@@ -36,32 +36,24 @@
 <div class="code-container">
     <div class="button-container">
         <button class="copy-button">Copy</button>
-        <button class="download-button">Download</button>
+        <button class="download-py-button">Download .py</button>
+        <button class="download-txt-button">Download .txt</button>
     </div>
-    <pre><code class="language-python">
-print("The brackets pass this text to print command")
-
-print(3+5/3+2)
-print((3+5)/(3+2))
-
-print("First loop")
-
-for i in range(4):
-    print("This will be looped")
-    print("Part of the loop?")
-
-print("Second loop")
-
-for i in range(4):
-    print("This will be looped")
-print("Part of the loop?")
-    </code></pre>
+    <pre><code id="code" class="language-python"></code></pre>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
 <script>
+    fetch('code.txt')
+        .then(response => response.text())
+        .then(data => {
+            const codeElement = document.getElementById('code');
+            codeElement.textContent = data;
+            Prism.highlightElement(codeElement);
+        });
+
     document.querySelector('.copy-button').addEventListener('click', function() {
-        const code = document.querySelector('code').textContent;
+        const code = document.getElementById('code').textContent;
         navigator.clipboard.writeText(code).then(function() {
             alert('Code copied to clipboard!');
         }, function(err) {
@@ -69,17 +61,34 @@ print("Part of the loop?")
         });
     });
 
-    document.querySelector('.download-button').addEventListener('click', function() {
-        const code = document.querySelector('code').textContent;
-        const blob = new Blob([code], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'code.py';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+    document.querySelector('.download-py-button').addEventListener('click', function() {
+        fetch('code.txt')
+            .then(response => response.blob())
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'code.py';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+    });
+
+    document.querySelector('.download-txt-button').addEventListener('click', function() {
+        fetch('code.txt')
+            .then(response => response.blob())
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'code.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
     });
 </script>
 
