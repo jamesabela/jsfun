@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pretty Print Python Code</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css" id="highlight-theme">
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
         .code-container {
             position: relative;
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
             padding: 1em;
-            background: #2d2d2d;
+            background: #f5f5f5;
             border-radius: 5px;
             overflow: auto;
         }
@@ -29,9 +32,35 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        .controls-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .controls-container input[type="range"] {
+            width: 200px;
+        }
+        .hljs-ln-numbers {
+            text-align: right;
+            border-right: 1px solid #ccc;
+            padding-right: 10px;
+            margin-right: 10px;
+            min-width: 40px; /* Adjust based on your needs */
+        }
+        .hljs-ln-code {
+            padding-left: 10px; /* Add space after line numbers */
+        }
     </style>
 </head>
 <body>
+
+<div class="controls-container">
+    <label for="mode">Mode:</label>
+    <input type="radio" id="light-mode" name="mode" value="light" checked> Light
+    <input type="radio" id="dark-mode" name="mode" value="dark"> Dark
+    <br>
+    <label for="font-size">Font Size:</label>
+    <input type="range" id="font-size" min="10" max="30" value="16">
+</div>
 
 <div class="code-container">
     <div class="button-container">
@@ -39,56 +68,73 @@
         <button class="download-py-button">Download .py</button>
         <button class="download-txt-button">Download .txt</button>
     </div>
-    <pre><code id="code" class="language-python"></code></pre>
+    <pre><code id="code" class="python hljs"></code></pre>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
 <script>
-    fetch('code.txt')
-        .then(response => response.text())
-        .then(data => {
-            const codeElement = document.getElementById('code');
-            codeElement.textContent = data;
-            Prism.highlightElement(codeElement);
+    let codeText = '';
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Get the URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const codeUrl = urlParams.get('url') || 'code.txt';
+
+        fetch(codeUrl)
+            .then(response => response.text())
+            .then(data => {
+                codeText = data;
+                const codeElement = document.getElementById('code');
+                codeElement.innerHTML = data.split('\n').map((line, index) => `<span class="hljs-ln-numbers">${index + 1}&nbsp;</span>${line}&nbsp;`).join('\n');
+                hljs.highlightElement(codeElement);
+            });
+
+        document.getElementById('light-mode').addEventListener('change', function() {
+            document.getElementById('highlight-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css';
+            document.querySelector('.code-container').style.backgroundColor = '#f5f5f5';
         });
 
-    document.querySelector('.copy-button').addEventListener('click', function() {
-        const code = document.getElementById('code').textContent;
-        navigator.clipboard.writeText(code).then(function() {
-            alert('Code copied to clipboard!');
-        }, function(err) {
-            console.error('Could not copy text: ', err);
+        document.getElementById('dark-mode').addEventListener('change', function() {
+            document.getElementById('highlight-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/atom-one-dark.min.css';
+            document.querySelector('.code-container').style.backgroundColor = '#2d2d2d';
         });
-    });
 
-    document.querySelector('.download-py-button').addEventListener('click', function() {
-        fetch('code.txt')
-            .then(response => response.blob())
-            .then(blob => {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'code.py';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            });
-    });
+        document.getElementById('font-size').addEventListener('input', function() {
+            document.getElementById('code').style.fontSize = this.value + 'px';
+        });
 
-    document.querySelector('.download-txt-button').addEventListener('click', function() {
-        fetch('code.txt')
-            .then(response => response.blob())
-            .then(blob => {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'code.txt';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+        document.querySelector('.copy-button').addEventListener('click', function() {
+            navigator.clipboard.writeText(codeText).then(function() {
+                alert('Code copied to clipboard!');
+            }, function(err) {
+                console.error('Could not copy text: ', err);
             });
+        });
+
+        document.querySelector('.download-py-button').addEventListener('click', function() {
+            const blob = new Blob([codeText], { type: 'text/x-python' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'code.py';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        document.querySelector('.download-txt-button').addEventListener('click', function() {
+            const blob = new Blob([codeText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'code.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
     });
 </script>
 
