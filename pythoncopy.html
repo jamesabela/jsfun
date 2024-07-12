@@ -15,14 +15,17 @@
             border-radius: 5px;
             overflow: auto;
         }
-        .copy-button {
+        .button-container {
             position: absolute;
             top: 10px;
             right: 10px;
+        }
+        .button-container button {
             background: #007bff;
             color: white;
             border: none;
             padding: 5px 10px;
+            margin-left: 5px;
             cursor: pointer;
             border-radius: 5px;
         }
@@ -31,12 +34,27 @@
 <body>
 
 <div class="code-container">
-    <button class="copy-button">Copy</button>
+    <div class="button-container">
+        <button class="copy-button">Copy</button>
+        <button class="download-button">Download</button>
+    </div>
     <pre><code class="language-python">
-def greet(name):
-    print(f"Hello, {name}!")
+print("The brackets pass this text to print command")
 
-greet("World")
+print(3+5/3+2)
+print((3+5)/(3+2))
+
+print("First loop")
+
+for i in range(4):
+    print("This will be looped")
+    print("Part of the loop?")
+
+print("Second loop")
+
+for i in range(4):
+    print("This will be looped")
+print("Part of the loop?")
     </code></pre>
 </div>
 
@@ -49,6 +67,19 @@ greet("World")
         }, function(err) {
             console.error('Could not copy text: ', err);
         });
+    });
+
+    document.querySelector('.download-button').addEventListener('click', function() {
+        const code = document.querySelector('code').textContent;
+        const blob = new Blob([code], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'code.py';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     });
 </script>
 
