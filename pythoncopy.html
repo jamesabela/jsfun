@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pretty Print Python Code</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        .code-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1em;
+            background: #2d2d2d;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="code-container">
+    <button class="copy-button">Copy</button>
+    <pre><code class="language-python">
+def greet(name):
+    print(f"Hello, {name}!")
+
+greet("World")
+    </code></pre>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+<script>
+    document.querySelector('.copy-button').addEventListener('click', function() {
+        const code = document.querySelector('code').textContent;
+        navigator.clipboard.writeText(code).then(function() {
+            alert('Code copied to clipboard!');
+        }, function(err) {
+            console.error('Could not copy text: ', err);
+        });
+    });
+</script>
+
+</body>
+</html>
