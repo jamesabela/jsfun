@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversion Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question {
+            margin-top: 20px;
+        }
+        .choices {
+            margin-top: 10px;
+        }
+        .result, .high-score, .timer, .correct-count {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .share-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .share-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Conversion Quiz</h2>
+
+<div id="levelContainer">
+    <label for="level">Select Level:</label>
+    <select id="level">
+        <option value="easy">Easy (0-15)</option>
+        <option value="medium">Medium (0-255)</option>
+        <option value="hard">Hard (Two's Complement)</option>
+        <option value="extreme">Extreme (Mixed Conversions)</option>
+    </select>
+    <br>
+    <label for="mode">Select Mode:</label>
+    <select id="mode">
+        <option value="timed">Timed</option>
+        <option value="untimed">Untimed</option>
+    </select>
+    <br>
+    <button onclick="startQuiz()">Start Quiz</button>
+</div>
+
+<div id="quizContainer" style="display:none;">
+    <div class="question" id="question"></div>
+    <div class="choices" id="choices"></div>
+    <button onclick="nextQuestion()">Next Question</button>
+</div>
+<div class="result" id="result"></div>
+<div class="timer" id="timer"></div>
+<div class="correct-count" id="correctCount"></div>
+<div class="high-score" id="highScore" style="display:none;"></div>
+<button id="playAgainBtn" style="display:none;" onclick="playAgain()">Play Again</button>
+<button id="shareBtn" class="share-button" style="display:none;" onclick="shareResults()">Share Your Score</button>
+
+<script>
+    const quizContainer = document.getElementById("quizContainer");
+    const levelContainer = document.getElementById("levelContainer");
+    const questionElement = document.getElementById("question");
+    const choicesElement = document.getElementById("choices");
+    const resultElement = document.getElementById("result");
+    const timerElement = document.getElementById("timer");
+    const correctCountElement = document.getElementById("correctCount");
+    const highScoreElement = document.getElementById("highScore");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+
+    let currentQuestion = {};
+    let score = 0;
+    let initialScore = 0;
+    let questionCount = 0;
+    let correctCount = 0;
+    let highScore = localStorage.getItem('highScore') ? parseInt(localStorage.getItem('highScore')) : 0;
+    let level = 'easy';
+    let mode = 'timed';
+    let timer;
+    let timeLeft = 200;
+    let scoreBreakdown = [];
+    let hasPenalty = false;
+
+    function setLevel() {
+        level = document.getElementById("level").value;
+    }
+
+    function setMode() {
+        mode = document.getElementById("mode").value;
+    }
+
+    function startQuiz() {
+        setLevel();
+        setMode();
+        levelContainer.style.display = "none";
+        quizContainer.style.display = "block";
+        timerElement.style.display = mode === 'timed' ? 'block' : 'none';
+        correctCountElement.style.display = "block";
+        correctCountElement.innerText = `Correct Answers: 0`;
+        score = 0;
+        correctCount = 0;
+        questionCount = 0;
+        scoreBreakdown = [];
+        hasPenalty = false;
+        if (mode === 'timed') {
+            timeLeft = 200;
+            startTimer();
+        }
+        generateQuestion();
+    }
+
+    function startTimer() {
+        timer = setInterval(function() {
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                endQuiz();
+            } else {
+                timerElement.innerText = `Time Left: ${timeLeft} seconds`;
+                timeLeft--;
+            }
+        }, 1000);
+    }
+
+    function generateRandomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getBinary(value) {
+        return value.toString(2).padStart(8, '0');
+    }
+
+    function getHexadecimal(value) {
+        return value.toString(16).toUpperCase().padStart(2, '0');
+    }
+
+    function generateQuestion() {
+        let decimalValue, binaryValue, hexadecimalValue, questionText, operator, num1, num2;
+        if (level === 'easy') {
+            decimalValue = generateRandomNumber(0, 15);
+            initialScore = 1;
+        } else if (level === 'medium') {
+            decimalValue = generateRandomNumber(0, 255);
+            initialScore = 5;
+        } else if (level === 'hard') {
+            decimalValue = generateRandomNumber(-128, 127);
+            initialScore = 10;
+        } else if (level === 'extreme') {
+            initialScore = 20;
+            const isMixedConversion = Math.random() > 0.5;
+            if (isMixedConversion) {
+                num1 = generateRandomNumber(0, 255);
+                num2 = generateRandomNumber(0, 255);
+                const format1 = Math.random() > 0.5 ? 'hex' : 'bin';
+                const format2 = format1 === 'hex' ? 'bin' : 'hex';
+                operator = Math.random() > 0.5 ? '+' : '-';
+                decimalValue = operator === '+' ? num1 + num2 : num1 - num2;
+                questionText = `Convert ${format1 === 'hex' ? getHexadecimal(num1) : getBinary(num1)} (${format1}) ${operator} ${format2 === 'hex' ? getHexadecimal(num2) : getBinary(num2)} (${format2}):`;
+                if (decimalValue < 0 || decimalValue > 255) {
+                    currentQuestion = {
+                        question: questionText,
+                        correctAnswer: 'Overflow',
+                        choices: generateChoices('Overflow', 'decimal')
+                    };
+                    displayQuestion();
+                    return;
+                }
+            } else {
+                decimalValue = generateRandomNumber(0, 255);
+            }
+        }
+
+        binaryValue = getBinary((decimalValue + 256) % 256); // Ensure it's always 8-bit
+        hexadecimalValue = getHexadecimal((decimalValue + 256) % 256);
+
+        const conversionTypes = level === 'extreme' && questionText ? [questionText] : ["Decimal to Binary", "Decimal to Hexadecimal", "Binary to Decimal", "Hexadecimal to Decimal"];
+        if (level === 'hard') {
+            conversionTypes.splice(conversionTypes.indexOf("Decimal to Hexadecimal"), 1);
+            conversionTypes.splice(conversionTypes.indexOf("Hexadecimal to Decimal"), 1);
+        }
+        const selectedConversion = conversionTypes[Math.floor(Math.random() * conversionTypes.length)];
+
+        switch (selectedConversion) {
+            case "Decimal to Binary":
+                currentQuestion = {
+                    question: `Convert ${decimalValue} (Decimal) to Binary:`,
+                    correctAnswer: binaryValue,
+                    choices: generateChoices(binaryValue, "binary")
+                };
+                break;
+            case "Decimal to Hexadecimal":
+                currentQuestion = {
+                    question: `Convert ${decimalValue} (Decimal) to Hexadecimal:`,
+                    correctAnswer: hexadecimalValue,
+                    choices: generateChoices(hexadecimalValue, "hexadecimal")
+                };
+                break;
+            case "Binary to Decimal":
+                currentQuestion = {
+                    question: `Convert ${binaryValue} (Binary) to Decimal:`,
+                    correctAnswer: decimalValue.toString(),
+                    choices: generateChoices(decimalValue.toString(), "decimal")
+                };
+                break;
+            case "Hexadecimal to Decimal":
+                currentQuestion = {
+                    question: `Convert ${hexadecimalValue} (Hexadecimal) to Decimal:`,
+                    correctAnswer: decimalValue.toString(),
+                    choices: generateChoices(decimalValue.toString(), "decimal")
+                };
+                break;
+            default:
+                currentQuestion = {
+                    question: questionText,
+                    correctAnswer: decimalValue.toString(),
+                    choices: generateChoices(decimalValue.toString(), "decimal")
+                };
+                break;
+        }
+
+        displayQuestion();
+    }
+
+    function displayQuestion() {
+        questionElement.innerText = currentQuestion.question;
+        choicesElement.innerHTML = "";
+        currentQuestion.choices.forEach(choice => {
+            const button = document.createElement("button");
+            button.innerText = choice;
+            button.onclick = () => checkAnswer(choice);
+            choicesElement.appendChild(button);
+        });
+    }
+
+    function generateChoices(correctAnswer, type) {
+        const choices = new Set();
+        choices.add(correctAnswer);
+
+        while (choices.size < 4) {
+            let choice;
+            if (level === 'extreme' && choices.size === 3) {
+                choice = 'Overflow';
+            } else {
+                switch (type) {
+                    case "binary":
+                        choice = getBinary(generateRandomNumber(0, 255));
+                        break;
+                    case "hexadecimal":
+                        choice = getHexadecimal(generateRandomNumber(0, 255));
+                        break;
+                    case "decimal":
+                        choice = generateRandomNumber(0, 255).toString();
+                        break;
+                }
+            }
+            choices.add(choice);
+        }
+
+        return Array.from(choices).sort(() => Math.random() - 0.5);
+    }
+
+    function checkAnswer(selectedChoice) {
+        if (selectedChoice === currentQuestion.correctAnswer) {
+            score += initialScore;
+            correctCount++;
+            resultElement.innerText = "Correct!";
+            scoreBreakdown.push({ question: currentQuestion.question, points: initialScore, timeBonus: 0 });
+        } else {
+            resultElement.innerText = `Incorrect. The correct answer is ${currentQuestion.correctAnswer}.`;
+            if (mode === 'timed') {
+                scoreBreakdown.push({ question: currentQuestion.question, points: 0, timeBonus: -initialScore * timeLeft });
+                hasPenalty = true;
+            } else {
+                scoreBreakdown.push({ question: currentQuestion.question, points: 0, timeBonus: 0 });
+            }
+        }
+        correctCountElement.innerText = `Correct Answers: ${correctCount}`;
+        questionCount++;
+        setTimeout(nextQuestion, 2000);
+    }
+
+    function nextQuestion() {
+        resultElement.innerText = "";
+        if (questionCount < 10) {
+            generateQuestion();
+        } else {
+            if (mode === 'timed') {
+                clearInterval(timer);
+            }
+            endQuiz();
+        }
+    }
+
+    function endQuiz() {
+        if (mode === 'timed') {
+            let totalBonus = Math.max(timeLeft, 0);
+            scoreBreakdown.forEach(entry => {
+                if (!hasPenalty || entry.points > 0) {
+                    entry.timeBonus = entry.points * totalBonus;
+                }
+            });
+            score += scoreBreakdown.reduce((sum, entry) => sum + entry.timeBonus, 0);
+        }
+
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('highScore', highScore);
+        }
+
+        displayResults();
+    }
+
+    function displayResults() {
+        quizContainer.style.display = "none";
+        playAgainBtn.style.display = "block";
+        highScoreElement.style.display = "block";
+        document.getElementById("shareBtn").style.display = "block";
+        let breakdownHTML = `<h3>Quiz Over! You scored ${score} points.</h3>`;
+        breakdownHTML += `<p>High Score: ${highScore}</p>`;
+        if (mode === 'timed') {
+            breakdownHTML += `<p>Time Bonus: ${Math.max(timeLeft, 0)}</p>`;
+        }
+        breakdownHTML += `<h4>Score Breakdown:</h4><ul>`;
+        scoreBreakdown.forEach(entry => {
+            breakdownHTML += `<li>${entry.question} - Points: ${entry.points}, Time Bonus: ${entry.timeBonus}</li>`;
+        });
+        breakdownHTML += `</ul>`;
+        resultElement.innerHTML = breakdownHTML;
+    }
+
+    function playAgain() {
+        score = 0;
+        questionCount = 0;
+        correctCount = 0;
+        resultElement.innerText = "";
+        playAgainBtn.style.display = "none";
+        quizContainer.style.display = "none";
+        levelContainer.style.display = "block";
+        timerElement.innerText = "";
+        correctCountElement.innerText = "";
+        highScoreElement.style.display = "none";
+        document.getElementById("shareBtn").style.display = "none";
+    }
+
+    function shareResults() {
+        const shareText = `I scored ${score} points in the Conversion Quiz! Can you beat my high score of ${highScore}?`;
+        const url = window.location.href;  // Get the current URL
+
+        const twitterShare = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
+        const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareText)}`;
+        const linkedInShare = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=Conversion Quiz&summary=${encodeURIComponent(shareText)}`;
+
+        // Open share dialogs (for simplicity, we're opening Twitter share here, you can add more)
+        window.open(twitterShare, '_blank');
+    }
+
+    generateQuestion();
+</script>
+
+</body>
+</html>
