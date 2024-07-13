@@ -1,7 +1,12 @@
 # jsfun
-Some fun things with JavaScript
+So the code is in JavaScript, but actually most of it is to help with Python programming.
 
-Some fun things I am playing with. This code displays Python online for easy reference:
+## Features
+
+A display tool that will enable you to download Python files as either .py files or .txt files if your firewall is very restrictive.
+It enables you to choose dark mode or light mode and it enables you to go full-screen. 
+
+For code under 20 lines it will make a puzzle too! 
 
 ## How to use
 Use ?url= to add the site you want. It needs to be a raw Python file. 
@@ -12,6 +17,8 @@ https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent
 For up to 20 lines you can use the reordering quiz. It uses the same format:
 https://jamesabela.github.io/jsfun/reorder?url=https://gist.githubusercontent.com/jamesabela/ce1a69f05f78fa56fbd03a4f31d13978/raw/4ff44e44fae1192081ebed6f793fd34ae68c1d6d/grocer.py
 Simply use ?url= and the url you want to display.
+
+You should be able to use any file on github and probably other sites too. I've put some of the [common algorithms](https://gist.github.com/jamesabela/53cc928fd03720c0803839b31bcda287) for iGCSE below as a tester. 
 
 ## iGCSE Algorithms
 
