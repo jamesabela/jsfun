@@ -62,11 +62,12 @@
     <input type="range" id="font-size" min="10" max="30" value="16">
 </div>
 
-<div class="code-container">
+<div class="code-container" id="codeContainer">
     <div class="button-container">
         <button class="copy-button">Copy</button>
         <button class="download-py-button">Download .py</button>
         <button class="download-txt-button">Download .txt</button>
+        <button class="fullscreen-button">Full Screen</button>
     </div>
     <pre><code id="code" class="python hljs"></code></pre>
 </div>
@@ -134,6 +135,25 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        });
+
+        document.querySelector('.fullscreen-button').addEventListener('click', function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        document.addEventListener('fullscreenchange', (event) => {
+            const button = document.querySelector('.fullscreen-button');
+            if (document.fullscreenElement) {
+                button.textContent = 'Exit Full Screen';
+            } else {
+                button.textContent = 'Full Screen';
+            }
         });
     });
 </script>
