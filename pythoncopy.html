@@ -68,6 +68,7 @@
         <button class="download-py-button">Download .py</button>
         <button class="download-txt-button">Download .txt</button>
         <button class="fullscreen-button">Full Screen</button>
+        <button class="visit-site-button">Make Puzzle</button>
     </div>
     <pre><code id="code" class="python hljs"></code></pre>
 </div>
@@ -76,11 +77,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
 <script>
     let codeText = '';
+    let codeUrl = '';
 
     document.addEventListener('DOMContentLoaded', (event) => {
         // Get the URL parameter
         const urlParams = new URLSearchParams(window.location.search);
-        const codeUrl = urlParams.get('url') || 'code.txt';
+        codeUrl = urlParams.get('url') || 'code.txt';
 
         fetch(codeUrl)
             .then(response => response.text())
@@ -145,6 +147,11 @@
             } else {
                 document.exitFullscreen();
             }
+        });
+
+        document.querySelector('.visit-site-button').addEventListener('click', function() {
+            const newUrl = `https://jamesabela.github.io/jsfun/reorder?url=${encodeURIComponent(codeUrl)}`;
+            window.open(newUrl, '_blank');
         });
 
         document.addEventListener('fullscreenchange', (event) => {
