@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>8-bit Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .result {
+      margin-top: 10px;
+    }
+    .workings {
+      margin-top: 20px;
+      font-family: monospace;
+    }
+    .slider-container {
+      margin-bottom: 20px;
+    }
+    #decimalInput {
+      background-color: #ff9999;
+    }
+    #binaryInput {
+      background-color: #99ccff;
+    }
+    #hexadecimalInput {
+      background-color: #99ff99;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      text-align: center;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>8-bit Converter</h2>
+
+<div>
+  <label for="mode">Mode:</label>
+  <input type="radio" id="unsigned" name="mode" value="unsigned" checked onchange="toggleTwosComplement()"> Unsigned
+  <input type="radio" id="twosComplement" name="mode" value="twosComplement" onchange="toggleTwosComplement()"> Two's Complement
+</div>
+<br>
+
+<div class="slider-container">
+  <label for="decimalInput">Decimal:</label>
+  <input type="range" id="decimalInput" min="0" max="255" value="0" oninput="convertFromDecimal()">
+  <span id="decimalValue">0</span>
+</div>
+
+<div class="slider-container">
+  <label for="binaryInput">Binary:</label>
+  <input type="range" id="binaryInput" min="0" max="255" value="0" oninput="convertFromBinary()">
+  <span id="binaryValue">0000 0000</span>
+</div>
+
+<div class="slider-container">
+  <label for="hexadecimalInput">Hexadecimal:</label>
+  <input type="range" id="hexadecimalInput" min="0" max="255" value="0" oninput="convertFromHexadecimal()">
+  <span id="hexadecimalValue">00</span>
+</div>
+
+<div class="result" id="conversionResult"></div>
+<div class="workings" id="conversionWorkings"></div>
+
+<table>
+  <tr>
+    <th>Bit</th>
+    <td id="bit0">0</td>
+    <td id="bit1">0</td>
+    <td id="bit2">0</td>
+    <td id="bit3">0</td>
+    <td id="bit4">0</td>
+    <td id="bit5">0</td>
+    <td id="bit6">0</td>
+    <td id="bit7">0</td>
+  </tr>
+  <tr>
+    <th>Place Value</th>
+    <td>2<sup>7</sup></td>
+    <td>2<sup>6</sup></td>
+    <td>2<sup>5</sup></td>
+    <td>2<sup>4</sup></td>
+    <td>2<sup>3</sup></td>
+    <td>2<sup>2</sup></td>
+    <td>2<sup>1</sup></td>
+    <td>2<sup>0</sup></td>
+  </tr>
+  <tr>
+    <th>Value</th>
+    <td>128</td>
+    <td>64</td>
+    <td>32</td>
+    <td>16</td>
+    <td>8</td>
+    <td>4</td>
+    <td>2</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <th>Hexadecimal</th>
+    <td colspan="4" id="hex0">0</td>
+    <td colspan="4" id="hex1">0</td>
+  </tr>
+</table>
+
+<script>
+  function toggleTwosComplement() {
+    const twosComplement = document.getElementById("twosComplement").checked;
+    const decimalInput = document.getElementById("decimalInput");
+
+    if (twosComplement) {
+      decimalInput.min = -128;
+      decimalInput.max = 127;
+    } else {
+      decimalInput.min = 0;
+      decimalInput.max = 255;
+    }
+
+    // Update the conversion based on the current slider value
+    convertFromDecimal();
+  }
+
+  function convertFromDecimal() {
+    let decimal = parseInt(document.getElementById("decimalInput").value);
+    const twosComplement = document.getElementById("twosComplement").checked;
+
+    document.getElementById("decimalValue").innerText = decimal;
+    if (isNaN(decimal) || decimal < (twosComplement ? -128 : 0) || decimal > (twosComplement ? 127 : 255)) {
+      document.getElementById("conversionResult").innerText = `Please enter a valid decimal number between ${twosComplement ? -128 : 0} and ${twosComplement ? 127 : 255}.`;
+      document.getElementById("conversionWorkings").innerText = "";
+      return;
+    }
+
+    let binary;
+    if (twosComplement && decimal < 0) {
+      binary = (256 + decimal).toString(2).padStart(8, '0');
+    } else {
+      binary = decimal.toString(2).padStart(8, '0');
+    }
+
+    let hexadecimal = parseInt(binary, 2).toString(16).toUpperCase().padStart(2, '0');
+    document.getElementById("binaryInput").value = parseInt(binary, 2);
+    document.getElementById("binaryValue").innerText = binary.slice(0, 4) + " " + binary.slice(4);
+    document.getElementById("hexadecimalInput").value = parseInt(binary, 2);
+    document.getElementById("hexadecimalValue").innerText = hexadecimal;
+    displayConversions(decimal, binary, hexadecimal);
+    showDecimalToOtherWorkings(decimal, binary, hexadecimal, twosComplement);
+    updateBinaryTable(binary);
+    updateHexadecimalTable(hexadecimal);
+  }
+
+  function convertFromBinary() {
+    let binaryValue = parseInt(document.getElementById("binaryInput").value);
+    const binary = binaryValue.toString(2).padStart(8, '0');
+    const twosComplement = document.getElementById("twosComplement").checked;
+
+    document.getElementById("binaryValue").innerText = binary.slice(0, 4) + " " + binary.slice(4);
+    if (isNaN(binaryValue) || binaryValue < 0 || binaryValue > 255) {
+      document.getElementById("conversionResult").innerText = "Please enter a valid 8-bit binary number.";
+      document.getElementById("conversionWorkings").innerText = "";
+      return;
+    }
+
+    let decimal = parseInt(binary, 2);
+    if (twosComplement && binary[0] === '1') {
+      decimal = decimal - 256;
+    }
+
+    let hexadecimal = parseInt(binary, 2).toString(16).toUpperCase().padStart(2, '0');
+    document.getElementById("decimalInput").value = decimal;
+    document.getElementById("decimalValue").innerText = decimal;
+    document.getElementById("hexadecimalInput").value = parseInt(binary, 2);
+    document.getElementById("hexadecimalValue").innerText = hexadecimal;
+    displayConversions(decimal, binary, hexadecimal);
+    showBinaryToOtherWorkings(decimal, binary, hexadecimal, twosComplement);
+    updateBinaryTable(binary);
+    updateHexadecimalTable(hexadecimal);
+  }
+
+  function convertFromHexadecimal() {
+    let hexadecimalValue = parseInt(document.getElementById("hexadecimalInput").value);
+    const hexadecimal = hexadecimalValue.toString(16).toUpperCase().padStart(2, '0');
+    const twosComplement = document.getElementById("twosComplement").checked;
+
+    document.getElementById("hexadecimalValue").innerText = hexadecimal;
+    if (isNaN(hexadecimalValue) || hexadecimalValue < 0 || hexadecimalValue > 255) {
+      document.getElementById("conversionResult").innerText = "Please enter a valid 2-digit hexadecimal number.";
+      document.getElementById("conversionWorkings").innerText = "";
+      return;
+    }
+
+    let decimal = parseInt(hexadecimal, 16);
+    const binary = decimal.toString(2).padStart(8, '0');
+    if (twosComplement && binary[0] === '1') {
+      decimal = decimal - 256;
+    }
+
+    document.getElementById("decimalInput").value = decimal;
+    document.getElementById("decimalValue").innerText = decimal;
+    document.getElementById("binaryInput").value = parseInt(binary, 2);
+    document.getElementById("binaryValue").innerText = binary.slice(0, 4) + " " + binary.slice(4);
+    displayConversions(decimal, binary, hexadecimal);
+    showHexadecimalToOtherWorkings(decimal, binary, hexadecimal, twosComplement);
+    updateBinaryTable(binary);
+    updateHexadecimalTable(hexadecimal);
+  }
+
+  function displayConversions(decimal, binary, hexadecimal) {
+    document.getElementById("conversionResult").innerHTML = `
+            <strong>Conversions:</strong><br>
+            Decimal: ${decimal}<br>
+            Binary: ${binary.slice(0, 4)} ${binary.slice(4)}<br>
+            Hexadecimal: ${hexadecimal}<br>
+        `;
+  }
+
+  function showDecimalToOtherWorkings(decimal, binary, hexadecimal, twosComplement) {
+    const binaryWorkings = Array.from(binary).map((bit, index) => `${bit} * 2^${7 - index}`).join(' + ');
+    const hexWorkings = `(${parseInt(binary, 2)} / 16) = ${Math.floor(parseInt(binary, 2) / 16)} remainder ${parseInt(binary, 2) % 16}`;
+    let twoComplementWorkings = '';
+
+    if (twosComplement && decimal < 0) {
+      const positiveBinary = (256 + decimal).toString(2).padStart(8, '0');
+      twoComplementWorkings = `For negative decimal values in two's complement:<br>
+                1. Take the absolute value of the decimal (${Math.abs(decimal)}) and convert it to binary: ${Math.abs(decimal).toString(2).padStart(8, '0')}<br>
+                2. Invert the bits: ${positiveBinary.split('').map(bit => bit === '0' ? '1' : '0').join('')}<br>
+                3. Add 1 to the result: ${positiveBinary}`;
+    }
+
+    document.getElementById("conversionWorkings").innerHTML = `
+            <strong>Workings:</strong><br>
+            <em>Decimal to Binary:</em><br>
+            ${decimal} in decimal is converted to binary:<br>
+            ${binaryWorkings}<br><br>
+
+            <em>Decimal to Hexadecimal:</em><br>
+            ${parseInt(binary, 2)} in decimal is converted to hexadecimal:<br>
+            ${hexWorkings}<br>
+            ${Math.floor(parseInt(binary, 2) / 16).toString(16).toUpperCase()} * 16^1 + ${parseInt(binary, 2) % 16} * 16^0 = ${hexadecimal}<br><br>
+
+            ${twoComplementWorkings}
+        `;
+  }
+
+  function showBinaryToOtherWorkings(decimal, binary, hexadecimal, twosComplement) {
+    const binaryWorkings = binary.split('').reverse().map((bit, index) => `${bit} * 2^${index}`).reverse().join(' + ');
+    const nibble1 = binary.slice(0, 4);
+    const nibble2 = binary.slice(4);
+    const hex1 = parseInt(nibble1, 2).toString(16).toUpperCase();
+    const hex2 = parseInt(nibble2, 2).toString(16).toUpperCase();
+    let twoComplementWorkings = '';
+
+    if (twosComplement && binary[0] === '1') {
+      const positiveBinary = binary.split('').map(bit => bit === '0' ? '1' : '0').join('');
+      const positiveDecimal = parseInt(positiveBinary, 2) + 1;
+      twoComplementWorkings = `For negative binary values in two's complement:<br>
+                1. Invert the bits: ${positiveBinary}<br>
+                2. Add 1 to the result: ${(positiveDecimal).toString(2).padStart(8, '0')}<br>
+                3. Convert the result to decimal: -${256 - parseInt(binary, 2)}`;
+    }
+
+    document.getElementById("conversionWorkings").innerHTML = `
+            <strong>Workings:</strong><br>
+            <em>Binary to Decimal:</em><br>
+            Binary: ${binary.slice(0, 4)} ${binary.slice(4)}<br>
+            ${binaryWorkings} = ${decimal}<br>
+            ${binary.slice(0, 4)} ${binary.slice(4)} in decimal is calculated by summing the products of each bit and its corresponding power of 2.<br><br>
+
+            <em>Binary to Hexadecimal:</em><br>
+            Binary: ${binary.slice(0, 4)} ${binary.slice(4)}<br>
+            Nibbles: ${nibble1} and ${nibble2}<br>
+            ${nibble1} in hexadecimal is ${hex1}<br>
+            ${nibble2} in hexadecimal is ${hex2}<br>
+            Concatenated result: ${hex1}${hex2}<br><br>
+
+            ${twoComplementWorkings}
+        `;
+  }
+
+  function showHexadecimalToOtherWorkings(decimal, binary, hexadecimal, twosComplement) {
+    const hexWorkings = hexadecimal.split('').reverse().map((digit, index) => `${parseInt(digit, 16)} * 16^${index}`).reverse().join(' + ');
+    const binaryWorkings = decimal.toString(2).padStart(8, '0').split('').map((bit, index) => `${bit} * 2^${7 - index}`).join(' + ');
+    let twoComplementWorkings = '';
+
+    if (twosComplement && binary[0] === '1') {
+      const positiveBinary = binary.split('').map(bit => bit === '0' ? '1' : '0').join('');
+      const positiveDecimal = parseInt(positiveBinary, 2) + 1;
+      twoComplementWorkings = `For negative hexadecimal values in two's complement:<br>
+                1. Convert the hexadecimal to binary: ${binary}<br>
+                2. Invert the bits: ${positiveBinary}<br>
+                3. Add 1 to the result: ${(positiveDecimal).toString(2).padStart(8, '0')}<br>
+                4. Convert the result to decimal: -${256 - parseInt(binary, 2)}`;
+    }
+
+    document.getElementById("conversionWorkings").innerHTML = `
+            <strong>Workings:</strong><br>
+            <em>Hexadecimal to Decimal:</em><br>
+            Hexadecimal: ${hexadecimal}<br>
+            ${hexWorkings} = ${decimal}<br>
+            ${hexadecimal} in decimal is calculated by summing the products of each digit and its corresponding power of 16.<br><br>
+
+            <em>Hexadecimal to Binary:</em><br>
+            Hexadecimal: ${hexadecimal}<br>
+            Decimal: ${decimal}<br>
+            Binary: ${binary.slice(0, 4)} ${binary.slice(4)}<br>
+            ${hexadecimal} in binary is calculated by first converting it to decimal (${decimal}) and then to binary:<br>
+            ${binaryWorkings}<br><br>
+
+            ${twoComplementWorkings}
+        `;
+  }
+
+  function updateBinaryTable(binary) {
+    for (let i = 0; i < 8; i++) {
+      document.getElementById(`bit${i}`).innerText = binary[i];
+    }
+  }
+
+  function updateHexadecimalTable(hexadecimal) {
+    document.getElementById('hex0').innerText = hexadecimal[0];
+    document.getElementById('hex1').innerText = hexadecimal[1];
+  }
+
+  // Initial call to display the default value
+  convertFromDecimal();
+</script>
+
+</body>
+</html>
