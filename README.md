@@ -10,6 +10,8 @@ For code under 20 lines it will make a puzzle too!
 
 ## How to use
 
+![Raw file](https://i.imgur.com/TT0mVo8.png)
+
 Click on [Python Code Display Tool](https://jamesabela.github.io/jsfun/pythoncopy) You can then add a url to raw gist file. such as: 
 [https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py](https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py)
 
