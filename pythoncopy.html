@@ -101,6 +101,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
 <script>
   let codeText = '';
+  let currentURL = '';
 
   document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -177,7 +178,7 @@
     });
 
     document.querySelector('.make-puzzle-button').addEventListener('click', function() {
-      const puzzleURL = `https://jamesabela.github.io/jsfun/reorder?url=${encodeURIComponent(window.location.href)}`;
+      const puzzleURL = `https://jamesabela.github.io/jsfun/reorder.html?url=${encodeURIComponent(currentURL)}`;
       window.open(puzzleURL, '_blank');
     });
 
@@ -199,6 +200,7 @@
   }
 
   function fetchCode(url) {
+    currentURL = url;
     fetch(url)
             .then(response => response.text())
             .then(data => {
