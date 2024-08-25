@@ -178,8 +178,12 @@
     });
 
     document.querySelector('.make-puzzle-button').addEventListener('click', function() {
-      const puzzleURL = `https://jamesabela.github.io/jsfun/reorder.html?url=${encodeURIComponent(currentURL)}`;
-      window.open(puzzleURL, '_blank');
+      if (currentURL) {
+        const puzzleURL = `https://jamesabela.github.io/jsfun/reorder.html?url=${encodeURIComponent(currentURL)}`;
+        window.open(puzzleURL, '_blank');
+      } else {
+        alert('No valid URL available to create a puzzle.');
+      }
     });
 
     document.addEventListener('fullscreenchange', () => {
@@ -193,7 +197,11 @@
   });
 
   function updateURL() {
-    const inputURL = document.getElementById('urlInput').value;
+    const inputURL = document.getElementById('urlInput').value.trim();
+    if (inputURL === '') {
+      alert('Please enter a valid URL.');
+      return;
+    }
     const newURL = `${window.location.pathname}?url=${encodeURIComponent(inputURL)}`;
     window.history.pushState({}, '', newURL);
     fetchCode(inputURL);
