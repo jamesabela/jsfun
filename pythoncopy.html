@@ -92,6 +92,7 @@
     <button class="download-txt-button">Download .txt</button>
     <button class="fullscreen-button">Full Screen</button>
     <button class="visualise-button">Visualise</button>
+    <button class="make-puzzle-button">Make Puzzle</button> <!-- Make Puzzle button -->
   </div>
   <pre><code id="code" class="python hljs"></code></pre>
 </div>
@@ -106,10 +107,8 @@
     const url = urlParams.get('url');
 
     if (url) {
-      // If a URL is passed in the query string, fetch and display the code
       fetchCode(url);
     } else {
-      // If no URL is passed, show the input container
       document.getElementById('inputContainer').style.display = 'block';
     }
 
@@ -175,6 +174,11 @@
       const params = `#code=${encodedCode}&codeDivHeight=400&codeDivWidth=350&cumulative=false&curInstr=3&heapPrimitives=nevernest&origin=opt-frontend.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false`;
       const fullURL = `${baseURL}${params}`;
       window.open(fullURL, '_blank');
+    });
+
+    document.querySelector('.make-puzzle-button').addEventListener('click', function() {
+      const puzzleURL = `https://jamesabela.github.io/jsfun/reorder?url=${encodeURIComponent(window.location.href)}`;
+      window.open(puzzleURL, '_blank');
     });
 
     document.addEventListener('fullscreenchange', () => {
