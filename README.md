@@ -21,6 +21,9 @@ e.g. [https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubuserc
 
 You can display nearly any Python file you choose, make a Parsons puzzle of the first 20 lines and get step by step display from [Pythontutor.com](https://pythontutor.com/python-compiler.html#mode=edit)
 
+## Why download a text file?
+Some school firewalls don't allow you to download .py files, because they are executables, so this ensures they are not.
+
 ## Advanced use
 Use ?url= to add the site you want. It needs to be a raw Python file. 
 
@@ -45,5 +48,8 @@ You should be able to use any file on github and probably other sites too. I've 
 * [repeat](https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py)
 * [totalling](https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py)
 * [whileloop](https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py)
+
+## Known limitations
+* Doesn't work with Pastebin
 
 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) James Abela
