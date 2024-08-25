@@ -1,178 +1,217 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pretty Print Python Code</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css" id="highlight-theme">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .code-container {
-            position: relative;
-            width: 100%;
-            padding: 1em;
-            background: #f5f5f5;
-            border-radius: 5px;
-            overflow: auto;
-        }
-        .button-container {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-        .button-container button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            margin-right: 5px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .controls-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .controls-container input[type="range"] {
-            width: 200px;
-        }
-        .hljs-ln-numbers {
-            text-align: right;
-            border-right: 1px solid #ccc;
-            padding-right: 10px;
-            margin-right: 10px;
-            min-width: 40px; /* Adjust based on your needs */
-        }
-        .hljs-ln-code {
-            padding-left: 10px; /* Add space after line numbers */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Code Display Tool</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css" id="highlight-theme">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .input-container {
+      margin-bottom: 20px;
+    }
+    .input-container input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .input-container button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .code-container {
+      position: relative;
+      width: 100%;
+      padding: 1em;
+      background: #f5f5f5;
+      border-radius: 5px;
+      overflow: auto;
+    }
+    .button-container {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    .button-container button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      margin-right: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .controls-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .controls-container input[type="range"] {
+      width: 200px;
+    }
+    .hljs-ln-numbers {
+      text-align: right;
+      border-right: 1px solid #ccc;
+      padding-right: 10px;
+      margin-right: 10px;
+      min-width: 40px;
+    }
+    .hljs-ln-code {
+      padding-left: 10px;
+    }
+  </style>
 </head>
 <body>
 
-<div class="controls-container">
-    <label for="mode">Mode:</label>
-    <input type="radio" id="light-mode" name="mode" value="light" checked> Light
-    <input type="radio" id="dark-mode" name="mode" value="dark"> Dark
-    <br>
-    <label for="font-size">Font Size:</label>
-    <input type="range" id="font-size" min="10" max="30" value="16">
+<div class="input-container" id="inputContainer">
+  <input type="text" id="urlInput" placeholder="Enter the raw gist URL here...">
+  <button onclick="updateURL()">Load Code</button>
 </div>
 
-<div class="code-container" id="codeContainer">
-    <div class="button-container">
-        <button class="copy-button">Copy</button>
-        <button class="download-py-button">Download .py</button>
-        <button class="download-txt-button">Download .txt</button>
-        <button class="fullscreen-button">Full Screen</button>
-        <button class="visit-site-button">Make Puzzle</button>
-        <button class="visualise-button">Visualise</button> <!-- New Visualise button -->
-    </div>
-    <pre><code id="code" class="python hljs"></code></pre>
+<div class="controls-container">
+  <label for="mode">Mode:</label>
+  <input type="radio" id="light-mode" name="mode" value="light" checked> Light
+  <input type="radio" id="dark-mode" name="mode" value="dark"> Dark
+  <br>
+  <label for="font-size">Font Size:</label>
+  <input type="range" id="font-size" min="10" max="30" value="16">
+</div>
+
+<div class="code-container" id="codeContainer" style="display: none;">
+  <div class="button-container">
+    <button class="copy-button">Copy</button>
+    <button class="download-py-button">Download .py</button>
+    <button class="download-txt-button">Download .txt</button>
+    <button class="fullscreen-button">Full Screen</button>
+    <button class="visualise-button">Visualise</button>
+  </div>
+  <pre><code id="code" class="python hljs"></code></pre>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
 <script>
-    let codeText = '';
-    let codeUrl = '';
+  let codeText = '';
 
-    document.addEventListener('DOMContentLoaded', (event) => {
-        // Get the URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        codeUrl = urlParams.get('url') || 'code.txt';
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const url = urlParams.get('url');
 
-        fetch(codeUrl)
+    if (url) {
+      // If a URL is passed in the query string, fetch and display the code
+      fetchCode(url);
+    } else {
+      // If no URL is passed, show the input container
+      document.getElementById('inputContainer').style.display = 'block';
+    }
+
+    document.getElementById('light-mode').addEventListener('change', function() {
+      document.getElementById('highlight-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css';
+      document.querySelector('.code-container').style.backgroundColor = '#f5f5f5';
+    });
+
+    document.getElementById('dark-mode').addEventListener('change', function() {
+      document.getElementById('highlight-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/atom-one-dark.min.css';
+      document.querySelector('.code-container').style.backgroundColor = '#2d2d2d';
+    });
+
+    document.getElementById('font-size').addEventListener('input', function() {
+      document.getElementById('code').style.fontSize = this.value + 'px';
+    });
+
+    document.querySelector('.copy-button').addEventListener('click', function() {
+      navigator.clipboard.writeText(codeText).then(() => {
+        alert('Code copied to clipboard!');
+      }, (err) => {
+        console.error('Could not copy text: ', err);
+      });
+    });
+
+    document.querySelector('.download-py-button').addEventListener('click', function() {
+      const blob = new Blob([codeText], { type: 'text/x-python' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'code.py';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    document.querySelector('.download-txt-button').addEventListener('click', function() {
+      const blob = new Blob([codeText], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'code.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    document.querySelector('.fullscreen-button').addEventListener('click', function() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    document.querySelector('.visualise-button').addEventListener('click', function() {
+      const baseURL = "https://pythontutor.com/iframe-embed.html";
+      const encodedCode = encodeURIComponent(codeText);
+      const params = `#code=${encodedCode}&codeDivHeight=400&codeDivWidth=350&cumulative=false&curInstr=3&heapPrimitives=nevernest&origin=opt-frontend.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false`;
+      const fullURL = `${baseURL}${params}`;
+      window.open(fullURL, '_blank');
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      const button = document.querySelector('.fullscreen-button');
+      if (document.fullscreenElement) {
+        button.textContent = 'Exit Full Screen';
+      } else {
+        button.textContent = 'Full Screen';
+      }
+    });
+  });
+
+  function updateURL() {
+    const inputURL = document.getElementById('urlInput').value;
+    const newURL = `${window.location.pathname}?url=${encodeURIComponent(inputURL)}`;
+    window.history.pushState({}, '', newURL);
+    fetchCode(inputURL);
+  }
+
+  function fetchCode(url) {
+    fetch(url)
             .then(response => response.text())
             .then(data => {
-                codeText = data;
-                const codeElement = document.getElementById('code');
-                codeElement.innerHTML = data.split('\n').map((line, index) => `<span class="hljs-ln-numbers">${index + 1}&nbsp;</span>${line}&nbsp;`).join('\n');
-                hljs.highlightElement(codeElement);
+              codeText = data;
+              const codeElement = document.getElementById('code');
+              codeElement.innerHTML = data.split('\n').map((line, index) => `<span class="hljs-ln-numbers">${index + 1}&nbsp;</span>${line}&nbsp;`).join('\n');
+              hljs.highlightElement(codeElement);
+              document.getElementById('codeContainer').style.display = 'block';
+              document.getElementById('inputContainer').style.display = 'none';
+            })
+            .catch(error => {
+              alert('Failed to load code. Please ensure the URL is correct and points to a raw Python file.');
+              console.error('Error fetching code:', error);
             });
-
-        document.getElementById('light-mode').addEventListener('change', function() {
-            document.getElementById('highlight-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css';
-            document.querySelector('.code-container').style.backgroundColor = '#f5f5f5';
-        });
-
-        document.getElementById('dark-mode').addEventListener('change', function() {
-            document.getElementById('highlight-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/atom-one-dark.min.css';
-            document.querySelector('.code-container').style.backgroundColor = '#2d2d2d';
-        });
-
-        document.getElementById('font-size').addEventListener('input', function() {
-            document.getElementById('code').style.fontSize = this.value + 'px';
-        });
-
-        document.querySelector('.copy-button').addEventListener('click', function() {
-            navigator.clipboard.writeText(codeText).then(function() {
-                alert('Code copied to clipboard!');
-            }, function(err) {
-                console.error('Could not copy text: ', err);
-            });
-        });
-
-        document.querySelector('.download-py-button').addEventListener('click', function() {
-            const blob = new Blob([codeText], { type: 'text/x-python' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'code.py';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        });
-
-        document.querySelector('.download-txt-button').addEventListener('click', function() {
-            const blob = new Blob([codeText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'code.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        });
-
-        document.querySelector('.fullscreen-button').addEventListener('click', function() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        });
-
-        document.querySelector('.visit-site-button').addEventListener('click', function() {
-            const newUrl = `https://jamesabela.github.io/jsfun/reorder?url=${encodeURIComponent(codeUrl)}`;
-            window.open(newUrl, '_blank');
-        });
-
-        document.querySelector('.visualise-button').addEventListener('click', function() {
-            const baseURL = "https://pythontutor.com/iframe-embed.html";
-            const encodedCode = encodeURIComponent(codeText);
-            const params = `#code=${encodedCode}&codeDivHeight=400&codeDivWidth=350&cumulative=false&curInstr=3&heapPrimitives=nevernest&origin=opt-frontend.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false`;
-            const fullURL = `${baseURL}${params}`;
-            window.open(fullURL, '_blank');
-        });
-
-        document.addEventListener('fullscreenchange', (event) => {
-            const button = document.querySelector('.fullscreen-button');
-            if (document.fullscreenElement) {
-                button.textContent = 'Exit Full Screen';
-            } else {
-                button.textContent = 'Full Screen';
-            }
-        });
-    });
+  }
 </script>
+
 <small>&nbsp;<a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a> &#169; James Abela</small>
 </body>
 </html>
