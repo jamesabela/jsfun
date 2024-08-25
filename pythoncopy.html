@@ -69,6 +69,7 @@
         <button class="download-txt-button">Download .txt</button>
         <button class="fullscreen-button">Full Screen</button>
         <button class="visit-site-button">Make Puzzle</button>
+        <button class="visualise-button">Visualise</button> <!-- New Visualise button -->
     </div>
     <pre><code id="code" class="python hljs"></code></pre>
 </div>
@@ -152,6 +153,14 @@
         document.querySelector('.visit-site-button').addEventListener('click', function() {
             const newUrl = `https://jamesabela.github.io/jsfun/reorder?url=${encodeURIComponent(codeUrl)}`;
             window.open(newUrl, '_blank');
+        });
+
+        document.querySelector('.visualise-button').addEventListener('click', function() {
+            const baseURL = "https://pythontutor.com/iframe-embed.html";
+            const encodedCode = encodeURIComponent(codeText);
+            const params = `#code=${encodedCode}&codeDivHeight=400&codeDivWidth=350&cumulative=false&curInstr=3&heapPrimitives=nevernest&origin=opt-frontend.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false`;
+            const fullURL = `${baseURL}${params}`;
+            window.open(fullURL, '_blank');
         });
 
         document.addEventListener('fullscreenchange', (event) => {
