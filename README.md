@@ -51,5 +51,7 @@ You should be able to use any file on github and probably other sites too. I've 
 
 ## Known limitations
 * Doesn't work with Pastebin
+* You can only visualise up to 5600 bytes. (Python tutor limit)
+* When embedded in Google Sites, doesn't allow full screen display (This is a limit on all web pages in sites).
 
 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) James Abela
