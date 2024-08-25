@@ -9,6 +9,17 @@ It enables you to choose dark mode or light mode and it enables you to go full-s
 For code under 20 lines it will make a puzzle too! 
 
 ## How to use
+
+Click on [Python Code Display Tool](https://jamesabela.github.io/jsfun/pythoncopy) You can then add a url to raw gist file. such as: 
+[https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py](https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py)
+
+It will then update with the new url. To embed this into your own site, just add the final url that appears: 
+
+e.g. [https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py](https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py)
+
+You can display nearly any Python file you choose, make a Parsons puzzle of the first 20 lines and get step by step display from [Pythontutor.com](https://pythontutor.com/python-compiler.html#mode=edit)
+
+## Advanced use
 Use ?url= to add the site you want. It needs to be a raw Python file. 
 
 Example:
