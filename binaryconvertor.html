@@ -64,7 +64,8 @@
 
 <div class="slider-container">
   <label for="decimalInput">Decimal:</label>
-  <input type="range" id="decimalInput" min="0" max="255" value="0" oninput="convertFromDecimal()">
+  <input type="range" id="decimalInput_byRange" min="0" max="255" value="0" oninput="convertFromDecimal()">
+  <input type="number" id="decimalInput_byField" min="0" max="255" value="0" oninput="convertFromDecimal()">
   <span id="decimalValue">0</span>
 </div>
 
@@ -127,9 +128,20 @@
 <p>Thank you to Su Young for the denary to binary workings algorithm.</p>
 
 <script>
+  const range = document.getElementById('decimalInput_byRange');
+  const field = document.getElementById('decimalInput_byField');
+
+  range.addEventListener('input', (e) => {
+    field.value = e.target.value;
+  });
+
+  field.addEventListener('input', (e) => {
+    range.value = e.target.value;
+  });
+
   function toggleTwosComplement() {
     const twosComplement = document.getElementById("twosComplement").checked;
-    const decimalInput = document.getElementById("decimalInput");
+    const decimalInput = document.getElementById("decimalInput_byField");
 
     if (twosComplement) {
       decimalInput.min = -128;
@@ -148,8 +160,9 @@
   }
 
   function convertFromDecimal() {
-    clearWorkings();
-    let decimal = parseInt(document.getElementById("decimalInput").value);
+
+    clearWorkings(); 
+    let decimal = parseInt(document.getElementById("decimalInput_byField").value);
     const twosComplement = document.getElementById("twosComplement").checked;
 
     document.getElementById("decimalValue").innerText = decimal;
@@ -196,7 +209,7 @@
     }
 
     let hexadecimal = parseInt(binary, 2).toString(16).toUpperCase().padStart(2, '0');
-    document.getElementById("decimalInput").value = decimal;
+    document.getElementById("decimalInput_byField").value = decimal;
     document.getElementById("decimalValue").innerText = decimal;
     document.getElementById("hexadecimalInput").value = parseInt(binary, 2);
     document.getElementById("hexadecimalValue").innerText = hexadecimal;
@@ -224,7 +237,7 @@
       decimal = decimal - 256;
     }
 
-    document.getElementById("decimalInput").value = decimal;
+    document.getElementById("decimalInput_byField").value = decimal;
     document.getElementById("decimalValue").innerText = decimal;
     document.getElementById("binaryInput").value = parseInt(binary, 2);
     document.getElementById("binaryValue").innerText = binary.slice(0, 4) + " " + binary.slice(4);
