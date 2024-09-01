@@ -17,9 +17,6 @@
     .slider-container {
       margin-bottom: 20px;
     }
-    #decimalInput {
-      background-color: #ff9999;
-    }
     #binaryInput {
       background-color: #99ccff;
     }
@@ -63,9 +60,14 @@
 <br>
 
 <div class="slider-container">
-  <label for="decimalInput">Decimal:</label>
+  <label for="decimalInput">Decimal (Slider):</label>
   <input type="range" id="decimalInput" min="0" max="255" value="0" oninput="convertFromDecimal()">
   <span id="decimalValue">0</span>
+</div>
+
+<div class="slider-container">
+  <label for="decimalTextInput">Decimal (Input):</label>
+  <input type="number" id="decimalTextInput" min="-128" max="255" value="0" oninput="convertFromTextInput()">
 </div>
 
 <div class="slider-container">
@@ -124,22 +126,27 @@
   </tr>
 </table>
 
-<p>Thank you to Su Young for the denary to binary workings algorithm.</p>
+<p>With thanks to Su Young for the binary workings algorithm and Adit for the idea to include a text input.</p>
 
 <script>
   function toggleTwosComplement() {
     const twosComplement = document.getElementById("twosComplement").checked;
     const decimalInput = document.getElementById("decimalInput");
+    const decimalTextInput = document.getElementById("decimalTextInput");
 
     if (twosComplement) {
       decimalInput.min = -128;
       decimalInput.max = 127;
+      decimalTextInput.min = -128;
+      decimalTextInput.max = 127;
     } else {
       decimalInput.min = 0;
       decimalInput.max = 255;
+      decimalTextInput.min = 0;
+      decimalTextInput.max = 255;
     }
 
-    // Update the conversion based on the current slider value
+    // Update the conversion based on the current slider or text input value
     convertFromDecimal();
   }
 
@@ -150,6 +157,18 @@
   function convertFromDecimal() {
     clearWorkings();
     let decimal = parseInt(document.getElementById("decimalInput").value);
+    document.getElementById("decimalTextInput").value = decimal;
+    handleConversion(decimal);
+  }
+
+  function convertFromTextInput() {
+    clearWorkings();
+    let decimal = parseInt(document.getElementById("decimalTextInput").value);
+    document.getElementById("decimalInput").value = decimal;
+    handleConversion(decimal);
+  }
+
+  function handleConversion(decimal) {
     const twosComplement = document.getElementById("twosComplement").checked;
 
     document.getElementById("decimalValue").innerText = decimal;
@@ -197,6 +216,7 @@
 
     let hexadecimal = parseInt(binary, 2).toString(16).toUpperCase().padStart(2, '0');
     document.getElementById("decimalInput").value = decimal;
+    document.getElementById("decimalTextInput").value = decimal;
     document.getElementById("decimalValue").innerText = decimal;
     document.getElementById("hexadecimalInput").value = parseInt(binary, 2);
     document.getElementById("hexadecimalValue").innerText = hexadecimal;
@@ -225,6 +245,7 @@
     }
 
     document.getElementById("decimalInput").value = decimal;
+    document.getElementById("decimalTextInput").value = decimal;
     document.getElementById("decimalValue").innerText = decimal;
     document.getElementById("binaryInput").value = parseInt(binary, 2);
     document.getElementById("binaryValue").innerText = binary.slice(0, 4) + " " + binary.slice(4);
@@ -241,7 +262,7 @@
             Hexadecimal: ${hexadecimal}<br>
         `;
   }
-// Thank you to Su Young for this algorithm
+
   function showDetailedWorkings(decimal) {
     const twosComplement = document.getElementById("twosComplement").checked;
     let workings = "";
@@ -269,7 +290,7 @@
       workings += `<table class="step2-table"><tr><th>Division</th><th colspan="8">Binary Representation</th></tr>`;
       while (n > 0) {
         line[depth] = (n % 2).toString();
-        workings += `<tr><td>${n}/2 = ${Math.floor(n / 2)} remainder ${n % 2}</td>`;
+        workings += `<tr><td>${n}/2</td>`;
         for (let i = 0; i < 8; i++) {
           workings += `<td>${line[i]}</td>`;
         }
@@ -304,7 +325,6 @@
     document.getElementById("conversionWorkings").innerHTML = workings;
     document.getElementById("binaryValue").innerText = binaryResult;
   }
-
 
   function updateBinaryTable(binary) {
     for (let i = 0; i < 8; i++) {
