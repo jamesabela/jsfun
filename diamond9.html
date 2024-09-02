@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diamond 9 Generator</title>
+  <style>
+    #container {
+      position: relative;
+      width: 100%;
+      height: 80vh;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .draggable {
+      position: absolute;
+      z-index: 9;
+      width: 100px;
+      height: 50px;
+      border: 1px solid #000;
+      background-color: #f0f0f0;
+      text-align: center;
+      line-height: 50px;
+      cursor: move;
+    }
+
+    .background-box {
+      position: absolute;
+      z-index: 1;
+      width: 100px;
+      height: 50px;
+      border: 1px solid #000;
+      background-color: #d3d3d3;
+    }
+
+    .label {
+      position: absolute;
+      z-index: 2;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .textBox {
+      margin: 5px 0;
+    }
+
+    /* Positioning background boxes in the correct Diamond 9 shape */
+    .background-box:nth-child(1) { top: 5%; left: calc(50% - 50px); }
+    .background-box:nth-child(2) { top: 20%; left: calc(40% - 50px); }
+    .background-box:nth-child(3) { top: 20%; left: calc(60% - 50px); }
+    .background-box:nth-child(4) { top: 35%; left: calc(30% - 50px); }
+    .background-box:nth-child(5) { top: 35%; left: calc(50% - 50px); }
+    .background-box:nth-child(6) { top: 35%; left: calc(70% - 50px); }
+    .background-box:nth-child(7) { top: 50%; left: calc(40% - 50px); }
+    .background-box:nth-child(8) { top: 50%; left: calc(60% - 50px); }
+    .background-box:nth-child(9) { top: 65%; left: calc(50% - 50px); }
+
+    .label.top { top: 0; left: calc(50% - 50px); }
+    .label.bottom { top: 75%; left: calc(50% - 50px); }
+  </style>
+</head>
+<body>
+<h1>Diamond 9 Generator</h1>
+
+<div id="inputContainer">
+  <input class="textBox" type="text" id="text1" placeholder="Enter text 1">
+  <input class="textBox" type="text" id="text2" placeholder="Enter text 2">
+  <input class="textBox" type="text" id="text3" placeholder="Enter text 3">
+  <input class="textBox" type="text" id="text4" placeholder="Enter text 4">
+  <input class="textBox" type="text" id="text5" placeholder="Enter text 5">
+  <input class="textBox" type="text" id="text6" placeholder="Enter text 6">
+  <input class="textBox" type="text" id="text7" placeholder="Enter text 7">
+  <input class="textBox" type="text" id="text8" placeholder="Enter text 8">
+  <input class="textBox" type="text" id="text9" placeholder="Enter text 9">
+  <button onclick="createRectangles()">Make</button>
+</div>
+
+<div id="container">
+  <!-- Background boxes in Diamond 9 layout -->
+  <div class="background-box"></div>
+  <div class="background-box"></div>
+  <div class="background-box"></div>
+  <div class="background-box"></div>
+  <div class="background-box"></div>
+  <div class="background-box"></div>
+  <div class="background-box"></div>
+  <div class="background-box"></div>
+  <div class="background-box"></div>
+
+  <!-- Labels -->
+  <div class="label top">Most important</div>
+  <div class="label bottom">Least important</div>
+</div>
+
+<script>
+  function createRectangles() {
+    const container = document.getElementById('container');
+    const inputContainer = document.getElementById('inputContainer');
+    const words = [];
+
+    for (let i = 1; i <= 9; i++) {
+      const text = document.getElementById(`text${i}`).value.trim();
+      if (text) {
+        const div = document.createElement('div');
+        div.className = 'draggable';
+        div.textContent = text;
+
+        // Randomly position the user-entered boxes within the container
+        div.style.left = `${Math.random() * (container.clientWidth - 100)}px`;
+        div.style.top = `${Math.random() * (container.clientHeight - 50)}px`;
+
+        div.id = `mydiv${i}`;
+
+        dragElement(div);
+        container.appendChild(div);
+        words.push(encodeURIComponent(text));
+      }
+    }
+
+    // Hide the input boxes and button
+    inputContainer.style.display = 'none';
+
+    // Update URL with words
+    const url = new URL(window.location);
+    url.searchParams.set('words', words.join(','));
+    window.history.replaceState({}, '', url);
+  }
+
+  // Make the DIV element draggable
+  function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    elmnt.onmousedown = function(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // get the mouse cursor position at startup:
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
+      document.onmousemove = elementDrag;
+    };
+
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position:
+      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+      /* stop moving when mouse button is released:*/
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }
+
+  // On page load, recreate rectangles if words are in the URL and hide input boxes
+  window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const words = urlParams.get('words');
+    if (words) {
+      const wordArray = words.split(',');
+      wordArray.forEach((word, index) => {
+        document.getElementById(`text${index + 1}`).value = decodeURIComponent(word);
+      });
+      createRectangles();
+      // Hide the input boxes and button since URL contains words
+      document.getElementById('inputContainer').style.display = 'none';
+    }
+  };
+</script>
+</body>
+</html>
