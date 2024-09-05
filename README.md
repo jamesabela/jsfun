@@ -50,6 +50,21 @@ You should be able to use any file on github and probably other sites too. I've 
 * [totalling](https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py)
 * [whileloop](https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py)
 
+## Diamond 9s
+
+These are designed for discussion and there is no correct answer.
+| Topic                                                                                                                                                                                                            | Corresponding Words                                                                                    |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [Computer Networks Components](https://jamesabela.github.io/jsfun/diamond9.html?words=Routers%2CSwitches%2CFirewalls%2CNICs%2CCables%2CModems%2CBridges%2CGateways%2CRepeaters)                                  | Routers, Switches, Firewalls, NICs, Cables, Modems, Bridges, Gateways, Repeaters                       |
+| [Cybersecurity Threats](https://jamesabela.github.io/jsfun/diamond9.html?words=Phishing%2CMalware%2CSocial%2CRansomware%2CDDoS%2CPhysical%2CSpyware%2CAdware%2CKeyloggers)                                       | Phishing, Malware, Social, Ransomware, DDoS, Physical, Spyware, Adware, Keyloggers                     |
+| [Ethical Issues in Computing](https://jamesabela.github.io/jsfun/diamond9.html?words=Privacy%2CSecurity%2CProperty%2CDivide%2CAutomation%2COpen%2CTransparency%2CAccountability%2CConsent)                       | Privacy, Security, Property, Divide, Automation, Open, Transparency, Accountability, Consent           |
+| [Hardware Components of a Computer](https://jamesabela.github.io/jsfun/diamond9.html?words=CPU%2CRAM%2CStorage%2CMotherboard%2CPower%2CPeripheral%2CMonitor%2CKeyboard%2CMouse)                                  | CPU, RAM, Storage, Motherboard, Power, Peripheral, Monitor, Keyboard, Mouse                            |
+| [Key Algorithms](https://jamesabela.github.io/jsfun/diamond9.html?words=Sorting%2CSearching%2CGraph%2CDynamic%2CGreedy%2CRecursion%2CTree%2CBacktracking%2CHashing)                                              | Sorting, Searching, Graph, Dynamic, Greedy, Recursion, Tree, Backtracking, Hashing                     |
+| [Programming Concepts](https://jamesabela.github.io/jsfun/diamond9.html?words=Variables%2CFunctions%2CLoops%2CAlgorithms%2CObjects%2CSyntax%2CData%2CPseudocode%2COperators)                                     | Variables, Functions, Loops, Algorithms, Objects, Syntax, Data, Pseudocode, Operators                  |
+| [Programming Paradigms](https://jamesabela.github.io/jsfun/diamond9.html?words=OOP%2CProcedural%2CFunctional%2CEvent-Driven%2CLogic%2CDeclarative%2CImperative%2CConcurrent%2CAspect-Oriented)                   | OOP, Procedural, Functional, Event-Driven, Logic, Declarative, Imperative, Concurrent, Aspect-Oriented |
+| [Software Development Lifecycle (SDLC) Stages](https://jamesabela.github.io/jsfun/diamond9.html?words=Requirements%2CDesign%2CImplementation%2CTesting%2CDeployment%2CMaintenance%2CPlanning%2CReview%2CClosure) | Requirements, Design, Implementation, Testing, Deployment, Maintenance, Planning, Review, Closure      |
+| [Types of Software Testing](https://jamesabela.github.io/jsfun/diamond9.html?words=Unit%2CIntegration%2CSystem%2CUAT%2CRegression%2CAlpha%2CBeta%2CLoad%2CStress)                                                | Unit, Integration, System, UAT, Regression, Alpha, Beta, Load, Stress                                  |
+
 ## Known limitations
 * Doesn't work with Pastebin
 * You can only visualise up to 5600 bytes. (Python tutor limit)
