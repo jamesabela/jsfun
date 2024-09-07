@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triangle Word Drawer</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+        #controls {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Triangle Word Drawer</h1>
+<p>Which is the most important?</p>
+<canvas id="triangleCanvas" width="430" height="400"></canvas>
+
+<div id="controls">
+    <input type="text" id="word1" placeholder="Enter Word 1">
+    <input type="text" id="word2" placeholder="Enter Word 2">
+    <input type="text" id="word3" placeholder="Enter Word 3">
+    <button onclick="updateTriangle()">Draw Triangle</button>
+    <button onclick="generateRandomWords()">Random Words</button>
+</div>
+
+<script>
+    const canvas = document.getElementById('triangleCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const randomWords = [
+        "name", "age", "nationality", "occupation", "address",
+        "breakfast", "commute", "work", "lunch", "evening",
+        "restaurant", "meal", "ingredient", "recipe", "beverage",
+        "sports", "music", "reading", "painting", "gardening",
+        "airport", "hotel", "sightseeing", "vacation", "luggage",
+        "sunny", "rainy", "winter", "temperature", "forecast",
+        "mall", "price", "discount", "cashier", "purchase",
+        "exercise", "diet", "doctor", "medicine", "wellness",
+        "student", "teacher", "classroom", "homework", "exam",
+        "office", "colleague", "meeting", "salary", "career",
+        "mother", "father", "sibling", "marriage", "friendship",
+        "computer", "smartphone", "internet", "software", "application",
+        "apartment", "kitchen", "bedroom", "furniture", "neighborhood",
+        "bus", "train", "bicycle", "traffic", "route",
+        "festival", "ceremony", "custom", "heritage", "language",
+        "happy", "sad", "excited", "angry", "nervous",
+        "pollution", "recycling", "conservation", "nature", "ecosystem",
+        "movie", "theater", "concert", "game", "television",
+        "shirt", "jeans", "shoes", "style", "designer",
+        "message", "profile", "post", "comment", "hashtag"
+    ];
+
+    function drawTriangle(word1, word2, word3) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Create a gradient for the triangle fill
+        const gradient = ctx.createLinearGradient(50, 350, 350, 50);
+        gradient.addColorStop(0, 'blue');
+        gradient.addColorStop(0.5, 'green');
+        gradient.addColorStop(1, 'red');
+
+        // Fill the triangle with gradient
+        ctx.beginPath();
+        ctx.moveTo(200, 50); // Top point of the triangle
+        ctx.lineTo(50, 350); // Bottom left point
+        ctx.lineTo(350, 350); // Bottom right point
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // Draw colorful borders for each side
+        ctx.strokeStyle = "purple"; // First side
+        ctx.moveTo(200, 50);
+        ctx.lineTo(50, 350);
+        ctx.stroke();
+
+        ctx.strokeStyle = "orange"; // Second side
+        ctx.moveTo(50, 350);
+        ctx.lineTo(350, 350);
+        ctx.stroke();
+
+        ctx.strokeStyle = "pink"; // Third side
+        ctx.moveTo(350, 350);
+        ctx.lineTo(200, 50);
+        ctx.stroke();
+
+        // Draw words with different colors at each triangle vertex
+        ctx.font = "20px Arial";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "red";
+        ctx.fillText(word1, 200, 30); // Top, above the point
+        ctx.fillStyle = "blue";
+        ctx.fillText(word2, 70, 370); // Bottom left, outside the triangle
+        ctx.fillStyle = "green";
+        ctx.fillText(word3, 370, 370); // Bottom right, outside the triangle
+    }
+
+    function updateTriangle() {
+        const word1 = document.getElementById('word1').value || "Word1";
+        const word2 = document.getElementById('word2').value || "Word2";
+        const word3 = document.getElementById('word3').value || "Word3";
+
+        // Update the URL with the words
+        const url = new URL(window.location);
+        url.searchParams.set('word1', word1);
+        url.searchParams.set('word2', word2);
+        url.searchParams.set('word3', word3);
+        window.history.pushState({}, '', url);
+
+        drawTriangle(word1, word2, word3);
+    }
+
+    function generateRandomWords() {
+        const word1 = randomWords[Math.floor(Math.random() * randomWords.length)];
+        const word2 = randomWords[Math.floor(Math.random() * randomWords.length)];
+        const word3 = randomWords[Math.floor(Math.random() * randomWords.length)];
+
+        // Set random words to input fields
+        document.getElementById('word1').value = word1;
+        document.getElementById('word2').value = word2;
+        document.getElementById('word3').value = word3;
+
+        updateTriangle();
+    }
+
+    // On page load, check if there are words in the URL parameters
+    window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const word1 = urlParams.get('word1') || "Word1";
+        const word2 = urlParams.get('word2') || "Word2";
+        const word3 = urlParams.get('word3') || "Word3";
+
+        document.getElementById('word1').value = word1;
+        document.getElementById('word2').value = word2;
+        document.getElementById('word3').value = word3;
+
+        drawTriangle(word1, word2, word3);
+    }
+</script>
+
+</body>
+</html>
