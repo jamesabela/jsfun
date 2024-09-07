@@ -1,6 +1,6 @@
 # jsfun
 So the code is in JavaScript, but actually most of it is to help with Python programming. The main tool is a [Python Display tool](https://jamesabela.github.io/jsfun/pythoncopy), but there is also a
-[Binary Conversion tool](https://jamesabela.github.io/jsfun/binaryconvertor.html), a [triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool,  a [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html) which automates this set of [slides](https://docs.google.com/presentation/d/1FS-kOrCE4xuCCn4SM8Yt1Hm-81fIFxG5wzxbfamFArY/template/preview) and a simple [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html) 
+[Binary Conversion tool](https://jamesabela.github.io/jsfun/binaryconvertor.html), a [triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool,  a [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html) and a simple [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html) 
 
 ## Features
 
@@ -52,7 +52,7 @@ You should be able to use any file on github and probably other sites too. I've 
 
 ## Diamond 9s
 
-These are designed for discussion and there is no correct answer.
+A [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html) is designed for discussion and there is no correct answer. It automates this set of [slides](https://docs.google.com/presentation/d/1FS-kOrCE4xuCCn4SM8Yt1Hm-81fIFxG5wzxbfamFArY/template/preview)
 | Topic                                                                                                                                                                                                            | Corresponding Words                                                                                    |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | [Computer Networks Components](https://jamesabela.github.io/jsfun/diamond9.html?words=Routers%2CSwitches%2CFirewalls%2CNICs%2CCables%2CModems%2CBridges%2CGateways%2CRepeaters)                                  | Routers, Switches, Firewalls, NICs, Cables, Modems, Bridges, Gateways, Repeaters                       |
@@ -64,6 +64,27 @@ These are designed for discussion and there is no correct answer.
 | [Programming Paradigms](https://jamesabela.github.io/jsfun/diamond9.html?words=OOP%2CProcedural%2CFunctional%2CEvent-Driven%2CLogic%2CDeclarative%2CImperative%2CConcurrent%2CAspect-Oriented)                   | OOP, Procedural, Functional, Event-Driven, Logic, Declarative, Imperative, Concurrent, Aspect-Oriented |
 | [Software Development Lifecycle (SDLC) Stages](https://jamesabela.github.io/jsfun/diamond9.html?words=Requirements%2CDesign%2CImplementation%2CTesting%2CDeployment%2CMaintenance%2CPlanning%2CReview%2CClosure) | Requirements, Design, Implementation, Testing, Deployment, Maintenance, Planning, Review, Closure      |
 | [Types of Software Testing](https://jamesabela.github.io/jsfun/diamond9.html?words=Unit%2CIntegration%2CSystem%2CUAT%2CRegression%2CAlpha%2CBeta%2CLoad%2CStress)                                                | Unit, Integration, System, UAT, Regression, Alpha, Beta, Load, Stress                                  |
+
+## Triangle Discussion Tool
+A [triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool is a tool used in English language learning to get discussion going. It encourages you to discuss which is the most important word and why. It can lead to some wonderful open ended discussons and they sometimes get quite deep! Here are some computer science themed triangles. The random button will generate more general discussions on common topics.
+
+
+| Issue               | Word1          | Word2        | Word3          | HTTP Link |
+|---------------------|----------------|--------------|----------------|-----------|
+| **Security**         | Security       | Privacy      | Encryption     | https://jamesabela.github.io/jsfun/triangle.html?word1=Security&word2=Privacy&word3=Encryption |
+| **Scalability**      | Scalability    | Performance  | Cost           | https://jamesabela.github.io/jsfun/triangle.html?word1=Scalability&word2=Performance&word3=Cost |
+| **Ethics**           | Ethics         | Bias         | Responsibility | https://jamesabela.github.io/jsfun/triangle.html?word1=Ethics&word2=Bias&word3=Responsibility |
+| **Data**             | Data           | Storage      | Integrity      | https://jamesabela.github.io/jsfun/triangle.html?word1=Data&word2=Storage&word3=Integrity |
+| **AI**               | AI             | Automation   | Intelligence   | https://jamesabela.github.io/jsfun/triangle.html?word1=AI&word2=Automation&word3=Intelligence |
+| **Privacy**          | Privacy        | Consent      | Tracking       | https://jamesabela.github.io/jsfun/triangle.html?word1=Privacy&word2=Consent&word3=Tracking |
+| **Accessibility**    | Accessibility  | Usability    | Inclusion      | https://jamesabela.github.io/jsfun/triangle.html?word1=Accessibility&word2=Usability&word3=Inclusion |
+| **Sustainability**   | Sustainability | Energy       | Efficiency     | https://jamesabela.github.io/jsfun/triangle.html?word1=Sustainability&word2=Energy&word3=Efficiency |
+| **Cybercrime**       | Cybercrime     | Fraud        | Phishing       | https://jamesabela.github.io/jsfun/triangle.html?word1=Cybercrime&word2=Fraud&word3=Phishing |
+| **Open Source**      | OpenSource     | Collaboration| Transparency   | https://jamesabela.github.io/jsfun/triangle.html?word1=OpenSource&word2=Collaboration&word3=Transparency |
+| **Digital Divide**   | DigitalDivide  | Access       | Education      | https://jamesabela.github.io/jsfun/triangle.html?word1=DigitalDivide&word2=Access&word3=Education |
+| **Algorithms**       | Algorithms     | Optimization | Complexity     | https://jamesabela.github.io/jsfun/triangle.html?word1=Algorithms&word2=Optimization&word3=Complexity |
+| **Networking**       | Networking     | Bandwidth    | Connectivity   | https://jamesabela.github.io/jsfun/triangle.html?word1=Networking&word2=Bandwidth&word3=Connectivity |
+
 
 ## Known limitations
 * Code Display doesn't work with Pastebin
