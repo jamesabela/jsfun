@@ -1,6 +1,6 @@
 # jsfun
 So the code is in JavaScript, but actually most of it is to help with Python programming. The main tool is a [Python Display tool](https://jamesabela.github.io/jsfun/pythoncopy), but there is also a
-[Binary Conversion tool](https://jamesabela.github.io/jsfun/binaryconvertor.html), a [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html) which automates this set of [slides](https://docs.google.com/presentation/d/1FS-kOrCE4xuCCn4SM8Yt1Hm-81fIFxG5wzxbfamFArY/template/preview) and a simple [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html) 
+[Binary Conversion tool](https://jamesabela.github.io/jsfun/binaryconvertor.html), a [triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool,  a [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html) which automates this set of [slides](https://docs.google.com/presentation/d/1FS-kOrCE4xuCCn4SM8Yt1Hm-81fIFxG5wzxbfamFArY/template/preview) and a simple [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html) 
 
 ## Features
 
