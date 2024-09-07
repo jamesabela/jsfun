@@ -66,8 +66,8 @@ These are designed for discussion and there is no correct answer.
 | [Types of Software Testing](https://jamesabela.github.io/jsfun/diamond9.html?words=Unit%2CIntegration%2CSystem%2CUAT%2CRegression%2CAlpha%2CBeta%2CLoad%2CStress)                                                | Unit, Integration, System, UAT, Regression, Alpha, Beta, Load, Stress                                  |
 
 ## Known limitations
-* Doesn't work with Pastebin
-* You can only visualise up to 5600 bytes. (Python tutor limit)
+* Code Display doesn't work with Pastebin
+* Code Display can only visualise up to 5600 bytes. (Python tutor limit)
 * When embedded in Google Sites, doesn't allow full screen display (This is a limit on all web pages in sites).
 
 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) James Abela
