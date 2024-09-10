@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Lollipop Stick Carousel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      overflow: hidden;
+    }
+    #carousel {
+      perspective: 1000px;
+      height: 350px;
+      position: relative;
+      margin-top: 50px;
+    }
+    .stick-container {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+      height: 300px;
+      transform-style: preserve-3d;
+      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1); /* Smooth ease-out spin */
+    }
+    .stick {
+      width: 100px;
+      height: 250px;
+      margin: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      position: absolute;
+      cursor: pointer;
+      transform-style: preserve-3d;
+    }
+    .stick span {
+      position: absolute;
+      bottom: 20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    #question-inputs {
+      margin: 20px 0;
+    }
+    .btn {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #picked-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #333;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      width: 50%;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<h1>3D Lollipop Stick Carousel</h1>
+<div id="question-inputs">
+  <textarea id="questions" rows="6" cols="50" placeholder="Enter up to 25 questions/names/groups, each on a new line..."></textarea><br>
+  <button class="btn" onclick="generateSticks()">Generate Sticks</button>
+</div>
+
+<div id="carousel">
+  <div class="stick-container" id="stick-container"></div>
+  <div id="picked-box"></div> <!-- Moved to center the carousel -->
+</div>
+
+<button class="btn" onclick="pickRandomStick()" style="display:none;" id="pick-btn">Pick Random Stick</button>
+<button class="btn" onclick="removeRandomStick()" style="display:none;" id="remove-btn">Remove Random Stick</button>
+
+<script>
+  let sticks = [];
+  let currentAngle = 0;
+  let lastPickedIndex = -1; // Store the last picked stick index
+
+  const colors = [
+    '#ffcc00', '#ff6666', '#66cc66', '#6699ff', '#ff9966', '#ff66ff', '#33ccff', '#33ff66', '#ff6633', '#cc33ff',
+    '#ff3333', '#00cc66', '#9933ff', '#ffcc99', '#66ff66', '#99ccff', '#ff6699', '#66ffcc', '#cc66ff', '#ffcc33',
+    '#33ff99', '#3366ff', '#ff9933', '#99ff33', '#66ccff'
+  ];
+
+  function generateSticks() {
+    const questions = document.getElementById('questions').value.split('\n').filter(q => q.trim() !== '');
+    if (questions.length > 25) {
+      alert("Please enter no more than 25 questions.");
+      return;
+    }
+
+    sticks = questions.map((question, index) => ({ text: question, id: index }));
+    updateUrl(questions); // Update the URL with the questions
+    renderCarousel();
+  }
+
+  function renderCarousel() {
+    const container = document.getElementById('stick-container');
+    container.innerHTML = '';
+
+    const totalSticks = sticks.length;
+    const angleStep = 360 / totalSticks;
+
+    sticks.forEach((stick, index) => {
+      const stickDiv = document.createElement('div');
+      stickDiv.className = 'stick';
+      stickDiv.style.backgroundColor = colors[index % colors.length];
+      stickDiv.id = 'stick-' + stick.id;
+      stickDiv.innerHTML = `<span>${stick.text}</span>`;
+      stickDiv.style.transform = `rotateY(${index * angleStep}deg) translateZ(300px)`;
+      container.appendChild(stickDiv);
+    });
+
+    document.getElementById('pick-btn').style.display = 'inline-block';
+    document.getElementById('remove-btn').style.display = 'inline-block';
+  }
+
+  function pickRandomStick() {
+    if (sticks.length === 0) {
+      alert("No more sticks left.");
+      return;
+    }
+
+    const container = document.getElementById('stick-container');
+    const randomIndex = Math.floor(Math.random() * sticks.length);
+    const angleStep = 360 / sticks.length;
+
+    // Calculate a random number of spins (i.e., full rotations) for a more realistic spinning effect
+    const randomSpins = Math.floor(Math.random() * 4 + 3); // Random spins between 3 and 6
+    const targetAngle = -(randomIndex * angleStep) - (randomSpins * 360); // Add full rotations for realism
+
+    container.style.transform = `rotateY(${targetAngle}deg)`; // Apply the rotation
+    lastPickedIndex = randomIndex; // Store the picked stick index
+
+    setTimeout(() => {
+      const pickedStick = sticks[randomIndex];
+      const pickedBox = document.getElementById('picked-box');
+      pickedBox.textContent = pickedStick.text;
+      pickedBox.style.display = 'block';
+    }, 4000); // Wait for the animation to finish (4 seconds for smooth spin)
+  }
+
+  function removeRandomStick() {
+    if (sticks.length === 0) {
+      alert("No more sticks to remove.");
+      return;
+    }
+    if (lastPickedIndex === -1) {
+      alert("No stick has been picked yet!");
+      return;
+    }
+
+    // Remove the last picked stick
+    sticks.splice(lastPickedIndex, 1);
+    lastPickedIndex = -1; // Reset after removal
+
+    // Re-generate carousel with remaining sticks
+    renderCarousel();
+  }
+
+  function updateUrl(questions) {
+    const url = new URL(window.location);
+    url.searchParams.set('questions', encodeURIComponent(questions.join(',')));
+    window.history.pushState({}, '', url);
+  }
+
+  // Load questions from URL if present
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('questions')) {
+      const questions = decodeURIComponent(urlParams.get('questions')).split(',');
+      document.getElementById('questions').value = questions.join('\n');
+      sticks = questions.map((question, index) => ({ text: question, id: index }));
+      renderCarousel(); // Re-render the carousel with loaded questions
+    }
+  };
+</script>
+</body>
+</html>
