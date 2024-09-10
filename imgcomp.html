@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Comparison Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      position: relative;
+      width: 500px;
+      height: 300px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+    }
+    .image {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #image1 {
+      z-index: 5;
+      clip-path: inset(0 50% 0 0); /* Initial left half visibility */
+    }
+    .slider {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 20px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      cursor: ew-resize;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .slider::before {
+      content: '◀';
+      position: absolute;
+      left: -15px;
+      font-size: 20px;
+      color: white;
+    }
+    .slider::after {
+      content: '▶';
+      position: absolute;
+      right: -15px;
+      font-size: 20px;
+      color: white;
+    }
+    .question {
+      margin-top: 10px;
+    }
+    .form, .question-text {
+      margin: 10px 0;
+    }
+    .form input, .form button, .question-text input {
+      margin-right: 5px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form">
+  <label for="image1-url">Image 1 URL: </label>
+  <input type="text" id="image1-url">
+  <label for="image2-url">Image 2 URL: </label>
+  <input type="text" id="image2-url">
+  <label for="question">Question: </label>
+  <input type="text" id="question">
+  <button id="submit">Submit</button>
+</div>
+
+<div class="container hidden" id="image-container">
+  <img id="image1" class="image" src="" alt="Image 1">
+  <img id="image2" class="image" src="" alt="Image 2" style="z-index: 1;">
+  <div class="slider" id="slider"></div>
+</div>
+
+<div class="question-text hidden">
+  <p id="display-question"></p>
+</div>
+
+<script>
+  document.getElementById('submit').addEventListener('click', function() {
+    // Get the URLs and question
+    const image1Url = document.getElementById('image1-url').value;
+    const image2Url = document.getElementById('image2-url').value;
+    const question = document.getElementById('question').value;
+
+    // Update the images and the question
+    document.getElementById('image1').src = image1Url;
+    document.getElementById('image2').src = image2Url;
+    document.getElementById('display-question').textContent = question;
+
+    // Hide the form
+    document.querySelector('.form').classList.add('hidden');
+
+    // Show the image container and question
+    document.getElementById('image-container').classList.remove('hidden');
+    document.querySelector('.question-text').classList.remove('hidden');
+
+    // Update the URL with the image URLs and question
+    const newUrl = `${window.location.origin}${window.location.pathname}?image1=${encodeURIComponent(image1Url)}&image2=${encodeURIComponent(image2Url)}&question=${encodeURIComponent(question)}`;
+    history.pushState(null, '', newUrl);
+  });
+
+  // Slider functionality
+  const slider = document.getElementById('slider');
+  const image1 = document.getElementById('image1');
+  const image2 = document.getElementById('image2');
+  slider.addEventListener('mousedown', function(e) {
+    const onMouseMove = (e) => {
+      let rect = slider.parentNode.getBoundingClientRect();
+      let offsetX = e.clientX - rect.left;
+      let percentage = offsetX / rect.width * 100;
+      image1.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+      slider.style.left = `${percentage}%`;
+    };
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', () => {
+      document.removeEventListener('mousemove', onMouseMove);
+    }, { once: true });
+  });
+
+  // Load from URL if provided
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('image1') && params.has('image2') && params.has('question')) {
+    document.getElementById('image1-url').value = params.get('image1');
+    document.getElementById('image2-url').value = params.get('image2');
+    document.getElementById('question').value = params.get('question');
+    document.getElementById('submit').click();
+  }
+</script>
+
+</body>
+</html>
