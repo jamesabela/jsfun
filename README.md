@@ -11,7 +11,7 @@ This tool started as a way to help with Python programming, but has expanded rat
 ## Fun tools
 There is now a host of little tools that enable you to enter in some text or links and then use the results. In most cases, the link updates so that you can easily come back.
 
-* [triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool
+* [Triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool
 * [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html)
 * [3D Lollipop Stick Carousel](https://jamesabela.github.io/jsfun/lollipop.html) - For choosing random names, groups or questions
 * [Tile Reveal Game](https://jamesabela.github.io/jsfun/imgtiles.html) - Link an image and play a game to see who can guess what it is first
