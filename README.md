@@ -1,8 +1,22 @@
 # jsfun
-So the code is in JavaScript, but actually most of it is to help with Python programming. The main tool is a [Python Display tool](https://jamesabela.github.io/jsfun/pythoncopy), but there is also a
-[Binary Conversion tool](https://jamesabela.github.io/jsfun/binaryconvertor.html), a [triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool,  a [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html) and a simple [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html) 
+This tool started as a way to help with Python programming, but has expanded rather a lot! The main tool is [Python Display tool](https://jamesabela.github.io/jsfun/pythoncopy)
 
-## Features
+## CS Specific tools
+
+* [Binary Conversion tool](https://jamesabela.github.io/jsfun/binaryconvertor.html)
+* [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html) 
+
+## Fun tools
+There is now a host of little tools that enable you to enter in some text or links and then use the results. In most cases, the link updates so that you can easily come back.
+
+* [triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool
+* [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html)
+* [3D Lollipop Stick Carousel](https://jamesabela.github.io/jsfun/lollipop.html) - For choosing random names, groups or questions
+* [Tile Reveal Game](https://jamesabela.github.io/jsfun/imgtiles.html) - Link an image and play a game to see who can guess what it is first
+* [Image Reveal](https://jamesabela.github.io/jsfun/imgrev.html) - Fun spotlight to investigate an image. Great for younger children to explore.
+* [Image Compare](https://jamesabela.github.io/jsfun/imgcomp.html) - A tool to see two images over the top of each other. Great for Now & Then or even just comparing which you like best.
+
+## Python Display Tool Features
 
 A [display tool](https://jamesabela.github.io/jsfun/pythoncopy) that will enable you to download Python files as either .py files or .txt files if your firewall is very restrictive.
 It enables you to choose dark mode or light mode and it enables you to go full-screen. 
