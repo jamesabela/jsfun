@@ -7,6 +7,7 @@ This tool started as a way to help with Python programming, but has expanded rat
 * [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html)
 * [iGCSE File Size Calculator](https://ians.site/file/) (Student created)
 * [Python Challenges](https://pythonchallenges.weebly.com/) (Welcome to use challenges, but entries are GIS only)
+* [Cipher Wheel](https://scratch.mit.edu/projects/427196904/)
 
 ## Fun tools
 There is now a host of little tools that enable you to enter in some text or links and then use the results. In most cases, the link updates so that you can easily come back.
