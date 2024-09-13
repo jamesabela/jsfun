@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Draggable Manipulatives</title>
+  <style>
+    #manipulatives-container {
+      width: 100%;
+      height: 100vh;
+      border: 1px solid #ccc;
+      position: relative;
+      overflow: auto;
+      margin-top: 10px;
+    }
+    .manipulative {
+      display: inline-block;
+      padding: 10px;
+      margin: 5px;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 5px;
+      cursor: grab;
+      position: absolute;
+      user-select: none; /* Prevent text selection while dragging */
+      font-size: 1em;
+    }
+    #input-container {
+      display: block;
+      margin: 10px 0;
+    }
+    #title {
+      text-align: center;
+      font-size: 2em;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    #scale-container {
+      display: block;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+      background-color: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    #scale-label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h2 id="title">Draggable Manipulatives Generator</h2>
+
+<div id="input-container">
+  <input type="text" id="title-input" placeholder="Enter title here" style="width: 50%; display: block; margin-bottom: 10px;">
+  <textarea id="text-input" rows="5" cols="50" placeholder="Enter words or phrases, each on a new line"></textarea>
+  <br>
+  <button id="generate-btn" onclick="generateManipulatives()">Generate Manipulatives</button>
+</div>
+
+<!-- Slider for scaling -->
+<div id="scale-container">
+  <label id="scale-label">Scale:</label>
+  <input type="range" id="scale-slider" min="0.5" max="3" step="0.1" value="1" oninput="scaleManipulativesAndTitle(this.value)">
+</div>
+
+<div id="manipulatives-container"></div>
+
+<script>
+  // Function to create draggable manipulatives
+  function generateManipulatives() {
+    const titleText = document.getElementById('title-input').value;
+    const inputText = document.getElementById('text-input').value;
+    const phrases = sanitizeText(inputText);
+
+    if (!phrases.length || !titleText.trim()) return; // Avoid empty title or phrases
+
+    // Update the URL with the title and phrases
+    const encodedTitle = encodeURIComponent(titleText);
+    const encodedPhrases = encodeURIComponent(phrases.join('\n'));
+    const newUrl = `${window.location.origin}${window.location.pathname}?title=${encodedTitle}&phrases=${encodedPhrases}`;
+    window.history.pushState({}, '', newUrl);
+
+    // Set the title and hide the input fields
+    document.getElementById('title').textContent = titleText;
+    document.getElementById('input-container').style.display = 'none';
+
+    createManipulatives(phrases);
+  }
+
+  // Function to sanitize and process input text
+  function sanitizeText(inputText) {
+    return inputText
+            .split(/\n+/) // Split by newline characters
+            .filter(phrase => phrase.trim().length > 0) // Remove empty entries
+            .map(phrase => phrase.trim()); // Remove extra spaces
+  }
+
+  // Function to create manipulatives on the screen
+  function createManipulatives(phrases) {
+    const container = document.getElementById('manipulatives-container');
+    container.innerHTML = ''; // Clear previous manipulatives
+
+    phrases.forEach((phrase) => {
+      const manipulative = document.createElement('div');
+      manipulative.classList.add('manipulative');
+      manipulative.textContent = phrase;
+      manipulative.style.top = `${Math.random() * 250}px`; // Random position
+      manipulative.style.left = `${Math.random() * 250}px`;
+
+      // Add manual drag functionality
+      let isDragging = false;
+      let offsetX, offsetY;
+
+      manipulative.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        offsetX = e.clientX - parseInt(manipulative.style.left);
+        offsetY = e.clientY - parseInt(manipulative.style.top);
+        manipulative.style.cursor = 'grabbing'; // Change cursor while dragging
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+          manipulative.style.top = `${e.clientY - offsetY}px`;
+          manipulative.style.left = `${e.clientX - offsetX}px`;
+        }
+      });
+
+      document.addEventListener('mouseup', function() {
+        if (isDragging) {
+          isDragging = false;
+          manipulative.style.cursor = 'grab'; // Reset cursor when not dragging
+        }
+      });
+
+      container.appendChild(manipulative);
+    });
+  }
+
+  // Function to scale manipulatives and the title based on slider value
+  function scaleManipulativesAndTitle(scaleValue) {
+    const manipulatives = document.querySelectorAll('.manipulative');
+    const title = document.getElementById('title');
+
+    // Scale manipulatives
+    manipulatives.forEach(manipulative => {
+      manipulative.style.fontSize = `${scaleValue}em`;
+    });
+
+    // Scale title
+    title.style.fontSize = `${scaleValue * 2}em`; // Title is larger, so scale it accordingly
+  }
+
+  // Automatically generate manipulatives if title and phrases are in the URL
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const titleParam = urlParams.get('title');
+    const phrasesParam = urlParams.get('phrases');
+    if (titleParam && phrasesParam) {
+      const decodedTitle = decodeURIComponent(titleParam);
+      const decodedPhrases = decodeURIComponent(phrasesParam).split('\n');
+
+      // Set title and hide input fields
+      document.getElementById('title').textContent = decodedTitle;
+      document.getElementById('input-container').style.display = 'none';
+
+      // Generate manipulatives
+      createManipulatives(decodedPhrases);
+    }
+  };
+</script>
+
+</body>
+</html>
