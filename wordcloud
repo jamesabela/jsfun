@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Cloud</title>
+  <style>
+    #word-cloud {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      position: relative;
+    }
+    .word {
+      position: absolute;
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+    }
+    #text-input, #generate-btn {
+      display: block;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Word Cloud Generator</h2>
+
+<textarea id="text-input" rows="5" cols="50" placeholder="Enter your text here..."></textarea>
+<br>
+<button id="generate-btn" onclick="generateWordCloud()">Generate Word Cloud</button>
+
+<div id="word-cloud"></div>
+
+<script>
+  // List of common stop words to exclude from word cloud
+  const stopWords = ["the", "is", "in", "and", "or", "an", "a", "of", "to", "with", "as", "by", "on", "at", "for", "this", "that", "it"];
+
+  // Function to generate random color
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  // Function to sanitize input and remove problematic characters
+  function sanitizeText(text) {
+    return text
+            .replace(/[^a-zA-Z0-9\s]/g, '') // Remove all non-alphanumeric characters except spaces
+            .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+            .trim(); // Trim leading/trailing spaces
+  }
+
+  // Function to generate word cloud from sanitized text
+  function generateWordCloudFromText(inputText) {
+    const wordCloudContainer = document.getElementById('word-cloud');
+    wordCloudContainer.innerHTML = ''; // Clear previous content
+
+    const words = inputText.split(/\s+/);
+    const wordMap = {};
+
+    words.forEach(word => {
+      word = word.toLowerCase();
+      if (!stopWords.includes(word)) { // Only include non-stop words
+        wordMap[word] = (wordMap[word] || 0) + 1;
+      }
+    });
+
+    Object.keys(wordMap).forEach((word) => {
+      const wordCount = wordMap[word];
+      const wordSpan = document.createElement('span');
+      wordSpan.classList.add('word');
+      wordSpan.style.fontSize = `${Math.min(wordCount * 10, 50)}px`; // Size by word frequency, max font size of 50px
+      wordSpan.textContent = word;
+
+      // Add random color
+      wordSpan.style.color = getRandomColor();
+
+      // Randomly position the word
+      wordSpan.style.left = `${Math.random() * 90}%`;
+      wordSpan.style.top = `${Math.random() * 90}%`;
+
+      wordCloudContainer.appendChild(wordSpan);
+    });
+
+    // Hide the input box and button after submission
+    document.getElementById('text-input').style.display = 'none';
+    document.getElementById('generate-btn').style.display = 'none';
+  }
+
+  // Function to generate word cloud from textarea input and update URL
+  function generateWordCloud() {
+    let inputText = document.getElementById('text-input').value;
+    inputText = sanitizeText(inputText);
+
+    if (!inputText.trim()) return; // Avoid generating empty cloud
+
+    // Update the URL with the sanitized input text
+    const encodedText = encodeURIComponent(inputText);
+    const newUrl = `${window.location.origin}${window.location.pathname}?text=${encodedText}`;
+    window.history.pushState({}, '', newUrl);
+
+    generateWordCloudFromText(inputText);
+  }
+
+  // Automatically generate word cloud if text is in the URL
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const text = urlParams.get('text');
+    if (text) {
+      const decodedText = decodeURIComponent(text);
+      const sanitizedText = sanitizeText(decodedText);
+      // Directly generate the word cloud without relying on the textarea
+      generateWordCloudFromText(sanitizedText);
+    }
+  };
+</script>
+
+</body>
+</html>
