@@ -17,13 +17,21 @@
       display: inline-block;
       padding: 10px;
       margin: 5px;
-      background-color: #4CAF50;
       color: white;
       border-radius: 5px;
       cursor: grab;
       position: absolute;
       user-select: none; /* Prevent text selection while dragging */
       font-size: 1em;
+    }
+    .green {
+      background-color: #4CAF50; /* Default green */
+    }
+    .blue {
+      background-color: #2196F3; /* Blue for * */
+    }
+    .red {
+      background-color: #F44336; /* Red for ** */
     }
     #input-container {
       display: block;
@@ -57,7 +65,7 @@
 
 <div id="input-container">
   <input type="text" id="title-input" placeholder="Enter title here" style="width: 50%; display: block; margin-bottom: 10px;">
-  <textarea id="text-input" rows="5" cols="50" placeholder="Enter words or phrases, each on a new line"></textarea>
+  <textarea id="text-input" rows="5" cols="50" placeholder="Enter words or phrases, each on a new line. Use * for blue and ** for red"></textarea>
   <br>
   <button id="generate-btn" onclick="generateManipulatives()">Generate Manipulatives</button>
 </div>
@@ -108,6 +116,18 @@
     phrases.forEach((phrase) => {
       const manipulative = document.createElement('div');
       manipulative.classList.add('manipulative');
+
+      // Set class based on * or ** at the start of the phrase
+      if (phrase.startsWith('**')) {
+        manipulative.classList.add('red'); // Red if it starts with **
+        phrase = phrase.substring(2).trim(); // Remove the **
+      } else if (phrase.startsWith('*')) {
+        manipulative.classList.add('blue'); // Blue if it starts with *
+        phrase = phrase.substring(1).trim(); // Remove the *
+      } else {
+        manipulative.classList.add('green'); // Default green
+      }
+
       manipulative.textContent = phrase;
       manipulative.style.top = `${Math.random() * 250}px`; // Random position
       manipulative.style.left = `${Math.random() * 250}px`;
