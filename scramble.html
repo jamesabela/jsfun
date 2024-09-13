@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentence Order Quiz</title>
+  <style>
+    #quiz-container {
+      width: 100%;
+      height: 70vh;
+      border: 1px solid #ccc;
+      position: relative;
+      overflow: auto;
+      margin-top: 10px;
+      padding: 20px;
+    }
+    .sentence {
+      padding: 10px;
+      margin: 5px;
+      background-color: #5bc0de;
+      color: white;
+      border-radius: 5px;
+      cursor: grab;
+      user-select: none;
+      font-size: 1.2em;
+      width: 90%;
+      box-sizing: border-box;
+    }
+    .dropzone {
+      height: 60px;
+      margin: 10px 0;
+      padding: 10px;
+      border: 2px dashed #ccc;
+      background-color: #f9f9f9;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dropzone.empty {
+      border: 2px dashed #ccc;
+    }
+    .dropzone.filled {
+      border: none;
+    }
+    #input-container {
+      display: block;
+      margin: 10px 0;
+    }
+    #title {
+      text-align: center;
+      font-size: 2em;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    #check-btn {
+      margin-top: 20px;
+      font-size: 1.2em;
+      padding: 10px;
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #d9534f;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<h2 id="title">Sentence Order Quiz</h2>
+
+<!-- Moved the check order button to the top -->
+<button id="check-btn" style="display:none;" onclick="checkOrder()">Check Order</button>
+
+<div id="input-container">
+  <textarea id="sentence-input" rows="5" cols="50" placeholder="Enter sentences, each on a new line"></textarea>
+  <br>
+  <button id="generate-btn" onclick="generateQuiz()">Generate Quiz</button>
+</div>
+
+<div id="quiz-container"></div>
+
+<div id="result"></div>
+
+<script>
+  // Base64 encoding/decoding functions for encryption and decryption
+  function encodeBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+
+  function decodeBase64(str) {
+    return decodeURIComponent(escape(atob(str)));
+  }
+
+  // Function to scramble the sentences randomly
+  function scrambleArray(array) {
+    return array
+            .map((a) => ({ sort: Math.random(), value: a }))
+            .sort((a, b) => a.sort - b.sort)
+            .map((a) => a.value);
+  }
+
+  // Function to sanitize and process input text (split by new lines)
+  function sanitizeText(inputText) {
+    return inputText
+            .split(/\n+/) // Split by newline characters
+            .filter(sentence => sentence.trim().length > 0) // Remove empty entries
+            .map(sentence => sentence.trim()); // Remove extra spaces
+  }
+
+  // Function to generate the quiz
+  function generateQuiz() {
+    const inputText = document.getElementById('sentence-input').value;
+    const sentences = sanitizeText(inputText);
+
+    if (!sentences.length) return; // Avoid empty input
+
+    // Scramble the sentences
+    const scrambledSentences = scrambleArray(sentences);
+
+    // Encrypt the correct order using Base64
+    const correctOrder = encodeBase64(sentences.join('|'));
+
+    // Update the URL with the encrypted correct order
+    const newUrl = `${window.location.origin}${window.location.pathname}?order=${correctOrder}`;
+    window.history.pushState({}, '', newUrl);
+
+    // Hide the input container
+    document.getElementById('input-container').style.display = 'none';
+
+    // Display the scrambled sentences as draggable items with drop zones
+    createQuiz(sentences, scrambledSentences);
+  }
+
+  // Function to create the quiz with scrambled sentences and drop zones
+  function createQuiz(originalSentences, scrambledSentences) {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = ''; // Clear previous quiz
+
+    // Create drop zones for each sentence
+    originalSentences.forEach((_, index) => {
+      const dropzone = document.createElement('div');
+      dropzone.classList.add('dropzone', 'empty');
+      dropzone.setAttribute('data-index', index);
+      dropzone.addEventListener('dragover', handleDragOver);
+      dropzone.addEventListener('drop', handleDrop);
+      container.appendChild(dropzone);
+    });
+
+    // Create draggable sentences
+    scrambledSentences.forEach((sentence, index) => {
+      const sentenceDiv = document.createElement('div');
+      sentenceDiv.classList.add('sentence');
+      sentenceDiv.textContent = sentence;
+      sentenceDiv.setAttribute('draggable', true);
+      sentenceDiv.setAttribute('data-index', index);
+
+      // Add drag event listeners
+      sentenceDiv.addEventListener('dragstart', dragStart);
+      sentenceDiv.addEventListener('dragend', dragEnd);
+
+      container.appendChild(sentenceDiv);
+    });
+
+    document.getElementById('check-btn').style.display = 'block'; // Show check button above the quiz container
+  }
+
+  // Drag and Drop functionality
+  let draggedElement = null;
+  let originalDropZone = null;
+
+  function dragStart(e) {
+    draggedElement = e.target;
+    originalDropZone = e.target.parentNode.classList.contains('dropzone') ? e.target.parentNode : null;
+    e.dataTransfer.setData('text/plain', e.target.dataset.index);
+    setTimeout(() => {
+      e.target.style.display = 'none'; // Hide the element while dragging
+    }, 0);
+  }
+
+  function dragEnd(e) {
+    e.target.style.display = ''; // Make the element visible again after drag ends
+    draggedElement = null;
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    const dropzone = e.target;
+
+    if (dropzone.classList.contains('dropzone')) {
+      if (dropzone.classList.contains('empty')) {
+        dropzone.classList.remove('empty');
+        dropzone.classList.add('filled');
+        dropzone.innerHTML = ''; // Clear the drop zone
+        dropzone.appendChild(draggedElement); // Snap sentence into the drop zone
+      } else {
+        // Swap items: move the existing sentence back out
+        const existingElement = dropzone.querySelector('.sentence');
+        if (existingElement && draggedElement) {
+          dropzone.appendChild(draggedElement); // Place the new element in the drop zone
+          document.getElementById('quiz-container').appendChild(existingElement); // Move the old sentence to the free space
+          existingElement.classList.add('sentence'); // Make sure it remains draggable
+        }
+      }
+
+      // If the sentence was dragged from another drop zone, mark the original drop zone as empty
+      if (originalDropZone && originalDropZone !== dropzone) {
+        originalDropZone.classList.remove('filled');
+        originalDropZone.classList.add('empty');
+      }
+    }
+  }
+
+  // Function to check if the sentences are in the correct order
+  function checkOrder() {
+    const container = document.getElementById('quiz-container');
+    const dropzones = container.querySelectorAll('.dropzone');
+    const orderedSentences = Array.from(dropzones).map(zone => {
+      return zone.textContent.trim();
+    });
+
+    // Retrieve the correct order from the encrypted URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const encodedOrder = urlParams.get('order');
+    const correctOrder = decodeBase64(encodedOrder).split('|');
+
+    // Compare the ordered sentences with the correct order
+    const isCorrect = orderedSentences.every((sentence, index) => sentence === correctOrder[index]);
+
+    // Display the result
+    const resultDiv = document.getElementById('result');
+    if (isCorrect) {
+      resultDiv.textContent = 'Correct! The sentences are in the right order.';
+      resultDiv.style.color = '#5cb85c';
+    } else {
+      resultDiv.textContent = 'Incorrect! Try again.';
+      resultDiv.style.color = '#d9534f';
+    }
+  }
+
+  // Automatically generate quiz if the encrypted order is in the URL
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const encodedOrder = urlParams.get('order');
+    if (encodedOrder) {
+      const correctOrder = decodeBase64(encodedOrder).split('|');
+      const scrambledSentences = scrambleArray(correctOrder);
+
+      // Hide input container and generate the quiz
+      document.getElementById('input-container').style.display = 'none';
+      createQuiz(correctOrder, scrambledSentences);
+    }
+  };
+</script>
+
+</body>
+</html>
