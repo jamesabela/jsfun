@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Two Sides with Lines</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
+    #content {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 50px;
+    }
+    #left, #right {
+      width: 30%;
+    }
+    .box {
+      border: 1px solid #000;
+      padding: 10px;
+      margin: 20px 0;
+      text-align: center;
+      cursor: pointer;
+    }
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+    }
+    #input-container {
+      width: 100%;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    #input-container input,
+    #input-container textarea {
+      width: 45%;
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 1em;
+    }
+    #submit-btn, #check-btn, #reset-btn {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #reset-btn {
+      background-color: #f44336; /* Red */
+    }
+    #result {
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #000;
+    }
+    #button-container {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="input-container">
+  <textarea id="left-input" rows="5" placeholder="Enter left-side items, each on a new line"></textarea>
+  <textarea id="right-input" rows="5" placeholder="Enter right-side items, each on a new line"></textarea>
+  <br>
+  <button id="submit-btn" onclick="createBoxes()">Generate Boxes</button>
+</div>
+
+<div id="content">
+  <!-- Left Side -->
+  <div id="left" style="display:none;">
+    <h3>Left Side</h3>
+  </div>
+
+  <!-- Canvas for drawing lines -->
+  <canvas id="canvas"></canvas>
+
+  <!-- Right Side -->
+  <div id="right" style="display:none;">
+    <h3>Right Side</h3>
+  </div>
+</div>
+
+<!-- Button Container below the canvas -->
+<div id="button-container">
+  <button id="check-btn" style="display:none;" onclick="checkAnswer()">Check Answer</button>
+  <button id="reset-btn" style="display:none;" onclick="resetCanvas()">Reset Lines</button>
+</div>
+
+<!-- Result -->
+<div id="result"></div>
+
+<script>
+  let selectedLeftBox = null;
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let correctPairs = [];
+  let userConnections = [];
+
+  // Function to draw a line between two points
+  function drawLine(startX, startY, endX, endY) {
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+  }
+
+  // Function to randomize an array
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Base64 encoding/decoding functions for encryption and decryption
+  function encodeBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+
+  function decodeBase64(str) {
+    return decodeURIComponent(escape(atob(str)));
+  }
+
+  // Function to create boxes based on user input
+  function createBoxes() {
+    const leftInput = document.getElementById('left-input').value.trim().split('\n');
+    const rightInput = document.getElementById('right-input').value.trim().split('\n');
+
+    // Save the correct pairs
+    correctPairs = leftInput.map((item, index) => ({
+      left: `left-${index}`,
+      right: `right-${index}`
+    }));
+
+    // Hide the input container and show the left and right sections
+    document.getElementById('input-container').style.display = 'none';
+    document.getElementById('left').style.display = 'block';
+    document.getElementById('right').style.display = 'block';
+    document.getElementById('check-btn').style.display = 'block';
+    document.getElementById('reset-btn').style.display = 'block';
+
+    // Randomize both sides
+    const shuffledLeft = shuffle([...leftInput]);
+    const shuffledRight = shuffle([...rightInput]);
+
+    // Create left boxes
+    const leftContainer = document.getElementById('left');
+    shuffledLeft.forEach((item, index) => {
+      const box = document.createElement('div');
+      box.classList.add('box');
+      box.textContent = item;
+      box.dataset.id = `left-${leftInput.indexOf(item)}`; // Keep track of original index
+      box.addEventListener('click', function() {
+        selectedLeftBox = this;
+        this.style.backgroundColor = 'yellow'; // Highlight selected box
+      });
+      leftContainer.appendChild(box);
+    });
+
+    // Create right boxes
+    const rightContainer = document.getElementById('right');
+    shuffledRight.forEach((item, index) => {
+      const box = document.createElement('div');
+      box.classList.add('box');
+      box.textContent = item;
+      box.dataset.id = `right-${rightInput.indexOf(item)}`; // Keep track of original index
+      box.addEventListener('click', function() {
+        if (selectedLeftBox) {
+          // Draw line connecting left to right
+          const rectLeft = selectedLeftBox.getBoundingClientRect();
+          const rectRight = this.getBoundingClientRect();
+          drawLine(rectLeft.right, rectLeft.top + rectLeft.height / 2, rectRight.left, rectRight.top + rectRight.height / 2);
+
+          // Save the user connection
+          userConnections.push({
+            left: selectedLeftBox.dataset.id,
+            right: this.dataset.id
+          });
+
+          // Deselect the left box
+          selectedLeftBox.style.backgroundColor = '';
+          selectedLeftBox = null;
+        }
+      });
+      rightContainer.appendChild(box);
+    });
+
+    // Save to encrypted URL
+    saveEncryptedUrl(leftInput, rightInput);
+  }
+
+  // Function to save the puzzle to an encrypted URL
+  function saveEncryptedUrl(leftInput, rightInput) {
+    const encodedLeft = encodeBase64(leftInput.join('\n'));
+    const encodedRight = encodeBase64(rightInput.join('\n'));
+    const newUrl = `${window.location.origin}${window.location.pathname}?left=${encodedLeft}&right=${encodedRight}`;
+    window.history.pushState({}, '', newUrl);
+  }
+
+  // Function to check if the user's connections are correct
+  function checkAnswer() {
+    let correct = 0;
+    userConnections.forEach(connection => {
+      correctPairs.forEach(pair => {
+        if (connection.left === pair.left && connection.right === pair.right) {
+          correct++;
+        }
+      });
+    });
+    const result = document.getElementById('result');
+    result.textContent = `You got ${correct} out of ${correctPairs.length} correct!`;
+  }
+
+  // Function to reset the canvas and connections
+  function resetCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+    userConnections = []; // Reset user connections
+  }
+
+  // Resize canvas to fit screen size
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas(); // Call once on page load to set canvas size
+
+  // Automatically load from encrypted URL
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const leftEncoded = urlParams.get('left');
+    const rightEncoded = urlParams.get('right');
+    if (leftEncoded && rightEncoded) {
+      const leftDecoded = decodeBase64(leftEncoded).split('\n');
+      const rightDecoded = decodeBase64(rightEncoded).split('\n');
+      document.getElementById('left-input').value = leftDecoded.join('\n');
+      document.getElementById('right-input').value = rightDecoded.join('\n');
+      createBoxes(); // Generate boxes on load if URL contains encoded values
+    }
+  };
+</script>
+
+</body>
+</html>
