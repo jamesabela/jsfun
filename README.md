@@ -12,12 +12,26 @@ This tool started as a way to help with Python programming, but has expanded rat
 ## Fun tools
 There is now a host of little tools that enable you to enter in some text or links and then use the results. In most cases, the link updates so that you can easily come back.
 
+Question tools
+* [link Two sides](https://jamesabela.github.io/jsfun/linksides.html) - This is a very common exam question where you draw lines between linked items
+* [Sentence ordering quiz](https://jamesabela.github.io/jsfun/scramble.html) - You can either do a word order quiz, sentences or processes
+
+Choosers
+* [3D Lollipop Stick Carousel](https://jamesabela.github.io/jsfun/lollipop.html) - For choosing random names, groups or questions
+* [Draggable manipulatives](https://jamesabela.github.io/jsfun/manip.html) - Can be used for categorisations or groupings
+
+Discussion tools
+
 * [Triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool
 * [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html)
-* [3D Lollipop Stick Carousel](https://jamesabela.github.io/jsfun/lollipop.html) - For choosing random names, groups or questions
+
+Image fun
+
 * [Tile Reveal Game](https://jamesabela.github.io/jsfun/imgtiles.html) - Link an image and play a game to see who can guess what it is first
 * [Image Reveal](https://jamesabela.github.io/jsfun/imgrev.html) - Fun spotlight to investigate an image. Great for younger children to explore.
 * [Image Compare](https://jamesabela.github.io/jsfun/imgcomp.html) - A tool to see two images over the top of each other. Great for Now & Then or even just comparing which you like best.
+
+In Scratch
 * [Plot Device Chooser](https://scratch.mit.edu/projects/2261416/fullscreen/) - In Scratch
 
 ## Python Display Tool Features
