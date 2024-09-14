@@ -8,7 +8,11 @@ I did use AI to help program these, sometimes it really helped and sometimes it 
 * [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html)
 * [iGCSE File Size Calculator](https://ians.site/file/) (Student created)
 * [Python Challenges](https://pythonchallenges.weebly.com/) (Welcome to use challenges, but entries are GIS only)
+
+Scratch projects
 * [Cipher Wheel](https://scratch.mit.edu/projects/427196904/)
+* [Von Neumann](https://scratch.mit.edu/projects/621571362/)
+* [Right Hand Rule](https://scratch.mit.edu/projects/287065173/)
 
 ## Fun tools
 There is now a host of little tools that enable you to enter in some text or links and then use the results. In most cases, the link updates so that you can easily come back.
