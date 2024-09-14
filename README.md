@@ -1,5 +1,6 @@
 # jsfun
 This tool started as a way to help with Python programming, but has expanded rather a lot! The main tool is [Python Display tool](https://jamesabela.github.io/jsfun/pythoncopy)
+I did use AI to help program these, sometimes it really helped and sometimes it basically needed to be fed the code! 
 
 ## CS Specific tools
 
@@ -15,6 +16,7 @@ There is now a host of little tools that enable you to enter in some text or lin
 Question tools
 * [link Two sides](https://jamesabela.github.io/jsfun/linksides.html) - This is a very common exam question where you draw lines between linked items
 * [Sentence ordering quiz](https://jamesabela.github.io/jsfun/scramble.html) - You can either do a word order quiz, sentences or processes
+(The links use a simple encryption to stop students guessing from the link)
 
 Choosers
 * [3D Lollipop Stick Carousel](https://jamesabela.github.io/jsfun/lollipop.html) - For choosing random names, groups or questions
