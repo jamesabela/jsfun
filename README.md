@@ -32,7 +32,7 @@ Discussion tools
 * [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html)
 
 Brainstorming tools
-* [Mindmaps](https://jamesabela.github.io/jsfun/mindmapplain.html) - You can also [export text to Mindmap](https://jamesabela.github.io/jsfun/exportmm.html) and there is an [advanced version](https://jamesabela.github.io/jsfun/mindmap.html) that supports markdown.
+* [Mindmaps](https://jamesabela.github.io/jsfun/mindmapplain.html) - You can also [export text to Mindmap](https://jamesabela.github.io/jsfun/exportmm.html) and there is a [super geeky edition](https://jamesabela.github.io/jsfun/mindmap.html) that supports markdown.
 
 Image fun
 
