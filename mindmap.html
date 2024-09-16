@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title id="document-title">Mind Map</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #mindmap-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .node {
+      position: absolute;
+      padding: 8px 12px;
+      background-color: #FFFFFF;
+      border-radius: 5px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: bold;
+      border: 1px solid #999;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+      white-space: nowrap;
+      min-width: 100px;
+      min-height: 60px;
+      box-sizing: border-box;
+    }
+    .node:hover {
+      background-color: #FFA500;
+      box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    .node:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #0000FF, 2px 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .central-node {
+      font-size: 24px; /* Increased font size for central node */
+      background-color: #FFA500;
+      color: #000000; /* Default text color */
+    }
+    /* Placeholder styling for contenteditable nodes */
+    .node:empty::before {
+      content: attr(data-placeholder);
+      color: grey;
+      pointer-events: none;
+      display: block;
+    }
+    .color-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin: 0 4px;
+      cursor: pointer;
+      display: inline-block;
+      border: 1px solid #333;
+    }
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+    }
+    /* Updated styles for button-container and its child elements */
+    #button-container {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      flex-direction: column; /* Arrange children vertically */
+      gap: 10px; /* Space between rows */
+      z-index: 10;
+    }
+    /* Container for main buttons */
+    #main-buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    /* Container for color palette and emoji buttons */
+    #bottom-buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    /* Styles for main buttons */
+    #copy-text-btn, #delete-node-btn, #undo-btn, #redo-btn, #add-node-btn, #add-child-btn {
+      padding: 8px 16px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    #copy-text-btn:hover, #undo-btn:hover, #redo-btn:hover, #add-node-btn:hover, #add-child-btn:hover {
+      background-color: #1976D2;
+    }
+    #delete-node-btn {
+      background-color: #FF5722;
+    }
+    #delete-node-btn:hover {
+      background-color: #E64A19;
+    }
+    #add-child-btn {
+      background-color: #32CD32;
+    }
+    #add-child-btn:hover {
+      background-color: #2E8B57;
+    }
+    /* Styles for emoji buttons */
+    .emoji-btn {
+      padding: 4px 6px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
+    .emoji-btn:hover {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+<div id="mindmap-container">
+  <svg id="svg-connections"></svg>
+  <!-- Central Node with Placeholder -->
+  <div id="central-node" class="node central-node" contenteditable="true" tabindex="0" data-placeholder="Central topic, Enter to add siblings, Tab to enter children"></div>
+  <div id="button-container">
+    <!-- First Row: Main Buttons -->
+    <div id="main-buttons">
+      <button id="copy-text-btn">Copy Text</button>
+      <button id="delete-node-btn">Delete Node</button>
+      <button id="undo-btn">Undo</button>
+      <button id="redo-btn">Redo</button>
+      <button id="add-node-btn">Add Node</button>
+      <button id="add-child-btn">Add Child Node</button>
+    </div>
+    <!-- Second Row: Color Palette and Emoji Buttons -->
+    <div id="bottom-buttons">
+      <!-- Color Palette -->
+      <div id="color-palette">
+        <div class="color-swatch" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
+        <div class="color-swatch" style="background-color: #FFD700;" data-color="#FFD700"></div>
+        <div class="color-swatch" style="background-color: #FF4500;" data-color="#FF4500"></div>
+        <div class="color-swatch" style="background-color: #32CD32;" data-color="#32CD32"></div>
+        <div class="color-swatch" style="background-color: #1E90FF;" data-color="#1E90FF"></div>
+        <div class="color-swatch" style="background-color: #BA55D3;" data-color="#BA55D3"></div>
+      </div>
+      <!-- Emoji Buttons -->
+      <div id="emoji-buttons">
+        <button class="emoji-btn" data-emoji="💡">💡</button>
+        <button class="emoji-btn" data-emoji="🧠">🧠</button>
+        <button class="emoji-btn" data-emoji="📚">📚</button>
+        <button class="emoji-btn" data-emoji="🎯">🎯</button>
+        <button class="emoji-btn" data-emoji="✅">✅</button>
+        <button class="emoji-btn" data-emoji="❌">❌</button>
+        <button class="emoji-btn" data-emoji="🛠️">🛠️</button>
+        <button class="emoji-btn" data-emoji="🚦">🚦</button>
+        <button class="emoji-btn" data-emoji="🎬">🎬</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const container = document.getElementById('mindmap-container');
+  const svg = document.getElementById('svg-connections');
+  const centralNode = document.getElementById('central-node');
+  const documentTitle = document.getElementById('document-title');
+  const copyTextBtn = document.getElementById('copy-text-btn');
+  const deleteNodeBtn = document.getElementById('delete-node-btn');
+  const undoBtn = document.getElementById('undo-btn');
+  const redoBtn = document.getElementById('redo-btn');
+  const addNodeBtn = document.getElementById('add-node-btn');
+  const addChildBtn = document.getElementById('add-child-btn');
+  const colorPalette = document.getElementById('color-palette');
+  const emojiButtons = document.querySelectorAll('.emoji-btn'); // Select all emoji buttons
+
+  const colors = ['#FFFFFF', '#FFD700', '#FF4500', '#32CD32', '#1E90FF', '#BA55D3'];
+
+  let nodesData = [];
+  let undoStack = [];
+  let redoStack = [];
+  let selectedNodeId = null;
+  let siblingAngle = 0; // Angle to track placement for sibling nodes
+  let childAngle = 300; // Initial angle for child nodes, set to 5 o'clock (300 degrees)
+
+  function generateId() {
+    return 'node-' + Math.random().toString(36).substr(2, 9);
+  }
+
+  // Initialize central node with fixed ID and empty text
+  const centralNodeId = 'central-node';
+  nodesData.push({
+    id: centralNodeId,
+    parentId: null,
+    x: 0,
+    y: 0,
+    color: colors[0],
+    text: '' // Empty text for central node to show placeholder
+  });
+
+  function updateDocumentTitle() {
+    const centralNodeData = nodesData.find(n => n.id === centralNodeId);
+    if (centralNodeData) {
+      documentTitle.textContent = centralNodeData.text || 'Mind Map';
+    }
+  }
+
+  function renderMindMap() {
+    const existingNodes = container.querySelectorAll('.node');
+    existingNodes.forEach(node => {
+      if (node.id !== 'central-node') { // Preserve the central node
+        container.removeChild(node);
+      }
+    });
+
+    nodesData.forEach(node => {
+      if (node.id === centralNodeId) {
+        // Update central node separately
+        centralNode.style.left = `${node.x}px`;
+        centralNode.style.top = `${node.y}px`;
+        centralNode.style.backgroundColor = node.color;
+        centralNode.innerText = node.text;
+
+        // Attach event listeners if not already attached
+        if (!centralNode.dataset.listenersAttached) {
+          addEventListenersToNode(centralNode, node.id);
+          centralNode.dataset.listenersAttached = 'true';
+        }
+
+        return;
+      }
+
+      const nodeDiv = document.createElement('div');
+      nodeDiv.className = 'node';
+      nodeDiv.id = node.id;
+      nodeDiv.contentEditable = true;
+      nodeDiv.tabIndex = 0;
+      nodeDiv.style.left = `${node.x}px`;
+      nodeDiv.style.top = `${node.y}px`;
+      nodeDiv.style.backgroundColor = node.color;
+      nodeDiv.innerText = node.text;
+
+      addEventListenersToNode(nodeDiv, node.id);
+
+      container.appendChild(nodeDiv);
+    });
+
+    drawConnections();
+    highlightSelectedNode();
+    updateDocumentTitle();
+    updateURL();
+  }
+
+  function addEventListenersToNode(nodeDiv, nodeId) {
+    nodeDiv.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent triggering container's click
+      setSelectedNode(nodeId);
+    });
+
+    nodeDiv.addEventListener('keydown', (e) => handleKeyDown(e, nodeId));
+
+    nodeDiv.addEventListener('mousedown', startDrag);
+
+    nodeDiv.addEventListener('input', () => updateNodeText(nodeId));
+  }
+
+  function handleKeyDown(event, nodeId) {
+    const isCentralNode = nodeId === centralNodeId;
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (isCentralNode) {
+        addNode(nodeId); // Add a child node when pressing Enter on the central node
+      } else {
+        addSiblingNode(nodeId); // Add sibling node for other nodes
+      }
+    } else if (event.key === 'Tab') {
+      event.preventDefault();
+      addNode(nodeId); // Add a child node when pressing Tab on any node
+    }
+  }
+
+  function setSelectedNode(nodeId) {
+    selectedNodeId = nodeId;
+    highlightSelectedNode();
+  }
+
+  function highlightSelectedNode() {
+    const nodes = container.querySelectorAll('.node');
+    nodes.forEach(node => {
+      if (node.id === selectedNodeId) {
+        node.style.border = '2px solid #0000FF';
+      } else {
+        node.style.border = '1px solid #999';
+      }
+    });
+  }
+
+  function addNode(parentId) {
+    if (!parentId) {
+      alert('No parent node selected.');
+      return;
+    }
+    const newId = generateId();
+    const nodeDiv = document.getElementById(parentId);
+
+    // Calculate new node position using the child angle (5 o'clock direction)
+    const radius = 150;
+    const parentX = nodeDiv.offsetLeft;
+    const parentY = nodeDiv.offsetTop;
+    const newX = parentX + radius * Math.cos(childAngle * Math.PI / 180);
+    const newY = parentY + radius * Math.sin(childAngle * Math.PI / 180);
+
+    const newNode = {
+      id: newId,
+      parentId: parentId,
+      x: newX,
+      y: newY,
+      color: colors[0],
+      text: ''
+    };
+    pushToUndo();
+    nodesData.push(newNode);
+    renderMindMap();
+    focusNode(newId);
+  }
+
+  function addSiblingNode(currentNodeId) {
+    const currentNode = nodesData.find(n => n.id === currentNodeId);
+    if (!currentNode) return;
+
+    // First sibling positioned at 1 o'clock direction
+    const siblingRadius = 200;
+    const siblingX = currentNode.x + siblingRadius * Math.cos(siblingAngle * Math.PI / 180);
+    const siblingY = currentNode.y + siblingRadius * Math.sin(siblingAngle * Math.PI / 180);
+    siblingAngle += 45; // Increment for next sibling
+
+    const newId = generateId();
+    const newNode = {
+      id: newId,
+      parentId: currentNode.parentId,
+      x: siblingX,
+      y: siblingY,
+      color: colors[0],
+      text: ''
+    };
+    pushToUndo();
+    nodesData.push(newNode);
+    renderMindMap();
+    focusNode(newId);
+  }
+
+  function deleteSelectedNode() {
+    if (!selectedNodeId) {
+      alert('No node selected for deletion.');
+      return;
+    }
+
+    if (selectedNodeId === centralNodeId) {
+      alert('Cannot delete the central node.');
+      return;
+    }
+
+    pushToUndo();
+    function deleteRecursively(id) {
+      const children = nodesData.filter(n => n.parentId === id);
+      children.forEach(child => deleteRecursively(child.id));
+      nodesData = nodesData.filter(n => n.id !== id);
+    }
+    deleteRecursively(selectedNodeId);
+    selectedNodeId = null;
+    renderMindMap();
+  }
+
+  function changeNodeColor(color) {
+    if (!selectedNodeId) return;
+    const node = nodesData.find(n => n.id === selectedNodeId);
+    if (node) {
+      pushToUndo();
+      node.color = color;
+      renderMindMap();
+    }
+  }
+
+  function updateNodeText(nodeId) {
+    const node = nodesData.find(n => n.id === nodeId);
+    const nodeDiv = document.getElementById(nodeId);
+    if (node && nodeDiv) {
+      node.text = nodeDiv.innerText;
+      updateDocumentTitle();
+      updateURL();
+    }
+  }
+
+  function pushToUndo() {
+    undoStack.push(JSON.parse(JSON.stringify(nodesData)));
+    redoStack = [];
+  }
+
+  function undo() {
+    if (undoStack.length === 0) return;
+    redoStack.push(JSON.parse(JSON.stringify(nodesData)));
+    nodesData = undoStack.pop();
+    renderMindMap();
+  }
+
+  function redo() {
+    if (redoStack.length === 0) return;
+    undoStack.push(JSON.parse(JSON.stringify(nodesData)));
+    nodesData = redoStack.pop();
+    renderMindMap();
+  }
+
+  let isDraggingFlag = false;
+  let currentDraggedNodeId = null;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+
+  function startDrag(event) {
+    if (event.target.classList.contains('node')) {
+      isDraggingFlag = true;
+      currentDraggedNodeId = event.target.id;
+      const nodeRect = event.target.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      dragOffsetX = event.clientX - nodeRect.left;
+      dragOffsetY = event.clientY - nodeRect.top;
+      document.addEventListener('mousemove', dragNode);
+      document.addEventListener('mouseup', stopDrag);
+    }
+  }
+
+  function dragNode(event) {
+    if (!isDraggingFlag || !currentDraggedNodeId) return;
+    const containerRect = container.getBoundingClientRect();
+    let newX = event.clientX - containerRect.left - dragOffsetX;
+    let newY = event.clientY - containerRect.top - dragOffsetY;
+
+    newX = Math.max(0, Math.min(newX, containerRect.width - 100));
+    newY = Math.max(0, Math.min(newY, containerRect.height - 60));
+
+    const node = nodesData.find(n => n.id === currentDraggedNodeId);
+    if (node) {
+      node.x = newX;
+      node.y = newY;
+      renderMindMap();
+    }
+  }
+
+  function stopDrag() {
+    isDraggingFlag = false;
+    currentDraggedNodeId = null;
+    document.removeEventListener('mousemove', dragNode);
+    document.removeEventListener('mouseup', stopDrag);
+    updateURL();
+  }
+
+  function focusNode(nodeId) {
+    const nodeDiv = document.getElementById(nodeId);
+    if (nodeDiv) {
+      nodeDiv.focus();
+      setSelectedNode(nodeId);
+    }
+  }
+
+  function drawConnections() {
+    svg.innerHTML = '';
+
+    nodesData.forEach(node => {
+      if (node.parentId) {
+        const parentNode = nodesData.find(n => n.id === node.parentId);
+        if (parentNode) {
+          drawLine(parentNode, node);
+        }
+      }
+    });
+  }
+
+  function drawLine(parent, child) {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', parent.x + 50); // Adjust based on node width
+    line.setAttribute('y1', parent.y + 30); // Adjust based on node height
+    line.setAttribute('x2', child.x + 50); // Adjust based on node width
+    line.setAttribute('y2', child.y + 30); // Adjust based on node height
+    line.setAttribute('stroke', 'black');
+    line.setAttribute('stroke-width', '2');
+    svg.appendChild(line);
+  }
+
+  function updateURL() {
+    const serializedData = JSON.stringify(nodesData);
+    const encodedData = btoa(encodeURIComponent(serializedData));
+    window.history.replaceState(null, null, '#' + encodedData);
+  }
+
+  function copyText() {
+    const nodeTexts = nodesData.map(node => `${'\t'.repeat(getNodeDepth(node.id))}${node.text}`);
+    const textToCopy = nodeTexts.join('\n');
+    navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+              alert('Mind map text copied to clipboard!');
+            })
+            .catch(err => {
+              console.error('Failed to copy text: ', err);
+            });
+  }
+
+  function getNodeDepth(nodeId, depth = 0) {
+    const node = nodesData.find(n => n.id === nodeId);
+    if (node && node.parentId) {
+      return getNodeDepth(node.parentId, depth + 1);
+    }
+    return depth;
+  }
+
+  window.addEventListener('load', () => {
+    loadFromURL();
+    centralNode.focus();
+    setSelectedNode(centralNodeId); // Automatically select the central node on load
+  });
+
+  window.addEventListener('beforeunload', () => {
+    updateURL();
+  });
+
+  window.addEventListener('resize', () => {
+    renderMindMap();
+  });
+
+  // Event listeners for main buttons
+  copyTextBtn.addEventListener('click', copyText);
+  deleteNodeBtn.addEventListener('click', deleteSelectedNode);
+  undoBtn.addEventListener('click', undo);
+  redoBtn.addEventListener('click', redo);
+  addNodeBtn.addEventListener('click', () => addSiblingNode(selectedNodeId));
+  addChildBtn.addEventListener('click', () => addNode(selectedNodeId));
+
+  // Event listener for color palette
+  colorPalette.addEventListener('click', (event) => {
+    if (event.target.classList.contains('color-swatch')) {
+      const color = event.target.getAttribute('data-color');
+      changeNodeColor(color);
+    }
+  });
+
+  // Event listeners for emoji buttons
+  emojiButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const emoji = button.getAttribute('data-emoji');
+      addEmojiToSelectedNode(emoji);
+    });
+  });
+
+  function addEmojiToSelectedNode(emoji) {
+    if (!selectedNodeId) {
+      alert('No node selected.');
+      return;
+    }
+    const node = nodesData.find(n => n.id === selectedNodeId);
+    if (node) {
+      pushToUndo();
+      const emojis = ['💡', '🧠', '📚', '🎯', '✅', '❌', '🛠️', '🚦', '🎬'];
+      let currentText = node.text.trim();
+
+      // Find if currentText starts with any of the defined emojis
+      const existingEmoji = emojis.find(e => currentText.startsWith(e));
+
+      if (existingEmoji) {
+        // Replace the existing emoji with the new one
+        node.text = currentText.replace(existingEmoji, emoji);
+      } else {
+        // Prepend the new emoji with a space if there is existing text
+        node.text = (currentText ? emoji + ' ' + currentText : emoji);
+      }
+
+      renderMindMap();
+    }
+  }
+
+  function loadFromURL() {
+    if (window.location.hash.length > 1) {
+      try {
+        const encodedData = window.location.hash.substring(1);
+        const decodedData = decodeURIComponent(atob(encodedData));
+        const parsedData = JSON.parse(decodedData);
+
+        // Ensure the central node has the fixed ID
+        const central = parsedData.find(n => n.parentId === null);
+        if (central) {
+          central.id = centralNodeId;
+          nodesData = parsedData.map(n => n.id === central.id ? central : n);
+        } else {
+          // If no central node found, initialize it
+          nodesData = [{
+            id: centralNodeId,
+            parentId: null,
+            x: 0,
+            y: 0,
+            color: colors[0],
+            text: '' // Empty text for placeholder
+          }];
+        }
+
+        renderMindMap();
+      } catch (error) {
+        console.error('Failed to load mind map from URL:', error);
+        centerNodePosition(centralNodeId);
+        renderMindMap();
+      }
+    } else {
+      centerNodePosition(centralNodeId);
+      renderMindMap();
+    }
+  }
+
+  function centerNodePosition(nodeId) {
+    const node = nodesData.find(n => n.id === nodeId);
+    if (node) {
+      const containerRect = container.getBoundingClientRect();
+      node.x = (containerRect.width / 2) - 50; // Adjust to center
+      node.y = (containerRect.height / 2) - 30; // Adjust to center
+    }
+  }
+</script>
+</body>
+</html>
