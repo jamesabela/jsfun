@@ -31,13 +31,16 @@ Discussion tools
 * [Triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool
 * [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html)
 
+Brainstorming tools
+* [Mindmaps](https://jamesabela.github.io/jsfun/mindmap.html)
+
 Image fun
 
 * [Tile Reveal Game](https://jamesabela.github.io/jsfun/imgtiles.html) - Link an image and play a game to see who can guess what it is first
 * [Image Reveal](https://jamesabela.github.io/jsfun/imgrev.html) - Fun spotlight to investigate an image. Great for younger children to explore.
 * [Image Compare](https://jamesabela.github.io/jsfun/imgcomp.html) - A tool to see two images over the top of each other. Great for Now & Then or even just comparing which you like best.
 
-Help with literacy
+Word & literacy tools
 * [Word Cloud](https://jamesabela.github.io/jsfun/wordcloud.html) - Quick word cloud generator
 * [Plot Device Chooser](https://scratch.mit.edu/projects/2261416/fullscreen/) - In Scratch
 
