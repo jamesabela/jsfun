@@ -32,7 +32,7 @@ Discussion tools
 * [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html)
 
 Brainstorming tools
-* [Mindmaps](mindmapplain.html)
+* [Mindmaps](https://jamesabela.github.io/jsfun/mindmapplain.html)
 
 Image fun
 
