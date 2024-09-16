@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Export Mind Map</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .instructions {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #e7f3fe;
+      border-left: 6px solid #2196F3;
+      border-radius: 4px;
+    }
+    .instructions h2 {
+      margin-top: 0;
+      color: #2196F3;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+      resize: vertical;
+    }
+    textarea {
+      height: 200px;
+      font-family: monospace;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .note {
+      font-size: 12px;
+      color: #888;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Export Mind Map</h1>
+
+<form id="export-form">
+  <div class="instructions">
+    <h2>Instructions</h2>
+    <p>
+      Use this form to export your mind map. Follow the steps below:
+    </p>
+    <ol>
+      <li><strong>Central Subject:</strong> Enter the main topic of your mind map.</li>
+      <li><strong>Nodes:</strong> Enter subtopics using indentation to represent hierarchy. Use <code>3 spaces</code> for each level of indentation.</li>
+      <li>Press <strong>Enter</strong> or <strong>Tab</strong> to add new nodes. Note that pressing <strong>Tab</strong> will insert <code>3 spaces</code> for indentation.</li>
+      <li>Click the <strong>Export to Mind Map</strong> button to generate and open your mind map.</li>
+    </ol>
+    <p>
+      <em>Example:</em>
+    </p>
+    <pre>
+Central Topic
+   Subtopic 1
+      Sub-subtopic 1.1
+   Subtopic 2
+      Sub-subtopic 2.1
+      Sub-subtopic 2.2
+   Subtopic 3
+      Sub-subtopic 3.1
+      Sub-subtopic 3.2
+      Sub-subtopic 3.3
+      </pre>
+  </div>
+
+  <label for="central-subject">Central Subject:</label>
+  <input type="text" id="central-subject" name="central-subject" placeholder="Enter central subject" required>
+
+  <label for="nodes">Nodes:</label>
+  <textarea id="nodes" name="nodes" placeholder="Enter nodes with proper indentation"></textarea>
+  <div class="note">Use 3 spaces for each level of indentation.</div>
+
+  <button type="submit">Export to Mind Map</button>
+</form>
+
+<script>
+  const form = document.getElementById('export-form');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const centralSubject = document.getElementById('central-subject').value.trim();
+    const nodesText = document.getElementById('nodes').value.trim();
+
+    if (!centralSubject) {
+      alert('Please enter a central subject.');
+      return;
+    }
+
+    // Prepare the central node
+    const centralNode = {
+      id: 'central-node',
+      parentId: null,
+      x: window.innerWidth / 2, // Center of the screen
+      y: window.innerHeight / 2, // Center of the screen
+      color: '#FFFFFF', // Default color
+      text: centralSubject
+    };
+
+    // Parse nodes
+    const parsedNodes = parseNodes(nodesText);
+
+    if (parsedNodes === null) {
+      alert('Failed to parse nodes. Please ensure proper indentation and formatting.');
+      return;
+    }
+
+    // Combine central node with other parsed nodes
+    const allNodes = [centralNode, ...parsedNodes];
+
+    // Log parsed nodes before redirection
+    console.log("All Nodes Before Serialization:", allNodes);
+
+    // Position the nodes radially around the central node
+    positionNodes(allNodes);
+
+    // Serialize and encode data
+    const serializedData = JSON.stringify(allNodes);
+    const encodedData = encodeBase64(serializedData);
+
+    // Construct the URL to mindmap.html with encoded data in hash
+    const mindmapURL = 'https://jamesabela.github.io/jsfun/mindmapplain.html#' + encodedData;
+
+    // Open the mindmap in a new browser window
+    window.open(mindmapURL, '_blank');
+  });
+
+  /**
+   * Parses the nodes text into an array of node objects.
+   * Assumes 3 spaces per indentation level.
+   * @param {string} text - The nodes text.
+   * @returns {Array|null} - Array of node objects or null if parsing fails.
+   */
+  function parseNodes(text) {
+    const lines = text.split('\n');
+    const nodes = [];
+    const stack = []; // Stack to keep track of parent nodes based on depth
+    const emojis = ['💡', '🧠', '📚', '🎯', '✅', '❌', '🛠️', '🚦', '🎬'];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.trim() === '') continue; // Skip empty lines
+
+      // Count leading spaces (assuming 3 spaces per level)
+      const leadingSpaces = line.match(/^ */)[0].length;
+      const depth = Math.floor(leadingSpaces / 3);
+      const content = line.trim();
+
+      // Extract emoji if present
+      let emoji = '';
+      let nodeText = content;
+      const firstChar = content.charAt(0);
+      if (emojis.includes(firstChar)) {
+        emoji = firstChar;
+        nodeText = content.substring(1).trim();
+      }
+
+      if (nodeText === '') {
+        // Skip lines that only have emojis or are empty after trimming
+        continue;
+      }
+
+      const nodeId = generateId();
+      const newNode = {
+        id: nodeId,
+        parentId: null,
+        color: '#FFFFFF', // Default color
+        text: nodeText,
+        x: null, // Initially set to null
+        y: null  // Initially set to null
+      };
+
+      if (depth === 0) {
+        // Direct child of central node
+        newNode.parentId = 'central-node';
+        nodes.push(newNode);
+        stack.length = 0; // Reset the stack
+        stack.push(newNode);
+      } else {
+        if (depth > stack.length) {
+          // Depth increased by more than one level
+          console.error(`Invalid indentation at line ${i + 1}`);
+          return null;
+        }
+        while (depth < stack.length) {
+          stack.pop();
+        }
+        const parentNode = stack[stack.length - 1];
+        if (!parentNode) {
+          console.error(`No parent found for line ${i + 1}`);
+          return null;
+        }
+        newNode.parentId = parentNode.id;
+        nodes.push(newNode);
+        stack.push(newNode);
+      }
+    }
+
+    // Log nodes before positioning
+    console.log("Nodes Before Positioning:", nodes);
+
+    return nodes;
+  }
+
+  /**
+   * Generates a unique ID for a node.
+   * @returns {string} - Unique ID.
+   */
+  function generateId() {
+    return 'node-' + Math.random().toString(36).substr(2, 9);
+  }
+
+  /**
+   * Assigns x and y coordinates to nodes based on their hierarchy to spread them around the center.
+   * Uses a radial layout based on parent.
+   * @param {Array} nodes - Array of node objects.
+   */
+  function positionNodes(nodes) {
+    const centralNode = nodes.find(n => n.id === 'central-node');
+    if (!centralNode) {
+      console.error('Central node not found.');
+      console.log('Nodes Array:', nodes); // Log the nodes array to check its contents
+      return;
+    }
+
+    const centerX = centralNode.x;
+    const centerY = centralNode.y;
+    const radiusIncrement = 150; // Distance between levels
+    const angleIncrement = 360; // Full circle in degrees
+
+    // Find direct children of the central node
+    const firstLevelNodes = nodes.filter(n => n.parentId === 'central-node');
+    const firstLevelCount = firstLevelNodes.length;
+    const firstLevelAngleIncrement = firstLevelCount > 0 ? angleIncrement / firstLevelCount : angleIncrement;
+
+    console.log("Positioning First Level Nodes:");
+    firstLevelNodes.forEach((node, index) => {
+      const angle = firstLevelAngleIncrement * index;
+      node.x = centerX + radiusIncrement * Math.cos(angle * (Math.PI / 180));
+      node.y = centerY + radiusIncrement * Math.sin(angle * (Math.PI / 180));
+
+      console.log(`First Level Node ${node.id}: x=${node.x}, y=${node.y}`);
+
+      // Position second-level nodes (children of the first-level nodes)
+      const secondLevelNodes = nodes.filter(n => n.parentId === node.id);
+      const secondLevelCount = secondLevelNodes.length;
+      const secondLevelAngleIncrement = secondLevelCount > 0 ? angleIncrement / secondLevelCount : angleIncrement;
+
+      secondLevelNodes.forEach((childNode, childIndex) => {
+        const childAngle = secondLevelAngleIncrement * childIndex;
+        childNode.x = node.x + radiusIncrement * 0.7 * Math.cos(childAngle * (Math.PI / 180));
+        childNode.y = node.y + radiusIncrement * 0.7 * Math.sin(childAngle * (Math.PI / 180));
+
+        console.log(`Second Level Node ${childNode.id}: x=${childNode.x}, y=${childNode.y}`);
+      });
+    });
+  }
+
+  /**
+   * Utility function for Base64 encoding with Unicode support
+   * @param {string} str - The string to encode.
+   * @returns {string} - Base64 encoded string.
+   */
+  function encodeBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+
+  /**
+   * Utility function for Base64 decoding with Unicode support
+   * @param {string} str - The Base64 encoded string.
+   * @returns {string} - Decoded string.
+   */
+  function decodeBase64(str) {
+    return decodeURIComponent(escape(atob(str)));
+  }
+
+  /**
+   * Handles the Tab key press in the textarea to insert 3 spaces.
+   */
+  const textarea = document.getElementById('nodes');
+
+  textarea.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+
+      // Set textarea value to: text before caret + 3 spaces + text after caret
+      this.value = this.value.substring(0, start) + '   ' + this.value.substring(end);
+
+      // Move caret
+      this.selectionStart = this.selectionEnd = start + 3;
+    }
+  });
+</script>
+</body>
+</html>
