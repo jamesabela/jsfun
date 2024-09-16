@@ -1,5 +1,3 @@
-<!-- Bug with central node -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,6 +144,21 @@
         .node.editable {
             border: 2px dashed #4CAF50;
         }
+        /* Add these styles to make #export-svg-btn match main buttons */
+        #export-svg-btn {
+            padding: 8px 16px;
+            background-color: #2196F3; /* Blue color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        #export-svg-btn:hover {
+            background-color: #1976D2; /* Darker blue on hover */
+        }
     </style>
 </head>
 <body>
@@ -162,6 +175,7 @@
             <button id="redo-btn">Redo</button>
             <button id="add-node-btn">+Node (Enter)</button>
             <button id="add-child-btn">+ Child Node (Tab)</button>
+            <button id="export-svg-btn">Export to SVG</button> <!-- New Button -->
         </div>
         <!-- Second Row: Color Palette and Emoji Buttons -->
         <div id="bottom-buttons">
@@ -718,6 +732,128 @@
             node.y = (containerRect.height / 2) - 30; // Adjust to center
         }
     }
+
+    // Select the Export to SVG button
+    const exportSvgBtn = document.getElementById('export-svg-btn');
+
+    // Add click event listener
+    exportSvgBtn.addEventListener('click', exportToSVG);
+
+    /**
+     * Function to export the mind map to an SVG file.
+     * Preserves colors and box styles.
+     */
+    function exportToSVG() {
+        // Disable the button to prevent multiple clicks
+        exportSvgBtn.disabled = true;
+        exportSvgBtn.textContent = 'Exporting...';
+
+        // Create SVG namespace
+        const svgNS = "http://www.w3.org/2000/svg";
+
+        // Create an SVG element
+        const svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("xmlns", svgNS);
+        svg.setAttribute("version", "1.1");
+        svg.setAttribute("width", "100%");
+        svg.setAttribute("height", "100%");
+        svg.setAttribute("viewBox", "0 0 " + container.offsetWidth + " " + container.offsetHeight);
+
+        // Optional: Add a background rectangle
+        const bgRect = document.createElementNS(svgNS, "rect");
+        bgRect.setAttribute("width", "100%");
+        bgRect.setAttribute("height", "100%");
+        bgRect.setAttribute("fill", "#f0f0f0"); // Match your container's background color
+        svg.appendChild(bgRect);
+
+        // Draw connections as lines
+        nodesData.forEach(node => {
+            if (node.parentId) {
+                const parentNode = nodesData.find(n => n.id === node.parentId);
+                if (parentNode) {
+                    const line = document.createElementNS(svgNS, "line");
+                    line.setAttribute("x1", parentNode.x + 50); // Adjust based on node width
+                    line.setAttribute("y1", parentNode.y + 30); // Adjust based on node height
+                    line.setAttribute("x2", node.x + 50); // Adjust based on node width
+                    line.setAttribute("y2", node.y + 30); // Adjust based on node height
+                    line.setAttribute("stroke", "black");
+                    line.setAttribute("stroke-width", "2");
+                    svg.appendChild(line);
+                }
+            }
+        });
+
+        // Draw nodes as rectangles with text
+        nodesData.forEach(node => {
+            // Skip if node is central node and handle separately if needed
+            // For this example, we'll treat all nodes similarly
+            const rect = document.createElementNS(svgNS, "rect");
+            rect.setAttribute("x", node.x);
+            rect.setAttribute("y", node.y);
+            rect.setAttribute("width", "100"); // Adjust width as needed
+            rect.setAttribute("height", "60"); // Adjust height as needed
+            rect.setAttribute("fill", node.color);
+            rect.setAttribute("stroke", "#000"); // Border color
+            rect.setAttribute("stroke-width", "1");
+            svg.appendChild(rect);
+
+            // Add text
+            const text = document.createElementNS(svgNS, "text");
+            text.setAttribute("x", node.x + 50); // Center horizontally
+            text.setAttribute("y", node.y + 35); // Center vertically
+            text.setAttribute("font-size", "14");
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("dominant-baseline", "middle");
+            text.setAttribute("fill", "#000"); // Text color
+
+            // Handle Markdown rendering
+            // For simplicity, we'll strip Markdown syntax. For advanced rendering, consider using a library.
+            const plainText = stripMarkdown(node.text);
+
+            text.textContent = plainText;
+            svg.appendChild(text);
+        });
+
+        // Serialize the SVG XML
+        const serializer = new XMLSerializer();
+        const svgString = serializer.serializeToString(svg);
+
+        // Create a Blob from the SVG string
+        const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+
+        // Create a URL for the Blob
+        const url = URL.createObjectURL(blob);
+
+        // Create a temporary link to trigger the download
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "MindMap.svg";
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        // Re-enable the button and reset text
+        exportSvgBtn.disabled = false;
+        exportSvgBtn.textContent = 'Export to SVG';
+    }
+
+    /**
+     * Utility function to strip Markdown syntax for plain text.
+     * @param {string} markdown - The Markdown string.
+     * @returns {string} - Plain text string.
+     */
+    function stripMarkdown(markdown) {
+        // Simple regex-based stripping. For more complex Markdown, consider using a library.
+        return markdown
+            .replace(/[#_*~`>]/g, '') // Remove common Markdown characters
+            .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Remove links but keep the text
+            .replace(/!\[.*?\]\(.*?\)/g, '') // Remove images
+            .trim();
+    }
+
 </script>
 </body>
 </html>
