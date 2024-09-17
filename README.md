@@ -1,6 +1,6 @@
 # jsfun
 This tool started as a way to help with Python programming, but has expanded rather a lot! The main tool is [Python Display tool](https://jamesabela.github.io/jsfun/pythoncopy)
-I did use AI to help program these, sometimes it really helped and sometimes it basically needed to be fed the code! 
+I did use AI to help program these, sometimes it really helped and sometimes it basically needed to be fed the code! Many of these tools use longer urls than usual, so feel free to use a url shortener such as: [Tinyurl](https://tinyurl.com/)
 
 ## CS Specific tools
 
