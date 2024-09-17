@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title id="document-title">Mind Map</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -81,8 +82,8 @@
       top: 10px;
       left: 10px;
       display: flex;
-      flex-direction: column; /* Arrange children vertically */
-      gap: 10px; /* Space between rows */
+      flex-direction: column;
+      gap: 10px;
       z-index: 10;
     }
     /* Container for main buttons */
@@ -100,7 +101,7 @@
       flex-wrap: wrap;
     }
     /* Styles for main buttons */
-    #copy-text-btn, #delete-node-btn, #undo-btn, #redo-btn, #add-node-btn, #add-child-btn {
+    #copy-text-btn, #delete-node-btn, #undo-btn, #redo-btn, #add-node-btn, #add-child-btn, #export-png-btn {
       padding: 8px 16px;
       background-color: #2196F3;
       color: white;
@@ -110,7 +111,7 @@
       font-size: 14px;
       transition: background-color 0.3s;
     }
-    #copy-text-btn:hover, #undo-btn:hover, #redo-btn:hover, #add-node-btn:hover, #add-child-btn:hover {
+    #copy-text-btn:hover, #undo-btn:hover, #redo-btn:hover, #add-node-btn:hover, #add-child-btn:hover, #export-png-btn:hover {
       background-color: #1976D2;
     }
     #delete-node-btn {
@@ -125,17 +126,11 @@
     #add-child-btn:hover {
       background-color: #2E8B57;
     }
-    /* Styles for emoji buttons */
-    .emoji-btn {
-      padding: 4px 6px;
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
-      font-size: 20px;
-      transition: transform 0.2s;
+    #export-png-btn {
+      background-color: #FF5722;
     }
-    .emoji-btn:hover {
-      transform: scale(1.2);
+    #export-png-btn:hover {
+      background-color: #E64A19;
     }
   </style>
 </head>
@@ -148,6 +143,7 @@
     <!-- First Row: Main Buttons -->
     <div id="main-buttons">
       <button id="copy-text-btn">Copy Text</button>
+      <button id="export-png-btn">Export to PNG</button>
       <button id="delete-node-btn">Delete Node</button>
       <button id="undo-btn">Undo</button>
       <button id="redo-btn">Redo</button>
@@ -156,7 +152,6 @@
     </div>
     <!-- Second Row: Color Palette and Emoji Buttons -->
     <div id="bottom-buttons">
-      <!-- Color Palette -->
       <div id="color-palette">
         <div class="color-swatch" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
         <div class="color-swatch" style="background-color: #FFD700;" data-color="#FFD700"></div>
@@ -192,8 +187,10 @@
   const redoBtn = document.getElementById('redo-btn');
   const addNodeBtn = document.getElementById('add-node-btn');
   const addChildBtn = document.getElementById('add-child-btn');
+  const exportPngBtn = document.getElementById('export-png-btn');
+  const buttonContainer = document.getElementById('button-container');
   const colorPalette = document.getElementById('color-palette');
-  const emojiButtons = document.querySelectorAll('.emoji-btn'); // Select all emoji buttons
+  const emojiButtons = document.querySelectorAll('.emoji-btn');
 
   const colors = ['#FFFFFF', '#FFD700', '#FF4500', '#32CD32', '#1E90FF', '#BA55D3'];
 
@@ -236,7 +233,6 @@
 
     nodesData.forEach(node => {
       if (node.id === centralNodeId) {
-        // Update central node separately
         centralNode.style.left = `${node.x}px`;
         centralNode.style.top = `${node.y}px`;
         centralNode.style.backgroundColor = node.color;
@@ -247,7 +243,6 @@
           addEventListenersToNode(centralNode, node.id);
           centralNode.dataset.listenersAttached = 'true';
         }
-
         return;
       }
 
@@ -262,7 +257,6 @@
       nodeDiv.innerText = node.text;
 
       addEventListenersToNode(nodeDiv, node.id);
-
       container.appendChild(nodeDiv);
     });
 
@@ -290,13 +284,13 @@
     if (event.key === 'Enter') {
       event.preventDefault();
       if (isCentralNode) {
-        addNode(nodeId); // Add a child node when pressing Enter on the central node
+        addNode(nodeId);
       } else {
-        addSiblingNode(nodeId); // Add sibling node for other nodes
+        addSiblingNode(nodeId);
       }
     } else if (event.key === 'Tab') {
       event.preventDefault();
-      addNode(nodeId); // Add a child node when pressing Tab on any node
+      addNode(nodeId);
     }
   }
 
@@ -323,8 +317,6 @@
     }
     const newId = generateId();
     const nodeDiv = document.getElementById(parentId);
-
-    // Calculate new node position using the child angle (5 o'clock direction)
     const radius = 150;
     const parentX = nodeDiv.offsetLeft;
     const parentY = nodeDiv.offsetTop;
@@ -349,11 +341,10 @@
     const currentNode = nodesData.find(n => n.id === currentNodeId);
     if (!currentNode) return;
 
-    // First sibling positioned at 1 o'clock direction
     const siblingRadius = 200;
     const siblingX = currentNode.x + siblingRadius * Math.cos(siblingAngle * Math.PI / 180);
     const siblingY = currentNode.y + siblingRadius * Math.sin(siblingAngle * Math.PI / 180);
-    siblingAngle += 45; // Increment for next sibling
+    siblingAngle += 45;
 
     const newId = generateId();
     const newNode = {
@@ -535,7 +526,7 @@
   window.addEventListener('load', () => {
     loadFromURL();
     centralNode.focus();
-    setSelectedNode(centralNodeId); // Automatically select the central node on load
+    setSelectedNode(centralNodeId);
   });
 
   window.addEventListener('beforeunload', () => {
@@ -553,6 +544,22 @@
   redoBtn.addEventListener('click', redo);
   addNodeBtn.addEventListener('click', () => addSiblingNode(selectedNodeId));
   addChildBtn.addEventListener('click', () => addNode(selectedNodeId));
+
+  exportPngBtn.addEventListener('click', function () {
+    buttonContainer.style.display = 'none';
+
+    html2canvas(container, { scale: 2 }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = 'MindMap.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }).finally(() => {
+      buttonContainer.style.display = 'flex';
+    });
+  });
 
   // Event listener for color palette
   colorPalette.addEventListener('click', (event) => {
@@ -581,14 +588,11 @@
       const emojis = ['💡', '🧠', '📚', '🎯', '✅', '❌', '🛠️', '🚦', '🎬'];
       let currentText = node.text.trim();
 
-      // Find if currentText starts with any of the defined emojis
       const existingEmoji = emojis.find(e => currentText.startsWith(e));
 
       if (existingEmoji) {
-        // Replace the existing emoji with the new one
         node.text = currentText.replace(existingEmoji, emoji);
       } else {
-        // Prepend the new emoji with a space if there is existing text
         node.text = (currentText ? emoji + ' ' + currentText : emoji);
       }
 
@@ -603,20 +607,18 @@
         const decodedData = decodeURIComponent(atob(encodedData));
         const parsedData = JSON.parse(decodedData);
 
-        // Ensure the central node has the fixed ID
         const central = parsedData.find(n => n.parentId === null);
         if (central) {
           central.id = centralNodeId;
           nodesData = parsedData.map(n => n.id === central.id ? central : n);
         } else {
-          // If no central node found, initialize it
           nodesData = [{
             id: centralNodeId,
             parentId: null,
             x: 0,
             y: 0,
             color: colors[0],
-            text: '' // Empty text for placeholder
+            text: ''
           }];
         }
 
@@ -636,8 +638,8 @@
     const node = nodesData.find(n => n.id === nodeId);
     if (node) {
       const containerRect = container.getBoundingClientRect();
-      node.x = (containerRect.width / 2) - 50; // Adjust to center
-      node.y = (containerRect.height / 2) - 30; // Adjust to center
+      node.x = (containerRect.width / 2) - 50;
+      node.y = (containerRect.height / 2) - 30;
     }
   }
 </script>
