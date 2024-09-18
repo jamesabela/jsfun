@@ -44,6 +44,9 @@ Word & literacy tools
 * [Word Cloud](https://jamesabela.github.io/jsfun/wordcloud.html) - Quick word cloud generator
 * [Plot Device Chooser](https://scratch.mit.edu/projects/2261416/fullscreen/) - In Scratch
 
+Timer
+* [Pomodoro timer](https://minnowfish.github.io/Pomodoro-Timer/) - Student created
+
 ## Python Display Tool Features
 
 A [display tool](https://jamesabela.github.io/jsfun/pythoncopy) that will enable you to download Python files as either .py files or .txt files if your firewall is very restrictive.
