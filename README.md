@@ -6,6 +6,7 @@ I did use AI to help program these, sometimes it really helped and sometimes it 
 
 * [Binary Conversion tool](https://jamesabela.github.io/jsfun/binaryconvertor.html)
 * [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html)
+* [8 bit binary display](https://sethideclercq.com/tools/binaryvisualiser.html) (Created by Sethi De Clercq)
 * [iGCSE File Size Calculator](https://ians.site/file/) (Student created)
 * [Python Challenges](https://pythonchallenges.weebly.com/) (Welcome to use challenges, but entries are GIS only)
 
