@@ -26,6 +26,7 @@ Question tools
 Choosers
 * [3D Lollipop Stick Carousel](https://jamesabela.github.io/jsfun/lollipop.html) - For choosing random names, groups or questions
 * [Draggable manipulatives](https://jamesabela.github.io/jsfun/manip.html) - Can be used for categorisations or groupings
+* [Number Flash cards](https://sethideclercq.com/tools/number-gen.html) (Created by Sethi De Clercq)
 
 Discussion tools
 
