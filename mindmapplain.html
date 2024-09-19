@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPGZQXEPJ1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-MPGZQXEPJ1');
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title id="document-title">Mind Map</title>
@@ -345,8 +336,12 @@
         const radius = 150;
         const parentX = nodeDiv.offsetLeft;
         const parentY = nodeDiv.offsetTop;
-        const newX = parentX + radius * Math.cos(childAngle * Math.PI / 180);
-        const newY = parentY + radius * Math.sin(childAngle * Math.PI / 180);
+        let newX = parentX + radius * Math.cos(childAngle * Math.PI / 180);
+        let newY = parentY + radius * Math.sin(childAngle * Math.PI / 180);
+
+        // Constrain the Y position of the new child node
+        const containerRect = container.getBoundingClientRect();
+        newY = Math.max(100, Math.min(newY, containerRect.height - 100));  // Prevent creation too high or too low
 
         const newNode = {
             id: newId,
@@ -362,14 +357,19 @@
         focusNode(newId);
     }
 
+
     function addSiblingNode(currentNodeId) {
         const currentNode = nodesData.find(n => n.id === currentNodeId);
         if (!currentNode) return;
 
         const siblingRadius = 200;
-        const siblingX = currentNode.x + siblingRadius * Math.cos(siblingAngle * Math.PI / 180);
-        const siblingY = currentNode.y + siblingRadius * Math.sin(siblingAngle * Math.PI / 180);
+        let siblingX = currentNode.x + siblingRadius * Math.cos(siblingAngle * Math.PI / 180);
+        let siblingY = currentNode.y + siblingRadius * Math.sin(siblingAngle * Math.PI / 180);
         siblingAngle += 45;
+
+        // Constrain the Y position of the new sibling node
+        const containerRect = container.getBoundingClientRect();
+        siblingY = Math.max(100, Math.min(siblingY, containerRect.height - 100));  // Prevent creation too high or too low
 
         const newId = generateId();
         const newNode = {
@@ -385,6 +385,7 @@
         renderMindMap();
         focusNode(newId);
     }
+
 
     function deleteSelectedNode() {
         if (!selectedNodeId) {
@@ -471,8 +472,9 @@
         let newX = event.clientX - containerRect.left - dragOffsetX;
         let newY = event.clientY - containerRect.top - dragOffsetY;
 
-        newX = Math.max(0, Math.min(newX, containerRect.width - 100));
-        newY = Math.max(0, Math.min(newY, containerRect.height - 60));
+        // Constrain X and Y to the bounds of the container
+        newX = Math.max(0, Math.min(newX, containerRect.width - 100));  // Ensure node stays within the width of the container
+        newY = Math.max(100, Math.min(newY, containerRect.height - 100));  // Ensure node stays within the height of the container, but not too high (e.g., 50px from the top)
 
         const node = nodesData.find(n => n.id === currentDraggedNodeId);
         if (node) {
@@ -481,6 +483,7 @@
             renderMindMap();
         }
     }
+
 
     function stopDrag() {
         isDraggingFlag = false;
@@ -668,5 +671,8 @@
         }
     }
 </script>
+<!-- 100% privacy-first analytics -->
+<script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 </body>
 </html>
