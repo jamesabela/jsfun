@@ -6,7 +6,9 @@ I did use AI to help program these, sometimes it really helped and sometimes it 
 
 * [Binary Conversion tool](https://jamesabela.github.io/jsfun/binaryconvertor.html)
 * [binary quiz](https://jamesabela.github.io/jsfun/binaryquiz.html)
-* [8 bit binary display](https://sethideclercq.com/tools/binaryvisualiser.html) (Created by Sethi De Clercq)
+* [Binary Conversion Timed Challenge](https://sethideclercq.com/tools/8bitquest.html) (Created by [Sethi De Clercq](https://sethideclercq.com/teachingtools/))
+* [8 bit binary display](https://sethideclercq.com/tools/binaryvisualiser.html) (Created by [Sethi De Clercq](https://sethideclercq.com/teachingtools/))
+* [Decimal to Binary Conversion Tool](https://sethideclercq.com/tools/switchmaster.html) (Created by [Sethi De Clercq](https://sethideclercq.com/teachingtools/))
 * [iGCSE File Size Calculator](https://ians.site/file/) (Student created)
 * [Python Challenges](https://pythonchallenges.weebly.com/) (Welcome to use challenges, but entries are GIS only)
 
@@ -22,6 +24,7 @@ Question tools
 * [link Two sides](https://jamesabela.github.io/jsfun/linksides.html) - This is a very common exam question where you draw lines between linked items
 * [Sentence ordering quiz](https://jamesabela.github.io/jsfun/scramble.html) - You can either do a word order quiz, sentences or processes
 (The links use a simple encryption to stop students guessing from the link)
+* [More Than / Less Than](https://sethideclercq.com/tools/comparison.html) (Created by [Sethi De Clercq](https://sethideclercq.com/teachingtools/))
 
 Choosers
 * [3D Lollipop Stick Carousel](https://jamesabela.github.io/jsfun/lollipop.html) - For choosing random names, groups or questions
