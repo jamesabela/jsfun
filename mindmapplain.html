@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title id="document-title">Mind Map</title>
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/libs/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+   <!-- PptxGenJS -->
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -164,6 +167,7 @@
       </a>
       <button id="copy-text-btn" class="main-button">Copy Text</button>
       <button id="export-png-btn" class="main-button">Export PNG</button>
+      <button id="export-pptx-btn" class="main-button">Export PPTX</button>
       <button id="download-json-btn" class="main-button">Download JSON</button>
       <button id="upload-json-btn" onclick="document.getElementById('upload-json').click()">Upload JSON</button>
       <input type="file" id="upload-json" style="display: none;" />
@@ -587,8 +591,11 @@
     html2canvas(container, { scale: 2 }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
       const link = document.createElement('a');
+      // Name the PNG file based on the central node text
+      const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'MindMap';
+      const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.png`;
       link.href = imgData;
-      link.download = 'MindMap.png';
+      link.download = fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -599,11 +606,13 @@
 
   // Download JSON
   function downloadJSON() {
+    const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'MindMap';
+    const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.json`;
     const serializedData = JSON.stringify(nodesData);
     const blob = new Blob([serializedData], { type: "application/json" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "MindMap.json";
+    link.download = fileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -618,15 +627,16 @@
     reader.onload = function (e) {
       try {
         const parsedData = JSON.parse(e.target.result);
-        nodesData = parsedData;
 
-        // Set the central node to have a consistent ID
-        const centralNodeData = nodesData.find(n => n.parentId === null);
-        if (centralNodeData) {
-          centralNodeData.id = centralNodeId;
-        }
+        // Convert the parsed JSON data to a Base64-encoded string (without encodeURIComponent)
+        const encodedData = btoa(JSON.stringify(parsedData));
 
-        renderMindMap();
+        // Construct a new URL with the uploaded mind map data
+        const newUrl = `${window.location.origin}${window.location.pathname}#${encodedData}`;
+
+        // Open the new URL in a new tab or window
+        window.open(newUrl, '_blank');
+
       } catch (error) {
         console.error('Failed to load mind map:', error);
         alert('Invalid mind map file.');
@@ -634,6 +644,7 @@
     };
     reader.readAsText(file);
   });
+
 
   // Event listener for color palette
   colorPalette.addEventListener('click', (event) => {
@@ -716,8 +727,119 @@
       node.y = (containerRect.height / 2) - 30;
     }
   }
+// Export PPTX
+  document.getElementById('export-pptx-btn').addEventListener('click', function() {
+    const pptx = new PptxGenJS();
 
+    // Slide 1: Title Slide with Central Node Name
+    const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'Mind Map';
+    const titleSlide = pptx.addSlide({ masterName: 'TITLE_SLIDE' });
 
+    // Expand the title text box for the first slide
+    titleSlide.addText(centralNodeText, {
+      x: 0.5,
+      y: 2,
+      w: 9,  // Expanding the width of the title text box
+      h: 1,  // Expanding the height of the title text box
+      fontSize: 36,
+      bold: true,
+      align: 'center'
+    });
+
+    // Slide 2: Mind Map Image
+    const slide2 = pptx.addSlide();
+
+    // Hide toolbar for the export
+    buttonContainer.style.display = 'none';
+
+    html2canvas(container, { scale: 2 }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      slide2.addImage({ data: imgData, x: 0, y: 0, w: 10, h: 5.625 });
+
+      // Slide 3: Single Text Box with Bullets (Indented)
+      const slide3 = pptx.addSlide();
+
+      // Title for the slide
+      slide3.addText(centralNodeText, {
+        x: 0.5,
+        y: 0.1,
+        w: 9,  // Make the text box wide enough
+        h: 1, // Adjust the height as needed
+        fontSize: 24,
+        bold: true });
+
+      // Create bullet points in a single text box
+      let bulletPoints = '';
+
+      nodesData.forEach(node => {
+        if (node.id !== centralNodeId) {  // Skip the central node
+          const depth = getNodeDepth(node.id);
+          const bulletText = `${'    '.repeat(depth)}• ${node.text || 'Node'}`;
+          bulletPoints += `${bulletText}\n`;
+        }
+      });
+
+      // Add the entire bullet points list to a single text box
+      slide3.addText(bulletPoints, {
+        x: 0.5,
+        y: 1,  // Adjust the Y position for bullets
+        w: 9,  // Make the text box wide enough
+        h: 4.5, // Adjust the height as needed
+        fontSize: 18,
+        align: 'left'
+      });
+
+      // Slide 4: Mind Map Link
+      const slide4 = pptx.addSlide();
+      const mindmapLink = window.location.href;
+
+      // Add the title and link with expanded text box
+      slide4.addText('Edit the Mind Map Here:', {
+        x: 0.5,
+        y: 0.2,
+        w: 9,  // Expanding the width of the title text box
+        h: 1,  // Expanding the height of the title text box
+        fontSize: 24,
+        bold: true
+      });
+      slide4.addText(centralNodeText, {
+        x: 0.5,
+        y: 1,
+        fontSize: 14,
+        w: 9,  // Expand width of text box to fit the content
+        h: 1,  // Expand height to make the link and title more readable
+        hyperlink: { url: mindmapLink }
+      });
+
+      // Add the "Created with" message and CC BY-NC-SA link
+      slide4.addText("Created with James Abela's Mindmapping tool", {
+        x: 0.5,
+        y: 5,  // Position it at the bottom of the slide
+        fontSize: 12,
+        w: 9,
+        align: 'center'
+      });
+      slide4.addText("CC BY-NC-SA 4.0", {
+        x: 0.5,
+        y: 5.3,  // Slightly below the previous text
+        fontSize: 12,
+        hyperlink: { url: "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" },
+        w: 9,
+        align: 'center'
+      });
+
+      // Restore toolbar after export
+      buttonContainer.style.display = 'flex';
+
+      // Name the file based on the central node's text
+      const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.pptx`;
+
+      // Save the PowerPoint
+      pptx.writeFile(fileName);
+    }).finally(() => {
+      buttonContainer.style.display = 'flex';  // Ensure toolbar is restored even if export fails
+    });
+  });
 
 </script>
 <!-- 100% privacy-first analytics -->
