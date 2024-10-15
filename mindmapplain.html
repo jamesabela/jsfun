@@ -763,44 +763,49 @@
       const imgData = canvas.toDataURL('image/png');
       slide2.addImage({ data: imgData, x: 0, y: 0, w: 10, h: 5.625 });
 
-      // Slide 3: Single Text Box with Bullets (Indented)
+      // Slide 3: Single Text Box with Proper Bulleted List (Flat, no indentation)
       const slide3 = pptx.addSlide();
 
-      // Title for the slide
+// Title for the slide
       slide3.addText(centralNodeText, {
         x: 0.5,
         y: 0.1,
         w: 9,  // Make the text box wide enough
-        h: 1, // Adjust the height as needed
+        h: 1,  // Adjust the height as needed for the title
         fontSize: 24,
-        bold: true });
+        bold: true
+      });
 
-      // Create bullet points in a single text box
-      let bulletPoints = '';
+// Create a string to hold all bullet points, flat list (no indentation)
+      let bulletPointsText = '';
 
-      nodesData.forEach(node => {
+// Loop through each node and build the string for the flat bullets, without a final extra newline
+      nodesData.forEach((node, index) => {
         if (node.id !== centralNodeId) {  // Skip the central node
-          const depth = getNodeDepth(node.id);
-          const bulletText = `${'    '.repeat(depth)}• ${node.text || 'Node'}`;
-          bulletPoints += `${bulletText}\n`;
+          bulletPointsText += `${node.text || 'Node'}`;
+          if (index !== nodesData.length - 1) {  // Add a newline unless it's the last item
+            bulletPointsText += '\n';
+          }
         }
       });
 
-      // Add the entire bullet points list to a single text box
-      slide3.addText(bulletPoints, {
-        x: 0.5,
-        y: 1,  // Adjust the Y position for bullets
-        w: 9,  // Make the text box wide enough
-        h: 4.5, // Adjust the height as needed
+// Add the entire string as a single bulleted text box
+      slide3.addText(bulletPointsText, {
+        x: 0.5,  // X position for the text box
+        y: 1,    // Y position for the bullets
+        w: 9,    // Width of the text box
+        h: 4.5,  // Height of the text box
         fontSize: 18,
-        align: 'left'
+        align: 'left',
+        bullet: true  // Enable PowerPoint's bullet functionality
       });
+
 
       // Slide 4: Mind Map Link
       const slide4 = pptx.addSlide();
       const mindmapLink = window.location.href;
 
-      // Add the title and link with expanded text box
+      // Add the title for the slide
       slide4.addText('Edit the Mind Map Here:', {
         x: 0.5,
         y: 0.2,
@@ -809,16 +814,18 @@
         fontSize: 24,
         bold: true
       });
-      slide4.addText(centralNodeText, {
+
+// Display the mind map URL as plain text, size 8, without hyperlink
+      slide4.addText(mindmapLink, {
         x: 0.5,
         y: 1,
-        fontSize: 14,
-        w: 9,  // Expand width of text box to fit the content
-        h: 1,  // Expand height to make the link and title more readable
-        hyperlink: { url: mindmapLink }
+        fontSize: 8,    // Set font size to 8
+        w: 9,           // Expand width of the text box to fit the content
+        h: 1,           // Adjust height as needed
+        align: 'left'
       });
 
-      // Add the "Created with" message and CC BY-NC-SA link
+// Add the "Created with" message and CC BY-NC-SA link
       slide4.addText("Created with James Abela's Mindmapping tool", {
         x: 0.5,
         y: 5,  // Position it at the bottom of the slide
@@ -834,9 +841,10 @@
         w: 9,
         align: 'center'
       });
-      // Add the full link to the presenter notes
+
+// Add the full link to the presenter notes
       slide4.addNotes(mindmapLink);
-      
+
       // Restore toolbar after export
       buttonContainer.style.display = 'flex';
 
