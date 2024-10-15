@@ -256,51 +256,50 @@ Central Topic
     return 'node-' + Math.random().toString(36).substr(2, 9);
   }
 
-  /**
-   * Assigns x and y coordinates to nodes based on their hierarchy to spread them around the center.
-   * Uses a radial layout based on parent.
-   * @param {Array} nodes - Array of node objects.
-   */
   function positionNodes(nodes) {
     const centralNode = nodes.find(n => n.id === 'central-node');
     if (!centralNode) {
       console.error('Central node not found.');
-      console.log('Nodes Array:', nodes); // Log the nodes array to check its contents
       return;
     }
 
     const centerX = centralNode.x;
     const centerY = centralNode.y;
-    const radiusIncrement = 150; // Distance between levels
-    const angleIncrement = 360; // Full circle in degrees
+    const baseRadius = 200;  // Base radius for the first level
+    const radiusIncrement = 150;  // Distance between levels
+    const angleIncrement = Math.PI / 4;  // Adjust this to control the spacing between nodes (radians)
 
-    // Find direct children of the central node
+    // Position the first-level nodes
     const firstLevelNodes = nodes.filter(n => n.parentId === 'central-node');
     const firstLevelCount = firstLevelNodes.length;
-    const firstLevelAngleIncrement = firstLevelCount > 0 ? angleIncrement / firstLevelCount : angleIncrement;
+    let firstAngle = 0;  // Start at 0 radians (right side)
 
-    console.log("Positioning First Level Nodes:");
     firstLevelNodes.forEach((node, index) => {
-      const angle = firstLevelAngleIncrement * index;
-      node.x = centerX + radiusIncrement * Math.cos(angle * (Math.PI / 180));
-      node.y = centerY + radiusIncrement * Math.sin(angle * (Math.PI / 180));
+      // Position the node in a circular pattern around the central node
+      node.x = centerX + baseRadius * Math.cos(firstAngle);
+      node.y = centerY + baseRadius * Math.sin(firstAngle);
 
-      console.log(`First Level Node ${node.id}: x=${node.x}, y=${node.y}`);
+      firstAngle += (2 * Math.PI) / firstLevelCount;  // Distribute nodes evenly in a circle
 
-      // Position second-level nodes (children of the first-level nodes)
+      // Now position the second-level nodes (children of the first-level nodes)
       const secondLevelNodes = nodes.filter(n => n.parentId === node.id);
+      let secondAngle = 0;  // Start at 0 radians for second level
       const secondLevelCount = secondLevelNodes.length;
-      const secondLevelAngleIncrement = secondLevelCount > 0 ? angleIncrement / secondLevelCount : angleIncrement;
 
-      secondLevelNodes.forEach((childNode, childIndex) => {
-        const childAngle = secondLevelAngleIncrement * childIndex;
-        childNode.x = node.x + radiusIncrement * 0.7 * Math.cos(childAngle * (Math.PI / 180));
-        childNode.y = node.y + radiusIncrement * 0.7 * Math.sin(childAngle * (Math.PI / 180));
+      secondLevelNodes.forEach((childNode) => {
+        const childRadius = baseRadius + radiusIncrement;  // Move second-level nodes farther out
+        childNode.x = node.x + childRadius * Math.cos(secondAngle);
+        childNode.y = node.y + childRadius * Math.sin(secondAngle);
 
-        console.log(`Second Level Node ${childNode.id}: x=${childNode.x}, y=${childNode.y}`);
+        secondAngle += (2 * Math.PI) / secondLevelCount;  // Distribute second-level nodes in a circle around their parent
       });
     });
+
+    // Log final positions for debugging
+    console.log("Node positions:", nodes);
   }
+
+
 
   /**
    * Utility function for Base64 encoding with Unicode support
