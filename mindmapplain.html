@@ -604,12 +604,17 @@
     });
   });
 
-  // Download JSON
+  // Download JSON with proper Unicode/emoji support
   function downloadJSON() {
     const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'MindMap';
     const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.json`;
+
+    // Encode the JSON data using TextEncoder for full Unicode/emoji support
     const serializedData = JSON.stringify(nodesData);
-    const blob = new Blob([serializedData], { type: "application/json" });
+    const encoder = new TextEncoder();
+    const encodedData = encoder.encode(serializedData);
+
+    const blob = new Blob([encodedData], { type: "application/json" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
@@ -618,7 +623,8 @@
     document.body.removeChild(link);
   }
 
-  // Upload JSON
+
+  // Upload JSON with proper Unicode/emoji support
   document.getElementById('upload-json').addEventListener('change', function (event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -626,24 +632,25 @@
     const reader = new FileReader();
     reader.onload = function (e) {
       try {
-        const parsedData = JSON.parse(e.target.result);
+        // Use readAsText() to handle the file as text
+        const decodedData = e.target.result;  // No need for TextDecoder here
 
-        // Convert the parsed JSON data to a Base64-encoded string (without encodeURIComponent)
-        const encodedData = btoa(JSON.stringify(parsedData));
+        const parsedData = JSON.parse(decodedData);
+        nodesData = parsedData;
 
-        // Construct a new URL with the uploaded mind map data
-        const newUrl = `${window.location.origin}${window.location.pathname}#${encodedData}`;
-
-        // Open the new URL in a new tab or window
-        window.open(newUrl, '_blank');
+        // Re-render the mind map with the uploaded data
+        renderMindMap();
 
       } catch (error) {
         console.error('Failed to load mind map:', error);
         alert('Invalid mind map file.');
       }
     };
-    reader.readAsText(file);
+    reader.readAsText(file);  // Read the file as text
   });
+
+
+
 
 
   // Event listener for color palette
