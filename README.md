@@ -10,6 +10,7 @@ I did use AI to help program these, sometimes it really helped and sometimes it 
 * [8 bit binary display](https://sethideclercq.com/tools/binaryvisualiser.html) (Created by [Sethi De Clercq](https://sethideclercq.com/teachingtools/))
 * [Decimal to Binary Conversion Tool](https://sethideclercq.com/tools/switchmaster.html) (Created by [Sethi De Clercq](https://sethideclercq.com/teachingtools/))
 * [iGCSE File Size Calculator](https://ians.site/file/) (Student created)
+* [Parity Byte](https://jamesabela.github.io/jsfun/paritybyte.html)
 * [Python Challenges](https://pythonchallenges.weebly.com/) (Welcome to use challenges, but entries are GIS only)
 
 Scratch projects
