@@ -47,6 +47,7 @@ Image fun
 * [Image Compare](https://jamesabela.github.io/jsfun/imgcomp.html) - A tool to see two images over the top of each other. Great for Now & Then or even just comparing which you like best.
 
 Data literacy tools
+
 Can you believe that nobody has made a game of spreadsheets? Well I've made one and its addictive.
 [Find the cell](https://jamesabela.github.io/jsfun/cells.html)
 
