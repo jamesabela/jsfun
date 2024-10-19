@@ -46,6 +46,11 @@ Image fun
 * [Image Reveal](https://jamesabela.github.io/jsfun/imgrev.html) - Fun spotlight to investigate an image. Great for younger children to explore.
 * [Image Compare](https://jamesabela.github.io/jsfun/imgcomp.html) - A tool to see two images over the top of each other. Great for Now & Then or even just comparing which you like best.
 
+Data literacy tools
+Can you believe that nobody has made a game of spreadsheets? Well I've made one and its addictive.
+[Find the cell](https://jamesabela.github.io/jsfun/cells.html)
+
+
 Word & literacy tools
 * [Word Cloud](https://jamesabela.github.io/jsfun/wordcloud.html) - Quick word cloud generator
 * [Plot Device Chooser](https://scratch.mit.edu/projects/2261416/fullscreen/) - In Scratch
