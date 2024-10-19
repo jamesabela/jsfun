@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matrix Parity Checker (8x8 Grid)</title>
+  <style>
+    .byte-matrix {
+      font-size: 18px;
+      margin: 10px;
+      display: grid;
+      grid-template-columns: repeat(9, 50px);
+    }
+    .byte-cell {
+      padding: 5px;
+      text-align: center;
+      border: 1px solid #000;
+    }
+    .parity-cell {
+      background-color: yellow;
+    }
+    .label-cell {
+      background-color: lightblue;
+      font-weight: bold;
+    }
+    .options {
+      margin: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<h1>Matrix Parity Checker (8x8 Grid)</h1>
+<div class="instructions">
+  <h2>Instructions</h2>
+  <p>Welcome to the Matrix Parity Checker! Here's how you can use the tool:</p>
+  <ul>
+    <li><strong>Step 1:</strong> Click the <em>Generate Matrix</em> button to generate a random 7x7 binary matrix with parity bits.</li>
+    <li><strong>Step 2:</strong> The system will randomly use either <strong>even</strong> or <strong>odd</strong> parity, which will be displayed above the matrix.</li>
+    <li><strong>Step 3:</strong> An error may or may not be introduced into the matrix. You need to identify if there’s an error and guess the row and column where the error is located.</li>
+    <li><strong>Step 4:</strong> Select the row and column where you think the error is, or choose the <em>No error</em> option if you believe the matrix is correct.</li>
+    <li><strong>Step 5:</strong> Once you've made your guess, click the <em>Reveal Answer</em> button to check if you're correct!</li>
+  </ul>
+</div>
+<details>
+  <summary><strong>What is a Parity Check?</strong> (Click to expand)</summary>
+  <p>
+    A <strong>parity check</strong> is a simple error-detection mechanism used in digital systems to detect errors in transmitted or stored data.
+    The system adds an extra bit, known as the <em>parity bit</em>, to a group of bits (like a byte). The parity bit is used to indicate whether
+    the number of 1s in the group is odd or even.
+  </p>
+  <p>
+    There are two types of parity checks:
+  </p>
+  <ul>
+    <li><strong>Even Parity:</strong> The parity bit is set so that the total number of 1s in the group (including the parity bit) is even.</li>
+    <li><strong>Odd Parity:</strong> The parity bit is set so that the total number of 1s in the group (including the parity bit) is odd.</li>
+  </ul>
+  <p>
+    When data is transmitted or stored, the receiver can check whether the data follows the expected parity (even or odd). If the number of 1s
+    does not match the expected parity, an error has occurred. While parity checks can detect single-bit errors, they cannot correct them.
+  </p>
+</details>
+
+<div id="matrixDisplay" class="byte-matrix"></div>
+<div id="parityTypeDisplay" class="options"></div>
+<div class="options">
+  Guess the location of the error (Row, Column):
+  <br>
+  Row:
+  <select id="rowGuess">
+    <option value="0">Row 1</option>
+    <option value="1">Row 2</option>
+    <option value="2">Row 3</option>
+    <option value="3">Row 4</option>
+    <option value="4">Row 5</option>
+    <option value="5">Row 6</option>
+    <option value="6">Row 7</option>
+    <option value="7">Parity Row</option>
+  </select>
+  Column:
+  <select id="colGuess">
+    <option value="0">Column A</option>
+    <option value="1">Column B</option>
+    <option value="2">Column C</option>
+    <option value="3">Column D</option>
+    <option value="4">Column E</option>
+    <option value="5">Column F</option>
+    <option value="6">Column G</option>
+    <option value="7">Parity Column</option>
+  </select>
+  <br><br>
+  <input type="radio" name="errorGuess" value="error" checked> There is an error<br>
+  <input type="radio" name="errorGuess" value="no-error"> No error
+</div>
+
+<button id="generateButton">Generate Matrix</button>
+<button id="revealButton" class="hidden">Reveal Answer</button>
+
+<div id="result" class="hidden"></div>
+
+<script>
+  let matrix = [];
+  let rowParity = [];
+  let colParity = [];
+  let errorLocation = {row: -1, col: -1}; // Random error location (if any)
+  let parityType = ''; // Even or Odd parity
+
+  document.getElementById('generateButton').addEventListener('click', function() {
+    generateMatrix();
+    document.getElementById('revealButton').classList.remove('hidden');
+    document.getElementById('result').classList.add('hidden');
+  });
+
+  document.getElementById('revealButton').addEventListener('click', function() {
+    revealAnswer();
+  });
+
+  function generateMatrix() {
+    // Randomly assign parity type (even or odd)
+    parityType = Math.random() < 0.5 ? 'even' : 'odd';
+    document.getElementById('parityTypeDisplay').textContent = "Parity Type: " + parityType.charAt(0).toUpperCase() + parityType.slice(1);
+
+    // Generate a 7x7 matrix of random bits
+    matrix = Array.from({ length: 7 }, () => Array.from({ length: 7 }, () => Math.floor(Math.random() * 2)));
+    rowParity = [];
+    colParity = Array(7).fill(0);
+
+    // Calculate row and column parity once, based on the matrix
+    calculateRowAndColumnParity();
+
+    // Randomly decide whether to introduce an error (one bit flip)
+    if (Math.random() < 0.5) {
+      errorLocation.row = Math.floor(Math.random() * 7); // Rows 0-6
+      errorLocation.col = Math.floor(Math.random() * 7); // Columns 0-6
+      flipBit(errorLocation.row, errorLocation.col);
+    } else {
+      errorLocation = { row: -1, col: -1 }; // No error
+    }
+
+    // Display the matrix with the parity bits
+    displayMatrix();
+  }
+
+  function calculateRowAndColumnParity() {
+    // Calculate row parity
+    matrix.forEach((row, rowIndex) => {
+      let rowSum = row.reduce((sum, bit) => sum + bit, 0);
+      rowParity[rowIndex] = calculateParity(rowSum);
+    });
+
+    // Calculate column parity
+    for (let col = 0; col < 7; col++) {
+      let colSum = 0;
+      for (let row = 0; row < 7; row++) {
+        colSum += matrix[row][col];
+      }
+      colParity[col] = calculateParity(colSum);
+    }
+  }
+
+  function calculateParity(sum) {
+    // Returns parity bit based on selected parity type (even or odd)
+    if (parityType === 'even') {
+      return sum % 2 === 0 ? 0 : 1;
+    } else {
+      return sum % 2 === 0 ? 1 : 0;
+    }
+  }
+
+  function flipBit(row, col) {
+    console.log(`Flipping bit at Row ${row + 1}, Column ${String.fromCharCode(65 + col)}`);
+    matrix[row][col] = matrix[row][col] === 0 ? 1 : 0; // Flip the specific bit only
+  }
+
+  function displayMatrix() {
+    const matrixDisplay = document.getElementById('matrixDisplay');
+    matrixDisplay.innerHTML = ''; // Clear previous matrix
+
+    // Display column labels (A-G and Parity Column)
+    const columnLabels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'P'];
+    matrixDisplay.appendChild(createLabelCell('')); // Empty cell for row/column alignment
+    columnLabels.forEach(label => {
+      const colLabelCell = document.createElement('div');
+      colLabelCell.className = 'byte-cell label-cell';
+      colLabelCell.textContent = label;
+      matrixDisplay.appendChild(colLabelCell);
+    });
+
+    // Display matrix with parity bits and row labels
+    for (let i = 0; i < 7; i++) {
+      const rowLabelCell = document.createElement('div');
+      rowLabelCell.className = 'byte-cell label-cell';
+      rowLabelCell.textContent = i + 1; // Row labels 1-7
+      matrixDisplay.appendChild(rowLabelCell);
+
+      for (let j = 0; j < 7; j++) {
+        let cell = document.createElement('div');
+        cell.className = 'byte-cell';
+        cell.textContent = matrix[i][j];
+        matrixDisplay.appendChild(cell);
+      }
+      // Append row parity bit
+      let rowParityCell = document.createElement('div');
+      rowParityCell.className = 'byte-cell parity-cell';
+      rowParityCell.textContent = rowParity[i];
+      matrixDisplay.appendChild(rowParityCell);
+    }
+    // Display column parity bits
+    const finalRowLabelCell = document.createElement('div');
+    finalRowLabelCell.className = 'byte-cell label-cell';
+    finalRowLabelCell.textContent = 'P'; // Parity row label
+    matrixDisplay.appendChild(finalRowLabelCell);
+
+    for (let j = 0; j < 7; j++) {
+      let colParityCell = document.createElement('div');
+      colParityCell.className = 'byte-cell parity-cell';
+      colParityCell.textContent = colParity[j];
+      matrixDisplay.appendChild(colParityCell);
+    }
+
+    // Append final parity cell (bottom-right corner), leave empty for simplicity
+    let finalParityCell = document.createElement('div');
+    finalParityCell.className = 'byte-cell parity-cell';
+    finalParityCell.textContent = '';
+    matrixDisplay.appendChild(finalParityCell);
+  }
+
+  function createLabelCell(text) {
+    let cell = document.createElement('div');
+    cell.className = 'byte-cell label-cell';
+    cell.textContent = text;
+    return cell;
+  }
+
+  function revealAnswer() {
+    const userRowGuess = parseInt(document.getElementById('rowGuess').value);
+    const userColGuess = parseInt(document.getElementById('colGuess').value);
+    const errorGuess = document.querySelector('input[name="errorGuess"]:checked').value;
+
+    let resultText = "The error was ";
+    if (errorLocation.row === -1 && errorLocation.col === -1) {
+      resultText += "nowhere! No error was introduced.<br>";
+      if (errorGuess === "no-error") {
+        resultText += "Correct! There was no error.";
+      } else {
+        resultText += "Incorrect. You guessed there was an error.";
+      }
+    } else {
+      resultText += "in Row " + (errorLocation.row + 1) + ", Column " + String.fromCharCode(65 + errorLocation.col) + ".<br>";
+      if (userRowGuess === errorLocation.row && userColGuess === errorLocation.col && errorGuess === "error") {
+        resultText += "Correct!";
+      } else {
+        resultText += "Incorrect. Your guess was Row " + (userRowGuess + 1) + ", Column " + String.fromCharCode(65 + userColGuess) + ".";
+      }
+    }
+
+    document.getElementById('result').innerHTML = resultText;
+    document.getElementById('result').classList.remove('hidden');
+  }
+</script>
+</body>
+</html>
