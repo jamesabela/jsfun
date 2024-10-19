@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cell Finder Game for Kids</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      background-color: #f0f8ff;
+    }
+
+    h1 {
+      color: #ff6347;
+      font-size: 48px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px #ffa07a;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-gap: 4px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .game-cell {
+      background-color: #f9f9f9;
+      border: 2px solid #333;
+      text-align: center;
+      line-height: 50px;
+      font-size: 20px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      transition: background-color 0.3s;
+    }
+
+    .game-cell:hover {
+      background-color: #87cefa;
+    }
+
+    .header-cell {
+      background-color: #ffd700;
+      font-weight: bold;
+      font-size: 22px;
+      line-height: 50px;
+    }
+
+    .child-friendly {
+      font-size: 24px;
+      background-color: #87cefa;
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      color: #fff;
+      box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .timer, .score {
+      font-size: 30px;
+      color: #4caf50;
+      margin-bottom: 20px;
+    }
+
+    .input-area input {
+      padding: 10px;
+      font-size: 20px;
+      text-align: center;
+      width: 140px;
+      border-radius: 5px;
+      border: 2px solid #4caf50;
+    }
+
+    .input-area button {
+      padding: 10px 20px;
+      font-size: 20px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .input-area button:hover {
+      background-color: #45a049;
+      transform: scale(1.05);
+    }
+
+    .mode-select {
+      margin-top: 40px;
+    }
+
+    .mode-select h2 {
+      font-size: 36px;
+      color: #ff6347;
+      text-shadow: 2px 2px #ffa07a;
+      margin-bottom: 20px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    .mode-buttons {
+      margin-bottom: 20px;
+    }
+
+    .mode-select button {
+      padding: 20px 40px;
+      font-size: 24px;
+      background-color: #ffa07a;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background-color 0.3s, transform 0.2s;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      color: #fff;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .mode-select button:hover {
+      background-color: #ff6347;
+      transform: scale(1.05);
+    }
+
+    .difficulty-select {
+      font-size: 24px;
+      margin-top: 20px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    .difficulty-select label {
+      margin-right: 20px;
+      color: #4caf50;
+    }
+
+    .difficulty-select input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    .correct {
+      background-color: #8bc34a;
+      transition: background-color 0.3s;
+    }
+
+    .incorrect {
+      background-color: #f44336;
+      transition: background-color 0.3s;
+    }
+
+    #gameArea {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Find the Cell Game!</h1>
+<p class="high-score">High Score: <span id="highScore">0</span></p>
+<div id="gameArea">
+  <div id="grid" class="game-grid"></div>
+
+  <div class="child-friendly">
+    <p id="gameModeText"></p>
+    <p>Where is? <span id="randomQuestion"></span></p>
+    <p id="timer" class="timer"></p>
+    <p class="score">Score: <span id="score">0</span></p>
+  </div>
+
+  <div class="input-area">
+    <input type="text" id="cellInput" placeholder="Cell e.g. A1">
+    <button id="submitAnswer">Submit</button>
+  </div>
+</div>
+
+<div class="mode-select">
+  <h2>Choose Your Challenge!</h2>
+  <div class="difficulty-select">
+    <label><input type="radio" name="difficulty" value="4x4" checked> 4x4</label>
+    <label><input type="radio" name="difficulty" value="8x8"> 8x8</label>
+    <label><input type="radio" name="difficulty" value="medium"> formula</label>
+  </div>
+  <br>
+  <div class="mode-buttons">
+    <button onclick="selectMode('5-correct')">5 Correct Answers</button>
+    <button onclick="selectMode('10-correct')">10 Correct Answers</button>
+    <button onclick="selectMode('timed-30')">30 Seconds</button>
+    <button onclick="selectMode('timed-60')">60 Seconds</button>
+    <button onclick="selectMode('timed-90')">90 Seconds</button>
+  </div>
+
+</div>
+
+<script>
+  let grid = [];
+  let randomNumber = 0;
+  let score = 0;
+  let correctAnswers = 0;
+  let timeLimit = 0;
+  let countdownInterval = null;
+  let targetCorrect = 0;
+  let gameMode = "";  // Default mode is none
+  let gridSize = 4;   // Default grid size is 4x4 when the page loads
+  let difficulty = "4x4"; // Default difficulty
+  let highScore = 0;  // Variable to store the high score
+  let pointsPerCorrect = 30;  // Default points for 30 seconds mode
+
+  let usedNumbers = [];  // To track numbers already used in the grid
+
+  // This will run on page load to set the default 4x4 grid
+  window.onload = function() {
+    createGrid();  // Create the default 4x4 grid on page load
+  };
+
+  // Event listener for the submit button
+  document.getElementById('submitAnswer').addEventListener('click', checkAnswer);
+
+  // Event listener to submit when pressing Enter
+  document.getElementById('cellInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      checkAnswer();  // Call the checkAnswer function when Enter is pressed
+    }
+  });
+
+  function selectMode(mode) {
+    gameMode = mode;
+    difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+
+    // Set grid size based on difficulty choice
+    if (difficulty === "4x4") gridSize = 4;
+    else if (difficulty === "8x8") gridSize = 8;
+    else gridSize = 8;  // Medium uses the 8x8 grid
+
+    // Set points and time limit based on the selected mode
+    if (gameMode === "timed-30") {
+      timeLimit = 30;
+      pointsPerCorrect = 30;  // 30 points for 30 seconds mode
+      document.getElementById('timer').style.display = 'block';  // Show timer
+    } else if (gameMode === "timed-60") {
+      timeLimit = 60;
+      pointsPerCorrect = 18;  // 18 points for 60 seconds mode
+      document.getElementById('timer').style.display = 'block';  // Show timer
+    } else if (gameMode === "timed-90") {
+      timeLimit = 90;
+      pointsPerCorrect = 7;   // 7 points for 90 seconds mode
+      document.getElementById('timer').style.display = 'block';  // Show timer
+    } else {
+      // For untimed mode, hide the timer and set the point system
+      pointsPerCorrect = 5;   // 5 points for correct answers in untimed mode
+      pointsPerIncorrect = -1; // -1 points for incorrect answers in untimed mode
+      document.getElementById('timer').style.display = 'none';  // Hide timer
+    }
+
+    // If it's a timed mode, start the timed game
+    if (gameMode.startsWith("timed")) {
+      startTimedGame();
+    } else {
+      // For untimed mode, set target number of correct answers
+      targetCorrect = gameMode === "5-correct" ? 5 : 10;
+      startUntimedGame();
+    }
+
+    document.getElementById("gameArea").style.display = "block";
+    document.querySelector(".mode-select").style.display = "none";
+  }
+
+
+
+  function createGrid() {
+    const gridElement = document.getElementById('grid');
+    gridElement.innerHTML = '';
+    grid = [];
+    usedNumbers = [];  // Reset used numbers at the start of a new game
+
+    // Set up the grid columns based on the grid size
+    gridElement.style.gridTemplateColumns = `repeat(${gridSize + 1}, 60px)`;
+
+    // Create column headers (A, B, C, etc.)
+    gridElement.appendChild(createHeaderCell('')); // Empty top-left corner cell
+    for (let i = 0; i < gridSize; i++) {
+      const header = String.fromCharCode(65 + i); // A, B, C, ...
+      gridElement.appendChild(createHeaderCell(header));
+    }
+
+    // Create the grid cells with numbers
+    let number = 1;
+    for (let i = 0; i < gridSize; i++) {
+      // Create row headers (1, 2, 3, etc.)
+      gridElement.appendChild(createHeaderCell(i + 1));
+
+      for (let j = 0; j < gridSize; j++) {
+        const cellId = String.fromCharCode(65 + j) + (i + 1);  // Cell ID like A1, B2, etc.
+        const cellNumber = number++;  // Use numbers for the grid
+
+        grid.push({ id: cellId, number: cellNumber });  // Store cell data
+        const cell = document.createElement('div');
+        cell.classList.add('game-cell');
+        cell.id = cellId;
+        cell.innerText = cellNumber;
+        gridElement.appendChild(cell);
+      }
+    }
+  }
+
+  function createHeaderCell(content) {
+    const cell = document.createElement('div');
+    cell.classList.add('header-cell');
+    cell.innerText = content;
+    return cell;
+  }
+
+  function startTimedGame() {
+    score = 0;
+    correctAnswers = 0;
+    document.getElementById('timer').innerText = timeLimit + ' seconds';
+    document.getElementById('score').innerText = score;
+    createGrid();  // Create the grid when starting the game
+    generateRandomQuestion();
+
+    countdownInterval = setInterval(function() {
+      timeLimit--;
+      document.getElementById('timer').innerText = timeLimit + ' seconds';
+      if (timeLimit <= 0) {
+        endGame();
+      }
+    }, 1000);
+  }
+
+  function startUntimedGame() {
+    score = 0;
+    correctAnswers = 0;
+    document.getElementById('score').innerText = score;
+    createGrid();  // Create the grid when starting the game
+    generateRandomQuestion();
+  }
+
+  function generateRandomQuestion() {
+    if (difficulty === "4x4" || difficulty === "8x8") {
+      // Pick a random cell number to guess in simple mode for 4x4 or 8x8 grids
+      let randomIndex = generateUniqueIndex();
+      randomNumber = grid[randomIndex].number;
+      document.getElementById('randomQuestion').innerText = randomNumber;
+    } else if (difficulty === "medium") {
+      // Medium difficulty: Simple addition with numbers 1-20
+      let randomCell1 = grid[generateUniqueIndexForMedium()];
+      let randomCell2 = grid[generateUniqueIndexForMedium()];
+      let num1 = randomCell1.number;
+      let num2 = randomCell2.number;
+      randomNumber = num1 + num2;  // Ensure numbers are within 1-20 range
+      document.getElementById('randomQuestion').innerText = `=${randomCell1.id} + ${randomCell2.id}`;
+    }
+  }
+
+  function generateUniqueIndexForMedium() {
+    let randomIndex = Math.floor(Math.random() * grid.length);
+
+    // Limit numbers to range 1-20 for medium mode
+    while (grid[randomIndex].number > 20 || usedNumbers.includes(grid[randomIndex].number)) {
+      randomIndex = Math.floor(Math.random() * grid.length);
+    }
+
+    usedNumbers.push(grid[randomIndex].number);  // Track the number to avoid repetition
+    return randomIndex;
+  }
+
+  function generateUniqueIndex() {
+    let randomIndex = Math.floor(Math.random() * grid.length);
+
+    while (usedNumbers.includes(grid[randomIndex].number)) {
+      randomIndex = Math.floor(Math.random() * grid.length);
+    }
+
+    usedNumbers.push(grid[randomIndex].number);  // Track the number to avoid repetition
+    return randomIndex;
+  }
+
+  function checkAnswer() {
+    const userInput = document.getElementById('cellInput').value.toUpperCase();
+
+    // Find the cell that contains the correct number from the grid
+    const correctCell = grid.find(cell => cell.number === randomNumber).id;
+
+    if (userInput === correctCell) {
+      correctAnswers++;
+      score += pointsPerCorrect;  // Use the correct points for the mode
+      document.getElementById(correctCell).classList.add('correct');
+    } else {
+      score += pointsPerIncorrect || -5;  // Deduct 1 point for untimed or 5 for timed
+      document.getElementById(correctCell).classList.add('incorrect');
+    }
+
+    document.getElementById('score').innerText = score;
+
+    // Generate the next question
+    if (gameMode.startsWith("timed")) {
+      generateRandomQuestion();
+    } else if (correctAnswers >= targetCorrect) {
+      endGame();
+    } else {
+      generateRandomQuestion();
+    }
+
+    document.getElementById('cellInput').value = '';  // Clear the input after each answer
+  }
+
+  function startTimedGame() {
+    score = 0;
+    correctAnswers = 0;
+    document.getElementById('timer').innerText = timeLimit + ' seconds';
+    document.getElementById('score').innerText = score;
+    createGrid();  // Create the fixed grid
+    generateRandomQuestion();
+
+    countdownInterval = setInterval(function() {
+      timeLimit--;
+      document.getElementById('timer').innerText = timeLimit + ' seconds';
+      if (timeLimit <= 0) {
+        endGame();
+      }
+    }, 1000);
+  }
+
+  function startUntimedGame() {
+    score = 0;
+    correctAnswers = 0;
+    document.getElementById('score').innerText = score;
+    createGrid();  // Create the fixed grid
+    generateRandomQuestion();
+  }
+
+  function endGame() {
+    clearInterval(countdownInterval);
+
+    let resultMessage = `Game Over! Your final score is: ${score}`;
+    if (gameMode.startsWith("timed")) {
+      resultMessage += `. You got ${correctAnswers} correct answers in the timed mode.`;
+    } else {
+      resultMessage += `. You completed ${correctAnswers} correct answers out of ${targetCorrect}.`;
+    }
+
+    // Check if current score is a new high score
+    if (score > highScore) {
+      highScore = score;
+      document.getElementById('highScore').innerText = highScore;  // Update high score display
+      resultMessage += `\nCongratulations! New High Score: ${highScore}`;
+    }
+
+    alert(resultMessage);
+
+    // Reset game area and bring back the mode selection menu
+    document.getElementById("gameArea").style.display = "none";
+    document.querySelector(".mode-select").style.display = "block";
+    document.getElementById('cellInput').value = '';
+
+    // Reset score, correct answers, and used numbers
+    score = 0;
+    correctAnswers = 0;
+    usedNumbers = [];
+    document.getElementById('score').innerText = score;
+  }
+
+  document.getElementById('submitAnswer').addEventListener('click', checkAnswer);
+
+  // Initialize the grid on page load
+  createGrid();
+</script>
+</body>
+</html>
