@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polygon Viewer</title>
+  <style>
+    body {
+      font-family: Comic Sans MS, Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    }
+    canvas {
+      border: 5px dashed #ff6f61;
+      background-color: #ffe4e1;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    .slider-container {
+      margin: 20px 0;
+    }
+    #sides-slider {
+      width: 80%;
+    }
+    .slider-container label {
+      font-size: 1.2em;
+      color: #ff6347;
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #ff4500;
+      text-shadow: 2px 2px #ffa07a;
+    }
+    .emoji {
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body>
+<h1>🎨 Polygon Viewer 🎉</h1>
+<div class="slider-container">
+  <label for="sides-slider">Number of sides: <span id="sides-value">3</span> <span class="emoji">🖌️</span></label>
+  <br>
+  <input type="range" id="sides-slider" min="3" max="365" value="3">
+</div>
+<canvas id="polygonCanvas" width="500" height="500"></canvas>
+
+<script>
+  const slider = document.getElementById('sides-slider');
+  const sidesValue = document.getElementById('sides-value');
+  const canvas = document.getElementById('polygonCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function drawPolygon(sides) {
+    const radius = 200; // Radius of the polygon
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const angleStep = (2 * Math.PI) / sides;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+    // Add fun background effect
+    const gradient = ctx.createRadialGradient(centerX, centerY, radius * 0.1, centerX, centerY, radius);
+    gradient.addColorStop(0, '#ff9a9e');
+    gradient.addColorStop(1, '#fad0c4');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.beginPath();
+    for (let i = 0; i <= sides; i++) {
+      const x = centerX + radius * Math.cos(i * angleStep);
+      const y = centerY + radius * Math.sin(i * angleStep);
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    }
+    ctx.closePath();
+
+    ctx.strokeStyle = '#ff4500';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = '#ffe4e1';
+    ctx.fill();
+  }
+
+  slider.addEventListener('input', () => {
+    const sides = parseInt(slider.value);
+    sidesValue.textContent = sides;
+    drawPolygon(sides);
+  });
+
+  // Initial drawing
+  drawPolygon(parseInt(slider.value));
+</script>
+</body>
+</html>
