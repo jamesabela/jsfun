@@ -35,6 +35,30 @@
       margin-top: 0;
     }
 
+    .controls {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .control-button {
+      width: 60px;
+      height: 60px;
+      background-color: #d41e1e;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      box-shadow: 0 4px #b31515;
+      cursor: pointer;
+    }
+
+    .control-button:active {
+      box-shadow: 0 2px #b31515;
+      transform: translateY(2px);
+    }
+
     .game-over {
       position: absolute;
       text-align: center;
@@ -48,6 +72,16 @@
 <h1>Happy Chinese New Year!</h1>
 <h2>Wishing you a Wonderful Year of the Snake!</h2>
 <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+<div class="controls">
+  <button class="control-button" id="up">⬆️</button>
+</div>
+<div class="controls">
+  <button class="control-button" id="left">⬅️</button>
+  <button class="control-button" id="down">⬇️</button>
+  <button class="control-button" id="right">➡️</button>
+</div>
+
 <script>
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
@@ -161,6 +195,23 @@
         if (direction !== "LEFT") direction = "RIGHT";
         break;
     }
+  });
+
+  // Button controls
+  document.getElementById("up").addEventListener("click", () => {
+    if (direction !== "DOWN") direction = "UP";
+  });
+
+  document.getElementById("down").addEventListener("click", () => {
+    if (direction !== "UP") direction = "DOWN";
+  });
+
+  document.getElementById("left").addEventListener("click", () => {
+    if (direction !== "RIGHT") direction = "LEFT";
+  });
+
+  document.getElementById("right").addEventListener("click", () => {
+    if (direction !== "LEFT") direction = "RIGHT";
   });
 
   function gameLoopFunction() {
