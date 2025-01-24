@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake Game - Chinese New Year Theme</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffefd5;
+      font-family: 'Arial', sans-serif;
+    }
+
+    canvas {
+      border: 5px solid #d41e1e;
+      background-color: #f9e5e1;
+      box-shadow: 0 0 20px #d41e1e;
+    }
+
+    h1 {
+      color: #d41e1e;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px #f9e5e1;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #d41e1e;
+      font-size: 1.5rem;
+      text-shadow: 1px 1px #f9e5e1;
+      margin-top: 0;
+    }
+
+    .game-over {
+      position: absolute;
+      text-align: center;
+      color: #d41e1e;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<h1>Happy Chinese New Year!</h1>
+<h2>Wishing you a Wonderful Year of the Snake!</h2>
+<canvas id="gameCanvas" width="400" height="400"></canvas>
+<script>
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // Game settings
+  const tileSize = 20;
+  const canvasSize = canvas.width;
+  const tileCount = canvasSize / tileSize;
+
+  let snake = [{ x: 5, y: 5 }];
+  let direction = "RIGHT";
+  let food = { x: Math.floor(Math.random() * tileCount), y: Math.floor(Math.random() * tileCount) };
+  let score = 0;
+
+  const gameSpeed = 100;
+
+  function drawTile(x, y, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+  }
+
+  function drawBoard() {
+    ctx.fillStyle = "#f9e5e1";
+    ctx.fillRect(0, 0, canvasSize, canvasSize);
+  }
+
+  function drawSnake() {
+    for (let segment of snake) {
+      drawTile(segment.x, segment.y, "#d41e1e");
+      ctx.strokeStyle = "gold";
+      ctx.strokeRect(segment.x * tileSize, segment.y * tileSize, tileSize, tileSize);
+    }
+  }
+
+  function drawFood() {
+    drawTile(food.x, food.y, "gold");
+    ctx.beginPath();
+    ctx.arc(
+            food.x * tileSize + tileSize / 2,
+            food.y * tileSize + tileSize / 2,
+            tileSize / 3,
+            0,
+            2 * Math.PI
+    );
+    ctx.fillStyle = "red";
+    ctx.fill();
+  }
+
+  function moveSnake() {
+    const head = { ...snake[0] };
+
+    switch (direction) {
+      case "UP":
+        head.y -= 1;
+        break;
+      case "DOWN":
+        head.y += 1;
+        break;
+      case "LEFT":
+        head.x -= 1;
+        break;
+      case "RIGHT":
+        head.x += 1;
+        break;
+    }
+
+    // Wrap snake around edges
+    head.x = (head.x + tileCount) % tileCount;
+    head.y = (head.y + tileCount) % tileCount;
+
+    // Check collision with itself
+    if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+      gameOver();
+      return;
+    }
+
+    snake.unshift(head);
+
+    // Check if the snake eats food
+    if (head.x === food.x && head.y === food.y) {
+      score++;
+      food = { x: Math.floor(Math.random() * tileCount), y: Math.floor(Math.random() * tileCount) };
+    } else {
+      snake.pop();
+    }
+  }
+
+  function gameOver() {
+    clearInterval(gameLoop);
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    ctx.fillRect(0, 0, canvasSize, canvasSize);
+    ctx.fillStyle = "#d41e1e";
+    ctx.font = "bold 30px Arial";
+    ctx.fillText("Game Over", canvasSize / 4, canvasSize / 2);
+    ctx.font = "20px Arial";
+    ctx.fillText(`Score: ${score}`, canvasSize / 3, canvasSize / 1.6);
+  }
+
+  document.addEventListener("keydown", event => {
+    switch (event.key) {
+      case "ArrowUp":
+        if (direction !== "DOWN") direction = "UP";
+        break;
+      case "ArrowDown":
+        if (direction !== "UP") direction = "DOWN";
+        break;
+      case "ArrowLeft":
+        if (direction !== "RIGHT") direction = "LEFT";
+        break;
+      case "ArrowRight":
+        if (direction !== "LEFT") direction = "RIGHT";
+        break;
+    }
+  });
+
+  function gameLoopFunction() {
+    drawBoard();
+    drawSnake();
+    drawFood();
+    moveSnake();
+  }
+
+  const gameLoop = setInterval(gameLoopFunction, gameSpeed);
+</script>
+</body>
+</html>
