@@ -54,6 +54,7 @@ Can you believe that nobody has made a game of spreadsheets? Well I've made one 
 
 Word & literacy tools
 * [Word Cloud](https://jamesabela.github.io/jsfun/wordcloud.html) - Quick word cloud generator
+* [Story Dice](https://jamesabela.github.io/jsfun/storydice.html) - Generates story prompts and nets. (Even saves images for you)
 * [Plot Device Chooser](https://scratch.mit.edu/projects/2261416/fullscreen/) - In Scratch
 
 Timer
