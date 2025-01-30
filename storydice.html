@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Dice - Fun for Kids!</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #fce4ec;
+    }
+    h1 {
+      color: #ff4081;
+      font-size: 36px;
+    }
+    .dice-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+      position: relative;
+      padding: 10px;
+      background-color: white;
+      border-radius: 10px;
+      width: max-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .grid-9 {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      justify-content: center;
+      gap: 15px;
+    }
+    .dice {
+      width: 80px;
+      height: 80px;
+      font-size: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid #ff4081;
+      border-radius: 15px;
+      background-color: #fff3e0;
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s;
+    }
+    .dice:hover {
+      transform: rotate(10deg) scale(1.1);
+    }
+    .net {
+      display: grid;
+      grid-template-columns: 100px 100px 100px;
+      grid-template-rows: 100px 100px 100px;
+      gap: 5px;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+    }
+    .net div {
+      width: 100px;
+      height: 100px;
+      font-size: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid #ff4081;
+      background-color: #fff3e0;
+    }
+  </style>
+</head>
+<body>
+<h1>🎲 Fun Story Dice! 🎲</h1>
+<p>Click the button to roll the dice and create an exciting story!</p>
+<label>
+  <input type="radio" name="diceMode" value="5" checked> 5 Dice
+</label>
+<label>
+  <input type="radio" name="diceMode" value="9"> 9 Dice
+</label>
+<label>
+  <input type="radio" name="diceMode" value="net"> Dice Net
+</label>
+<br><br>
+<button onclick="rollDice()">🎲 Roll the Dice! 🎲</button>
+<button onclick="saveImage()">💾 Save as Image</button>
+<div class="dice-container" id="diceContainer"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  const symbols = [
+    "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🦁", "🐯",
+    "🐵", "🐸", "🐷", "🐮", "🐔", "🦄", "🐙", "🐠", "🐉", "🐢",
+    "🌟", "🌈", "🔥", "⚡", "🧙", "🦸", "🧜", "🚀", "🏰", "🌊",
+    "🏜️", "🌋", "🌍", "🎩", "🔮", "👑", "🎠", "🛶", "🦅", "🦉",
+    "🧩", "🎭", "🎪", "🎵", "📖", "🔑", "🏆", "🎯", "🕰️", "🗺️",
+    "🍎", "🍌", "🍇", "🍉", "🍒", "🍓", "🥕", "🥦", "🌽", "🥑"
+  ];
+
+  function rollDice() {
+    const mode = document.querySelector('input[name="diceMode"]:checked').value;
+    const diceContainer = document.getElementById("diceContainer");
+    diceContainer.innerHTML = "";
+    diceContainer.classList.remove("grid-9");
+
+    if (mode === "net") {
+      generateDiceNet();
+      return;
+    }
+
+    const diceCount = parseInt(mode);
+    const shuffledSymbols = shuffleAndSlice(diceCount);
+
+    if (diceCount === 9) {
+      diceContainer.classList.add("grid-9");
+    }
+
+    displayDice(shuffledSymbols);
+    updateURL("dice", shuffledSymbols);
+  }
+
+  function displayDice(diceArray) {
+    const diceContainer = document.getElementById("diceContainer");
+    diceContainer.innerHTML = "";
+    diceArray.forEach(symbol => {
+      const dice = document.createElement("div");
+      dice.className = "dice";
+      dice.textContent = symbol;
+      diceContainer.appendChild(dice);
+    });
+  }
+
+  function generateDiceNet() {
+    const netContainer = document.getElementById("diceContainer");
+    netContainer.innerHTML = "";
+    const shuffledSymbols = shuffleAndSlice(6);
+
+    netContainer.innerHTML = `
+      <div class='net'>
+        <div></div><div>${shuffledSymbols[0]}</div><div></div>
+        <div>${shuffledSymbols[1]}</div><div>${shuffledSymbols[2]}</div><div>${shuffledSymbols[3]}</div>
+        <div></div><div>${shuffledSymbols[4]}</div><div></div>
+        <div></div><div>${shuffledSymbols[5]}</div><div></div>
+      </div>
+    `;
+    updateURL("net", shuffledSymbols);
+  }
+
+  function shuffleAndSlice(count) {
+    return [...symbols].sort(() => Math.random() - 0.5).slice(0, count);
+  }
+
+  function updateURL(paramName, symbolArray) {
+    const url = new URL(window.location);
+    url.searchParams.delete("dice");
+    url.searchParams.delete("net");
+    url.searchParams.set(paramName, symbolArray.join("-"));
+    window.history.pushState({}, "", url);
+  }
+
+  function saveImage() {
+    html2canvas(document.getElementById("diceContainer")).then(canvas => {
+      let link = document.createElement("a");
+      link.download = "story_dice.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  }
+
+  // Load from URL on page load
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const diceParam = urlParams.get("dice");
+    const netParam = urlParams.get("net");
+
+    if (netParam) {
+      // If there's a net param, display net
+      const netContainer = document.getElementById("diceContainer");
+      netContainer.innerHTML = "";
+      const symbolsFromURL = netParam.split("-");
+      netContainer.innerHTML = `
+        <div class='net'>
+          <div></div><div>${symbolsFromURL[0]}</div><div></div>
+          <div>${symbolsFromURL[1]}</div><div>${symbolsFromURL[2]}</div><div>${symbolsFromURL[3]}</div>
+          <div></div><div>${symbolsFromURL[4]}</div><div></div>
+          <div></div><div>${symbolsFromURL[5]}</div><div></div>
+        </div>
+      `;
+      document.querySelector('input[value="net"]').checked = true;
+    } else if (diceParam) {
+      // If there's a dice param, display dice
+      const diceArray = diceParam.split("-");
+      const diceContainer = document.getElementById("diceContainer");
+      diceContainer.classList.remove("grid-9");
+      diceContainer.innerHTML = "";
+
+      diceArray.forEach(symbol => {
+        const dice = document.createElement("div");
+        dice.className = "dice";
+        dice.textContent = symbol;
+        diceContainer.appendChild(dice);
+      });
+
+      // Decide if it's 5 or 9
+      if (diceArray.length === 9) {
+        diceContainer.classList.add("grid-9");
+        document.querySelector('input[value="9"]').checked = true;
+      } else {
+        document.querySelector('input[value="5"]').checked = true;
+      }
+    }
+  };
+</script>
+</body>
+</html>
