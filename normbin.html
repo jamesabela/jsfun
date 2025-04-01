@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Floating Point Normalisation Practice</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, select { margin: 5px; padding: 5px; width: 300px; }
+    button { margin: 5px; padding: 10px; }
+    #feedback { font-weight: bold; margin-top: 10px; }
+    code { background: #eee; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+<h1>Floating Point Normalisation (10-bit Mantissa, 6-bit Exponent)</h1>
+<label for="mode">Mode:</label>
+<select id="mode" onchange="generate()">
+  <option value="easy">Easy (with binary hint)</option>
+  <option value="hard">Hard (no hint)</option>
+</select>
+<button onclick="generate()">🎲 New Question</button>
+
+<div id="question"></div>
+<div id="hints" style="margin-top:10px;"></div>
+
+<div id="input-area" style="display:none;">
+  <p>Enter your normalised binary (bit format):</p>
+  <label>Mantissa (10 bits):</label><br>
+  <input type="text" id="mantissaInput" maxlength="10"><br>
+  <label>Exponent (6 bits):</label><br>
+  <input type="text" id="exponentInput" maxlength="6"><br>
+  <button onclick="checkAnswer()">✅ Check Answer</button>
+  <p id="feedback"></p>
+</div>
+
+<script>
+  let current = {};
+
+  function generate() {
+    const value = (Math.random() < 0.5 ? -1 : 1) * (Math.random() * 15 + 0.5);
+    current.value = parseFloat(value.toFixed(4));
+    document.getElementById("question").innerHTML = `
+        <p><strong>Convert this denary number to normalised floating-point binary:</strong></p>
+        <p>Value: <code>${current.value}</code></p>
+        <p>Use 10-bit mantissa and 6-bit exponent (two's complement if negative).</p>
+      `;
+
+    const mode = document.getElementById("mode").value;
+    if (mode === "easy") {
+      const fullBin = getFullBinary(current.value);
+      document.getElementById("hints").innerHTML = `
+          <strong>Hint:</strong> Binary (before normalisation)<br>
+          <code>${fullBin}</code>
+        `;
+    } else {
+      document.getElementById("hints").innerHTML = "";
+    }
+
+    document.getElementById("mantissaInput").value = "";
+    document.getElementById("exponentInput").value = "";
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("input-area").style.display = "block";
+  }
+
+  function toBinaryFraction(num, precision = 15) {
+    let result = '';
+    while (precision-- > 0) {
+      num *= 2;
+      result += Math.floor(num);
+      num -= Math.floor(num);
+    }
+    return result;
+  }
+
+  function getFullBinary(value) {
+    const absVal = Math.abs(value);
+    const intPart = Math.floor(absVal);
+    const fracPart = absVal - intPart;
+    const intBin = intPart.toString(2);
+    const fracBin = toBinaryFraction(fracPart);
+    return (value < 0 ? "-" : "") + intBin + "." + fracBin;
+  }
+
+  function floatToNormalisedBinary(val) {
+    const signBit = val < 0 ? '1' : '0';
+    let absVal = Math.abs(val);
+    let intPart = Math.floor(absVal);
+    let fracPart = absVal - intPart;
+
+    let intBin = intPart.toString(2);
+    let fracBin = toBinaryFraction(fracPart);
+
+    let fullBin = intBin + '.' + fracBin;
+
+    let shift;
+    let normalised;
+    if (intPart > 0) {
+      shift = intBin.length - 1;
+      normalised = intBin[0] + '.' + intBin.slice(1) + fracBin;
+    } else {
+      let firstOne = fracBin.indexOf('1') + 1;
+      shift = -firstOne;
+      normalised = '1.' + fracBin.slice(firstOne);
+    }
+
+    let mantissaBits = normalised.split('.')[1].padEnd(9, '0').slice(0, 9);
+    let mantissa = signBit + mantissaBits;
+
+    let exponent = shift;
+    exponent = exponent < 0
+            ? (64 + exponent).toString(2).padStart(6, '0')
+            : exponent.toString(2).padStart(6, '0');
+
+    return { mantissa, exponent };
+  }
+
+  function checkAnswer() {
+    const userMantissa = document.getElementById("mantissaInput").value.trim();
+    const userExponent = document.getElementById("exponentInput").value.trim();
+
+    if (userMantissa.length !== 10 || userExponent.length !== 6) {
+      document.getElementById("feedback").textContent = "❌ Both fields must be the correct bit length.";
+      document.getElementById("feedback").style.color = "red";
+      return;
+    }
+
+    const correct = floatToNormalisedBinary(current.value);
+    if (userMantissa === correct.mantissa && userExponent === correct.exponent) {
+      document.getElementById("feedback").textContent = "✅ Correct!";
+      document.getElementById("feedback").style.color = "green";
+    } else {
+      document.getElementById("feedback").innerHTML = `
+          ❌ Incorrect.<br>
+          <strong>Correct Mantissa:</strong> <code>${correct.mantissa}</code><br>
+          <strong>Correct Exponent:</strong> <code>${correct.exponent}</code>
+        `;
+      document.getElementById("feedback").style.color = "red";
+    }
+  }
+
+  generate(); // auto-run
+</script>
+</body>
+</html>
