@@ -37,21 +37,27 @@
   let current = {};
 
   function generate() {
-    const value = (Math.random() < 0.5 ? -1 : 1) * (Math.random() * 15 + 0.5);
+    // Generate value: integer part (0–15), + optional 1/2, 1/4, 1/8, 1/16
+    const intPart = Math.floor(Math.random() * 8); // 0 to 7
+    const fractions = [0, 0.5, 0.25, 0.125, 0.0625];
+    const fracPart = fractions[Math.floor(Math.random() * fractions.length)];
+    const sign = Math.random() < 0.5 ? -1 : 1;
+    const value = sign * (intPart + fracPart);
     current.value = parseFloat(value.toFixed(4));
+
     document.getElementById("question").innerHTML = `
-        <p><strong>Convert this denary number to normalised floating-point binary:</strong></p>
-        <p>Value: <code>${current.value}</code></p>
-        <p>Use 10-bit mantissa and 6-bit exponent (two's complement if negative).</p>
-      `;
+    <p><strong>Convert this denary number to normalised floating-point binary:</strong></p>
+    <p>Value: <code>${current.value}</code></p>
+    <p>Use 10-bit mantissa and 6-bit exponent (two's complement if negative).</p>
+  `;
 
     const mode = document.getElementById("mode").value;
     if (mode === "easy") {
       const fullBin = getFullBinary(current.value);
       document.getElementById("hints").innerHTML = `
-          <strong>Hint:</strong> Binary (before normalisation)<br>
-          <code>${fullBin}</code>
-        `;
+      <strong>Hint:</strong> Binary (before normalisation)<br>
+      <code>${fullBin}</code>
+    `;
     } else {
       document.getElementById("hints").innerHTML = "";
     }
@@ -61,6 +67,7 @@
     document.getElementById("feedback").textContent = "";
     document.getElementById("input-area").style.display = "block";
   }
+
 
   function toBinaryFraction(num, precision = 15) {
     let result = '';
