@@ -18,6 +18,12 @@
   <option value="easy">Easy (with binary hint)</option>
   <option value="hard">Hard (no hint)</option>
 </select>
+<label for="range">Value Type:</label>
+<select id="range" onchange="generate()">
+  <option value="mixed">Mixed (default)</option>
+  <option value="whole">Whole numbers only</option>
+  <option value="fraction">Fractions only</option>
+</select>
 <button onclick="generate()">🎲 New Question</button>
 
 <div id="question"></div>
@@ -37,13 +43,25 @@
   let current = {};
 
   function generate() {
-    // Generate value: integer part (0–15), + optional 1/2, 1/4, 1/8, 1/16
-    const intPart = Math.floor(Math.random() * 8); // 0 to 7
-    const fractions = [0, 0.5, 0.25, 0.125, 0.0625];
-    const fracPart = fractions[Math.floor(Math.random() * fractions.length)];
+    const type = document.getElementById("range").value;
+
+    const whole = Math.floor(Math.random() * 128); // Up to 127
+    const easyFractions = [0, 0.5, 0.25, 0.125, 0.0625];
+    let fraction = 0;
+
+    if (type !== "whole") {
+      fraction = easyFractions[Math.floor(Math.random() * easyFractions.length)];
+    }
+
+    let value;
+    if (type === "fraction") {
+      value = fraction;
+    } else {
+      value = whole + fraction;
+    }
+
     const sign = Math.random() < 0.5 ? -1 : 1;
-    const value = sign * (intPart + fracPart);
-    current.value = parseFloat(value.toFixed(4));
+    current.value = parseFloat((sign * value).toFixed(6));
 
     document.getElementById("question").innerHTML = `
     <p><strong>Convert this denary number to normalised floating-point binary:</strong></p>
@@ -67,6 +85,8 @@
     document.getElementById("feedback").textContent = "";
     document.getElementById("input-area").style.display = "block";
   }
+
+
 
 
   function toBinaryFraction(num, precision = 15) {
