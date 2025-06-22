@@ -2,6 +2,8 @@
 This tool started as a way to help with Python programming, but has expanded rather a lot! The main tool is [Python Display tool](https://jamesabela.github.io/jsfun/pythoncopy)
 I did use AI to help program these, sometimes it really helped and sometimes it basically needed to be fed the code! Many of these tools use longer urls than usual, so feel free to use a url shortener such as: [Tinyurl](https://tinyurl.com/)
 
+If you are not a programmer then I made a [Sway](https://sway.cloud.microsoft/ht02InthHEezG5lE) to more attractively present the non-coding tools.
+
 ## CS Specific tools
 
 * [Binary Conversion tool](https://jamesabela.github.io/jsfun/binaryconvertor.html)
