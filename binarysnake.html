@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binary Snake - Learn Binary Numbers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1a103c 0%, #301b70 100%);
+      margin: 0;
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .game-title {
+      font-family: 'Orbitron', sans-serif;
+      text-shadow: 0 0 10px rgba(123, 97, 255, 0.8);
+    }
+
+    .game-container {
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(123, 97, 255, 0.3);
+      background: rgba(30, 20, 60, 0.8);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(123, 97, 255, 0.5);
+    }
+
+    .game-board {
+      background-color: rgba(15, 10, 30, 0.8);
+      border-radius: 8px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .btn {
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #7b61ff 0%, #5b41df 100%);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #ff61dc 0%, #df41b9 100%);
+    }
+
+    .btn-tertiary {
+      background: linear-gradient(135deg, #61c3ff 0%, #4183df 100%);
+    }
+
+    .btn-selected {
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+      transform: translateY(-2px);
+    }
+
+    .binary-display {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .game-cell {
+      border-radius: 2px;
+    }
+
+    .snake-head {
+      background-color: #7b61ff;
+      border-radius: 4px;
+      box-shadow: 0 0 8px rgba(123, 97, 255, 0.8);
+    }
+
+    .snake-body {
+      background-color: #9f8bff;
+      border-radius: 3px;
+    }
+
+    .food-1, .food-0 {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      font-size: 1.2em;
+      color: #000;
+    }
+
+    .food-1 {
+      background-color: #5cff61;
+      box-shadow: 0 0 8px rgba(92, 255, 97, 0.8);
+    }
+
+    .food-0 {
+      background-color: #ff6161;
+      box-shadow: 0 0 8px rgba(255, 97, 97, 0.8);
+    }
+
+    .lives-container {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .heart {
+      color: #ff4d6d;
+      text-shadow: 0 0 5px rgba(255, 77, 109, 0.8);
+    }
+
+    .score-container {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .modal {
+      backdrop-filter: blur(8px);
+      background-color: rgba(10, 5, 20, 0.85);
+    }
+
+    .glow-text {
+      text-shadow: 0 0 10px rgba(123, 97, 255, 0.8);
+    }
+
+    .binary-bit {
+      display: inline-block;
+      width: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .binary-bit.active {
+      color: #7b61ff;
+      text-shadow: 0 0 5px rgba(123, 97, 255, 0.8);
+    }
+
+    .binary-bit.next {
+      color: #5cff61;
+      text-shadow: 0 0 5px rgba(92, 255, 97, 0.8);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+
+    .controls-hint {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .target-number-display {
+      background: rgba(123, 97, 255, 0.3);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: bold;
+      box-shadow: 0 0 15px rgba(123, 97, 255, 0.5);
+      border: 2px solid rgba(123, 97, 255, 0.5);
+    }
+
+    /* Full screen styles */
+    .fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .fullscreen .game-board {
+      flex: 1;
+      max-height: 70vh;
+    }
+
+    .fullscreen-btn {
+      background: rgba(123, 97, 255, 0.3);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .fullscreen-btn:hover {
+      background: rgba(123, 97, 255, 0.5);
+      transform: scale(1.1);
+    }
+
+    .pause-penalty {
+      color: #ff6161;
+      font-weight: bold;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .hint-btn {
+      background: rgba(123, 97, 255, 0.3);
+      border: 1px solid rgba(123, 97, 255, 0.5);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .hint-btn:hover {
+      background: rgba(123, 97, 255, 0.5);
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: rgba(10, 5, 20, 0.9);
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(123, 97, 255, 0.3);
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Mobile touch controls */
+    .mobile-controls {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .control-btn {
+      background: rgba(123, 97, 255, 0.3);
+      border: 1px solid rgba(123, 97, 255, 0.5);
+      border-radius: 8px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      padding: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .control-btn:active, .control-btn.active {
+      background: rgba(123, 97, 255, 0.7);
+      transform: scale(0.95);
+    }
+
+    .control-btn-up {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .control-btn-left {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .control-btn-right {
+      grid-column: 3;
+      grid-row: 2;
+    }
+
+    .control-btn-down {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    /* Game layout with side target */
+    .game-layout {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .game-layout {
+        flex-direction: row;
+      }
+
+      .side-target {
+        width: 120px;
+        margin-right: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .game-area {
+        flex: 1;
+      }
+    }
+
+    /* Cursor buttons for mobile */
+    .cursor-controls {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 8px;
+      max-width: 180px;
+      margin: 15px auto 0;
+    }
+
+    .cursor-btn {
+      background: rgba(123, 97, 255, 0.4);
+      border: 2px solid rgba(123, 97, 255, 0.6);
+      border-radius: 12px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      padding: 10px;
+      height: 50px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .cursor-btn:active, .cursor-btn.active {
+      background: rgba(123, 97, 255, 0.8);
+      transform: scale(0.95);
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .cursor-btn-up {
+      grid-column: 2;
+      grid-row: 1;
+      border-radius: 12px 12px 4px 4px;
+    }
+
+    .cursor-btn-left {
+      grid-column: 1;
+      grid-row: 2;
+      border-radius: 12px 4px 4px 12px;
+    }
+
+    .cursor-btn-center {
+      grid-column: 2;
+      grid-row: 2;
+      background: rgba(123, 97, 255, 0.2);
+      border: 2px solid rgba(123, 97, 255, 0.3);
+    }
+
+    .cursor-btn-right {
+      grid-column: 3;
+      grid-row: 2;
+      border-radius: 4px 12px 12px 4px;
+    }
+
+    .cursor-btn-down {
+      grid-column: 2;
+      grid-row: 3;
+      border-radius: 4px 4px 12px 12px;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen py-4">
+<!-- Start Menu -->
+<div id="start-menu" class="game-container p-8 w-11/12 max-w-lg">
+  <h1 class="game-title text-4xl md:text-5xl font-bold text-center mb-6 text-white">Binary <span class="text-purple-400">Snake</span></h1>
+  <p class="text-center mb-8 text-gray-300">Learn binary numbers while having fun! Guide the snake to eat the correct bits (1s and 0s) to match the target decimal number.</p>
+
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3 text-purple-300">Choose Difficulty:</h2>
+    <div class="flex flex-col md:flex-row gap-4">
+      <button id="easy-btn" class="btn btn-primary py-3 px-6 rounded-lg text-white font-medium flex-1 btn-selected">
+        <div class="text-lg font-bold">Easy</div>
+        <div class="text-sm opacity-80">Numbers 0-16</div>
+      </button>
+      <button id="hard-btn" class="btn btn-secondary py-3 px-6 rounded-lg text-white font-medium flex-1">
+        <div class="text-lg font-bold">Hard</div>
+        <div class="text-sm opacity-80">Numbers 0-255</div>
+      </button>
+      <button id="twos-btn" class="btn btn-tertiary py-3 px-6 rounded-lg text-white font-medium flex-1">
+        <div class="text-lg font-bold">Two's Complement</div>
+        <div class="text-sm opacity-80">Numbers -128 to +127</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-purple-900 bg-opacity-30 p-4 rounded-lg mb-6">
+    <h2 class="text-xl font-semibold mb-2 text-purple-300">How to Play:</h2>
+    <ul class="list-disc pl-5 text-gray-300 space-y-1">
+      <li>Use arrow keys, WASD, or touch controls to move the snake</li>
+      <li>You need to convert the target decimal number to binary in your head</li>
+      <li>Eat the correct binary digits (1s and 0s) in order from left to right</li>
+      <li>Eating the wrong digit costs you a life</li>
+      <li>Pausing costs you 1 point per second!</li>
+      <li>Watch out! The board will have multiple 1s and 0s to avoid</li>
+      <li>The snake wraps around the edges of the board</li>
+    </ul>
+  </div>
+
+  <div class="text-center">
+    <button id="start-btn" class="btn btn-primary py-3 px-8 rounded-lg text-white font-bold text-lg pulse">START GAME</button>
+  </div>
+</div>
+
+<!-- Game Screen (Hidden initially) -->
+<div id="game-screen" class="hidden game-container p-4 w-11/12 max-w-4xl relative">
+  <!-- Top Game Info -->
+  <div class="flex justify-between items-center mb-2">
+    <div class="score-container">
+      <span class="text-purple-300">SCORE:</span>
+      <span id="score" class="text-2xl font-bold">0</span>
+    </div>
+    <div class="lives-container">
+      <span class="text-purple-300">LIVES:</span>
+      <span id="lives" class="text-2xl ml-2">
+                    <span class="heart">❤</span>
+                    <span class="heart">❤</span>
+                    <span class="heart">❤</span>
+                </span>
+    </div>
+  </div>
+
+  <!-- Game Layout with Side Target -->
+  <div class="game-layout">
+    <!-- Side Target (visible on larger screens) -->
+    <div class="side-target hidden md:flex md:flex-col">
+      <div id="target-number-display-side" class="target-number-display mb-4">
+        <div class="text-center text-sm text-purple-300">TARGET</div>
+        <div class="text-center text-3xl" id="decimal-target-side">10</div>
+      </div>
+
+      <!-- Fullscreen Button (moved to side target area) -->
+      <button id="fullscreen-btn" class="fullscreen-btn self-center">
+        <i class="fas fa-expand" id="fullscreen-icon"></i>
+      </button>
+    </div>
+
+    <!-- Game Area -->
+    <div class="game-area">
+      <!-- Target Number (visible on mobile) -->
+      <div class="md:hidden mb-2 flex justify-between items-center">
+        <div id="target-number-display" class="target-number-display">
+          Target: <span id="decimal-target-big">10</span>
+        </div>
+
+        <!-- Fullscreen Button (mobile position) -->
+        <button id="fullscreen-btn-mobile" class="fullscreen-btn ml-2">
+          <i class="fas fa-expand" id="fullscreen-icon-mobile"></i>
+        </button>
+      </div>
+
+      <!-- Game Board -->
+      <div class="game-board w-full mb-2 relative" id="game-board" style="aspect-ratio: 16/9;"></div>
+
+      <!-- Cursor Controls (always visible) -->
+      <div class="cursor-controls" id="cursor-controls">
+        <button id="cursor-up" class="cursor-btn cursor-btn-up">
+          <i class="fas fa-chevron-up"></i>
+        </button>
+        <button id="cursor-left" class="cursor-btn cursor-btn-left">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="cursor-btn cursor-btn-center"></div>
+        <button id="cursor-right" class="cursor-btn cursor-btn-right">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <button id="cursor-down" class="cursor-btn cursor-btn-down">
+          <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Game Info -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4">
+    <div class="binary-target p-2 bg-purple-900 bg-opacity-30 rounded-lg md:col-span-2">
+      <div class="flex justify-between items-center">
+        <div class="text-purple-300">
+          Target: <span id="decimal-target" class="font-bold text-white">10</span>
+          <span class="tooltip">
+                            <button class="hint-btn">?</button>
+                            <span class="tooltiptext">Convert this decimal number to binary and eat the bits in order from left to right</span>
+                        </span>
+        </div>
+      </div>
+      <div class="binary-progress text-center text-xl mt-2 font-bold" id="binary-progress">????????</div>
+    </div>
+
+    <div class="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4">
+      <button id="pause-btn" class="btn bg-purple-700 py-2 px-4 rounded-lg text-white">Pause</button>
+      <button id="restart-btn" class="btn bg-purple-700 py-2 px-4 rounded-lg text-white">Restart</button>
+    </div>
+  </div>
+
+  <div class="controls-hint text-center text-gray-400 mt-2">
+    <span>Controls: Arrow Keys or WASD | <span class="text-purple-300">F</span> for Fullscreen</span>
+  </div>
+</div>
+
+<!-- Game Over Modal (Hidden initially) -->
+<div id="game-over-modal" class="hidden fixed inset-0 flex items-center justify-center z-50">
+  <div class="modal p-8 rounded-xl max-w-md w-11/12 text-center">
+    <h2 class="game-title text-3xl font-bold mb-4 text-white">Game Over!</h2>
+    <p class="mb-4 text-gray-300">Your final score: <span id="final-score" class="text-2xl font-bold text-purple-300">0</span></p>
+    <div class="mb-6 p-4 bg-purple-900 bg-opacity-30 rounded-lg">
+      <p class="text-gray-300">You've learned <span id="completed-numbers" class="font-bold text-white">0</span> binary numbers!</p>
+    </div>
+    <div class="flex flex-col md:flex-row gap-3 justify-center">
+      <button id="play-again-btn" class="btn btn-primary py-2 px-6 rounded-lg text-white font-bold">Play Again</button>
+      <button id="menu-btn" class="btn bg-purple-700 py-2 px-6 rounded-lg text-white font-bold">Main Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pause Modal (Hidden initially) -->
+<div id="pause-modal" class="hidden fixed inset-0 flex items-center justify-center z-50">
+  <div class="modal p-8 rounded-xl max-w-md w-11/12 text-center">
+    <h2 class="game-title text-3xl font-bold mb-4 text-white">Game Paused</h2>
+    <p class="mb-4 text-gray-300">Take a break and continue when you're ready!</p>
+    <p class="pause-penalty mb-6">Losing 1 point per second while paused!</p>
+    <div class="mb-4 p-4 bg-purple-900 bg-opacity-30 rounded-lg">
+      <p class="text-gray-300">Current target: <span id="pause-target" class="font-bold text-white">10</span></p>
+      <p class="text-gray-300 mt-2">Hint: <span id="pause-hint" class="font-bold text-white">1010</span></p>
+    </div>
+    <div class="flex justify-center">
+      <button id="resume-btn" class="btn btn-primary py-2 px-6 rounded-lg text-white font-bold">Resume Game</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Game variables
+  let gameState = {
+    snake: [],
+    foods: [], // Array to hold multiple food items
+    direction: 'right',
+    nextDirection: 'right',
+    gridSize: 15,
+    speed: 150,
+    score: 0,
+    lives: 3,
+    gameInterval: null,
+    isPaused: false,
+    isGameOver: false,
+    targetDecimal: 0,
+    targetBinary: '',
+    currentBinary: '',
+    nextBitIndex: 0,
+    maxNumber: 16, // Default to easy mode
+    minNumber: 0,  // Default minimum number
+    gameMode: 'easy', // Default game mode
+    completedNumbers: 0,
+    isFullscreen: false,
+    pausePenaltyInterval: null,
+    minFoodCount: 4, // Minimum number of food items on the board
+    maxFoodCount: 6,  // Maximum number of food items on the board
+    isTwosComplement: false // Flag for Two's Complement mode
+  };
+
+  // DOM Elements
+  const startMenu = document.getElementById('start-menu');
+  const gameScreen = document.getElementById('game-screen');
+  const gameBoard = document.getElementById('game-board');
+  const scoreElement = document.getElementById('score');
+  const livesElement = document.getElementById('lives');
+  const decimalTarget = document.getElementById('decimal-target');
+  const decimalTargetBig = document.getElementById('decimal-target-big');
+  const decimalTargetSide = document.getElementById('decimal-target-side');
+  const binaryProgress = document.getElementById('binary-progress');
+  const gameOverModal = document.getElementById('game-over-modal');
+  const finalScoreElement = document.getElementById('final-score');
+  const completedNumbersElement = document.getElementById('completed-numbers');
+  const pauseModal = document.getElementById('pause-modal');
+  const pauseTarget = document.getElementById('pause-target');
+  const pauseHint = document.getElementById('pause-hint');
+  const fullscreenBtn = document.getElementById('fullscreen-btn');
+  const fullscreenBtnMobile = document.getElementById('fullscreen-btn-mobile');
+  const fullscreenIcon = document.getElementById('fullscreen-icon');
+  const fullscreenIconMobile = document.getElementById('fullscreen-icon-mobile');
+
+  // Mode selection buttons
+  const easyBtn = document.getElementById('easy-btn');
+  const hardBtn = document.getElementById('hard-btn');
+  const twosBtn = document.getElementById('twos-btn');
+
+  // Cursor control buttons
+  const cursorUp = document.getElementById('cursor-up');
+  const cursorRight = document.getElementById('cursor-right');
+  const cursorLeft = document.getElementById('cursor-left');
+  const cursorDown = document.getElementById('cursor-down');
+
+  // Button event listeners for mode selection
+  easyBtn.addEventListener('click', () => {
+    gameState.maxNumber = 16;
+    gameState.minNumber = 0;
+    gameState.gameMode = 'easy';
+    gameState.isTwosComplement = false;
+
+    // Update button styles
+    easyBtn.classList.add('btn-selected');
+    hardBtn.classList.remove('btn-selected');
+    twosBtn.classList.remove('btn-selected');
+  });
+
+  hardBtn.addEventListener('click', () => {
+    gameState.maxNumber = 255;
+    gameState.minNumber = 0;
+    gameState.gameMode = 'hard';
+    gameState.isTwosComplement = false;
+
+    // Update button styles
+    hardBtn.classList.add('btn-selected');
+    easyBtn.classList.remove('btn-selected');
+    twosBtn.classList.remove('btn-selected');
+  });
+
+  twosBtn.addEventListener('click', () => {
+    gameState.maxNumber = 127;
+    gameState.minNumber = -128;
+    gameState.gameMode = 'twos';
+    gameState.isTwosComplement = true;
+
+    // Update button styles
+    twosBtn.classList.add('btn-selected');
+    easyBtn.classList.remove('btn-selected');
+    hardBtn.classList.remove('btn-selected');
+  });
+
+  // Button event listeners for game controls
+  document.getElementById('start-btn').addEventListener('click', startGame);
+  document.getElementById('pause-btn').addEventListener('click', togglePause);
+  document.getElementById('restart-btn').addEventListener('click', restartGame);
+  document.getElementById('play-again-btn').addEventListener('click', restartGame);
+  document.getElementById('menu-btn').addEventListener('click', showMainMenu);
+  document.getElementById('resume-btn').addEventListener('click', resumeGame);
+  fullscreenBtn.addEventListener('click', toggleFullscreen);
+  fullscreenBtnMobile.addEventListener('click', toggleFullscreen);
+
+  // Cursor control event listeners
+  cursorUp.addEventListener('click', () => {
+    if (gameState.direction !== 'down') {
+      gameState.nextDirection = 'up';
+      highlightCursorButton(cursorUp);
+    }
+  });
+
+  cursorRight.addEventListener('click', () => {
+    if (gameState.direction !== 'left') {
+      gameState.nextDirection = 'right';
+      highlightCursorButton(cursorRight);
+    }
+  });
+
+  cursorLeft.addEventListener('click', () => {
+    if (gameState.direction !== 'right') {
+      gameState.nextDirection = 'left';
+      highlightCursorButton(cursorLeft);
+    }
+  });
+
+  cursorDown.addEventListener('click', () => {
+    if (gameState.direction !== 'up') {
+      gameState.nextDirection = 'down';
+      highlightCursorButton(cursorDown);
+    }
+  });
+
+  // Also add touch events for mobile
+  cursorUp.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameState.direction !== 'down') {
+      gameState.nextDirection = 'up';
+      highlightCursorButton(cursorUp);
+    }
+  });
+
+  cursorRight.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameState.direction !== 'left') {
+      gameState.nextDirection = 'right';
+      highlightCursorButton(cursorRight);
+    }
+  });
+
+  cursorLeft.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameState.direction !== 'right') {
+      gameState.nextDirection = 'left';
+      highlightCursorButton(cursorLeft);
+    }
+  });
+
+  cursorDown.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameState.direction !== 'up') {
+      gameState.nextDirection = 'down';
+      highlightCursorButton(cursorDown);
+    }
+  });
+
+  // Highlight cursor button when pressed
+  function highlightCursorButton(button) {
+    // Remove active class from all controls
+    cursorUp.classList.remove('active');
+    cursorRight.classList.remove('active');
+    cursorLeft.classList.remove('active');
+    cursorDown.classList.remove('active');
+
+    // Add active class to the pressed control
+    button.classList.add('active');
+
+    // Remove active class after a short delay
+    setTimeout(() => {
+      button.classList.remove('active');
+    }, 200);
+  }
+
+  // Initialize game board
+  function initializeGameBoard() {
+    gameBoard.innerHTML = '';
+
+    // Create game grid
+    const gameGrid = document.createElement('div');
+    gameGrid.style.display = 'grid';
+    gameGrid.style.gridTemplateColumns = `repeat(${gameState.gridSize}, 1fr)`;
+    gameGrid.style.gridTemplateRows = `repeat(${gameState.gridSize}, 1fr)`;
+    gameGrid.style.width = '100%';
+    gameGrid.style.height = '100%';
+
+    for (let i = 0; i < gameState.gridSize * gameState.gridSize; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('game-cell');
+      gameGrid.appendChild(cell);
+    }
+
+    gameBoard.appendChild(gameGrid);
+  }
+
+  // Toggle fullscreen mode
+  function toggleFullscreen() {
+    gameState.isFullscreen = !gameState.isFullscreen;
+
+    if (gameState.isFullscreen) {
+      gameScreen.classList.add('fullscreen');
+      fullscreenIcon.classList.remove('fa-expand');
+      fullscreenIcon.classList.add('fa-compress');
+      fullscreenIconMobile.classList.remove('fa-expand');
+      fullscreenIconMobile.classList.add('fa-compress');
+    } else {
+      gameScreen.classList.remove('fullscreen');
+      fullscreenIcon.classList.remove('fa-compress');
+      fullscreenIcon.classList.add('fa-expand');
+      fullscreenIconMobile.classList.remove('fa-compress');
+      fullscreenIconMobile.classList.add('fa-expand');
+    }
+
+    // Update the game board after a short delay to ensure proper rendering
+    setTimeout(() => {
+      updateGameBoard();
+    }, 100);
+  }
+
+  // Start the game
+  function startGame() {
+    startMenu.classList.add('hidden');
+    gameScreen.classList.remove('hidden');
+
+    initializeGameBoard();
+    resetGame();
+
+    // Start game loop
+    gameState.gameInterval = setInterval(gameLoop, gameState.speed);
+
+    // Set up keyboard controls
+    document.addEventListener('keydown', handleKeyPress);
+  }
+
+  // Reset game state
+  function resetGame() {
+    gameState.snake = [
+      {x: Math.floor(gameState.gridSize / 2), y: Math.floor(gameState.gridSize / 2)},
+      {x: Math.floor(gameState.gridSize / 2) - 1, y: Math.floor(gameState.gridSize / 2)},
+      {x: Math.floor(gameState.gridSize / 2) - 2, y: Math.floor(gameState.gridSize / 2)}
+    ];
+    gameState.foods = []; // Clear all foods
+    gameState.direction = 'right';
+    gameState.nextDirection = 'right';
+    gameState.score = 0;
+    gameState.lives = 3;
+    gameState.isPaused = false;
+    gameState.isGameOver = false;
+    gameState.completedNumbers = 0;
+
+    // Clear any existing pause penalty interval
+    if (gameState.pausePenaltyInterval) {
+      clearInterval(gameState.pausePenaltyInterval);
+      gameState.pausePenaltyInterval = null;
+    }
+
+    // Update UI
+    scoreElement.textContent = gameState.score;
+    updateLivesDisplay();
+
+    // Generate new target number
+    generateNewTarget();
+
+    // Place initial food items
+    ensureMinimumFood();
+  }
+
+  // Generate a new target binary number
+  function generateNewTarget() {
+    if (gameState.isTwosComplement) {
+      // Two's complement mode: -128 to +127
+      gameState.targetDecimal = Math.floor(Math.random() * 256) - 128;
+
+      // Convert to binary string with 8-bit padding
+      if (gameState.targetDecimal >= 0) {
+        // Positive numbers are represented normally
+        gameState.targetBinary = gameState.targetDecimal.toString(2).padStart(8, '0');
+      } else {
+        // Negative numbers use two's complement
+        // First, get the absolute value in binary
+        let positiveBinary = Math.abs(gameState.targetDecimal).toString(2).padStart(8, '0');
+
+        // Invert all bits
+        let invertedBinary = '';
+        for (let i = 0; i < positiveBinary.length; i++) {
+          invertedBinary += positiveBinary[i] === '0' ? '1' : '0';
+        }
+
+        // Add 1 to get two's complement
+        let carry = 1;
+        let twosComplement = '';
+        for (let i = invertedBinary.length - 1; i >= 0; i--) {
+          if (invertedBinary[i] === '1' && carry === 1) {
+            twosComplement = '0' + twosComplement;
+          } else if (invertedBinary[i] === '0' && carry === 1) {
+            twosComplement = '1' + twosComplement;
+            carry = 0;
+          } else {
+            twosComplement = invertedBinary[i] + twosComplement;
+          }
+        }
+
+        gameState.targetBinary = twosComplement;
+      }
+    } else {
+      // Regular binary mode
+      gameState.targetDecimal = Math.floor(Math.random() * (gameState.maxNumber + 1));
+
+      // Convert to binary string with appropriate padding
+      const binaryLength = gameState.maxNumber <= 16 ? 4 : 8;
+      gameState.targetBinary = gameState.targetDecimal.toString(2).padStart(binaryLength, '0');
+    }
+
+    // Reset current binary progress
+    gameState.currentBinary = '?'.repeat(gameState.targetBinary.length);
+    gameState.nextBitIndex = 0;
+
+    // Update UI
+    decimalTarget.textContent = gameState.targetDecimal;
+    decimalTargetBig.textContent = gameState.targetDecimal;
+    decimalTargetSide.textContent = gameState.targetDecimal;
+    updateBinaryDisplay();
+  }
+
+  // Update binary display with highlighting
+  function updateBinaryDisplay() {
+    binaryProgress.innerHTML = '';
+
+    for (let i = 0; i < gameState.currentBinary.length; i++) {
+      const bitSpan = document.createElement('span');
+      bitSpan.classList.add('binary-bit');
+
+      if (gameState.currentBinary[i] !== '?') {
+        bitSpan.classList.add('active');
+      } else if (i === gameState.nextBitIndex) {
+        bitSpan.classList.add('next');
+      }
+
+      bitSpan.textContent = gameState.currentBinary[i];
+      binaryProgress.appendChild(bitSpan);
+    }
+  }
+
+  // Ensure there are minimum number of food items on the board
+  function ensureMinimumFood() {
+    // Calculate how many more food items we need
+    const foodNeeded = Math.max(0, gameState.minFoodCount - gameState.foods.length);
+
+    // Add food items until we reach the minimum
+    for (let i = 0; i < foodNeeded; i++) {
+      placeFood();
+    }
+  }
+
+  // Place food on the game board
+  function placeFood() {
+    // Determine which bit (0 or 1) to place
+    let foodValue;
+
+    if (gameState.nextBitIndex < gameState.targetBinary.length) {
+      // Make sure we have the correct bit for the next position
+      const correctBit = gameState.targetBinary[gameState.nextBitIndex];
+
+      // Check if we already have the correct bit on the board
+      const hasCorrectBit = gameState.foods.some(food => food.value === correctBit);
+
+      if (!hasCorrectBit) {
+        // If we don't have the correct bit, place it
+        foodValue = correctBit;
+      } else {
+        // Otherwise place a random bit
+        foodValue = Math.random() < 0.5 ? '0' : '1';
+      }
+    } else {
+      // If we've completed the current number, just place random bits
+      foodValue = Math.random() < 0.5 ? '0' : '1';
+    }
+
+    placeSpecificFood(foodValue);
+  }
+
+  // Place a specific food value (0 or 1)
+  function placeSpecificFood(value) {
+    let x, y;
+    let validPosition = false;
+    let attempts = 0;
+    const maxAttempts = 100; // Prevent infinite loop
+
+    // Try to find a valid position not occupied by the snake or other food
+    while (!validPosition && attempts < maxAttempts) {
+      attempts++;
+      x = Math.floor(Math.random() * gameState.gridSize);
+      y = Math.floor(Math.random() * gameState.gridSize);
+
+      validPosition = true;
+
+      // Check if position is occupied by snake
+      for (const segment of gameState.snake) {
+        if (segment.x === x && segment.y === y) {
+          validPosition = false;
+          break;
+        }
+      }
+
+      // Check if position is occupied by another food
+      for (const food of gameState.foods) {
+        if (food.x === x && food.y === y) {
+          validPosition = false;
+          break;
+        }
+      }
+
+      // Check if position is too close to other food items (for spacing)
+      if (validPosition && gameState.foods.length > 0) {
+        for (const food of gameState.foods) {
+          const distance = Math.abs(food.x - x) + Math.abs(food.y - y);
+          if (distance < 3) { // Minimum Manhattan distance for spacing
+            validPosition = false;
+            break;
+          }
+        }
+      }
+    }
+
+    // If we found a valid position, place the food
+    if (validPosition) {
+      gameState.foods.push({ x, y, value });
+    }
+  }
+
+  // Main game loop
+  function gameLoop() {
+    if (gameState.isPaused || gameState.isGameOver) return;
+
+    moveSnake();
+    checkCollision();
+
+    // Ensure we always have minimum food on the board
+    if (gameState.foods.length < gameState.minFoodCount) {
+      ensureMinimumFood();
+    }
+
+    // Occasionally add more food if we're below the maximum
+    if (gameState.foods.length < gameState.maxFoodCount && Math.random() < 0.05) {
+      placeFood();
+    }
+
+    updateGameBoard();
+  }
+
+  // Move the snake
+  function moveSnake() {
+    // Update direction from nextDirection
+    gameState.direction = gameState.nextDirection;
+
+    // Calculate new head position
+    const head = { ...gameState.snake[0] };
+
+    switch (gameState.direction) {
+      case 'up':
+        head.y -= 1;
+        break;
+      case 'down':
+        head.y += 1;
+        break;
+      case 'left':
+        head.x -= 1;
+        break;
+      case 'right':
+        head.x += 1;
+        break;
+    }
+
+    // Wrap around edges
+    if (head.x < 0) head.x = gameState.gridSize - 1;
+    if (head.x >= gameState.gridSize) head.x = 0;
+    if (head.y < 0) head.y = gameState.gridSize - 1;
+    if (head.y >= gameState.gridSize) head.y = 0;
+
+    // Add new head to the beginning of snake array
+    gameState.snake.unshift(head);
+
+    // Remove tail unless food was eaten (handled in checkCollision)
+    gameState.snake.pop();
+  }
+
+  // Check for collisions
+  function checkCollision() {
+    const head = gameState.snake[0];
+
+    // Check self collision
+    for (let i = 1; i < gameState.snake.length; i++) {
+      if (head.x === gameState.snake[i].x && head.y === gameState.snake[i].y) {
+        loseLife();
+        return;
+      }
+    }
+
+    // Check food collision
+    let foodEaten = false;
+    for (let i = 0; i < gameState.foods.length; i++) {
+      const food = gameState.foods[i];
+      if (head.x === food.x && head.y === food.y) {
+        eatFood(food);
+        gameState.foods.splice(i, 1); // Remove the eaten food
+        foodEaten = true;
+        break;
+      }
+    }
+
+    // If food was eaten, grow the snake
+    if (foodEaten) {
+      gameState.snake.push({});
+    }
+  }
+
+  // Handle eating food
+  function eatFood(food) {
+    if (gameState.nextBitIndex < gameState.targetBinary.length) {
+      const correctBit = gameState.targetBinary[gameState.nextBitIndex];
+
+      if (food.value === correctBit) {
+        // Correct bit eaten
+        let newCurrent = gameState.currentBinary.split('');
+        newCurrent[gameState.nextBitIndex] = correctBit;
+        gameState.currentBinary = newCurrent.join('');
+        gameState.nextBitIndex++;
+
+        // Update score
+        gameState.score += 10;
+        scoreElement.textContent = gameState.score;
+
+        // Check if binary number is complete
+        if (gameState.nextBitIndex >= gameState.targetBinary.length) {
+          completeNumber();
+        }
+      } else {
+        // Wrong bit eaten
+        loseLife();
+      }
+    } else {
+      // Already completed the number, any food gives points
+      gameState.score += 5;
+      scoreElement.textContent = gameState.score;
+    }
+
+    updateBinaryDisplay();
+
+    // Make sure we have the correct bit available if needed
+    ensureCorrectBitAvailable();
+  }
+
+  // Ensure the correct bit is available on the board
+  function ensureCorrectBitAvailable() {
+    if (gameState.nextBitIndex < gameState.targetBinary.length) {
+      const correctBit = gameState.targetBinary[gameState.nextBitIndex];
+      const hasCorrectBit = gameState.foods.some(food => food.value === correctBit);
+
+      if (!hasCorrectBit) {
+        placeSpecificFood(correctBit);
+      }
+    }
+  }
+
+  // Complete a binary number
+  function completeNumber() {
+    gameState.completedNumbers++;
+    gameState.score += 50; // Bonus for completing a number
+    scoreElement.textContent = gameState.score;
+
+    // Generate a new target after a short delay
+    setTimeout(() => {
+      if (!gameState.isGameOver && !gameState.isPaused) {
+        generateNewTarget();
+
+        // Clear all foods and place new ones
+        gameState.foods = [];
+        ensureMinimumFood();
+      }
+    }, 1000);
+  }
+
+  // Lose a life
+  function loseLife() {
+    gameState.lives--;
+    updateLivesDisplay();
+
+    if (gameState.lives <= 0) {
+      gameOver();
+    } else {
+      // Reset snake position but keep the score and target
+      resetSnakePosition();
+    }
+  }
+
+  // Reset snake position after losing a life
+  function resetSnakePosition() {
+    gameState.snake = [
+      {x: Math.floor(gameState.gridSize / 2), y: Math.floor(gameState.gridSize / 2)},
+      {x: Math.floor(gameState.gridSize / 2) - 1, y: Math.floor(gameState.gridSize / 2)},
+      {x: Math.floor(gameState.gridSize / 2) - 2, y: Math.floor(gameState.gridSize / 2)}
+    ];
+    gameState.direction = 'right';
+    gameState.nextDirection = 'right';
+
+    // Clear and replace food
+    gameState.foods = [];
+    ensureMinimumFood();
+  }
+
+  // Update lives display
+  function updateLivesDisplay() {
+    livesElement.innerHTML = '';
+    for (let i = 0; i < gameState.lives; i++) {
+      const heart = document.createElement('span');
+      heart.classList.add('heart');
+      heart.textContent = '❤';
+      livesElement.appendChild(heart);
+    }
+  }
+
+  // Game over
+  function gameOver() {
+    gameState.isGameOver = true;
+    clearInterval(gameState.gameInterval);
+
+    // Clear pause penalty interval if it exists
+    if (gameState.pausePenaltyInterval) {
+      clearInterval(gameState.pausePenaltyInterval);
+      gameState.pausePenaltyInterval = null;
+    }
+
+    // Update game over modal
+    finalScoreElement.textContent = gameState.score;
+    completedNumbersElement.textContent = gameState.completedNumbers;
+
+    // Show game over modal
+    gameOverModal.classList.remove('hidden');
+  }
+
+  // Update game board display
+  function updateGameBoard() {
+    const cells = document.querySelectorAll('.game-cell');
+    const cellSize = Math.min(
+            gameBoard.offsetWidth / gameState.gridSize,
+            gameBoard.offsetHeight / gameState.gridSize
+    );
+    const fontSize = Math.max(cellSize * 0.5, 16); // Adjust font size based on cell size
+
+    // Clear all cells
+    for (let i = 0; i < cells.length; i++) {
+      cells[i].className = 'game-cell';
+      cells[i].textContent = '';
+      cells[i].style.fontSize = `${fontSize}px`;
+    }
+
+    // Draw snake
+    for (let i = 0; i < gameState.snake.length; i++) {
+      const segment = gameState.snake[i];
+      const index = segment.y * gameState.gridSize + segment.x;
+
+      if (index >= 0 && index < cells.length) {
+        if (i === 0) {
+          cells[index].classList.add('snake-head');
+        } else {
+          cells[index].classList.add('snake-body');
+        }
+      }
+    }
+
+    // Draw food items
+    for (const food of gameState.foods) {
+      const foodIndex = food.y * gameState.gridSize + food.x;
+      if (foodIndex >= 0 && foodIndex < cells.length) {
+        cells[foodIndex].classList.add(`food-${food.value}`);
+        cells[foodIndex].textContent = food.value;
+        cells[foodIndex].style.display = 'flex';
+        cells[foodIndex].style.alignItems = 'center';
+        cells[foodIndex].style.justifyContent = 'center';
+      }
+    }
+  }
+
+  // Handle keyboard input
+  function handleKeyPress(event) {
+    if (gameState.isPaused && event.key !== 'Escape' && event.key !== 'p') return;
+
+    switch (event.key) {
+      case 'ArrowUp':
+      case 'w':
+      case 'W':
+        if (gameState.direction !== 'down') {
+          gameState.nextDirection = 'up';
+          highlightCursorButton(cursorUp);
+        }
+        break;
+      case 'ArrowDown':
+      case 's':
+      case 'S':
+        if (gameState.direction !== 'up') {
+          gameState.nextDirection = 'down';
+          highlightCursorButton(cursorDown);
+        }
+        break;
+      case 'ArrowLeft':
+      case 'a':
+      case 'A':
+        if (gameState.direction !== 'right') {
+          gameState.nextDirection = 'left';
+          highlightCursorButton(cursorLeft);
+        }
+        break;
+      case 'ArrowRight':
+      case 'd':
+      case 'D':
+        if (gameState.direction !== 'left') {
+          gameState.nextDirection = 'right';
+          highlightCursorButton(cursorRight);
+        }
+        break;
+      case 'Escape':
+      case 'p':
+      case 'P':
+        togglePause();
+        break;
+      case 'f':
+      case 'F':
+        toggleFullscreen();
+        break;
+    }
+  }
+
+  // Toggle pause state
+  function togglePause() {
+    gameState.isPaused = !gameState.isPaused;
+
+    if (gameState.isPaused) {
+      // Show pause modal
+      pauseModal.classList.remove('hidden');
+
+      // Update pause modal with current target and hint
+      pauseTarget.textContent = gameState.targetDecimal;
+      pauseHint.textContent = gameState.targetBinary;
+
+      // Start the pause penalty timer
+      gameState.pausePenaltyInterval = setInterval(() => {
+        if (gameState.score > 0) {
+          gameState.score--;
+          scoreElement.textContent = gameState.score;
+        }
+      }, 1000); // Deduct 1 point every second
+    } else {
+      // Hide pause modal
+      pauseModal.classList.add('hidden');
+
+      // Clear the pause penalty timer
+      if (gameState.pausePenaltyInterval) {
+        clearInterval(gameState.pausePenaltyInterval);
+        gameState.pausePenaltyInterval = null;
+      }
+    }
+  }
+
+  // Resume game from pause
+  function resumeGame() {
+    gameState.isPaused = false;
+    pauseModal.classList.add('hidden');
+
+    // Clear the pause penalty timer
+    if (gameState.pausePenaltyInterval) {
+      clearInterval(gameState.pausePenaltyInterval);
+      gameState.pausePenaltyInterval = null;
+    }
+  }
+
+  // Restart game
+  function restartGame() {
+    clearInterval(gameState.gameInterval);
+
+    // Clear pause penalty interval if it exists
+    if (gameState.pausePenaltyInterval) {
+      clearInterval(gameState.pausePenaltyInterval);
+      gameState.pausePenaltyInterval = null;
+    }
+
+    gameOverModal.classList.add('hidden');
+    pauseModal.classList.add('hidden');
+    resetGame();
+    gameState.gameInterval = setInterval(gameLoop, gameState.speed);
+  }
+
+  // Show main menu
+  function showMainMenu() {
+    clearInterval(gameState.gameInterval);
+
+    // Clear pause penalty interval if it exists
+    if (gameState.pausePenaltyInterval) {
+      clearInterval(gameState.pausePenaltyInterval);
+      gameState.pausePenaltyInterval = null;
+    }
+
+    gameOverModal.classList.add('hidden');
+    pauseModal.classList.add('hidden');
+    gameScreen.classList.add('hidden');
+
+    // Exit fullscreen if active
+    if (gameState.isFullscreen) {
+      gameState.isFullscreen = false;
+      gameScreen.classList.remove('fullscreen');
+      fullscreenIcon.classList.remove('fa-compress');
+      fullscreenIcon.classList.add('fa-expand');
+      fullscreenIconMobile.classList.remove('fa-compress');
+      fullscreenIconMobile.classList.add('fa-expand');
+    }
+
+    startMenu.classList.remove('hidden');
+  }
+
+  // Handle browser fullscreen API
+  document.addEventListener('fullscreenchange', handleFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+  document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+  document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+  function handleFullscreenChange() {
+    if (!document.fullscreenElement &&
+            !document.webkitFullscreenElement &&
+            !document.mozFullScreenElement &&
+            !document.msFullscreenElement) {
+
+      // Exit fullscreen mode in our UI if browser fullscreen was exited
+      if (gameState.isFullscreen) {
+        gameState.isFullscreen = false;
+        gameScreen.classList.remove('fullscreen');
+        fullscreenIcon.classList.remove('fa-compress');
+        fullscreenIcon.classList.add('fa-expand');
+        fullscreenIconMobile.classList.remove('fa-compress');
+        fullscreenIconMobile.classList.add('fa-expand');
+      }
+    }
+  }
+
+  // Adjust the game board size on window resize
+  window.addEventListener('resize', function() {
+    if (!gameState.isGameOver && !gameState.isPaused) {
+      updateGameBoard();
+    }
+  });
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95386a707322c8d1',t:'MTc1MDU2MDM5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
