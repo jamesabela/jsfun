@@ -11,7 +11,7 @@ I did use AI to help program these, sometimes it really helped and sometimes it 
 * [Decimal to Binary Conversion Tool](https://sethideclercq.com/tools/switchmaster.html) (Created by [Sethi De Clercq](https://sethideclercq.com/teachingtools/))
 * [iGCSE File Size Calculator](https://ians.site/file/) (Student created)
 * [Parity Byte](https://jamesabela.github.io/jsfun/paritybyte.html)
-* [Towers of Hanoi](https://hanoitowers.my.canva.site/) Also see the [article](https://readysetcompute.com/codeforme-canva/)
+* [Towers of Hanoi](https://hanoitowers.my.canva.site/) Also see the [article](https://readysetcompute.com/codeforme-canva/) (By Sethi De Clercq)
 * [Python Challenges](https://pythonchallenges.weebly.com/) (Welcome to use challenges, but entries are GIS only)
 
 Scratch projects
