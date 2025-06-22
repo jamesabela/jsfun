@@ -14,6 +14,7 @@ If you are not a programmer then I made a [Sway](https://sway.cloud.microsoft/ht
 * [iGCSE File Size Calculator](https://ians.site/file/) (Student created)
 * [Parity Byte](https://jamesabela.github.io/jsfun/paritybyte.html)
 * [Towers of Hanoi](https://hanoitowers.my.canva.site/) Also see the [article](https://readysetcompute.com/codeforme-canva/) (By Sethi De Clercq)
+* [Binary Snake](https://jamesabela.github.io/jsfun/binarysnake.html)
 * [Python Challenges](https://pythonchallenges.weebly.com/) (Welcome to use challenges, but entries are GIS only)
 
 Scratch projects
