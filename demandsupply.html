@@ -19,7 +19,9 @@
       --border: #e5e7eb;
     }
     * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); }
+
     .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
     h1 { font-size: 22px; margin: 0 0 8px; }
     p.help { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
@@ -28,530 +30,537 @@
     @media (min-width: 900px) { .grid { grid-template-columns: 1fr 320px; } }
 
     .card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
-
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
     .controls small { color: var(--muted); }
     .controls h2 { margin: 8px 0; font-size: 18px; }
     .controls .group { margin: 12px 0; }
     .controls label { display: block; font-size: 13px; margin-bottom: 4px; }
     .controls input[type=range] { width: 100%; }
+
     .btn { display: inline-block; border-radius: 10px; border: 1px solid var(--border); background: #f8fafc; padding: 8px 10px; font-size: 14px; cursor: pointer; }
     .btn:hover { background: #eef2f7; }
     .btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
     .btn.primary:hover { filter: brightness(0.95); }
-
     .scenario { text-align: left; width: 100%; }
+
     .legend { display: flex; gap: 16px; align-items: center; }
     .legend .k { width: 20px; height: 3px; display: inline-block; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
     .legend span { font-size: 13px; }
 
-    .quiz { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 12px; padding: 10px; }
+    .flex { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 
-    .flex { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-
-    /* SVG responsive */
     .svg-wrap { width: 100%; }
     svg { width: 100%; height: auto; display: block; }
+
+    /* Pseudo full screen fallback */
+    body.pseudo-fs { overflow: hidden; }
+    body.pseudo-fs .wrap { max-width: none; width: 100vw; height: 100vh; display: grid; grid-template-rows: auto 1fr; gap: 10px; }
+    body.pseudo-fs .grid { grid-template-columns: 2fr 1fr; height: 100%; }
+    body.pseudo-fs .card { height: 100%; }
+    body.pseudo-fs .svg-wrap { height: calc(100vh - 170px); }
+    body.pseudo-fs svg { height: 100%; }
+    #fsStatus { font-size: 12px; color: var(--muted); margin-left: 8px; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Supply and Demand Tool</h1>
-    <p class="help">Use this to show how curves shift and how policies change outcomes. Labels use simple English.</p>
+<div id="app" class="wrap">
+  <h1>Supply and Demand Tool</h1>
+  <p class="help">Use this to show how curves shift and how policies change outcomes. Labels use simple English.</p>
 
-    <div class="grid">
-      <div class="card">
-        <div class="flex" style="margin-bottom:8px;">
-          <div class="legend">
-            <span><i class="k" style="background:var(--blue)"></i>Demand</span>
-            <span><i class="k" style="background:var(--green)"></i>Supply</span>
-            <span><i class="k" style="background:var(--blueL)"></i>Demand after shift</span>
-            <span><i class="k" style="background:var(--greenL)"></i>Supply after shift</span>
-          </div>
-          <button id="resetBtn" class="btn" title="Clear all shifts and policies">Reset</button>
-        </div>
+  <div class="flex" style="margin-bottom:10px; gap:10px;">
+    <div class="flex" style="gap:8px; align-items:center;">
+      <button id="fullscreenBtn" class="btn">Enter full screen</button>
+      <span id="fsStatus" aria-live="polite"></span>
+    </div>
+    <div class="flex" style="gap:8px; align-items:center;">
+      <button id="shareBtn" class="btn" title="Copy a link with current settings">Copy shareable link</button>
+      <span id="shareStatus" style="font-size:12px; color:var(--muted);" aria-live="polite"></span>
+    </div>
+    <button id="resetBtnTop" class="btn" title="Clear shifts and policies">Reset</button>
+  </div>
 
-        <div class="svg-wrap">
-          <svg id="chart" viewBox="0 0 720 460" aria-label="Supply and demand chart"></svg>
+  <div class="grid">
+    <div class="card">
+      <div class="flex" style="margin-bottom:8px;">
+        <div class="legend">
+          <span><i class="k" style="background:var(--blue)"></i>Demand</span>
+          <span><i class="k" style="background:var(--green)"></i>Supply</span>
+          <span><i class="k" style="background:var(--blueL)"></i>Demand after shift</span>
+          <span><i class="k" style="background:var(--greenL)"></i>Supply after shift</span>
         </div>
+        <button id="resetBtn" class="btn" title="Clear shifts and policies">Reset</button>
       </div>
-
-      <div class="card controls">
-        <section class="group">
-          <h2>Model</h2>
-          <div class="row">
-            <div>
-              <label for="maxP">Max Price: <span id="maxPVal"></span></label>
-              <input id="maxP" type="range" min="50" max="200" value="100" />
-            </div>
-            <div>
-              <label for="maxQ">Max Quantity: <span id="maxQVal"></span></label>
-              <input id="maxQ" type="range" min="50" max="200" value="100" />
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="a">Demand intercept a: <span id="aVal"></span></label>
-              <input id="a" type="range" min="20" max="120" value="80" />
-            </div>
-            <div>
-              <label for="b">Demand slope b: <span id="bVal"></span></label>
-              <input id="b" type="range" min="0.2" max="1.5" step="0.05" value="0.6" />
-            </div>
-            <div>
-              <label for="c">Supply intercept c: <span id="cVal"></span></label>
-              <input id="c" type="range" min="0" max="60" value="10" />
-            </div>
-            <div>
-              <label for="d">Supply slope d: <span id="dVal"></span></label>
-              <input id="d" type="range" min="0.2" max="1.5" step="0.05" value="0.7" />
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="dShift">Demand shift: <span id="dShiftVal">0</span></label>
-              <input id="dShift" type="range" min="-40" max="40" value="0" />
-            </div>
-            <div>
-              <label for="sShift">Supply shift: <span id="sShiftVal">0</span></label>
-              <input id="sShift" type="range" min="-40" max="40" value="0" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label><input id="showCeiling" type="checkbox" /> Show price ceiling</label>
-              <div id="ceilingWrap" style="display:none; margin-top:6px;">
-                <label for="ceiling">Ceiling level: <span id="ceilingVal"></span></label>
-                <input id="ceiling" type="range" min="0" max="200" value="30" />
-              </div>
-            </div>
-            <div>
-              <label><input id="showFloor" type="checkbox" /> Show price floor</label>
-              <div id="floorWrap" style="display:none; margin-top:6px;">
-                <label for="floor">Floor level: <span id="floorVal"></span></label>
-                <input id="floor" type="range" min="0" max="200" value="70" />
-              </div>
-            </div>
-          </div>
-          <small>Note: Demand uses Q = a - bP. Supply uses Q = c + dP. Shifts move the whole curve left or right.</small>
-        </section>
-
-        <section class="group">
-          <h2>Common scenarios</h2>
-          <div id="scenarios" class="column" style="display:grid; gap:8px;"></div>
-        </section>
-
-        <section class="group">
-          <div class="flex">
-            <h2>Quiz mode</h2>
-            <div>
-              <button id="startQuiz" class="btn primary">Start quiz</button>
-              <button id="endQuiz" class="btn" style="display:none;">End quiz</button>
-            </div>
-          </div>
-          <div id="quizBox" class="quiz" style="display:none; margin-top:8px;"></div>
-        </section>
-
-        <section class="group">
-          <h2>Teacher tips</h2>
-          <ul style="margin:6px 0 0 18px; padding:0; font-size:14px; color:var(--muted);">
-            <li>Use sliders to set a starting market that suits your lesson.</li>
-            <li>Click a scenario to show a clear left or right shift.</li>
-            <li>Turn on a price ceiling or floor to discuss shortage or surplus.</li>
-            <li>Use Quiz mode to check understanding quickly.</li>
-          </ul>
-        </section>
+      <div class="svg-wrap">
+        <svg id="chart" viewBox="0 0 720 460" aria-label="Supply and demand chart"></svg>
       </div>
     </div>
 
-    <p style="color:var(--muted); font-size:12px; margin-top:8px;">Built for classroom demos. Simple linear model for clarity.</p>
+    <div class="card controls">
+      <section class="group">
+        <h2>Model</h2>
+        <div class="row">
+          <div>
+            <label for="maxP">Max Price: <span id="maxPVal"></span></label>
+            <input id="maxP" type="range" min="50" max="200" value="100" />
+          </div>
+          <div>
+            <label for="maxQ">Max Quantity: <span id="maxQVal"></span></label>
+            <input id="maxQ" type="range" min="50" max="200" value="100" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="a">Demand intercept a: <span id="aVal"></span></label>
+            <input id="a" type="range" min="20" max="120" value="80" />
+          </div>
+          <div>
+            <label for="b">Demand slope b: <span id="bVal"></span></label>
+            <input id="b" type="range" min="0.2" max="1.5" step="0.05" value="0.6" />
+          </div>
+          <div>
+            <label for="c">Supply intercept c: <span id="cVal"></span></label>
+            <input id="c" type="range" min="0" max="60" value="10" />
+          </div>
+          <div>
+            <label for="d">Supply slope d: <span id="dVal"></span></label>
+            <input id="d" type="range" min="0.2" max="1.5" step="0.05" value="0.7" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="dShift">Demand shift: <span id="dShiftVal">0</span></label>
+            <input id="dShift" type="range" min="-40" max="40" value="0" />
+          </div>
+          <div>
+            <label for="sShift">Supply shift: <span id="sShiftVal">0</span></label>
+            <input id="sShift" type="range" min="-40" max="40" value="0" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label><input id="showCeiling" type="checkbox" /> Show price ceiling</label>
+            <div id="ceilingWrap" style="display:none; margin-top:6px;">
+              <label for="ceiling">Ceiling level: <span id="ceilingVal"></span></label>
+              <input id="ceiling" type="range" min="0" max="200" value="30" />
+            </div>
+          </div>
+          <div>
+            <label><input id="showFloor" type="checkbox" /> Show price floor</label>
+            <div id="floorWrap" style="display:none; margin-top:6px;">
+              <label for="floor">Floor level: <span id="floorVal"></span></label>
+              <input id="floor" type="range" min="0" max="200" value="70" />
+            </div>
+          </div>
+        </div>
+        <small>Note: Demand uses Q = a - bP. Supply uses Q = c + dP. Shifts move the whole curve left or right.</small>
+      </section>
+
+      <section class="group">
+        <h2>Common scenarios</h2>
+        <div id="scenarios" style="display:grid; gap:8px;"></div>
+      </section>
+    </div>
   </div>
 
-  <script>
-    // ---------- Data and helpers ----------
-    const W = 720, H = 460, PAD = 56;
+  <p style="color:var(--muted); font-size:12px; margin-top:8px;">Built for classroom demos. Simple linear model for clarity.</p>
+</div>
 
-    const state = {
-      maxP: 100, maxQ: 100,
-      a: 80, b: 0.6,
-      c: 10, d: 0.7,
-      dShift: 0, sShift: 0,
-      showCeiling: false, ceiling: 30,
-      showFloor: false, floor: 70,
-      quizOn: false, quizItem: null, selected: null, revealed: false
-    };
+<script>
+  // ---------- Data and helpers ----------
+  const W = 720, H = 460, PAD = 56;
 
-    const SCENARIOS = [
-      { id: 'd_inc_normal', title: 'Income rises for a normal good', effect: { demandShift: 15 }, tip: 'People want more at every price. Demand shifts right.' },
-      { id: 'd_dec_inferior', title: 'Income rises for an inferior good', effect: { demandShift: -12 }, tip: 'People buy fewer inferior goods. Demand shifts left.' },
-      { id: 'comp_price_up', title: 'Price of a complement rises', effect: { demandShift: -10 }, tip: 'Complements used together. Demand shifts left.' },
-      { id: 'sub_price_down', title: 'Price of a substitute falls', effect: { demandShift: -10 }, tip: 'Cheaper substitute reduces demand. Demand shifts left.' },
-      { id: 'tech_improves', title: 'Technology improves production', effect: { supplyShift: 15 }, tip: 'Lower cost to produce. Supply shifts right.' },
-      { id: 'input_cost_up', title: 'Input costs rise', effect: { supplyShift: -12 }, tip: 'Higher input costs reduce supply. Supply shifts left.' },
-      { id: 'tax_on_sellers', title: 'Per-unit tax on sellers', effect: { supplyShift: -14 }, tip: 'Tax raises cost. Supply shifts left.' },
-      { id: 'subsidy_buyers', title: 'Subsidy to buyers', effect: { demandShift: 12 }, tip: 'Subsidy raises demand. Demand shifts right.' },
-      { id: 'price_ceiling', title: 'Binding price ceiling', effect: { policy: 'ceiling' }, tip: 'Ceiling below equilibrium causes shortage.' },
-      { id: 'price_floor', title: 'Binding price floor', effect: { policy: 'floor' }, tip: 'Floor above equilibrium causes surplus.' }
-    ];
+  const state = {
+    maxP: 100, maxQ: 100,
+    a: 80, b: 0.6,
+    c: 10, d: 0.7,
+    dShift: 0, sShift: 0,
+    showCeiling: false, ceiling: 30,
+    showFloor: false, floor: 70
+  };
 
-    const QUIZ = [
-      { id: 'q1', prompt: 'A new machine reduces the cost of making the good. What happens?', options: [
-          { k: 'd_right', text: 'Demand shifts right' },
-          { k: 's_right', text: 'Supply shifts right' },
-          { k: 'd_left', text: 'Demand shifts left' },
-          { k: 's_left', text: 'Supply shifts left' },
-        ], answer: 's_right', explanation: 'Lower costs increase supply at every price. Supply shifts right.', apply: { supplyShift: 15 } },
-      { id: 'q2', prompt: 'The price of a complement rises. What happens to this market?', options: [
-          { k: 'd_right', text: 'Demand shifts right' },
-          { k: 's_right', text: 'Supply shifts right' },
-          { k: 'd_left', text: 'Demand shifts left' },
-          { k: 's_left', text: 'Supply shifts left' },
-        ], answer: 'd_left', explanation: 'Higher price of the other good reduces demand here.', apply: { demandShift: -12 } },
-      { id: 'q3', prompt: 'A per-unit tax is placed on sellers. What shifts?', options: [
-          { k: 'd_right', text: 'Demand shifts right' },
-          { k: 's_left', text: 'Supply shifts left' },
-          { k: 'd_left', text: 'Demand shifts left' },
-          { k: 'none', text: 'No shift' },
-        ], answer: 's_left', explanation: 'The tax raises per-unit cost, so supply shifts left.', apply: { supplyShift: -14 } },
-      { id: 'q4', prompt: 'Incomes rise and the good is inferior. What happens?', options: [
-          { k: 'd_left', text: 'Demand shifts left' },
-          { k: 'd_right', text: 'Demand shifts right' },
-          { k: 's_left', text: 'Supply shifts left' },
-          { k: 's_right', text: 'Supply shifts right' },
-        ], answer: 'd_left', explanation: 'With more income, people buy fewer inferior goods. Demand shifts left.', apply: { demandShift: -10 } },
-      { id: 'q5', prompt: 'A binding price ceiling is set below equilibrium. What is the outcome?', options: [
-          { k: 'shortage', text: 'Shortage (excess demand)' },
-          { k: 'surplus', text: 'Surplus (excess supply)' },
-          { k: 'none', text: 'No effect' },
-          { k: 'higher_price', text: 'Price rises above equilibrium' },
-        ], answer: 'shortage', explanation: 'A ceiling below equilibrium caps the price and causes a shortage.', apply: { policy: 'ceiling' } },
-    ];
+  // Short keys for URL
+  const URL_KEYS = {
+    maxP: 'MP', maxQ: 'MQ', a: 'a', b: 'b', c: 'c', d: 'd',
+    dShift: 'DS', sShift: 'SS', showCeiling: 'SC', ceiling: 'CL', showFloor: 'SF', floor: 'FL'
+  };
+  const REV_URL_KEYS = Object.fromEntries(Object.entries(URL_KEYS).map(([k, v]) => [v, k]));
 
-    function xScale(Q, maxQ) { return PAD + (Q / maxQ) * (W - 2 * PAD); }
-    function yScale(P, maxP) {
-      const innerH = H - 2 * PAD;
-      return PAD + innerH - (P / maxP) * innerH;
+  const SCENARIOS = [
+    { id: 'd_inc_normal', title: 'Income rises for a normal good', effect: { demandShift: 15 }, tip: 'People want more at every price. Demand shifts right.' },
+    { id: 'd_dec_inferior', title: 'Income rises for an inferior good', effect: { demandShift: -12 }, tip: 'People buy fewer inferior goods. Demand shifts left.' },
+    { id: 'comp_price_up', title: 'Price of a complement rises', effect: { demandShift: -10 }, tip: 'Complements used together. Demand shifts left.' },
+    { id: 'sub_price_down', title: 'Price of a substitute falls', effect: { demandShift: -10 }, tip: 'Cheaper substitute reduces demand. Demand shifts left.' },
+    { id: 'tech_improves', title: 'Technology improves production', effect: { supplyShift: 15 }, tip: 'Lower cost to produce. Supply shifts right.' },
+    { id: 'input_cost_up', title: 'Input costs rise', effect: { supplyShift: -12 }, tip: 'Higher input costs reduce supply. Supply shifts left.' },
+    { id: 'tax_on_sellers', title: 'Per-unit tax on sellers', effect: { supplyShift: -14 }, tip: 'Tax raises cost. Supply shifts left.' },
+    { id: 'subsidy_buyers', title: 'Subsidy to buyers', effect: { demandShift: 12 }, tip: 'Subsidy raises demand. Demand shifts right.' },
+    { id: 'price_ceiling', title: 'Binding price ceiling', effect: { policy: 'ceiling' }, tip: 'Ceiling below equilibrium causes shortage.' },
+    { id: 'price_floor', title: 'Binding price floor', effect: { policy: 'floor' }, tip: 'Floor above equilibrium causes surplus.' }
+  ];
+
+  function xScale(Q, maxQ) { return PAD + (Q / maxQ) * (W - 2 * PAD); }
+  function yScale(P, maxP) {
+    const innerH = H - 2 * PAD;
+    return PAD + innerH - (P / maxP) * innerH;
+  }
+  function solveEquilibrium(a, b, c, d) {
+    const denom = b + d;
+    const P = denom !== 0 ? (a - c) / denom : 0;
+    const Q = a - b * P;
+    return { P, Q };
+  }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  // ---------- DOM refs ----------
+  const appEl = document.getElementById('app');
+  const chart = document.getElementById('chart');
+  const ids = [ 'maxP','maxQ','a','b','c','d','dShift','sShift','showCeiling','ceiling','showFloor','floor' ];
+  const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+  const valIds = [ 'maxPVal','maxQVal','aVal','bVal','cVal','dVal','dShiftVal','sShiftVal','ceilingVal','floorVal' ];
+  const valEl = Object.fromEntries(valIds.map(id => [id, document.getElementById(id)]));
+
+  const resetBtn = document.getElementById('resetBtn');
+  const resetBtnTop = document.getElementById('resetBtnTop');
+  const ceilingWrap = document.getElementById('ceilingWrap');
+  const floorWrap = document.getElementById('floorWrap');
+  const scenariosBox = document.getElementById('scenarios');
+
+  const fsBtn = document.getElementById('fullscreenBtn');
+  const fsStatus = document.getElementById('fsStatus');
+  const shareBtn = document.getElementById('shareBtn');
+  const shareStatus = document.getElementById('shareStatus');
+
+  // ---------- URL helpers (dynamic links) ----------
+  function stateToParams(s) {
+    const p = new URLSearchParams();
+    for (const [k, shortK] of Object.entries(URL_KEYS)) {
+      let v = s[k];
+      if (typeof v === 'boolean') v = v ? 1 : 0;
+      if (typeof v === 'number') v = Number.isInteger(v) ? v : Number(v.toFixed(2));
+      p.set(shortK, v);
     }
-    function solveEquilibrium(a, b, c, d) {
-      const denom = b + d;
-      const P = denom !== 0 ? (a - c) / denom : 0;
-      const Q = a - b * P;
-      return { P, Q };
+    return p;
+  }
+  function paramsToState(p, target) {
+    const out = { ...target };
+    for (const [shortK, fullK] of Object.entries(REV_URL_KEYS)) {
+      if (!p.has(shortK)) continue;
+      const raw = p.get(shortK);
+      if (fullK === 'showCeiling' || fullK === 'showFloor') {
+        out[fullK] = raw === '1' || raw === 'true';
+      } else {
+        const num = parseFloat(raw);
+        if (Number.isFinite(num)) out[fullK] = num;
+      }
     }
-    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-
-    // ---------- DOM refs ----------
-    const chart = document.getElementById('chart');
-    const ids = [ 'maxP','maxQ','a','b','c','d','dShift','sShift','showCeiling','ceiling','showFloor','floor' ];
-    const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
-    const valIds = [ 'maxPVal','maxQVal','aVal','bVal','cVal','dVal','dShiftVal','sShiftVal','ceilingVal','floorVal' ];
-    const valEl = Object.fromEntries(valIds.map(id => [id, document.getElementById(id)]));
-
-    const resetBtn = document.getElementById('resetBtn');
-    const ceilingWrap = document.getElementById('ceilingWrap');
-    const floorWrap = document.getElementById('floorWrap');
-    const scenariosBox = document.getElementById('scenarios');
-
-    const startQuizBtn = document.getElementById('startQuiz');
-    const endQuizBtn = document.getElementById('endQuiz');
-    const quizBox = document.getElementById('quizBox');
-
-    // ---------- UI wiring ----------
-    function syncLabels() {
-      valEl.maxPVal.textContent = state.maxP;
-      valEl.maxQVal.textContent = state.maxQ;
-      valEl.aVal.textContent = state.a;
-      valEl.bVal.textContent = state.b.toFixed(2);
-      valEl.cVal.textContent = state.c;
-      valEl.dVal.textContent = state.d.toFixed(2);
-      valEl.dShiftVal.textContent = state.dShift;
-      valEl.sShiftVal.textContent = state.sShift;
-      valEl.ceilingVal.textContent = state.ceiling;
-      valEl.floorVal.textContent = state.floor;
-
-      el.maxP.value = state.maxP; el.maxQ.value = state.maxQ;
-      el.a.value = state.a; el.b.value = state.b; el.c.value = state.c; el.d.value = state.d;
-      el.dShift.value = state.dShift; el.sShift.value = state.sShift;
-      el.showCeiling.checked = state.showCeiling; el.ceiling.value = state.ceiling;
-      el.showFloor.checked = state.showFloor; el.floor.value = state.floor;
-
-      ceilingWrap.style.display = state.showCeiling ? 'block' : 'none';
-      floorWrap.style.display = state.showFloor ? 'block' : 'none';
+    // clamp within UI ranges
+    out.maxP = clamp(out.maxP, 50, 200);
+    out.maxQ = clamp(out.maxQ, 50, 200);
+    out.a = clamp(out.a, 20, 120);
+    out.b = clamp(out.b, 0.2, 1.5);
+    out.c = clamp(out.c, 0, 60);
+    out.d = clamp(out.d, 0.2, 1.5);
+    out.dShift = clamp(out.dShift, -40, 40);
+    out.sShift = clamp(out.sShift, -40, 40);
+    out.ceiling = clamp(out.ceiling, 0, 200);
+    out.floor = clamp(out.floor, 0, 200);
+    return out;
+  }
+  function updateUrlFromState() {
+    const p = stateToParams(state);
+    const newHash = '#' + p.toString();
+    if (location.hash !== newHash) history.replaceState(null, '', newHash);
+  }
+  function loadStateFromUrl() {
+    const hash = location.hash.startsWith('#') ? location.hash.slice(1) : '';
+    const src = hash || location.search.slice(1);
+    if (!src) return;
+    const p = new URLSearchParams(src);
+    const next = paramsToState(p, state);
+    Object.assign(state, next);
+  }
+  function copyShareLink() {
+    const url = new URL(location.href);
+    url.hash = stateToParams(state).toString();
+    const text = url.toString();
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(() => { shareStatus.textContent = 'Link copied'; setTimeout(() => shareStatus.textContent = '', 1500); });
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      shareStatus.textContent = 'Link copied'; setTimeout(() => shareStatus.textContent = '', 1500);
     }
+  }
+  function debounce(fn, ms) { let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); }; }
+  const debouncedUrlUpdate = debounce(updateUrlFromState, 120);
 
-    ids.forEach(id => {
-      const node = el[id];
-      node.addEventListener('input', () => {
-        const t = node.type;
-        let v = (t === 'checkbox') ? node.checked : parseFloat(node.value);
-        if (id === 'b' || id === 'd') v = parseFloat(v);
-        state[id] = v;
-        syncLabels();
-        draw();
-      });
+  // ---------- UI wiring ----------
+  function syncLabels() {
+    valEl.maxPVal.textContent = state.maxP;
+    valEl.maxQVal.textContent = state.maxQ;
+    valEl.aVal.textContent = state.a;
+    valEl.bVal.textContent = state.b.toFixed(2);
+    valEl.cVal.textContent = state.c;
+    valEl.dVal.textContent = state.d.toFixed(2);
+    valEl.dShiftVal.textContent = state.dShift;
+    valEl.sShiftVal.textContent = state.sShift;
+    valEl.ceilingVal.textContent = state.ceiling;
+    valEl.floorVal.textContent = state.floor;
+
+    el.maxP.value = state.maxP; el.maxQ.value = state.maxQ;
+    el.a.value = state.a; el.b.value = state.b; el.c.value = state.c; el.d.value = state.d;
+    el.dShift.value = state.dShift; el.sShift.value = state.sShift;
+    el.showCeiling.checked = state.showCeiling; el.ceiling.value = state.ceiling;
+    el.showFloor.checked = state.showFloor; el.floor.value = state.floor;
+
+    ceilingWrap.style.display = state.showCeiling ? 'block' : 'none';
+    floorWrap.style.display = state.showFloor ? 'block' : 'none';
+  }
+
+  ids.forEach(id => {
+    const node = el[id];
+    node.addEventListener('input', () => {
+      const t = node.type;
+      let v = (t === 'checkbox') ? node.checked : parseFloat(node.value);
+      if (id === 'b' || id === 'd') v = parseFloat(v);
+      state[id] = v;
+      syncLabels();
+      draw();
+      debouncedUrlUpdate();
     });
+  });
 
-    resetBtn.addEventListener('click', () => {
-      state.dShift = 0; state.sShift = 0;
-      state.showCeiling = false; state.showFloor = false;
-      state.revealed = false; state.selected = null; state.quizItem = null; state.quizOn = false;
-      quizBox.style.display = 'none'; startQuizBtn.style.display = 'inline-block'; endQuizBtn.style.display = 'none';
-      syncLabels(); draw();
-    });
+  function handleReset() {
+    state.dShift = 0; state.sShift = 0;
+    state.showCeiling = false; state.showFloor = false;
+    syncLabels(); draw(); updateUrlFromState();
+  }
+  resetBtn.addEventListener('click', handleReset);
+  resetBtnTop.addEventListener('click', handleReset);
 
-    // Scenario buttons
+  // Scenario buttons
+  function initScenarios() {
+    scenariosBox.innerHTML = '';
     SCENARIOS.forEach(sc => {
       const b = document.createElement('button');
       b.className = 'btn scenario';
       b.textContent = sc.title;
       b.title = sc.tip;
-      b.addEventListener('click', () => applyScenario(sc));
+      b.addEventListener('click', () => { applyScenario(sc); updateUrlFromState(); });
       scenariosBox.appendChild(b);
     });
+  }
 
-    function applyScenario(sc) {
-      state.dShift = 0; state.sShift = 0; state.showCeiling = false; state.showFloor = false;
-      if (sc.effect) {
-        if (typeof sc.effect.demandShift === 'number') state.dShift += sc.effect.demandShift;
-        if (typeof sc.effect.supplyShift === 'number') state.sShift += sc.effect.supplyShift;
-        if (sc.effect.policy === 'ceiling') {
-          state.showCeiling = true;
-          const eq = solveEquilibrium(state.a + state.dShift, state.b, state.c + state.sShift, state.d);
-          state.ceiling = clamp(Math.round(eq.P * 0.7), 0, state.maxP);
-        }
-        if (sc.effect.policy === 'floor') {
-          state.showFloor = true;
-          const eq = solveEquilibrium(state.a + state.dShift, state.b, state.c + state.sShift, state.d);
-          state.floor = clamp(Math.round(eq.P * 1.3), 0, state.maxP);
-        }
-      }
-      syncLabels(); draw();
-    }
-
-    // Quiz
-    startQuizBtn.addEventListener('click', () => {
-      state.quizOn = true; state.revealed = false; state.selected = null;
-      // pick random
-      state.quizItem = QUIZ[Math.floor(Math.random() * QUIZ.length)];
-      startQuizBtn.style.display = 'none'; endQuizBtn.style.display = 'inline-block';
-      renderQuiz();
-      // clear shifts on graph until reveal
-      state.dShift = 0; state.sShift = 0; state.showCeiling = false; state.showFloor = false;
-      syncLabels(); draw();
-    });
-
-    endQuizBtn.addEventListener('click', () => {
-      state.quizOn = false; state.quizItem = null; quizBox.style.display = 'none';
-      startQuizBtn.style.display = 'inline-block'; endQuizBtn.style.display = 'none';
-      state.selected = null; state.revealed = false;
-      state.dShift = 0; state.sShift = 0; state.showCeiling = false; state.showFloor = false;
-      syncLabels(); draw();
-    });
-
-    function renderQuiz() {
-      if (!state.quizOn || !state.quizItem) return;
-      quizBox.style.display = 'block';
-      const q = state.quizItem;
-      quizBox.innerHTML = '';
-      const p = document.createElement('p'); p.style.margin = '0 0 8px 0'; p.style.fontWeight = '600'; p.textContent = q.prompt; quizBox.appendChild(p);
-      q.options.forEach(op => {
-        const lab = document.createElement('label'); lab.style.display = 'flex'; lab.style.alignItems = 'center'; lab.style.gap = '6px'; lab.style.margin = '4px 0';
-        const r = document.createElement('input'); r.type = 'radio'; r.name = 'quiz'; r.value = op.k;
-        r.addEventListener('change', () => { state.selected = op.k; });
-        const s = document.createElement('span'); s.textContent = op.text;
-        lab.appendChild(r); lab.appendChild(s); quizBox.appendChild(lab);
-      });
-      const btn = document.createElement('button'); btn.className = 'btn primary'; btn.textContent = 'Reveal and show on graph'; btn.style.marginTop = '8px';
-      btn.addEventListener('click', () => {
-        state.revealed = true;
-        const e = q.apply || {};
-        if (typeof e.demandShift === 'number') state.dShift = e.demandShift;
-        if (typeof e.supplyShift === 'number') state.sShift = e.supplyShift;
-        if (e.policy === 'ceiling') { state.showCeiling = true; }
-        if (e.policy === 'floor') { state.showFloor = true; }
-        // set default policy levels around current equilibrium
+  function applyScenario(sc) {
+    state.dShift = 0; state.sShift = 0; state.showCeiling = false; state.showFloor = false;
+    if (sc.effect) {
+      if (typeof sc.effect.demandShift === 'number') state.dShift += sc.effect.demandShift;
+      if (typeof sc.effect.supplyShift === 'number') state.sShift += sc.effect.supplyShift;
+      if (sc.effect.policy === 'ceiling') {
+        state.showCeiling = true;
         const eq = solveEquilibrium(state.a + state.dShift, state.b, state.c + state.sShift, state.d);
-        if (state.showCeiling) state.ceiling = clamp(Math.round(eq.P * 0.7), 0, state.maxP);
-        if (state.showFloor) state.floor = clamp(Math.round(eq.P * 1.3), 0, state.maxP);
-        syncLabels(); draw();
-        const feedback = document.createElement('div'); feedback.style.marginTop = '8px'; feedback.style.fontSize = '14px';
-        const correct = (state.selected === q.answer);
-        feedback.innerHTML = `<p style="margin:0; font-weight:600; color:${correct ? '#166534' : '#991b1b'}">${correct ? 'Correct.' : 'Not quite.'}</p><p style="margin:4px 0 0 0;">${q.explanation}</p>`;
-        quizBox.appendChild(feedback);
-      });
-      quizBox.appendChild(btn);
-    }
-
-    // ---------- Drawing ----------
-    function buildCurvePointsDemand(a, b, maxP, maxQ) {
-      const pts = [];
-      const steps = 50;
-      for (let i = 0; i <= steps; i++) {
-        const P = (i / steps) * maxP;
-        const Q = Math.max(0, a - b * P);
-        pts.push(`${xScale(Math.min(Q, maxQ), maxQ)},${yScale(Math.min(P, maxP), maxP)}`);
+        state.ceiling = clamp(Math.round(eq.P * 0.7), 0, state.maxP);
       }
-      return pts.join(' ');
-    }
-    function buildCurvePointsSupply(c, d, maxP, maxQ) {
-      const pts = [];
-      const steps = 50;
-      for (let i = 0; i <= steps; i++) {
-        const P = (i / steps) * maxP;
-        const Q = Math.max(0, c + d * P);
-        pts.push(`${xScale(Math.min(Q, maxQ), maxQ)},${yScale(Math.min(P, maxP), maxP)}`);
+      if (sc.effect.policy === 'floor') {
+        state.showFloor = true;
+        const eq = solveEquilibrium(state.a + state.dShift, state.b, state.c + state.sShift, state.d);
+        state.floor = clamp(Math.round(eq.P * 1.3), 0, state.maxP);
       }
-      return pts.join(' ');
     }
+    syncLabels(); draw();
+  }
 
-    function drawAxes(svg, maxP, maxQ) {
-      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      // X axis
-      let ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      ln.setAttribute('x1', PAD); ln.setAttribute('y1', H - PAD);
-      ln.setAttribute('x2', W - PAD); ln.setAttribute('y2', H - PAD);
-      ln.setAttribute('stroke', '#222'); g.appendChild(ln);
-      // Y axis
-      ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      ln.setAttribute('x1', PAD); ln.setAttribute('y1', PAD);
-      ln.setAttribute('x2', PAD); ln.setAttribute('y2', H - PAD);
-      ln.setAttribute('stroke', '#222'); g.appendChild(ln);
-
-      // Labels
-      let tx = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      tx.setAttribute('x', W - PAD - 4); tx.setAttribute('y', H - PAD + 28);
-      tx.setAttribute('text-anchor', 'end'); tx.setAttribute('font-size', '12'); tx.textContent = 'Quantity (Q)'; g.appendChild(tx);
-      tx = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      tx.setAttribute('x', PAD - 36); tx.setAttribute('y', PAD - 12);
-      tx.setAttribute('font-size', '12'); tx.textContent = 'Price (P)'; g.appendChild(tx);
-
-      // Ticks
-      const ticks = 5;
-      for (let i = 0; i <= ticks; i++) {
-        const qt = Math.round((i * maxQ) / ticks);
-        const xt = xScale(qt, maxQ);
-        const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        l.setAttribute('x1', xt); l.setAttribute('y1', H - PAD);
-        l.setAttribute('x2', xt); l.setAttribute('y2', H - PAD + 6);
-        l.setAttribute('stroke', '#222'); g.appendChild(l);
-        const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        t.setAttribute('x', xt); t.setAttribute('y', H - PAD + 18); t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', '11'); t.textContent = qt; g.appendChild(t);
-      }
-      for (let i = 0; i <= ticks; i++) {
-        const pt = Math.round((i * maxP) / ticks);
-        const yt = yScale(pt, maxP);
-        const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        l.setAttribute('x1', PAD - 6); l.setAttribute('y1', yt);
-        l.setAttribute('x2', PAD); l.setAttribute('y2', yt);
-        l.setAttribute('stroke', '#222'); g.appendChild(l);
-        const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        t.setAttribute('x', PAD - 10); t.setAttribute('y', yt + 4); t.setAttribute('text-anchor', 'end'); t.setAttribute('font-size', '11'); t.textContent = pt; g.appendChild(t);
-      }
-
-      svg.appendChild(g);
+  // ---------- Drawing ----------
+  function buildCurvePointsDemand(a, b, maxP, maxQ) {
+    const pts = [];
+    const steps = 50;
+    for (let i = 0; i <= steps; i++) {
+      const P = (i / steps) * maxP;
+      const Q = Math.max(0, a - b * P);
+      pts.push(`${xScale(Math.min(Q, maxQ), maxQ)},${yScale(Math.min(P, maxP), maxP)}`);
     }
+    return pts.join(' ');
+  }
+  function buildCurvePointsSupply(c, d, maxP, maxQ) {
+    const pts = [];
+    const steps = 50;
+    for (let i = 0; i <= steps; i++) {
+      const P = (i / steps) * maxP;
+      const Q = Math.max(0, c + d * P);
+      pts.push(`${xScale(Math.min(Q, maxQ), maxQ)},${yScale(Math.min(P, maxP), maxP)}`);
+    }
+    return pts.join(' ');
+  }
 
-    function line(x1, y1, x2, y2, stroke, dash) {
+  function drawAxes(svg, maxP, maxQ) {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    // X axis
+    let ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    ln.setAttribute('x1', PAD); ln.setAttribute('y1', H - PAD);
+    ln.setAttribute('x2', W - PAD); ln.setAttribute('y2', H - PAD);
+    ln.setAttribute('stroke', '#222'); g.appendChild(ln);
+    // Y axis
+    ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    ln.setAttribute('x1', PAD); ln.setAttribute('y1', PAD);
+    ln.setAttribute('x2', PAD); ln.setAttribute('y2', H - PAD);
+    ln.setAttribute('stroke', '#222'); g.appendChild(ln);
+
+    // Labels
+    let tx = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    tx.setAttribute('x', W - PAD - 4); tx.setAttribute('y', H - PAD + 28);
+    tx.setAttribute('text-anchor', 'end'); tx.setAttribute('font-size', '12'); tx.textContent = 'Quantity (Q)'; g.appendChild(tx);
+    tx = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    tx.setAttribute('x', PAD - 36); tx.setAttribute('y', PAD - 12);
+    tx.setAttribute('font-size', '12'); tx.textContent = 'Price (P)'; g.appendChild(tx);
+
+    // Ticks
+    const ticks = 5;
+    for (let i = 0; i <= ticks; i++) {
+      const qt = Math.round((i * maxQ) / ticks);
+      const xt = xScale(qt, maxQ);
       const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      l.setAttribute('x1', x1); l.setAttribute('y1', y1); l.setAttribute('x2', x2); l.setAttribute('y2', y2);
-      l.setAttribute('stroke', stroke);
-      if (dash) l.setAttribute('stroke-dasharray', dash);
-      return l;
-    }
-
-    function text(x, y, str, size = 12, color = '#111', anchor) {
+      l.setAttribute('x1', xt); l.setAttribute('y1', H - PAD);
+      l.setAttribute('x2', xt); l.setAttribute('y2', H - PAD + 6);
+      l.setAttribute('stroke', '#222'); g.appendChild(l);
       const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      t.setAttribute('x', x); t.setAttribute('y', y); t.setAttribute('font-size', String(size)); t.setAttribute('fill', color);
-      if (anchor) t.setAttribute('text-anchor', anchor);
-      t.textContent = str; return t;
+      t.setAttribute('x', xt); t.setAttribute('y', H - PAD + 18); t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', '11'); t.textContent = qt; g.appendChild(t);
+    }
+    for (let i = 0; i <= ticks; i++) {
+      const pt = Math.round((i * maxP) / ticks);
+      const yt = yScale(pt, maxP);
+      const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      l.setAttribute('x1', PAD - 6); l.setAttribute('y1', yt);
+      l.setAttribute('x2', PAD); l.setAttribute('y2', yt);
+      l.setAttribute('stroke', '#222'); g.appendChild(l);
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', PAD - 10); t.setAttribute('y', yt + 4); t.setAttribute('text-anchor', 'end'); t.setAttribute('font-size', '11'); t.textContent = pt; g.appendChild(t);
     }
 
-    function polyline(points, stroke) {
-      const p = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-      p.setAttribute('fill', 'none'); p.setAttribute('stroke-width', '2'); p.setAttribute('stroke', stroke); p.setAttribute('points', points);
-      return p;
+    svg.appendChild(g);
+  }
+
+  function line(x1, y1, x2, y2, stroke, dash) {
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', x1); l.setAttribute('y1', y1); l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+    l.setAttribute('stroke', stroke);
+    if (dash) l.setAttribute('stroke-dasharray', dash);
+    return l;
+  }
+
+  function text(x, y, str, size = 12, color = '#111', anchor) {
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y); t.setAttribute('font-size', String(size)); t.setAttribute('fill', color);
+    if (anchor) t.setAttribute('text-anchor', anchor);
+    t.textContent = str; return t;
+  }
+
+  function polyline(points, stroke) {
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    p.setAttribute('fill', 'none'); p.setAttribute('stroke-width', '2'); p.setAttribute('stroke', stroke); p.setAttribute('points', points);
+    return p;
+  }
+
+  function draw() {
+    chart.innerHTML = '';
+    const effA = state.a + state.dShift;
+    const effC = state.c + state.sShift;
+    const eq = solveEquilibrium(effA, state.b, effC, state.d);
+
+    drawAxes(chart, state.maxP, state.maxQ);
+
+    // Original curves
+    chart.appendChild(polyline(buildCurvePointsDemand(state.a, state.b, state.maxP, state.maxQ), 'var(--blue)'));
+    chart.appendChild(polyline(buildCurvePointsSupply(state.c, state.d, state.maxP, state.maxQ), 'var(--green)'));
+
+    // Shifted curves
+    if (state.dShift !== 0) chart.appendChild(polyline(buildCurvePointsDemand(effA, state.b, state.maxP, state.maxQ), 'var(--blueL)'));
+    if (state.sShift !== 0) chart.appendChild(polyline(buildCurvePointsSupply(effC, state.d, state.maxP, state.maxQ), 'var(--greenL)'));
+
+    // Equilibrium marker
+    if (eq.P >= 0 && eq.Q >= 0) {
+      const x = xScale(Math.min(eq.Q, state.maxQ), state.maxQ);
+      const y = yScale(Math.min(eq.P, state.maxP), state.maxP);
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 4); c.setAttribute('fill', '#111');
+      chart.appendChild(c);
+      chart.appendChild(line(x, y, x, yScale(0, state.maxP), '#555', '4 4'));
+      chart.appendChild(line(xScale(0, state.maxQ), y, x, y, '#555', '4 4'));
+      chart.appendChild(text(x + 8, y - 8, `Eq P=${eq.P.toFixed(1)}, Q=${eq.Q.toFixed(1)}`));
     }
 
-    function draw() {
-      chart.innerHTML = '';
-      const effA = state.a + state.dShift;
-      const effC = state.c + state.sShift;
-      const eq = solveEquilibrium(effA, state.b, effC, state.d);
+    // Policies
+    const activeCeiling = state.showCeiling && state.ceiling < eq.P;
+    const activeFloor = state.showFloor && state.floor > eq.P;
 
-      drawAxes(chart, state.maxP, state.maxQ);
-
-      // Original curves
-      chart.appendChild(polyline(buildCurvePointsDemand(state.a, state.b, state.maxP, state.maxQ), 'var(--blue)'));
-      chart.appendChild(polyline(buildCurvePointsSupply(state.c, state.d, state.maxP, state.maxQ), 'var(--green)'));
-
-      // Shifted curves
-      if (state.dShift !== 0) chart.appendChild(polyline(buildCurvePointsDemand(effA, state.b, state.maxP, state.maxQ), 'var(--blueL)'));
-      if (state.sShift !== 0) chart.appendChild(polyline(buildCurvePointsSupply(effC, state.d, state.maxP, state.maxQ), 'var(--greenL)'));
-
-      // Equilibrium marker
-      if (eq.P >= 0 && eq.Q >= 0) {
-        const x = xScale(Math.min(eq.Q, state.maxQ), state.maxQ);
-        const y = yScale(Math.min(eq.P, state.maxP), state.maxP);
-        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 4); c.setAttribute('fill', '#111');
-        chart.appendChild(c);
-        chart.appendChild(line(x, y, x, yScale(0, state.maxP), '#555', '4 4'));
-        chart.appendChild(line(xScale(0, state.maxQ), y, x, y, '#555', '4 4'));
-        chart.appendChild(text(x + 8, y - 8, `Eq P=${eq.P.toFixed(1)}, Q=${eq.Q.toFixed(1)}`));
-      }
-
-      // Policies
-      const activeCeiling = state.showCeiling && state.ceiling < eq.P;
-      const activeFloor = state.showFloor && state.floor > eq.P;
-
-      if (state.showCeiling) {
-        const y = yScale(state.ceiling, state.maxP);
-        chart.appendChild(line(PAD, y, W - PAD, y, 'var(--purple)', '6 6'));
-        chart.appendChild(text(W - PAD + 6, y + 4, `Ceiling P=${state.ceiling}`, 12, 'var(--purple)'));
-      }
-      if (state.showFloor) {
-        const y = yScale(state.floor, state.maxP);
-        chart.appendChild(line(PAD, y, W - PAD, y, 'var(--amber)', '6 6'));
-        chart.appendChild(text(W - PAD + 6, y + 4, `Floor P=${state.floor}`, 12, 'var(--amber)'));
-      }
-
-      // Shortage/Surplus text
-      if (activeCeiling) {
-        const Pc = state.ceiling;
-        const Qd = Math.max(0, effA - state.b * Pc);
-        const Qs = Math.max(0, effC + state.d * Pc);
-        const shortage = Math.max(0, Qd - Qs);
-        chart.appendChild(text(xScale(Math.min((Qd+Qs)/2 + 4, state.maxQ), state.maxQ), yScale(Pc, state.maxP) - 10, `Shortage ≈ ${shortage.toFixed(1)}`, 12, 'var(--purple)'));
-      }
-      if (activeFloor) {
-        const Pf = state.floor;
-        const Qd = Math.max(0, effA - state.b * Pf);
-        const Qs = Math.max(0, effC + state.d * Pf);
-        const surplus = Math.max(0, Qs - Qd);
-        chart.appendChild(text(xScale(Math.min((Qd+Qs)/2 + 4, state.maxQ), state.maxQ), yScale(Pf, state.maxP) - 10, `Surplus ≈ ${surplus.toFixed(1)}`, 12, 'var(--amber)'));
-      }
+    if (state.showCeiling) {
+      const y = yScale(state.ceiling, state.maxP);
+      chart.appendChild(line(PAD, y, W - PAD, y, 'var(--purple)', '6 6'));
+      chart.appendChild(text(W - PAD + 6, y + 4, `Ceiling P=${state.ceiling}`, 12, 'var(--purple)'));
+    }
+    if (state.showFloor) {
+      const y = yScale(state.floor, state.maxP);
+      chart.appendChild(line(PAD, y, W - PAD, y, 'var(--amber)', '6 6'));
+      chart.appendChild(text(W - PAD + 6, y + 4, `Floor P=${state.floor}`, 12, 'var(--amber)'));
     }
 
-    // Init scenarios list
-    function initScenarios() {
-      scenariosBox.innerHTML = '';
-      SCENARIOS.forEach(sc => {
-        const btn = document.createElement('button');
-        btn.className = 'btn scenario';
-        btn.textContent = sc.title;
-        btn.title = sc.tip;
-        btn.addEventListener('click', () => applyScenario(sc));
-        scenariosBox.appendChild(btn);
-      });
+    if (activeCeiling) {
+      const Pc = state.ceiling;
+      const Qd = Math.max(0, effA - state.b * Pc);
+      const Qs = Math.max(0, effC + state.d * Pc);
+      const shortage = Math.max(0, Qd - Qs);
+      chart.appendChild(text(xScale(Math.min((Qd+Qs)/2 + 4, state.maxQ), state.maxQ), yScale(Pc, state.maxP) - 10, `Shortage ≈ ${shortage.toFixed(1)}`));
     }
-
-    function boot() {
-      initScenarios();
-      syncLabels();
-      draw();
+    if (activeFloor) {
+      const Pf = state.floor;
+      const Qd = Math.max(0, effA - state.b * Pf);
+      const Qs = Math.max(0, effC + state.d * Pf);
+      const surplus = Math.max(0, Qs - Qd);
+      chart.appendChild(text(xScale(Math.min((Qd+Qs)/2 + 4, state.maxQ), state.maxQ), yScale(Pf, state.maxP) - 10, `Surplus ≈ ${surplus.toFixed(1)}`));
     }
+  }
 
-    boot();
-  </script>
+  // ---------- Full screen (with sandbox-safe fallback) ----------
+  let pseudoOn = false;
+  function logStatus(msg) { if (fsStatus) fsStatus.textContent = msg; }
+  function updateFsUi() {
+    const isNativeFs = !!document.fullscreenElement;
+    const label = (isNativeFs || pseudoOn) ? 'Exit full screen' : 'Enter full screen';
+    fsBtn.textContent = label;
+    if (isNativeFs) logStatus('Native full screen');
+    else if (pseudoOn) logStatus('Screen fill mode');
+    else logStatus('');
+  }
+  async function tryEnterNativeFs() {
+    if (!document.fullscreenEnabled || !appEl.requestFullscreen) return false;
+    try { await appEl.requestFullscreen({ navigationUI: 'hide' }); return true; } catch { return false; }
+  }
+  function enterPseudoFs() { document.body.classList.add('pseudo-fs'); pseudoOn = true; draw(); updateFsUi(); }
+  function exitPseudoFs() { document.body.classList.remove('pseudo-fs'); pseudoOn = false; draw(); updateFsUi(); }
+  async function toggleFullScreen() {
+    const isNativeFs = !!document.fullscreenElement;
+    if (isNativeFs) { await document.exitFullscreen?.(); updateFsUi(); return; }
+    if (pseudoOn) { exitPseudoFs(); return; }
+    const ok = await tryEnterNativeFs();
+    if (!ok) { enterPseudoFs(); logStatus('Full screen is blocked here. Using screen fill mode.'); }
+  }
+
+  fsBtn.addEventListener('click', toggleFullScreen);
+  document.addEventListener('fullscreenchange', updateFsUi);
+
+  // ---------- Share links ----------
+  shareBtn.addEventListener('click', copyShareLink);
+  window.addEventListener('hashchange', () => { loadStateFromUrl(); syncLabels(); draw(); });
+
+  // ---------- Boot ----------
+  function boot() {
+    loadStateFromUrl();
+    initScenarios();
+    syncLabels();
+    draw();
+    updateFsUi();
+    updateUrlFromState();
+  }
+  boot();
+</script>
 </body>
 </html>
