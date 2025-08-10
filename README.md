@@ -64,6 +64,9 @@ Word & literacy tools
 Timer
 * [Pomodoro timer](https://minnowfish.github.io/Pomodoro-Timer/) - Student created
 
+Supply and demand display tool
+* [Supply and demand](https://jamesabela.github.io/jsfun/demandsupply.html)
+
 ## Python Display Tool Features
 
 A [display tool](https://jamesabela.github.io/jsfun/pythoncopy) that will enable you to download Python files as either .py files or .txt files if your firewall is very restrictive.
