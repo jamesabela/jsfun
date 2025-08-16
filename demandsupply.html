@@ -60,7 +60,7 @@
     body.pseudo-fs .card { height: 100%; }
     body.pseudo-fs .svg-wrap { height: calc(100vh - 170px); }
     body.pseudo-fs svg { height: 100%; }
-    #fsStatus { font-size: 12px; color: var(--muted); margin-left: 8px; }
+    #fsStatus, #saveStatus { font-size: 12px; color: var(--muted); margin-left: 8px; }
   </style>
 </head>
 <body>
@@ -76,6 +76,11 @@
     <div class="flex" style="gap:8px; align-items:center;">
       <button id="shareBtn" class="btn" title="Copy a link with current settings">Copy shareable link</button>
       <span id="shareStatus" style="font-size:12px; color:var(--muted);" aria-live="polite"></span>
+    </div>
+    <!-- New Save PNG button -->
+    <div class="flex" style="gap:8px; align-items:center;">
+      <button id="savePngBtn" class="btn" title="Save the chart as a PNG image">Save PNG</button>
+      <span id="saveStatus" aria-live="polite"></span>
     </div>
     <button id="resetBtnTop" class="btn" title="Clear shifts and policies">Reset</button>
   </div>
@@ -139,7 +144,7 @@
           </div>
         </div>
 
-        <!-- New curve visibility controls -->
+        <!-- Curve visibility controls -->
         <div class="row" style="grid-template-columns: 1fr 1fr;">
           <div>
             <label><input id="showDemand" type="checkbox" checked /> Show demand</label>
@@ -191,7 +196,6 @@
     dShift: 0, sShift: 0,
     showCeiling: false, ceiling: 30,
     showFloor: false, floor: 70,
-    // New visibility flags
     showDemand: true, showSupply: true,
     showShiftedDemand: true, showShiftedSupply: true
   };
@@ -200,7 +204,6 @@
   const URL_KEYS = {
     maxP: 'MP', maxQ: 'MQ', a: 'a', b: 'b', c: 'c', d: 'd',
     dShift: 'DS', sShift: 'SS', showCeiling: 'SC', ceiling: 'CL', showFloor: 'SF', floor: 'FL',
-    // New in URL
     showDemand: 'SD', showSupply: 'SSP', showShiftedDemand: 'SSD', showShiftedSupply: 'SSS'
   };
   const REV_URL_KEYS = Object.fromEntries(Object.entries(URL_KEYS).map(([k, v]) => [v, k]));
@@ -249,6 +252,10 @@
   const fsStatus = document.getElementById('fsStatus');
   const shareBtn = document.getElementById('shareBtn');
   const shareStatus = document.getElementById('shareStatus');
+
+  // New save UI
+  const saveBtn = document.getElementById('savePngBtn');
+  const saveStatus = document.getElementById('saveStatus');
 
   // ---------- URL helpers (dynamic links) ----------
   function stateToParams(s) {
@@ -333,7 +340,6 @@
     el.showCeiling.checked = state.showCeiling; el.ceiling.value = state.ceiling;
     el.showFloor.checked = state.showFloor; el.floor.value = state.floor;
 
-    // new checkboxes
     el.showDemand.checked = state.showDemand;
     el.showSupply.checked = state.showSupply;
     el.showShiftedDemand.checked = state.showShiftedDemand;
@@ -360,7 +366,7 @@
   function handleReset() {
     state.dShift = 0; state.sShift = 0;
     state.showCeiling = false; state.showFloor = false;
-    // keep curve visibility as set by the teacher
+    // keep curve visibility choices
     syncLabels(); draw(); updateUrlFromState();
   }
   resetBtn.addEventListener('click', handleReset);
@@ -378,7 +384,6 @@
       scenariosBox.appendChild(b);
     });
   }
-
   function applyScenario(sc) {
     state.dShift = 0; state.sShift = 0; state.showCeiling = false; state.showFloor = false;
     if (sc.effect) {
@@ -463,7 +468,6 @@
       const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       t.setAttribute('x', PAD - 10); t.setAttribute('y', yt + 4); t.setAttribute('text-anchor', 'end'); t.setAttribute('font-size', '11'); t.textContent = pt; g.appendChild(t);
     }
-
     svg.appendChild(g);
   }
 
@@ -474,14 +478,12 @@
     if (dash) l.setAttribute('stroke-dasharray', dash);
     return l;
   }
-
   function text(x, y, str, size = 12, color = '#111', anchor) {
     const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     t.setAttribute('x', x); t.setAttribute('y', y); t.setAttribute('font-size', String(size)); t.setAttribute('fill', color);
     if (anchor) t.setAttribute('text-anchor', anchor);
     t.textContent = str; return t;
   }
-
   function polyline(points, stroke) {
     const p = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     p.setAttribute('fill', 'none'); p.setAttribute('stroke-width', '2'); p.setAttribute('stroke', stroke); p.setAttribute('points', points);
@@ -496,7 +498,6 @@
 
     drawAxes(chart, state.maxP, state.maxQ);
 
-    // Original curves
     if (state.showDemand) {
       chart.appendChild(polyline(buildCurvePointsDemand(state.a, state.b, state.maxP, state.maxQ), 'var(--blue)'));
     }
@@ -504,7 +505,6 @@
       chart.appendChild(polyline(buildCurvePointsSupply(state.c, state.d, state.maxP, state.maxQ), 'var(--green)'));
     }
 
-    // Shifted curves
     if (state.dShift !== 0 && state.showShiftedDemand) {
       chart.appendChild(polyline(buildCurvePointsDemand(effA, state.b, state.maxP, state.maxQ), 'var(--blueL)'));
     }
@@ -512,7 +512,6 @@
       chart.appendChild(polyline(buildCurvePointsSupply(effC, state.d, state.maxP, state.maxQ), 'var(--greenL)'));
     }
 
-    // Equilibrium marker
     if (eq.P >= 0 && eq.Q >= 0) {
       const x = xScale(Math.min(eq.Q, state.maxQ), state.maxQ);
       const y = yScale(Math.min(eq.P, state.maxP), state.maxP);
@@ -523,7 +522,6 @@
       chart.appendChild(text(x + 8, y - 8, `Eq P=${eq.P.toFixed(1)}, Q=${eq.Q.toFixed(1)}`));
     }
 
-    // Policies
     const activeCeiling = state.showCeiling && state.ceiling < eq.P;
     const activeFloor = state.showFloor && state.floor > eq.P;
 
@@ -585,6 +583,94 @@
   // ---------- Share links ----------
   shareBtn.addEventListener('click', copyShareLink);
   window.addEventListener('hashchange', () => { loadStateFromUrl(); syncLabels(); draw(); });
+
+  // ---------- Save PNG ----------
+  function resolveCssVar(varName) {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    return v || '#000';
+  }
+  function inlineVarsOnSvg(svgEl) {
+    const varMap = {
+      '--blue': resolveCssVar('--blue'),
+      '--green': resolveCssVar('--green'),
+      '--blueL': resolveCssVar('--blueL'),
+      '--greenL': resolveCssVar('--greenL'),
+      '--purple': resolveCssVar('--purple'),
+      '--amber': resolveCssVar('--amber')
+    };
+    const walker = document.createTreeWalker(svgEl, NodeFilter.SHOW_ELEMENT, null);
+    while (walker.nextNode()) {
+      const n = walker.currentNode;
+      ['stroke','fill'].forEach(attr => {
+        const val = n.getAttribute && n.getAttribute(attr);
+        if (val && val.startsWith('var(')) {
+          const key = val.slice(4, -1).trim();
+          if (varMap[key]) n.setAttribute(attr, varMap[key]);
+        }
+      });
+    }
+  }
+  function saveSvgAsPng(svgNode, opts = {}) {
+    const scale = opts.scale || 2; // high-res
+    const vb = svgNode.viewBox.baseVal;
+    const w = vb && vb.width ? vb.width : svgNode.clientWidth || 720;
+    const h = vb && vb.height ? vb.height : svgNode.clientHeight || 460;
+
+    // Clone and resolve CSS vars so canvas gets final colours
+    const clone = svgNode.cloneNode(true);
+    // Add minimal style for font fallback
+    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    style.textContent = 'text{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;fill:#111}';
+    clone.insertBefore(style, clone.firstChild);
+    inlineVarsOnSvg(clone);
+
+    const ser = new XMLSerializer();
+    const svgStr = ser.serializeToString(clone);
+    const img = new Image();
+    const svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(w * scale);
+    canvas.height = Math.round(h * scale);
+    const ctx = canvas.getContext('2d');
+
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      // white background for classroom slides
+      ctx.save();
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      ctx.restore();
+
+      canvas.toBlob(blob => {
+        if (!blob) { saveStatus.textContent = 'Could not create PNG'; return; }
+        const a = document.createElement('a');
+        const ts = new Date().toISOString().replace(/[:.]/g, '-');
+        a.download = `supply-demand-${ts}.png`;
+        a.href = URL.createObjectURL(blob);
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(a.href);
+        a.remove();
+        saveStatus.textContent = 'Saved';
+        setTimeout(() => saveStatus.textContent = '', 1200);
+      }, 'image/png');
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      saveStatus.textContent = 'Could not load SVG for export';
+    };
+    img.src = url;
+  }
+  saveBtn.addEventListener('click', () => {
+    saveStatus.textContent = 'Preparing PNG...';
+    // Make sure the latest drawing is on screen, then export
+    requestAnimationFrame(() => saveSvgAsPng(chart, { scale: 2 }));
+  });
 
   // ---------- Boot ----------
   function boot() {
