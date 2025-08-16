@@ -127,6 +127,7 @@
             <input id="d" type="range" min="0.2" max="1.5" step="0.05" value="0.7" />
           </div>
         </div>
+
         <div class="row">
           <div>
             <label for="dShift">Demand shift: <span id="dShiftVal">0</span></label>
@@ -137,6 +138,19 @@
             <input id="sShift" type="range" min="-40" max="40" value="0" />
           </div>
         </div>
+
+        <!-- New curve visibility controls -->
+        <div class="row" style="grid-template-columns: 1fr 1fr;">
+          <div>
+            <label><input id="showDemand" type="checkbox" checked /> Show demand</label>
+            <label><input id="showSupply" type="checkbox" checked /> Show supply</label>
+          </div>
+          <div>
+            <label><input id="showShiftedDemand" type="checkbox" checked /> Show shifted demand</label>
+            <label><input id="showShiftedSupply" type="checkbox" checked /> Show shifted supply</label>
+          </div>
+        </div>
+
         <div class="row">
           <div>
             <label><input id="showCeiling" type="checkbox" /> Show price ceiling</label>
@@ -176,13 +190,18 @@
     c: 10, d: 0.7,
     dShift: 0, sShift: 0,
     showCeiling: false, ceiling: 30,
-    showFloor: false, floor: 70
+    showFloor: false, floor: 70,
+    // New visibility flags
+    showDemand: true, showSupply: true,
+    showShiftedDemand: true, showShiftedSupply: true
   };
 
   // Short keys for URL
   const URL_KEYS = {
     maxP: 'MP', maxQ: 'MQ', a: 'a', b: 'b', c: 'c', d: 'd',
-    dShift: 'DS', sShift: 'SS', showCeiling: 'SC', ceiling: 'CL', showFloor: 'SF', floor: 'FL'
+    dShift: 'DS', sShift: 'SS', showCeiling: 'SC', ceiling: 'CL', showFloor: 'SF', floor: 'FL',
+    // New in URL
+    showDemand: 'SD', showSupply: 'SSP', showShiftedDemand: 'SSD', showShiftedSupply: 'SSS'
   };
   const REV_URL_KEYS = Object.fromEntries(Object.entries(URL_KEYS).map(([k, v]) => [v, k]));
 
@@ -215,7 +234,7 @@
   // ---------- DOM refs ----------
   const appEl = document.getElementById('app');
   const chart = document.getElementById('chart');
-  const ids = [ 'maxP','maxQ','a','b','c','d','dShift','sShift','showCeiling','ceiling','showFloor','floor' ];
+  const ids = [ 'maxP','maxQ','a','b','c','d','dShift','sShift','showCeiling','ceiling','showFloor','floor','showDemand','showSupply','showShiftedDemand','showShiftedSupply' ];
   const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
   const valIds = [ 'maxPVal','maxQVal','aVal','bVal','cVal','dVal','dShiftVal','sShiftVal','ceilingVal','floorVal' ];
   const valEl = Object.fromEntries(valIds.map(id => [id, document.getElementById(id)]));
@@ -247,7 +266,7 @@
     for (const [shortK, fullK] of Object.entries(REV_URL_KEYS)) {
       if (!p.has(shortK)) continue;
       const raw = p.get(shortK);
-      if (fullK === 'showCeiling' || fullK === 'showFloor') {
+      if (['showCeiling','showFloor','showDemand','showSupply','showShiftedDemand','showShiftedSupply'].includes(fullK)) {
         out[fullK] = raw === '1' || raw === 'true';
       } else {
         const num = parseFloat(raw);
@@ -314,12 +333,19 @@
     el.showCeiling.checked = state.showCeiling; el.ceiling.value = state.ceiling;
     el.showFloor.checked = state.showFloor; el.floor.value = state.floor;
 
+    // new checkboxes
+    el.showDemand.checked = state.showDemand;
+    el.showSupply.checked = state.showSupply;
+    el.showShiftedDemand.checked = state.showShiftedDemand;
+    el.showShiftedSupply.checked = state.showShiftedSupply;
+
     ceilingWrap.style.display = state.showCeiling ? 'block' : 'none';
     floorWrap.style.display = state.showFloor ? 'block' : 'none';
   }
 
   ids.forEach(id => {
     const node = el[id];
+    if (!node) return;
     node.addEventListener('input', () => {
       const t = node.type;
       let v = (t === 'checkbox') ? node.checked : parseFloat(node.value);
@@ -334,6 +360,7 @@
   function handleReset() {
     state.dShift = 0; state.sShift = 0;
     state.showCeiling = false; state.showFloor = false;
+    // keep curve visibility as set by the teacher
     syncLabels(); draw(); updateUrlFromState();
   }
   resetBtn.addEventListener('click', handleReset);
@@ -470,12 +497,20 @@
     drawAxes(chart, state.maxP, state.maxQ);
 
     // Original curves
-    chart.appendChild(polyline(buildCurvePointsDemand(state.a, state.b, state.maxP, state.maxQ), 'var(--blue)'));
-    chart.appendChild(polyline(buildCurvePointsSupply(state.c, state.d, state.maxP, state.maxQ), 'var(--green)'));
+    if (state.showDemand) {
+      chart.appendChild(polyline(buildCurvePointsDemand(state.a, state.b, state.maxP, state.maxQ), 'var(--blue)'));
+    }
+    if (state.showSupply) {
+      chart.appendChild(polyline(buildCurvePointsSupply(state.c, state.d, state.maxP, state.maxQ), 'var(--green)'));
+    }
 
     // Shifted curves
-    if (state.dShift !== 0) chart.appendChild(polyline(buildCurvePointsDemand(effA, state.b, state.maxP, state.maxQ), 'var(--blueL)'));
-    if (state.sShift !== 0) chart.appendChild(polyline(buildCurvePointsSupply(effC, state.d, state.maxP, state.maxQ), 'var(--greenL)'));
+    if (state.dShift !== 0 && state.showShiftedDemand) {
+      chart.appendChild(polyline(buildCurvePointsDemand(effA, state.b, state.maxP, state.maxQ), 'var(--blueL)'));
+    }
+    if (state.sShift !== 0 && state.showShiftedSupply) {
+      chart.appendChild(polyline(buildCurvePointsSupply(effC, state.d, state.maxP, state.maxQ), 'var(--greenL)'));
+    }
 
     // Equilibrium marker
     if (eq.P >= 0 && eq.Q >= 0) {
