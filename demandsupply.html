@@ -77,12 +77,11 @@
       <button id="shareBtn" class="btn" title="Copy a link with current settings">Copy shareable link</button>
       <span id="shareStatus" style="font-size:12px; color:var(--muted);" aria-live="polite"></span>
     </div>
-    <!-- New Save PNG button -->
     <div class="flex" style="gap:8px; align-items:center;">
       <button id="savePngBtn" class="btn" title="Save the chart as a PNG image">Save PNG</button>
       <span id="saveStatus" aria-live="polite"></span>
     </div>
-    <button id="resetBtnTop" class="btn" title="Clear shifts and policies">Reset</button>
+    <button id="resetBtnTop" class="btn" title="Restore all defaults and clear link">Reset</button>
   </div>
 
   <div class="grid">
@@ -94,7 +93,7 @@
           <span><i class="k" style="background:var(--blueL)"></i>Demand after shift</span>
           <span><i class="k" style="background:var(--greenL)"></i>Supply after shift</span>
         </div>
-        <button id="resetBtn" class="btn" title="Clear shifts and policies">Reset</button>
+        <button id="resetBtn" class="btn" title="Restore all defaults and clear link">Reset</button>
       </div>
       <div class="svg-wrap">
         <svg id="chart" viewBox="0 0 720 460" aria-label="Supply and demand chart"></svg>
@@ -189,7 +188,8 @@
   // ---------- Data and helpers ----------
   const W = 720, H = 460, PAD = 56;
 
-  const state = {
+  // One source of truth for defaults
+  const INITIAL_STATE = {
     maxP: 100, maxQ: 100,
     a: 80, b: 0.6,
     c: 10, d: 0.7,
@@ -199,6 +199,9 @@
     showDemand: true, showSupply: true,
     showShiftedDemand: true, showShiftedSupply: true
   };
+
+  // Live state object (only declaration)
+  const state = { ...INITIAL_STATE };
 
   // Short keys for URL
   const URL_KEYS = {
@@ -253,7 +256,7 @@
   const shareBtn = document.getElementById('shareBtn');
   const shareStatus = document.getElementById('shareStatus');
 
-  // New save UI
+  // Save UI
   const saveBtn = document.getElementById('savePngBtn');
   const saveStatus = document.getElementById('saveStatus');
 
@@ -364,10 +367,20 @@
   });
 
   function handleReset() {
-    state.dShift = 0; state.sShift = 0;
-    state.showCeiling = false; state.showFloor = false;
-    // keep curve visibility choices
-    syncLabels(); draw(); updateUrlFromState();
+    // Restore defaults
+    Object.assign(state, INITIAL_STATE);
+
+    // Clear URL hash so a reload stays reset
+    if (location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+
+    // Sync UI and redraw
+    syncLabels();
+    draw();
+
+    // Clear status messages
+    [shareStatus, fsStatus, saveStatus].forEach(e => { if (e) e.textContent = ''; });
   }
   resetBtn.addEventListener('click', handleReset);
   resetBtnTop.addEventListener('click', handleReset);
@@ -385,6 +398,7 @@
     });
   }
   function applyScenario(sc) {
+    // Start from no policy, no extra shift, but keep current a,b,c,d etc.
     state.dShift = 0; state.sShift = 0; state.showCeiling = false; state.showFloor = false;
     if (sc.effect) {
       if (typeof sc.effect.demandShift === 'number') state.dShift += sc.effect.demandShift;
@@ -611,14 +625,12 @@
     }
   }
   function saveSvgAsPng(svgNode, opts = {}) {
-    const scale = opts.scale || 2; // high-res
+    const scale = opts.scale || 2;
     const vb = svgNode.viewBox.baseVal;
     const w = vb && vb.width ? vb.width : svgNode.clientWidth || 720;
     const h = vb && vb.height ? vb.height : svgNode.clientHeight || 460;
 
-    // Clone and resolve CSS vars so canvas gets final colours
     const clone = svgNode.cloneNode(true);
-    // Add minimal style for font fallback
     const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
     style.textContent = 'text{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;fill:#111}';
     clone.insertBefore(style, clone.firstChild);
@@ -637,7 +649,6 @@
 
     img.onload = () => {
       URL.revokeObjectURL(url);
-      // white background for classroom slides
       ctx.save();
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -668,7 +679,6 @@
   }
   saveBtn.addEventListener('click', () => {
     saveStatus.textContent = 'Preparing PNG...';
-    // Make sure the latest drawing is on screen, then export
     requestAnimationFrame(() => saveSvgAsPng(chart, { scale: 2 }));
   });
 
@@ -679,7 +689,8 @@
     syncLabels();
     draw();
     updateFsUi();
-    updateUrlFromState();
+    // write initial URL if coming in clean
+    if (!location.hash) updateUrlFromState();
   }
   boot();
 </script>
