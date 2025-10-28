@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Name Spinner</title>
+  <style>
+    body {
+      background: radial-gradient(circle at center, #1a245a 0%, #0b1020 100%);
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 { font-size: 2rem; margin-bottom: 20px; }
+    textarea {
+      width: 90%; max-width: 500px; height: 200px;
+      background: #0e1633; border: 1px solid #444; color: #fff;
+      border-radius: 10px; padding: 10px;
+    }
+    button {
+      margin: 10px; padding: 12px 20px; font-weight: bold;
+      background: #ffba08; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s;
+    }
+    button:hover { background: #ffd34a; }
+
+    .machine {
+      margin: 40px auto; width: 360px; height: 160px;
+      border-radius: 15px; border: 4px solid #ffba08;
+      background: linear-gradient(180deg, #101a40, #0b1020);
+      display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,.45);
+    }
+    #display {
+      font-size: 1.8rem; font-weight: 900; letter-spacing: .3px; width: 100%;
+      display: flex; align-items: center; justify-content: center; padding: 0 10px;
+      white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
+    }
+    .marquee { position:absolute; top:8px; left:10px; right:10px; height:6px; opacity:.7;
+      background: repeating-linear-gradient(90deg, #ffba08 0 12px, transparent 12px 20px);
+      border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Name Spinner</h1>
+  <p>Paste names below (one per line):</p>
+  <textarea id="names" placeholder="Alice\nBilal\nChen Wei\nDiana\n..."></textarea><br>
+  <button id="spin">Spin</button>
+  <button id="reset">Reset</button>
+
+  <div class="machine">
+    <div class="marquee"></div>
+    <div id="display">Ready</div>
+  </div>
+
+  <script>
+    const textarea = document.getElementById('names');
+    const display = document.getElementById('display');
+    const spinBtn = document.getElementById('spin');
+    const resetBtn = document.getElementById('reset');
+
+    let names = [];
+    function updateNames() {
+      names = textarea.value.split(/\r?\n/).map(n => n.trim()).filter(Boolean);
+    }
+    textarea.addEventListener('input', updateNames);
+
+    let spinning = false; let rafId = null;
+
+    function spinFor(durationMs = 2000){
+      if (spinning) return;
+      updateNames();
+      if (names.length === 0) { alert('Please enter some names first!'); return; }
+
+      spinning = true; spinBtn.disabled = true;
+      const pool = [...names];
+
+      // Start at a random index so it feels fresh each time
+      let i = Math.floor(Math.random() * pool.length);
+      let lastSwitch = 0; // timestamp of last name change
+      let speed = 25;     // initial ms between changes
+
+      const start = performance.now();
+      function tick(now){
+        const elapsed = now - start;
+        // Slow down over time (linear ease-out)
+        speed = 25 + (120 - 25) * (elapsed / durationMs);
+
+        if (now - lastSwitch >= speed){
+          display.textContent = pool[i % pool.length];
+          i++; lastSwitch = now;
+        }
+
+        if (elapsed >= durationMs){
+          // Pick a fair random winner from full list
+          const winner = pool[Math.floor(Math.random() * pool.length)];
+          display.textContent = winner;
+          spinning = false; spinBtn.disabled = false; cancelAnimationFrame(rafId); return;
+        }
+        rafId = requestAnimationFrame(tick);
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    spinBtn.addEventListener('click', () => spinFor(2000));
+
+    resetBtn.addEventListener('click', () => {
+      textarea.value = '';
+      display.textContent = 'Ready';
+      names = []; if (rafId) cancelAnimationFrame(rafId); spinning = false; spinBtn.disabled = false;
+    });
+  </script>
+</body>
+</html>
