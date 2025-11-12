@@ -1,288 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presentation Spinner</title>
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom font */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Custom class for the spinning text effect */
-        .spinning-text {
-            opacity: 0.6;
-            animation: text-flicker 0.1s infinite alternate;
-        }
-        @keyframes text-flicker {
-            0% { transform: scale(1.02); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentation Spinner</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom font */
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Custom class for the spinning text effect */
+    .spinning-text {
+      opacity: 0.6;
+      animation: text-flicker 0.1s infinite alternate;
+    }
+    @keyframes text-flicker {
+      0% { transform: scale(1.02); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
-    <div class="w-full max-w-4xl bg-white rounded-xl shadow-2xl p-6 md:p-10">
-        
-        <header class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Presentation Spinner</h1>
-            <p class="text-lg text-gray-600 mt-2">Pick who's "Now" and who's "Next"</p>
-        </header>
+<div class="w-full max-w-4xl bg-white rounded-xl shadow-2xl p-6 md:p-10">
 
-        <main>
-            <!-- Input Section -->
-            <div class="mb-6">
-                <label for="names-input" class="block text-sm font-medium text-gray-700 mb-2">
-                    Paste names here (one per line):
-                </label>
-                <textarea id="names-input" rows="8" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Alice
+  <header class="text-center mb-8">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Presentation Spinner</h1>
+    <p class="text-lg text-gray-600 mt-2">Pick who's "Now" and who's "Next"</p>
+  </header>
+
+  <main>
+    <!-- Input Section -->
+    <div class="mb-6">
+      <label for="names-input" class="block text-sm font-medium text-gray-700 mb-2">
+        Paste names here (one per line):
+      </label>
+      <textarea id="names-input" rows="8" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Alice
 Bob
 Charlie
 David
 Eve
 ..."></textarea>
-            </div>
-
-            <!-- Controls Section -->
-            <div class="flex flex-col sm:flex-row gap-4 mb-8">
-                <button id="load-btn" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 active:scale-95 transition transform">
-                    Load / Reset Names
-                </button>
-                <button id="spin-btn" class="flex-1 bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 active:scale-95 transition transform" disabled>
-                    Spin!
-                </button>
-            </div>
-            
-            <!-- Status Message -->
-            <div id="status-message" class="text-center text-gray-600 h-6 mb-4 font-medium"></div>
-
-            <!-- Display Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <!-- Presenting Now -->
-                <div class="bg-blue-100 border-4 border-blue-500 rounded-xl p-6 shadow-lg text-center">
-                    <h2 class="text-xl font-semibold text-blue-800 mb-4">PRESENTING NOW</h2>
-                    <div id="presenting-now" class="text-4xl font-extrabold text-blue-900 min-h-[50px] flex items-center justify-center break-all">
-                        ...
-                    </div>
-                </div>
-                
-                <!-- On Deck (Next) -->
-                <div class="bg-yellow-100 border-4 border-yellow-500 rounded-xl p-6 shadow-lg text-center">
-                    <h2 class="text-xl font-semibold text-yellow-800 mb-4">ON DECK (NEXT)</h2>
-                    <div id="on-deck" class="text-4xl font-extrabold text-yellow-900 min-h-[50px] flex items-center justify-center break-all">
-                        ...
-                    </div>
-                </div>
-            </div>
-
-            <!-- Remaining Names -->
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="font-semibold text-gray-700 mb-2">
-                    Remaining in Pool: <span id="remaining-count" class="font-bold">0</span>
-                </h3>
-                <div id="remaining-list" class="text-sm text-gray-600 flex flex-wrap gap-x-2 gap-y-1">
-                    <!-- Names will be populated here -->
-                </div>
-            </div>
-        </main>
     </div>
 
-    <script>
-        // --- DOM Elements ---
-        const namesInput = document.getElementById('names-input');
-        const loadBtn = document.getElementById('load-btn');
-        const spinBtn = document.getElementById('spin-btn');
-        const statusMessage = document.getElementById('status-message');
-        const presentingEl = document.getElementById('presenting-now');
-        const onDeckEl = document.getElementById('on-deck');
-        const remainingCountEl = document.getElementById('remaining-count');
-        const remainingListEl = document.getElementById('remaining-list');
+    <!-- Controls Section -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+      <button id="load-btn" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 active:scale-95 transition transform">
+        Load / Reset Names
+      </button>
+      <button id="spin-btn" class="flex-1 bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 active:scale-95 transition transform" disabled>
+        Spin!
+      </button>
+    </div>
 
-        // --- State Variables ---
-        let allNames = [];
-        let availableNames = [];
-        let presentingNow = "...";
-        let onDeck = "...";
-        let isStarted = false;
-        let isSpinning = false;
+    <!-- Status Message -->
+    <div id="status-message" class="text-center text-gray-600 h-6 mb-4 font-medium"></div>
 
-        // --- Event Listeners ---
-        loadBtn.addEventListener('click', handleLoadNames);
-        spinBtn.addEventListener('click', handleSpin);
+    <!-- Display Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <!-- Presenting Now -->
+      <div class="bg-blue-100 border-4 border-blue-500 rounded-xl p-6 shadow-lg text-center">
+        <h2 class="text-xl font-semibold text-blue-800 mb-4">PRESENTING NOW</h2>
+        <div id="presenting-now" class="text-4xl font-extrabold text-blue-900 min-h-[50px] flex items-center justify-center break-all">
+          ...
+        </div>
+      </div>
 
-        // --- Functions ---
-        
-        /**
-         * Loads names from the textarea into the state.
-         * Resets the spinner.
-         */
-        function handleLoadNames() {
-            if (isSpinning) return;
-            
-            const namesText = namesInput.value;
-            allNames = namesText.split('\n')
-                               .map(name => name.trim())
-                               .filter(name => name.length > 0);
-            
-            if (allNames.length < 2) {
-                showMessage("Please enter at least 2 names.", "error");
-                spinBtn.disabled = true;
-                return;
-            }
-            
-            availableNames = [...allNames];
-            isStarted = false;
-            presentingNow = "...";
-            onDeck = "...";
-            
-            spinBtn.disabled = false;
-            spinBtn.innerText = "Spin!";
-            showMessage(`Loaded ${allNames.length} names. Ready to spin!`, "success");
-            updateUI();
+      <!-- On Deck (Next) -->
+      <div class="bg-yellow-100 border-4 border-yellow-500 rounded-xl p-6 shadow-lg text-center">
+        <h2 class="text-xl font-semibold text-yellow-800 mb-4">ON DECK (NEXT)</h2>
+        <div id="on-deck" class="text-4xl font-extrabold text-yellow-900 min-h-[50px] flex items-center justify-center break-all">
+          ...
+        </div>
+      </div>
+    </div>
+
+    <!-- Remaining Names -->
+    <div class="bg-gray-50 p-4 rounded-lg">
+      <h3 class="font-semibold text-gray-700 mb-2">
+        Remaining in Pool: <span id="remaining-count" class="font-bold">0</span>
+      </h3>
+      <div id="remaining-list" class="text-sm text-gray-600 flex flex-wrap gap-x-2 gap-y-1">
+        <!-- Names will be populated here -->
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // --- DOM Elements ---
+  const namesInput = document.getElementById('names-input');
+  const loadBtn = document.getElementById('load-btn');
+  const spinBtn = document.getElementById('spin-btn');
+  const statusMessage = document.getElementById('status-message');
+  const presentingEl = document.getElementById('presenting-now');
+  const onDeckEl = document.getElementById('on-deck');
+  const remainingCountEl = document.getElementById('remaining-count');
+  const remainingListEl = document.getElementById('remaining-list');
+
+  // --- State Variables ---
+  let allNames = [];
+  let availableNames = [];
+  let presentingNow = "...";
+  let onDeck = "...";
+  let isStarted = false;
+  let isSpinning = false;
+
+  // --- Event Listeners ---
+  document.addEventListener('DOMContentLoaded', loadNamesFromURL);
+  loadBtn.addEventListener('click', handleLoadNames);
+  spinBtn.addEventListener('click', handleSpin);
+
+  // --- Functions ---
+
+  /**
+   * Checks the URL hash on page load and pre-fills the textarea.
+   */
+  function loadNamesFromURL() {
+    if (window.location.hash) {
+      try {
+        // Get hash value, remove leading '#' and decode it
+        const namesString = decodeURIComponent(window.location.hash.substring(1));
+        if (namesString.trim().length > 0) {
+          namesInput.value = namesString;
         }
+      } catch (e) {
+        console.error("Error decoding names from URL hash:", e);
+        // Clear a malformed hash
+        history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  }
 
-        /**
-         * Handles the spin button click, triggering the selection logic.
-         */
-        function handleSpin() {
-            if (isSpinning || availableNames.length === 0 && !isStarted) return;
-            
-            // Handle the "all done" state
-            if (presentingNow !== "..." && onDeck === "---") {
-                 showMessage("Everyone has presented! Please Load/Reset.", "info");
-                 spinBtn.disabled = true;
-                 spinBtn.innerText = "All Done!";
-                 return;
-            }
+  /**
+   * Loads names from the textarea into the state.
+   * Resets the spinner.
+   */
+  function handleLoadNames() {
+    if (isSpinning) return;
 
-            isSpinning = true;
-            spinBtn.disabled = true;
-            loadBtn.disabled = true;
-            showMessage(""); // Clear message
+    const namesText = namesInput.value;
 
-            const spinDuration = 1500; // 1.5 seconds
-            const flickerInterval = 50; // 50ms
+    // --- NEW: Save names to URL hash ---
+    try {
+      if (namesText.trim().length > 0) {
+        const encodedNames = encodeURIComponent(namesText);
+        // Use replaceState to update URL without adding to browser history
+        history.replaceState(null, '', '#' + encodedNames);
+      } else {
+        // Clear the hash if the input is empty
+        history.replaceState(null, '', window.location.pathname);
+      }
+    } catch (e) {
+      console.error("Error updating URL hash:", e);
+    }
+    // --- End new feature ---
 
-            let onDeckInterval;
-            let presentingInterval;
+    allNames = namesText.split('\n')
+            .map(name => name.trim())
+            .filter(name => name.length > 0);
 
-            // Start flickering
-            if (!isStarted) {
-                // First spin, flicker both
-                presentingEl.classList.add('spinning-text');
-                presentingInterval = setInterval(() => {
-                    presentingEl.textContent = getRandomName();
-                }, flickerInterval);
-            }
-            
-            onDeckEl.classList.add('spinning-text');
-            onDeckInterval = setInterval(() => {
-                onDeckEl.textContent = getRandomName();
-            }, flickerInterval);
+    if (allNames.length < 2) {
+      showMessage("Please enter at least 2 names.", "error");
+      spinBtn.disabled = true;
+      return;
+    }
+
+    availableNames = [...allNames];
+    isStarted = false;
+    presentingNow = "...";
+    onDeck = "...";
+
+    spinBtn.disabled = false;
+    spinBtn.innerText = "Spin!";
+    showMessage(`Loaded ${allNames.length} names. Ready to spin!`, "success");
+    updateUI();
+  }
+
+  /**
+   * Handles the spin button click, triggering the selection logic.
+   */
+  function handleSpin() {
+    if (isSpinning || availableNames.length === 0 && !isStarted) return;
+
+    // Handle the "all done" state
+    if (presentingNow !== "..." && onDeck === "---") {
+      showMessage("Everyone has presented! Please Load/Reset.", "info");
+      spinBtn.disabled = true;
+      spinBtn.innerText = "All Done!";
+      return;
+    }
+
+    isSpinning = true;
+    spinBtn.disabled = true;
+    loadBtn.disabled = true;
+    showMessage(""); // Clear message
+
+    const spinDuration = 1500; // 1.5 seconds
+    const flickerInterval = 50; // 50ms
+
+    let onDeckInterval;
+    let presentingInterval;
+
+    // Start flickering
+    if (!isStarted) {
+      // First spin, flicker both
+      presentingEl.classList.add('spinning-text');
+      presentingInterval = setInterval(() => {
+        presentingEl.textContent = getRandomName();
+      }, flickerInterval);
+    }
+
+    onDeckEl.classList.add('spinning-text');
+    onDeckInterval = setInterval(() => {
+      onDeckEl.textContent = getRandomName();
+    }, flickerInterval);
 
 
-            // After duration, stop flickering and set results
-            setTimeout(() => {
-                // Stop flickering
-                onDeckEl.classList.remove('spinning-text');
-                clearInterval(onDeckInterval);
-                
-                if (presentingInterval) {
-                    presentingEl.classList.remove('spinning-text');
-                    clearInterval(presentingInterval);
-                }
+    // After duration, stop flickering and set results
+    setTimeout(() => {
+      // Stop flickering
+      onDeckEl.classList.remove('spinning-text');
+      clearInterval(onDeckInterval);
 
-                // --- Core Draw Logic ---
-                if (!isStarted) {
-                    // First spin
-                    presentingNow = drawRandomName();
-                    onDeck = drawRandomName();
-                    isStarted = true;
-                } else {
-                    // Subsequent spins
-                    presentingNow = onDeck; // Move On Deck to Presenting
-                    onDeck = drawRandomName(); // Draw new On Deck
-                }
-                
-                // --- Update State ---
-                isSpinning = false;
-                loadBtn.disabled = false;
-                
-                // Check if we're at the end
-                if (presentingNow === "---" && onDeck === "---") {
-                    showMessage("Everyone has presented! Please Load/Reset.", "info");
-                    spinBtn.disabled = true;
-                    spinBtn.innerText = "All Done!";
-                } else if (onDeck === "---") {
-                     showMessage("Last person is on deck!", "info");
-                     spinBtn.disabled = false; // Allow one more spin
-                     spinBtn.innerText = "Spin (Last!)";
-                } else {
-                    spinBtn.disabled = false;
-                }
-                
-                updateUI();
+      if (presentingInterval) {
+        presentingEl.classList.remove('spinning-text');
+        clearInterval(presentingInterval);
+      }
 
-            }, spinDuration);
-        }
+      // --- Core Draw Logic ---
+      if (!isStarted) {
+        // First spin
+        presentingNow = drawRandomName();
+        onDeck = drawRandomName();
+        isStarted = true;
+      } else {
+        // Subsequent spins
+        presentingNow = onDeck; // Move On Deck to Presenting
+        onDeck = drawRandomName(); // Draw new On Deck
+      }
 
-        /**
-         * Updates all UI elements based on the current state.
-         */
-        function updateUI() {
-            presentingEl.textContent = presentingNow;
-            onDeckEl.textContent = onDeck;
-            remainingCountEl.textContent = availableNames.length;
-            
-            remainingListEl.innerHTML = availableNames
-                .map(name => `<span class="bg-gray-200 text-gray-800 px-2 py-0.5 rounded-full">${name}</span>`)
-                .join(' ');
-        }
+      // --- Update State ---
+      isSpinning = false;
+      loadBtn.disabled = false;
 
-        /**
-         * Draws one random name from the available pool.
-         * Removes the name from the pool.
-         * @returns {string} The drawn name or "---" if empty.
-         */
-        function drawRandomName() {
-            if (availableNames.length === 0) {
-                return "---";
-            }
-            const index = Math.floor(Math.random() * availableNames.length);
-            const [name] = availableNames.splice(index, 1);
-            return name;
-        }
+      // Check if we're at the end
+      if (presentingNow === "---" && onDeck === "---") {
+        showMessage("Everyone has presented! Please Load/Reset.", "info");
+        spinBtn.disabled = true;
+        spinBtn.innerText = "All Done!";
+      } else if (onDeck === "---") {
+        showMessage("Last person is on deck!", "info");
+        spinBtn.disabled = false; // Allow one more spin
+        spinBtn.innerText = "Spin (Last!)";
+      } else {
+        spinBtn.disabled = false;
+      }
 
-        /**
-         * Gets a random name from the *original* list for flickering.
-         * @returns {string} A random name.
-         */
-        function getRandomName() {
-            if (allNames.length === 0) return "...";
-            const index = Math.floor(Math.random() * allNames.length);
-            return allNames[index];
-        }
+      updateUI();
 
-        /**
-         * Shows a message to the user.
-         * @param {string} text - The message to display.
-         * @param {string} [type] - 'success', 'error', or 'info'.
-         */
-        function showMessage(text, type = 'info') {
-            statusMessage.textContent = text;
-            statusMessage.classList.remove('text-green-600', 'text-red-600', 'text-gray-600');
-            
-            if (type === 'success') {
-                statusMessage.classList.add('text-green-600');
-            } else if (type === 'error') {
-                statusMessage.classList.add('text-red-600');
-            } else {
-                statusMessage.classList.add('text-gray-600');
-            }
-        }
+    }, spinDuration);
+  }
 
-    </script>
+  /**
+   * Updates all UI elements based on the current state.
+   */
+  function updateUI() {
+    presentingEl.textContent = presentingNow;
+    onDeckEl.textContent = onDeck;
+    remainingCountEl.textContent = availableNames.length;
+
+    remainingListEl.innerHTML = availableNames
+            .map(name => `<span class="bg-gray-200 text-gray-800 px-2 py-0.5 rounded-full">${name}</span>`)
+            .join(' ');
+  }
+
+  /**
+   * Draws one random name from the available pool.
+   * Removes the name from the pool.
+   * @returns {string} The drawn name or "---" if empty.
+   */
+  function drawRandomName() {
+    if (availableNames.length === 0) {
+      return "---";
+    }
+    const index = Math.floor(Math.random() * availableNames.length);
+    const [name] = availableNames.splice(index, 1);
+    return name;
+  }
+
+  /**
+   * Gets a random name from the *original* list for flickering.
+   * @returns {string} A random name.
+   */
+  function getRandomName() {
+    if (allNames.length === 0) return "...";
+    const index = Math.floor(Math.random() * allNames.length);
+    return allNames[index];
+  }
+
+  /**
+   * Shows a message to the user.
+   * @param {string} text - The message to display.
+   * @param {string} [type] - 'success', 'error', or 'info'.
+   */
+  function showMessage(text, type = 'info') {
+    statusMessage.textContent = text;
+    statusMessage.classList.remove('text-green-600', 'text-red-600', 'text-gray-600');
+
+    if (type === 'success') {
+      statusMessage.classList.add('text-green-600');
+    } else if (type === 'error') {
+      statusMessage.classList.add('text-red-600');
+    } else {
+      statusMessage.classList.add('text-gray-600');
+    }
+  }
+
+</script>
 </body>
 </html>
