@@ -34,6 +34,7 @@ Question tools
 Choosers
 * [3D Lollipop Stick Carousel](https://jamesabela.github.io/jsfun/lollipop.html) - For choosing random names, groups or questions
 * [Mega Spinner](https://jamesabela.github.io/jsfun/megaspinner.html) - For choosing from larger groups of names
+* [Presentation Spinner](https://jamesabela.github.io/jsfun/prezzispinner.html) - For getting two people up at once
 * [Draggable manipulatives](https://jamesabela.github.io/jsfun/manip.html) - Can be used for categorisations or groupings
 * [Number Flash cards](https://sethideclercq.com/tools/number-gen.html) (Created by Sethi De Clercq)
 
