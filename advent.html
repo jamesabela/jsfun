@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computing Advent Calendar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #1a202c;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    h1, h2, .festive-font {
+      font-family: 'Mountains of Christmas', cursive;
+    }
+
+    /* 3D Door Flip Styles */
+    .perspective-container {
+      perspective: 1000px;
+    }
+
+    .door-card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+
+    .door-card.open {
+      transform: rotateY(-180deg);
+      cursor: default;
+    }
+
+    .door-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden; /* Safari */
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Front of the door (The Number) */
+    .door-front {
+      background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+      border: 2px solid #fbbf24;
+      color: #fff;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Pattern on door front */
+    .door-front::before {
+      content: '';
+      position: absolute;
+      top: 5px; left: 5px; right: 5px; bottom: 5px;
+      border: 1px dashed rgba(255,255,255,0.5);
+      border-radius: 0.25rem;
+      pointer-events: none;
+    }
+
+    /* Back of the door (The Content) */
+    .door-back {
+      background-color: #f7fafc;
+      color: #2d3748;
+      transform: rotateY(180deg);
+      border: 4px solid #38a169;
+      text-align: center;
+      padding: 0.5rem;
+      overflow: hidden;
+    }
+
+    .locked {
+      filter: grayscale(0.5);
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+
+    /* Shake animation for locked doors */
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    .shake {
+      animation: shake 0.3s ease-in-out;
+    }
+
+    /* Cheat Mode Theme (Purple & Gold) */
+    body.cheat-mode {
+      background-color: #2d1b4e;
+      transition: background-color 0.5s;
+    }
+
+    body.cheat-mode .door-front {
+      background: linear-gradient(135deg, #6b46c1 0%, #553c9a 100%);
+      border-color: #f6e05e;
+    }
+
+    body.cheat-mode h1 {
+      color: #f6e05e;
+      text-shadow: 0 0 10px rgba(246, 224, 94, 0.5);
+    }
+
+    body.cheat-mode .door-front::before {
+      border-color: rgba(246, 224, 94, 0.3);
+    }
+
+    /* Snow Canvas */
+    #snow-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content-layer {
+      position: relative;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-900">
+
+<!-- Snow Effect -->
+<canvas id="snow-canvas"></canvas>
+
+<div class="content-layer container mx-auto px-4 py-8">
+
+  <!-- Header -->
+  <header class="text-center mb-10">
+    <h1 class="text-5xl md:text-7xl font-bold text-red-500 mb-2 text-shadow-lg drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)]">
+      Advent Calendar
+    </h1>
+    <p class="text-yellow-400 text-xl italic">Count down the days with a surprise behind every window!</p>
+
+    <!-- Controls -->
+    <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
+      <button onclick="resetCalendar()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded shadow transition">
+        Reset Calendar
+      </button>
+    </div>
+    <p id="date-display" class="mt-2 text-gray-400 text-xs"></p>
+  </header>
+
+  <!-- Grid -->
+  <div id="calendar-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
+    <!-- Windows will be injected here by JS -->
+  </div>
+
+</div>
+
+<!-- Modal for details -->
+<div id="message-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white text-gray-900 rounded-lg max-w-md w-full p-6 shadow-2xl transform transition-all scale-100 relative">
+    <button onclick="closeModal()" class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+    <h3 id="modal-title" class="text-2xl font-bold text-red-600 festive-font mb-4">Wait!</h3>
+    <p id="modal-body" class="text-lg">You can't open this yet.</p>
+    <div class="mt-6 text-center">
+      <button onclick="closeModal()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-bold transition">OK</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- Configuration ---
+  const totalDays = 25;
+  const currentYear = new Date().getFullYear();
+  const storageKey = `advent_calendar_${currentYear}_state`;
+
+  // Content for the 25 days with COMPUTING LINKS
+  const adventData = [
+    // Week 1: Basics & Fun
+    { day: 1, type: 'text', content: "Let's roll some Story Dice!", icon: "🎲", url: "https://jamesabela.github.io/jsfun/storydice.html" },
+    { day: 2, type: 'text', content: "Visualise Binary Numbers", icon: "01", url: "https://sethideclercq.com/tools/binaryvisualiser.html" },
+    { day: 3, type: 'text', content: "Crack the code with a Cipher Wheel", icon: "🔐", url: "https://scratch.mit.edu/projects/427196904/" },
+    { day: 4, type: 'text', content: "Create Blackout Poetry", icon: "⬛", url: "https://sethideclercq.com/tools/blackoutpoetry.html" },
+    { day: 5, type: 'text', content: "Play the Binary Snake Game", icon: "🐍", url: "https://jamesabela.github.io/jsfun/snake.html" },
+
+    // Week 2: Logic & Tools
+    { day: 6, type: 'text', content: "Random Number Generator", icon: "#️⃣", url: "https://sethideclercq.com/tools/number-gen.html" },
+    { day: 7, type: 'text', content: "Solve the Towers of Hanoi", icon: "🏗️", url: "https://hanoitowers.my.canva.site/" },
+    { day: 8, type: 'text', content: "Send a Secret Message", icon: "🤫", url: "https://sethideclercq.com/tools/secretcodegen.html" },
+    { day: 9, type: 'text', content: "Brainstorm with a Mind Map", icon: "🧠", url: "https://jamesabela.github.io/jsfun/mindmapplain.html" },
+    { day: 10, type: 'text', content: "Create a Word Search", icon: "🔎", url: "https://sethideclercq.com/tools/wordsearch.html" },
+
+    // Week 3: Visualisation
+    { day: 11, type: 'text', content: "3D Lollipop Carousel", icon: "🍭", url: "https://jamesabela.github.io/jsfun/lollipop.html" },
+    { day: 12, type: 'text', content: "Greater Than / Less Than", icon: "<>", url: "https://sethideclercq.com/tools/comparison.html" },
+    { day: 13, type: 'text', content: "Tile Reveal Game", icon: "🧱", url: "https://jamesabela.github.io/jsfun/imgtiles.html?image=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2015%2F12%2F23%2F22%2F36%2Fminecraft-1106253_1280.png" },
+    { day: 14, type: 'text', content: "Decimal to Binary Converter", icon: "🔟", url: "https://sethideclercq.com/tools/switchmaster.html" },
+    { day: 15, type: 'text', content: "Word Triangle Discussion", icon: "🔺", url: "https://jamesabela.github.io/jsfun/triangle.html" },
+
+    // Week 4: Challenge
+    { day: 16, type: 'text', content: "Part-Whole Challenges", icon: "🍰", url: "https://sethideclercq.com/tools/partwhole.html" },
+    { day: 17, type: 'text', content: "Spreadsheet Cell Fun", icon: "🖼️", url: "https://jamesabela.github.io/jsfun/cells.html" },
+    { day: 18, type: 'text', content: "Parity Byte Checker", icon: "🧮", url: "https://jamesabela.github.io/jsfun/paritybyte.html" },
+    { day: 19, type: 'text', content: "Plot Device Chooser", icon: "📖", url: "https://scratch.mit.edu/projects/2261416/fullscreen/" },
+    { day: 20, type: 'text', content: "Word Type Highlighter", icon: "🖍️", url: "https://sethideclercq.com/tools/wordtype.html" },
+
+    // The Final Stretch: Advanced Computing
+    { day: 21, type: 'text', content: "Draggable Manipulatives", icon: "✋", url: "https://jamesabela.github.io/jsfun/manip.html" },
+    { day: 22, type: 'text', content: "AmberJr: ScratchJr Assets", icon: "🐱", url: "https://amberjr.vercel.app/" },
+    { day: 23, type: 'text', content: "TutorialFriend: Visual Guides", icon: "🤝", url: "https://tutorialfriend.vercel.app/" },
+    { day: 24, type: 'text', content: "EmeraldLens: Video Learning", icon: "🟢", url: "https://emerald-lens.vercel.app/" },
+    { day: 25, type: 'text', content: "SapphireStudio: Recorder", icon: "💎", url: "https://sapphirestudio.vercel.app/" }
+  ];
+
+  // --- State Management ---
+  let openedDoors = JSON.parse(localStorage.getItem(storageKey)) || [];
+  let isTestMode = false;
+
+  function init() {
+    // Check URL parameters for cheat mode
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('cheat') || urlParams.get('mode') === 'test') {
+      isTestMode = true;
+      document.body.classList.add('cheat-mode');
+    }
+
+    renderGrid();
+    updateDateDisplay();
+    startSnow();
+  }
+
+  function resetCalendar() {
+    if(confirm("Are you sure you want to close all windows?")) {
+      localStorage.removeItem(storageKey);
+      openedDoors = [];
+      location.reload();
+    }
+  }
+
+  function updateDateDisplay() {
+    const today = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('date-display').innerText = `Current Date: ${today.toLocaleDateString('en-US', options)}`;
+  }
+
+  function isDateValid(day) {
+    if (isTestMode) return true;
+
+    const now = new Date();
+    const currentMonth = now.getMonth(); // 0-11, December is 11
+    const currentDay = now.getDate();
+
+    // Allow opening if it's December and the day is reached or passed
+    if (currentMonth === 11) { // It is December
+      return day <= currentDay;
+    }
+
+    // If it's NOT December, generally lock everything unless testing
+    return false;
+  }
+
+  function handleDoorClick(day, element) {
+    // If already open, do nothing
+    if (openedDoors.includes(day)) return;
+
+    if (!isDateValid(day)) {
+      // Shake animation
+      element.classList.add('shake');
+      setTimeout(() => element.classList.remove('shake'), 500);
+
+      // Show modal
+      showModal("Not Yet!", `You can't open window #${day} until December ${day}!`);
+      return;
+    }
+
+    // Open the door
+    openedDoors.push(day);
+    localStorage.setItem(storageKey, JSON.stringify(openedDoors));
+
+    // Trigger animation
+    const cardInner = element.querySelector('.door-card');
+    cardInner.classList.add('open');
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('calendar-grid');
+    grid.innerHTML = '';
+
+    adventData.forEach(item => {
+      const isOpen = openedDoors.includes(item.day);
+      const canOpen = isDateValid(item.day);
+
+      // Outer Container (Perspective)
+      const container = document.createElement('div');
+      container.className = `perspective-container h-48 w-full`;
+
+      // Inner Card (The thing that flips)
+      const card = document.createElement('div');
+      card.className = `door-card ${isOpen ? 'open' : ''}`;
+
+      // Click Handler on container to capture clicks
+      container.onclick = (e) => {
+        // Prevent flipping if clicking the link button directly
+        if (!e.target.closest('a')) {
+          handleDoorClick(item.day, container);
+        }
+      };
+
+      // Front Face
+      const front = document.createElement('div');
+      front.className = `door-face door-front ${!canOpen && !isOpen ? 'locked' : ''}`;
+      front.innerHTML = `
+                    <span class="text-4xl font-bold festive-font drop-shadow-md">${item.day}</span>
+                    ${!canOpen && !isOpen ? '<span class="text-xs mt-2 uppercase tracking-wide opacity-75">Locked</span>' : ''}
+                `;
+
+      // Back Face
+      const back = document.createElement('div');
+      back.className = 'door-face door-back flex flex-col items-center justify-center p-2';
+      // Added the Link Button here
+      back.innerHTML = `
+                    <div class="text-3xl mb-1">${item.icon}</div>
+                    <p class="font-bold text-xs leading-tight mb-2">${item.content}</p>
+                    <a href="${item.url}" target="_blank" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded shadow transition-colors duration-200 flex items-center gap-1">
+                        Go <span class="text-xs">→</span>
+                    </a>
+                `;
+
+      card.appendChild(front);
+      card.appendChild(back);
+      container.appendChild(card);
+      grid.appendChild(container);
+    });
+  }
+
+  // --- Modal Logic ---
+  function showModal(title, body) {
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-body').innerText = body;
+    document.getElementById('message-modal').classList.remove('hidden');
+  }
+
+  function closeModal() {
+    document.getElementById('message-modal').classList.add('hidden');
+  }
+
+  // --- Snowfall Animation (Lightweight) ---
+  function startSnow() {
+    const canvas = document.getElementById("snow-canvas");
+    const ctx = canvas.getContext("2d");
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const maxFlakes = 100;
+    const flakes = [];
+
+    for (let i = 0; i < maxFlakes; i++) {
+      flakes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 3 + 1, // radius
+        d: Math.random() * maxFlakes // density
+      });
+    }
+
+    function drawFlakes() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+      ctx.beginPath();
+      for (let i = 0; i < maxFlakes; i++) {
+        const f = flakes[i];
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+      }
+      ctx.fill();
+      moveFlakes();
+    }
+
+    let angle = 0;
+    function moveFlakes() {
+      angle += 0.01;
+      for (let i = 0; i < maxFlakes; i++) {
+        const f = flakes[i];
+        f.y += Math.pow(f.d, 2) + 1; // Speed
+        f.x += Math.sin(angle) * 2;
+
+        // If it hits bottom, send to top
+        if (f.y > height) {
+          // Resets to -10 (just above screen) so they enter smoothly
+          flakes[i] = { x: Math.random() * width, y: -10, r: f.r, d: f.d };
+        }
+      }
+    }
+
+    setInterval(drawFlakes, 25);
+
+    // Handle Resize
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+  }
+
+  // Run
+  init();
+
+</script>
+</body>
+</html>
