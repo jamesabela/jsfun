@@ -254,8 +254,8 @@
       const serializedData = JSON.stringify(allNodes);
       const encodedData = btoa(encodeURIComponent(serializedData));
 
-      // Construct the URL to MindMap.html with encoded data in hash
-      const mindmapURL = 'MindMap.html#' + encodedData;
+      // Construct the URL to mindmapplain.html with encoded data in hash
+      const mindmapURL = 'mindmapplain.html#' + encodedData;
 
       // Open the mindmap in a new browser window
       window.open(mindmapURL, '_blank');
