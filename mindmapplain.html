@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,67 +8,86 @@
   <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/libs/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-   <!-- PptxGenJS -->
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
+    :root {
+      --font-family: 'Inter', sans-serif;
+      --bg-gradient: #ffffff;
+      --glass-bg: rgba(255, 255, 255, 0.9);
+      --glass-border: rgba(0, 0, 0, 0.1);
+      --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --node-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --node-hover-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      --primary-color: #4a90e2;
+      --text-color: #333;
+      --toolbar-bg: rgba(255, 255, 255, 0.95);
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: var(--font-family);
       margin: 0;
       padding: 0;
       overflow: hidden;
+      background: var(--bg-gradient);
+      color: var(--text-color);
     }
 
     #mindmap-container {
       position: relative;
       width: 100vw;
       height: 100vh;
-      background-color: #f0f0f0;
+      /* Background is now on body for the full effect */
     }
 
     .node {
       position: absolute;
-      padding: 8px 12px;
-      background-color: #FFFFFF;
-      border-radius: 5px;
+      padding: 12px 20px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
       cursor: pointer;
       user-select: none;
-      transition: background-color 0.3s, box-shadow 0.3s;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 16px;
-      font-weight: bold;
-      border: 1px solid #999;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+      font-weight: 500;
+      box-shadow: var(--node-shadow);
       white-space: nowrap;
-      min-width: 100px;
-      min-height: 60px;
+      min-width: 120px;
+      min-height: 50px;
       box-sizing: border-box;
+      color: #333;
     }
 
     .node:hover {
-      background-color: #FFA500;
-      box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+      box-shadow: var(--node-hover-shadow);
+      background: rgba(255, 255, 255, 0.85);
     }
 
     .node:focus {
       outline: none;
-      box-shadow: 0 0 0 2px #0000FF, 2px 2px 10px rgba(0, 0, 0, 0.2);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3), var(--node-hover-shadow);
     }
 
     .central-node {
-      font-size: 24px; /* Increased font size for central node */
-      background-color: #FFA500;
-      color: #000000; /* Default text color */
-    }
-
-    .color-swatch {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      margin: 0 4px;
-      cursor: pointer;
-      display: inline-block;
-      border: 1px solid #333;
+      font-size: 24px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      padding: 20px 30px;
+      min-width: 160px;
+      min-height: 80px;
     }
 
     svg {
@@ -80,630 +100,1244 @@
       height: 100%;
     }
 
-    #button-container {
+    /* SVG Line Styling */
+    line {
+      stroke: rgba(0, 0, 0, 0.4);
+      stroke-width: 2px;
+      transition: stroke 0.3s;
+    }
+
+    /* Toolbar Styling */
+    #toolbar-dock {
       position: absolute;
       top: 10px;
-      left: 10px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 10;
-    }
-
-    #main-buttons {
-      display: flex;
+      flex-direction: row;
+      gap: 4px;
+      z-index: 100;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      width: auto;
+      max-width: 98%;
+      flex-wrap: nowrap;
+      justify-content: center;
+      pointer-events: none;
+      background: var(--toolbar-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 4px 8px;
+      border-radius: 8px;
+      box-shadow: var(--glass-shadow);
+      border: 1px solid var(--glass-border);
     }
 
-    #bottom-buttons {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+    .toolbar-panel {
+      pointer-events: auto;
+      display: contents;
+      /* Remove panel visual, just use as logical group */
     }
 
-    /* Common styling for all main buttons */
+    .divider {
+      width: 1px;
+      height: 16px;
+      background: rgba(0, 0, 0, 0.1);
+      margin: 0 4px;
+    }
+
+    /* Buttons */
+    .icon-btn,
     .main-button {
-      padding: 8px 16px;
-      background-color: #2196F3;
-      color: white;
-      border: none;
-      border-radius: 5px;
+      padding: 4px 8px;
+      background: transparent;
+      color: var(--text-color);
+      border: 1px solid transparent;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--font-family);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
+    .icon-btn:hover,
     .main-button:hover {
-      background-color: #1976D2;
+      background: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.1);
     }
 
-    /* Specific style for Delete Node button */
+    .icon-btn:active,
+    .main-button:active {
+      transform: translateY(0);
+    }
+
     .delete-button {
-      background-color: #FF5722;
+      color: #e74c3c;
+      background: rgba(231, 76, 60, 0.1);
     }
 
     .delete-button:hover {
-      background-color: #E64A19;
-    }
-    /* Styles for the upload button to make it red */
-    #upload-json-btn {
-      padding: 8px 16px;
-      background-color: #FF5722; /* Red background color */
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s;
+      background: rgba(231, 76, 60, 0.2);
+      color: #c0392b;
     }
 
-    #upload-json-btn:hover {
-      background-color: #E64A19; /* Darker red on hover */
+    .primary-btn {
+      background: var(--primary-color);
+      color: white;
     }
+
+    .primary-btn:hover {
+      background: #357abd;
+      color: white;
+    }
+
+    /* Color Swatches */
+    .color-swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .color-swatch:hover {
+      transform: scale(1.2);
+    }
+
+    /* Emoji Buttons */
+    .emoji-btn {
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .emoji-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+      transform: scale(1.1);
+    }
+
     #upload-json {
       display: none;
     }
 
+    /* Hide for print/export */
     @media print {
-      #button-container {
+      #toolbar-dock {
         display: none;
       }
+
+      body {
+        background: white;
+      }
+
+      .node {
+        box-shadow: none;
+        border: 1px solid #ccc;
+      }
+    }
+
+    /* Helper class for html2canvas export */
+    body.exporting {
+      background: white !important;
+    }
+
+    body.exporting .node {
+      backdrop-filter: none !important;
+      background: rgba(255, 255, 255, 1) !important;
+      box-shadow: none !important;
+      border: 1px solid #999 !important;
+    }
+
+    body.exporting #toolbar-dock {
+      display: none !important;
+    }
+
+    /* Attribution */
+    .attribution {
+      font-size: 10px;
+      color: rgba(0, 0, 0, 0.5);
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+
+    .attribution a {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Modal Styling */
+    #modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    #modal-box {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      font-family: var(--font-family);
+    }
+
+    #modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-color);
+    }
+
+    #modal-message {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .modal-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .btn-cancel:hover {
+      background: #e5e7eb;
+    }
+
+    .btn-new-window {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .btn-new-window:hover {
+      background: #bae6fd;
+    }
+
+    .btn-overwrite {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .btn-overwrite:hover {
+      background: #fecaca;
+    }
+
+    /* URL Status Badge */
+    #url-status {
+      pointer-events: auto;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+      user-select: none;
+    }
+
+    #url-status.status-good {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    #url-status.status-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    #url-status.status-error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    #url-status:hover {
+      opacity: 0.8;
+    }
+
+    #url-status .status-icon {
+      font-size: 10px;
     }
   </style>
 </head>
+
 <body>
-<div id="mindmap-container">
-  <svg id="svg-connections"></svg>
-  <!-- Central Node with Placeholder -->
-  <div id="central-node" class="node central-node" contenteditable="true" tabindex="0" data-placeholder="Central topic"></div>
-  <div id="button-container">
-    <!-- First Row: Main Buttons -->
-    <div id="main-buttons">
-      <a href="https://jamesabela.github.io/jsfun/mindmapplain.html" target="_blank">
-        <button class="main-button">New Mindmap</button>
-      </a>
-      <button id="copy-text-btn" class="main-button">Copy Text</button>
-      <button id="export-png-btn" class="main-button">Export PNG</button>
-      <button id="export-pptx-btn" class="main-button">Export PPTX</button>
-      <button id="download-json-btn" class="main-button">Download JSON</button>
-      <button id="upload-json-btn" onclick="document.getElementById('upload-json').click()">Upload JSON</button>
-      <input type="file" id="upload-json" style="display: none;" />
-      <button id="delete-node-btn" class="main-button delete-button">Delete Node</button>
-      <button id="undo-btn" class="main-button">Undo</button>
-      <button id="redo-btn" class="main-button">Redo</button>
-      <button id="add-node-btn" class="main-button">+Node (Enter)</button>
-      <button id="add-child-btn" class="main-button">+ Child Node (Tab)</button>
-    </div>
-    <!-- Second Row: Color Palette and Emoji Buttons -->
-    <div id="bottom-buttons">
-      <div id="color-palette">
-        <div class="color-swatch" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
-        <div class="color-swatch" style="background-color: #FFD700;" data-color="#FFD700"></div>
-        <div class="color-swatch" style="background-color: #FF4500;" data-color="#FF4500"></div>
-        <div class="color-swatch" style="background-color: #32CD32;" data-color="#32CD32"></div>
-        <div class="color-swatch" style="background-color: #1E90FF;" data-color="#1E90FF"></div>
-        <div class="color-swatch" style="background-color: #BA55D3;" data-color="#BA55D3"></div>
+  <div id="mindmap-container">
+    <svg id="svg-connections"></svg>
+    <!-- Central Node with Placeholder -->
+    <div id="central-node" class="node central-node" contenteditable="true" tabindex="0"
+      data-placeholder="Central topic"></div>
+
+    <div id="toolbar-dock">
+      <!-- Main Actions -->
+      <div class="toolbar-panel" id="main-actions">
+        <button id="add-node-btn" class="main-button primary-btn" title="Add Sibling (Enter)">+ Node</button>
+        <button id="add-child-btn" class="main-button primary-btn" title="Add Child (Tab)">+ Child</button>
+        <button id="delete-node-btn" class="main-button delete-button" title="Delete Selected">Del</button>
+        <div class="divider"></div>
+        <button id="undo-btn" class="icon-btn" title="Undo">↩</button>
+        <button id="redo-btn" class="icon-btn" title="Redo">↪</button>
+        <button id="copy-text-btn" class="icon-btn" title="Copy Text">📋</button>
+        <div class="divider"></div>
+        <button id="auto-layout-btn" class="icon-btn" title="Auto-layout nodes">🔄</button>
+        <button id="help-btn" class="icon-btn" title="Help / Tutorial">📖</button>
       </div>
-      <!-- Emoji Buttons -->
-      <div id="emoji-buttons">
-        <button class="emoji-btn" data-emoji="💡">💡</button>
-        <button class="emoji-btn" data-emoji="🧠">🧠</button>
-        <button class="emoji-btn" data-emoji="📚">📚</button>
-        <button class="emoji-btn" data-emoji="🎯">🎯</button>
-        <button class="emoji-btn" data-emoji="✅">✅</button>
-        <button class="emoji-btn" data-emoji="❌">❌</button>
-        <button class="emoji-btn" data-emoji="🛠️">🛠️</button>
-        <button class="emoji-btn" data-emoji="🚦">🚦</button>
-        <button class="emoji-btn" data-emoji="🎬">🎬</button>
+
+      <!-- Styling & Emojis -->
+      <div class="toolbar-panel" id="style-panel">
+        <div class="divider"></div>
+        <div id="color-palette" style="display: flex; gap: 4px; align-items: center;">
+          <div class="color-swatch" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
+          <div class="color-swatch" style="background-color: #FFD700;" data-color="#FFD700"></div>
+          <div class="color-swatch" style="background-color: #FF4500;" data-color="#FF4500"></div>
+          <div class="color-swatch" style="background-color: #32CD32;" data-color="#32CD32"></div>
+          <div class="color-swatch" style="background-color: #1E90FF;" data-color="#1E90FF"></div>
+          <div class="color-swatch" style="background-color: #BA55D3;" data-color="#BA55D3"></div>
+        </div>
+        <div class="divider"></div>
+        <div id="emoji-buttons" style="display: flex; gap: 1px;">
+          <button class="emoji-btn" data-emoji="💡">💡</button>
+          <button class="emoji-btn" data-emoji="🧠">🧠</button>
+          <button class="emoji-btn" data-emoji="📚">📚</button>
+          <button class="emoji-btn" data-emoji="🎯">🎯</button>
+          <button class="emoji-btn" data-emoji="✅">✅</button>
+          <button class="emoji-btn" data-emoji="❌">❌</button>
+          <button class="emoji-btn" data-emoji="🛠️">🛠️</button>
+          <button class="emoji-btn" data-emoji="🚦">🚦</button>
+          <button class="emoji-btn" data-emoji="🎬">🎬</button>
+        </div>
       </div>
-      <p xmlns:cc="http://creativecommons.org/ns#" ><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+
+      <!-- File Operations -->
+      <div class="toolbar-panel" id="file-ops">
+        <div class="divider"></div>
+        <a href="https://jamesabela.github.io/jsfun/mindmapplain.html" target="_blank" style="text-decoration: none;">
+          <button class="main-button" title="New Mindmap">New</button>
+        </a>
+        <button id="upload-json-btn" class="main-button" onclick="document.getElementById('upload-json').click()"
+          title="Open JSON">📂</button>
+        <input type="file" id="upload-json" />
+        <button id="download-json-btn" class="main-button" title="Save JSON">💾</button>
+        <button id="export-png-btn" class="main-button" title="Export PNG">🖼️</button>
+        <button id="export-pptx-btn" class="main-button" title="Export PPTX">📊</button>
+
+        <div class="attribution" style="margin-left: 8px;">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank"
+            rel="license noopener noreferrer" title="CC BY-NC-SA 4.0">
+            <img style="height:18px!important;"
+              src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="">
+            <img style="height:18px!important;"
+              src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
+            <img style="height:18px!important;"
+              src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="">
+            <img style="height:18px!important;"
+              src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+          </a>
+        </div>
+
+        <div id="url-status" class="status-good" title="Click to toggle URL storage">
+          <span class="status-icon">●</span>
+          <span id="url-char-count">0</span>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<script>
-  const container = document.getElementById('mindmap-container');
-  const svg = document.getElementById('svg-connections');
-  const centralNode = document.getElementById('central-node');
-  const documentTitle = document.getElementById('document-title');
-  const copyTextBtn = document.getElementById('copy-text-btn');
-  const deleteNodeBtn = document.getElementById('delete-node-btn');
-  const undoBtn = document.getElementById('undo-btn');
-  const redoBtn = document.getElementById('redo-btn');
-  const addNodeBtn = document.getElementById('add-node-btn');
-  const addChildBtn = document.getElementById('add-child-btn');
-  const exportPngBtn = document.getElementById('export-png-btn');
-  const buttonContainer = document.getElementById('button-container');
-  const colorPalette = document.getElementById('color-palette');
-  const emojiButtons = document.querySelectorAll('.emoji-btn');
+  </div>
 
-  const colors = ['#FFFFFF', '#FFD700', '#FF4500', '#32CD32', '#1E90FF', '#BA55D3'];
+  <!-- Warning Modal -->
+  <div id="modal-overlay">
+    <div id="modal-box">
+      <div id="modal-title">Open Mind Map</div>
+      <div id="modal-message">Opening a file will overwrite your current mind map. What would you like to do?</div>
+      <div class="modal-buttons">
+        <button class="modal-btn btn-cancel" id="modal-cancel">Cancel</button>
+        <button class="modal-btn btn-new-window" id="modal-new-window">New Window</button>
+        <button class="modal-btn btn-overwrite" id="modal-overwrite">Overwrite</button>
+      </div>
+    </div>
+  </div>
 
-  let nodesData = [];
-  let undoStack = [];
-  let redoStack = [];
-  let selectedNodeId = null;
-  let siblingAngle = 0; // Angle to track placement for sibling nodes
-  let childAngle = 300; // Initial angle for child nodes, set to 5 o'clock (300 degrees)
+  <script>
+    const container = document.getElementById('mindmap-container');
+    const svg = document.getElementById('svg-connections');
+    const centralNode = document.getElementById('central-node');
+    const documentTitle = document.getElementById('document-title');
+    const copyTextBtn = document.getElementById('copy-text-btn');
+    const deleteNodeBtn = document.getElementById('delete-node-btn');
+    const undoBtn = document.getElementById('undo-btn');
+    const redoBtn = document.getElementById('redo-btn');
+    const addNodeBtn = document.getElementById('add-node-btn');
+    const addChildBtn = document.getElementById('add-child-btn');
+    const exportPngBtn = document.getElementById('export-png-btn');
+    const buttonContainer = document.getElementById('toolbar-dock');
+    const colorPalette = document.getElementById('color-palette');
+    const emojiButtons = document.querySelectorAll('.emoji-btn');
 
-  function generateId() {
-    return 'node-' + Math.random().toString(36).substr(2, 9);
-  }
+    const colors = ['#FFFFFF', '#FFD700', '#FF4500', '#32CD32', '#1E90FF', '#BA55D3'];
 
-  // Initialize central node with fixed ID and empty text
-  const centralNodeId = 'central-node';
-  nodesData.push({
-    id: centralNodeId,
-    parentId: null,
-    x: 0,
-    y: 0,
-    color: colors[0],
-    text: '' // Empty text for central node to show placeholder
-  });
+    let nodesData = [];
+    let undoStack = [];
+    let redoStack = [];
+    let selectedNodeId = null;
+    let siblingAngle = 0; // Angle to track placement for sibling nodes
+    let parentChildAngles = {}; // Track next angle for each parent's children
+    let urlStorageEnabled = true; // Toggle for URL storage
 
-  function updateDocumentTitle() {
-    const centralNodeData = nodesData.find(n => n.id === centralNodeId);
-    if (centralNodeData) {
-      documentTitle.textContent = centralNodeData.text || 'Mind Map';
+    function generateId() {
+      return 'node-' + Math.random().toString(36).substr(2, 9);
     }
-  }
 
-  function renderMindMap() {
-    const existingNodes = container.querySelectorAll('.node');
-    existingNodes.forEach(node => {
-      if (node.id !== 'central-node') { // Preserve the central node
-        container.removeChild(node);
-      }
+    // Initialize central node with fixed ID and empty text
+    const centralNodeId = 'central-node';
+    nodesData.push({
+      id: centralNodeId,
+      parentId: null,
+      x: 0,
+      y: 0,
+      color: colors[0],
+      text: '' // Empty text for central node to show placeholder
     });
 
-    nodesData.forEach(node => {
-      if (node.id === centralNodeId) {
-        centralNode.style.left = `${node.x}px`;
-        centralNode.style.top = `${node.y}px`;
-        centralNode.style.backgroundColor = node.color;
-        centralNode.innerText = node.text;
+    function updateDocumentTitle() {
+      const centralNodeData = nodesData.find(n => n.id === centralNodeId);
+      if (centralNodeData) {
+        documentTitle.textContent = centralNodeData.text || 'Mind Map';
+      }
+    }
 
-        // Attach event listeners if not already attached
-        if (!centralNode.dataset.listenersAttached) {
-          addEventListenersToNode(centralNode, node.id);
-          centralNode.dataset.listenersAttached = 'true';
+    function renderMindMap() {
+      const existingNodes = container.querySelectorAll('.node');
+      existingNodes.forEach(node => {
+        if (node.id !== 'central-node') { // Preserve the central node
+          container.removeChild(node);
         }
-        return;
-      }
+      });
 
-      const nodeDiv = document.createElement('div');
-      nodeDiv.className = 'node';
-      nodeDiv.id = node.id;
-      nodeDiv.contentEditable = true;
-      nodeDiv.tabIndex = 0;
-      nodeDiv.style.left = `${node.x}px`;
-      nodeDiv.style.top = `${node.y}px`;
-      nodeDiv.style.backgroundColor = node.color;
-      nodeDiv.innerText = node.text;
+      nodesData.forEach(node => {
+        if (node.id === centralNodeId) {
+          centralNode.style.left = `${node.x}px`;
+          centralNode.style.top = `${node.y}px`;
+          centralNode.style.backgroundColor = node.color;
+          centralNode.innerText = node.text;
 
-      addEventListenersToNode(nodeDiv, node.id);
-      container.appendChild(nodeDiv);
-    });
+          // Attach event listeners if not already attached
+          if (!centralNode.dataset.listenersAttached) {
+            addEventListenersToNode(centralNode, node.id);
+            centralNode.dataset.listenersAttached = 'true';
+          }
+          return;
+        }
 
-    drawConnections();
-    highlightSelectedNode();
-    updateDocumentTitle();
-    updateURL();
-  }
+        const nodeDiv = document.createElement('div');
+        nodeDiv.className = 'node';
+        nodeDiv.id = node.id;
+        nodeDiv.contentEditable = true;
+        nodeDiv.tabIndex = 0;
+        nodeDiv.style.left = `${node.x}px`;
+        nodeDiv.style.top = `${node.y}px`;
+        nodeDiv.style.backgroundColor = node.color;
+        nodeDiv.innerText = node.text;
 
-  function addEventListenersToNode(nodeDiv, nodeId) {
-    nodeDiv.addEventListener('click', (e) => {
-      e.stopPropagation(); // Prevent triggering container's click
-      setSelectedNode(nodeId);
-    });
+        addEventListenersToNode(nodeDiv, node.id);
+        container.appendChild(nodeDiv);
+      });
 
-    nodeDiv.addEventListener('keydown', (e) => handleKeyDown(e, nodeId));
-
-    nodeDiv.addEventListener('mousedown', startDrag);
-
-    nodeDiv.addEventListener('input', () => updateNodeText(nodeId));
-  }
-
-  function handleKeyDown(event, nodeId) {
-    const isCentralNode = nodeId === centralNodeId;
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      if (isCentralNode) {
-        addNode(nodeId);
-      } else {
-        addSiblingNode(nodeId);
-      }
-    } else if (event.key === 'Tab') {
-      event.preventDefault();
-      addNode(nodeId);
-    }
-  }
-
-  function setSelectedNode(nodeId) {
-    selectedNodeId = nodeId;
-    highlightSelectedNode();
-  }
-
-  function highlightSelectedNode() {
-    const nodes = container.querySelectorAll('.node');
-    nodes.forEach(node => {
-      if (node.id === selectedNodeId) {
-        node.style.border = '2px solid #0000FF';
-      } else {
-        node.style.border = '1px solid #999';
-      }
-    });
-  }
-
-  function addNode(parentId) {
-    if (!parentId) {
-      alert('No parent node selected.');
-      return;
-    }
-    const newId = generateId();
-    const nodeDiv = document.getElementById(parentId);
-    const radius = 150;
-    const parentX = nodeDiv.offsetLeft;
-    const parentY = nodeDiv.offsetTop;
-    let newX = parentX + radius * Math.cos(childAngle * Math.PI / 180);
-    let newY = parentY + radius * Math.sin(childAngle * Math.PI / 180);
-
-    // Constrain the Y position of the new child node
-    const containerRect = container.getBoundingClientRect();
-    newY = Math.max(100, Math.min(newY, containerRect.height - 100));  // Prevent creation too high or too low
-
-    const newNode = {
-      id: newId,
-      parentId: parentId,
-      x: newX,
-      y: newY,
-      color: colors[0],
-      text: ''
-    };
-    pushToUndo();
-    nodesData.push(newNode);
-    renderMindMap();
-    focusNode(newId);
-  }
-
-
-  function addSiblingNode(currentNodeId) {
-    const currentNode = nodesData.find(n => n.id === currentNodeId);
-    if (!currentNode) return;
-
-    const siblingRadius = 200;
-    let siblingX = currentNode.x + siblingRadius * Math.cos(siblingAngle * Math.PI / 180);
-    let siblingY = currentNode.y + siblingRadius * Math.sin(siblingAngle * Math.PI / 180);
-    siblingAngle += 45;
-
-    // Constrain the Y position of the new sibling node
-    const containerRect = container.getBoundingClientRect();
-    siblingY = Math.max(100, Math.min(siblingY, containerRect.height - 100));  // Prevent creation too high or too low
-
-    const newId = generateId();
-    const newNode = {
-      id: newId,
-      parentId: currentNode.parentId,
-      x: siblingX,
-      y: siblingY,
-      color: colors[0],
-      text: ''
-    };
-    pushToUndo();
-    nodesData.push(newNode);
-    renderMindMap();
-    focusNode(newId);
-  }
-
-
-  function deleteSelectedNode() {
-    if (!selectedNodeId) {
-      alert('No node selected for deletion.');
-      return;
-    }
-
-    if (selectedNodeId === centralNodeId) {
-      alert('Cannot delete the central node.');
-      return;
-    }
-
-    pushToUndo();
-    function deleteRecursively(id) {
-      const children = nodesData.filter(n => n.parentId === id);
-      children.forEach(child => deleteRecursively(child.id));
-      nodesData = nodesData.filter(n => n.id !== id);
-    }
-    deleteRecursively(selectedNodeId);
-    selectedNodeId = null;
-    renderMindMap();
-  }
-
-  function changeNodeColor(color) {
-    if (!selectedNodeId) return;
-    const node = nodesData.find(n => n.id === selectedNodeId);
-    if (node) {
-      pushToUndo();
-      node.color = color;
-      renderMindMap();
-    }
-  }
-
-  function updateNodeText(nodeId) {
-    const node = nodesData.find(n => n.id === nodeId);
-    const nodeDiv = document.getElementById(nodeId);
-    if (node && nodeDiv) {
-      node.text = nodeDiv.innerText;
+      drawConnections();
+      highlightSelectedNode();
       updateDocumentTitle();
       updateURL();
     }
-  }
 
-  function pushToUndo() {
-    undoStack.push(JSON.parse(JSON.stringify(nodesData)));
-    redoStack = [];
-  }
+    function addEventListenersToNode(nodeDiv, nodeId) {
+      nodeDiv.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent triggering container's click
+        setSelectedNode(nodeId);
+      });
 
-  function undo() {
-    if (undoStack.length === 0) return;
-    redoStack.push(JSON.parse(JSON.stringify(nodesData)));
-    nodesData = undoStack.pop();
-    renderMindMap();
-  }
+      nodeDiv.addEventListener('keydown', (e) => handleKeyDown(e, nodeId));
 
-  function redo() {
-    if (redoStack.length === 0) return;
-    undoStack.push(JSON.parse(JSON.stringify(nodesData)));
-    nodesData = redoStack.pop();
-    renderMindMap();
-  }
+      nodeDiv.addEventListener('mousedown', startDrag);
 
-  let isDraggingFlag = false;
-  let currentDraggedNodeId = null;
-  let dragOffsetX = 0;
-  let dragOffsetY = 0;
-
-  function startDrag(event) {
-    if (event.target.classList.contains('node')) {
-      isDraggingFlag = true;
-      currentDraggedNodeId = event.target.id;
-      const nodeRect = event.target.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      dragOffsetX = event.clientX - nodeRect.left;
-      dragOffsetY = event.clientY - nodeRect.top;
-      document.addEventListener('mousemove', dragNode);
-      document.addEventListener('mouseup', stopDrag);
+      nodeDiv.addEventListener('input', () => updateNodeText(nodeId));
     }
-  }
 
-  function dragNode(event) {
-    if (!isDraggingFlag || !currentDraggedNodeId) return;
-    const containerRect = container.getBoundingClientRect();
-    let newX = event.clientX - containerRect.left - dragOffsetX;
-    let newY = event.clientY - containerRect.top - dragOffsetY;
+    function handleKeyDown(event, nodeId) {
+      const isCentralNode = nodeId === centralNodeId;
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        if (isCentralNode) {
+          addNode(nodeId);
+        } else {
+          addSiblingNode(nodeId);
+        }
+      } else if (event.key === 'Tab') {
+        event.preventDefault();
+        addNode(nodeId);
+      }
+    }
 
-    // Constrain X and Y to the bounds of the container
-    newX = Math.max(0, Math.min(newX, containerRect.width - 100));  // Ensure node stays within the width of the container
-    newY = Math.max(100, Math.min(newY, containerRect.height - 100));  // Ensure node stays within the height of the container, but not too high (e.g., 50px from the top)
+    function setSelectedNode(nodeId) {
+      selectedNodeId = nodeId;
+      highlightSelectedNode();
+    }
 
-    const node = nodesData.find(n => n.id === currentDraggedNodeId);
-    if (node) {
-      node.x = newX;
-      node.y = newY;
+    function highlightSelectedNode() {
+      const nodes = container.querySelectorAll('.node');
+      nodes.forEach(node => {
+        if (node.id === selectedNodeId) {
+          node.style.border = '2px solid #0000FF';
+        } else {
+          node.style.border = '1px solid #999';
+        }
+      });
+    }
+
+    function addNode(parentId) {
+      if (!parentId) {
+        alert('No parent node selected.');
+        return;
+      }
+      const newId = generateId();
+      const nodeDiv = document.getElementById(parentId);
+
+      // Use larger radius - 280px for central node children, 200px for others
+      const radius = parentId === centralNodeId ? 280 : 200;
+
+      const parentX = nodeDiv.offsetLeft;
+      const parentY = nodeDiv.offsetTop;
+
+      // Initialize angle tracking for this parent if not exists
+      if (!parentChildAngles[parentId]) {
+        parentChildAngles[parentId] = 0; // Start at 0 degrees (3 o'clock)
+      }
+
+      // Get existing children of this parent to find the best angle
+      const existingChildren = nodesData.filter(n => n.parentId === parentId);
+
+      // Calculate angle - distribute evenly around the parent
+      // Start at 0° (right) and increment by 45° for each child
+      let angle = parentChildAngles[parentId];
+      let attempts = 0;
+      const maxAttempts = 8; // Try up to 8 positions (every 45°)
+
+      // Find a non-overlapping position
+      while (attempts < maxAttempts) {
+        let newX = parentX + radius * Math.cos(angle * Math.PI / 180);
+        let newY = parentY + radius * Math.sin(angle * Math.PI / 180);
+
+        // Constrain the Y position
+        const containerRect = container.getBoundingClientRect();
+        newY = Math.max(100, Math.min(newY, containerRect.height - 100));
+
+        // Check if this position overlaps with existing children
+        const overlaps = existingChildren.some(child => {
+          const dx = child.x - newX;
+          const dy = child.y - newY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          return distance < 120; // Minimum distance between nodes (increased from 80)
+        });
+
+        if (!overlaps) {
+          // Found a good position
+          const newNode = {
+            id: newId,
+            parentId: parentId,
+            x: newX,
+            y: newY,
+            color: colors[0],
+            text: ''
+          };
+
+          // Update angle for next child
+          parentChildAngles[parentId] = (angle + 45) % 360;
+
+          pushToUndo();
+          nodesData.push(newNode);
+          renderMindMap();
+          focusNode(newId);
+          return;
+        }
+
+        // Try next angle
+        angle = (angle + 45) % 360;
+        attempts++;
+      }
+
+      // If all positions tried, just place it at the current angle anyway
+      let newX = parentX + radius * Math.cos(angle * Math.PI / 180);
+      let newY = parentY + radius * Math.sin(angle * Math.PI / 180);
+      const containerRect = container.getBoundingClientRect();
+      newY = Math.max(100, Math.min(newY, containerRect.height - 100));
+
+      const newNode = {
+        id: newId,
+        parentId: parentId,
+        x: newX,
+        y: newY,
+        color: colors[0],
+        text: ''
+      };
+
+      parentChildAngles[parentId] = (angle + 45) % 360;
+
+      pushToUndo();
+      nodesData.push(newNode);
+      renderMindMap();
+      focusNode(newId);
+    }
+
+
+    function addSiblingNode(currentNodeId) {
+      const currentNode = nodesData.find(n => n.id === currentNodeId);
+      if (!currentNode) return;
+
+      const siblingRadius = 200;
+      let siblingX = currentNode.x + siblingRadius * Math.cos(siblingAngle * Math.PI / 180);
+      let siblingY = currentNode.y + siblingRadius * Math.sin(siblingAngle * Math.PI / 180);
+      siblingAngle += 45;
+
+      // Constrain the Y position of the new sibling node
+      const containerRect = container.getBoundingClientRect();
+      siblingY = Math.max(100, Math.min(siblingY, containerRect.height - 100));  // Prevent creation too high or too low
+
+      const newId = generateId();
+      const newNode = {
+        id: newId,
+        parentId: currentNode.parentId,
+        x: siblingX,
+        y: siblingY,
+        color: colors[0],
+        text: ''
+      };
+      pushToUndo();
+      nodesData.push(newNode);
+      renderMindMap();
+      focusNode(newId);
+    }
+
+
+    function deleteSelectedNode() {
+      if (!selectedNodeId) {
+        alert('No node selected for deletion.');
+        return;
+      }
+
+      if (selectedNodeId === centralNodeId) {
+        alert('Cannot delete the central node.');
+        return;
+      }
+
+      pushToUndo();
+      function deleteRecursively(id) {
+        const children = nodesData.filter(n => n.parentId === id);
+        children.forEach(child => deleteRecursively(child.id));
+        nodesData = nodesData.filter(n => n.id !== id);
+      }
+      deleteRecursively(selectedNodeId);
+      selectedNodeId = null;
       renderMindMap();
     }
-  }
 
-
-  function stopDrag() {
-    isDraggingFlag = false;
-    currentDraggedNodeId = null;
-    document.removeEventListener('mousemove', dragNode);
-    document.removeEventListener('mouseup', stopDrag);
-    updateURL();
-  }
-
-  function focusNode(nodeId) {
-    const nodeDiv = document.getElementById(nodeId);
-    if (nodeDiv) {
-      nodeDiv.focus();
-      setSelectedNode(nodeId);
+    function changeNodeColor(color) {
+      if (!selectedNodeId) return;
+      const node = nodesData.find(n => n.id === selectedNodeId);
+      if (node) {
+        pushToUndo();
+        node.color = color;
+        renderMindMap();
+      }
     }
-  }
 
-  function drawConnections() {
-    svg.innerHTML = '';
+    function updateNodeText(nodeId) {
+      const node = nodesData.find(n => n.id === nodeId);
+      const nodeDiv = document.getElementById(nodeId);
+      if (node && nodeDiv) {
+        node.text = nodeDiv.innerText;
+        updateDocumentTitle();
+        updateURL();
+      }
+    }
 
-    nodesData.forEach(node => {
-      if (node.parentId) {
-        const parentNode = nodesData.find(n => n.id === node.parentId);
-        if (parentNode) {
-          drawLine(parentNode, node);
+    function pushToUndo() {
+      undoStack.push(JSON.parse(JSON.stringify(nodesData)));
+      redoStack = [];
+    }
+
+    function undo() {
+      if (undoStack.length === 0) return;
+      redoStack.push(JSON.parse(JSON.stringify(nodesData)));
+      nodesData = undoStack.pop();
+      renderMindMap();
+    }
+
+    function redo() {
+      if (redoStack.length === 0) return;
+      undoStack.push(JSON.parse(JSON.stringify(nodesData)));
+      nodesData = redoStack.pop();
+      renderMindMap();
+    }
+
+    let isDraggingFlag = false;
+    let currentDraggedNodeId = null;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    function startDrag(event) {
+      if (event.target.classList.contains('node')) {
+        isDraggingFlag = true;
+        currentDraggedNodeId = event.target.id;
+        const nodeRect = event.target.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        dragOffsetX = event.clientX - nodeRect.left;
+        dragOffsetY = event.clientY - nodeRect.top;
+        document.addEventListener('mousemove', dragNode);
+        document.addEventListener('mouseup', stopDrag);
+      }
+    }
+
+    function dragNode(event) {
+      if (!isDraggingFlag || !currentDraggedNodeId) return;
+      const containerRect = container.getBoundingClientRect();
+      let newX = event.clientX - containerRect.left - dragOffsetX;
+      let newY = event.clientY - containerRect.top - dragOffsetY;
+
+      // Constrain X and Y to the bounds of the container
+      newX = Math.max(0, Math.min(newX, containerRect.width - 100));  // Ensure node stays within the width of the container
+      newY = Math.max(100, Math.min(newY, containerRect.height - 100));  // Ensure node stays within the height of the container, but not too high (e.g., 50px from the top)
+
+      const node = nodesData.find(n => n.id === currentDraggedNodeId);
+      if (node) {
+        node.x = newX;
+        node.y = newY;
+        renderMindMap();
+      }
+    }
+
+
+    function stopDrag() {
+      isDraggingFlag = false;
+      currentDraggedNodeId = null;
+      document.removeEventListener('mousemove', dragNode);
+      document.removeEventListener('mouseup', stopDrag);
+      updateURL();
+    }
+
+    function focusNode(nodeId) {
+      const nodeDiv = document.getElementById(nodeId);
+      if (nodeDiv) {
+        nodeDiv.focus();
+        setSelectedNode(nodeId);
+      }
+    }
+
+    function drawConnections() {
+      svg.innerHTML = '';
+
+      nodesData.forEach(node => {
+        if (node.parentId) {
+          const parentNode = nodesData.find(n => n.id === node.parentId);
+          if (parentNode) {
+            drawLine(parentNode, node);
+          }
         }
+      });
+    }
+
+    function drawLine(parent, child) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', parent.x + 50); // Adjust based on node width
+      line.setAttribute('y1', parent.y + 30); // Adjust based on node height
+      line.setAttribute('x2', child.x + 50); // Adjust based on node width
+      line.setAttribute('y2', child.y + 30); // Adjust based on node height
+      line.setAttribute('stroke', 'black');
+      line.setAttribute('stroke-width', '2');
+      svg.appendChild(line);
+    }
+
+    function updateURL() {
+      if (!urlStorageEnabled) {
+        updateURLStatus(0, false);
+        return;
+      }
+
+      const serializedData = JSON.stringify(nodesData);
+      const encodedData = btoa(encodeURIComponent(serializedData));
+      const fullURL = '#' + encodedData;
+
+      window.history.replaceState(null, null, fullURL);
+      updateURLStatus(fullURL.length, true);
+    }
+
+    function updateURLStatus(charCount, enabled) {
+      const statusBadge = document.getElementById('url-status');
+      const charCountEl = document.getElementById('url-char-count');
+
+      if (!enabled) {
+        statusBadge.className = 'status-good';
+        statusBadge.title = 'URL storage disabled (click to enable)';
+        charCountEl.textContent = 'OFF';
+        return;
+      }
+
+      charCountEl.textContent = charCount;
+
+      // Color coding based on safe limits
+      if (charCount < 2000) {
+        statusBadge.className = 'status-good';
+        statusBadge.title = `URL: ${charCount} chars (Safe for all browsers)`;
+      } else if (charCount < 8000) {
+        statusBadge.className = 'status-warning';
+        statusBadge.title = `URL: ${charCount} chars (May have issues in some contexts)`;
+      } else {
+        statusBadge.className = 'status-error';
+        statusBadge.title = `URL: ${charCount} chars (Too long! Consider saving as JSON)`;
+      }
+    }
+
+    // Toggle URL storage
+    document.getElementById('url-status').addEventListener('click', () => {
+      urlStorageEnabled = !urlStorageEnabled;
+      if (urlStorageEnabled) {
+        updateURL(); // Re-enable and update
+      } else {
+        window.history.replaceState(null, null, window.location.pathname);
+        updateURLStatus(0, false);
       }
     });
-  }
 
-  function drawLine(parent, child) {
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', parent.x + 50); // Adjust based on node width
-    line.setAttribute('y1', parent.y + 30); // Adjust based on node height
-    line.setAttribute('x2', child.x + 50); // Adjust based on node width
-    line.setAttribute('y2', child.y + 30); // Adjust based on node height
-    line.setAttribute('stroke', 'black');
-    line.setAttribute('stroke-width', '2');
-    svg.appendChild(line);
-  }
-
-  function updateURL() {
-    const serializedData = JSON.stringify(nodesData);
-    const encodedData = btoa(encodeURIComponent(serializedData));
-    window.history.replaceState(null, null, '#' + encodedData);
-  }
-
-  function copyText() {
-    const nodeTexts = nodesData.map(node => `${'\t'.repeat(getNodeDepth(node.id))}${node.text}`);
-    const textToCopy = nodeTexts.join('\n');
-    navigator.clipboard.writeText(textToCopy)
-            .then(() => {
-              alert('Mind map text copied to clipboard!');
-            })
-            .catch(err => {
-              console.error('Failed to copy text: ', err);
-            });
-  }
-
-  function getNodeDepth(nodeId, depth = 0) {
-    const node = nodesData.find(n => n.id === nodeId);
-    if (node && node.parentId) {
-      return getNodeDepth(node.parentId, depth + 1);
+    function copyText() {
+      const nodeTexts = nodesData.map(node => `${'\t'.repeat(getNodeDepth(node.id))}${node.text}`);
+      const textToCopy = nodeTexts.join('\n');
+      navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+          alert('Mind map text copied to clipboard!');
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
     }
-    return depth;
-  }
 
-  window.addEventListener('load', () => {
-    loadFromURL();
-    centralNode.focus();
-    setSelectedNode(centralNodeId);
-  });
+    function getNodeDepth(nodeId, depth = 0) {
+      const node = nodesData.find(n => n.id === nodeId);
+      if (node && node.parentId) {
+        return getNodeDepth(node.parentId, depth + 1);
+      }
+      return depth;
+    }
 
-  window.addEventListener('beforeunload', () => {
-    updateURL();
-  });
+    window.addEventListener('load', () => {
+      loadFromURL();
+      // Re-query central node as it might have been re-created by renderMindMap
+      const currentCentralNode = document.getElementById(centralNodeId);
+      if (currentCentralNode) {
+        currentCentralNode.focus();
+      }
+      setSelectedNode(centralNodeId);
+    });
 
-  window.addEventListener('resize', () => {
-    renderMindMap();
-  });
+    window.addEventListener('beforeunload', () => {
+      updateURL();
+    });
 
-  // Event listeners for main buttons
-  copyTextBtn.addEventListener('click', copyText);
-  deleteNodeBtn.addEventListener('click', deleteSelectedNode);
-  undoBtn.addEventListener('click', undo);
-  redoBtn.addEventListener('click', redo);
-  addNodeBtn.addEventListener('click', () => addSiblingNode(selectedNodeId));
-  addChildBtn.addEventListener('click', () => addNode(selectedNodeId));
-  document.getElementById('download-json-btn').addEventListener('click', downloadJSON);
+    window.addEventListener('resize', () => {
+      renderMindMap();
+    });
 
-  exportPngBtn.addEventListener('click', function () {
-    buttonContainer.style.display = 'none';
+    // Event listeners for main buttons
+    copyTextBtn.addEventListener('click', copyText);
+    deleteNodeBtn.addEventListener('click', deleteSelectedNode);
+    undoBtn.addEventListener('click', undo);
+    redoBtn.addEventListener('click', redo);
+    addNodeBtn.addEventListener('click', () => addSiblingNode(selectedNodeId));
+    addChildBtn.addEventListener('click', () => addNode(selectedNodeId));
+    document.getElementById('download-json-btn').addEventListener('click', downloadJSON);
+    document.getElementById('auto-layout-btn').addEventListener('click', autoLayout);
+    document.getElementById('help-btn').addEventListener('click', () => loadTutorial());
 
-    html2canvas(container, { scale: 2 }).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      // Name the PNG file based on the central node text
+    function loadTutorial(force = false) {
+      // Encode tutorial data and open in new window with URL hash
+      const tutorialData = [{ "id": "central-node", "parentId": null, "x": 594, "y": 378, "color": "#FFFFFF", "text": "How to use" }, { "id": "node-itx7aweuu", "parentId": "central-node", "x": 606.984375, "y": 113.0859375, "color": "#32CD32", "text": "Use Tab to make child nodes" }, { "id": "node-v8wicqt4z", "parentId": "central-node", "x": 684, "y": 191.0859375, "color": "#32CD32", "text": "Use Enter to add siblings" }, { "id": "node-urm2xi9fn", "parentId": "central-node", "x": 230.984375, "y": 376.0859375, "color": "#FFD700", "text": "Press the icons for colours and emojis" }, { "id": "node-vfc52uqw1", "parentId": "node-urm2xi9fn", "x": 194, "y": 487.0859375, "color": "#FFFFFF", "text": "💡Idea" }, { "id": "node-4vwecjmln", "parentId": "node-urm2xi9fn", "x": 370, "y": 254.0961894323342, "color": "#FFFFFF", "text": "🧠Thinking" }, { "id": "node-b01ouqdyi", "parentId": "node-urm2xi9fn", "x": 325, "y": 493.0859375, "color": "#FFFFFF", "text": "🔬research" }, { "id": "node-rbvu3wcl7", "parentId": "node-urm2xi9fn", "x": 201.9965362548828, "y": 254.0885467529297, "color": "#FFFFFF", "text": "🎯Target" }, { "id": "node-nw6o6pwa8", "parentId": "node-urm2xi9fn", "x": 31, "y": 401.0859375, "color": "#FFFFFF", "text": "✅Done" }, { "id": "node-zmdqet6c5", "parentId": "node-urm2xi9fn", "x": 26, "y": 485.0859375, "color": "#FFFFFF", "text": "❌Not done" }, { "id": "node-4y5fi21ud", "parentId": "node-urm2xi9fn", "x": 483.9921875, "y": 491.0859375, "color": "#FFFFFF", "text": "🛠️Fix it" }, { "id": "node-eicb2ehb7", "parentId": "node-urm2xi9fn", "x": 15, "y": 311.0859375, "color": "#FFFFFF", "text": "🚦Progress" }, { "id": "node-d5wucmwhk", "parentId": "node-urm2xi9fn", "x": 297.9930725097656, "y": 163.0885467529297, "color": "#FFFFFF", "text": "🎬Action" }, { "id": "node-xp19w7q95", "parentId": "node-urm2xi9fn", "x": 43.984375, "y": 585.078125, "color": "#FFFFFF", "text": "Can change icon by pressing another button" }, { "id": "node-rfh741ueh", "parentId": "central-node", "x": 848, "y": 448.078125, "color": "#FFFFFF", "text": "Copy Text gives you the mindmap text" }, { "id": "node-q23udh75a", "parentId": "central-node", "x": 923.9921875, "y": 259.0859375, "color": "#FFFFFF", "text": "The link at the top updates" }, { "id": "node-ovcxbvqcd", "parentId": "node-q23udh75a", "x": 960.9921875, "y": 370.09375, "color": "#FFFFFF", "text": "Copy and paste link to save" }, { "id": "node-p4kqkvd10", "parentId": "node-q23udh75a", "x": 929.9921875, "y": 70.0859375, "color": "#FFFFFF", "text": "Encoded, but only against casual looking" }, { "id": "node-11zyyd38b", "parentId": "node-q23udh75a", "x": 1060.984375, "y": 162.09375, "color": "#FF4500", "text": "Don't include confidential info" }, { "id": "node-4y2pl7cq6", "parentId": "central-node", "x": 792, "y": 692.09375, "color": "#FFFFFF", "text": "Print to save a PDF" }, { "id": "node-ajne4uz7j", "parentId": "central-node", "x": 467, "y": 697.09375, "color": "#FFFFFF", "text": "Can download JSON for later" }, { "id": "node-6cwdh749f", "parentId": "central-node", "x": 852, "y": 525.09375, "color": "#FFFFFF", "text": "Export PNG for easy transfer to other apps" }, { "id": "node-jes9tna46", "parentId": "central-node", "x": 844, "y": 612.09375, "color": "#FFFFFF", "text": "Export pptx for easy slides" }];
+
+      const serializedData = JSON.stringify(tutorialData);
+      const encodedData = btoa(encodeURIComponent(serializedData));
+
+      const url = new URL(window.location.href);
+      url.hash = encodedData;
+      window.open(url.toString(), '_blank');
+    }
+
+    function autoLayout() {
+      pushToUndo();
+
+      const containerRect = container.getBoundingClientRect();
+      const centerX = containerRect.width / 2 - 50;
+      const centerY = containerRect.height / 2 - 30;
+
+      // Position central node at center
+      const centralNodeData = nodesData.find(n => n.id === centralNodeId);
+      if (centralNodeData) {
+        centralNodeData.x = centerX;
+        centralNodeData.y = centerY;
+      }
+
+      // Group nodes by depth level
+      const nodesByDepth = {};
+      nodesData.forEach(node => {
+        const depth = getNodeDepth(node.id);
+        if (!nodesByDepth[depth]) {
+          nodesByDepth[depth] = [];
+        }
+        nodesByDepth[depth].push(node);
+      });
+
+      // Layout each depth level in concentric circles
+      const maxDepth = Math.max(...Object.keys(nodesByDepth).map(Number));
+
+      for (let depth = 1; depth <= maxDepth; depth++) {
+        const nodesAtDepth = nodesByDepth[depth];
+        if (!nodesAtDepth || nodesAtDepth.length === 0) continue;
+
+        // Calculate radius for this depth level - increased base radius
+        const baseRadius = 280;
+        const radius = baseRadius * depth;
+
+        // Group nodes by their parent
+        const nodesByParent = {};
+        nodesAtDepth.forEach(node => {
+          if (!nodesByParent[node.parentId]) {
+            nodesByParent[node.parentId] = [];
+          }
+          nodesByParent[node.parentId].push(node);
+        });
+
+        // For each parent, distribute its children around it
+        Object.keys(nodesByParent).forEach(parentId => {
+          const parentNode = nodesData.find(n => n.id === parentId);
+          if (!parentNode) return;
+
+          const children = nodesByParent[parentId];
+          const childCount = children.length;
+
+          // Calculate angle step based on number of children
+          const angleStep = 360 / Math.max(childCount, 1);
+
+          // Determine starting angle based on parent's position relative to center
+          let startAngle = 0;
+          if (depth > 1) {
+            const dx = parentNode.x - centerX;
+            const dy = parentNode.y - centerY;
+            startAngle = Math.atan2(dy, dx) * 180 / Math.PI;
+          }
+
+          // Position children around parent
+          children.forEach((child, index) => {
+            const angle = (startAngle + (index * angleStep)) * Math.PI / 180;
+            const childRadius = depth === 1 ? radius : 200;
+
+            child.x = parentNode.x + childRadius * Math.cos(angle);
+            child.y = parentNode.y + childRadius * Math.sin(angle);
+
+            // Constrain to viewport
+            child.x = Math.max(50, Math.min(child.x, containerRect.width - 150));
+            child.y = Math.max(100, Math.min(child.y, containerRect.height - 100));
+          });
+        });
+      }
+
+      // Collision detection and resolution
+      const minDistance = 120; // Minimum distance between node centers
+      const maxIterations = 50;
+
+      for (let iteration = 0; iteration < maxIterations; iteration++) {
+        let hasCollision = false;
+
+        // Check all pairs of nodes (excluding central node)
+        for (let i = 0; i < nodesData.length; i++) {
+          if (nodesData[i].id === centralNodeId) continue;
+
+          for (let j = i + 1; j < nodesData.length; j++) {
+            if (nodesData[j].id === centralNodeId) continue;
+
+            const node1 = nodesData[i];
+            const node2 = nodesData[j];
+
+            const dx = node2.x - node1.x;
+            const dy = node2.y - node1.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < minDistance && distance > 0) {
+              hasCollision = true;
+
+              // Push nodes apart
+              const overlap = minDistance - distance;
+              const angle = Math.atan2(dy, dx);
+
+              const pushX = (overlap / 2) * Math.cos(angle);
+              const pushY = (overlap / 2) * Math.sin(angle);
+
+              node1.x -= pushX;
+              node1.y -= pushY;
+              node2.x += pushX;
+              node2.y += pushY;
+
+              // Constrain to viewport
+              node1.x = Math.max(50, Math.min(node1.x, containerRect.width - 150));
+              node1.y = Math.max(100, Math.min(node1.y, containerRect.height - 100));
+              node2.x = Math.max(50, Math.min(node2.x, containerRect.width - 150));
+              node2.y = Math.max(100, Math.min(node2.y, containerRect.height - 100));
+            }
+          }
+        }
+
+        // If no collisions detected, we're done
+        if (!hasCollision) break;
+      }
+
+      renderMindMap();
+    }
+
+    exportPngBtn.addEventListener('click', function () {
+      document.body.classList.add('exporting');
+
+      html2canvas(container, { scale: 2, backgroundColor: null }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        // Name the PNG file based on the central node text
+        const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'MindMap';
+        const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.png`;
+        link.href = imgData;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }).finally(() => {
+        document.body.classList.remove('exporting');
+      });
+    });
+
+    // Download JSON with proper Unicode/emoji support
+    function downloadJSON() {
       const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'MindMap';
-      const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.png`;
-      link.href = imgData;
+      const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.json`;
+
+      // Encode the JSON data using TextEncoder for full Unicode/emoji support
+      const serializedData = JSON.stringify(nodesData);
+      const encoder = new TextEncoder();
+      const encodedData = encoder.encode(serializedData);
+
+      const blob = new Blob([encodedData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
       link.download = fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    }).finally(() => {
-      buttonContainer.style.display = 'flex';
-    });
-  });
-
-  // Download JSON with proper Unicode/emoji support
-  function downloadJSON() {
-    const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'MindMap';
-    const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.json`;
-
-    // Encode the JSON data using TextEncoder for full Unicode/emoji support
-    const serializedData = JSON.stringify(nodesData);
-    const encoder = new TextEncoder();
-    const encodedData = encoder.encode(serializedData);
-
-    const blob = new Blob([encodedData], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-
-  // Upload JSON with proper Unicode/emoji support
-  document.getElementById('upload-json').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      try {
-        // Use readAsText() to handle the file as text
-        const decodedData = e.target.result;  // No need for TextDecoder here
-
-        const parsedData = JSON.parse(decodedData);
-        nodesData = parsedData;
-
-        // Re-render the mind map with the uploaded data
-        renderMindMap();
-
-      } catch (error) {
-        console.error('Failed to load mind map:', error);
-        alert('Invalid mind map file.');
-      }
-    };
-    reader.readAsText(file);  // Read the file as text
-  });
-
-
-
-
-
-  // Event listener for color palette
-  colorPalette.addEventListener('click', (event) => {
-    if (event.target.classList.contains('color-swatch')) {
-      const color = event.target.getAttribute('data-color');
-      changeNodeColor(color);
+      URL.revokeObjectURL(url);
     }
-  });
 
-  // Event listeners for emoji buttons
-  emojiButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const emoji = button.getAttribute('data-emoji');
-      addEmojiToSelectedNode(emoji);
-    });
-  });
 
-  function addEmojiToSelectedNode(emoji) {
-    if (!selectedNodeId) {
-      alert('No node selected.');
-      return;
-    }
-    const node = nodesData.find(n => n.id === selectedNodeId);
-    if (node) {
-      pushToUndo();
-      const emojis = ['💡', '🧠', '📚', '🎯', '✅', '❌', '🛠️', '🚦', '🎬'];
-      let currentText = node.text.trim();
+    // Upload JSON with proper Unicode/emoji support and warning
+    const uploadInput = document.getElementById('upload-json');
+    let pendingFile = null;
 
-      const existingEmoji = emojis.find(e => currentText.startsWith(e));
+    uploadInput.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (!file) return;
 
-      if (existingEmoji) {
-        node.text = currentText.replace(existingEmoji, emoji);
+      // Clear the input value so the same file can be selected again
+      uploadInput.value = '';
+
+      // Check if current map is effectively empty (just central node with default text or empty)
+      const isClean = nodesData.length === 1 && nodesData[0].id === centralNodeId && (!nodesData[0].text || nodesData[0].text === 'Central topic');
+
+      if (isClean) {
+        // If clean, just load it
+        loadFile(file);
       } else {
-        node.text = (currentText ? emoji + ' ' + currentText : emoji);
+        // Show warning modal
+        pendingFile = file;
+        document.getElementById('modal-overlay').style.display = 'flex';
       }
+    });
 
-      renderMindMap();
+    // Modal Actions
+    document.getElementById('modal-cancel').addEventListener('click', () => {
+      closeModal();
+      pendingFile = null;
+    });
+
+    document.getElementById('modal-overwrite').addEventListener('click', () => {
+      if (pendingFile) {
+        loadFile(pendingFile);
+      }
+      closeModal();
+    });
+
+    document.getElementById('modal-new-window').addEventListener('click', () => {
+      if (pendingFile) {
+        openInNewWindow(pendingFile);
+      }
+      closeModal();
+    });
+
+    function closeModal() {
+      document.getElementById('modal-overlay').style.display = 'none';
     }
-  }
 
-  function loadFromURL() {
-    if (window.location.hash.length > 1) {
-      try {
-        const encodedData = window.location.hash.substring(1);
-        const decodedData = decodeURIComponent(atob(encodedData));
-        const parsedData = JSON.parse(decodedData);
+    function loadFile(file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const decodedData = e.target.result;
+          const parsedData = JSON.parse(decodedData);
+          nodesData = parsedData;
+          renderMindMap();
+        } catch (error) {
+          console.error('Failed to load mind map:', error);
+          alert('Invalid mind map file.');
+        }
+      };
+      reader.readAsText(file);
+    }
 
-        const central = parsedData.find(n => n.parentId === null);
-        if (central) {
-          central.id = centralNodeId;
-          nodesData = parsedData.map(n => n.id === central.id ? central : n);
+    function openInNewWindow(file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const decodedData = e.target.result;
+          // Validate JSON first
+          JSON.parse(decodedData);
+
+          // Create URL with hash
+          const encodedData = btoa(encodeURIComponent(decodedData));
+          const currentUrl = window.location.href.split('#')[0];
+          const newUrl = currentUrl + '#' + encodedData;
+
+          window.open(newUrl, '_blank');
+        } catch (error) {
+          console.error('Failed to open in new window:', error);
+          alert('Invalid mind map file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+
+
+
+
+    // Event listener for color palette
+    colorPalette.addEventListener('click', (event) => {
+      if (event.target.classList.contains('color-swatch')) {
+        const color = event.target.getAttribute('data-color');
+        changeNodeColor(color);
+      }
+    });
+
+    // Event listeners for emoji buttons
+    emojiButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const emoji = button.getAttribute('data-emoji');
+        addEmojiToSelectedNode(emoji);
+      });
+    });
+
+    function addEmojiToSelectedNode(emoji) {
+      if (!selectedNodeId) {
+        alert('No node selected.');
+        return;
+      }
+      const node = nodesData.find(n => n.id === selectedNodeId);
+      if (node) {
+        pushToUndo();
+        const emojis = ['💡', '🧠', '📚', '🎯', '✅', '❌', '🛠️', '🚦', '🎬'];
+        let currentText = node.text.trim();
+
+        const existingEmoji = emojis.find(e => currentText.startsWith(e));
+
+        if (existingEmoji) {
+          node.text = currentText.replace(existingEmoji, emoji);
         } else {
+          node.text = (currentText ? emoji + ' ' + currentText : emoji);
+        }
+
+        renderMindMap();
+      }
+    }
+
+    function loadFromURL() {
+      if (window.location.hash.length > 1) {
+        try {
+          const encodedData = window.location.hash.substring(1);
+          const decodedData = decodeURIComponent(atob(encodedData));
+          const parsedData = JSON.parse(decodedData);
+
+          const central = parsedData.find(n => n.parentId === null);
+          if (central) {
+            central.id = centralNodeId;
+            nodesData = parsedData.map(n => n.id === central.id ? central : n);
+          } else {
+            nodesData = [{
+              id: centralNodeId,
+              parentId: null,
+              x: 0,
+              y: 0,
+              color: colors[0],
+              text: ''
+            }];
+          }
+
+          renderMindMap();
+        } catch (error) {
+          console.error('Failed to load mind map from URL:', error);
+          centerNodePosition(centralNodeId);
+          renderMindMap();
+        }
+      } else {
+        // Initialize with default central node if empty
+        if (nodesData.length === 0) {
           nodesData = [{
             id: centralNodeId,
             parentId: null,
@@ -713,154 +1347,145 @@
             text: ''
           }];
         }
-
-        renderMindMap();
-      } catch (error) {
-        console.error('Failed to load mind map from URL:', error);
         centerNodePosition(centralNodeId);
         renderMindMap();
       }
-    } else {
-      centerNodePosition(centralNodeId);
-      renderMindMap();
     }
-  }
 
-  function centerNodePosition(nodeId) {
-    const node = nodesData.find(n => n.id === nodeId);
-    if (node) {
-      const containerRect = container.getBoundingClientRect();
-      node.x = (containerRect.width / 2) - 50;
-      node.y = (containerRect.height / 2) - 30;
+    function centerNodePosition(nodeId) {
+      const node = nodesData.find(n => n.id === nodeId);
+      if (node) {
+        const containerRect = container.getBoundingClientRect();
+        node.x = (containerRect.width / 2) - 50;
+        node.y = (containerRect.height / 2) - 30;
+      }
     }
-  }
-// Export PPTX
-  document.getElementById('export-pptx-btn').addEventListener('click', function() {
-    const pptx = new PptxGenJS();
+    // Export PPTX
+    document.getElementById('export-pptx-btn').addEventListener('click', function () {
+      const pptx = new PptxGenJS();
 
-    // Slide 1: Title Slide with Central Node Name
-    const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'Mind Map';
-    const titleSlide = pptx.addSlide({ masterName: 'TITLE_SLIDE' });
+      // Slide 1: Title Slide with Central Node Name
+      const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'Mind Map';
+      const titleSlide = pptx.addSlide({ masterName: 'TITLE_SLIDE' });
 
-    // Expand the title text box for the first slide
-    titleSlide.addText(centralNodeText, {
-      x: 0.5,
-      y: 2,
-      w: 9,  // Expanding the width of the title text box
-      h: 1,  // Expanding the height of the title text box
-      fontSize: 36,
-      bold: true,
-      align: 'center'
-    });
-
-    // Slide 2: Mind Map Image
-    const slide2 = pptx.addSlide();
-
-    // Hide toolbar for the export
-    buttonContainer.style.display = 'none';
-
-    html2canvas(container, { scale: 2 }).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      slide2.addImage({ data: imgData, x: 0, y: 0, w: 10, h: 5.625 });
-
-      // Slide 3: Single Text Box with Proper Bulleted List (Flat, no indentation)
-      const slide3 = pptx.addSlide();
-
-// Title for the slide
-      slide3.addText(centralNodeText, {
+      // Expand the title text box for the first slide
+      titleSlide.addText(centralNodeText, {
         x: 0.5,
-        y: 0.1,
-        w: 9,  // Make the text box wide enough
-        h: 1,  // Adjust the height as needed for the title
-        fontSize: 24,
-        bold: true
-      });
-
-// Create a string to hold all bullet points, flat list (no indentation)
-      let bulletPointsText = '';
-
-// Loop through each node and build the string for the flat bullets, without a final extra newline
-      nodesData.forEach((node, index) => {
-        if (node.id !== centralNodeId) {  // Skip the central node
-          bulletPointsText += `${node.text || 'Node'}`;
-          if (index !== nodesData.length - 1) {  // Add a newline unless it's the last item
-            bulletPointsText += '\n';
-          }
-        }
-      });
-
-// Add the entire string as a single bulleted text box
-      slide3.addText(bulletPointsText, {
-        x: 0.5,  // X position for the text box
-        y: 1,    // Y position for the bullets
-        w: 9,    // Width of the text box
-        h: 4.5,  // Height of the text box
-        fontSize: 18,
-        align: 'left',
-        bullet: true  // Enable PowerPoint's bullet functionality
-      });
-
-
-      // Slide 4: Mind Map Link
-      const slide4 = pptx.addSlide();
-      const mindmapLink = window.location.href;
-
-      // Add the title for the slide
-      slide4.addText('Edit the Mind Map Here:', {
-        x: 0.5,
-        y: 0.2,
+        y: 2,
         w: 9,  // Expanding the width of the title text box
         h: 1,  // Expanding the height of the title text box
-        fontSize: 24,
-        bold: true
-      });
-
-// Display the mind map URL as plain text, size 8, without hyperlink
-      slide4.addText(mindmapLink, {
-        x: 0.5,
-        y: 1,
-        fontSize: 8,    // Set font size to 8
-        w: 9,           // Expand width of the text box to fit the content
-        h: 1,           // Adjust height as needed
-        align: 'left'
-      });
-
-// Add the "Created with" message and CC BY-NC-SA link
-      slide4.addText("Created with James Abela's Mindmapping tool", {
-        x: 0.5,
-        y: 5,  // Position it at the bottom of the slide
-        fontSize: 12,
-        w: 9,
-        align: 'center'
-      });
-      slide4.addText("CC BY-NC-SA 4.0", {
-        x: 0.5,
-        y: 5.3,  // Slightly below the previous text
-        fontSize: 12,
-        hyperlink: { url: "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" },
-        w: 9,
+        fontSize: 36,
+        bold: true,
         align: 'center'
       });
 
-// Add the full link to the presenter notes
-      slide4.addNotes(mindmapLink);
+      // Slide 2: Mind Map Image
+      const slide2 = pptx.addSlide();
 
-      // Restore toolbar after export
-      buttonContainer.style.display = 'flex';
+      // Hide toolbar for the export
+      document.body.classList.add('exporting');
 
-      // Name the file based on the central node's text
-      const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.pptx`;
+      html2canvas(container, { scale: 2, backgroundColor: null }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        slide2.addImage({ data: imgData, x: 0, y: 0, w: 10, h: 5.625 });
 
-      // Save the PowerPoint
-      pptx.writeFile(fileName);
-    }).finally(() => {
-      buttonContainer.style.display = 'flex';  // Ensure toolbar is restored even if export fails
+        // Slide 3: Single Text Box with Proper Bulleted List (Flat, no indentation)
+        const slide3 = pptx.addSlide();
+
+        // Title for the slide
+        slide3.addText(centralNodeText, {
+          x: 0.5,
+          y: 0.1,
+          w: 9,  // Make the text box wide enough
+          h: 1,  // Adjust the height as needed for the title
+          fontSize: 24,
+          bold: true
+        });
+
+        // Create a string to hold all bullet points, flat list (no indentation)
+        let bulletPointsText = '';
+
+        // Loop through each node and build the string for the flat bullets, without a final extra newline
+        nodesData.forEach((node, index) => {
+          if (node.id !== centralNodeId) {  // Skip the central node
+            bulletPointsText += `${node.text || 'Node'}`;
+            if (index !== nodesData.length - 1) {  // Add a newline unless it's the last item
+              bulletPointsText += '\n';
+            }
+          }
+        });
+
+        // Add the entire string as a single bulleted text box
+        slide3.addText(bulletPointsText, {
+          x: 0.5,  // X position for the text box
+          y: 1,    // Y position for the bullets
+          w: 9,    // Width of the text box
+          h: 4.5,  // Height of the text box
+          fontSize: 18,
+          align: 'left',
+          bullet: true  // Enable PowerPoint's bullet functionality
+        });
+
+
+        // Slide 4: Mind Map Link
+        const slide4 = pptx.addSlide();
+        const mindmapLink = window.location.href;
+
+        // Add the title for the slide
+        slide4.addText('Edit the Mind Map Here:', {
+          x: 0.5,
+          y: 0.2,
+          w: 9,  // Expanding the width of the title text box
+          h: 1,  // Expanding the height of the title text box
+          fontSize: 24,
+          bold: true
+        });
+
+        // Display the mind map URL as plain text, size 8, without hyperlink
+        slide4.addText(mindmapLink, {
+          x: 0.5,
+          y: 1,
+          fontSize: 8,    // Set font size to 8
+          w: 9,           // Expand width of the text box to fit the content
+          h: 1,           // Adjust height as needed
+          align: 'left'
+        });
+
+        // Add the "Created with" message and CC BY-NC-SA link
+        slide4.addText("Created with James Abela's Mindmapping tool", {
+          x: 0.5,
+          y: 5,  // Position it at the bottom of the slide
+          fontSize: 12,
+          w: 9,
+          align: 'center'
+        });
+        slide4.addText("CC BY-NC-SA 4.0", {
+          x: 0.5,
+          y: 5.3,  // Slightly below the previous text
+          fontSize: 12,
+          hyperlink: { url: "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" },
+          w: 9,
+          align: 'center'
+        });
+
+        // Add the full link to the presenter notes
+        slide4.addNotes(mindmapLink);
+
+        // Name the file based on the central node's text
+        const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.pptx`;
+
+        // Save the PowerPoint
+        pptx.writeFile({ fileName: fileName });
+      }).finally(() => {
+        document.body.classList.remove('exporting');
+      });
     });
-  });
 
-</script>
-<!-- 100% privacy-first analytics -->
-<script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+  </script>
+  <!-- 100% privacy-first analytics -->
+  <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
+      referrerpolicy="no-referrer-when-downgrade" /></noscript>
 </body>
+
 </html>
