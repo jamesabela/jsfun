@@ -1,342 +1,526 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Export Mind Map</title>
+  <title>Text to Mind Map</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.8);
+      --accent-color: #667eea;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f9f9f9;
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    form {
-      max-width: 600px;
-      margin: 0 auto;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      color: var(--text-primary);
     }
-    .instructions {
-      margin-bottom: 20px;
-      padding: 15px;
-      background-color: #e7f3fe;
-      border-left: 6px solid #2196F3;
-      border-radius: 4px;
+
+    .container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
     }
-    .instructions h2 {
-      margin-top: 0;
-      color: #2196F3;
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-align: center;
     }
+
+    .subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
     label {
       display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #555;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text-primary);
     }
+
     input[type="text"],
     textarea {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text-primary);
       font-size: 14px;
-      resize: vertical;
+      font-family: inherit;
+      transition: all 0.3s ease;
     }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+
+    input[type="text"]::placeholder,
+    textarea::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
     textarea {
-      height: 200px;
-      font-family: monospace;
+      min-height: 200px;
+      resize: vertical;
+      font-family: 'Monaco', 'Courier New', monospace;
+      line-height: 1.6;
     }
+
     button {
       width: 100%;
-      padding: 12px;
-      background-color: #4CAF50;
-      color: white;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       border: none;
-      border-radius: 4px;
+      border-radius: 12px;
+      color: white;
       font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
+
     button:hover {
-      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
     }
-    .note {
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .instructions {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .instructions strong {
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .instructions code {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
       font-size: 12px;
-      color: #888;
-      margin-top: -10px;
-      margin-bottom: 10px;
+    }
+
+    .example {
+      margin-top: 8px;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
     }
   </style>
 </head>
+
 <body>
 
-<h1>Export Mind Map</h1>
+  <div class="container">
+    <h1>📝 Text to Mind Map</h1>
+    <p class="subtitle">Convert indented text into beautiful mind maps</p>
 
-<form id="export-form">
-  <div class="instructions">
-    <h2>Instructions</h2>
-    <p>
-      Use this form to export your mind map. Follow the steps below:
-    </p>
-    <ol>
-      <li><strong>Central Subject:</strong> Enter the main topic of your mind map.</li>
-      <li><strong>Nodes:</strong> Enter subtopics using indentation to represent hierarchy. Use <code>3 spaces</code> for each level of indentation.</li>
-      <li>Press <strong>Enter</strong> or <strong>Tab</strong> to add new nodes. Note that pressing <strong>Tab</strong> will insert <code>3 spaces</code> for indentation.</li>
-      <li>Click the <strong>Export to Mind Map</strong> button to generate and open your mind map.</li>
-    </ol>
-    <p>
-      <em>Example:</em>
-    </p>
-    <pre>
-Central Topic
-   Subtopic 1
-      Sub-subtopic 1.1
-   Subtopic 2
-      Sub-subtopic 2.1
-      Sub-subtopic 2.2
-   Subtopic 3
-      Sub-subtopic 3.1
-      Sub-subtopic 3.2
-      Sub-subtopic 3.3
-      </pre>
+    <form id="export-form">
+      <div class="instructions">
+        <strong>How to use:</strong>
+        Use <code>Tab</code> or consistent spaces for indentation. Start with emojis for visual appeal!
+        <div class="example">
+          My Project<br>
+          &nbsp;&nbsp;&nbsp;💡 Ideas<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Research topic<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brainstorm solutions<br>
+          &nbsp;&nbsp;&nbsp;🎯 Goals<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Complete by Friday
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="central-subject">Central Topic</label>
+        <input type="text" id="central-subject" name="central-subject" placeholder="Enter your main topic" required>
+      </div>
+
+      <div class="form-group">
+        <label for="nodes">Nodes (use Tab or spaces for indentation)</label>
+        <textarea id="nodes" name="nodes" placeholder="💡 First idea&#10;&#9;Sub-idea&#10;🎯 Second idea"></textarea>
+      </div>
+
+      <button type="submit">🚀 Create Mind Map</button>
+    </form>
   </div>
 
-  <label for="central-subject">Central Subject:</label>
-  <input type="text" id="central-subject" name="central-subject" placeholder="Enter central subject" required>
+  <script>
+    const form = document.getElementById('export-form');
+    const nodesTextarea = document.getElementById('nodes');
 
-  <label for="nodes">Nodes:</label>
-  <textarea id="nodes" name="nodes" placeholder="Enter nodes with proper indentation"></textarea>
-  <div class="note">Use 3 spaces for each level of indentation.</div>
+    // Enable Tab key indentation in textarea
+    nodesTextarea.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
 
-  <button type="submit">Export to Mind Map</button>
-</form>
+        // Insert tab character
+        this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
 
-<script>
-  const form = document.getElementById('export-form');
-
-  form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    const centralSubject = document.getElementById('central-subject').value.trim();
-    const nodesText = document.getElementById('nodes').value.trim();
-
-    if (!centralSubject) {
-      alert('Please enter a central subject.');
-      return;
-    }
-
-    // Prepare the central node
-    const centralNode = {
-      id: 'central-node',
-      parentId: null,
-      x: window.innerWidth / 2, // Center of the screen
-      y: window.innerHeight / 2, // Center of the screen
-      color: '#FFFFFF', // Default color
-      text: centralSubject
-    };
-
-    // Parse nodes
-    const parsedNodes = parseNodes(nodesText);
-
-    if (parsedNodes === null) {
-      alert('Failed to parse nodes. Please ensure proper indentation and formatting.');
-      return;
-    }
-
-    // Combine central node with other parsed nodes
-    const allNodes = [centralNode, ...parsedNodes];
-
-    // Log parsed nodes before redirection
-    console.log("All Nodes Before Serialization:", allNodes);
-
-    // Position the nodes radially around the central node
-    positionNodes(allNodes);
-
-    // Serialize and encode data
-    const serializedData = JSON.stringify(allNodes);
-    const encodedData = encodeBase64(serializedData);
-
-    // Construct the URL to mindmap.html with encoded data in hash
-    const mindmapURL = 'https://jamesabela.github.io/jsfun/mindmapplain.html#' + encodedData;
-
-    // Open the mindmap in a new browser window
-    window.open(mindmapURL, '_blank');
-  });
-
-  /**
-   * Parses the nodes text into an array of node objects.
-   * Assumes 3 spaces per indentation level.
-   * @param {string} text - The nodes text.
-   * @returns {Array|null} - Array of node objects or null if parsing fails.
-   */
-  function parseNodes(text) {
-    const lines = text.split('\n');
-    const nodes = [];
-    const stack = []; // Stack to keep track of parent nodes based on depth
-    const emojis = ['💡', '🧠', '📚', '🎯', '✅', '❌', '🛠️', '🚦', '🎬'];
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      if (line.trim() === '') continue; // Skip empty lines
-
-      // Count leading spaces (assuming 3 spaces per level)
-      const leadingSpaces = line.match(/^ */)[0].length;
-      const depth = Math.floor(leadingSpaces / 3);
-      const content = line.trim();
-
-      // Extract emoji if present
-      let emoji = '';
-      let nodeText = content;
-      const firstChar = content.charAt(0);
-      if (emojis.includes(firstChar)) {
-        emoji = firstChar;
-        nodeText = content.substring(1).trim();
+        // Move cursor to right of inserted tab
+        this.selectionStart = this.selectionEnd = start + 1;
       }
-
-      if (nodeText === '') {
-        // Skip lines that only have emojis or are empty after trimming
-        continue;
-      }
-
-      const nodeId = generateId();
-      const newNode = {
-        id: nodeId,
-        parentId: null,
-        color: '#FFFFFF', // Default color
-        text: nodeText,
-        x: null, // Initially set to null
-        y: null  // Initially set to null
-      };
-
-      if (depth === 0) {
-        // Direct child of central node
-        newNode.parentId = 'central-node';
-        nodes.push(newNode);
-        stack.length = 0; // Reset the stack
-        stack.push(newNode);
-      } else {
-        if (depth > stack.length) {
-          // Depth increased by more than one level
-          console.error(`Invalid indentation at line ${i + 1}`);
-          return null;
-        }
-        while (depth < stack.length) {
-          stack.pop();
-        }
-        const parentNode = stack[stack.length - 1];
-        if (!parentNode) {
-          console.error(`No parent found for line ${i + 1}`);
-          return null;
-        }
-        newNode.parentId = parentNode.id;
-        nodes.push(newNode);
-        stack.push(newNode);
-      }
-    }
-
-    // Log nodes before positioning
-    console.log("Nodes Before Positioning:", nodes);
-
-    return nodes;
-  }
-
-  /**
-   * Generates a unique ID for a node.
-   * @returns {string} - Unique ID.
-   */
-  function generateId() {
-    return 'node-' + Math.random().toString(36).substr(2, 9);
-  }
-
-  function positionNodes(nodes) {
-    const centralNode = nodes.find(n => n.id === 'central-node');
-    if (!centralNode) {
-      console.error('Central node not found.');
-      return;
-    }
-
-    const centerX = centralNode.x;
-    const centerY = centralNode.y;
-    const baseRadius = 200;  // Base radius for the first level
-    const radiusIncrement = 150;  // Distance between levels
-    const angleIncrement = Math.PI / 4;  // Adjust this to control the spacing between nodes (radians)
-
-    // Position the first-level nodes
-    const firstLevelNodes = nodes.filter(n => n.parentId === 'central-node');
-    const firstLevelCount = firstLevelNodes.length;
-    let firstAngle = 0;  // Start at 0 radians (right side)
-
-    firstLevelNodes.forEach((node, index) => {
-      // Position the node in a circular pattern around the central node
-      node.x = centerX + baseRadius * Math.cos(firstAngle);
-      node.y = centerY + baseRadius * Math.sin(firstAngle);
-
-      firstAngle += (2 * Math.PI) / firstLevelCount;  // Distribute nodes evenly in a circle
-
-      // Now position the second-level nodes (children of the first-level nodes)
-      const secondLevelNodes = nodes.filter(n => n.parentId === node.id);
-      let secondAngle = 0;  // Start at 0 radians for second level
-      const secondLevelCount = secondLevelNodes.length;
-
-      secondLevelNodes.forEach((childNode) => {
-        const childRadius = baseRadius + radiusIncrement;  // Move second-level nodes farther out
-        childNode.x = node.x + childRadius * Math.cos(secondAngle);
-        childNode.y = node.y + childRadius * Math.sin(secondAngle);
-
-        secondAngle += (2 * Math.PI) / secondLevelCount;  // Distribute second-level nodes in a circle around their parent
-      });
     });
 
-    // Log final positions for debugging
-    console.log("Node positions:", nodes);
-  }
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
 
+      const centralSubject = document.getElementById('central-subject').value.trim();
+      const nodesText = document.getElementById('nodes').value.trim();
 
+      if (!centralSubject) {
+        alert('Please enter a central topic.');
+        return;
+      }
 
-  /**
-   * Utility function for Base64 encoding with Unicode support
-   * @param {string} str - The string to encode.
-   * @returns {string} - Base64 encoded string.
-   */
-  function encodeBase64(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  }
+      // Prepare the central node - will be centered later
+      const centralNode = {
+        id: 'central-node',
+        parentId: null,
+        x: 0,
+        y: 0,
+        color: '#FFFFFF',
+        text: centralSubject
+      };
 
-  /**
-   * Utility function for Base64 decoding with Unicode support
-   * @param {string} str - The Base64 encoded string.
-   * @returns {string} - Decoded string.
-   */
-  function decodeBase64(str) {
-    return decodeURIComponent(escape(atob(str)));
-  }
+      // Parse nodes
+      const parsedNodes = parseNodes(nodesText);
 
-  /**
-   * Handles the Tab key press in the textarea to insert 3 spaces.
-   */
-  const textarea = document.getElementById('nodes');
+      if (parsedNodes === null) {
+        alert('Failed to parse nodes. Please check your indentation is consistent.');
+        return;
+      }
 
-  textarea.addEventListener('keydown', function(e) {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const start = this.selectionStart;
-      const end = this.selectionEnd;
+      // Combine central node with other parsed nodes
+      const allNodes = [centralNode, ...parsedNodes];
 
-      // Set textarea value to: text before caret + 3 spaces + text after caret
-      this.value = this.value.substring(0, start) + '   ' + this.value.substring(end);
+      // Position the nodes using improved auto-layout
+      positionNodes(allNodes);
 
-      // Move caret
-      this.selectionStart = this.selectionEnd = start + 3;
+      // Serialize and encode data
+      const serializedData = JSON.stringify(allNodes);
+      const encodedData = btoa(encodeURIComponent(serializedData));
+
+      // Construct the URL to MindMap.html with encoded data in hash
+      const mindmapURL = 'MindMap.html#' + encodedData;
+
+      // Open the mindmap in a new browser window
+      window.open(mindmapURL, '_blank');
+    });
+
+    function parseNodes(text) {
+      if (!text || text.trim() === '') return [];
+
+      const lines = text.split('\n');
+      const nodes = [];
+      const stack = [];
+      const emojis = ['💡', '🧠', '📚', '🎯', '✅', '❌', '🛠️', '🚦', '🎬', '🔬', '🎨', '📊'];
+
+      // Detect indentation type and size from first indented line
+      let indentSize = null;
+      let indentChar = null;
+
+      for (const line of lines) {
+        if (line.trim() !== '' && line.match(/^[\t ]+/)) {
+          const leadingWhitespace = line.match(/^[\t ]+/)[0];
+          if (leadingWhitespace[0] === '\t') {
+            indentChar = '\t';
+            indentSize = 1;
+          } else {
+            indentChar = ' ';
+            indentSize = leadingWhitespace.length;
+          }
+          break;
+        }
+      }
+
+      // If no indentation detected, default to tab
+      if (indentSize === null) {
+        indentChar = '\t';
+        indentSize = 1;
+      }
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.trim() === '') continue;
+
+        // Calculate depth
+        let depth = 0;
+        const leadingWhitespace = line.match(/^[\t ]*/)[0];
+
+        if (leadingWhitespace.length > 0) {
+          if (indentChar === '\t') {
+            depth = leadingWhitespace.split('\t').length - 1;
+          } else {
+            depth = Math.floor(leadingWhitespace.length / indentSize);
+          }
+        }
+
+        const content = line.trim();
+        if (content === '') continue;
+
+        let emoji = '';
+        let nodeText = content;
+        const firstChar = content.charAt(0);
+        if (emojis.includes(firstChar)) {
+          emoji = firstChar;
+          nodeText = content.substring(1).trim();
+        }
+
+        if (nodeText === '') continue;
+
+        const nodeId = generateId();
+        const newNode = {
+          id: nodeId,
+          parentId: null,
+          color: '#FFFFFF',
+          text: nodeText,
+          x: null,
+          y: null
+        };
+
+        if (depth === 0) {
+          newNode.parentId = 'central-node';
+          nodes.push(newNode);
+          stack.length = 0;
+          stack.push(newNode);
+        } else {
+          if (depth > stack.length) {
+            console.error(`Invalid indentation at line ${i + 1}: depth ${depth} but stack length ${stack.length}`);
+            return null;
+          }
+          while (depth < stack.length) {
+            stack.pop();
+          }
+          const parentNode = stack[stack.length - 1];
+          if (!parentNode) {
+            console.error(`No parent found for line ${i + 1}`);
+            return null;
+          }
+          newNode.parentId = parentNode.id;
+          nodes.push(newNode);
+          stack.push(newNode);
+        }
+      }
+
+      console.log('Parsed nodes:', nodes.length, 'nodes');
+      return nodes;
     }
-  });
-</script>
+
+    function generateId() {
+      return 'node-' + Math.random().toString(36).substr(2, 9);
+    }
+
+    function positionNodes(nodes) {
+      console.log('=== positionNodes called with', nodes.length, 'nodes ===');
+
+      const centralNode = nodes.find(n => n.id === 'central-node');
+      if (!centralNode) {
+        console.error('Central node not found.');
+        return;
+      }
+
+      console.log('Central node before:', centralNode.x, centralNode.y);
+
+      // Start with central node at origin
+      centralNode.x = 0;
+      centralNode.y = 0;
+
+      console.log('Central node after setting to origin:', centralNode.x, centralNode.y);
+
+      // Group nodes by depth level
+      const nodesByDepth = {};
+      nodes.forEach(node => {
+        const depth = getNodeDepth(node, nodes);
+        if (!nodesByDepth[depth]) {
+          nodesByDepth[depth] = [];
+        }
+        nodesByDepth[depth].push(node);
+      });
+
+      console.log('Nodes by depth:', Object.keys(nodesByDepth).map(d => `Depth ${d}: ${nodesByDepth[d].length} nodes`));
+
+      const maxDepth = Math.max(...Object.keys(nodesByDepth).map(Number));
+
+      // Position nodes in concentric circles
+      for (let depth = 1; depth <= maxDepth; depth++) {
+        const nodesAtDepth = nodesByDepth[depth];
+        if (!nodesAtDepth || nodesAtDepth.length === 0) continue;
+
+        const baseRadius = 280;
+
+        // Group nodes by their parent
+        const nodesByParent = {};
+        nodesAtDepth.forEach(node => {
+          if (!nodesByParent[node.parentId]) {
+            nodesByParent[node.parentId] = [];
+          }
+          nodesByParent[node.parentId].push(node);
+        });
+
+        console.log(`Depth ${depth}: ${Object.keys(nodesByParent).length} parents, ${nodesAtDepth.length} total nodes`);
+
+        // For each parent, distribute its children around it
+        Object.keys(nodesByParent).forEach((parentId, parentIndex) => {
+          const parentNode = nodes.find(n => n.id === parentId);
+          if (!parentNode) return;
+
+          const children = nodesByParent[parentId];
+          const childCount = children.length;
+
+          console.log(`Parent ${parentId}: ${childCount} children`);
+
+          // Distribute children evenly in a circle
+          const angleStep = 360 / Math.max(childCount, 1);
+
+          let startAngle = 0;
+          if (depth > 1) {
+            // For deeper levels, orient away from center
+            const dx = parentNode.x - centralNode.x;
+            const dy = parentNode.y - centralNode.y;
+            startAngle = Math.atan2(dy, dx) * 180 / Math.PI;
+          }
+
+          children.forEach((child, index) => {
+            const angle = (startAngle + (index * angleStep)) * Math.PI / 180;
+            const childRadius = depth === 1 ? baseRadius : 200;
+
+            child.x = parentNode.x + childRadius * Math.cos(angle);
+            child.y = parentNode.y + childRadius * Math.sin(angle);
+
+            console.log(`Positioned ${child.text} at (${Math.round(child.x)}, ${Math.round(child.y)}) - angle ${Math.round(startAngle + index * angleStep)}°`);
+          });
+        });
+      }
+
+      // Collision detection and resolution
+      const minDistance = 120;
+      const maxIterations = 50;
+
+      for (let iteration = 0; iteration < maxIterations; iteration++) {
+        let hasCollision = false;
+
+        for (let i = 0; i < nodes.length; i++) {
+          if (nodes[i].id === 'central-node') continue;
+
+          for (let j = i + 1; j < nodes.length; j++) {
+            if (nodes[j].id === 'central-node') continue;
+
+            const node1 = nodes[i];
+            const node2 = nodes[j];
+
+            const dx = node2.x - node1.x;
+            const dy = node2.y - node1.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < minDistance && distance > 0) {
+              hasCollision = true;
+
+              const overlap = minDistance - distance;
+              const angle = Math.atan2(dy, dx);
+
+              const pushX = (overlap / 2) * Math.cos(angle);
+              const pushY = (overlap / 2) * Math.sin(angle);
+
+              node1.x -= pushX;
+              node1.y -= pushY;
+              node2.x += pushX;
+              node2.y += pushY;
+            }
+          }
+        }
+
+        if (!hasCollision) break;
+      }
+
+      // Calculate bounds and center the entire mind map
+      let minX = Infinity, maxX = -Infinity;
+      let minY = Infinity, maxY = -Infinity;
+
+      nodes.forEach(node => {
+        minX = Math.min(minX, node.x);
+        maxX = Math.max(maxX, node.x);
+        minY = Math.min(minY, node.y);
+        maxY = Math.max(maxY, node.y);
+      });
+
+      // Calculate center offset to position mind map at (600, 400)
+      const targetCenterX = 600;
+      const targetCenterY = 400;
+      const currentCenterX = (minX + maxX) / 2;
+      const currentCenterY = (minY + maxY) / 2;
+      const offsetX = targetCenterX - currentCenterX;
+      const offsetY = targetCenterY - currentCenterY;
+
+      // Apply offset to all nodes
+      nodes.forEach(node => {
+        node.x += offsetX;
+        node.y += offsetY;
+      });
+    }
+
+    function getNodeDepth(node, nodes, depth = 0) {
+      if (node.parentId === null) {
+        return depth;
+      }
+      const parent = nodes.find(n => n.id === node.parentId);
+      if (!parent) return depth;
+      return getNodeDepth(parent, nodes, depth + 1);
+    }
+  </script>
 </body>
+
 </html>
