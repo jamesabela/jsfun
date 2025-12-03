@@ -215,6 +215,30 @@
       }
     });
 
+    // Check for URL parameters to pre-fill the form
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const titleParam = urlParams.get('title');
+      const nodesParam = urlParams.get('nodes');
+      const nodesB64Param = urlParams.get('nodes_b64');
+
+      if (titleParam) {
+        document.getElementById('central-subject').value = titleParam;
+      }
+
+      if (nodesB64Param) {
+        try {
+          // decodeURIComponent(escape(atob(...))) handles UTF-8 characters correctly
+          const decodedNodes = decodeURIComponent(escape(atob(nodesB64Param)));
+          document.getElementById('nodes').value = decodedNodes;
+        } catch (e) {
+          console.error('Failed to decode nodes_b64 parameter:', e);
+        }
+      } else if (nodesParam) {
+        document.getElementById('nodes').value = nodesParam;
+      }
+    });
+
     form.addEventListener('submit', function (event) {
       event.preventDefault();
 
