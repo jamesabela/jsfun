@@ -1236,15 +1236,7 @@
     });
 
     function copyText() {
-      const nodeTexts = nodesData.map(node => `$ {
-          '\t' .repeat(getNodeDepth(node.id))
-        }
-
-        $ {
-          node.text
-        }
-
-        `);
+      const nodeTexts = nodesData.map(node => `${'\t'.repeat(getNodeDepth(node.id))}${node.text}`);
       const textToCopy = nodeTexts.join('\n');
 
       navigator.clipboard.writeText(textToCopy).then(() => {
