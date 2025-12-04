@@ -1049,7 +1049,7 @@
 
           linkIcon.addEventListener('click', (e) => {
             e.stopPropagation();
-            window.open(node.link, '_blank');
+            // Link opens via href attribute, no need for window.open()
           });
 
           nodeDiv.appendChild(linkIcon);
