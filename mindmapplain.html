@@ -76,7 +76,6 @@
 
     .node:focus {
       outline: none;
-      border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3), var(--node-hover-shadow);
     }
 
@@ -399,31 +398,156 @@
     #url-status .status-icon {
       font-size: 10px;
     }
+
+    /* Link Icon Styling */
+    .node-link-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 8px;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      transition: all 0.2s;
+      vertical-align: middle;
+    }
+
+    .node-link-icon:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: scale(1.1);
+    }
+
+    .node-md-image {
+      max-width: 150px;
+      max-height: 150px;
+      display: block;
+      margin: 4px auto;
+      border-radius: 4px;
+    }
+
+    /* Link/Image Modal Styles */
+    #link-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      backdrop-filter: blur(2px);
+    }
+
+    #link-modal-box {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      width: 350px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    #link-modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    #link-url-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    .link-type-selector {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .link-type-selector label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .modal-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .btn-cancel {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-cancel:hover {
+      background: #e0e0e0;
+    }
+
+    .btn-delete {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .btn-delete:hover {
+      background: #fecaca;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
   </style>
+
 </head>
 
 <body>
-  <div id="mindmap-container">
-    <svg id="svg-connections"></svg>
+  <div id="mindmap-container"><svg id="svg-connections"></svg>
     <!-- Central Node with Placeholder -->
     <div id="central-node" class="node central-node" contenteditable="true" tabindex="0"
       data-placeholder="Central topic"></div>
-
     <div id="toolbar-dock">
       <!-- Main Actions -->
-      <div class="toolbar-panel" id="main-actions">
-        <button id="add-node-btn" class="main-button primary-btn" title="Add Sibling (Enter)">+ Node</button>
-        <button id="add-child-btn" class="main-button primary-btn" title="Add Child (Tab)">+ Child</button>
-        <button id="delete-node-btn" class="main-button delete-button" title="Delete Selected">Del</button>
-        <div class="divider"></div>
-        <button id="undo-btn" class="icon-btn" title="Undo">↩</button>
-        <button id="redo-btn" class="icon-btn" title="Redo">↪</button>
-        <button id="copy-text-btn" class="icon-btn" title="Copy Text">📋</button>
-        <div class="divider"></div>
-        <button id="auto-layout-btn" class="icon-btn" title="Auto-layout nodes">🔄</button>
-        <button id="help-btn" class="icon-btn" title="Help / Tutorial">📖</button>
+      <div class="toolbar-panel" id="main-actions"><button id="add-node-btn" class="main-button primary-btn"
+          title="Add Sibling (Enter)">+Node</button><button id="add-child-btn" class="main-button primary-btn"
+          title="Add Child (Tab)">+Child</button><button id="delete-node-btn" class="main-button delete-button"
+          title="Delete Selected">Del</button>
+        <div class="divider"></div><button id="undo-btn" class="icon-btn" title="Undo">↩</button><button id="redo-btn"
+          class="icon-btn" title="Redo">↪</button><button id="add-link-btn" class="icon-btn"
+          title="Add/Edit Link">🔗</button><button id="copy-text-btn" class="icon-btn" title="Copy Text">📋</button>
+        <div class="divider"></div><button id="auto-layout-btn" class="icon-btn"
+          title="Auto-layout nodes">🔄</button><button id="help-btn" class="icon-btn"
+          title="Help / Tutorial">📖</button>
       </div>
-
       <!-- Styling & Emojis -->
       <div class="toolbar-panel" id="style-panel">
         <div class="divider"></div>
@@ -436,70 +560,68 @@
           <div class="color-swatch" style="background-color: #BA55D3;" data-color="#BA55D3"></div>
         </div>
         <div class="divider"></div>
-        <div id="emoji-buttons" style="display: flex; gap: 1px;">
-          <button class="emoji-btn" data-emoji="💡">💡</button>
-          <button class="emoji-btn" data-emoji="🧠">🧠</button>
-          <button class="emoji-btn" data-emoji="📚">📚</button>
-          <button class="emoji-btn" data-emoji="🎯">🎯</button>
-          <button class="emoji-btn" data-emoji="✅">✅</button>
-          <button class="emoji-btn" data-emoji="❌">❌</button>
-          <button class="emoji-btn" data-emoji="🛠️">🛠️</button>
-          <button class="emoji-btn" data-emoji="🚦">🚦</button>
-          <button class="emoji-btn" data-emoji="🎬">🎬</button>
-        </div>
+        <div id="emoji-buttons" style="display: flex; gap: 1px;"><button class="emoji-btn"
+            data-emoji="💡">💡</button><button class="emoji-btn" data-emoji="🧠">🧠</button><button class="emoji-btn"
+            data-emoji="📚">📚</button><button class="emoji-btn" data-emoji="🎯">🎯</button><button class="emoji-btn"
+            data-emoji="✅">✅</button><button class="emoji-btn" data-emoji="❌">❌</button><button class="emoji-btn"
+            data-emoji="🛠️">🛠️</button><button class="emoji-btn" data-emoji="🚦">🚦</button><button class="emoji-btn"
+            data-emoji="🎬">🎬</button></div>
       </div>
-
       <!-- File Operations -->
       <div class="toolbar-panel" id="file-ops">
-        <div class="divider"></div>
-        <a href="https://jamesabela.github.io/jsfun/mindmapplain.html" target="_blank" style="text-decoration: none;">
-          <button class="main-button" title="New Mindmap">New</button>
-        </a>
-        <button id="upload-json-btn" class="main-button" onclick="document.getElementById('upload-json').click()"
-          title="Open JSON">📂</button>
-        <input type="file" id="upload-json" />
-        <button id="download-json-btn" class="main-button" title="Save JSON">💾</button>
-        <button id="export-png-btn" class="main-button" title="Export PNG">🖼️</button>
-        <button id="export-pptx-btn" class="main-button" title="Export PPTX">📊</button>
-
-        <div class="attribution" style="margin-left: 8px;">
-          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank"
-            rel="license noopener noreferrer" title="CC BY-NC-SA 4.0">
-            <img style="height:18px!important;"
-              src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="">
-            <img style="height:18px!important;"
-              src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
-            <img style="height:18px!important;"
-              src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="">
-            <img style="height:18px!important;"
-              src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
-          </a>
-        </div>
-
-        <div id="url-status" class="status-good" title="Click to toggle URL storage">
-          <span class="status-icon">●</span>
-          <span id="url-char-count">0</span>
-        </div>
+        <div class="divider"></div><a href="https://jamesabela.github.io/jsfun/mindmapplain.html" target="_blank"
+          style="text-decoration: none;"><button class="main-button" title="New Mindmap">New</button></a><button
+          id="upload-json-btn" class="main-button" onclick="document.getElementById('upload-json').click()"
+          title="Open JSON">📂</button><input type="file" id="upload-json" /><button id="download-json-btn"
+          class="main-button" title="Save JSON">💾</button><button id="export-png-btn" class="main-button"
+          title="Export PNG">🖼️</button><button id="export-pptx-btn" class="main-button"
+          title="Export PPTX">📊</button>
+        <div class="attribution" style="margin-left: 8px;"><a
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank"
+            rel="license noopener noreferrer" title="CC BY-NC-SA 4.0"><img style="height:18px!important;"
+              src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img
+              style="height:18px!important;"
+              src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img
+              style="height:18px!important;"
+              src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img
+              style="height:18px!important;"
+              src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></div>
+        <div id="url-status" class="status-good" title="Click to toggle URL storage"><span
+            class="status-icon">●</span><span id="url-char-count">0</span></div>
       </div>
     </div>
   </div>
   </div>
-
   <!-- Warning Modal -->
   <div id="modal-overlay">
     <div id="modal-box">
       <div id="modal-title">Open Mind Map</div>
       <div id="modal-message">Opening a file will overwrite your current mind map. What would you like to do?</div>
-      <div class="modal-buttons">
-        <button class="modal-btn btn-cancel" id="modal-cancel">Cancel</button>
-        <button class="modal-btn btn-new-window" id="modal-new-window">New Window</button>
-        <button class="modal-btn btn-overwrite" id="modal-overwrite">Overwrite</button>
-      </div>
+      <div class="modal-buttons"><button class="modal-btn btn-cancel" id="modal-cancel">Cancel</button><button
+          class="modal-btn btn-new-window" id="modal-new-window">New Window</button><button
+          class="modal-btn btn-overwrite" id="modal-overwrite">Overwrite</button></div>
     </div>
   </div>
 
-  <script>
-    const container = document.getElementById('mindmap-container');
+  <!-- Link/Image Selection Modal -->
+  <div id="link-modal-overlay">
+    <div id="link-modal-box">
+      <div id="link-modal-title">Add Link or Image</div>
+      <div class="link-modal-content">
+        <input type="text" id="link-url-input" placeholder="Enter URL (https://...)" />
+        <div class="link-type-selector">
+          <label><input type="radio" name="link-type" value="link" checked> Hyperlink</label>
+          <label><input type="radio" name="link-type" value="image"> Image</label>
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-btn btn-cancel" id="link-modal-cancel">Cancel</button>
+        <button class="modal-btn btn-delete" id="link-modal-remove">Remove</button>
+        <button class="modal-btn btn-primary" id="link-modal-save">Save</button>
+      </div>
+    </div>
+  </div>
+  <script>const container = document.getElementById('mindmap-container');
     const svg = document.getElementById('svg-connections');
     const centralNode = document.getElementById('central-node');
     const documentTitle = document.getElementById('document-title');
@@ -507,6 +629,7 @@
     const deleteNodeBtn = document.getElementById('delete-node-btn');
     const undoBtn = document.getElementById('undo-btn');
     const redoBtn = document.getElementById('redo-btn');
+    const addLinkBtn = document.getElementById('add-link-btn');
     const addNodeBtn = document.getElementById('add-node-btn');
     const addChildBtn = document.getElementById('add-child-btn');
     const exportPngBtn = document.getElementById('export-png-btn');
@@ -514,15 +637,23 @@
     const colorPalette = document.getElementById('color-palette');
     const emojiButtons = document.querySelectorAll('.emoji-btn');
 
-    const colors = ['#FFFFFF', '#FFD700', '#FF4500', '#32CD32', '#1E90FF', '#BA55D3'];
+    const colors = ['#FFFFFF',
+      '#FFD700',
+      '#FF4500',
+      '#32CD32',
+      '#1E90FF',
+      '#BA55D3'];
 
     let nodesData = [];
     let undoStack = [];
     let redoStack = [];
     let selectedNodeId = null;
     let siblingAngle = 0; // Angle to track placement for sibling nodes
-    let parentChildAngles = {}; // Track next angle for each parent's children
+
+    let parentChildAngles = {}
+      ; // Track next angle for each parent's children
     let urlStorageEnabled = true; // Toggle for URL storage
+    let isInitialized = false; // Prevent URL updates before initial load
 
     function generateId() {
       return 'node-' + Math.random().toString(36).substr(2, 9);
@@ -530,6 +661,7 @@
 
     // Initialize central node with fixed ID and empty text
     const centralNodeId = 'central-node';
+
     nodesData.push({
       id: centralNodeId,
       parentId: null,
@@ -541,15 +673,19 @@
 
     function updateDocumentTitle() {
       const centralNodeData = nodesData.find(n => n.id === centralNodeId);
+
       if (centralNodeData) {
         documentTitle.textContent = centralNodeData.text || 'Mind Map';
       }
     }
 
     function renderMindMap() {
+      console.log('renderMindMap called, nodesData:', nodesData);
       const existingNodes = container.querySelectorAll('.node');
+
       existingNodes.forEach(node => {
-        if (node.id !== 'central-node') { // Preserve the central node
+        if (node.id !== 'central-node') {
+          // Preserve the central node
           container.removeChild(node);
         }
       });
@@ -559,13 +695,16 @@
           centralNode.style.left = `${node.x}px`;
           centralNode.style.top = `${node.y}px`;
           centralNode.style.backgroundColor = node.color;
-          centralNode.innerText = node.text;
+
+          // Use renderNodeContent for central node too
+          renderNodeContent(centralNode, node, false);
 
           // Attach event listeners if not already attached
           if (!centralNode.dataset.listenersAttached) {
             addEventListenersToNode(centralNode, node.id);
             centralNode.dataset.listenersAttached = 'true';
           }
+
           return;
         }
 
@@ -574,10 +713,13 @@
         nodeDiv.id = node.id;
         nodeDiv.contentEditable = true;
         nodeDiv.tabIndex = 0;
+
         nodeDiv.style.left = `${node.x}px`;
         nodeDiv.style.top = `${node.y}px`;
         nodeDiv.style.backgroundColor = node.color;
-        nodeDiv.innerText = node.text;
+
+        // Initial render in View Mode
+        renderNodeContent(nodeDiv, node, false);
 
         addEventListenersToNode(nodeDiv, node.id);
         container.appendChild(nodeDiv);
@@ -600,18 +742,35 @@
       nodeDiv.addEventListener('mousedown', startDrag);
 
       nodeDiv.addEventListener('input', () => updateNodeText(nodeId));
+
+      // Toggle between edit and view mode to prevent duplicate icons
+      nodeDiv.addEventListener('focus', () => {
+        const node = nodesData.find(n => n.id === nodeId);
+        if (node) renderNodeContent(nodeDiv, node, true);
+      });
+
+      nodeDiv.addEventListener('blur', () => {
+        const node = nodesData.find(n => n.id === nodeId);
+        if (node) renderNodeContent(nodeDiv, node, false);
+      });
     }
 
     function handleKeyDown(event, nodeId) {
       const isCentralNode = nodeId === centralNodeId;
+
       if (event.key === 'Enter') {
         event.preventDefault();
+
         if (isCentralNode) {
           addNode(nodeId);
-        } else {
+        }
+
+        else {
           addSiblingNode(nodeId);
         }
-      } else if (event.key === 'Tab') {
+      }
+
+      else if (event.key === 'Tab') {
         event.preventDefault();
         addNode(nodeId);
       }
@@ -623,14 +782,8 @@
     }
 
     function highlightSelectedNode() {
-      const nodes = container.querySelectorAll('.node');
-      nodes.forEach(node => {
-        if (node.id === selectedNodeId) {
-          node.style.border = '2px solid #0000FF';
-        } else {
-          node.style.border = '1px solid #999';
-        }
-      });
+      // Border colors are now handled by renderNodeContent
+      // This function can be used for other selection indicators if needed
     }
 
     function addNode(parentId) {
@@ -638,6 +791,7 @@
         alert('No parent node selected.');
         return;
       }
+
       const newId = generateId();
       const nodeDiv = document.getElementById(parentId);
 
@@ -679,6 +833,7 @@
         });
 
         if (!overlaps) {
+
           // Found a good position
           const newNode = {
             id: newId,
@@ -687,7 +842,9 @@
             y: newY,
             color: colors[0],
             text: ''
-          };
+          }
+
+            ;
 
           // Update angle for next child
           parentChildAngles[parentId] = (angle + 45) % 360;
@@ -717,7 +874,9 @@
         y: newY,
         color: colors[0],
         text: ''
-      };
+      }
+
+        ;
 
       parentChildAngles[parentId] = (angle + 45) % 360;
 
@@ -739,9 +898,10 @@
 
       // Constrain the Y position of the new sibling node
       const containerRect = container.getBoundingClientRect();
-      siblingY = Math.max(100, Math.min(siblingY, containerRect.height - 100));  // Prevent creation too high or too low
+      siblingY = Math.max(100, Math.min(siblingY, containerRect.height - 100)); // Prevent creation too high or too low
 
       const newId = generateId();
+
       const newNode = {
         id: newId,
         parentId: currentNode.parentId,
@@ -749,7 +909,9 @@
         y: siblingY,
         color: colors[0],
         text: ''
-      };
+      }
+
+        ;
       pushToUndo();
       nodesData.push(newNode);
       renderMindMap();
@@ -769,11 +931,13 @@
       }
 
       pushToUndo();
+
       function deleteRecursively(id) {
         const children = nodesData.filter(n => n.parentId === id);
         children.forEach(child => deleteRecursively(child.id));
         nodesData = nodesData.filter(n => n.id !== id);
       }
+
       deleteRecursively(selectedNodeId);
       selectedNodeId = null;
       renderMindMap();
@@ -782,6 +946,7 @@
     function changeNodeColor(color) {
       if (!selectedNodeId) return;
       const node = nodesData.find(n => n.id === selectedNodeId);
+
       if (node) {
         pushToUndo();
         node.color = color;
@@ -793,9 +958,67 @@
       const node = nodesData.find(n => n.id === nodeId);
       const nodeDiv = document.getElementById(nodeId);
       if (node && nodeDiv) {
+        // In Edit Mode (which triggers input), innerText is the raw text.
+        // We don't need to filter out the link icon because it's not rendered in Edit Mode.
         node.text = nodeDiv.innerText;
         updateDocumentTitle();
         updateURL();
+      }
+    }
+
+    function renderNodeContent(nodeDiv, node, editMode) {
+      console.log('renderNodeContent called:', { nodeId: node.id, text: node.text, editMode });
+      if (editMode) {
+        // Edit Mode: Raw text
+        nodeDiv.innerText = node.text;
+        // Green border for edit mode (ready to enter text)
+        nodeDiv.style.borderColor = '#10b981';
+      } else {
+        // View Mode: Plain text + Image + Link Icon
+        // Set text FIRST before clearing to prevent updateNodeText from seeing empty content
+        if (node.text) {
+          nodeDiv.textContent = node.text;
+          console.log('Text content set:', node.text);
+        } else {
+          nodeDiv.textContent = '';
+          console.log('No text to set for node:', node.id);
+        }
+
+        // Now add images and links as additional children
+        // Set border color based on whether node has link or image
+        if (node.link || node.image) {
+          nodeDiv.style.borderColor = '#3b82f6'; // Blue for links/images
+        } else {
+          nodeDiv.style.borderColor = ''; // Default border color
+        }
+
+        // Render Image if present
+        if (node.image) {
+          const img = document.createElement('img');
+          img.src = node.image;
+          img.className = 'node-md-image';
+          img.alt = 'Node Image';
+          img.contentEditable = 'false';
+          nodeDiv.appendChild(img);
+        }
+
+        // Render Link Icon if present
+        if (node.link) {
+          const linkIcon = document.createElement('a');
+          linkIcon.href = node.link;
+          linkIcon.target = '_blank';
+          linkIcon.className = 'node-link-icon';
+          linkIcon.innerHTML = '🔗';
+          linkIcon.contentEditable = 'false';
+          linkIcon.title = node.link;
+
+          linkIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.open(node.link, '_blank');
+          });
+
+          nodeDiv.appendChild(linkIcon);
+        }
       }
     }
 
@@ -843,10 +1066,11 @@
       let newY = event.clientY - containerRect.top - dragOffsetY;
 
       // Constrain X and Y to the bounds of the container
-      newX = Math.max(0, Math.min(newX, containerRect.width - 100));  // Ensure node stays within the width of the container
-      newY = Math.max(100, Math.min(newY, containerRect.height - 100));  // Ensure node stays within the height of the container, but not too high (e.g., 50px from the top)
+      newX = Math.max(0, Math.min(newX, containerRect.width - 100)); // Ensure node stays within the width of the container
+      newY = Math.max(100, Math.min(newY, containerRect.height - 100)); // Ensure node stays within the height of the container, but not too high (e.g., 50px from the top)
 
       const node = nodesData.find(n => n.id === currentDraggedNodeId);
+
       if (node) {
         node.x = newX;
         node.y = newY;
@@ -865,6 +1089,7 @@
 
     function focusNode(nodeId) {
       const nodeDiv = document.getElementById(nodeId);
+
       if (nodeDiv) {
         nodeDiv.focus();
         setSelectedNode(nodeId);
@@ -877,6 +1102,7 @@
       nodesData.forEach(node => {
         if (node.parentId) {
           const parentNode = nodesData.find(n => n.id === node.parentId);
+
           if (parentNode) {
             drawLine(parentNode, node);
           }
@@ -896,6 +1122,11 @@
     }
 
     function updateURL() {
+      console.log('updateURL called, nodesData:', nodesData);
+      if (!isInitialized) {
+        console.log('updateURL skipped: not initialized');
+        return;
+      }
       if (!urlStorageEnabled) {
         updateURLStatus(0, false);
         return;
@@ -904,6 +1135,7 @@
       const serializedData = JSON.stringify(nodesData);
       const encodedData = btoa(encodeURIComponent(serializedData));
       const fullURL = '#' + encodedData;
+      console.log('updateURL encoding:', serializedData);
 
       window.history.replaceState(null, null, fullURL);
       updateURLStatus(fullURL.length, true);
@@ -925,44 +1157,76 @@
       // Color coding based on safe limits
       if (charCount < 2000) {
         statusBadge.className = 'status-good';
-        statusBadge.title = `URL: ${charCount} chars (Safe for all browsers)`;
-      } else if (charCount < 8000) {
+
+        statusBadge.title = `URL: $ {
+          charCount
+        }
+
+        chars (Safe for all browsers)`;
+      }
+
+      else if (charCount < 8000) {
         statusBadge.className = 'status-warning';
-        statusBadge.title = `URL: ${charCount} chars (May have issues in some contexts)`;
-      } else {
+
+        statusBadge.title = `URL: $ {
+          charCount
+        }
+
+        chars (May have issues in some contexts)`;
+      }
+
+      else {
         statusBadge.className = 'status-error';
-        statusBadge.title = `URL: ${charCount} chars (Too long! Consider saving as JSON)`;
+
+        statusBadge.title = `URL: $ {
+          charCount
+        }
+
+        chars (Too long ! Consider saving as JSON)`;
       }
     }
 
     // Toggle URL storage
     document.getElementById('url-status').addEventListener('click', () => {
       urlStorageEnabled = !urlStorageEnabled;
+
       if (urlStorageEnabled) {
         updateURL(); // Re-enable and update
-      } else {
+      }
+
+      else {
         window.history.replaceState(null, null, window.location.pathname);
         updateURLStatus(0, false);
       }
     });
 
     function copyText() {
-      const nodeTexts = nodesData.map(node => `${'\t'.repeat(getNodeDepth(node.id))}${node.text}`);
+      const nodeTexts = nodesData.map(node => `$ {
+          '\t' .repeat(getNodeDepth(node.id))
+        }
+
+        $ {
+          node.text
+        }
+
+        `);
       const textToCopy = nodeTexts.join('\n');
-      navigator.clipboard.writeText(textToCopy)
-        .then(() => {
-          alert('Mind map text copied to clipboard!');
-        })
-        .catch(err => {
-          console.error('Failed to copy text: ', err);
-        });
+
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        alert('Mind map text copied to clipboard!');
+
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
     }
 
     function getNodeDepth(nodeId, depth = 0) {
       const node = nodesData.find(n => n.id === nodeId);
+
       if (node && node.parentId) {
         return getNodeDepth(node.parentId, depth + 1);
       }
+
       return depth;
     }
 
@@ -970,9 +1234,11 @@
       loadFromURL();
       // Re-query central node as it might have been re-created by renderMindMap
       const currentCentralNode = document.getElementById(centralNodeId);
+
       if (currentCentralNode) {
         currentCentralNode.focus();
       }
+
       setSelectedNode(centralNodeId);
     });
 
@@ -989,6 +1255,7 @@
     deleteNodeBtn.addEventListener('click', deleteSelectedNode);
     undoBtn.addEventListener('click', undo);
     redoBtn.addEventListener('click', redo);
+    addLinkBtn.addEventListener('click', addLink);
     addNodeBtn.addEventListener('click', () => addSiblingNode(selectedNodeId));
     addChildBtn.addEventListener('click', () => addNode(selectedNodeId));
     document.getElementById('download-json-btn').addEventListener('click', downloadJSON);
@@ -996,8 +1263,123 @@
     document.getElementById('help-btn').addEventListener('click', () => loadTutorial());
 
     function loadTutorial(force = false) {
+
       // Encode tutorial data and open in new window with URL hash
-      const tutorialData = [{ "id": "central-node", "parentId": null, "x": 594, "y": 378, "color": "#FFFFFF", "text": "How to use" }, { "id": "node-itx7aweuu", "parentId": "central-node", "x": 606.984375, "y": 113.0859375, "color": "#32CD32", "text": "Use Tab to make child nodes" }, { "id": "node-v8wicqt4z", "parentId": "central-node", "x": 684, "y": 191.0859375, "color": "#32CD32", "text": "Use Enter to add siblings" }, { "id": "node-urm2xi9fn", "parentId": "central-node", "x": 230.984375, "y": 376.0859375, "color": "#FFD700", "text": "Press the icons for colours and emojis" }, { "id": "node-vfc52uqw1", "parentId": "node-urm2xi9fn", "x": 194, "y": 487.0859375, "color": "#FFFFFF", "text": "💡Idea" }, { "id": "node-4vwecjmln", "parentId": "node-urm2xi9fn", "x": 370, "y": 254.0961894323342, "color": "#FFFFFF", "text": "🧠Thinking" }, { "id": "node-b01ouqdyi", "parentId": "node-urm2xi9fn", "x": 325, "y": 493.0859375, "color": "#FFFFFF", "text": "🔬research" }, { "id": "node-rbvu3wcl7", "parentId": "node-urm2xi9fn", "x": 201.9965362548828, "y": 254.0885467529297, "color": "#FFFFFF", "text": "🎯Target" }, { "id": "node-nw6o6pwa8", "parentId": "node-urm2xi9fn", "x": 31, "y": 401.0859375, "color": "#FFFFFF", "text": "✅Done" }, { "id": "node-zmdqet6c5", "parentId": "node-urm2xi9fn", "x": 26, "y": 485.0859375, "color": "#FFFFFF", "text": "❌Not done" }, { "id": "node-4y5fi21ud", "parentId": "node-urm2xi9fn", "x": 483.9921875, "y": 491.0859375, "color": "#FFFFFF", "text": "🛠️Fix it" }, { "id": "node-eicb2ehb7", "parentId": "node-urm2xi9fn", "x": 15, "y": 311.0859375, "color": "#FFFFFF", "text": "🚦Progress" }, { "id": "node-d5wucmwhk", "parentId": "node-urm2xi9fn", "x": 297.9930725097656, "y": 163.0885467529297, "color": "#FFFFFF", "text": "🎬Action" }, { "id": "node-xp19w7q95", "parentId": "node-urm2xi9fn", "x": 43.984375, "y": 585.078125, "color": "#FFFFFF", "text": "Can change icon by pressing another button" }, { "id": "node-rfh741ueh", "parentId": "central-node", "x": 848, "y": 448.078125, "color": "#FFFFFF", "text": "Copy Text gives you the mindmap text" }, { "id": "node-q23udh75a", "parentId": "central-node", "x": 923.9921875, "y": 259.0859375, "color": "#FFFFFF", "text": "The link at the top updates" }, { "id": "node-ovcxbvqcd", "parentId": "node-q23udh75a", "x": 960.9921875, "y": 370.09375, "color": "#FFFFFF", "text": "Copy and paste link to save" }, { "id": "node-p4kqkvd10", "parentId": "node-q23udh75a", "x": 929.9921875, "y": 70.0859375, "color": "#FFFFFF", "text": "Encoded, but only against casual looking" }, { "id": "node-11zyyd38b", "parentId": "node-q23udh75a", "x": 1060.984375, "y": 162.09375, "color": "#FF4500", "text": "Don't include confidential info" }, { "id": "node-4y2pl7cq6", "parentId": "central-node", "x": 792, "y": 692.09375, "color": "#FFFFFF", "text": "Print to save a PDF" }, { "id": "node-ajne4uz7j", "parentId": "central-node", "x": 467, "y": 697.09375, "color": "#FFFFFF", "text": "Can download JSON for later" }, { "id": "node-6cwdh749f", "parentId": "central-node", "x": 852, "y": 525.09375, "color": "#FFFFFF", "text": "Export PNG for easy transfer to other apps" }, { "id": "node-jes9tna46", "parentId": "central-node", "x": 844, "y": 612.09375, "color": "#FFFFFF", "text": "Export pptx for easy slides" }];
+      const tutorialData = [{
+        "id": "central-node", "parentId": null, "x": 594, "y": 378, "color": "#FFFFFF", "text": "How to use"
+      }
+
+        ,
+      {
+        "id": "node-itx7aweuu", "parentId": "central-node", "x": 606.984375, "y": 113.0859375, "color": "#32CD32", "text": "Use Tab to make child nodes"
+      }
+
+        ,
+      {
+        "id": "node-v8wicqt4z", "parentId": "central-node", "x": 684, "y": 191.0859375, "color": "#32CD32", "text": "Use Enter to add siblings"
+      }
+
+        ,
+      {
+        "id": "node-urm2xi9fn", "parentId": "central-node", "x": 230.984375, "y": 376.0859375, "color": "#FFD700", "text": "Press the icons for colours and emojis"
+      }
+
+        ,
+      {
+        "id": "node-vfc52uqw1", "parentId": "node-urm2xi9fn", "x": 194, "y": 487.0859375, "color": "#FFFFFF", "text": "💡Idea"
+      }
+
+        ,
+      {
+        "id": "node-4vwecjmln", "parentId": "node-urm2xi9fn", "x": 370, "y": 254.0961894323342, "color": "#FFFFFF", "text": "🧠Thinking"
+      }
+
+        ,
+      {
+        "id": "node-b01ouqdyi", "parentId": "node-urm2xi9fn", "x": 325, "y": 493.0859375, "color": "#FFFFFF", "text": "🔬research"
+      }
+
+        ,
+      {
+        "id": "node-rbvu3wcl7", "parentId": "node-urm2xi9fn", "x": 201.9965362548828, "y": 254.0885467529297, "color": "#FFFFFF", "text": "🎯Target"
+      }
+
+        ,
+      {
+        "id": "node-nw6o6pwa8", "parentId": "node-urm2xi9fn", "x": 31, "y": 401.0859375, "color": "#FFFFFF", "text": "✅Done"
+      }
+
+        ,
+      {
+        "id": "node-zmdqet6c5", "parentId": "node-urm2xi9fn", "x": 26, "y": 485.0859375, "color": "#FFFFFF", "text": "❌Not done"
+      }
+
+        ,
+      {
+        "id": "node-4y5fi21ud", "parentId": "node-urm2xi9fn", "x": 483.9921875, "y": 491.0859375, "color": "#FFFFFF", "text": "🛠️Fix it"
+      }
+
+        ,
+      {
+        "id": "node-eicb2ehb7", "parentId": "node-urm2xi9fn", "x": 15, "y": 311.0859375, "color": "#FFFFFF", "text": "🚦Progress"
+      }
+
+        ,
+      {
+        "id": "node-d5wucmwhk", "parentId": "node-urm2xi9fn", "x": 297.9930725097656, "y": 163.0885467529297, "color": "#FFFFFF", "text": "🎬Action"
+      }
+
+        ,
+      {
+        "id": "node-xp19w7q95", "parentId": "node-urm2xi9fn", "x": 43.984375, "y": 585.078125, "color": "#FFFFFF", "text": "Can change icon by pressing another button"
+      }
+
+        ,
+      {
+        "id": "node-rfh741ueh", "parentId": "central-node", "x": 848, "y": 448.078125, "color": "#FFFFFF", "text": "Copy Text gives you the mindmap text"
+      }
+
+        ,
+      {
+        "id": "node-q23udh75a", "parentId": "central-node", "x": 923.9921875, "y": 259.0859375, "color": "#FFFFFF", "text": "The link at the top updates"
+      }
+
+        ,
+      {
+        "id": "node-ovcxbvqcd", "parentId": "node-q23udh75a", "x": 960.9921875, "y": 370.09375, "color": "#FFFFFF", "text": "Copy and paste link to save"
+      }
+
+        ,
+      {
+        "id": "node-p4kqkvd10", "parentId": "node-q23udh75a", "x": 929.9921875, "y": 70.0859375, "color": "#FFFFFF", "text": "Encoded, but only against casual looking"
+      }
+
+        ,
+      {
+        "id": "node-11zyyd38b", "parentId": "node-q23udh75a", "x": 1060.984375, "y": 162.09375, "color": "#FF4500", "text": "Don't include confidential info"
+      }
+
+        ,
+      {
+        "id": "node-4y2pl7cq6", "parentId": "central-node", "x": 792, "y": 692.09375, "color": "#FFFFFF", "text": "Print to save a PDF"
+      }
+
+        ,
+      {
+        "id": "node-ajne4uz7j", "parentId": "central-node", "x": 467, "y": 697.09375, "color": "#FFFFFF", "text": "Can download JSON for later"
+      }
+
+        ,
+      {
+        "id": "node-6cwdh749f", "parentId": "central-node", "x": 852, "y": 525.09375, "color": "#FFFFFF", "text": "Export PNG for easy transfer to other apps"
+      }
+
+        ,
+      {
+        "id": "node-jes9tna46", "parentId": "central-node", "x": 844, "y": 612.09375, "color": "#FFFFFF", "text": "Export pptx for easy slides"
+      }
+
+      ];
 
       const serializedData = JSON.stringify(tutorialData);
       const encodedData = btoa(encodeURIComponent(serializedData));
@@ -1016,18 +1398,24 @@
 
       // Position central node at center
       const centralNodeData = nodesData.find(n => n.id === centralNodeId);
+
       if (centralNodeData) {
         centralNodeData.x = centerX;
         centralNodeData.y = centerY;
       }
 
       // Group nodes by depth level
-      const nodesByDepth = {};
+      const nodesByDepth = {}
+
+        ;
+
       nodesData.forEach(node => {
         const depth = getNodeDepth(node.id);
+
         if (!nodesByDepth[depth]) {
           nodesByDepth[depth] = [];
         }
+
         nodesByDepth[depth].push(node);
       });
 
@@ -1043,11 +1431,15 @@
         const radius = baseRadius * depth;
 
         // Group nodes by their parent
-        const nodesByParent = {};
+        const nodesByParent = {}
+
+          ;
+
         nodesAtDepth.forEach(node => {
           if (!nodesByParent[node.parentId]) {
             nodesByParent[node.parentId] = [];
           }
+
           nodesByParent[node.parentId].push(node);
         });
 
@@ -1064,6 +1456,7 @@
 
           // Determine starting angle based on parent's position relative to center
           let startAngle = 0;
+
           if (depth > 1) {
             const dx = parentNode.x - centerX;
             const dy = parentNode.y - centerY;
@@ -1140,17 +1533,26 @@
     exportPngBtn.addEventListener('click', function () {
       document.body.classList.add('exporting');
 
-      html2canvas(container, { scale: 2, backgroundColor: null }).then(canvas => {
+      html2canvas(container, {
+        scale: 2, backgroundColor: null
+
+      }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         // Name the PNG file based on the central node text
         const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'MindMap';
-        const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.png`;
+
+        const fileName = `$ {
+            centralNodeText.replace(/\s+/g, '_') || 'MindMap'
+          }
+
+          .png`;
         link.href = imgData;
         link.download = fileName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+
       }).finally(() => {
         document.body.classList.remove('exporting');
       });
@@ -1166,7 +1568,9 @@
       const encoder = new TextEncoder();
       const encodedData = encoder.encode(serializedData);
 
-      const blob = new Blob([encodedData], { type: 'application/json' });
+      const blob = new Blob([encodedData], {
+        type: 'application/json'
+      });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -1195,7 +1599,9 @@
       if (isClean) {
         // If clean, just load it
         loadFile(file);
-      } else {
+      }
+
+      else {
         // Show warning modal
         pendingFile = file;
         document.getElementById('modal-overlay').style.display = 'flex';
@@ -1212,6 +1618,7 @@
       if (pendingFile) {
         loadFile(pendingFile);
       }
+
       closeModal();
     });
 
@@ -1219,6 +1626,7 @@
       if (pendingFile) {
         openInNewWindow(pendingFile);
       }
+
       closeModal();
     });
 
@@ -1228,22 +1636,28 @@
 
     function loadFile(file) {
       const reader = new FileReader();
+
       reader.onload = function (e) {
         try {
           const decodedData = e.target.result;
           const parsedData = JSON.parse(decodedData);
           nodesData = parsedData;
           renderMindMap();
-        } catch (error) {
+        }
+
+        catch (error) {
           console.error('Failed to load mind map:', error);
           alert('Invalid mind map file.');
         }
-      };
+      }
+
+        ;
       reader.readAsText(file);
     }
 
     function openInNewWindow(file) {
       const reader = new FileReader();
+
       reader.onload = function (e) {
         try {
           const decodedData = e.target.result;
@@ -1256,11 +1670,15 @@
           const newUrl = currentUrl + '#' + encodedData;
 
           window.open(newUrl, '_blank');
-        } catch (error) {
+        }
+
+        catch (error) {
           console.error('Failed to open in new window:', error);
           alert('Invalid mind map file.');
         }
-      };
+      }
+
+        ;
       reader.readAsText(file);
     }
 
@@ -1289,17 +1707,29 @@
         alert('No node selected.');
         return;
       }
+
       const node = nodesData.find(n => n.id === selectedNodeId);
+
       if (node) {
         pushToUndo();
-        const emojis = ['💡', '🧠', '📚', '🎯', '✅', '❌', '🛠️', '🚦', '🎬'];
+        const emojis = ['💡',
+          '🧠',
+          '📚',
+          '🎯',
+          '✅',
+          '❌',
+          '🛠️',
+          '🚦',
+          '🎬'];
         let currentText = node.text.trim();
 
         const existingEmoji = emojis.find(e => currentText.startsWith(e));
 
         if (existingEmoji) {
           node.text = currentText.replace(existingEmoji, emoji);
-        } else {
+        }
+
+        else {
           node.text = (currentText ? emoji + ' ' + currentText : emoji);
         }
 
@@ -1310,32 +1740,52 @@
     function loadFromURL() {
       if (window.location.hash.length > 1) {
         try {
-          const encodedData = window.location.hash.substring(1);
-          const decodedData = decodeURIComponent(atob(encodedData));
-          const parsedData = JSON.parse(decodedData);
+          const rawHash = window.location.hash.substring(1);
 
-          const central = parsedData.find(n => n.parentId === null);
-          if (central) {
-            central.id = centralNodeId;
-            nodesData = parsedData.map(n => n.id === central.id ? central : n);
-          } else {
-            nodesData = [{
-              id: centralNodeId,
-              parentId: null,
-              x: 0,
-              y: 0,
-              color: colors[0],
-              text: ''
-            }];
+          // Attempt to decode URI component (handles % characters)
+          let encodedData = rawHash;
+          try {
+            encodedData = decodeURIComponent(rawHash);
+          } catch (e) {
+            console.warn('Outer decode failed, using raw hash', e);
           }
 
+          const decodedBase64 = atob(encodedData);
+          const decodedData = decodeURIComponent(decodedBase64);
+          const parsedData = JSON.parse(decodedData);
+
+          console.log('Loading from URL, parsed data:', parsedData);
+
+          // Simply use the parsed data directly
+          nodesData = parsedData;
+
+          console.log('nodesData after loading:', nodesData);
+
+          // Center the nodes if needed
+          const centralNodeData = nodesData.find(n => n.id === centralNodeId || n.parentId === null);
+          if (centralNodeData && (centralNodeData.x === 0 || centralNodeData.y === 0)) {
+            centerNodePosition(centralNodeData.id);
+          }
+
+          isInitialized = true;
           renderMindMap();
         } catch (error) {
           console.error('Failed to load mind map from URL:', error);
+          // Initialize with default if loading fails
+          nodesData = [{
+            id: centralNodeId,
+            parentId: null,
+            x: 0,
+            y: 0,
+            color: colors[0],
+            text: ''
+          }];
           centerNodePosition(centralNodeId);
+          isInitialized = true;
           renderMindMap();
         }
       } else {
+
         // Initialize with default central node if empty
         if (nodesData.length === 0) {
           nodesData = [{
@@ -1345,35 +1795,44 @@
             y: 0,
             color: colors[0],
             text: ''
-          }];
+          }
+
+          ];
         }
+
         centerNodePosition(centralNodeId);
+        isInitialized = true;
         renderMindMap();
       }
     }
 
     function centerNodePosition(nodeId) {
       const node = nodesData.find(n => n.id === nodeId);
+
       if (node) {
         const containerRect = container.getBoundingClientRect();
         node.x = (containerRect.width / 2) - 50;
         node.y = (containerRect.height / 2) - 30;
       }
     }
+
     // Export PPTX
     document.getElementById('export-pptx-btn').addEventListener('click', function () {
       const pptx = new PptxGenJS();
 
       // Slide 1: Title Slide with Central Node Name
       const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'Mind Map';
-      const titleSlide = pptx.addSlide({ masterName: 'TITLE_SLIDE' });
+
+      const titleSlide = pptx.addSlide({
+        masterName: 'TITLE_SLIDE'
+      });
 
       // Expand the title text box for the first slide
       titleSlide.addText(centralNodeText, {
         x: 0.5,
         y: 2,
-        w: 9,  // Expanding the width of the title text box
-        h: 1,  // Expanding the height of the title text box
+        w: 9, // Expanding the width of the title text box
+        h: 1, // Expanding the height of the title text box
         fontSize: 36,
         bold: true,
         align: 'center'
@@ -1385,9 +1844,15 @@
       // Hide toolbar for the export
       document.body.classList.add('exporting');
 
-      html2canvas(container, { scale: 2, backgroundColor: null }).then(canvas => {
+      html2canvas(container, {
+        scale: 2, backgroundColor: null
+
+      }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
-        slide2.addImage({ data: imgData, x: 0, y: 0, w: 10, h: 5.625 });
+
+        slide2.addImage({
+          data: imgData, x: 0, y: 0, w: 10, h: 5.625
+        });
 
         // Slide 3: Single Text Box with Proper Bulleted List (Flat, no indentation)
         const slide3 = pptx.addSlide();
@@ -1396,27 +1861,26 @@
         slide3.addText(centralNodeText, {
           x: 0.5,
           y: 0.1,
-          w: 9,  // Make the text box wide enough
-          h: 1,  // Adjust the height as needed for the title
+          w: 9, // Make the text box wide enough
+          h: 1, // Adjust the height as needed for the title
           fontSize: 24,
           bold: true
         });
 
-        // Create a string to hold all bullet points, flat list (no indentation)
-        let bulletPointsText = '';
-
-        // Loop through each node and build the string for the flat bullets, without a final extra newline
-        nodesData.forEach((node, index) => {
-          if (node.id !== centralNodeId) {  // Skip the central node
-            bulletPointsText += `${node.text || 'Node'}`;
-            if (index !== nodesData.length - 1) {  // Add a newline unless it's the last item
-              bulletPointsText += '\n';
+        // Create an array of text objects for rich text support (links)
+        const textItems = nodesData
+          .filter(n => n.id !== centralNodeId)
+          .map(node => ({
+            text: node.text || 'Node',
+            options: {
+              breakLine: true,
+              hyperlink: node.link ? { url: node.link } : undefined,
+              color: node.link ? '0563C1' : undefined // Standard link blue
             }
-          }
-        });
+          }));
 
-        // Add the entire string as a single bulleted text box
-        slide3.addText(bulletPointsText, {
+        // Add the text items as a bulleted list
+        slide3.addText(textItems, {
           x: 0.5,  // X position for the text box
           y: 1,    // Y position for the bullets
           w: 9,    // Width of the text box
@@ -1435,8 +1899,8 @@
         slide4.addText('Edit the Mind Map Here:', {
           x: 0.5,
           y: 0.2,
-          w: 9,  // Expanding the width of the title text box
-          h: 1,  // Expanding the height of the title text box
+          w: 9, // Expanding the width of the title text box
+          h: 1, // Expanding the height of the title text box
           fontSize: 24,
           bold: true
         });
@@ -1445,25 +1909,31 @@
         slide4.addText(mindmapLink, {
           x: 0.5,
           y: 1,
-          fontSize: 8,    // Set font size to 8
-          w: 9,           // Expand width of the text box to fit the content
-          h: 1,           // Adjust height as needed
+          fontSize: 8, // Set font size to 8
+          w: 9, // Expand width of the text box to fit the content
+          h: 1, // Adjust height as needed
           align: 'left'
         });
 
         // Add the "Created with" message and CC BY-NC-SA link
         slide4.addText("Created with James Abela's Mindmapping tool", {
           x: 0.5,
-          y: 5,  // Position it at the bottom of the slide
+          y: 5, // Position it at the bottom of the slide
           fontSize: 12,
           w: 9,
           align: 'center'
         });
+
         slide4.addText("CC BY-NC-SA 4.0", {
           x: 0.5,
-          y: 5.3,  // Slightly below the previous text
+          y: 5.3, // Slightly below the previous text
+
           fontSize: 12,
-          hyperlink: { url: "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" },
+          hyperlink: {
+            url: "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1"
+          }
+
+          ,
           w: 9,
           align: 'center'
         });
@@ -1472,20 +1942,119 @@
         slide4.addNotes(mindmapLink);
 
         // Name the file based on the central node's text
-        const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.pptx`;
+        const fileName = `$ {
+      centralNodeText.replace(/\s+/g, '_') || 'MindMap'
+    }
+
+    .pptx`;
 
         // Save the PowerPoint
-        pptx.writeFile({ fileName: fileName });
+        pptx.writeFile({
+          fileName: fileName
+        });
+
       }).finally(() => {
         document.body.classList.remove('exporting');
       });
     });
 
+    // Link/Image Modal Logic
+    const linkModalOverlay = document.getElementById('link-modal-overlay');
+    const linkUrlInput = document.getElementById('link-url-input');
+    const linkModalSave = document.getElementById('link-modal-save');
+    const linkModalRemove = document.getElementById('link-modal-remove');
+    const linkModalCancel = document.getElementById('link-modal-cancel');
+    const linkTypeRadios = document.getElementsByName('link-type');
+
+    function addLink() {
+      if (!selectedNodeId) {
+        alert('Please select a node first.');
+        return;
+      }
+      const node = nodesData.find(n => n.id === selectedNodeId);
+      if (!node) return;
+
+      // Pre-fill modal
+      if (node.image) {
+        linkUrlInput.value = node.image;
+        setLinkType('image');
+      } else if (node.link) {
+        linkUrlInput.value = node.link;
+        setLinkType('link');
+      } else {
+        linkUrlInput.value = '';
+        setLinkType('link'); // Default
+      }
+
+      linkModalOverlay.style.display = 'flex';
+      linkUrlInput.focus();
+    }
+
+    function setLinkType(type) {
+      for (const radio of linkTypeRadios) {
+        if (radio.value === type) {
+          radio.checked = true;
+        }
+      }
+    }
+
+    function getLinkType() {
+      for (const radio of linkTypeRadios) {
+        if (radio.checked) return radio.value;
+      }
+      return 'link';
+    }
+
+    function closeLinkModal() {
+      linkModalOverlay.style.display = 'none';
+    }
+
+    linkModalCancel.addEventListener('click', closeLinkModal);
+
+    linkModalRemove.addEventListener('click', () => {
+      const node = nodesData.find(n => n.id === selectedNodeId);
+      if (node) {
+        pushToUndo();
+        delete node.link;
+        delete node.image;
+        renderMindMap();
+      }
+      closeLinkModal();
+    });
+
+    linkModalSave.addEventListener('click', () => {
+      const node = nodesData.find(n => n.id === selectedNodeId);
+      if (node) {
+        const url = linkUrlInput.value.trim();
+        const type = getLinkType();
+
+        if (url) {
+          pushToUndo();
+          // Clear both first to ensure we switch types cleanly
+          delete node.link;
+          delete node.image;
+
+          if (type === 'image') {
+            node.image = url;
+          } else {
+            // Simple protocol check for links
+            let finalUrl = url;
+            if (!/^https?:\/\//i.test(finalUrl) && !/^mailto:/i.test(finalUrl)) {
+              finalUrl = 'https://' + finalUrl;
+            }
+            node.link = finalUrl;
+          }
+          renderMindMap();
+        }
+      }
+      closeLinkModal();
+    });
+
   </script>
-  <!-- 100% privacy-first analytics -->
-  <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
-      referrerpolicy="no-referrer-when-downgrade" /></noscript>
+  < !-- 100% privacy-first analytics -->
+    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script><noscript><img
+        src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
+        referrerpolicy="no-referrer-when-downgrade" /></noscript>
 </body>
 
 </html>
