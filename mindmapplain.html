@@ -609,9 +609,19 @@
       <div id="link-modal-title">Add Link or Image</div>
       <div class="link-modal-content">
         <input type="text" id="link-url-input" placeholder="Enter URL (https://...)" />
+        <div id="image-upload-container" style="display: none; margin-bottom: 10px;">
+          <input type="file" id="image-file-input" accept="image/*" style="font-size: 14px;">
+          <div style="font-size: 12px; color: #666; margin-top: 4px;">Or paste URL above. Uploaded images are embedded.
+          </div>
+        </div>
         <div class="link-type-selector">
           <label><input type="radio" name="link-type" value="link" checked> Hyperlink</label>
           <label><input type="radio" name="link-type" value="image"> Image</label>
+        </div>
+        <div id="image-size-container" style="display: none; margin-bottom: 20px;">
+          <label for="image-size-slider" style="display: block; font-size: 14px; margin-bottom: 8px;">Image Size: <span
+              id="image-size-value">150</span>px</label>
+          <input type="range" id="image-size-slider" min="10" max="150" value="150" style="width: 100%;">
         </div>
       </div>
       <div class="modal-buttons">
@@ -782,8 +792,25 @@
     }
 
     function highlightSelectedNode() {
-      // Border colors are now handled by renderNodeContent
-      // This function can be used for other selection indicators if needed
+      const allNodes = document.querySelectorAll('.node');
+      allNodes.forEach(nodeDiv => {
+        if (nodeDiv.id === selectedNodeId) {
+          const node = nodesData.find(n => n.id === selectedNodeId);
+          if (node) {
+            if (node.link || node.image) {
+              nodeDiv.style.borderColor = '#3b82f6'; // Blue for links/images
+              nodeDiv.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.3)';
+            } else {
+              nodeDiv.style.borderColor = '#10b981'; // Green for text only
+              nodeDiv.style.boxShadow = '0 0 0 2px rgba(16, 185, 129, 0.3)';
+            }
+          }
+        } else {
+          // Reset to default
+          nodeDiv.style.borderColor = '';
+          nodeDiv.style.boxShadow = '';
+        }
+      });
     }
 
     function addNode(parentId) {
@@ -971,8 +998,13 @@
       if (editMode) {
         // Edit Mode: Raw text
         nodeDiv.innerText = node.text;
-        // Green border for edit mode (ready to enter text)
-        nodeDiv.style.borderColor = '#10b981';
+
+        // Apply selection style immediately for edit mode
+        if (node.link || node.image) {
+          nodeDiv.style.borderColor = '#3b82f6'; // Blue
+        } else {
+          nodeDiv.style.borderColor = '#10b981'; // Green
+        }
       } else {
         // View Mode: Plain text + Image + Link Icon
         // Set text FIRST before clearing to prevent updateNodeText from seeing empty content
@@ -985,12 +1017,8 @@
         }
 
         // Now add images and links as additional children
-        // Set border color based on whether node has link or image
-        if (node.link || node.image) {
-          nodeDiv.style.borderColor = '#3b82f6'; // Blue for links/images
-        } else {
-          nodeDiv.style.borderColor = ''; // Default border color
-        }
+        // Reset border color to default in view mode (highlightSelectedNode handles selection)
+        nodeDiv.style.borderColor = '';
 
         // Render Image if present
         if (node.image) {
@@ -999,6 +1027,13 @@
           img.className = 'node-md-image';
           img.alt = 'Node Image';
           img.contentEditable = 'false';
+
+          // Apply custom size if exists
+          if (node.imageSize) {
+            img.style.maxWidth = node.imageSize + 'px';
+            img.style.maxHeight = node.imageSize + 'px';
+          }
+
           nodeDiv.appendChild(img);
         }
 
@@ -1534,25 +1569,22 @@
       document.body.classList.add('exporting');
 
       html2canvas(container, {
-        scale: 2, backgroundColor: null
-
+        scale: 2,
+        backgroundColor: null,
+        useCORS: true
       }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
         const link = document.createElement('a');
-        // Name the PNG file based on the central node text
         const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'MindMap';
-
-        const fileName = `$ {
-            centralNodeText.replace(/\s+/g, '_') || 'MindMap'
-          }
-
-          .png`;
+        const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.png`;
         link.href = imgData;
         link.download = fileName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
+      }).catch(err => {
+        console.error('PNG export error:', err);
+        alert('Error creating PNG. If you have images, please use the file upload button (not URL) to ensure they export correctly.');
       }).finally(() => {
         document.body.classList.remove('exporting');
       });
@@ -1816,12 +1848,14 @@
       }
     }
 
-    // Export PPTX
+    //Export PPTX
     document.getElementById('export-pptx-btn').addEventListener('click', function () {
       const pptx = new PptxGenJS();
 
       // Slide 1: Title Slide with Central Node Name
-      const centralNodeText = nodesData.find(n => n.id === centralNodeId)?.text || 'Mind Map';
+      // Find central node dynamically (node with no parent)
+      const centralNode = nodesData.find(n => !n.parentId);
+      const centralNodeText = centralNode?.text || 'Mind Map';
 
       const titleSlide = pptx.addSlide({
         masterName: 'TITLE_SLIDE'
@@ -1845,8 +1879,9 @@
       document.body.classList.add('exporting');
 
       html2canvas(container, {
-        scale: 2, backgroundColor: null
-
+        scale: 2,
+        backgroundColor: null,
+        useCORS: true
       }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
 
@@ -1891,62 +1926,8 @@
         });
 
 
-        // Slide 4: Mind Map Link
-        const slide4 = pptx.addSlide();
-        const mindmapLink = window.location.href;
-
-        // Add the title for the slide
-        slide4.addText('Edit the Mind Map Here:', {
-          x: 0.5,
-          y: 0.2,
-          w: 9, // Expanding the width of the title text box
-          h: 1, // Expanding the height of the title text box
-          fontSize: 24,
-          bold: true
-        });
-
-        // Display the mind map URL as plain text, size 8, without hyperlink
-        slide4.addText(mindmapLink, {
-          x: 0.5,
-          y: 1,
-          fontSize: 8, // Set font size to 8
-          w: 9, // Expand width of the text box to fit the content
-          h: 1, // Adjust height as needed
-          align: 'left'
-        });
-
-        // Add the "Created with" message and CC BY-NC-SA link
-        slide4.addText("Created with James Abela's Mindmapping tool", {
-          x: 0.5,
-          y: 5, // Position it at the bottom of the slide
-          fontSize: 12,
-          w: 9,
-          align: 'center'
-        });
-
-        slide4.addText("CC BY-NC-SA 4.0", {
-          x: 0.5,
-          y: 5.3, // Slightly below the previous text
-
-          fontSize: 12,
-          hyperlink: {
-            url: "https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1"
-          }
-
-          ,
-          w: 9,
-          align: 'center'
-        });
-
-        // Add the full link to the presenter notes
-        slide4.addNotes(mindmapLink);
-
         // Name the file based on the central node's text
-        const fileName = `$ {
-      centralNodeText.replace(/\s+/g, '_') || 'MindMap'
-    }
-
-    .pptx`;
+        const fileName = `${centralNodeText.replace(/\s+/g, '_') || 'MindMap'}.pptx`;
 
         // Save the PowerPoint
         pptx.writeFile({
@@ -1965,6 +1946,63 @@
     const linkModalRemove = document.getElementById('link-modal-remove');
     const linkModalCancel = document.getElementById('link-modal-cancel');
     const linkTypeRadios = document.getElementsByName('link-type');
+    const imageSizeContainer = document.getElementById('image-size-container');
+    const imageSizeSlider = document.getElementById('image-size-slider');
+    const imageSizeValue = document.getElementById('image-size-value');
+    const imageFileInput = document.getElementById('image-file-input');
+    const imageUploadContainer = document.getElementById('image-upload-container');
+
+    // Helper to convert image source to resized Data URI
+    async function processImageToDataURL(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous"; // Try to request CORS
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          // Resize logic (max 300px)
+          const maxDim = 300;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            const ratio = Math.min(maxDim / w, maxDim / h);
+            w *= ratio;
+            h *= ratio;
+          }
+          canvas.width = w;
+          canvas.height = h;
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.8)); // Compress
+        };
+        img.onerror = (e) => reject(e);
+        img.src = src;
+      });
+    }
+
+    // Update slider value display
+    imageSizeSlider.addEventListener('input', () => {
+      imageSizeValue.textContent = imageSizeSlider.value;
+    });
+
+    // Toggle slider visibility based on type
+    function updateSliderVisibility() {
+      const type = getLinkType();
+      imageSizeContainer.style.display = type === 'image' ? 'block' : 'none';
+      imageUploadContainer.style.display = type === 'image' ? 'block' : 'none';
+
+      // Adjust URL input placeholder based on type
+      const linkUrlInput = document.getElementById('link-url-input');
+      if (type === 'image') {
+        linkUrlInput.placeholder = "Enter Image URL (or upload below)";
+      } else {
+        linkUrlInput.placeholder = "Enter URL (https://...)";
+      }
+    }
+
+    // Add listeners to radios
+    linkTypeRadios.forEach(radio => {
+      radio.addEventListener('change', updateSliderVisibility);
+    });
 
     function addLink() {
       if (!selectedNodeId) {
@@ -1978,13 +2016,28 @@
       if (node.image) {
         linkUrlInput.value = node.image;
         setLinkType('image');
+        // Set slider
+        if (node.imageSize) {
+          imageSizeSlider.value = node.imageSize;
+          imageSizeValue.textContent = node.imageSize;
+        } else {
+          imageSizeSlider.value = 150;
+          imageSizeValue.textContent = 150;
+        }
       } else if (node.link) {
         linkUrlInput.value = node.link;
         setLinkType('link');
       } else {
         linkUrlInput.value = '';
         setLinkType('link'); // Default
+        imageSizeSlider.value = 150;
+        imageSizeValue.textContent = 150;
       }
+
+      // Reset file input
+      imageFileInput.value = '';
+
+      updateSliderVisibility();
 
       linkModalOverlay.style.display = 'flex';
       linkUrlInput.focus();
@@ -2017,37 +2070,87 @@
         pushToUndo();
         delete node.link;
         delete node.image;
+        delete node.imageSize;
         renderMindMap();
       }
       closeLinkModal();
     });
 
-    linkModalSave.addEventListener('click', () => {
+    linkModalSave.addEventListener('click', async () => {
       const node = nodesData.find(n => n.id === selectedNodeId);
       if (node) {
         const url = linkUrlInput.value.trim();
         const type = getLinkType();
 
-        if (url) {
+        if (url || (imageFileInput.files && imageFileInput.files[0])) {
           pushToUndo();
           // Clear both first to ensure we switch types cleanly
           delete node.link;
           delete node.image;
+          delete node.imageSize;
 
           if (type === 'image') {
-            node.image = url;
+            // Check if file was uploaded
+            if (imageFileInput.files && imageFileInput.files[0]) {
+              console.log('File selected:', imageFileInput.files[0].name);
+              const file = imageFileInput.files[0];
+              const reader = new FileReader();
+              reader.onload = async (e) => {
+                console.log('File read, size:', e.target.result.length);
+                try {
+                  const dataUrl = await processImageToDataURL(e.target.result);
+                  console.log('Data URL created, length:', dataUrl.length);
+                  node.image = dataUrl;
+                  finishSave();
+                } catch (err) {
+                  console.error("Failed to process uploaded image", err);
+                  alert("Failed to process image: " + err.message);
+                  finishSave(); // Still close modal even if image processing fails
+                }
+              };
+              reader.readAsDataURL(file);
+              return; // Wait for reader
+            }
+            // Else try to process URL
+            else if (url) {
+              try {
+                const dataUrl = await processImageToDataURL(url);
+                node.image = dataUrl;
+              } catch (err) {
+                console.warn("CORS blocked image processing, using raw URL", err);
+                node.image = url;
+              }
+              finishSave();
+            } else {
+              // No image provided
+              finishSave();
+            }
           } else {
             // Simple protocol check for links
             let finalUrl = url;
-            if (!/^https?:\/\//i.test(finalUrl) && !/^mailto:/i.test(finalUrl)) {
+            if (finalUrl && !/^https?:\/\//i.test(finalUrl) && !/^mailto:/i.test(finalUrl)) {
               finalUrl = 'https://' + finalUrl;
             }
             node.link = finalUrl;
+            finishSave();
           }
-          renderMindMap();
+
+          function finishSave() {
+            if (type === 'image') {
+              const size = parseInt(imageSizeSlider.value, 10);
+              if (size) {
+                node.imageSize = size;
+              }
+            }
+            renderMindMap();
+            closeLinkModal();
+          }
+        } else { // If no URL and no file, just close the modal
+          closeLinkModal();
         }
+      } else {
+        closeLinkModal();
       }
-      closeLinkModal();
     });
 
   </script>
