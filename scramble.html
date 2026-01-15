@@ -1,496 +1,177 @@
 <!doctype html>
 <html lang="en" class="h-full">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sentence Order Quiz</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <style>
-    body {
-      box-sizing: border-box;
-    }
-    
-    * {
-      font-family: 'DM Sans', sans-serif;
-    }
-    
-    .sentence-card {
-      transition: all 0.2s ease;
-      touch-action: none;
-    }
-    
-    .sentence-card:hover {
-      transform: translateY(-2px);
-    }
-    
-    .sentence-card.dragging {
-      opacity: 0.9;
-      transform: scale(1.02) rotate(1deg);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-      z-index: 1000;
-    }
-    
-    .drop-zone {
-      transition: all 0.2s ease;
-      min-height: 64px;
-    }
-    
-    .drop-zone.drag-over {
-      background-color: #e0f2fe;
-      border-color: #0ea5e9;
-      transform: scale(1.01);
-    }
-    
-    .drop-zone.has-card {
-      border-style: solid;
-      border-color: transparent;
-      background: transparent;
-      padding: 0;
-    }
-    
-    .zone-card-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      animation: slideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    
-    .zone-card-wrapper.reordering {
-      animation: bounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    
-    .zone-card-inner {
-      flex: 1;
-      transition: all 0.2s ease;
-    }
-    
-    .zone-card-inner:hover {
-      transform: translateX(4px);
-    }
-    
-    .zone-card-inner.dragging-in-zone {
-      opacity: 0.7;
-      transform: scale(0.98) rotate(-1deg);
-    }
-    
-    .correct-answer {
-      animation: correctPulse 0.5s ease;
-    }
-    
-    .incorrect-answer {
-      animation: shake 0.5s ease;
-    }
-    
-    @keyframes correctPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-    }
-    
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
-    }
-    
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .fade-in-up {
-      animation: fadeInUp 0.4s ease forwards;
-    }
-    
-    .stagger-1 { animation-delay: 0.05s; }
-    .stagger-2 { animation-delay: 0.1s; }
-    .stagger-3 { animation-delay: 0.15s; }
-    .stagger-4 { animation-delay: 0.2s; }
-    .stagger-5 { animation-delay: 0.25s; }
-    .stagger-6 { animation-delay: 0.3s; }
-    .stagger-7 { animation-delay: 0.35s; }
-    .stagger-8 { animation-delay: 0.4s; }
-    
-    .number-badge {
-      width: 28px;
-      height: 28px;
-      min-width: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    
-    textarea:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-    }
-    
-    .result-card {
-      animation: fadeInUp 0.5s ease;
-    }
-  </style>
-  <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body class="h-full m-0 p-0 overflow-auto" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
-  <div id="app-container" class="w-full min-h-full p-6 md:p-8">
-   <div class="max-w-3xl mx-auto"><!-- Header -->
-    <div class="text-center mb-8">
-     <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
-      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-      </svg>
-     </div>
-     <h1 id="quiz-title" class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Sentence Order Quiz</h1>
-     <p id="instructions" class="text-gray-500 text-lg">Drag and drop to arrange sentences in the correct order</p>
-    </div><!-- Input Section -->
-    <div id="input-section" class="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-6"><label for="sentence-input" class="block text-gray-700 font-semibold mb-3 text-lg">Enter your sentences</label>
-     <p class="text-gray-500 text-sm mb-4">Type each sentence on a new line. The order you enter them is the correct answer.</p><textarea id="sentence-input" class="w-full h-48 p-4 border-2 border-gray-200 rounded-xl text-gray-700 text-base resize-none transition-all" placeholder="First sentence goes here...
-Second sentence goes here...
-Third sentence goes here...
-And so on..."></textarea> <button id="generate-btn" onclick="generateQuiz()" class="w-full mt-4 py-4 px-6 rounded-xl font-semibold text-white text-lg transition-all hover:opacity-90 active:scale-[0.98]" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);"> <span class="flex items-center justify-center gap-2">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-       </svg> Create Quiz </span> </button>
-    </div><!-- Quiz Section (Hidden initially) -->
-    <div id="quiz-section" class="hidden">
-     <div id="drop-zones-container" class="bg-white rounded-2xl shadow-lg p-6 mb-6">
-      <h3 class="text-gray-600 font-semibold mb-4 flex items-center gap-2">
-       <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-       </svg> Arrange sentences in order</h3>
-      <div id="zones-content" class="space-y-3"></div>
-     </div><!-- Check Button --> <button id="check-btn" onclick="checkOrder()" class="w-full py-4 px-6 rounded-xl font-semibold text-white text-lg transition-all hover:opacity-90 active:scale-[0.98]" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"> <span id="check-btn-text" class="flex items-center justify-center gap-2">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-       </svg> Check My Answer </span> </button> <!-- Result Section -->
-     <div id="result-section" class="hidden mt-6"></div><!-- Try Again Button --> <button id="try-again-btn" onclick="resetQuiz()" class="hidden w-full mt-4 py-4 px-6 rounded-xl font-semibold text-gray-700 text-lg bg-white border-2 border-gray-200 transition-all hover:bg-gray-50 active:scale-[0.98]"> <span class="flex items-center justify-center gap-2">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-       </svg> Shuffle &amp; Try Again </span> </button> <!-- Create New Quiz Button --> <button id="new-quiz-btn" onclick="createNewQuiz()" class="hidden w-full mt-3 py-3 px-6 rounded-xl font-medium text-indigo-600 text-base bg-indigo-50 transition-all hover:bg-indigo-100 active:scale-[0.98]"> Create New Quiz </button>
-    </div>
-   </div>
-  </div>
-  <script>
-    // Config and state
-    const defaultConfig = {
-      quiz_title: 'Sentence Order Quiz',
-      instructions_text: 'Drag and drop to arrange sentences in the correct order',
-      check_button_text: 'Check My Answer'
-    };
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentence Order Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/_sdk/element_sdk.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body { box-sizing: border-box; }
+        * { font-family: 'DM Sans', sans-serif; }
+        .sentence-card { transition: all 0.2s ease; touch-action: none; opacity: 1 !important; }
+        .sentence-card:hover { transform: translateY(-2px); }
+        .sentence-card.dragging { opacity: 0.5; transform: scale(1.02); z-index: 1000; }
+        .fade-in-up { animation: fadeInUp 0.4s ease forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .stagger-1 { animation-delay: 0.05s; }
+        .stagger-2 { animation-delay: 0.1s; }
+        .stagger-3 { animation-delay: 0.15s; }
+        .stagger-4 { animation-delay: 0.2s; }
+    </style>
+</head>
+<body class="h-full m-0 p-0 overflow-auto" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+<div id="app-container" class="w-full min-h-full p-6 md:p-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
+            </div>
+            <h1 id="quiz-title" class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Sentence Order Quiz</h1>
+            <p id="instructions" class="text-gray-500 text-lg">Drag and drop to arrange sentences in the correct order</p>
+        </div>
 
+        <div id="input-section" class="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-6">
+            <label for="sentence-input" class="block text-gray-700 font-semibold mb-3 text-lg">Enter your sentences</label>
+            <p class="text-gray-500 text-sm mb-4">Type each sentence on a new line. The order you enter them is the correct answer.</p>
+            <textarea id="sentence-input" class="w-full h-48 p-4 border-2 border-gray-200 rounded-xl text-gray-700 text-base resize-none transition-all" placeholder="First sentence...&#10;Second sentence..."></textarea>
+            <button id="generate-btn" onclick="generateQuiz()" class="w-full mt-4 py-4 px-6 rounded-xl font-semibold text-white text-lg transition-all hover:opacity-90 active:scale-[0.98]" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);"> Create Quiz </button>
+        </div>
+
+        <div id="quiz-section" class="hidden">
+            <div id="drop-zones-container" class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                <h3 class="text-gray-600 font-semibold mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
+                    Arrange sentences in order</h3>
+                <div id="zones-content" class="space-y-3"></div>
+            </div>
+
+            <button id="check-btn" onclick="checkOrder()" class="w-full py-4 px-6 rounded-xl font-semibold text-white text-lg transition-all hover:opacity-90 active:scale-[0.98]" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"> Check My Answer </button>
+
+            <div id="result-section" class="hidden mt-6"></div>
+
+            <div class="flex flex-col gap-3 mt-4">
+                <button id="try-again-btn" onclick="resetQuiz()" class="hidden w-full py-4 px-6 rounded-xl font-semibold text-gray-700 text-lg bg-white border-2 border-gray-200 transition-all hover:bg-gray-50"> Shuffle & Try Again </button>
+                <button id="share-link-btn" onclick="copyLink()" class="w-full py-3 px-6 rounded-xl font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-all"> Copy Shareable Link for Students </button>
+                <button id="new-quiz-btn" onclick="createNewQuiz()" class="w-full py-3 px-6 rounded-xl font-medium text-gray-500 hover:text-gray-700 transition-all"> Create New Quiz </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
     let correctSentences = [];
     let currentOrder = [];
     let draggedElement = null;
-    let draggedFromZone = null;
 
-    // Element SDK initialization
-    window.elementSdk.init({
-      defaultConfig,
-      onConfigChange: async (config) => {
-        document.getElementById('quiz-title').textContent = config.quiz_title || defaultConfig.quiz_title;
-        document.getElementById('instructions').textContent = config.instructions_text || defaultConfig.instructions_text;
-        const checkBtnText = document.getElementById('check-btn-text');
-        if (checkBtnText) {
-          const btnText = config.check_button_text || defaultConfig.check_button_text;
-          checkBtnText.innerHTML = `
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            ${btnText}
-          `;
-        }
-      },
-      mapToCapabilities: (config) => ({
-        recolorables: [],
-        borderables: [],
-        fontEditable: undefined,
-        fontSizeable: undefined
-      }),
-      mapToEditPanelValues: (config) => new Map([
-        ['quiz_title', config.quiz_title || defaultConfig.quiz_title],
-        ['instructions_text', config.instructions_text || defaultConfig.instructions_text],
-        ['check_button_text', config.check_button_text || defaultConfig.check_button_text]
-      ])
-    });
+    function encodeBase64(str) { return btoa(unescape(encodeURIComponent(str))); }
+    function decodeBase64(str) { return decodeURIComponent(escape(atob(str))); }
 
-    // Base64 encoding/decoding
-    function encodeBase64(str) {
-      return btoa(unescape(encodeURIComponent(str)));
-    }
-
-    function decodeBase64(str) {
-      return decodeURIComponent(escape(atob(str)));
-    }
-
-    // Scramble array
     function scrambleArray(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
     }
 
-    // Sanitize input
-    function sanitizeText(inputText) {
-      return inputText
-        .split(/\n+/)
-        .filter(sentence => sentence.trim().length > 0)
-        .map(sentence => sentence.trim());
-    }
-
-    // Generate quiz
     function generateQuiz() {
-      const inputText = document.getElementById('sentence-input').value;
-      const sentences = sanitizeText(inputText);
+        const inputText = document.getElementById('sentence-input').value;
+        const sentences = inputText.split(/\n+/).filter(s => s.trim().length > 0).map(s => s.trim());
+        if (sentences.length < 2) return alert('Enter at least 2 sentences');
 
-      if (sentences.length < 2) {
-        showToast('Please enter at least 2 sentences');
-        return;
-      }
+        correctSentences = sentences;
+        const scrambled = scrambleArray(sentences);
 
-      correctSentences = sentences;
-      const scrambled = scrambleArray(sentences);
+        // Update URL so it can be shared
+        const encoded = encodeBase64(sentences.join('|'));
+        window.history.pushState({}, '', `?order=${encoded}`);
 
-      // Update URL
-      const correctOrder = encodeBase64(sentences.join('|'));
-      const newUrl = `${window.location.origin}${window.location.pathname}?order=${correctOrder}`;
-      window.history.pushState({}, '', newUrl);
-
-      // Hide input, show quiz
-      document.getElementById('input-section').classList.add('hidden');
-      document.getElementById('quiz-section').classList.remove('hidden');
-
-      createQuizUI(sentences.length, scrambled);
+        showQuizUI(scrambled);
     }
 
-    // Create quiz UI
-    function createQuizUI(numSlots, scrambled) {
-      const zonesContent = document.getElementById('zones-content');
-      
-      zonesContent.innerHTML = '';
-      currentOrder = scrambled.slice();
+    function showQuizUI(sentencesToDisplay) {
+        document.getElementById('input-section').classList.add('hidden');
+        document.getElementById('quiz-section').classList.remove('hidden');
+        const container = document.getElementById('zones-content');
+        container.innerHTML = '';
+        currentOrder = [...sentencesToDisplay];
 
-      // Create draggable sentence cards in single area
-      currentOrder.forEach((sentence, i) => {
-        const card = createSentenceCard(sentence, i, true);
-        zonesContent.appendChild(card);
-      });
-      
-      // Setup drop zone for reordering
-      zonesContent.addEventListener('dragover', handleDragOver);
-      zonesContent.addEventListener('dragleave', handleDragLeave);
-      zonesContent.addEventListener('drop', handleDrop);
-    }
+        sentencesToDisplay.forEach((text, i) => {
+            const card = document.createElement('div');
+            card.className = `sentence-card bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-4 rounded-xl cursor-grab shadow-md fade-in-up stagger-${(i%4)+1}`;
+            card.draggable = true;
+            card.dataset.text = text;
+            card.innerHTML = `<div class="flex items-center gap-3"><svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg><span>${text}</span></div>`;
 
-    // Create sentence card
-    function createSentenceCard(text, index, inZone = false) {
-      const card = document.createElement('div');
-      card.className = 'sentence-card bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-4 rounded-xl cursor-grab shadow-md fade-in-up opacity-0 stagger-' + (index % 8 + 1);
-      card.draggable = true;
-      card.dataset.text = text;
-      card.dataset.index = index;
-      card.innerHTML = `
-        <div class="flex items-center gap-3">
-          <svg class="w-5 h-5 flex-shrink-0 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
-          </svg>
-          <span class="text-base font-medium">${text}</span>
-        </div>
-      `;
-      
-      card.addEventListener('dragstart', handleDragStart);
-      card.addEventListener('dragend', handleDragEnd);
-      
-      return card;
-    }
+            card.addEventListener('dragstart', (e) => { draggedElement = card; card.classList.add('dragging'); });
+            card.addEventListener('dragend', () => { draggedElement.classList.remove('dragging'); draggedElement = null; });
+            container.appendChild(card);
+        });
 
-    // Drag handlers
-    function handleDragStart(e) {
-      draggedElement = e.target.closest('.sentence-card');
-      draggedElement.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    }
-
-    function handleDragEnd(e) {
-      if (draggedElement) {
-        draggedElement.classList.remove('dragging');
-      }
-      draggedElement = null;
-    }
-
-    function handleDragOver(e) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-    }
-
-    function handleDragLeave(e) {
-      // No-op
-    }
-
-    function handleDrop(e) {
-      e.preventDefault();
-      if (!draggedElement) return;
-      
-      const container = document.getElementById('zones-content');
-      const allCards = [...container.querySelectorAll('.sentence-card')];
-      const draggedIndex = allCards.indexOf(draggedElement);
-      const afterElement = getDragAfterElement(container, e.clientY);
-      
-      if (afterElement == null) {
-        container.appendChild(draggedElement);
-      } else {
-        container.insertBefore(draggedElement, afterElement);
-      }
-      
-      // Update currentOrder to match visual order
-      const cards = container.querySelectorAll('.sentence-card');
-      currentOrder = Array.from(cards).map(card => card.dataset.text);
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(container, e.clientY);
+            if (afterElement == null) container.appendChild(draggedElement);
+            else container.insertBefore(draggedElement, afterElement);
+        });
     }
 
     function getDragAfterElement(container, y) {
-      const draggableElements = [...container.querySelectorAll('.sentence-card:not(.dragging)')];
-      
-      return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
-        }
-      }, { offset: Number.NEGATIVE_INFINITY }).element;
+        const draggables = [...container.querySelectorAll('.sentence-card:not(.dragging)')];
+        return draggables.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) return { offset: offset, element: child };
+            else return closest;
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
-    // Check order
     function checkOrder() {
-      const resultSection = document.getElementById('result-section');
-      const tryAgainBtn = document.getElementById('try-again-btn');
-      const newQuizBtn = document.getElementById('new-quiz-btn');
-      
-      let correct = true;
-      
-      currentOrder.forEach((text, index) => {
-        if (text !== correctSentences[index]) {
-          correct = false;
+        const cards = [...document.querySelectorAll('.sentence-card')];
+        const userOrder = cards.map(c => c.dataset.text);
+        const isCorrect = JSON.stringify(userOrder) === JSON.stringify(correctSentences);
+
+        const result = document.getElementById('result-section');
+        result.classList.remove('hidden');
+        document.getElementById('try-again-btn').classList.remove('hidden');
+
+        if (isCorrect) {
+            result.innerHTML = `<div class="bg-emerald-500 text-white p-6 rounded-2xl text-center">🎉 Perfect Order!</div>`;
+        } else {
+            const correctCount = userOrder.filter((t, i) => t === correctSentences[i]).length;
+            result.innerHTML = `<div class="bg-amber-500 text-white p-6 rounded-2xl text-center">🤔 ${correctCount}/${correctSentences.length} correct. Keep trying!</div>`;
         }
-      });
-
-      resultSection.classList.remove('hidden');
-      tryAgainBtn.classList.remove('hidden');
-      newQuizBtn.classList.remove('hidden');
-
-      if (correct) {
-        resultSection.innerHTML = `
-          <div class="result-card bg-gradient-to-r from-emerald-500 to-teal-500 text-white p-6 rounded-2xl text-center">
-            <div class="text-5xl mb-3">🎉</div>
-            <h3 class="text-2xl font-bold mb-2">Perfect!</h3>
-            <p class="opacity-90">You got all sentences in the correct order!</p>
-          </div>
-        `;
-      } else {
-        const correctCount = currentOrder.filter((text, i) => text === correctSentences[i]).length;
-        resultSection.innerHTML = `
-          <div class="result-card bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-2xl text-center">
-            <div class="text-5xl mb-3">🤔</div>
-            <h3 class="text-2xl font-bold mb-2">Almost there!</h3>
-            <p class="opacity-90">You got ${correctCount} out of ${correctSentences.length} correct. Try again!</p>
-          </div>
-        `;
-      }
     }
 
-    // Reset quiz
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied! Send this URL to your students.');
+    }
+
     function resetQuiz() {
-      const resultSection = document.getElementById('result-section');
-      const tryAgainBtn = document.getElementById('try-again-btn');
-      
-      resultSection.classList.add('hidden');
-      tryAgainBtn.classList.add('hidden');
-
-      const scrambled = scrambleArray(correctSentences);
-      createQuizUI(correctSentences.length, scrambled);
+        showQuizUI(scrambleArray(correctSentences));
+        document.getElementById('result-section').classList.add('hidden');
     }
 
-    // Create new quiz
     function createNewQuiz() {
-      document.getElementById('quiz-section').classList.add('hidden');
-      document.getElementById('input-section').classList.remove('hidden');
-      document.getElementById('sentence-input').value = '';
-      document.getElementById('try-again-btn').classList.add('hidden');
-      document.getElementById('new-quiz-btn').classList.add('hidden');
-      document.getElementById('result-section').classList.add('hidden');
-      
-      // Clear URL params
-      window.history.pushState({}, '', window.location.pathname);
+        window.history.pushState({}, '', window.location.pathname);
+        location.reload();
     }
 
-    // Toast notification
-    function showToast(message) {
-      const existing = document.querySelector('.toast-notification');
-      if (existing) existing.remove();
-      
-      const toast = document.createElement('div');
-      toast.className = 'toast-notification fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-xl shadow-lg z-50';
-      toast.textContent = message;
-      document.body.appendChild(toast);
-      
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    // Check for URL params on load
-    function checkUrlParams() {
-      const params = new URLSearchParams(window.location.search);
-      const orderParam = params.get('order');
-      
-      if (orderParam) {
-        try {
-          const decoded = decodeBase64(orderParam);
-          correctSentences = decoded.split('|');
-          
-          if (correctSentences.length >= 2) {
-            document.getElementById('input-section').classList.add('hidden');
-            document.getElementById('quiz-section').classList.remove('hidden');
-            
-            const scrambled = scrambleArray(correctSentences);
-            createQuizUI(correctSentences.length, scrambled);
-          }
-        } catch (e) {
-          console.error('Failed to decode order parameter');
+    // AUTO-LOAD FOR STUDENTS
+    window.onload = () => {
+        const params = new URLSearchParams(window.location.search);
+        const orderParam = params.get('order');
+        if (orderParam) {
+            correctSentences = decodeBase64(orderParam).split('|');
+            showQuizUI(scrambleArray(correctSentences));
         }
-      }
-    }
-
-    // Initialize
-    checkUrlParams();
-  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be137f390b851d1',t:'MTc2ODQzNjU0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    };
+</script>
+</body>
 </html>
