@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debate Arena</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Oswald:wght@400;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.5), 0 0 40px rgba(255, 0, 0, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.8), 0 0 80px rgba(255, 0, 0, 0.5); }
+    }
+    
+    @keyframes vs-fire {
+      0%, 100% { text-shadow: 0 0 20px #ff0000, 0 0 40px #ff6600, 0 0 60px #ff0000; transform: scale(1); }
+      50% { text-shadow: 0 0 40px #ff0000, 0 0 80px #ff6600, 0 0 100px #ff0000; transform: scale(1.1); }
+    }
+    
+    @keyframes lightning {
+      0%, 100% { opacity: 0; }
+      10%, 30% { opacity: 1; }
+      20%, 40% { opacity: 0; }
+    }
+    
+    @keyframes slot-spin {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-100%); }
+    }
+    
+    .shake { animation: shake 0.5s ease-in-out; }
+    .pulse-glow { animation: pulse-glow 1.5s ease-in-out infinite; }
+    .vs-fire { animation: vs-fire 0.8s ease-in-out infinite; }
+    .lightning { animation: lightning 0.3s ease-in-out infinite; }
+    
+    .slot-container {
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .slot-strip {
+      transition: transform 0.1s linear;
+    }
+    
+    .slot-strip.spinning {
+      animation: slot-spin 0.15s linear infinite;
+    }
+    
+    .debate-card {
+      background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+      border: 3px solid #ff0000;
+    }
+    
+    .fighter-box {
+      background: linear-gradient(180deg, #2d1810 0%, #1a0f0a 100%);
+      border: 2px solid #ff6600;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-black overflow-auto">
+  <div id="app-wrapper" class="min-h-full w-full bg-gradient-to-b from-gray-900 via-black to-gray-900 relative"><!-- Lightning effects -->
+   <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div id="lightning1" class="absolute top-0 left-1/4 w-1 h-full bg-gradient-to-b from-yellow-300 via-white to-transparent opacity-0"></div>
+    <div id="lightning2" class="absolute top-0 right-1/4 w-1 h-full bg-gradient-to-b from-yellow-300 via-white to-transparent opacity-0"></div>
+   </div><!-- Main content -->
+   <div class="relative z-10 flex flex-col items-center justify-center min-h-full p-4 md:p-8"><!-- Title -->
+    <h1 id="main-title" class="text-4xl md:text-6xl lg:text-7xl font-bold text-center mb-6 md:mb-10 tracking-wider" style="font-family: 'Bebas Neue', sans-serif; color: #ff0000; text-shadow: 0 0 30px #ff0000, 0 0 60px #ff6600;">⚔️ DEBATE ARENA ⚔️</h1><!-- Slot Machine Container -->
+    <div id="arena-container" class="w-full max-w-5xl"><!-- Battle Stage -->
+     <div class="debate-card rounded-2xl p-4 md:p-8 relative"><!-- Decorative corners -->
+      <div class="absolute top-2 left-2 w-8 h-8 border-t-4 border-l-4 border-yellow-500"></div>
+      <div class="absolute top-2 right-2 w-8 h-8 border-t-4 border-r-4 border-yellow-500"></div>
+      <div class="absolute bottom-2 left-2 w-8 h-8 border-b-4 border-l-4 border-yellow-500"></div>
+      <div class="absolute bottom-2 right-2 w-8 h-8 border-b-4 border-r-4 border-yellow-500"></div><!-- Fighters Row -->
+      <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-6"><!-- Left Fighter Slot -->
+       <div class="w-full md:w-2/5">
+        <div class="fighter-box rounded-xl p-4 md:p-6 slot-container h-32 md:h-40">
+         <div id="left-slot" class="slot-strip h-full flex flex-col">
+          <div id="left-fighter" class="h-full flex items-center justify-center text-center"><span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;"> 🎰 SPIN TO REVEAL 🎰 </span>
+          </div>
+         </div>
+        </div>
+        <div class="text-center mt-2"><span class="text-red-500 text-sm uppercase tracking-widest" style="font-family: 'Oswald', sans-serif;">Challenger A</span>
+        </div>
+       </div><!-- VS Badge -->
+       <div class="relative">
+        <div id="vs-badge" class="w-20 h-20 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-red-600 via-orange-500 to-yellow-500 flex items-center justify-center pulse-glow"><span id="vs-text" class="text-3xl md:text-5xl font-black text-white vs-fire" style="font-family: 'Bebas Neue', sans-serif;">VS</span>
+        </div><!-- Fire particles -->
+        <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 text-2xl">
+         🔥
+        </div>
+        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-2xl">
+         🔥
+        </div>
+       </div><!-- Right Fighter Slot -->
+       <div class="w-full md:w-2/5">
+        <div class="fighter-box rounded-xl p-4 md:p-6 slot-container h-32 md:h-40">
+         <div id="right-slot" class="slot-strip h-full flex flex-col">
+          <div id="right-fighter" class="h-full flex items-center justify-center text-center"><span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;"> 🎰 SPIN TO REVEAL 🎰 </span>
+          </div>
+         </div>
+        </div>
+        <div class="text-center mt-2"><span class="text-red-500 text-sm uppercase tracking-widest" style="font-family: 'Oswald', sans-serif;">Challenger B</span>
+        </div>
+       </div>
+      </div><!-- Topic Reveal Area -->
+      <div id="topic-area" class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 rounded-xl p-4 md:p-6 border-2 border-yellow-600 min-h-24 mb-6 opacity-0 transition-opacity duration-500">
+       <div class="text-center"><span class="text-yellow-500 text-xs md:text-sm uppercase tracking-widest mb-2 block" style="font-family: 'Oswald', sans-serif;">📜 THE BATTLEGROUND 📜</span>
+        <p id="topic-text" class="text-gray-200 text-sm md:text-lg leading-relaxed" style="font-family: 'Oswald', sans-serif;"></p>
+       </div>
+      </div><!-- Control Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center"><button id="spin-btn" class="px-8 py-4 bg-gradient-to-r from-red-600 via-orange-500 to-red-600 hover:from-red-500 hover:via-orange-400 hover:to-red-500 text-white text-xl md:text-2xl font-black rounded-xl transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-red-500/50" style="font-family: 'Bebas Neue', sans-serif;"> 🎰 SPIN TO BATTLE! 🎰 </button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const debateLibrary = [
+  // --- 1-10: TECHNOLOGY & AI ---
+  { id: 1, category: "Technology", sides: ["AI legal personhood", "AI as strict property"], intro: "As AI mimics human reasoning, should advanced systems have rights, or are they merely sophisticated tools owned by creators?" },
+  { id: 2, category: "Technology", sides: ["AI Content Labeling", "Creative Freedom"], intro: "Should we mandate 'Digital Watermarks' on all AI media to protect truth, or does that unfairly stigmatize human-machine collaborative art?" },
+  { id: 3, category: "Technology", sides: ["Algorithmic Transparency", "Proprietary Secrets"], intro: "Should companies be forced to reveal the logic behind algorithms that decide loans or jobs, or does IP protection outweigh public oversight?" },
+  { id: 4, category: "Technology", sides: ["Digital Immortality", "The Right to Pass"], intro: "Griefbots can mimic deceased loved ones using their data. Is this a healthy tool for closure or a violation of the natural cycle of life?" },
+  { id: 5, category: "Technology", sides: ["Autonomous Weapons", "Human-in-the-loop Mandates"], intro: "Should AI make lethal decisions on the battlefield for precision, or is removing human moral agency from killing an ethical line we shouldn't cross?" },
+  { id: 6, category: "Technology", sides: ["Cryptocurrency Regulation", "Financial Sovereignty"], intro: "Does crypto volatility necessitate government control, or is its value found entirely in its independence from traditional institutions?" },
+  { id: 7, category: "Technology", sides: ["Quantum Computing", "Classical Security"], intro: "As Quantum computers threaten current encryption, should we prioritize the speed of innovation or the immediate security of our existing global data?" },
+  { id: 8, category: "Technology", sides: ["Facial Recognition in Public", "Total Privacy"], intro: "Does the safety provided by public surveillance justify the loss of anonymity for every citizen in a modern city?" },
+  { id: 9, category: "Technology", sides: ["Blockchain Voting", "Paper Ballots"], intro: "Can blockchain technology truly secure democratic elections, or is the 'analog' paper trail the only way to ensure public trust?" },
+  { id: 10, category: "Technology", sides: ["The Metaverse as Reality", "Digital Escapism"], intro: "Will living in virtual spaces eventually be as valid as the physical world, or is the shift toward the Metaverse a dangerous retreat from real responsibility?" },
+
+  // --- 11-20: ENVIRONMENT & CLIMATE ---
+  { id: 11, category: "Environment", sides: ["Planetary Geoengineering", "Precautionary Preservation"], intro: "Should we intentionally dim the sun with aerosols to cool the Earth, or are the unintended consequences of hacking the climate too dangerous?" },
+  { id: 12, category: "Environment", sides: ["Nuclear Energy", "Renewable-Only Transition"], intro: "Can we reach net-zero fast enough with only wind and solar, or is nuclear power the only viable 'baseload' for a clean energy future?" },
+  { id: 13, category: "Environment", sides: ["Personal Carbon Quotas", "Systemic Responsibility"], intro: "Should individuals be legally limited in travel and consumption, or is that a distraction from the 100 companies responsible for most emissions?" },
+  { id: 14, category: "Environment", sides: ["Deep Sea Mining", "Oceanic Conservation"], intro: "Green tech requires minerals from the ocean floor. Do we sacrifice marine ecosystems to save the atmosphere, or is the cost to the ocean too high?" },
+  { id: 15, category: "Environment", sides: ["Carbon Taxes", "Incentive Subsidies"], intro: "Is it more effective to punish polluters through high taxes or reward green innovators through massive government subsidies?" },
+  { id: 16, category: "Environment", sides: ["Electric Vehicles", "Public Transit Expansion"], intro: "Should we focus on replacing every car with an EV, or is the real solution to climate change moving away from car-dependency entirely?" },
+  { id: 17, category: "Environment", sides: ["Meat Taxes", "Personal Dietary Choice"], intro: "Given the carbon cost of beef, should meat be taxed like cigarettes, or is what we eat a fundamental personal freedom?" },
+  { id: 18, category: "Environment", sides: ["Fracking for Energy", "Total Fossil Fuel Ban"], intro: "Does natural gas provide a necessary 'bridge' to renewables, or does continuing any fossil fuel extraction delay an inevitable and urgent transition?" },
+  { id: 19, category: "Environment", sides: ["Rewilding Land", "Agricultural Maximization"], intro: "Should we return vast amounts of farmland to nature to stop the sixth mass extinction, or prioritize food security for a growing population?" },
+  { id: 20, category: "Environment", sides: ["Climate Reparations", "National Self-Interest"], intro: "Should wealthy nations pay for the climate damage in developing countries, or focus their resources on protecting their own borders from rising seas?" },
+
+  // --- 21-35: POLITICS & LAW ---
+  { id: 21, category: "Politics", sides: ["Abolishing the Electoral College", "Maintaining the Status Quo"], intro: "Does the Electoral College protect small-state interests, or does it fundamentally undermine the principle of 'one person, one vote'?" },
+  { id: 22, category: "Politics", sides: ["Lowering Voting Age to 16", "Maintaining 18+"], intro: "If 16-year-olds pay taxes and face the effects of climate policy, should they vote, or do they lack necessary cognitive maturity?" },
+  { id: 23, category: "Politics", sides: ["Compulsory Voting", "Freedom of Silence"], intro: "Would making voting a legal requirement cure apathy, or is the right to stay home a vital form of political protest?" },
+  { id: 24, category: "Politics", sides: ["Term Limits for Supreme Court", "Lifetime Appointments"], intro: "Do lifetime appointments ensure judicial independence, or do they result in a court that is out of touch with modern societal values?" },
+  { id: 25, category: "Politics", sides: ["Direct Democracy", "Representative Republic"], intro: "Should citizens vote on every major law via their phones, or is the buffer of elected representatives necessary to prevent 'tyranny of the majority'?" },
+  { id: 26, category: "Politics", sides: ["Sanctuary Cities", "Federal Enforcement"], intro: "Should local cities have the right to refuse to cooperate with federal immigration laws, or does this create a breakdown in national law and order?" },
+  { id: 27, category: "Politics", sides: ["Lobbying Ban", "Freedom to Petition"], intro: "Is corporate lobbying a form of systemic corruption that should be banned, or is it a protected right to petition the government?" },
+  { id: 28, category: "Politics", sides: ["Mandatory National Service", "Voluntary Civic Action"], intro: "Does a year of required service build a stronger national identity, or is it an infringement on the liberty of young adults?" },
+  { id: 29, category: "Politics", sides: ["Abolishing Private Prisons", "Regulated Privatization"], intro: "Can justice ever be served when a corporation profits from incarceration, or are private prisons more efficient than state-run systems?" },
+  { id: 30, category: "Politics", sides: ["Open Borders", "Strict Sovereign Control"], intro: "In a globalized world, is the restriction of movement a violation of human rights or a necessary tool for national security and economic stability?" },
+  { id: 31, category: "Politics", sides: ["Wealth Tax", "Flat Tax"], intro: "Should the ultra-wealthy pay a significantly higher percentage to combat inequality, or is a flat tax the only truly fair system?" },
+  { id: 32, category: "Politics", sides: ["Internet as a Utility", "Internet as a Private Service"], intro: "Should the government regulate the internet like water and electricity, or should private companies have the right to manage their networks as they see fit?" },
+  { id: 33, category: "Politics", sides: ["Censorship of Misinformation", "Absolute Free Speech"], intro: "In a 'post-truth' era, should platforms be required to remove lies, or is the risk of a 'Ministry of Truth' worse than the spread of false info?" },
+  { id: 34, category: "Politics", sides: ["Independence Movements", "National Unity"], intro: "Do regions (like Scotland or Catalonia) have an inherent right to self-determination, or is the stability of the existing nation-state more important?" },
+  { id: 35, category: "Politics", sides: ["Gender Quotas in Government", "Pure Meritocracy"], intro: "Should we mandate a 50/50 gender split in parliaments to ensure representation, or should the best candidate always win regardless of identity?" },
+
+  // --- 36-50: ECONOMY & WORK ---
+  { id: 36, category: "Economy", sides: ["Universal Basic Income", "Targeted Safety Nets"], intro: "As automation replaces jobs, should we provide unconditional income for all or focus on needs-based assistance to encourage work?" },
+  { id: 37, category: "Economy", sides: ["Billionaire Wealth Caps", "Incentivized Accumulation"], intro: "Is extreme wealth a sign of a failing system, or is it a necessary reward for innovators who drive global progress?" },
+  { id: 38, category: "Economy", sides: ["4-Day Work Week", "Standard 5-Day Week"], intro: "Does a shorter week prevent burnout and boost productivity, or would it lead to a drop in national output and competitiveness?" },
+  { id: 39, category: "Economy", sides: ["Remote-First Work", "Office Mandates"], intro: "Does remote work increase global happiness and talent access, or is physical presence vital for innovation and mentorship?" },
+  { id: 40, category: "Economy", sides: ["The Gig Economy", "Traditional Employment"], intro: "Is the 'Uber-fication' of work a path to ultimate flexibility, or a race to the bottom for worker protections and benefits?" },
+  { id: 41, category: "Economy", sides: ["Raising Minimum Wage", "Market-Led Wages"], intro: "Does a high minimum wage protect workers from poverty, or does it lead to automation and higher prices for consumers?" },
+  { id: 42, category: "Economy", sides: ["Anti-Trust in Tech", "Free Market Dominance"], intro: "Should Big Tech companies like Google be broken up to encourage competition, or is their size what allows them to innovate so effectively?" },
+  { id: 43, category: "Economy", sides: ["Protectionism", "Global Free Trade"], intro: "Should nations protect local industries with tariffs, or does the lower cost of global trade benefit everyone in the long run?" },
+  { id: 44, category: "Economy", sides: ["Student Loan Forgiveness", "Personal Responsibility"], intro: "Does wiping out student debt stimulate the economy, or is it unfair to those who already paid theirs or never attended college?" },
+  { id: 45, category: "Economy", sides: ["Housing as a Right", "Housing as a Commodity"], intro: "Should the government cap rents and build social housing, or do these interventions stifle the construction of new homes?" },
+  { id: 46, category: "Economy", sides: ["Automation Tax", "Innovation Subsidies"], intro: "Should companies pay a tax for every human worker they replace with a robot to fund social safety nets?" },
+  { id: 47, category: "Economy", sides: ["Global Minimum Tax", "Tax Competition"], intro: "Should all countries agree on a floor for corporate taxes to stop the 'race to the bottom,' or is tax competition a right of sovereign states?" },
+  { id: 48, category: "Economy", sides: ["Tipping Culture", "Living Wage Model"], intro: "Should we abolish tipping in favor of higher menu prices and guaranteed wages for service workers?" },
+  { id: 49, category: "Economy", sides: ["Early Retirement", "Raising Retirement Age"], intro: "As people live longer, should we raise the retirement age to keep pension funds solvent, or allow people more time for leisure?" },
+  { id: 50, category: "Economy", sides: ["The Cashless Society", "Cash as a Necessity"], intro: "Is a fully digital economy more efficient, or does it exclude the unbanked and threaten our privacy from state surveillance?" },
+
+  // --- 51-65: EDUCATION ---
+  { id: 51, category: "Education", sides: ["Standardized Testing", "Holistic Assessment"], intro: "Are benchmarks necessary for accountability, or does 'teaching to the test' stifle the creative development of students?" },
+  { id: 52, category: "Education", sides: ["Homeschooling", "Public Schooling"], intro: "Should education be a customizable family journey, or is the public system vital for social integration and civic knowledge?" },
+  { id: 53, category: "Education", sides: ["Banning Smartphones in Schools", "Digital Integration"], intro: "Are phones a source of bullying and distraction, or must schools teach students how to use the primary tool of the modern world?" },
+  { id: 54, category: "Education", sides: ["Free University for All", "User-Pays Model"], intro: "Is higher education a public good that should be tax-funded, or a private investment that the individual should pay for?" },
+  { id: 55, category: "Education", sides: ["STEM Focus", "Liberal Arts Focus"], intro: "Should schools prioritize the high-demand jobs of the future, or the 'human' subjects that teach us how to think and live?" },
+  { id: 56, category: "Education", sides: ["School Uniforms", "Self-Expression"], intro: "Do uniforms reduce social inequality and distractions, or do they suppress the development of individual identity?" },
+  { id: 57, category: "Education", sides: ["Paying Teachers like Athletes", "Standard Salary Scales"], intro: "Should the most effective teachers earn millions to attract top talent, or does that destroy the collaborative spirit of schools?" },
+  { id: 58, category: "Education", sides: ["Year-Round Schooling", "Summer Break"], intro: "Does the long summer break lead to 'learning loss,' or is that downtime essential for a child's mental health and development?" },
+  { id: 59, category: "Education", sides: ["Bilingual Education", "Immersion in National Language"], intro: "Should schools teach in a child's native tongue to preserve culture, or prioritize the national language for economic success?" },
+  { id: 60, category: "Education", sides: ["Cursive Writing", "Keyboard Literacy"], intro: "Is handwriting a vital cognitive skill we are losing, or an obsolete relic of the past that should be replaced by coding?" },
+  { id: 61, category: "Education", sides: ["Vocational Training", "Academic Track"], intro: "Are we pushing too many people into university when the economy actually needs more skilled tradespeople?" },
+  { id: 62, category: "Education", sides: ["Financial Literacy Classes", "Traditional Curriculum"], intro: "Should schools sacrifice history or science classes to teach kids how to file taxes and invest in stocks?" },
+  { id: 63, category: "Education", sides: ["Separation of Church and State", "Religious Charter Schools"], intro: "Should public money ever fund schools with a specific religious mission, or should education be strictly secular?" },
+  { id: 64, category: "Education", sides: ["Grading Systems", "Narrative Feedback"], intro: "Do letter grades (A-F) provide a clear roadmap for success, or do they reduce a student's entire worth to a single, stressful letter?" },
+  { id: 65, category: "Education", sides: ["AI Tutors", "Human Teachers"], intro: "Can a personalized AI provide a better education than a human teacher who is managing 30 different children at once?" },
+
+  // --- 66-80: ETHICS & HEALTH ---
+  { id: 66, category: "Ethics", sides: ["Separate Art from Artist", "Artist as Inseparable"], intro: "When a creator commits a moral wrong, can we enjoy the work independently, or does supporting the art validate the person behind it?" },
+  { id: 67, category: "Ethics", sides: ["Mandatory Organ Donation", "Opt-in Autonomy"], intro: "Should the law assume donation by default to save lives, or is the body sacred and requires explicit, prior consent?" },
+  { id: 68, category: "Ethics", sides: ["Animal Testing for Medicine", "Total Abolition"], intro: "Does human survival justify the use of other living beings in research, or do animals possess an inherent right to life and freedom?" },
+  { id: 69, category: "Ethics", sides: ["Euthanasia / MAID", "Sanctity of Life"], intro: "Should a terminally ill person have the right to choose the timing of their death, or does this devalue the life of the elderly and disabled?" },
+  { id: 70, category: "Ethics", sides: ["Gene Editing in Embryos", "Natural Lottery"], intro: "Should we use CRISPR to eliminate genetic diseases before birth, or does this lead down a dangerous path toward 'designer babies'?" },
+  { id: 71, category: "Ethics", sides: ["Mandatory Vaccines", "Bodily Autonomy"], intro: "Does the safety of the 'herd' justify the state requiring a medical procedure, or is the right to refuse treatment absolute?" },
+  { id: 72, category: "Ethics", sides: ["Decriminalization of All Drugs", "The War on Drugs"], intro: "Should we treat addiction as a health issue by legalizing everything, or is strict prohibition necessary to keep drugs out of communities?" },
+  { id: 73, category: "Ethics", sides: ["Longevity Research", "The Natural Lifespan"], intro: "Is 'curing death' the ultimate human achievement, or is a limited lifespan what gives our time on Earth its meaning?" },
+  { id: 74, category: "Ethics", sides: ["Universal Healthcare", "Private Market Healthcare"], intro: "Is healthcare a fundamental human right that should be free at the point of use, or a service best provided by competition?" },
+  { id: 75, category: "Ethics", sides: ["Psychology of Revenge", "Restorative Justice"], intro: "Is the desire for retribution a valid part of the human psyche, or should the law focus entirely on healing and rehabilitation?" },
+  { id: 76, category: "Ethics", sides: ["Sugar and Junk Food Taxes", "Consumer Freedom"], intro: "Should the government use taxes to stop the obesity crisis, or is it a person's right to eat whatever they want?" },
+  { id: 77, category: "Ethics", sides: ["Cloning Endangered Species", "Natural Selection"], intro: "Should we bring back the Woolly Mammoth and the Dodo, or focus our resources on protecting the species that are currently alive?" },
+  { id: 78, category: "Ethics", sides: ["Brain-Computer Interfaces", "Cognitive Privacy"], intro: "Should we be allowed to 'upgrade' our brains with chips, or does this create an unfair class of 'super-humans'?" },
+  { id: 79, category: "Ethics", sides: ["Prostitution Legalization", "Abolitionist Model"], intro: "Does legalizing sex work protect vulnerable people, or does it inherently commodify and exploit human bodies?" },
+  { id: 80, category: "Ethics", sides: ["Surrogacy Commercialization", "Altruistic Surrogacy"], intro: "Should women be allowed to 'rent' their wombs for money, or should surrogacy be restricted to strictly non-profit arrangements?" },
+
+  // --- 81-90: URBAN & LIFESTYLE ---
+  { id: 81, category: "Urban Planning", sides: ["15-Minute Cities", "Regional Hub Model"], intro: "Should all needs be within a 15-minute walk—risking social silos—or should we maintain hubs connected by high-speed transit?" },
+  { id: 82, category: "Lifestyle", sides: ["Physical Books", "E-Readers"], intro: "Is the 'soul' of reading in the tactile experience of paper, or is a 1,000-book digital library a superior evolution for humanity?" },
+  { id: 83, category: "Urban Planning", sides: ["Public Housing", "Rental Vouchers"], intro: "Should the state be the primary landlord for the poor, or should we subsidize their entry into the private market?" },
+  { id: 84, category: "Lifestyle", sides: ["Vegetarianism by Law", "Free Meat Consumption"], intro: "Given the climate impact, will we eventually see a legal ban on factory farming, or will lab-grown meat solve the issue first?" },
+  { id: 85, category: "Urban Planning", sides: ["Pedestrianized City Centers", "Car Accessibility"], intro: "Should we ban all cars from the heart of cities to improve air quality and safety, or does this hurt local businesses?" },
+  { id: 86, category: "Lifestyle", sides: ["Social Media 'Best Friends'", "In-Person Only Friends"], intro: "Can a digital-only connection ever be as deep and meaningful as a friend you have physically shared space with?" },
+  { id: 87, category: "Lifestyle", sides: ["The Minimalist Life", "The Abundant Life"], intro: "Is the secret to happiness 'owning less,' or is the accumulation of beautiful and useful things a valid form of human joy?" },
+  { id: 88, category: "Urban Planning", sides: ["Gentrification as Progress", "Gentrification as Displacement"], intro: "Does 'cleaning up' a neighborhood benefit the whole city, or does it unfairly push out the culture and people who made it special?" },
+  { id: 89, category: "Lifestyle", sides: ["Subscription Everything", "Product Ownership"], intro: "In a 'Streaming' world, are we better off never owning anything, or is the loss of personal property a threat to our long-term security?" },
+  { id: 90, category: "Lifestyle", sides: ["Remote Life", "Urban Concentration"], intro: "Will the internet allow us to return to small-town rural living, or is the magnetism of the 'Global City' too strong to resist?" },
+
+  // --- 91-100: FUN / ABSURD ---
+  { id: 91, category: "Fun", sides: ["Is a Hotdog a Sandwich?", "It's a Unique Category"], intro: "Is a sandwich defined by structure (bread and filling) or by cultural intention and category?" },
+  { id: 92, category: "Fun", sides: ["Pineapple on Pizza", "Culinary Sacrilege"], intro: "Does the sweetness of fruit belong on a savory pizza, or is this a fundamental violation of Italian tradition?" },
+  { id: 93, category: "Fun", sides: ["Is Cereal a Soup?", "Cereal is its own thing"], intro: "If a soup is liquid-based food in a bowl, does milk acting as 'broth' make your morning Froot Loops a soup?" },
+  { id: 94, category: "Fun", sides: ["Toilet Paper: Over or Under?", "The Wrong Way"], intro: "Is there a scientifically superior way to hang a roll, or is this the ultimate test of personality and domestic peace?" },
+  { id: 95, category: "Fun", sides: ["Winter is Better", "Summer is Better"], intro: "Is it better to be cold and cozy or hot and active? The ultimate seasonal battle." },
+  { id: 96, category: "Fun", sides: ["Cats are Superior", "Dogs are Superior"], intro: "The age-old debate between independence and loyalty in our furry companions." },
+  { id: 97, category: "Fun", sides: ["Socks with Sandals", "Fashion Crime"], intro: "Is this the peak of comfort and practical living, or a visual disaster that should be banned from public view?" },
+  { id: 98, category: "Fun", sides: ["Time Travel to the Past", "Time Travel to the Future"], intro: "Would you rather solve the mysteries of our history or witness the ultimate fate of our technology?" },
+  { id: 99, category: "Fun", sides: ["Is Water Wet?", "Water Makes things Wet"], intro: "Can a liquid itself be wet, or is 'wetness' only a property of a solid surface in contact with a liquid?" },
+  { id: 100, category: "Fun", sides: ["Aliens are Among Us", "We are Alone"], intro: "Is the 'Great Silence' of the universe proof that we are unique, or are we just not looking in the right places?" }
+];
+
+    const defaultConfig = {
+      main_title: "⚔️ DEBATE ARENA ⚔️",
+      vs_text: "VS",
+      spin_button_text: "🎰 SPIN TO BATTLE! 🎰",
+      primary_color: "#ff0000",
+      secondary_color: "#ff6600",
+      background_color: "#0a0a0f",
+      text_color: "#ffffff",
+      accent_color: "#fbbf24"
+    };
+
+    let isSpinning = false;
+    let currentDebate = null;
+
+    async function onConfigChange(config) {
+      const mainTitle = document.getElementById('main-title');
+      const vsText = document.getElementById('vs-text');
+      const spinBtn = document.getElementById('spin-btn');
+      const appWrapper = document.getElementById('app-wrapper');
+
+      const titleText = config.main_title || defaultConfig.main_title;
+      const vsString = config.vs_text || defaultConfig.vs_text;
+      const spinText = config.spin_button_text || defaultConfig.spin_button_text;
+      
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+
+      if (mainTitle) {
+        mainTitle.textContent = titleText;
+        mainTitle.style.color = primaryColor;
+        mainTitle.style.textShadow = `0 0 30px ${primaryColor}, 0 0 60px ${secondaryColor}`;
+      }
+
+      if (vsText) {
+        vsText.textContent = vsString;
+      }
+
+      if (spinBtn) {
+        spinBtn.textContent = spinText;
+        spinBtn.style.background = `linear-gradient(to right, ${primaryColor}, ${secondaryColor}, ${primaryColor})`;
+      }
+
+      if (appWrapper) {
+        appWrapper.style.background = `linear-gradient(to bottom, ${bgColor}, black, ${bgColor})`;
+      }
+
+      document.querySelectorAll('.fighter-box span, #topic-text').forEach(el => {
+        el.style.color = textColor;
+      });
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              config.primary_color = value;
+              window.elementSdk.setConfig({ primary_color: value });
+            }
+          },
+          {
+            get: () => config.secondary_color || defaultConfig.secondary_color,
+            set: (value) => {
+              config.secondary_color = value;
+              window.elementSdk.setConfig({ secondary_color: value });
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              window.elementSdk.setConfig({ accent_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["main_title", config.main_title || defaultConfig.main_title],
+        ["vs_text", config.vs_text || defaultConfig.vs_text],
+        ["spin_button_text", config.spin_button_text || defaultConfig.spin_button_text]
+      ]);
+    }
+
+    function getRandomDebate() {
+      return debateLibrary[Math.floor(Math.random() * debateLibrary.length)];
+    }
+
+    function triggerLightning() {
+      const l1 = document.getElementById('lightning1');
+      const l2 = document.getElementById('lightning2');
+      l1.classList.add('lightning');
+      l2.classList.add('lightning');
+      setTimeout(() => {
+        l1.classList.remove('lightning');
+        l2.classList.remove('lightning');
+      }, 300);
+    }
+
+    async function spinSlots() {
+      if (isSpinning) return;
+      isSpinning = true;
+
+      const spinBtn = document.getElementById('spin-btn');
+      const leftFighter = document.getElementById('left-fighter');
+      const rightFighter = document.getElementById('right-fighter');
+      const topicArea = document.getElementById('topic-area');
+      const topicText = document.getElementById('topic-text');
+      const vsBadge = document.getElementById('vs-badge');
+
+      spinBtn.disabled = true;
+      spinBtn.classList.add('opacity-50');
+      topicArea.style.opacity = '0';
+
+      const spinDuration = 2500;
+      const intervalTime = 80;
+      let elapsed = 0;
+
+      triggerLightning();
+
+      const spinInterval = setInterval(() => {
+        elapsed += intervalTime;
+        
+        const randomDebate = getRandomDebate();
+        leftFighter.innerHTML = `<span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;">🥊 ${randomDebate.sides[0]} 🥊</span>`;
+        rightFighter.innerHTML = `<span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;">🥊 ${randomDebate.sides[1]} 🥊</span>`;
+
+        vsBadge.classList.add('shake');
+        setTimeout(() => vsBadge.classList.remove('shake'), 100);
+
+        if (elapsed % 400 < intervalTime) {
+          triggerLightning();
+        }
+
+        if (elapsed >= spinDuration) {
+          clearInterval(spinInterval);
+          
+          currentDebate = getRandomDebate();
+          
+          leftFighter.innerHTML = `<span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;">🥊 ${currentDebate.sides[0]} 🥊</span>`;
+          rightFighter.innerHTML = `<span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;">🥊 ${currentDebate.sides[1]} 🥊</span>`;
+
+          triggerLightning();
+          triggerLightning();
+
+          setTimeout(() => {
+            topicText.textContent = currentDebate.intro;
+            topicArea.style.opacity = '1';
+            
+            spinBtn.disabled = false;
+            spinBtn.classList.remove('opacity-50');
+            isSpinning = false;
+          }, 500);
+        }
+      }, intervalTime);
+    }
+
+    document.getElementById('spin-btn').addEventListener('click', spinSlots);
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    } else {
+      onConfigChange(defaultConfig);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be1b9e9233b0969',t:'MTc2ODQ0MTg2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
