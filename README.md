@@ -42,6 +42,7 @@ Discussion tools
 
 * [Triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool
 * [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html)
+* [Debate tool](https://jamesabela.github.io/jsfun/debate.html)
 
 Brainstorming tools
 I have moved the [Mindmapping tool](https://github.com/jamesabela/mindmap) into its own repository, because its become its own progressive Web app. Its now more than a toy.
