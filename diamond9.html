@@ -2,184 +2,585 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Diamond 9 Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    #container {
-      position: relative;
-      width: 100%;
-      height: 80vh;
-      border: 1px solid #ccc;
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    :root {
+      --primary: #ffffff;
+      --text: #2d3748;
+      --card-bg: rgba(255, 255, 255, 0.2);
+      --card-border: rgba(255, 255, 255, 0.3);
+      --slot-border: rgba(255, 255, 255, 0.4);
     }
 
-    .draggable {
-      position: absolute;
-      z-index: 9;
-      width: 100px;
-      height: 50px;
-      border: 1px solid #000;
-      background-color: #f0f0f0;
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+      /* Vibrant animated gradient background */
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+
+    h1 {
+      margin-top: 2rem;
+      font-weight: 700;
+      font-size: 2.5rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
       text-align: center;
-      line-height: 50px;
-      cursor: move;
+      padding: 0 1rem;
+    }
+
+    /* Glassmorphism Input Container */
+    #inputContainer {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 90%;
+      max-width: 600px;
+      margin-top: 1rem;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    .inputGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .textBox {
+      padding: 12px 15px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 15px;
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .textBox::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .textBox:focus {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: #fff;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 16px;
+      margin-top: 15px;
+    }
+    
+    .button-group button {
+      flex: 1;
+    }
+
+    button.randomBtn {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border: 1px solid var(--card-border);
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      font-family: 'Outfit', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button.randomBtn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    
+    button.randomBtn:active {
+      transform: translateY(1px);
+    }
+
+    button.makeBtn {
+      background: #fff;
+      color: #e73c7e;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 18px;
+      font-family: 'Outfit', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      margin-top: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    button.makeBtn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 14px rgba(0,0,0,0.15);
+    }
+    
+    button.makeBtn:active {
+      transform: translateY(1px);
+    }
+
+    /* Container for the Diamond 9 */
+    #container {
+      position: relative;
+      width: 95%;
+      max-width: 800px;
+      height: 700px;
+      margin: 1rem auto 3rem auto;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+      display: none; /* hidden until Make button is clicked */
+      overflow: hidden; /* keep draggables visible comfortably within bounds */
     }
 
     .background-box {
       position: absolute;
-      z-index: 1;
-      width: 100px;
-      height: 50px;
-      border: 1px solid #000;
-      background-color: #d3d3d3;
+      width: 140px;
+      height: 70px;
+      border: 2px dashed var(--slot-border);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateX(-50%);
     }
+
+    /* Diamond 9 Absolute Positioning */
+    .background-box:nth-child(1) { top: 12%; left: 50%; }
+    
+    .background-box:nth-child(2) { top: 27%; left: 35%; }
+    .background-box:nth-child(3) { top: 27%; left: 65%; }
+    
+    .background-box:nth-child(4) { top: 42%; left: 20%; }
+    .background-box:nth-child(5) { top: 42%; left: 50%; }
+    .background-box:nth-child(6) { top: 42%; left: 80%; }
+    
+    .background-box:nth-child(7) { top: 57%; left: 35%; }
+    .background-box:nth-child(8) { top: 57%; left: 65%; }
+    
+    .background-box:nth-child(9) { top: 72%; left: 50%; }
 
     .label {
       position: absolute;
-      z-index: 2;
-      font-weight: bold;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 16px;
+      width: 100%;
       text-align: center;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .label.top { top: 4%; }
+    .label.bottom { top: 88%; }
+
+    /* Draggable items */
+    .draggable {
+      position: absolute;
+      z-index: 9;
+      width: 140px;
+      height: 70px;
+      background: var(--primary);
+      color: var(--text);
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      font-size: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      cursor: grab;
+      user-select: none;
+      touch-action: none; /* Crucial for touch dragging */
+      transition: box-shadow 0.2s, transform 0.2s;
+      text-align: center;
+      padding: 0 10px;
+      box-sizing: border-box;
+      word-break: break-word;
+      line-height: 1.2;
     }
 
-    .textBox {
-      margin: 5px 0;
+    .draggable:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      transform: translateY(-2px);
     }
 
-    /* Positioning background boxes in the correct Diamond 9 shape */
-    .background-box:nth-child(1) { top: 5%; left: calc(50% - 50px); }
-    .background-box:nth-child(2) { top: 20%; left: calc(40% - 50px); }
-    .background-box:nth-child(3) { top: 20%; left: calc(60% - 50px); }
-    .background-box:nth-child(4) { top: 35%; left: calc(30% - 50px); }
-    .background-box:nth-child(5) { top: 35%; left: calc(50% - 50px); }
-    .background-box:nth-child(6) { top: 35%; left: calc(70% - 50px); }
-    .background-box:nth-child(7) { top: 50%; left: calc(40% - 50px); }
-    .background-box:nth-child(8) { top: 50%; left: calc(60% - 50px); }
-    .background-box:nth-child(9) { top: 65%; left: calc(50% - 50px); }
+    .draggable.dragging {
+      cursor: grabbing;
+      transform: scale(1.05);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      transition: none; /* Smooth drag */
+      z-index: 100 !important;
+    }
 
-    .label.top { top: 0; left: calc(50% - 50px); }
-    .label.bottom { top: 75%; left: calc(50% - 50px); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .inputGrid { grid-template-columns: 1fr; }
+      
+      .background-box {
+        width: 90px;
+        height: 50px;
+      }
+      .draggable {
+        width: 90px;
+        height: 50px;
+        font-size: 12px;
+        border-radius: 12px;
+      }
+      
+      #container { height: 550px; }
+      
+      .background-box:nth-child(1) { top: 12%; left: 50%; }
+      .background-box:nth-child(2) { top: 26%; left: 32%; }
+      .background-box:nth-child(3) { top: 26%; left: 68%; }
+      .background-box:nth-child(4) { top: 40%; left: 14%; }
+      .background-box:nth-child(5) { top: 40%; left: 50%; }
+      .background-box:nth-child(6) { top: 40%; left: 86%; }
+      .background-box:nth-child(7) { top: 54%; left: 32%; }
+      .background-box:nth-child(8) { top: 54%; left: 68%; }
+      .background-box:nth-child(9) { top: 68%; left: 50%; }
+    }
+
+    /* Print styling */
+    @media print {
+      body {
+        background: none !important;
+        background-color: #fff !important;
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      h1, #generatedTopic {
+        color: #000 !important;
+        text-shadow: none !important;
+      }
+
+      #container {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+      }
+
+      .label {
+        color: #000 !important;
+        text-shadow: none !important;
+      }
+
+      .draggable {
+        box-shadow: none !important;
+        border: 2px solid #000 !important;
+        background: #fff !important;
+        color: #000 !important;
+      }
+
+      .background-box {
+        border: 2px dashed #aaa !important;
+        background: transparent !important;
+      }
+
+      #inputContainer, #footerActions button {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
-<h1>Diamond 9 Generator</h1>
 
-<div id="inputContainer">
-  <input class="textBox" type="text" id="text1" placeholder="Enter text 1">
-  <input class="textBox" type="text" id="text2" placeholder="Enter text 2">
-  <input class="textBox" type="text" id="text3" placeholder="Enter text 3">
-  <input class="textBox" type="text" id="text4" placeholder="Enter text 4">
-  <input class="textBox" type="text" id="text5" placeholder="Enter text 5">
-  <input class="textBox" type="text" id="text6" placeholder="Enter text 6">
-  <input class="textBox" type="text" id="text7" placeholder="Enter text 7">
-  <input class="textBox" type="text" id="text8" placeholder="Enter text 8">
-  <input class="textBox" type="text" id="text9" placeholder="Enter text 9">
-  <button onclick="createRectangles()">Make</button>
-</div>
+  <h1>Diamond 9 Generator</h1>
 
-<div id="container">
-  <!-- Background boxes in Diamond 9 layout -->
-  <div class="background-box"></div>
-  <div class="background-box"></div>
-  <div class="background-box"></div>
-  <div class="background-box"></div>
-  <div class="background-box"></div>
-  <div class="background-box"></div>
-  <div class="background-box"></div>
-  <div class="background-box"></div>
-  <div class="background-box"></div>
+  <div id="inputContainer">
+    <input class="textBox" type="text" id="topicInput" placeholder="Optional: Enter a topic (e.g. Most Important Inventions)" style="width: 100%; box-sizing: border-box; margin-bottom: 5px; font-weight: 600; text-align: center;">
+    <div class="inputGrid">
+      <input class="textBox" type="text" id="text1" placeholder="Idea 1">
+      <input class="textBox" type="text" id="text2" placeholder="Idea 2">
+      <input class="textBox" type="text" id="text3" placeholder="Idea 3">
+      <input class="textBox" type="text" id="text4" placeholder="Idea 4">
+      <input class="textBox" type="text" id="text5" placeholder="Idea 5">
+      <input class="textBox" type="text" id="text6" placeholder="Idea 6">
+      <input class="textBox" type="text" id="text7" placeholder="Idea 7">
+      <input class="textBox" type="text" id="text8" placeholder="Idea 8">
+      <input class="textBox" type="text" id="text9" placeholder="Idea 9">
+    </div>
+    <div class="button-group">
+      <button class="randomBtn" onclick="loadRandomExample()">Random Example</button>
+      <button class="makeBtn" onclick="createRectangles()" style="flex: 2;">Generate Diamond</button>
+    </div>
+  </div>
 
-  <!-- Labels -->
-  <div class="label top">Most important</div>
-  <div class="label bottom">Least important</div>
-</div>
+  <div id="outputHeader" style="display: none; text-align: center; margin-top: 1rem; margin-bottom: 0px; animation: fadeIn 0.6s ease forwards;">
+    <h2 id="generatedTopic" style="margin: 0; margin-bottom: 15px; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.2);"></h2>
+  </div>
+  <div id="container">
+    <!-- Background boxes -->
+    <div class="background-box"></div>
+    <div class="background-box"></div>
+    <div class="background-box"></div>
+    <div class="background-box"></div>
+    <div class="background-box"></div>
+    <div class="background-box"></div>
+    <div class="background-box"></div>
+    <div class="background-box"></div>
+    <div class="background-box"></div>
 
-<script>
-  function createRectangles() {
-    const container = document.getElementById('container');
-    const inputContainer = document.getElementById('inputContainer');
-    const words = [];
+    <div class="label top">Most Important</div>
+    <div class="label bottom">Least Important</div>
+  </div>
 
-    for (let i = 1; i <= 9; i++) {
-      const text = document.getElementById(`text${i}`).value.trim();
-      if (text) {
-        const div = document.createElement('div');
-        div.className = 'draggable';
-        div.textContent = text;
+  <div id="footerActions" style="display: none; text-align: center; margin-bottom: 3rem; animation: fadeIn 0.6s ease forwards;">
+    <button class="randomBtn" onclick="editMode()" style="padding: 10px 24px; font-size: 15px; background: rgba(255,255,255,0.15);">Back to Edit</button>
+  </div>
 
-        // Randomly position the user-entered boxes within the container
-        div.style.left = `${Math.random() * (container.clientWidth - 100)}px`;
-        div.style.top = `${Math.random() * (container.clientHeight - 50)}px`;
+  <script>
+    const presetExamples = [
+      { topic: "Most important inventions ever", words: ["Wheel", "Printing Press", "Internet", "Compass", "Light Bulb", "Penicillin", "Telephone", "Steam Engine", "Airplane"] },
+      { topic: "Best study habits", words: ["Pomodoro Technique", "Active Recall", "Spaced Repetition", "Quiet Environment", "Taking Notes", "Getting Sleep", "Practice Tests", "Mind Mapping", "Group Study"] },
+      { topic: "Things that make a game addictive", words: ["Progression System", "Reward Feedback", "Social Competition", "Immersive Story", "Challenging Levels", "Daily Quests", "Customization", "Loot Boxes", "Smooth Mechanics"] },
+      { topic: "Features of a great film", words: ["Compelling Plot", "Strong Acting", "Cinematography", "Musical Score", "Character Arc", "Pacing", "Directing", "Special Effects", "Emotional Impact"] },
+      { topic: "Qualities of a good teacher", words: ["Patience", "Subject Knowledge", "Empathy", "Communication", "Engaging", "Adaptability", "Fairness", "Enthusiasm", "Listening Skills"] },
+      { topic: "Ways to relax after exams", words: ["Sleep", "Watch Movies", "Hang Out with Friends", "Play Video Games", "Read a Book", "Go for a Walk", "Eat Favorite Food", "Listen to Music", "Take a Bath"] },
+      { topic: "Items to take to survive on a desert island", words: ["Knife", "Fire Starter", "Water Purifier", "Rope", "Tarp/Tent", "Fishing Gear", "First Aid Kit", "Flashlight", "Compass"] },
+      { topic: "Skills needed in a zombie apocalypse", words: ["Scavenging", "First Aid", "Running Fast", "Melee Combat", "Stealth", "Starting Fires", "Building Shelter", "Teamwork", "Navigation"] },
+      { topic: "Traits of a superhero", words: ["Bravery", "Super Strength", "Selflessness", "Intelligence", "Resilience", "Sense of Justice", "Leadership", "Agility", "Compassion"] }
+    ];
 
-        div.id = `mydiv${i}`;
+    function loadRandomExample() {
+      const random = presetExamples[Math.floor(Math.random() * presetExamples.length)];
+      const topicInput = document.getElementById('topicInput');
+      if (topicInput) topicInput.value = random.topic;
 
-        dragElement(div);
-        container.appendChild(div);
-        words.push(encodeURIComponent(text));
+      random.words.forEach((word, index) => {
+        const input = document.getElementById(`text${index + 1}`);
+        if(input) {
+          input.value = word;
+        }
+      });
+    }
+
+    function editMode() {
+      document.getElementById('container').style.display = 'none';
+      document.getElementById('outputHeader').style.display = 'none';
+      const footerActions = document.getElementById('footerActions');
+      if (footerActions) footerActions.style.display = 'none';
+      
+      const inputContainer = document.getElementById('inputContainer');
+      inputContainer.style.display = 'flex';
+      inputContainer.style.animation = 'none'; 
+      inputContainer.offsetHeight; /* trigger reflow */
+      inputContainer.style.animation = 'fadeIn 0.4s ease forwards';
+      
+      const url = new URL(window.location);
+      url.searchParams.delete('words');
+      url.searchParams.delete('topic');
+      window.history.replaceState({}, '', url);
+    }
+
+    function createRectangles() {
+      const container = document.getElementById('container');
+      const inputContainer = document.getElementById('inputContainer');
+      const words = [];
+      let delay = 0;
+
+      // Clear existing draggables first
+      const existingDraggables = container.querySelectorAll('.draggable');
+      existingDraggables.forEach(d => d.remove());
+
+      // Make container visible so we can measure it
+      container.style.display = 'block';
+      // Slight animation for container
+      container.style.animation = 'fadeIn 0.6s ease forwards';
+      
+      const width = document.body.clientWidth > 768 ? 140 : 90;
+      const height = document.body.clientWidth > 768 ? 70 : 50;
+
+      for (let i = 1; i <= 9; i++) {
+        const textElement = document.getElementById(`text${i}`);
+        const text = textElement ? textElement.value.trim() : '';
+        if (text) {
+          const div = document.createElement('div');
+          div.className = 'draggable';
+          div.textContent = text;
+          div.id = `mydiv${i}`;
+
+          // Add to DOM first to apply sizing
+          container.appendChild(div);
+
+          // Calculate a random initial position within bounds
+          const maxX = container.clientWidth - width;
+          const maxY = container.clientHeight - height;
+          
+          div.style.left = `${Math.random() * maxX}px`;
+          div.style.top = `${Math.random() * maxY}px`;
+          
+          // Entry animation
+          div.style.opacity = '0';
+          div.style.transform = 'scale(0.8)';
+          setTimeout(() => {
+            div.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            div.style.opacity = '1';
+            div.style.transform = 'scale(1)';
+            // Remove transition after entry so drag is smooth
+            setTimeout(() => { div.style.transition = 'box-shadow 0.2s, transform 0.2s'; }, 400);
+          }, delay);
+          delay += 50;
+
+          dragElement(div);
+          words.push(encodeURIComponent(text));
+        }
+      }
+
+      inputContainer.style.display = 'none';
+
+      const topicInput = document.getElementById('topicInput');
+      const topic = topicInput ? topicInput.value.trim() : '';
+
+      const outputHeader = document.getElementById('outputHeader');
+      if (outputHeader) outputHeader.style.display = 'block';
+
+      const footerActions = document.getElementById('footerActions');
+      if (footerActions) footerActions.style.display = 'block';
+
+      const genTopic = document.getElementById('generatedTopic');
+      if (genTopic) {
+        if (topic) {
+          genTopic.textContent = topic;
+          genTopic.style.display = 'block';
+        } else {
+          genTopic.style.display = 'none';
+        }
+      }
+
+      // Update URL so it can be shared or refreshed
+      if (words.length > 0) {
+        const url = new URL(window.location);
+        url.searchParams.set('words', words.join(','));
+        if (topic) {
+          url.searchParams.set('topic', encodeURIComponent(topic));
+        } else {
+          url.searchParams.delete('topic');
+        }
+        window.history.replaceState({}, '', url);
       }
     }
 
-    // Hide the input boxes and button
-    inputContainer.style.display = 'none';
+    // Modern pointer-events based drag (Supports Touch, Pen, Mouse)
+    function dragElement(elmnt) {
+      let pointerStartX = 0, pointerStartY = 0, initialLeft = 0, initialTop = 0;
 
-    // Update URL with words
-    const url = new URL(window.location);
-    url.searchParams.set('words', words.join(','));
-    window.history.replaceState({}, '', url);
-  }
+      elmnt.addEventListener('pointerdown', dragStart, { passive: false });
 
-  // Make the DIV element draggable
-  function dragElement(elmnt) {
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    elmnt.onmousedown = function(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // get the mouse cursor position at startup:
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      // call a function whenever the cursor moves:
-      document.onmousemove = elementDrag;
+      function dragStart(e) {
+        // Only allow primary pointer (e.g. left click, one finger)
+        if (!e.isPrimary) return;
+        e.preventDefault();
+
+        pointerStartX = e.clientX;
+        pointerStartY = e.clientY;
+        initialLeft = elmnt.offsetLeft;
+        initialTop = elmnt.offsetTop;
+        
+        elmnt.setPointerCapture(e.pointerId);
+        
+        elmnt.classList.add('dragging');
+
+        elmnt.addEventListener('pointermove', dragMove, { passive: false });
+        elmnt.addEventListener('pointerup', dragEnd, { passive: false });
+        elmnt.addEventListener('pointercancel', dragEnd, { passive: false });
+      }
+
+      function dragMove(e) {
+        if (!e.isPrimary) return;
+        e.preventDefault();
+
+        const dx = e.clientX - pointerStartX;
+        const dy = e.clientY - pointerStartY;
+
+        let newLeft = initialLeft + dx;
+        let newTop = initialTop + dy;
+
+        // Container bounds checking logic
+        const container = document.getElementById('container');
+        const containerRect = container.getBoundingClientRect();
+        const rect = elmnt.getBoundingClientRect();
+        
+        // Prevent element from being dragged completely out of bounds
+        // allowing half of the element to be outside the container edge at most
+        const minLeft = -rect.width / 2;
+        const maxLeft = containerRect.width - rect.width / 2;
+        const minTop = -rect.height / 2;
+        const maxTop = containerRect.height - rect.height / 2;
+        
+        newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+        newTop = Math.max(minTop, Math.min(newTop, maxTop));
+
+        elmnt.style.left = newLeft + "px";
+        elmnt.style.top = newTop + "px";
+      }
+
+      function dragEnd(e) {
+        if (!e.isPrimary) return;
+        
+        elmnt.removeEventListener('pointermove', dragMove);
+        elmnt.removeEventListener('pointerup', dragEnd);
+        elmnt.removeEventListener('pointercancel', dragEnd);
+        elmnt.releasePointerCapture(e.pointerId);
+        
+        elmnt.classList.remove('dragging');
+      }
+    }
+
+    // Auto-populate from URL on load
+    window.onload = function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      const topic = urlParams.get('topic');
+      if (topic) {
+        const topicInput = document.getElementById('topicInput');
+        if (topicInput) topicInput.value = decodeURIComponent(topic);
+      }
+
+      const words = urlParams.get('words');
+      if (words) {
+        const wordArray = words.split(',');
+        wordArray.forEach((word, index) => {
+          const input = document.getElementById(`text${index + 1}`);
+          if (input) input.value = decodeURIComponent(word);
+        });
+        createRectangles();
+      }
     };
-
-    function elementDrag(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      // set the element's new position:
-      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-    }
-
-    function closeDragElement() {
-      /* stop moving when mouse button is released:*/
-      document.onmouseup = null;
-      document.onmousemove = null;
-    }
-  }
-
-  // On page load, recreate rectangles if words are in the URL and hide input boxes
-  window.onload = function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const words = urlParams.get('words');
-    if (words) {
-      const wordArray = words.split(',');
-      wordArray.forEach((word, index) => {
-        document.getElementById(`text${index + 1}`).value = decodeURIComponent(word);
-      });
-      createRectangles();
-      // Hide the input boxes and button since URL contains words
-      document.getElementById('inputContainer').style.display = 'none';
-    }
-  };
-</script>
+  </script>
+  
   <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 </body>
 </html>
