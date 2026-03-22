@@ -41,7 +41,7 @@ Choosers
 Discussion tools
 
 * [Triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool
-* [Diamond 9](https://jamesabela.github.io/jsfun/diamond9.html)
+* [ThinkRank Studio](https://jamesabela.github.io/ThinkRankStudio/) Includes Diamond 9, Diamond 5, Triangle ranking, line ranking, podium ranking and elimination mode.
 * [Debate tool](https://jamesabela.github.io/jsfun/debate.html)
 
 Brainstorming tools
