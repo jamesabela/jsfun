@@ -217,7 +217,11 @@
 
   function fetchCode(url) {
     currentURL = url;
-    fetch(url)
+    // Pastebin doesn't send CORS headers, so route it through a proxy
+    const fetchURL = /pastebin\.com/i.test(url)
+      ? `https://corsproxy.io/?${encodeURIComponent(url)}`
+      : url;
+    fetch(fetchURL)
             .then(response => response.text())
             .then(data => {
               codeText = data;
