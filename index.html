@@ -85,6 +85,16 @@
       box-shadow: 0 4px 12px rgba(99,102,241,0.35);
     }
     .tab-btn:hover:not(.active) { background: var(--indigo-light); color: var(--indigo); }
+    .tab-btn.link-btn {
+      background: transparent;
+      color: #0d9488;
+      border: 1.5px solid #0d9488;
+    }
+    .tab-btn.link-btn:hover {
+      background: #ccfbf1;
+      color: #0f766e;
+      border-color: #0f766e;
+    }
 
     /* ───── Main content ───── */
     main { max-width: 960px; margin: 2.5rem auto; padding: 0 1rem 4rem; }
@@ -195,6 +205,7 @@
   <div class="tab-bar" role="tablist">
     <button class="tab-btn active" role="tab" onclick="switchTab('general', this)">🎓 General Teaching</button>
     <button class="tab-btn" role="tab" onclick="switchTab('computing', this)">💻 Computing Tools</button>
+    <a class="tab-btn link-btn" href="https://readysetcompute.com/" target="_blank" rel="noopener">🚀 ReadySetCompute</a>
   </div>
 </div>
 
