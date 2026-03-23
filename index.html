@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jsfun — Teaching Tools by James Abela</title>
+  <meta name="description" content="A collection of free classroom tools for computing and general teaching by James Abela.">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --indigo: #6366f1;
+      --indigo-dark: #4f46e5;
+      --indigo-light: #e0e7ff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --radius: 1rem;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ───── Hero ───── */
+    .hero {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 60%, #a855f7 100%);
+      color: #fff;
+      text-align: center;
+      padding: 3.5rem 1rem 5rem;
+      clip-path: ellipse(120% 100% at 50% 0%);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      opacity: 0.85;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ───── Tab bar ───── */
+    .tab-bar-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: -2.5rem;
+      position: relative;
+      z-index: 10;
+    }
+    .tab-bar {
+      background: var(--white);
+      border-radius: 999px;
+      padding: 0.35rem;
+      display: inline-flex;
+      gap: 0.25rem;
+      box-shadow: 0 4px 24px rgba(99,102,241,0.18);
+      border: 1px solid var(--border);
+    }
+    .tab-btn {
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.6rem 1.6rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--muted);
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background: var(--indigo);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+    }
+    .tab-btn:hover:not(.active) { background: var(--indigo-light); color: var(--indigo); }
+
+    /* ───── Main content ───── */
+    main { max-width: 960px; margin: 2.5rem auto; padding: 0 1rem 4rem; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ───── Section heading ───── */
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--indigo-dark);
+      margin: 2.2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--indigo-light);
+    }
+    .section-heading .icon { font-size: 1.4rem; }
+
+    /* ───── Cards grid ───── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.3rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(99,102,241,0.14);
+      border-color: var(--indigo);
+    }
+    .card-emoji { font-size: 1.6rem; }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .card-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.15em 0.7em;
+      border-radius: 999px;
+      background: var(--indigo-light);
+      color: var(--indigo-dark);
+      margin-top: auto;
+      align-self: flex-start;
+    }
+    /* External indicator */
+    .card.external::after {
+      content: '↗';
+      position: absolute;
+      top: 0.8rem;
+      right: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    /* ───── Footer ───── */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    footer a { color: var(--indigo); font-weight: 600; text-decoration: none; }
+    footer a.tea { color: #e73c7e; }
+
+    @media (max-width: 500px) {
+      .hero { padding: 2.5rem 1rem 4rem; }
+      .tab-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🛠️ jsfun Tools</h1>
+  <p>Free classroom tools for computing and general teaching — built to make learning more engaging.</p>
+</div>
+
+<!-- Tab bar -->
+<div class="tab-bar-wrap">
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn active" role="tab" onclick="switchTab('general', this)">🎓 General Teaching</button>
+    <button class="tab-btn" role="tab" onclick="switchTab('computing', this)">💻 Computing Tools</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- ══════════════════════════════════════════════
+       TAB 1 — COMPUTING TOOLS
+  ══════════════════════════════════════════════════ -->
+  <div id="tab-computing" class="tab-panel">
+
+    <div class="section-heading"><span class="icon">🐍</span> Python Display Tool</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy" target="_blank" rel="noopener">
+        <span class="card-emoji">📄</span>
+        <div class="card-title">Python Code Display</div>
+        <div class="card-desc">Display, download (.py or .txt), visualise and make puzzles from any raw Python file. Paste a GitHub Gist or Pastebin URL.</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/reorder.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🧩</span>
+        <div class="card-title">Parsons Puzzle (Reorder)</div>
+        <div class="card-desc">Reorder scrambled lines of code back into the correct order. Works with any raw Python URL (up to 20 lines).</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">🧒</span> Early Years &amp; Primary Computing</div>
+    <div class="cards">
+      <a class="card external" href="https://amberjr.vercel.app/" target="_blank" rel="noopener">
+        <span class="card-emoji">🟠</span>
+        <div class="card-title">AmberJr — ScratchJr Prep Tool</div>
+        <div class="card-desc">Create, edit and customise ScratchJr projects for class — add custom characters, backgrounds and sounds with a drag-and-drop scene editor. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/secretcodegen.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔐</span>
+        <div class="card-title">Secret Code Generator</div>
+        <div class="card-desc">Create and crack secret codes and ciphers — a hands-on introduction to cryptography for young learners. Message Centre friendly. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1 / KS2</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/MyCreations/mypixelart.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🎨</span>
+        <div class="card-title">Pixel Art Creator</div>
+        <div class="card-desc">Create pixel art on 8×8, 16×16 or 32×32 grids — introduces digital art, coordinates and grids. Export to PDF. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1 / KS2</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/simplepaint.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🖌️</span>
+        <div class="card-title">Paint Tool</div>
+        <div class="card-desc">No-frills drawing tool for young learners — brush/eraser modes, adjustable sizes, and simple colour palette. Save as PNG. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">📚</span> iGCSE Algorithms</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py" target="_blank" rel="noopener">
+        <span class="card-emoji">📊</span>
+        <div class="card-title">Average</div>
+        <div class="card-desc">Calculate the average of a list of numbers.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble" target="_blank" rel="noopener">
+        <span class="card-emoji">🔃</span>
+        <div class="card-title">Bubble Sort</div>
+        <div class="card-desc">Classic bubble sort algorithm implementation.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py" target="_blank" rel="noopener">
+        <span class="card-emoji">🔢</span>
+        <div class="card-title">Counting</div>
+        <div class="card-desc">Counting algorithm — tallying occurrences.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/forloop.py" target="_blank" rel="noopener">
+        <span class="card-emoji">🔁</span>
+        <div class="card-title">For Loop</div>
+        <div class="card-desc">A definite iteration example using a for loop.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py" target="_blank" rel="noopener">
+        <span class="card-emoji">🔀</span>
+        <div class="card-title">If / Else</div>
+        <div class="card-desc">Selection — branching logic with if/else.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py" target="_blank" rel="noopener">
+        <span class="card-emoji">🔍</span>
+        <div class="card-title">Linear Search</div>
+        <div class="card-desc">Search through a list one item at a time.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py" target="_blank" rel="noopener">
+        <span class="card-emoji">📈</span>
+        <div class="card-title">Max &amp; Min</div>
+        <div class="card-desc">Find the maximum and minimum in a list.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py" target="_blank" rel="noopener">
+        <span class="card-emoji">🔄</span>
+        <div class="card-title">Repeat Loop</div>
+        <div class="card-desc">Post-condition loop (repeat…until style).</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py" target="_blank" rel="noopener">
+        <span class="card-emoji">🧮</span>
+        <div class="card-title">Totalling</div>
+        <div class="card-desc">Running total / accumulator pattern.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py" target="_blank" rel="noopener">
+        <span class="card-emoji">🔁</span>
+        <div class="card-title">While Loop</div>
+        <div class="card-desc">Pre-condition indefinite iteration with while.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">0️⃣</span> Binary &amp; Data</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/jsfun/binaryconvertor.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔢</span>
+        <div class="card-title">Binary Conversion Tool</div>
+        <div class="card-desc">Convert between decimal and binary step by step.</div>
+        <span class="card-tag">KS3 / iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/binaryquiz.html" target="_blank" rel="noopener">
+        <span class="card-emoji">❓</span>
+        <div class="card-title">Binary Quiz</div>
+        <div class="card-desc">Test binary conversion knowledge with a quiz.</div>
+        <span class="card-tag">KS3 / iGCSE</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/8bitquest.html" target="_blank" rel="noopener">
+        <span class="card-emoji">⏱️</span>
+        <div class="card-title">Binary Timed Challenge</div>
+        <div class="card-desc">Race against the clock on binary conversions. By Sethi De Clercq.</div>
+        <span class="card-tag">KS3 / iGCSE</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/binaryvisualiser.html" target="_blank" rel="noopener">
+        <span class="card-emoji">💡</span>
+        <div class="card-title">8-bit Binary Display</div>
+        <div class="card-desc">Visual 8-bit binary bulb display. By Sethi De Clercq.</div>
+        <span class="card-tag">KS3 / iGCSE</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/switchmaster.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔀</span>
+        <div class="card-title">Decimal → Binary Tool</div>
+        <div class="card-desc">Step-by-step decimal to binary conversion. By Sethi De Clercq.</div>
+        <span class="card-tag">KS3 / iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/paritybyte.html" target="_blank" rel="noopener">
+        <span class="card-emoji">✅</span>
+        <div class="card-title">Parity Byte</div>
+        <div class="card-desc">Understand how parity bits detect errors in data transmission.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/binarysnake.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🐍</span>
+        <div class="card-title">Binary Snake</div>
+        <div class="card-desc">Snake game with a binary challenge twist.</div>
+        <span class="card-tag">KS3 / iGCSE</span>
+      </a>
+      <a class="card external" href="https://ians.site/file/" target="_blank" rel="noopener">
+        <span class="card-emoji">📁</span>
+        <div class="card-title">File Size Calculator</div>
+        <div class="card-desc">Calculate file sizes for iGCSE questions. Student created.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">💎</span> Diamond 9 — CS Topics</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/ThinkRankStudio/index.html?words=Routers%2CSwitches%2CFirewalls%2CNICs%2CCables%2CModems%2CBridges%2CGateways%2CRepeaters" target="_blank" rel="noopener">
+        <span class="card-emoji">🌐</span>
+        <div class="card-title">Computer Networks Components</div>
+        <div class="card-desc">Routers, Switches, Firewalls, NICs, Cables, Modems, Bridges, Gateways, Repeaters</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/ThinkRankStudio/index.html?words=Phishing%2CMalware%2CSocial%2CRansomware%2CDDoS%2CPhysical%2CSpyware%2CAdware%2CKeyloggers" target="_blank" rel="noopener">
+        <span class="card-emoji">🔐</span>
+        <div class="card-title">Cybersecurity Threats</div>
+        <div class="card-desc">Phishing, Malware, Social Engineering, Ransomware, DDoS, Physical, Spyware, Adware, Keyloggers</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/ThinkRankStudio/index.html?words=Privacy%2CSecurity%2CProperty%2CDivide%2CAutomation%2COpen%2CTransparency%2CAccountability%2CConsent" target="_blank" rel="noopener">
+        <span class="card-emoji">⚖️</span>
+        <div class="card-title">Ethical Issues in Computing</div>
+        <div class="card-desc">Privacy, Security, Property, Divide, Automation, Open Source, Transparency, Accountability, Consent</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/ThinkRankStudio/index.html?words=CPU%2CRAM%2CStorage%2CMotherboard%2CPower%2CPeripheral%2CMonitor%2CKeyboard%2CMouse" target="_blank" rel="noopener">
+        <span class="card-emoji">🖥️</span>
+        <div class="card-title">Hardware Components</div>
+        <div class="card-desc">CPU, RAM, Storage, Motherboard, Power Supply, Peripherals, Monitor, Keyboard, Mouse</div>
+        <span class="card-tag">KS3 / iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/ThinkRankStudio/index.html?words=Sorting%2CSearching%2CGraph%2CDynamic%2CGreedy%2CRecursion%2CTree%2CBacktracking%2CHashing" target="_blank" rel="noopener">
+        <span class="card-emoji">🧠</span>
+        <div class="card-title">Key Algorithms</div>
+        <div class="card-desc">Sorting, Searching, Graph, Dynamic, Greedy, Recursion, Tree, Backtracking, Hashing</div>
+        <span class="card-tag">A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/ThinkRankStudio/index.html?words=Variables%2CFunctions%2CLoops%2CAlgorithms%2CObjects%2CSyntax%2CData%2CPseudocode%2COperators" target="_blank" rel="noopener">
+        <span class="card-emoji">💻</span>
+        <div class="card-title">Programming Concepts</div>
+        <div class="card-desc">Variables, Functions, Loops, Algorithms, Objects, Syntax, Data, Pseudocode, Operators</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/ThinkRankStudio/index.html?words=OOP%2CProcedural%2CFunctional%2CEvent-Driven%2CLogic%2CDeclarative%2CImperative%2CConcurrent%2CAspect-Oriented" target="_blank" rel="noopener">
+        <span class="card-emoji">🏗️</span>
+        <div class="card-title">Programming Paradigms</div>
+        <div class="card-desc">OOP, Procedural, Functional, Event-Driven, Logic, Declarative, Imperative, Concurrent, Aspect-Oriented</div>
+        <span class="card-tag">A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/ThinkRankStudio/index.html?words=Requirements%2CDesign%2CImplementation%2CTesting%2CDeployment%2CMaintenance%2CPlanning%2CReview%2CClosure" target="_blank" rel="noopener">
+        <span class="card-emoji">🔄</span>
+        <div class="card-title">SDLC Stages</div>
+        <div class="card-desc">Requirements, Design, Implementation, Testing, Deployment, Maintenance, Planning, Review, Closure</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/ThinkRankStudio/index.html?words=Unit%2CIntegration%2CSystem%2CUAT%2CRegression%2CAlpha%2CBeta%2CLoad%2CStress" target="_blank" rel="noopener">
+        <span class="card-emoji">🧪</span>
+        <div class="card-title">Types of Software Testing</div>
+        <div class="card-desc">Unit, Integration, System, UAT, Regression, Alpha, Beta, Load, Stress</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">🔺</span> Priority Triangle — CS Topics</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Security&word2=Privacy&word3=Encryption" target="_blank" rel="noopener">
+        <span class="card-emoji">🔒</span>
+        <div class="card-title">Security</div>
+        <div class="card-desc">Security · Privacy · Encryption</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Scalability&word2=Performance&word3=Cost" target="_blank" rel="noopener">
+        <span class="card-emoji">📈</span>
+        <div class="card-title">Scalability</div>
+        <div class="card-desc">Scalability · Performance · Cost</div>
+        <span class="card-tag">A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Ethics&word2=Bias&word3=Responsibility" target="_blank" rel="noopener">
+        <span class="card-emoji">⚖️</span>
+        <div class="card-title">Ethics</div>
+        <div class="card-desc">Ethics · Bias · Responsibility</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Data&word2=Storage&word3=Integrity" target="_blank" rel="noopener">
+        <span class="card-emoji">🗄️</span>
+        <div class="card-title">Data</div>
+        <div class="card-desc">Data · Storage · Integrity</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=AI&word2=Automation&word3=Intelligence" target="_blank" rel="noopener">
+        <span class="card-emoji">🤖</span>
+        <div class="card-title">AI</div>
+        <div class="card-desc">AI · Automation · Intelligence</div>
+        <span class="card-tag">A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Privacy&word2=Consent&word3=Tracking" target="_blank" rel="noopener">
+        <span class="card-emoji">👁️</span>
+        <div class="card-title">Privacy</div>
+        <div class="card-desc">Privacy · Consent · Tracking</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Accessibility&word2=Usability&word3=Inclusion" target="_blank" rel="noopener">
+        <span class="card-emoji">♿</span>
+        <div class="card-title">Accessibility</div>
+        <div class="card-desc">Accessibility · Usability · Inclusion</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Sustainability&word2=Energy&word3=Efficiency" target="_blank" rel="noopener">
+        <span class="card-emoji">🌱</span>
+        <div class="card-title">Sustainability</div>
+        <div class="card-desc">Sustainability · Energy · Efficiency</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Cybercrime&word2=Fraud&word3=Phishing" target="_blank" rel="noopener">
+        <span class="card-emoji">🦹</span>
+        <div class="card-title">Cybercrime</div>
+        <div class="card-desc">Cybercrime · Fraud · Phishing</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=OpenSource&word2=Collaboration&word3=Transparency" target="_blank" rel="noopener">
+        <span class="card-emoji">🤝</span>
+        <div class="card-title">Open Source</div>
+        <div class="card-desc">Open Source · Collaboration · Transparency</div>
+        <span class="card-tag">A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=DigitalDivide&word2=Access&word3=Education" target="_blank" rel="noopener">
+        <span class="card-emoji">🌍</span>
+        <div class="card-title">Digital Divide</div>
+        <div class="card-desc">Digital Divide · Access · Education</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Algorithms&word2=Optimization&word3=Complexity" target="_blank" rel="noopener">
+        <span class="card-emoji">🧮</span>
+        <div class="card-title">Algorithms</div>
+        <div class="card-desc">Algorithms · Optimization · Complexity</div>
+        <span class="card-tag">A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html?word1=Networking&word2=Bandwidth&word3=Connectivity" target="_blank" rel="noopener">
+        <span class="card-emoji">📡</span>
+        <div class="card-title">Networking</div>
+        <div class="card-desc">Networking · Bandwidth · Connectivity</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">🔗</span> Link Two Sides — CS Quizzes</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=QSBsb29wIHRoYXQgcmVwZWF0cyBhIHNldCBvZiBpbnN0cnVjdGlvbnMgYSBrbm93biBudW1iZXIgb2YgdGltZXMuCkEgY29uZGl0aW9uIHRoYXQgY2hlY2tzIGlmIGEgc3RhdGVtZW50IGlzIHRydWUgb3IgZmFsc2UuCkEgbG9vcCB0aGF0IGNvbnRpbnVlcyB1bnRpbCBhIGNlcnRhaW4gY29uZGl0aW9uIGlzIG1ldC4KQSBjb21tYW5kIHRoYXQgYWxsb3dzIGEgcHJvZ3JhbSB0byBza2lwIGluc3RydWN0aW9ucyBpZiBhIGNvbmRpdGlvbiBpcyBmYWxzZS4=&right=Rm9yIGxvb3AKSWYgc3RhdGVtZW50CldoaWxlIGxvb3AKRWxzZSBzdGF0ZW1lbnQ=" target="_blank" rel="noopener">
+        <span class="card-emoji">🔁</span>
+        <div class="card-title">Programming Constructs</div>
+        <div class="card-desc">Match: For loop, If statement, While loop, Else statement to their definitions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=T3V0cHV0cyB0cnVlIG9ubHkgd2hlbiBib3RoIGlucHV0cyBhcmUgdHJ1ZS4KT3V0cHV0cyB0cnVlIHdoZW4gZWl0aGVyIGlucHV0IGlzIHRydWUuCk91dHB1dHMgdHJ1ZSB3aGVuIG5laXRoZXIgaW5wdXQgaXMgdHJ1ZS4KT3V0cHV0cyB0cnVlIG9ubHkgd2hlbiB0aGUgaW5wdXRzIGFyZSBkaWZmZXJlbnQu&right=QU5EIGdhdGUKT1IgZ2F0ZQpOT1IgZ2F0ZQpYT1IgZ2F0ZQ==" target="_blank" rel="noopener">
+        <span class="card-emoji">⚡</span>
+        <div class="card-title">Logic Gates</div>
+        <div class="card-desc">Match AND, OR, NOR, XOR gates to their truth-table descriptions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=Vm9sYXRpbGUgbWVtb3J5IHRoYXQgc3RvcmVzIGRhdGEgdGVtcG9yYXJpbHkuCk5vbi12b2xhdGlsZSBzdG9yYWdlIGRldmljZSB0aGF0IHN0b3JlcyBkYXRhIHBlcm1hbmVudGx5LgpBIHBvcnRhYmxlIHN0b3JhZ2UgZGV2aWNlIHRoYXQgY2FuIGJlIGNvbm5lY3RlZCB2aWEgVVNCLgpEYXRhIHN0b3JhZ2UgbWVkaXVtIHRoYXQgdXNlcyBsYXNlcnMgdG8gcmVhZCBhbmQgd3JpdGUgZGF0YS4=&right=UkFNCkhhcmQgRGlzayBEcml2ZQpVU0IgRmxhc2ggRHJpdmUKT3B0aWNhbCBEaXNj" target="_blank" rel="noopener">
+        <span class="card-emoji">💾</span>
+        <div class="card-title">Data Storage</div>
+        <div class="card-desc">Match RAM, Hard Disk, USB Flash Drive, Optical Disc to their descriptions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=QSB1bmlxdWUgaWRlbnRpZmllciBhc3NpZ25lZCB0byBkZXZpY2VzIG9uIGEgbmV0d29yay4KVGhlIHN0YW5kYXJkIGNvbW11bmljYXRpb24gcHJvdG9jb2wgb2YgdGhlIGludGVybmV0LgpBIGRldmljZSB0aGF0IGZvcndhcmRzIGRhdGEgcGFja2V0cyBiZXR3ZWVuIG5ldHdvcmtzLgpBIGNvbXB1dGVyIHRoYXQgcHJvdmlkZXMgc2VydmljZXMgdG8gb3RoZXIgY29tcHV0ZXJzIG92ZXIgYSBuZXR3b3JrLg==&right=SVAgQWRkcmVzcwpUQ1AvSVAKUm91dGVyClNlcnZlcg==" target="_blank" rel="noopener">
+        <span class="card-emoji">🌐</span>
+        <div class="card-title">Networking Concepts</div>
+        <div class="card-desc">Match IP Address, TCP/IP, Router, Server to their descriptions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=QSBzdGVwLWJ5LXN0ZXAgcHJvY2VkdXJlIGZvciBzb2x2aW5nIGEgcHJvYmxlbS4KQSBzdHJ1Y3R1cmUgdXNlZCB0byByZXByZXNlbnQgYSBkZWNpc2lvbi1tYWtpbmcgcHJvY2Vzcy4KQW4gb3JkZXJlZCBsaXN0IG9mIGVsZW1lbnRzLgpBIGJyYW5jaGluZyBwb2ludCBpbiBhIHByb2dyYW0gd2hlcmUgbXVsdGlwbGUgb3B0aW9ucyBhcmUgcG9zc2libGUu&right=QWxnb3JpdGhtCkZsb3djaGFydApBcnJheQpEZWNpc2lvbg==" target="_blank" rel="noopener">
+        <span class="card-emoji">📊</span>
+        <div class="card-title">Algorithm Basics</div>
+        <div class="card-desc">Match Algorithm, Flowchart, Array, Decision to their descriptions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=QSBzdGF0ZW1lbnQgdG8gY291bnQuCkEgc3RhdGVtZW50IHRvIHRvdGFsLgpBIHN0YXRlbWVudCB0byBzdGFydCBhIHByZS1jb25kaXRpb24gbG9vcC4KQSBzdGF0ZW1lbnQgdG8gc3RhcnQgYSBwb3N0LWNvbmRpdGlvbiBsb29wLg==&right=Rk9SIENvdW50IOKGkCAxIFRPIDEwClZhbHVlIOKGkCBWYWx1ZSArIE5ld1ZhbHVlCldISUxFIFZhbHVlID4gMTAgRE8KUkVQRUFU" target="_blank" rel="noopener">
+        <span class="card-emoji">📝</span>
+        <div class="card-title">Pseudocode Statements</div>
+        <div class="card-desc">Match FOR, totalling, WHILE, REPEAT to their pseudocode descriptions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=TGlicmFyeSByb3V0aW5lClN0cnVjdHVyZSBkaWFncmFtClByb2NlZHVyZQpGdW5jdGlvbg==&right=QSBzdGFuZGFyZCBzdWJyb3V0aW5lIHRoYXQgaXMgYXZhaWxhYmxlIGZvciBpbW1lZGlhdGUgdXNlLgpBbiBvdmVydmlldyBvZiBhIHByb2dyYW0gb3Igc3Vicm91dGluZS4KQSBzdWJyb3V0aW5lIHRoYXQgbWF5IG5vdCByZXR1cm4gYSB2YWx1ZS4KQSBzdWJyb3V0aW5lIHRoYXQgY2FuIGJlIHVzZWQgaW4gYW4gYXNzaWdubWVudCBzdGF0ZW1lbnQu" target="_blank" rel="noopener">
+        <span class="card-emoji">🔧</span>
+        <div class="card-title">Programming Concepts</div>
+        <div class="card-desc">Match Library routine, Structure diagram, Procedure, Function to their definitions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=RGV2ZWxvcCBhbiBhbGdvcml0aG0gdG8gc29sdmUgdGhlIHByb2JsZW0gYnkgdXNpbmcgc3RydWN0dXJlIGRpYWdyYW1zLCBmbG93Y2hhcnRzLCBvciBwc2V1ZG9jb2RlCkRldGVjdCBhbmQgZml4IHRoZSBlcnJvcnMgaW4gdGhlIHByb2dyYW0KSWRlbnRpZnkgdGhlIHByb2JsZW0gYW5kIGl0cyByZXF1aXJlbWVudHMKV3JpdGUgYW5kIGltcGxlbWVudCB0aGUgaW5zdHJ1Y3Rpb25zIHRvIHNvbHZlIHRoZSBwcm9ibGVt&right=RGVzaWduClRlc3RpbmcKQW5hbHlzaXMKQ29kaW5n" target="_blank" rel="noopener">
+        <span class="card-emoji">🔄</span>
+        <div class="card-title">Program Development Life Cycle</div>
+        <div class="card-desc">Match Design, Testing, Analysis, Coding to their PDLC stage descriptions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=U3RvcmVzIGRhdGEgaW4gYSBmaWxlClJldHJpZXZlcyBkYXRhIGZyb20gYSBmaWxlCkRpc3BsYXlzIGRhdGEgb24gYSBzY3JlZW4KRW50ZXJzIGRhdGEgZnJvbSBhIGtleWJvYXJk&right=V1JJVEUKUkVBRApPVVRQVVQKSU5QVVQ=" target="_blank" rel="noopener">
+        <span class="card-emoji">⌨️</span>
+        <div class="card-title">Pseudocode Keywords</div>
+        <div class="card-desc">Match WRITE, READ, OUTPUT, INPUT to their pseudocode actions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html?left=QSB3aG9sZSBudW1iZXIKQSBzaW5nbGUgbGV0dGVyCkEgd29yZCBvciBwaHJhc2UKQSBudW1iZXIgd2l0aCB0d28gZGVjaW1hbCBwbGFjZXM=&right=SU5URUdFUgpDSEFSClNUUklORwpSRUFM" target="_blank" rel="noopener">
+        <span class="card-emoji">🔢</span>
+        <div class="card-title">Data Types</div>
+        <div class="card-desc">Match INTEGER, CHAR, STRING, REAL to their definitions.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">🐱</span> Scratch Projects</div>
+    <div class="cards">
+      <a class="card external" href="https://scratch.mit.edu/projects/427196904/" target="_blank" rel="noopener">
+        <span class="card-emoji">🔐</span>
+        <div class="card-title">Cipher Wheel</div>
+        <div class="card-desc">Interactive Caesar cipher / substitution cipher wheel in Scratch.</div>
+        <span class="card-tag">KS3</span>
+      </a>
+      <a class="card external" href="https://scratch.mit.edu/projects/621571362/" target="_blank" rel="noopener">
+        <span class="card-emoji">🖥️</span>
+        <div class="card-title">Von Neumann Architecture</div>
+        <div class="card-desc">Visual model of the Von Neumann computer architecture.</div>
+        <span class="card-tag">iGCSE</span>
+      </a>
+      <a class="card external" href="https://scratch.mit.edu/projects/287065173/" target="_blank" rel="noopener">
+        <span class="card-emoji">🔄</span>
+        <div class="card-title">Right Hand Rule</div>
+        <div class="card-desc">Maze-solving using the right-hand rule algorithm.</div>
+        <span class="card-tag">KS3 / iGCSE</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">🧗</span> Challenges</div>
+    <div class="cards">
+      <a class="card external" href="https://pythonchallenges.weebly.com/" target="_blank" rel="noopener">
+        <span class="card-emoji">🏆</span>
+        <div class="card-title">Python Challenges</div>
+        <div class="card-desc">A collection of Python programming challenges. Entries are for GIS students only but challenges are open to all.</div>
+        <span class="card-tag">KS3 – A-Level</span>
+      </a>
+      <a class="card external" href="https://hanoitowers.my.canva.site/" target="_blank" rel="noopener">
+        <span class="card-emoji">🗼</span>
+        <div class="card-title">Towers of Hanoi</div>
+        <div class="card-desc">Classic recursive problem in an interactive visual format. By Sethi De Clercq.</div>
+        <span class="card-tag">iGCSE / A-Level</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/cells.html" target="_blank" rel="noopener">
+        <span class="card-emoji">📊</span>
+        <div class="card-title">Find the Cell</div>
+        <div class="card-desc">Spreadsheet cell reference game — surprisingly addictive! Builds data literacy skills.</div>
+        <span class="card-tag">KS3</span>
+      </a>
+    </div>
+
+  </div><!-- /tab-computing -->
+
+
+  <!-- ══════════════════════════════════════════════
+       TAB 2 — GENERAL TEACHING TOOLS
+  ══════════════════════════════════════════════════ -->
+  <div id="tab-general" class="tab-panel active">
+
+    <div class="section-heading"><span class="icon">❓</span> Question Tools</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔗</span>
+        <div class="card-title">Link Two Sides</div>
+        <div class="card-desc">Draw lines between matching items — a very common exam question type. Customisable with your own content.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/scramble.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔀</span>
+        <div class="card-title">Sentence Ordering Quiz</div>
+        <div class="card-desc">Order scrambled words, sentences or processes. Answers are encrypted so students can't guess from the URL.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/comparison.html" target="_blank" rel="noopener">
+        <span class="card-emoji">⚖️</span>
+        <div class="card-title">More Than / Less Than</div>
+        <div class="card-desc">Comparison tool for numerical reasoning. By Sethi De Clercq.</div>
+        <span class="card-tag">Primary / KS3</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">🎰</span> Choosers &amp; Pickers</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/jsfun/lollipop.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🍭</span>
+        <div class="card-title">3D Lollipop Carousel</div>
+        <div class="card-desc">Choose random names, groups or questions with a beautiful 3D spinning carousel.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/megaspinner.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🌀</span>
+        <div class="card-title">Mega Spinner</div>
+        <div class="card-desc">Spin the wheel to choose from large groups of names — perfect for bigger classes.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/prezzispinner.html" target="_blank" rel="noopener">
+        <span class="card-emoji">👥</span>
+        <div class="card-title">Presentation Spinner</div>
+        <div class="card-desc">Get two students presenting at once — great for peer assessment activities.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/manip.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🧲</span>
+        <div class="card-title">Draggable Manipulatives</div>
+        <div class="card-desc">Drag and drop items for categorisation or grouping activities on a whiteboard.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/number-gen.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔢</span>
+        <div class="card-title">Number Flash Cards</div>
+        <div class="card-desc">Random number flash card generator. By Sethi De Clercq.</div>
+        <span class="card-tag">Primary / KS3</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/debate.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🗳️</span>
+        <div class="card-title">Debate Picker</div>
+        <div class="card-desc">Pick a classroom debate topic and assign sides randomly.</div>
+        <span class="card-tag">KS3+</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">💬</span> Discussion Tools</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔺</span>
+        <div class="card-title">Priority Triangle</div>
+        <div class="card-desc">Which concept is most important? Editable words, dictionary look-up and image search built in.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card external" href="https://jamesabela.github.io/ThinkRankStudio/" target="_blank" rel="noopener">
+        <span class="card-emoji">🏆</span>
+        <div class="card-title">ThinkRank Studio</div>
+        <div class="card-desc">Full ranking suite — Diamond 9, Diamond 5, Triangle, Line ranking, Podium and Elimination mode.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/debate.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🎙️</span>
+        <div class="card-title">Debate Tool</div>
+        <div class="card-desc">Structure and run a classroom debate with this simple tool.</div>
+        <span class="card-tag">KS3+</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">🖼️</span> Image Tools</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/jsfun/imgtiles.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🎮</span>
+        <div class="card-title">Tile Reveal Game</div>
+        <div class="card-desc">Reveal tiles one by one — who can guess the hidden image first? Great as a starter activity.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/imgrev.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔦</span>
+        <div class="card-title">Image Reveal Spotlight</div>
+        <div class="card-desc">Spotlight effect to slowly explore an image. Wonderful for younger children investigating a visual stimulus.</div>
+        <span class="card-tag">Primary / KS3</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/imgcomp.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔍</span>
+        <div class="card-title">Image Compare</div>
+        <div class="card-desc">Overlay two images to compare them — great for Now &amp; Then, or just "which do you prefer?"</div>
+        <span class="card-tag">All ages</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">🔢</span> Primary Maths</div>
+    <div class="cards">
+      <a class="card external" href="https://sethideclercq.com/tools/tenframes.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🟡</span>
+        <div class="card-title">Ten Frame Tool</div>
+        <div class="card-desc">Visual ten frames with 4 coloured counters. Choose 1 or 2 frames, horizontal or vertical. Toggle running totals on/off. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/partwhole.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔵</span>
+        <div class="card-title">Part-Whole Challenges</div>
+        <div class="card-desc">Interactive part-whole model tool — visually explore fractions, addition and subtraction. Numbers up to 10, 20 or 50. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/sheets/numbergrid.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔍</span>
+        <div class="card-title">Missing Number Grids</div>
+        <div class="card-desc">5×5 or 10×10 grids with missing numbers for students to fill in. Export to PDF for printing. By Sethi De Clercq.</div>
+        <span class="card-tag">KS1 / KS2</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">✍️</span> Word &amp; Literacy</div>
+    <div class="cards">
+      <a class="card" href="https://jamesabela.github.io/icemaze/" target="_blank" rel="noopener">
+        <span class="card-emoji">❄️</span>
+        <div class="card-title">Ice Maze — Sentence Builder</div>
+        <div class="card-desc">Navigate a maze collecting words in the right order to build sentences. Uses the Colourful Semantics approach — 8 progressive stages from simple to complex.</div>
+        <span class="card-tag">KS1 / KS2</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/wordcloud.html" target="_blank" rel="noopener">
+        <span class="card-emoji">☁️</span>
+        <div class="card-title">Word Cloud</div>
+        <div class="card-desc">Quickly generate a word cloud from any text. Great for summarising themes in a text.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/wordtype.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🏷️</span>
+        <div class="card-title">Word Type Highlighter</div>
+        <div class="card-desc">Highlight nouns, verbs, adjectives and more with school colour codes. Build grammar awareness for young learners. By Sethi De Clercq.</div>
+        <span class="card-tag">KS1 / KS2</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/wordsearch.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🔤</span>
+        <div class="card-title">Word Search Maker</div>
+        <div class="card-desc">Create custom word searches with your own word list. Multiple grid sizes, upper/lower case support, printable. By Sethi De Clercq.</div>
+        <span class="card-tag">KS1 / KS2</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/blackoutpoetry.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🖊️</span>
+        <div class="card-title">Blackout Poetry Creator</div>
+        <div class="card-desc">Upload any text and use highlighting tools to create blackout poetry. Share or export your creations. By Sethi De Clercq.</div>
+        <span class="card-tag">KS2 / KS3</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/MyCreations/mywriting.html" target="_blank" rel="noopener">
+        <span class="card-emoji">✏️</span>
+        <div class="card-title">Fun Writing Adventures</div>
+        <div class="card-desc">Distraction-free writing tool for young learners to practise typing and build writing confidence. Export as a clean document. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/storydice.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🎲</span>
+        <div class="card-title">Story Dice</div>
+        <div class="card-desc">Generate story prompts and story net images. Even saves images for you!</div>
+        <span class="card-tag">Primary / KS3</span>
+      </a>
+      <a class="card external" href="https://scratch.mit.edu/projects/2261416/fullscreen/" target="_blank" rel="noopener">
+        <span class="card-emoji">📖</span>
+        <div class="card-title">Plot Device Chooser</div>
+        <div class="card-desc">Scratch-based story plot device generator for creative writing inspiration.</div>
+        <span class="card-tag">Primary / KS3</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">🎨</span> Primary Creative &amp; Fun</div>
+    <div class="cards">
+      <a class="card external" href="https://sethideclercq.com/tools/MyCreations/mypixelart.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🖼️</span>
+        <div class="card-title">Pixel Art Creator</div>
+        <div class="card-desc">Create pixel art on 8×8, 16×16 or 32×32 grids. Introduces coordinates and digital art. Export to PDF. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1 / KS2</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/simplepaint.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🖌️</span>
+        <div class="card-title">Paint Tool</div>
+        <div class="card-desc">Simple drawing tool with brush/eraser, adjustable sizes and basic colours. Save as PNG. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/howmanysleeps.html" target="_blank" rel="noopener">
+        <span class="card-emoji">🎂</span>
+        <div class="card-title">How Many Sleeps?</div>
+        <div class="card-desc">Count down to birthdays and special events in days, sleeps or hours. Add names and dates, upload via CSV. By Sethi De Clercq.</div>
+        <span class="card-tag">EYFS / KS1</span>
+      </a>
+      <a class="card external" href="https://sethideclercq.com/tools/emojisearch.html" target="_blank" rel="noopener">
+        <span class="card-emoji">😊</span>
+        <div class="card-title">Emoji Search &amp; Sheet Coder</div>
+        <div class="card-desc">Search emojis, get Unicode values and Google Sheets / Excel formulas. Click to copy. By Sethi De Clercq.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+    </div>
+
+    <div class="section-heading"><span class="icon">⏰</span> Productivity</div>
+    <div class="cards">
+      <a class="card external" href="https://sethideclercq.com/tools/simpletimer.html" target="_blank" rel="noopener">
+        <span class="card-emoji">⏱️</span>
+        <div class="card-title">Simple Timer</div>
+        <div class="card-desc">Countdown timer with an end-of-time chime. Set minutes and seconds. Clean, minimal design for any whiteboard. By Sethi De Clercq.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card external" href="https://minnowfish.github.io/Pomodoro-Timer/" target="_blank" rel="noopener">
+        <span class="card-emoji">🍅</span>
+        <div class="card-title">Pomodoro Timer</div>
+        <div class="card-desc">Classic 25/5 focus timer to help students manage their work time. Student created.</div>
+        <span class="card-tag">All ages</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/jsfun/demandsupply.html" target="_blank" rel="noopener">
+        <span class="card-emoji">📉</span>
+        <div class="card-title">Supply &amp; Demand</div>
+        <div class="card-desc">Interactive supply and demand curve display tool.</div>
+        <span class="card-tag">Economics</span>
+      </a>
+    </div>
+
+  </div><!-- /tab-general -->
+
+</main>
+
+<footer>
+  <p>
+    Made with ❤️ for better thinking. If it helped you, support the project.
+    <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+  </p>
+  <p style="margin-top:0.5rem;font-size:0.85rem;">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> © James Abela 2024
+  </p>
+</footer>
+
+<script>
+  function switchTab(name, btn) {
+    // Hide all panels
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    // Deactivate all buttons
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    // Show selected panel + activate button
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+
+<script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
+</body>
+</html>
