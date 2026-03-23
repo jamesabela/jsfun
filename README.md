@@ -200,7 +200,6 @@ A [triangle](https://jamesabela.github.io/jsfun/triangle.html) discussion tool i
 
 
 ## Known limitations
-* Code Display doesn't work with Pastebin
 * Code Display can only visualise up to 5600 bytes. (Python tutor limit)
 * When embedded in Google Sites, doesn't allow full screen display (This is a limit on all web pages in sites).
 
