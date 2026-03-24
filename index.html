@@ -256,7 +256,6 @@
   <button class="filter-btn" onclick="filterByTag('KS3', this)">KS3</button>
   <button class="filter-btn" onclick="filterByTag('iGCSE', this)">iGCSE</button>
   <button class="filter-btn" onclick="filterByTag('A-Level', this)">A-Level</button>
-  <button class="filter-btn" onclick="filterByTag('All ages', this)">All Ages</button>
 </div>
 
 <main>
@@ -349,6 +348,12 @@
         <div class="card-title">Debate Tool</div>
         <div class="card-desc">Structure and run a classroom debate with this simple tool.</div>
         <span class="card-tag">KS3+</span>
+      </a>
+      <a class="card" href="https://jamesabela.github.io/mindmap/" target="_blank" rel="noopener">
+        <span class="card-emoji">🧠</span>
+        <div class="card-title">Interactive Mind Map</div>
+        <div class="card-desc">Visually organize your thoughts, brainstorm ideas, and map out concepts collaboratively.</div>
+        <span class="card-tag">All ages</span>
       </a>
     </div>
 
@@ -494,7 +499,7 @@
         <span class="card-emoji">📉</span>
         <div class="card-title">Supply &amp; Demand</div>
         <div class="card-desc">Interactive supply and demand curve display tool.</div>
-        <span class="card-tag">Economics</span>
+        <span class="card-tag">iGCSE / A-Level</span>
       </a>
     </div>
 
@@ -528,11 +533,11 @@
       
       if (tag === 'all') {
         show = true;
+      } else if (cardTag.includes('All ages')) {
+        show = true; // Always show All Ages items
       } else if (tag === 'Primary') {
-        // Broad primary filter including EYFS and specific KS groups
         show = cardTag.includes('EYFS') || cardTag.includes('KS1') || cardTag.includes('KS2') || cardTag.includes('Primary');
       } else {
-        // Exact match or includes for KS3, iGCSE, etc.
         show = cardTag.includes(tag);
       }
       

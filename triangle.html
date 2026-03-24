@@ -3,260 +3,130 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Priority Triangle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Triangle Discussion — jsfun</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    body {
       font-family: 'Outfit', sans-serif;
     }
 
-    body {
-      background: #ffffff;
-      color: #111;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem 4rem;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-
-    h1 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: #1e1b4b;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.25rem;
-    }
-
-    h1 span {
-      color: #6366f1;
-    }
-
-    p.subtitle {
-      font-size: 1.2rem;
-      color: #475569;
-      font-weight: 400;
-    }
-
-    /* --- Triangle SVG container --- */
-    .triangle-area {
+    .triangle-container {
       position: relative;
       width: 100%;
-      max-width: 640px;
+      max-width: 500px;
+      aspect-ratio: 1.15;
     }
 
-    svg.tri {
+    .triangle-svg {
       width: 100%;
-      height: auto;
-      display: block;
-      filter: drop-shadow(0 6px 24px rgba(99, 102, 241, 0.15));
+      height: 100%;
     }
 
-    /* --- Word label cards, absolutely placed over the SVG --- */
-    .tri-label {
+    .vertex-label {
       position: absolute;
-      transform: translateX(-50%);
-      border-radius: 1.25rem;
-      border: 3px solid transparent;
-      min-width: 160px;
-      cursor: default;
-      transition: box-shadow 0.2s, border-color 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4em;
-      padding: 0.55em 1em 0.5em;
-      z-index: 15;
-    }
-
-    /* The editable word text */
-    .label-word {
-      font-size: clamp(1.1rem, 3.5vw, 1.8rem);
-      font-weight: 700;
+      transform: translate(-50%, -50%);
       text-align: center;
-      outline: none;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
       white-space: nowrap;
+      transition: transform 0.2s;
       cursor: pointer;
-      border-bottom: 2px dashed transparent;
-      transition: border-color 0.2s;
-      min-width: 80px;
-      display: block;
+      user-select: none;
+      z-index: 20;
     }
 
-    .label-word:focus {
-      border-bottom-color: currentColor;
-      cursor: text;
+    .vertex-label:hover {
+      transform: translate(-50%, -50%) scale(1.02);
     }
 
-    .tri-label:focus-within {
-      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
-    }
-
-    /* Icon action row inside each badge */
     .label-actions {
       display: flex;
-      gap: 0.4em;
+      gap: 0.4rem;
       align-items: center;
     }
 
     .label-action {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
+      background: white;
+      border: 2px solid currentColor;
+      border-radius: 999px;
+      padding: 0.2rem 0.5rem;
       text-decoration: none;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1.5px solid rgba(0, 0, 0, 0.1);
-      border-radius: 2em;
-      padding: 0.1em 0.55em;
-      transition: background 0.15s, transform 0.12s;
-      display: inline-flex;
+      transition: all 0.2s;
+      line-height: 1;
+      display: flex;
       align-items: center;
-      cursor: pointer;
-      user-select: none;
+      justify-content: center;
+      opacity: 0.8;
     }
 
     .label-action:hover {
-      background: rgba(255, 255, 255, 1);
-      transform: scale(1.12);
-    }
-
-    .label-action:active {
-      transform: scale(0.95);
-    }
-
-    /* TOP — pinned above apex */
-    #label1 {
-      top: 0%;
-      left: 50%;
-      background: #fef08a;
-      color: #713f12;
-      border-color: #eab308;
-    }
-
-    /* BOTTOM LEFT */
-    #label2 {
-      bottom: 2%;
-      left: 18%;
-      background: #bbf7d0;
-      color: #14532d;
-      border-color: #22c55e;
-    }
-
-    /* BOTTOM RIGHT */
-    #label3 {
-      bottom: 2%;
-      left: 82%;
-      background: #bfdbfe;
-      color: #1e3a8a;
-      border-color: #3b82f6;
-    }
-
-    /* Tap-to-edit hint */
-    .edit-hint {
-      text-align: center;
-      font-size: 1rem;
-      color: #94a3b8;
-      margin-top: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-    }
-
-    /* --- Bottom controls --- */
-    .controls {
-      margin-top: 2.5rem;
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .input-bar {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .input-bar input {
-      font-family: inherit;
-      font-size: 1.1rem;
-      padding: 0.6rem 1rem;
-      border-radius: 0.75rem;
-      border: 2px solid #cbd5e1;
-      outline: none;
-      color: #1e293b;
-      width: 14rem;
-      transition: border-color 0.2s;
-    }
-
-    .input-bar input:focus {
+      background: #fff;
+      transform: scale(1.1);
       border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 
-    button {
-      font-family: inherit;
-      font-size: 1.1rem;
-      font-weight: 600;
-      padding: 0.65rem 1.6rem;
-      border-radius: 0.75rem;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-      touch-action: manipulation;
-    }
-
-    button:active {
-      transform: scale(0.96);
-    }
-
-    .btn-primary {
+    .user-marker {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+      z-index: 30;
       background: #6366f1;
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+      border: 3px solid #fff;
     }
 
-    .btn-primary:hover {
-      background: #4f46e5;
+    .user-marker:active {
+      cursor: grabbing;
     }
 
-    .btn-secondary {
-      background: #f1f5f9;
-      color: #334155;
-      border: 2px solid #e2e8f0;
-    }
-
-    .btn-secondary:hover {
-      background: #e2e8f0;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: #6366f1;
+    .pulse-ring {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
       border: 2px solid #6366f1;
+      animation: pulse 1.5s ease-out infinite;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
     }
 
-    .btn-ghost:hover {
-      background: rgba(99, 102, 241, 0.08);
+    @keyframes pulse {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+      }
     }
 
-    /* --- Share Modal --- */
+    .balance-bar {
+      height: 8px;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .hide-details #user-marker,
+    .hide-details #pulse-ring,
+    .hide-details .percentage-stats {
+      display: none !important;
+    }
+
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      z-index: 200;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
       align-items: center;
       justify-content: center;
     }
@@ -265,404 +135,602 @@
       display: flex;
     }
 
-    .modal {
-      background: #fff;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      max-width: 360px;
-      width: 90%;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-      position: relative;
-      text-align: center;
+    .custom-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236366f1' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7' /%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.25rem;
+      padding-right: 3rem;
     }
 
-    .modal h2 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #1e1b4b;
-      margin-bottom: 1.25rem;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: #f1f5f9;
-      border: none;
-      border-radius: 50%;
-      width: 2rem;
-      height: 2rem;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      color: #64748b;
-    }
-
-    .modal-close:hover {
-      background: #e2e8f0;
-    }
-
-    #qrImg {
-      width: 180px;
-      height: 180px;
-      display: block;
-      margin: 0 auto 1.25rem;
-      border-radius: 0.75rem;
-      border: 3px solid #e2e8f0;
-    }
-
-    .share-row {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      margin-top: 0.5rem;
-    }
-
-    .share-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      padding: 0.7rem 1.1rem;
-      border-radius: 0.75rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: transform 0.15s, box-shadow 0.15s;
-      font-family: inherit;
-      text-decoration: none;
-      color: #fff;
-      justify-content: center;
-    }
-
-    .share-btn:active {
-      transform: scale(0.97);
-    }
-
-    .share-btn.classroom {
-      background: #1a73e8;
-    }
-
-    .share-btn.classroom:hover {
-      background: #1558b0;
-    }
-
-    .share-btn.teams {
-      background: #5558af;
-    }
-
-    .share-btn.teams:hover {
-      background: #3d3f8f;
-    }
-
-    .share-btn.copy {
-      background: #f1f5f9;
-      color: #334155;
-      border-color: #e2e8f0;
-    }
-
-    .share-btn.copy:hover {
-      background: #e2e8f0;
-    }
-
-    /* Toast */
-    #copyToast {
-      visibility: hidden;
-      opacity: 0;
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1e293b;
-      color: #fff;
-      padding: 0.6rem 1.5rem;
-      border-radius: 2rem;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: opacity 0.3s;
-      z-index: 300;
-    }
-
-    #copyToast.show {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    @media (max-width: 500px) {
-      h1 {
-        font-size: 2rem;
-      }
-
-      .tri-label {
-        font-size: 1rem;
-        padding: 0.35em 0.9em;
-        min-width: 90px;
-      }
+    [contenteditable="true"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
+      background: #f8fafc;
     }
   </style>
 </head>
 
-<body>
+<body class="bg-slate-50 text-slate-900 min-h-screen pb-20">
 
-  <header>
-    <h1>Priority <span>Triangle</span></h1>
-    <p class="subtitle">Which is the most important?</p>
-  </header>
+  <div class="max-w-4xl mx-auto px-4 pt-12 text-center">
+    <header class="mb-8">
+      <h1 class="text-4xl font-800 tracking-tight text-slate-900">Priority <span class="text-indigo-600">Triangle</span>
+      </h1>
+      <p class="text-lg text-slate-500 mt-1">Which of these is the most important?</p>
+    </header>
 
-  <div class="triangle-area" id="triArea">
-    <svg class="tri" viewBox="0 0 560 500" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <!-- Main triangle fill: top vivid purple → bottom soft indigo -->
-        <linearGradient id="triFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#7c3aed" />
-          <stop offset="100%" stop-color="#c7d2fe" />
-        </linearGradient>
-        <!-- Glow filter -->
-        <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-          <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#6366f1" flood-opacity="0.2" />
-        </filter>
-      </defs>
+    <!-- Controls Section -->
+    <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+      <div class="w-full md:w-auto min-w-[200px]">
+        <label class="block text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1 ml-4 text-left">Select
+          Topic</label>
+        <select id="topic-select" onchange="handleTopicChange()"
+          class="custom-select w-full bg-white border-2 border-slate-200 text-slate-700 font-700 py-3 px-5 rounded-2xl hover:border-indigo-300 transition-all cursor-pointer shadow-sm">
+          <option value="all">All Topics</option>
+        </select>
+      </div>
 
-      <!-- Main filled triangle -->
-      <polygon points="280,30 20,470 540,470" fill="url(#triFill)" stroke="#4f46e5" stroke-width="4"
-        stroke-linejoin="round" filter="url(#shadow)" />
+      <div class="w-full md:w-auto min-w-[240px]">
+        <label class="block text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1 ml-4 text-left">Select
+          Choice</label>
+        <select id="choice-select" onchange="handleChoiceChange()"
+          class="custom-select w-full bg-white border-2 border-slate-200 text-slate-700 font-700 py-3 px-5 rounded-2xl hover:border-indigo-300 transition-all cursor-pointer shadow-sm">
+          <option value="">Choose a triad...</option>
+        </select>
+      </div>
 
-      <!-- Horizontal band — medium priority line -->
-      <polygon points="192,250 368,250 474,470 86,470" fill="rgba(255,255,255,0.12)" />
+      <div class="pt-5 flex gap-2">
+        <button onclick="shuffleTriad()"
+          class="px-6 py-3 bg-indigo-600 text-white font-800 rounded-2xl hover:bg-indigo-700 transition-all shadow-lg flex items-center gap-2 whitespace-nowrap">
+          🎲 Random
+        </button>
+      </div>
 
-      <!-- Discussion prompt inside triangle -->
-      <text x="280" y="240" text-anchor="middle" font-family="Outfit,sans-serif" font-size="24" font-weight="700"
-        fill="rgba(255,255,255,0.9)">Which of these</text>
-      <text x="280" y="272" text-anchor="middle" font-family="Outfit,sans-serif" font-size="24" font-weight="700"
-        fill="rgba(255,255,255,0.9)">is most important?</text>
-    </svg>
-
-    <!-- Editable word badge cards -->
-    <div id="label1" class="tri-label">
-      <span class="label-word" contenteditable="true" spellcheck="false" aria-label="Top word" title="Tap to edit">Word
-        1</span>
-      <div class="label-actions">
-        <a id="dict1" class="label-action" target="_blank" rel="noopener" title="Dictionary.com">📖</a>
-        <a id="img1" class="label-action" target="_blank" rel="noopener" title="Google Image Search">🖼️</a>
+      <div class="pt-5 flex items-center bg-white border-2 border-slate-100 rounded-2xl px-4 py-2 shadow-sm">
+        <label class="flex items-center cursor-pointer gap-2">
+          <input type="checkbox" id="toggle-details" onchange="toggleDetails()" checked class="w-5 h-5 accent-indigo-600">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Show Dot & %</span>
+        </label>
       </div>
     </div>
 
-    <div id="label2" class="tri-label">
-      <span class="label-word" contenteditable="true" spellcheck="false" aria-label="Bottom left word"
-        title="Tap to edit">Word 2</span>
-      <div class="label-actions">
-        <a id="dict2" class="label-action" target="_blank" rel="noopener" title="Dictionary.com">📖</a>
-        <a id="img2" class="label-action" target="_blank" rel="noopener" title="Google Image Search">🖼️</a>
+    <!-- Main Tool -->
+    <div
+      class="bg-white rounded-[2.5rem] shadow-2xl shadow-indigo-100 p-8 md:p-12 mb-8 border border-slate-100 relative overflow-hidden">
+      <div class="mb-8 text-center">
+        <span class="text-xs font-bold tracking-widest text-indigo-400 uppercase" id="triad-category">Leadership &
+          Management</span>
+        <h2 class="text-2xl font-800 text-slate-800 mt-1" id="triad-title">Strategy • Execution • Culture</h2>
+      </div>
+
+      <div class="flex justify-center mb-10 relative">
+        <div class="triangle-container" id="triangle-area">
+          <svg class="triangle-svg" viewBox="0 0 400 350">
+            <defs>
+              <linearGradient id="triFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#fbbf24" /> <!-- Amber-400 -->
+                <stop offset="50%" stop-color="#34d399" /> <!-- Emerald-400 -->
+                <stop offset="100%" stop-color="#fb7185" /> <!-- Rose-400 -->
+              </linearGradient>
+            </defs>
+            <polygon points="200,30 50,320 350,320" fill="url(#triFill)" fill-opacity="0.2" stroke="#cbd5e1"
+              stroke-width="4" stroke-linejoin="round" />
+            <!-- Visual Guides -->
+            <line x1="200" y1="30" x2="200" y2="220" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4" />
+            <line x1="125" y1="175" x2="275" y2="175" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4" />
+            <line x1="87" y1="250" x2="313" y2="250" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4" />
+          </svg>
+
+          <!-- Vertices (Editable) -->
+          <div
+            class="vertex-label bg-amber-50 border-4 border-amber-400 text-amber-900 shadow-xl flex flex-row items-center gap-4 px-6 py-3 rounded-3xl"
+            style="top: 2%; left: 50%;">
+            <span id="vertex-top" contenteditable="true" oninput="handleLabelEdit(0, this.textContent)"
+              class="outline-none min-w-[80px] text-2xl font-800">Strategy</span>
+            <div class="label-actions">
+              <a id="dict1" class="label-action" target="_blank" rel="noopener" title="Dictionary">📖</a>
+              <a id="img1" class="label-action" target="_blank" rel="noopener" title="Image Search">🖼️</a>
+            </div>
+          </div>
+          <div
+            class="vertex-label bg-emerald-50 border-4 border-emerald-400 text-emerald-900 shadow-xl flex flex-row items-center gap-4 px-6 py-3 rounded-3xl"
+            style="bottom: 2%; left: 10%;">
+            <span id="vertex-left" contenteditable="true" oninput="handleLabelEdit(1, this.textContent)"
+              class="outline-none min-w-[80px] text-2xl font-800">Execution</span>
+            <div class="label-actions">
+              <a id="dict2" class="label-action" target="_blank" rel="noopener" title="Dictionary">📖</a>
+              <a id="img2" class="label-action" target="_blank" rel="noopener" title="Image Search">🖼️</a>
+            </div>
+          </div>
+          <div
+            class="vertex-label bg-rose-50 border-4 border-rose-400 text-rose-900 shadow-xl flex flex-row items-center gap-4 px-6 py-3 rounded-3xl"
+            style="bottom: 2%; right: -35%;">
+            <span id="vertex-right" contenteditable="true" oninput="handleLabelEdit(2, this.textContent)"
+              class="outline-none min-w-[80px] text-2xl font-800">Culture</span>
+            <div class="label-actions">
+              <a id="dict3" class="label-action" target="_blank" rel="noopener" title="Dictionary">📖</a>
+              <a id="img3" class="label-action" target="_blank" rel="noopener" title="Image Search">🖼️</a>
+            </div>
+          </div>
+
+          <!-- The Marker -->
+          <div class="user-marker" id="user-marker"></div>
+          <div class="pulse-ring" id="pulse-ring"></div>
+        </div>
+      </div>
+
+      <!-- Percentages -->
+      <div class="percentage-stats grid grid-cols-3 gap-6 max-w-md mx-auto">
+        <div class="text-center">
+          <div class="text-xs font-bold text-amber-500 uppercase mb-2 truncate" id="balance-label-1">Strategy</div>
+          <div class="bg-amber-50 rounded-full overflow-hidden border border-amber-200">
+            <div class="balance-bar bg-amber-400" id="balance-bar-1" style="width: 33%"></div>
+          </div>
+          <div class="text-sm font-800 mt-2 text-amber-600" id="balance-value-1">33%</div>
+        </div>
+        <div class="text-center">
+          <div class="text-xs font-bold text-emerald-500 uppercase mb-2 truncate" id="balance-label-2">Execution</div>
+          <div class="bg-emerald-50 rounded-full overflow-hidden border border-emerald-200">
+            <div class="balance-bar bg-emerald-400" id="balance-bar-2" style="width: 33%"></div>
+          </div>
+          <div class="text-sm font-800 mt-2 text-emerald-600" id="balance-value-2">33%</div>
+        </div>
+        <div class="text-center">
+          <div class="text-xs font-bold text-rose-500 uppercase mb-2 truncate" id="balance-label-3">Culture</div>
+          <div class="bg-rose-50 rounded-full overflow-hidden border border-rose-200">
+            <div class="balance-bar bg-rose-400" id="balance-bar-3" style="width: 33%"></div>
+          </div>
+          <div class="text-sm font-800 mt-2 text-rose-600" id="balance-value-3">33%</div>
+        </div>
       </div>
     </div>
-
-    <div id="label3" class="tri-label">
-      <span class="label-word" contenteditable="true" spellcheck="false" aria-label="Bottom right word"
-        title="Tap to edit">Word 3</span>
-      <div class="label-actions">
-        <a id="dict3" class="label-action" target="_blank" rel="noopener" title="Dictionary.com">📖</a>
-        <a id="img3" class="label-action" target="_blank" rel="noopener" title="Google Image Search">🖼️</a>
-      </div>
+    <div class="flex flex-wrap justify-center gap-4 mb-12">
+      <button onclick="centerMarker()"
+        class="px-8 py-3 bg-white border-2 border-slate-200 text-slate-600 font-700 rounded-2xl hover:bg-slate-50 transition-all flex items-center gap-2">
+        🎯 Center
+      </button>
+      <button onclick="openShare()"
+        class="px-10 py-3 bg-indigo-600 text-white font-700 rounded-2xl shadow-xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all transform active:scale-95">
+        🔗 Share Activity
+      </button>
     </div>
-  </div>
 
-  <p class="edit-hint">
-    <svg width="18" height="18" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M12 20h9" />
-      <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z" />
-    </svg>
-    Tap any word to edit it directly
-  </p>
-
-  <div class="controls">
-    <button class="btn-secondary" onclick="randomWords()">🎲 Random Words</button>
-    <button class="btn-primary" onclick="openShare()">🔗 Share</button>
-    <button class="btn-ghost" onclick="toggleFullScreen()">⛶ Fullscreen</button>
+    <!-- Footer -->
+    <footer class="mt-12 pt-8 pb-4 border-t border-slate-200 text-center text-slate-500 max-w-2xl mx-auto">
+      <p class="mb-4">
+        More tools at <a href="https://jamesabela.github.io/ThinkRankStudio/" target="_blank" rel="noopener"
+          class="text-indigo-600 font-700 hover:underline">ThinkRank Studio</a> — a collection of thinking tools for the
+        classroom.
+      </p>
+      <div class="text-sm">
+        Made with ❤️ for better thinking. If it helped you, support the project.
+        <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener"
+          class="text-pink-600 font-700 hover:underline">Buy me a tea</a>.
+      </div>
+      <p class="mt-6 text-xs text-slate-400">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener"
+          class="hover:underline">CC BY-NC-SA 4.0</a> © James Abela 2024
+      </p>
+    </footer>
   </div>
 
   <!-- Share Modal -->
   <div class="modal-overlay" id="shareModal" onclick="closeShareOnBg(event)">
-    <div class="modal">
-      <button class="modal-close" onclick="closeShare()" aria-label="Close">✕</button>
-      <h2>Share this activity</h2>
-      <img id="qrImg" src="" alt="QR Code for this page">
-      <div class="share-row">
-        <a id="classroomBtn" class="share-btn classroom" target="_blank" rel="noopener">
-          <svg width="22" height="22" viewBox="0 0 48 48" fill="none">
-            <rect width="48" height="48" rx="8" fill="#1a73e8" />
-            <path d="M24 14a6 6 0 100 12 6 6 0 000-12zM12 36c0-5.523 5.373-10 12-10s12 4.477 12 10" stroke="#fff"
-              stroke-width="3" stroke-linecap="round" />
-          </svg>
-          Share to Google Classroom
-        </a>
-        <a id="teamsBtn" class="share-btn teams" target="_blank" rel="noopener">
-          <svg width="22" height="22" viewBox="0 0 48 48" fill="none">
-            <rect width="48" height="48" rx="8" fill="#5558af" />
-            <path
-              d="M30 16a4 4 0 100 8 4 4 0 000-8zM20 20a5 5 0 100 10 5 5 0 000-10zM20 32c-5 0-9 3-9 7h18c0-4-4-7-9-7zM34 26c3.5 0 6 2 6 5h-8"
-              stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
-          </svg>
-          Share to Microsoft Teams
-        </a>
-        <button class="share-btn copy" onclick="copyLink()">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <div class="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl relative">
+      <button class="absolute top-6 right-6 text-slate-300 hover:text-slate-500 transition-all" onclick="closeShare()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="3">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <h2 class="text-2xl font-800 mb-6 text-slate-900 pr-10">Share this with students</h2>
+      <div class="flex flex-col gap-3">
+        <button onclick="copyLink()"
+          class="w-full flex items-center justify-between p-4 bg-indigo-50 text-indigo-700 font-700 rounded-2xl border-2 border-transparent hover:border-indigo-200 transition-all">
+          <span>Copy Direct Link</span>
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="9" y="9" width="13" height="13" rx="2" />
             <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
           </svg>
-          Copy Link
         </button>
+        <a id="classroomBtn" target="_blank"
+          class="w-full flex items-center justify-between p-4 bg-emerald-50 text-emerald-700 font-700 rounded-2xl border-2 border-transparent hover:border-emerald-200 transition-all no-underline">
+          <span>Google Classroom</span>
+          <span class="text-xl">🎓</span>
+        </a>
+        <a id="teamsBtn" target="_blank"
+          class="w-full flex items-center justify-between p-4 bg-blue-50 text-blue-700 font-700 rounded-2xl border-2 border-transparent hover:border-blue-200 transition-all no-underline">
+          <span>Microsoft Teams</span>
+          <span class="text-xl">👥</span>
+        </a>
+      </div>
+      <div class="mt-8 flex flex-col items-center">
+        <p class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest">Or scan QR code</p>
+        <img id="qrImg" class="w-48 h-48 border-4 border-slate-50 rounded-2xl" src="">
       </div>
     </div>
   </div>
 
-  <div id="copyToast">✓ Link copied!</div>
+  <div id="copyToast"
+    class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-8 py-3 rounded-full font-bold text-sm shadow-2xl transition-all opacity-0 pointer-events-none translate-y-5">
+    ✓ Link Copied to Clipboard
+  </div>
 
   <script>
-    // Target the word spans, not the wrapper divs
-    const labels = [
-      document.querySelector('#label1 .label-word'),
-      document.querySelector('#label2 .label-word'),
-      document.querySelector('#label3 .label-word'),
+    const triangleTriads = [
+      {
+        category: "Cartoon Characters", triads: [
+          ["Mickey", "Donald", "Goofy"],
+          ["Elsa", "Anna", "Olaf"],
+          ["Bluey", "Bingo", "Bandit"],
+          ["SpongeBob", "Patrick", "Squidward"],
+          ["Woody", "Buzz Lightyear", "Jessie"],
+          ["Simba", "Timon", "Pumbaa"]
+        ]
+      },
+      {
+        category: "Food & Treats", triads: [
+          ["Pizza", "Burger", "Pasta"],
+          ["Apple", "Banana", "Strawberry"],
+          ["Cake", "Ice Cream", "Chocolate"],
+          ["Broccoli", "Carrot", "Corn"],
+          ["Milk", "Juice", "Water"],
+          ["Breakfast", "Lunch", "Dinner"]
+        ]
+      },
+      {
+        category: "Careers & Jobs", triads: [
+          ["Doctor", "Teacher", "Engineer"],
+          ["Astronaut", "Artist", "Athlete"],
+          ["Chef", "Pilot", "Firefighter"],
+          ["Musician", "Scientist", "Vet"],
+          ["Police", "Farmer", "Builder"]
+        ]
+      },
+      {
+        category: "Leadership & Management", triads: [
+          ["Strategy", "Execution", "Culture"],
+          ["Vision", "Logic", "Empathy"],
+          ["Speed", "Quality", "Cost"],
+          ["Authority", "Influence", "Collaboration"],
+          ["Innovation", "Stability", "Efficiency"]
+        ]
+      },
+      {
+        category: "Personal Development", triads: [
+          ["Mind", "Body", "Spirit"],
+          ["Thoughts", "Emotions", "Actions"],
+          ["Work", "Play", "Rest"],
+          ["Knowledge", "Skills", "Attitude"],
+          ["Confidence", "Humility", "Curiosity"]
+        ]
+      },
+      {
+        category: "Creativity & Communication", triads: [
+          ["Ethos", "Pathos", "Logos"],
+          ["Form", "Function", "Aesthetic"],
+          ["Truth", "Beauty", "Utility"],
+          ["Draft", "Polish", "Release"]
+        ]
+      },
+      {
+        category: "Society & Values", triads: [
+          ["Liberty", "Equality", "Fraternity"],
+          ["Tradition", "Progress", "Reform"],
+          ["Individual", "Community", "State"],
+          ["Privacy", "Transparency", "Security"]
+        ]
+      },
+      {
+        category: "Learning & Education", triads: [
+          ["Read", "Write", "Discuss"],
+          ["Concept", "Example", "Application"],
+          ["Challenge", "Support", "Feedback"],
+          ["Teaching", "Mentoring", "Coaching"]
+        ]
+      },
+      {
+        category: "Product & Design", triads: [
+          ["Feasibility", "Viability", "Desirability"],
+          ["User", "Business", "Technology"],
+          ["Privacy", "Convenience", "Personalization"]
+        ]
+      },
+      {
+        category: "Philosophical", triads: [
+          ["Being", "Doing", "Having"],
+          ["Absolute", "Relative", "Contextual"],
+          ["Fate", "Will", "Chance"]
+        ]
+      }
     ];
 
-    const dictLinks = [
-      document.getElementById('dict1'),
-      document.getElementById('dict2'),
-      document.getElementById('dict3'),
-    ];
+    const allTriads = triangleTriads.flatMap((cat, catIndex) =>
+      cat.triads.map(triad => ({ category: cat.category, triad, catIndex }))
+    );
 
-    const imgLinks = [
-      document.getElementById('img1'),
-      document.getElementById('img2'),
-      document.getElementById('img3'),
-    ];
+    let currentTriadIndex = 0;
+    let currentCategory = 'all';
+    let markerPosition = { x: 200, y: 193 }; // Barycenter
+    let isDragging = false;
+
+    const triangleVertices = {
+      top: { x: 200, y: 30 },
+      left: { x: 50, y: 320 },
+      right: { x: 350, y: 320 }
+    };
+
+    function pointInTriangle(px, py, v1, v2, v3) {
+      const area = 0.5 * (-v2.y * v3.x + v1.y * (-v2.x + v3.x) + v1.x * (v2.y - v3.y) + v2.x * v3.y);
+      const s = 1 / (2 * area) * (v1.y * v3.x - v1.x * v3.y + (v3.y - v1.y) * px + (v1.x - v3.x) * py);
+      const t = 1 / (2 * area) * (v1.x * v2.y - v1.y * v2.x + (v1.y - v2.y) * px + (v2.x - v1.x) * py);
+      return s >= 0 && t >= 0 && (1 - s - t) >= 0;
+    }
+
+    function closestPointInTriangle(px, py, v1, v2, v3) {
+      if (pointInTriangle(px, py, v1, v2, v3)) return { x: px, y: py };
+      const edges = [[v1, v2], [v2, v3], [v3, v1]];
+      let closest = null, minDist = Infinity;
+      edges.forEach(([a, b]) => {
+        const cp = closestPointOnSegment(px, py, a, b);
+        const dist = Math.hypot(px - cp.x, py - cp.y);
+        if (dist < minDist) { minDist = dist; closest = cp; }
+      });
+      return closest;
+    }
+
+    function closestPointOnSegment(px, py, a, b) {
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const t = Math.max(0, Math.min(1, ((px - a.x) * dx + (py - a.y) * dy) / (dx * dx + dy * dy)));
+      return { x: a.x + t * dx, y: a.y + t * dy };
+    }
+
+    function calculateBarycentricCoords(px, py) {
+      const v0 = triangleVertices.top, v1 = triangleVertices.left, v2 = triangleVertices.right;
+      const denom = (v1.y - v2.y) * (v0.x - v2.x) + (v2.x - v1.x) * (v0.y - v2.y);
+      const w0 = ((v1.y - v2.y) * (px - v2.x) + (v2.x - v1.x) * (py - v2.y)) / denom;
+      const w1 = ((v2.y - v0.y) * (px - v2.x) + (v0.x - v2.x) * (py - v2.y)) / denom;
+      const w2 = 1 - w0 - w1;
+      return { top: Math.max(0, w0), left: Math.max(0, w1), right: Math.max(0, w2) };
+    }
+
+    function updateMarkerPosition(svgX, svgY) {
+      const constrained = closestPointInTriangle(svgX, svgY, triangleVertices.top, triangleVertices.left, triangleVertices.right);
+      const marker = document.getElementById('user-marker');
+      const pulseRing = document.getElementById('pulse-ring');
+      marker.style.left = (constrained.x / 400 * 100) + '%';
+      marker.style.top = (constrained.y / 350 * 100) + '%';
+      pulseRing.style.left = marker.style.left;
+      pulseRing.style.top = marker.style.top;
+      markerPosition = constrained;
+      updateBalanceIndicators();
+    }
+
+    function updateBalanceIndicators() {
+      const coords = calculateBarycentricCoords(markerPosition.x, markerPosition.y);
+      const total = coords.top + coords.left + coords.right;
+      const p1 = Math.round((coords.top / total) * 100);
+      const p2 = Math.round((coords.left / total) * 100);
+      const p3 = 100 - p1 - p2;
+      document.getElementById('balance-bar-1').style.width = p1 + '%';
+      document.getElementById('balance-bar-2').style.width = p2 + '%';
+      document.getElementById('balance-bar-3').style.width = p3 + '%';
+      document.getElementById('balance-value-1').textContent = p1 + '%';
+      document.getElementById('balance-value-2').textContent = p2 + '%';
+      document.getElementById('balance-value-3').textContent = p3 + '%';
+    }
+
+    function centerMarker() {
+      updateMarkerPosition(200, 193);
+    }
+
+    function loadTriad(index) {
+      const data = allTriads[index];
+      const topicSelect = document.getElementById('topic-select');
+      const choiceSelect = document.getElementById('choice-select');
+
+      if (topicSelect.value != data.catIndex) {
+        topicSelect.value = data.catIndex;
+        populateChoiceSelect(data.catIndex);
+      }
+      choiceSelect.value = index;
+
+      updateUIWithTriad(data.category, data.triad);
+      syncUrl(data.triad);
+      updateLinks();
+    }
 
     function updateLinks() {
+      const labels = [
+        document.getElementById('vertex-top'),
+        document.getElementById('vertex-left'),
+        document.getElementById('vertex-right')
+      ];
+      const dictLinks = [
+        document.getElementById('dict1'),
+        document.getElementById('dict2'),
+        document.getElementById('dict3')
+      ];
+      const imgLinks = [
+        document.getElementById('img1'),
+        document.getElementById('img2'),
+        document.getElementById('img3')
+      ];
+
       labels.forEach((lbl, i) => {
+        if (!lbl) return;
         const raw = lbl.textContent.trim();
         const slug = raw.toLowerCase().replace(/\s+/g, '-');
         const q = raw.replace(/\s+/g, '+');
-        dictLinks[i].href = `https://www.dictionary.com/browse/${encodeURIComponent(slug)}`;
-        imgLinks[i].href = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q)}`;
+        if (dictLinks[i]) dictLinks[i].href = `https://www.dictionary.com/browse/${encodeURIComponent(slug)}`;
+        if (imgLinks[i]) imgLinks[i].href = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q)}`;
       });
     }
-    const wordBank = [
-      "Honesty", "Respect", "Kindness", "Justice", "Loyalty", "Freedom", "Family", "Health",
-      "Creativity", "Education", "Courage", "Teamwork", "Responsibility", "Community",
-      "Empathy", "Integrity", "Patience", "Perseverance", "Curiosity", "Gratitude",
-      "Leadership", "Compassion", "Equality", "Fairness", "Innovation", "Sustainability"
-    ];
 
-    /* Sync URL on edit */
-    labels.forEach((lbl, i) => {
-      lbl.addEventListener('input', () => {
-        syncUrl();
-        updateLinks();
-      });
-      lbl.addEventListener('blur', () => {
-        updateLinks();
-      });
-      /* Select all on first touch/click so it's easy to type new word */
-      lbl.addEventListener('focus', () => {
-        const range = document.createRange();
-        range.selectNodeContents(lbl);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-      });
-      /* Prevent Enter from adding line break */
-      lbl.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); lbl.blur(); }
-      });
-    });
+    function updateUIWithTriad(category, triad) {
+      document.getElementById('triad-category').textContent = category;
+      document.getElementById('triad-title').textContent = triad.join(' • ');
 
-    function randomWords() {
-      const shuffled = [...wordBank].sort(() => Math.random() - 0.5);
-      labels.forEach((lbl, i) => {
-        lbl.textContent = shuffled[i];
+      const vLabels = ['vertex-top', 'vertex-left', 'vertex-right'];
+      const bLabels = ['balance-label-1', 'balance-label-2', 'balance-label-3'];
+
+      triad.forEach((t, i) => {
+        document.getElementById(vLabels[i]).textContent = t;
+        document.getElementById(bLabels[i]).textContent = t;
       });
-      syncUrl();
-      updateLinks();
+      centerMarker();
     }
 
-    function syncUrl() {
-      const url = new URL(window.location);
-      labels.forEach((lbl, i) => {
-        url.searchParams.set(`word${i + 1}`, lbl.textContent.trim());
-      });
-      window.history.replaceState({}, '', url);
+    function handleTopicChange() {
+      const catIndex = document.getElementById('topic-select').value;
+      populateChoiceSelect(catIndex);
+      const pool = (catIndex === 'all') ? allTriads : allTriads.filter(t => t.catIndex == catIndex);
+      loadTriad(allTriads.indexOf(pool[0]));
     }
 
-    function toggleFullScreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else {
-        document.exitFullscreen();
+    function handleChoiceChange() {
+      const index = document.getElementById('choice-select').value;
+      if (index !== "") {
+        loadTriad(parseInt(index));
       }
     }
 
-    /* --- Share modal --- */
+    function populateChoiceSelect(catIndex) {
+      const select = document.getElementById('choice-select');
+      select.innerHTML = '<option value="">Choose a triad...</option>';
+
+      const pool = (catIndex === 'all') ? allTriads : allTriads.filter(t => t.catIndex == catIndex);
+
+      pool.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = allTriads.indexOf(item);
+        opt.textContent = item.triad.join(' • ');
+        select.appendChild(opt);
+      });
+    }
+
+    function shuffleTriad() {
+      const catIndex = document.getElementById('topic-select').value;
+      const pool = (catIndex === 'all') ? allTriads : allTriads.filter(t => t.catIndex == catIndex);
+      const randomItem = pool[Math.floor(Math.random() * pool.length)];
+      loadTriad(allTriads.indexOf(randomItem));
+    }
+
+    function handleLabelEdit(index, value) {
+      const bLabels = ['balance-label-1', 'balance-label-2', 'balance-label-3'];
+      document.getElementById(bLabels[index]).textContent = value;
+
+      const words = [
+        document.getElementById('vertex-top').textContent,
+        document.getElementById('vertex-left').textContent,
+        document.getElementById('vertex-right').textContent
+      ];
+
+      document.getElementById('triad-category').textContent = "Custom Discussion";
+      document.getElementById('triad-title').textContent = words.join(' • ');
+      syncUrl(words);
+      updateLinks();
+    }
+
+    function syncUrl(triad) {
+      const url = new URL(window.location);
+      url.searchParams.set('word1', triad[0]);
+      url.searchParams.set('word2', triad[1]);
+      url.searchParams.set('word3', triad[2]);
+      window.history.replaceState({}, '', url);
+    }
+
+    function setupDrag() {
+      const area = document.getElementById('triangle-area');
+      const marker = document.getElementById('user-marker');
+
+      function move(e) {
+        if (!isDragging) return;
+        const rect = area.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = (clientX - rect.left) / rect.width * 400;
+        const y = (clientY - rect.top) / rect.height * 350;
+        updateMarkerPosition(x, y);
+      }
+
+      marker.onpointerdown = (e) => {
+        isDragging = true;
+        marker.setPointerCapture(e.pointerId);
+      };
+      marker.onpointermove = move;
+      marker.onpointerup = () => isDragging = false;
+
+      area.onclick = (e) => {
+        if (e.target === marker || e.target.classList.contains('vertex-label')) return;
+        const rect = area.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width * 400;
+        const y = (e.clientY - rect.top) / rect.height * 350;
+        updateMarkerPosition(x, y);
+      };
+    }
+
+    /* --- Sharing --- */
     function openShare() {
       const url = encodeURIComponent(window.location.href);
-      // QR code via free API
-      document.getElementById('qrImg').src =
-        `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${url}&margin=8`;
-      // Google Classroom
-      document.getElementById('classroomBtn').href =
-        `https://classroom.google.com/share?url=${url}`;
-      // Microsoft Teams
-      document.getElementById('teamsBtn').href =
-        `https://teams.microsoft.com/share?href=${url}&msgText=Check+this+activity+out!`;
+      document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${url}&margin=10`;
+      document.getElementById('classroomBtn').href = `https://classroom.google.com/share?url=${url}`;
+      document.getElementById('teamsBtn').href = `https://teams.microsoft.com/share?href=${url}`;
       document.getElementById('shareModal').classList.add('open');
     }
-
-    function closeShare() {
-      document.getElementById('shareModal').classList.remove('open');
-    }
-
-    function closeShareOnBg(e) {
-      if (e.target === document.getElementById('shareModal')) closeShare();
-    }
-
+    function closeShare() { document.getElementById('shareModal').classList.remove('open'); }
+    function closeShareOnBg(e) { if (e.target.id === 'shareModal') closeShare(); }
     function copyLink() {
       navigator.clipboard.writeText(window.location.href).then(() => {
-        const toast = document.getElementById('copyToast');
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2200);
+        const t = document.getElementById('copyToast');
+        t.classList.replace('opacity-0', 'opacity-100');
+        t.classList.replace('translate-y-5', 'translate-y-0');
+        setTimeout(() => {
+          t.classList.replace('opacity-100', 'opacity-0');
+          t.classList.replace('translate-y-0', 'translate-y-5');
+        }, 2000);
       });
     }
 
-    /* On load, restore from URL params */
-    window.addEventListener('DOMContentLoaded', () => {
-      const p = new URLSearchParams(window.location.search);
-      labels.forEach((lbl, i) => {
-        const val = p.get(`word${i + 1}`);
-        if (val) { lbl.textContent = val; }
+    window.onload = () => {
+      // Build Topic Select
+      const topicSelect = document.getElementById('topic-select');
+      triangleTriads.forEach((cat, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = cat.category;
+        topicSelect.appendChild(opt);
       });
+
+      // Restore from URL
+      const p = new URLSearchParams(window.location.search);
+      const w1 = p.get('word1'), w2 = p.get('word2'), w3 = p.get('word3');
+      if (w1 && w2 && w3) {
+        loadTriadWithCustom([w1, w2, w3]);
+      } else {
+        loadTriad(0);
+      }
+      setupDrag();
       updateLinks();
-    });
+    };
+
+    function loadTriadWithCustom(words) {
+      populateChoiceSelect('all');
+      document.getElementById('topic-select').value = 'all';
+      updateUIWithTriad("Custom Discussion", words);
+      updateLinks();
+    }
+
+    function toggleDetails() {
+      const isChecked = document.getElementById('toggle-details').checked;
+      if (isChecked) {
+        document.body.classList.remove('hide-details');
+      } else {
+        document.body.classList.add('hide-details');
+      }
+    }
   </script>
-
-  <footer
-    style="margin-top:3rem;padding:1.5rem 1rem;text-align:center;font-size:0.95rem;color:#64748b;border-top:1px solid #e2e8f0;width:100%;max-width:640px;">
-    <p style="margin-bottom:0.6rem;">
-      More tools at <a href="https://jamesabela.github.io/ThinkRankStudio/" target="_blank" rel="noopener"
-        style="color:#6366f1;font-weight:700;text-decoration:none;">ThinkRank Studio</a> — a collection of thinking
-      tools for the classroom.
-    </p>
-    <span>
-      Made with ❤️ for better thinking. If it helped you, you can support the project with a tea.
-      <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener"
-        style="color:#e73c7e;text-decoration:none;font-weight:600;">Buy me a tea</a>.
-    </span>
-  </footer>
-
-  <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
-      referrerpolicy="no-referrer-when-downgrade" /></noscript>
 </body>
 
 </html>

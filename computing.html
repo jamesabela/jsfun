@@ -253,7 +253,6 @@
   <button class="filter-btn" onclick="filterByTag('KS3', this)">KS3</button>
   <button class="filter-btn" onclick="filterByTag('iGCSE', this)">iGCSE</button>
   <button class="filter-btn" onclick="filterByTag('A-Level', this)">A-Level</button>
-  <button class="filter-btn" onclick="filterByTag('All ages', this)">All Ages</button>
 </div>
 
 <main>
@@ -656,7 +655,7 @@
         <span class="card-emoji">🏆</span>
         <div class="card-title">Python Challenges</div>
         <div class="card-desc">A collection of Python programming challenges. Entries are for GIS students only but challenges are open to all.</div>
-        <span class="card-tag">KS3 – A-Level</span>
+        <span class="card-tag">KS3 / iGCSE / A-Level</span>
       </a>
       <a class="card external" href="https://hanoitowers.my.canva.site/" target="_blank" rel="noopener">
         <span class="card-emoji">🗼</span>
@@ -707,6 +706,8 @@
       
       if (tag === 'all') {
         show = true;
+      } else if (cardTag.includes('All ages')) {
+        show = true; // Always show All Ages items
       } else if (tag === 'Primary') {
         show = cardTag.includes('EYFS') || cardTag.includes('KS1') || cardTag.includes('KS2') || cardTag.includes('Primary');
       } else {
