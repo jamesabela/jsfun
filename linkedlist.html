@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory & Pointers: Linked List Puzzle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .memory-node {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pointer-drop-zone {
+            transition: background-color 0.2s;
+            min-width: 80px;
+        }
+
+        .pointer-drop-zone.hover {
+            background-color: #fef08a;
+            border-color: #ca8a04;
+        }
+
+        .address-chip {
+            touch-action: none;
+            cursor: grab;
+        }
+
+        .address-chip:active {
+            cursor: grabbing;
+        }
+
+        .dragging {
+            opacity: 0.5;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-900 min-h-screen text-slate-100 p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-8 border-b border-slate-700 pb-6">
+            <h1 class="text-3xl font-bold text-white mb-2">🧠 Memory Address Challenge</h1>
+            <p class="text-slate-400 max-w-2xl">
+                Nodes are scattered in RAM at specific <b>Memory Addresses</b>.
+                To sort the data (1 → 2 → 3 → 4), you must tell each node the <b>Address</b> of the next one.
+            </p>
+        </header>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- RAM / HEAP -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="flex items-center gap-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
+                    <div
+                        class="px-3 py-1 bg-rose-500 text-white rounded font-mono text-sm shadow-lg shadow-rose-900/20">
+                        HEAD
+                    </div>
+                    <div class="text-slate-400">➔</div>
+                    <div id="head-pointer"
+                        class="pointer-drop-zone w-32 h-10 border-2 border-dashed border-rose-500/50 rounded flex items-center justify-center font-mono text-rose-300 bg-rose-500/5">
+                        EMPTY
+                    </div>
+                </div>
+
+                <div id="memory-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Nodes will be injected here -->
+                </div>
+            </div>
+
+            <!-- Sidebar / Controls -->
+            <div class="space-y-6">
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Available Addresses</h3>
+                    <div id="address-bank" class="flex flex-wrap gap-3">
+                        <!-- Address chips will be injected here -->
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-slate-700">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Logical Flow</h3>
+                        <div id="traversal-view"
+                            class="font-mono text-xs space-y-2 text-emerald-400 bg-black/30 p-4 rounded-lg min-h-[100px]">
+                            <!-- Live traversal log -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="win-card" class="hidden bg-emerald-500 text-white p-6 rounded-2xl shadow-lg animate-bounce">
+                    <h3 class="font-bold text-xl">List Sorted! 🎉</h3>
+                    <p class="text-sm opacity-90">You've successfully mapped the pointers through memory.</p>
+                </div>
+
+                <button onclick="resetMemory()"
+                    class="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-all font-semibold">
+                    Scramble Memory
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const INITIAL_NODES = [
+            { val: 3, addr: '0x4A2' },
+            { val: 1, addr: '0x10B' },
+            { val: 4, addr: '0xF99' },
+            { val: 2, addr: '0x2C4' }
+        ];
+
+        let state = {
+            head: null,
+            links: {
+                '0x4A2': null,
+                '0x10B': null,
+                '0xF99': null,
+                '0x2C4': null
+            }
+        };
+
+        let draggedAddr = null;
+
+        function init() {
+            renderNodes();
+            renderAddressBank();
+            setupDragEvents();
+            updateLogic();
+        }
+
+        function renderNodes() {
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+
+            INITIAL_NODES.forEach(node => {
+                const div = document.createElement('div');
+                div.className = "memory-node bg-slate-800 border border-slate-700 rounded-xl p-4 shadow-lg flex flex-col gap-3";
+                div.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                        <span class="text-[10px] font-mono text-slate-500 uppercase">Address</span>
+                        <span class="text-sm font-mono text-blue-400 font-bold">${node.addr}</span>
+                    </div>
+                    <div class="flex justify-around items-center py-2">
+                        <div class="text-center">
+                            <div class="text-[10px] text-slate-500 uppercase mb-1">Data</div>
+                            <div class="text-3xl font-black text-white">${node.val}</div>
+                        </div>
+                        <div class="h-12 w-[1px] bg-slate-700"></div>
+                        <div class="text-center">
+                            <div class="text-[10px] text-slate-500 uppercase mb-1">Next Pointer</div>
+                            <div class="pointer-drop-zone w-24 h-10 border-2 border-dashed border-slate-600 rounded flex items-center justify-center font-mono text-emerald-400 text-sm bg-black/20" 
+                                 data-owner="${node.addr}">
+                                ${state.links[node.addr] || 'NULL'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function renderAddressBank() {
+            const bank = document.getElementById('address-bank');
+            bank.innerHTML = '';
+
+            // Add a NULL option
+            const addresses = [...INITIAL_NODES.map(n => n.addr), 'NULL'];
+
+            addresses.forEach(addr => {
+                const chip = document.createElement('div');
+                chip.className = `address-chip px-3 py-2 rounded-lg font-mono text-sm font-bold shadow-md transition-all 
+                    ${addr === 'NULL' ? 'bg-slate-600 text-slate-300' : 'bg-blue-600 text-white hover:bg-blue-500'}`;
+                chip.innerText = addr;
+                chip.draggable = true;
+                chip.dataset.addr = addr;
+                bank.appendChild(chip);
+            });
+        }
+
+        function setupDragEvents() {
+            document.addEventListener('pointerdown', e => {
+                const chip = e.target.closest('.address-chip');
+                if (!chip) return;
+                draggedAddr = chip.dataset.addr;
+                chip.classList.add('dragging');
+            });
+
+            document.addEventListener('pointerover', e => {
+                const zone = e.target.closest('.pointer-drop-zone');
+                if (zone) zone.classList.add('hover');
+            });
+
+            document.addEventListener('pointerout', e => {
+                const zone = e.target.closest('.pointer-drop-zone');
+                if (zone) zone.classList.remove('hover');
+            });
+
+            document.addEventListener('pointerup', e => {
+                const chip = document.querySelector('.dragging');
+                if (chip) chip.classList.remove('dragging');
+
+                const zone = document.elementFromPoint(e.clientX, e.clientY)?.closest('.pointer-drop-zone');
+                if (zone && draggedAddr) {
+                    if (zone.id === 'head-pointer') {
+                        state.head = draggedAddr === 'NULL' ? null : draggedAddr;
+                    } else {
+                        const owner = zone.dataset.owner;
+                        state.links[owner] = draggedAddr === 'NULL' ? null : draggedAddr;
+                    }
+                    renderNodes();
+                    updateLogic();
+                }
+                draggedAddr = null;
+            });
+        }
+
+        function updateLogic() {
+            // Update Head UI
+            const headZone = document.getElementById('head-pointer');
+            headZone.innerText = state.head || 'EMPTY';
+            headZone.className = `pointer-drop-zone w-32 h-10 border-2 border-dashed rounded flex items-center justify-center font-mono text-sm 
+                ${state.head ? 'border-rose-500 text-rose-300 bg-rose-500/20' : 'border-rose-500/50 text-rose-300/50 bg-rose-500/5'}`;
+
+            // Traverse the list
+            const traversal = [];
+            let currentAddr = state.head;
+            const visited = new Set();
+            let isSorted = true;
+            let expectedVal = 1;
+
+            while (currentAddr && currentAddr !== 'NULL' && !visited.has(currentAddr)) {
+                visited.add(currentAddr);
+                const node = INITIAL_NODES.find(n => n.addr === currentAddr);
+                if (node) {
+                    traversal.push(`Node(${node.val}) at ${currentAddr}`);
+                    if (node.val !== expectedVal) isSorted = false;
+                    expectedVal++;
+                    currentAddr = state.links[currentAddr];
+                } else {
+                    break;
+                }
+            }
+
+            // UI Feedback
+            const log = document.getElementById('traversal-view');
+            if (traversal.length === 0) {
+                log.innerHTML = `<span class="text-slate-500">List is empty. Start by setting the HEAD pointer.</span>`;
+            } else {
+                let html = traversal.map((step, i) => `<div>[${i}] ${step}</div>`).join('<div class="text-slate-600 ml-4">↓</div>');
+                if (currentAddr === 'NULL') html += `<div class="text-slate-600 ml-4">↓</div><div class="text-slate-500">NULL (End of List)</div>`;
+                else if (visited.has(currentAddr)) html += `<div class="text-red-500 mt-2">⚠ Infinite Loop detected!</div>`;
+                log.innerHTML = html;
+            }
+
+            const win = document.getElementById('win-card');
+            if (isSorted && traversal.length === 4 && currentAddr === 'NULL') {
+                win.classList.remove('hidden');
+            } else {
+                win.classList.add('hidden');
+            }
+        }
+
+        function resetMemory() {
+            state.head = null;
+            Object.keys(state.links).forEach(k => state.links[k] = null);
+            renderNodes();
+            updateLogic();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>
