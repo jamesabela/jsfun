@@ -187,9 +187,45 @@
     footer a { color: var(--indigo); font-weight: 600; text-decoration: none; }
     footer a.tea { color: #e73c7e; }
 
+    /* ───── Filter bar ───── */
+    .filter-bar-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 1.5rem auto 0;
+      padding: 0 1rem;
+      max-width: 960px;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .filter-btn {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.4rem 1.1rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      background: var(--white);
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .filter-btn.active {
+      background: var(--indigo);
+      color: #fff;
+      border-color: var(--indigo);
+      box-shadow: 0 4px 12px rgba(99,102,241,0.25);
+    }
+    .filter-btn:hover:not(.active) {
+      background: var(--indigo-light);
+      border-color: var(--indigo-light);
+      color: var(--indigo);
+    }
+
     @media (max-width: 500px) {
       .hero { padding: 2.5rem 1rem 4rem; }
       .tab-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+      .filter-bar-wrap { margin-top: 1rem; gap: 0.4rem; }
+      .filter-btn { padding: 0.35rem 0.8rem; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -207,6 +243,18 @@
     <button class="tab-btn" role="tab" onclick="switchTab('computing', this)">💻 Computing Tools</button>
     <a class="tab-btn link-btn" href="https://readysetcompute.com/" target="_blank" rel="noopener">🚀 ReadySetCompute</a>
   </div>
+</div>
+
+<!-- Filter bar -->
+<div class="filter-bar-wrap">
+  <button class="filter-btn active" onclick="filterByTag('all', this)">All</button>
+  <button class="filter-btn" onclick="filterByTag('Primary', this)">Primary</button>
+  <button class="filter-btn" onclick="filterByTag('KS1', this)">KS1</button>
+  <button class="filter-btn" onclick="filterByTag('KS2', this)">KS2</button>
+  <button class="filter-btn" onclick="filterByTag('KS3', this)">KS3</button>
+  <button class="filter-btn" onclick="filterByTag('iGCSE', this)">iGCSE</button>
+  <button class="filter-btn" onclick="filterByTag('A-Level', this)">A-Level</button>
+  <button class="filter-btn" onclick="filterByTag('All ages', this)">All Ages</button>
 </div>
 
 <main>
@@ -889,8 +937,45 @@
     // Deactivate all buttons
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     // Show selected panel + activate button
-    document.getElementById('tab-' + name).classList.add('active');
+    const panel = document.getElementById('tab-' + name);
+    if(panel) panel.classList.add('active');
     btn.classList.add('active');
+  }
+
+  function filterByTag(tag, btn) {
+    // Update button states
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      const tagSpan = card.querySelector('.card-tag');
+      if (!tagSpan) return;
+      
+      const cardTag = tagSpan.textContent;
+      let show = false;
+      
+      if (tag === 'all') {
+        show = true;
+      } else if (tag === 'Primary') {
+        // Broad primary filter including EYFS and specific KS groups
+        show = cardTag.includes('EYFS') || cardTag.includes('KS1') || cardTag.includes('KS2') || cardTag.includes('Primary');
+      } else {
+        // Exact match or includes for KS3, iGCSE, etc.
+        show = cardTag.includes(tag);
+      }
+      
+      card.style.display = show ? 'flex' : 'none';
+    });
+
+    // Hide section headings if no cards are visible within them
+    document.querySelectorAll('.section-heading').forEach(heading => {
+      const sectionCards = heading.nextElementSibling;
+      if (sectionCards && sectionCards.classList.contains('cards')) {
+        const visibleCards = Array.from(sectionCards.querySelectorAll('.card')).filter(c => c.style.display !== 'none');
+        heading.style.display = visibleCards.length > 0 ? 'flex' : 'none';
+      }
+    });
   }
 </script>
 
