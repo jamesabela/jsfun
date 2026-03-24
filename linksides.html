@@ -13,7 +13,7 @@
     .box.correct { border-color: #10b981; background-color: #ecfdf5; color: #065f46; }
     .box.incorrect { border-color: #ef4444; background-color: #fef2f2; color: #991b1b; }
     #svg-canvas { pointer-events: none; z-index: 10; }
-    line { stroke-linecap: round; transition: stroke-dashoffset 0.5s ease-in-out; }
+    line { stroke-linecap: round; }
   </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900 overflow-x-hidden">
@@ -35,36 +35,47 @@
 
   <main class="max-w-6xl mx-auto p-6 md:p-10">
 
-    <!-- Input Section -->
-    <div id="input-section" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xl mb-10 transition-all">
-      <h2 class="text-lg font-bold mb-4 text-slate-700 flex items-center gap-2">
-        <span>📝</span> Create Your Exercise
-      </h2>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Left Side (Answers)</label>
-          <textarea id="left-input" rows="6" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono text-sm" placeholder="One item per line..."></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Right Side (Matching pairs)</label>
-          <textarea id="right-input" rows="6" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono text-sm" placeholder="Matched row-for-row with left side..."></textarea>
+    <!-- Input Section (Editor) -->
+    <div id="input-section" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xl mb-10 transition-all hidden">
+      <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
+        <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+          <span>📝</span> Create Your Exercise
+        </h2>
+        <div class="flex flex-wrap gap-2">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest self-center mr-2">Quick Start:</span>
+            <button onclick="loadExample('english')" class="px-3 py-1.5 text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200 rounded-full hover:bg-amber-200 transition-all">Collocations</button>
+            <button onclick="loadExample('economics')" class="px-3 py-1.5 text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full hover:bg-emerald-200 transition-all">Economics</button>
+            <button onclick="loadExample('computing')" class="px-3 py-1.5 text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200 rounded-full hover:bg-blue-200 transition-all">Computing</button>
         </div>
       </div>
-      
-      <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2">Try an Example:</span>
-          <button onclick="loadExample('english')" class="px-3 py-1.5 text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200 rounded-full hover:bg-amber-200 transition-all">Collocations</button>
-          <button onclick="loadExample('economics')" class="px-3 py-1.5 text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full hover:bg-emerald-200 transition-all">Economics</button>
-          <button onclick="loadExample('computing')" class="px-3 py-1.5 text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200 rounded-full hover:bg-blue-200 transition-all">Computing</button>
-        </div>
-        <button onclick="createPuzzle()" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-900/20 transition-all transform active:scale-95">
-          Generate Exercise
+
+      <div class="overflow-x-auto mb-8">
+        <table class="w-full">
+            <thead>
+                <tr class="text-left border-b border-slate-200">
+                    <th class="pb-3 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] w-12 px-2">#</th>
+                    <th class="pb-3 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Left Side (Term)</th>
+                    <th class="pb-3 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Right Side (Description)</th>
+                    <th class="pb-3 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] w-10"></th>
+                </tr>
+            </thead>
+            <tbody id="rows-container" class="divide-y divide-slate-50">
+                <!-- Rows injected here -->
+            </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between mt-8 pt-8 border-t border-slate-100">
+        <button onclick="addRow()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-sm transition-all flex items-center gap-2">
+            <span class="text-lg">＋</span> Add Matching Pair
+        </button>
+        <button onclick="createPuzzle()" class="px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-800 rounded-2xl shadow-xl shadow-indigo-600/20 transition-all transform active:scale-95 flex items-center gap-2">
+           <span class="text-lg">⚡</span> Generate Exercise
         </button>
       </div>
     </div>
 
-    <!-- Puzzle Section -->
+    <!-- Puzzle Section (Player) -->
     <div id="puzzle-wrap" class="relative hidden">
       <svg id="svg-canvas" class="absolute inset-0 w-full h-full min-h-[400px]"></svg>
       
@@ -75,13 +86,13 @@
         <div id="right-col" class="space-y-4"></div>
       </div>
 
-      <div class="mt-12 flex flex-col items-center gap-4">
-        <div id="result-msg" class="text-lg font-bold text-slate-700 h-8"></div>
+      <div class="mt-12 flex flex-col items-center gap-6">
+        <div id="result-msg" class="text-xl font-bold text-slate-700 h-10 transition-all scale-100"></div>
         <div class="flex gap-4">
           <button id="reset-btn" onclick="resetPuzzle()" class="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition-all">
             Reset Lines
           </button>
-          <button id="check-btn" onclick="checkAnswer()" class="px-10 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">
+          <button id="check-btn" onclick="checkAnswer()" class="px-12 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all transform active:scale-95">
             Check Answer
           </button>
         </div>
@@ -89,9 +100,9 @@
     </div>
 
     <!-- Empty State -->
-    <div id="empty-state" class="text-center py-20">
-      <div class="text-6xl mb-4">🧩</div>
-      <h2 class="text-2xl font-800 text-slate-300 italic">Create a puzzle to start matching!</h2>
+    <div id="empty-state" class="text-center py-20 hidden">
+      <div class="text-6xl mb-6">🔗</div>
+      <h2 class="text-2xl font-800 text-slate-300 italic">Open the tool without parameters to create a puzzle.</h2>
     </div>
 
   </main>
@@ -114,13 +125,13 @@
         ]
       },
       computing: {
-        left: [
+        left: ["Analysis", "Design", "Coding", "Testing"],
+        right: [
           "Identify the problem and its requirements",
           "Develop an algorithm to solve the problem by using structure diagrams, flowcharts, or pseudocode",
           "Write and implement the instructions to solve the problem",
           "Detect and fix the errors in the program"
-        ],
-        right: ["Analysis", "Design", "Coding", "Testing"]
+        ]
       }
     };
 
@@ -129,19 +140,60 @@
     let correctPairs = [];
 
     function encodeBase64(str) { return btoa(unescape(encodeURIComponent(str))); }
-    function decodeBase64(str) { return decodeURIComponent(escape(atob(str))); }
+    function decodeBase64(str) { try { return decodeURIComponent(escape(atob(str))); } catch(e) { return "" } }
+
+    function addRow(leftVal = '', rightVal = '') {
+        const container = document.getElementById('rows-container');
+        const rowNum = container.children.length + 1;
+        const row = document.createElement('tr');
+        row.className = "data-row group";
+        row.innerHTML = `
+            <td class="py-3 px-2 text-xs font-mono text-slate-300 group-hover:text-indigo-400 transition-colors">${rowNum}</td>
+            <td class="py-2 pr-4">
+                <input type="text" class="left-val w-full p-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all text-sm font-600" placeholder="e.g. CPU" value="${leftVal}">
+            </td>
+            <td class="py-2 pr-4">
+                <input type="text" class="right-val w-full p-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all text-sm" placeholder="e.g. The brain of the computer" value="${rightVal}">
+            </td>
+            <td class="py-2">
+                <button onclick="this.closest('tr').remove(); renumberRows();" class="p-2 text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+            </td>
+        `;
+        container.appendChild(row);
+    }
+
+    function renumberRows() {
+        document.querySelectorAll('.data-row').forEach((row, i) => {
+            row.querySelector('td').innerText = i + 1;
+        });
+    }
 
     function loadExample(key) {
-      document.getElementById('left-input').value = EXAMPLES[key].left.join('\n');
-      document.getElementById('right-input').value = EXAMPLES[key].right.join('\n');
+      const container = document.getElementById('rows-container');
+      container.innerHTML = '';
+      EXAMPLES[key].left.forEach((l, i) => {
+          addRow(l, EXAMPLES[key].right[i]);
+      });
     }
 
     function createPuzzle() {
-      const leftItems = document.getElementById('left-input').value.trim().split('\n').filter(i => i.trim());
-      const rightItems = document.getElementById('right-input').value.trim().split('\n').filter(i => i.trim());
+      const rows = document.querySelectorAll('.data-row');
+      const leftItems = [];
+      const rightItems = [];
+      
+      rows.forEach(row => {
+          const l = row.querySelector('.left-val').value.trim();
+          const r = row.querySelector('.right-val').value.trim();
+          if (l && r) {
+              leftItems.push(l);
+              rightItems.push(r);
+          }
+      });
 
-      if (leftItems.length === 0 || leftItems.length !== rightItems.length) {
-        alert("Please ensure both columns have the same number of items!");
+      if (leftItems.length === 0) {
+        alert("Please add at least one pair!");
         return;
       }
 
@@ -149,12 +201,9 @@
       const encodedRight = encodeBase64(rightItems.join('\n'));
       const puzzleUrl = `${window.location.origin}${window.location.pathname}?left=${encodedLeft}&right=${encodedRight}`;
       
-      // Open the puzzle in a new tab for testing/sharing
       window.open(puzzleUrl, '_blank');
-      
-      // Show share button in the current (Editor) tab
       document.getElementById('share-btn').classList.remove('hidden');
-      window.history.replaceState({}, '', puzzleUrl); // Update URL in editor too for convenience
+      window.history.replaceState({}, '', puzzleUrl);
     }
 
     function renderPuzzle(leftList, rightList) {
@@ -165,7 +214,7 @@
 
       leftList.forEach(item => {
         const div = document.createElement('div');
-        div.className = "box p-4 bg-white border-2 border-slate-200 rounded-xl cursor-pointer font-600 text-center shadow-sm hover:shadow-md";
+        div.className = "box p-5 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer font-600 text-center shadow-sm hover:shadow-md hover:border-indigo-400/50 transition-all";
         div.innerText = item.val;
         div.dataset.id = item.id;
         div.onclick = () => selectLeft(div);
@@ -174,7 +223,7 @@
 
       rightList.forEach(item => {
         const div = document.createElement('div');
-        div.className = "box p-4 bg-white border-2 border-slate-200 rounded-xl cursor-pointer font-600 text-center shadow-sm hover:shadow-md";
+        div.className = "box p-5 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer font-600 text-center shadow-sm hover:shadow-md hover:border-indigo-400/50 transition-all";
         div.innerText = item.val;
         div.dataset.id = item.id;
         div.onclick = () => connectToRight(div);
@@ -191,11 +240,8 @@
     function connectToRight(el) {
       if (!selectedLeft) return;
 
-      // Check if already connected from this left item
       const existingIdx = userConnections.findIndex(c => c.leftId === parseInt(selectedLeft.dataset.id));
-      if (existingIdx > -1) {
-        userConnections.splice(existingIdx, 1);
-      }
+      if (existingIdx > -1) userConnections.splice(existingIdx, 1);
 
       userConnections.push({
         leftId: parseInt(selectedLeft.dataset.id),
@@ -213,16 +259,16 @@
     function drawConnections() {
       const svg = document.getElementById('svg-canvas');
       svg.innerHTML = '';
-      
-      // Update SVG container height to match the grid
       const puzzleWrap = document.getElementById('puzzle-wrap');
+      if (puzzleWrap.classList.contains('hidden')) return;
+      
       svg.style.height = puzzleWrap.offsetHeight + 'px';
+      const wrapRect = puzzleWrap.getBoundingClientRect();
 
       userConnections.forEach(conn => {
         const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
         const rectL = conn.leftEl.getBoundingClientRect();
         const rectR = conn.rightEl.getBoundingClientRect();
-        const wrapRect = puzzleWrap.getBoundingClientRect();
 
         const x1 = rectL.right - wrapRect.left;
         const y1 = rectL.top + rectL.height/2 - wrapRect.top;
@@ -234,15 +280,13 @@
         line.setAttribute("x2", x2);
         line.setAttribute("y2", y2);
         line.setAttribute("stroke", "#6366f1");
-        line.setAttribute("stroke-width", "3");
+        line.setAttribute("stroke-width", "4");
         svg.appendChild(line);
       });
     }
 
     function checkAnswer() {
       let correctCount = 0;
-      
-      // Reset visuals
       document.querySelectorAll('.box').forEach(b => b.classList.remove('correct', 'incorrect'));
       const svg = document.getElementById('svg-canvas');
       const lines = svg.querySelectorAll('line');
@@ -261,10 +305,12 @@
         }
       });
 
-      document.getElementById('result-msg').innerHTML = 
-        correctCount === correctPairs.length 
-          ? `<span class="text-emerald-600">Perfect! ${correctCount}/${correctPairs.length} correct 🎉</span>`
-          : `<span class="text-slate-600">You got ${correctCount}/${correctPairs.length} correct. Try again!</span>`;
+      const msg = document.getElementById('result-msg');
+      if (correctCount === correctPairs.length) {
+          msg.innerHTML = `<span class="text-emerald-600">Excellent! All ${correctCount} pairs matched! 🌟</span>`;
+      } else {
+          msg.innerHTML = `<span class="text-slate-500">Matched ${correctCount}/${correctPairs.length}. Keep going!</span>`;
+      }
     }
 
     function resetPuzzle() {
@@ -274,65 +320,24 @@
       drawConnections();
     }
 
-    function updateShareUrl(left, right) {
-      const url = new URL(window.location);
-      url.searchParams.set('left', encodeBase64(left.join('\n')));
-      url.searchParams.set('right', encodeBase64(right.join('\n')));
-      window.history.pushState({}, '', url);
-    }
-
     function copyShareLink() {
       const url = window.location.href;
-      
-      // Attempt using modern navigator.clipboard
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(url).then(() => showCopyFeedback());
       } else {
-        // Fallback for non-HTTPS or file://
         const textArea = document.createElement("textarea");
-        textArea.value = url;
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-          document.execCommand('copy');
-          showCopyFeedback();
-        } catch (err) {
-          alert('Could not copy link. Please copy it manually from the address bar.');
-        }
+        textArea.value = url; document.body.appendChild(textArea); textArea.select();
+        try { document.execCommand('copy'); showCopyFeedback(); } catch (err) { alert('Copy failed. Use the URL bar.'); }
         document.body.removeChild(textArea);
       }
     }
 
     function showCopyFeedback() {
       const btn = document.getElementById('share-btn');
-      const originalText = btn.innerText;
-      btn.innerText = "Link Copied!";
+      const oText = btn.innerText;
+      btn.innerText = "Copied!";
       btn.classList.replace('bg-indigo-600', 'bg-emerald-600');
-      setTimeout(() => {
-        btn.innerText = originalText;
-        btn.classList.replace('bg-emerald-600', 'bg-indigo-600');
-      }, 2000);
-    }
-
-    function updateEditVisibility() {
-      const isLocked = !document.getElementById('edit-lock').checked;
-      const editBtn = document.getElementById('edit-btn-top');
-      const inputSection = document.getElementById('input-section');
-
-      if (isLocked) {
-        editBtn.classList.add('hidden');
-        if (isEditing) toggleEdit(); // Force close editor if locked
-      } else {
-        editBtn.classList.remove('hidden');
-      }
-    }
-
-    window.onresize = drawConnections;
-
-    function resetCanvas() {
-        const svg = document.getElementById('svg-canvas');
-        svg.innerHTML = '';
-        userConnections = [];
+      setTimeout(() => { btn.innerText = oText; btn.classList.replace('bg-emerald-600', 'bg-indigo-600'); }, 2000);
     }
 
     window.onresize = drawConnections;
@@ -345,27 +350,18 @@
         try {
           const leftItems = decodeBase64(params.get('left')).split('\n').filter(i => i.trim());
           const rightItems = decodeBase64(params.get('right')).split('\n').filter(i => i.trim());
-
-          // Set correct pairs based on original input order
           correctPairs = leftItems.map((_, i) => ({ left: i, right: i }));
-          userConnections = [];
-          
-          // Shuffle for display
           const leftShuffled = leftItems.map((val, i) => ({ val, id: i })).sort(() => Math.random() - 0.5);
           const rightShuffled = rightItems.map((val, i) => ({ val, id: i })).sort(() => Math.random() - 0.5);
-
           renderPuzzle(leftShuffled, rightShuffled);
-          
           document.getElementById('input-section').remove();
-          document.getElementById('empty-state').classList.add('hidden');
           document.getElementById('puzzle-wrap').classList.remove('hidden');
           document.getElementById('share-btn').innerText = "Copy Puzzle Link";
           document.getElementById('share-btn').classList.remove('hidden');
         } catch(e) { console.error("Invalid URL parameters"); }
       } else {
-        // Teacher view (new puzzle): show input, hide puzzle
         document.getElementById('input-section').classList.remove('hidden');
-        document.getElementById('puzzle-wrap').classList.add('hidden');
+        for(let i=0; i<4; i++) addRow();
       }
     };
   </script>
