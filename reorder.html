@@ -3,208 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parsons Problem Creator</title>
+    <title>Reorder Tool (Parsons Problem) — jsfun by James Abela</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .controls-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .problem-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-        .line {
-            background: #f5f5f5;
-            border: 1px solid #ccc;
-            padding: 5px;
-            cursor: move;
-            user-select: none;
-        }
-        .selected {
-            background-color: lightblue;
-        }
-        .notice {
-            margin-bottom: 10px;
-            color: red;
-        }
-        .check-button, .hint-button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .correct {
-            color: green;
-        }
-        .incorrect {
-            color: red;
-        }
-        .highlight {
-            background-color: lightgreen;
-        }
+        body { font-family: 'Outfit', sans-serif; }
+        .line-item { transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s; touch-action: none; }
+        .line-item.dragging { z-index: 50; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); transform: scale(1.02); }
+        .line-item.correct { border-color: #10b981; background-color: #ecfdf5; color: #065f46; }
+        .line-item.incorrect { border-color: #ef4444; background-color: #fef2f2; color: #991b1b; }
+        .line-item.highlight { background-color: #f0f9ff; border-color: #bae6fd; color: #0369a1; }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 min-h-screen text-slate-900 pb-20">
 
-<div class="controls-container">
-    <label for="font-size">Font Size:</label>
-    <input type="range" id="font-size" min="10" max="30" value="16">
-</div>
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🔀</span>
+                <h1 class="text-xl font-800 tracking-tight text-slate-800">Reorder Tool</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleEditor()" class="px-4 py-2 text-sm font-600 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-all flex items-center gap-2">
+                    <span id="edit-icon">✏️</span> <span id="edit-text">Edit Content</span>
+                </button>
+                <button onclick="copyShareLink()" id="share-btn" class="hidden px-4 py-2 text-sm font-600 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all">
+                    Copy Student Link
+                </button>
+            </div>
+        </div>
+    </header>
 
-<div id="problem-container" class="problem-container"></div>
-<button class="check-button">Check Order</button>
-<button class="hint-button">Hint</button>
-<div id="result"></div>
+    <main class="max-w-4xl mx-auto p-6 md:p-10">
 
-<script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const codeUrl = urlParams.get('url') || 'code.txt';
-        let originalOrder = [];
+        <!-- Editor Section -->
+        <div id="editor-section" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xl mb-10 transition-all">
+            <h2 class="text-lg font-bold mb-4 text-slate-700 flex items-center gap-2">
+                <span>📝</span> Create Your Parsons Problem
+            </h2>
+            <p class="text-sm text-slate-500 mb-6">Paste your code or sentences below. Each line will become a draggable block. We will automatically shuffle them for students.</p>
+            
+            <textarea id="code-input" rows="8" class="w-full p-6 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono text-sm leading-relaxed mb-6" placeholder="Paste your code or correctly ordered sentences here..."></textarea>
+            
+            <div class="flex items-center justify-between pt-6 border-t border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2">Quick Start:</span>
+                    <button onclick="loadExample('python')" class="px-3 py-1.5 text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200 rounded-full hover:bg-blue-200 transition-all text-xs">Python Algorithm</button>
+                    <button onclick="loadExample('french')" class="px-3 py-1.5 text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200 rounded-full hover:bg-rose-200 transition-all text-xs">Language Learning</button>
+                </div>
+                <button onclick="generatePuzzle()" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 transition-all transform active:scale-95">
+                    Generate Puzzle
+                </button>
+            </div>
+        </div>
 
-        fetch(codeUrl)
-            .then(response => response.text())
-            .then(data => {
-                const lines = data.split('\n').filter(line => line.trim() !== '').slice(0, 20);
-                const problemContainer = document.getElementById('problem-container');
+        <!-- Puzzle Container -->
+        <div id="puzzle-wrap" class="hidden space-y-8">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div class="text-sm text-slate-500 font-600 italic">Drag blocks into the correct logical order:</div>
+                <div class="flex items-center gap-4">
+                    <label class="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase cursor-pointer">
+                        Size:
+                        <input type="range" id="fontSizeRange" min="12" max="24" value="16" class="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    </label>
+                </div>
+            </div>
 
-                originalOrder = lines.map((line, index) => ({
-                    index,
-                    text: line.replace(/ /g, '&nbsp;')
-                }));
+            <div id="item-list" class="relative space-y-2 select-none">
+                <!-- Blocks go here -->
+            </div>
 
-                originalOrder.forEach(item => {
-                    const lineElement = document.createElement('div');
-                    lineElement.className = 'line';
-                    lineElement.innerHTML = item.text;
-                    lineElement.dataset.index = item.index;
-                    lineElement.draggable = true;
-                    problemContainer.appendChild(lineElement);
-                });
+            <div class="pt-8 flex flex-col items-center gap-4">
+                <div id="feedback" class="h-8 text-lg font-bold transition-all duration-300"></div>
+                <button onclick="checkOrder()" class="px-12 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-800 rounded-2xl shadow-xl shadow-emerald-600/20 transition-all transform active:scale-95 flex items-center gap-2">
+                    ✅ Check My Order
+                </button>
+            </div>
+        </div>
 
-                if (data.split('\n').length > 20) {
-                    const notice = document.createElement('div');
-                    notice.className = 'notice';
-                    notice.textContent = 'Note: Only the first 20 lines are used.';
-                    document.body.insertBefore(notice, problemContainer);
-                }
+        <!-- Empty State -->
+        <div id="empty-state" class="text-center py-20">
+            <div class="text-6xl mb-6 opacity-30">📦</div>
+            <h3 class="text-xl font-bold text-slate-300 italic">Ready for your content...</h3>
+        </div>
 
-                // Shuffle the lines
-                for (let i = problemContainer.children.length; i >= 0; i--) {
-                    problemContainer.appendChild(problemContainer.children[Math.random() * i | 0]);
-                }
+    </main>
 
-                let dragSrcEl = null;
+    <script>
+        const EXAMPLES = {
+            python: "def calculate_average(numbers):\n    count = len(numbers)\n    if count == 0:\n        return 0\n    total = sum(numbers)\n    return total / count",
+            french: "Je m'appelle James.\nJ'ai quarante ans.\nJ'habite à Bangkok.\nJe suis professeur de technologie.\nJ'adore la programmation."
+        };
 
-                function handleDragStart(e) {
-                    dragSrcEl = this;
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('text/html', this.innerHTML);
-                    this.classList.add('selected');
-                }
+        let state = {
+            originalOrder: [],
+            currentOrder: [],
+            isEditing: true
+        };
 
-                function handleDragOver(e) {
-                    if (e.preventDefault) {
-                        e.preventDefault();
-                    }
-                    e.dataTransfer.dropEffect = 'move';
-                    return false;
-                }
+        function encode(s) { return btoa(unescape(encodeURIComponent(s))); }
+        function decode(s) { try { return decodeURIComponent(escape(atob(s))); } catch(e) { return "" } }
 
-                function handleDragEnter(e) {
-                    this.classList.add('over');
-                }
+        function toggleEditor() {
+            const editor = document.getElementById('editor-section');
+            const btnText = document.getElementById('edit-text');
+            const btnIcon = document.getElementById('edit-icon');
+            state.isEditing = !state.isEditing;
 
-                function handleDragLeave(e) {
-                    this.classList.remove('over');
-                }
-
-                function handleDrop(e) {
-                    if (e.stopPropagation) {
-                        e.stopPropagation();
-                    }
-
-                    if (dragSrcEl !== this) {
-                        dragSrcEl.innerHTML = this.innerHTML;
-                        this.innerHTML = e.dataTransfer.getData('text/html');
-                        // Swap the data-index values
-                        const tempIndex = dragSrcEl.dataset.index;
-                        dragSrcEl.dataset.index = this.dataset.index;
-                        this.dataset.index = tempIndex;
-                    }
-                    return false;
-                }
-
-                function handleDragEnd(e) {
-                    this.classList.remove('selected');
-                    document.querySelectorAll('.line').forEach(line => {
-                        line.classList.remove('over');
-                    });
-                }
-
-                document.querySelectorAll('.line').forEach(line => {
-                    line.addEventListener('dragstart', handleDragStart);
-                    line.addEventListener('dragenter', handleDragEnter);
-                    line.addEventListener('dragover', handleDragOver);
-                    line.addEventListener('dragleave', handleDragLeave);
-                    line.addEventListener('drop', handleDrop);
-                    line.addEventListener('dragend', handleDragEnd);
-                });
-            });
-
-        document.getElementById('font-size').addEventListener('input', function() {
-            const lines = document.querySelectorAll('.line');
-            lines.forEach(line => {
-                line.style.fontSize = this.value + 'px';
-            });
-        });
-
-        document.querySelector('.check-button').addEventListener('click', () => {
-            const problemContainer = document.getElementById('problem-container');
-            const resultContainer = document.getElementById('result');
-            const lines = Array.from(problemContainer.children);
-            let correctOrder = true;
-
-            lines.forEach((line, index) => {
-                if (parseInt(line.dataset.index, 10) !== index) {
-                    correctOrder = false;
-                }
-            });
-
-            if (correctOrder) {
-                resultContainer.textContent = 'Correct order!';
-                resultContainer.className = 'correct';
+            if (state.isEditing) {
+                editor.classList.remove('hidden');
+                btnText.innerText = "Close Editor";
+                btnIcon.innerText = "✖️";
             } else {
-                resultContainer.textContent = 'Incorrect order. Try again!';
-                resultContainer.className = 'incorrect';
+                editor.classList.add('hidden');
+                btnText.innerText = "Edit Content";
+                btnIcon.innerText = "✏️";
             }
-        });
+        }
 
-        document.querySelector('.hint-button').addEventListener('click', () => {
-            const problemContainer = document.getElementById('problem-container');
-            const lines = Array.from(problemContainer.children);
-            lines.forEach((line, index) => {
-                if (parseInt(line.dataset.index, 10) === index) {
-                    line.classList.add('highlight');
+        function loadExample(key) {
+            document.getElementById('code-input').value = EXAMPLES[key];
+        }
+
+        function generatePuzzle(data = null) {
+            const raw = data || document.getElementById('code-input').value.trim();
+            if (!raw) return;
+
+            const lines = raw.split('\n').filter(l => l.trim() !== '');
+            state.originalOrder = lines.map((text, i) => ({ text, id: i }));
+            
+            // Shuffle
+            state.currentOrder = [...state.originalOrder].sort(() => Math.random() - 0.5);
+            
+            renderList();
+            
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('puzzle-wrap').classList.remove('hidden');
+            document.getElementById('share-btn').classList.remove('hidden');
+            
+            if (state.isEditing) toggleEditor();
+            updateUrl(raw);
+        }
+
+        function renderList() {
+            const container = document.getElementById('item-list');
+            container.innerHTML = '';
+            
+            state.currentOrder.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = "line-item p-4 md:px-6 bg-white border-2 border-slate-200 rounded-2xl cursor-grab font-mono text-sm shadow-sm flex items-center gap-4 group";
+                el.innerHTML = `
+                    <div class="flex flex-col gap-1 opacity-20 group-hover:opacity-100 transition-opacity">
+                        <div class="w-4 h-0.5 bg-slate-400"></div>
+                        <div class="w-4 h-0.5 bg-slate-400"></div>
+                        <div class="w-4 h-0.5 bg-slate-400"></div>
+                    </div>
+                    <span class="whitespace-pre overflow-x-auto">${item.text}</span>
+                `;
+                el.dataset.id = item.id;
+                el.dataset.index = index;
+                el.style.fontSize = document.getElementById('fontSizeRange').value + 'px';
+                
+                setupDrag(el);
+                container.appendChild(el);
+            });
+        }
+
+        function setupDrag(el) {
+            let isDragging = false;
+            let startY, initialRect;
+            let placeholder = null;
+
+            el.onpointerdown = (e) => {
+                if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+                isDragging = true;
+                startY = e.clientY;
+                initialRect = el.getBoundingClientRect();
+                
+                // Clear any existing highlights/feedback
+                document.getElementById('feedback').innerText = "";
+                document.querySelectorAll('.line-item').forEach(l => l.classList.remove('correct', 'incorrect', 'highlight'));
+
+                el.setPointerCapture(e.pointerId);
+                el.classList.add('dragging');
+                
+                // Create a placeholder to preserve space in the list
+                placeholder = document.createElement('div');
+                placeholder.className = "line-item-placeholder bg-slate-100 border-2 border-dashed border-slate-200 rounded-2xl h-[4.5rem]";
+                placeholder.style.height = el.offsetHeight + 'px';
+                el.parentNode.insertBefore(placeholder, el.nextSibling);
+
+                // Make the dragged element absolute so it floats over the list
+                el.style.width = el.offsetWidth + 'px';
+                el.style.position = 'fixed';
+                el.style.top = initialRect.top + 'px';
+                el.style.left = initialRect.left + 'px';
+            };
+
+            el.onpointermove = (e) => {
+                if (!isDragging) return;
+                
+                const deltaY = e.clientY - startY;
+                el.style.transform = `translateY(${deltaY}px)`;
+
+                const elRect = el.getBoundingClientRect();
+                const elCenter = elRect.top + elRect.height / 2;
+                
+                // Find candidates for swapping from neighbors
+                const items = [...document.querySelectorAll('.line-item:not(.dragging)')];
+                const neighbor = items.find(item => {
+                    const rect = item.getBoundingClientRect();
+                    return elCenter > rect.top && elCenter < rect.bottom;
+                });
+
+                if (neighbor) {
+                    const parent = neighbor.parentNode;
+                    const neighborRect = neighbor.getBoundingClientRect();
+                    
+                    if (elCenter < neighborRect.top + neighborRect.height / 2) {
+                        parent.insertBefore(placeholder, neighbor);
+                    } else {
+                        parent.insertBefore(placeholder, neighbor.nextSibling);
+                    }
+                }
+            };
+
+            el.onpointerup = (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                
+                el.classList.remove('dragging');
+                el.releasePointerCapture(e.pointerId);
+
+                // Finalize position: move el to where placeholder is
+                if (placeholder && placeholder.parentNode) {
+                    placeholder.parentNode.insertBefore(el, placeholder);
+                    placeholder.remove();
+                }
+
+                // Reset styles
+                el.style.position = '';
+                el.style.top = '';
+                el.style.left = '';
+                el.style.width = '';
+                el.style.transform = '';
+                
+                // Re-sync internal state by reading current DOM order
+                syncStateFromDom();
+            };
+        }
+
+        function syncStateFromDom() {
+            const items = [...document.querySelectorAll('.line-item')];
+            state.currentOrder = items.map(el => {
+                return state.originalOrder.find(o => o.id == el.dataset.id);
+            });
+        }
+
+        function checkOrder() {
+            let correct = 0;
+            const items = document.querySelectorAll('.line-item');
+            
+            items.forEach((item, i) => {
+                const isCorrect = state.originalOrder[i].id == item.dataset.id;
+                if (isCorrect) {
+                    correct++;
+                    item.classList.add('correct');
                 } else {
-                    line.classList.remove('highlight');
+                    item.classList.add('incorrect');
                 }
             });
-        });
-    });
-</script>
-<script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+
+            const f = document.getElementById('feedback');
+            if (correct === state.originalOrder.length) {
+                f.innerText = "Perfect! The logic is sound. 🚀";
+                f.className = "text-emerald-600 font-bold h-8 animate-bounce";
+            } else {
+                f.innerText = "Not quite. Check the sequence again.";
+                f.className = "text-slate-500 font-bold h-8";
+            }
+        }
+
+        document.getElementById('fontSizeRange').oninput = (e) => {
+            document.querySelectorAll('.line-item span').forEach(s => s.style.fontSize = e.target.value + 'px');
+        };
+
+        function updateUrl(raw) {
+            const url = new URL(window.location);
+            url.searchParams.set('data', encode(raw));
+            window.history.replaceState({}, '', url);
+        }
+
+        function copyShareLink() {
+            const url = window.location.href;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    const btn = document.getElementById('share-btn');
+                    const old = btn.innerText;
+                    btn.innerText = "Link Copied!";
+                    btn.classList.replace('bg-indigo-600', 'bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerText = old;
+                        btn.classList.replace('bg-emerald-600', 'bg-indigo-600');
+                    }, 2000);
+                });
+            }
+        }
+
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            const data = params.get('data');
+            const legacyUrl = params.get('url');
+
+            if (data) {
+                generatePuzzle(decode(data));
+                lockForStudents(params);
+            } else if (legacyUrl) {
+                // Support FORMER way of loading: from a Gist/URL
+                fetch(legacyUrl)
+                    .then(response => response.text())
+                    .then(txt => {
+                        generatePuzzle(txt);
+                        lockForStudents(params);
+                    })
+                    .catch(err => console.error("Could not fetch legacy URL:", err));
+            }
+        };
+
+        function lockForStudents(params) {
+            const isStudent = !params.has('edit');
+            if (isStudent) {
+                const editorSection = document.getElementById('editor-section');
+                if (editorSection) editorSection.remove();
+                const editBtn = document.querySelector('button[onclick="toggleEditor()"]');
+                if (editBtn) editBtn.remove();
+            }
+        }
+    </script>
 </body>
 </html>
