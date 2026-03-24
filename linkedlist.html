@@ -116,12 +116,12 @@
             }
         };
 
-        let draggedAddr = null;
+        let draggedData = null;
 
         function init() {
             renderNodes();
             renderAddressBank();
-            setupDragEvents();
+            setupDragAndDrop();
             updateLogic();
         }
 
@@ -160,12 +160,11 @@
             const bank = document.getElementById('address-bank');
             bank.innerHTML = '';
 
-            // Add a NULL option
             const addresses = [...INITIAL_NODES.map(n => n.addr), 'NULL'];
 
             addresses.forEach(addr => {
                 const chip = document.createElement('div');
-                chip.className = `address-chip px-3 py-2 rounded-lg font-mono text-sm font-bold shadow-md transition-all 
+                chip.className = `address-chip px-3 py-2 rounded-lg font-mono text-sm font-bold shadow-md transition-all select-none
                     ${addr === 'NULL' ? 'bg-slate-600 text-slate-300' : 'bg-blue-600 text-white hover:bg-blue-500'}`;
                 chip.innerText = addr;
                 chip.draggable = true;
@@ -174,40 +173,66 @@
             });
         }
 
-        function setupDragEvents() {
-            document.addEventListener('pointerdown', e => {
+        function setupDragAndDrop() {
+            // Use event delegation for better reliability on Safari and after re-renders
+            document.addEventListener('dragstart', (e) => {
                 const chip = e.target.closest('.address-chip');
                 if (!chip) return;
-                draggedAddr = chip.dataset.addr;
+                
+                draggedData = chip.dataset.addr;
                 chip.classList.add('dragging');
+                
+                // Safari compatibility: must set data to transfer
+                e.dataTransfer.setData('text/plain', draggedData);
+                e.dataTransfer.effectAllowed = 'copy';
+                
+                // Visual feedback for drop zones
+                document.querySelectorAll('.pointer-drop-zone').forEach(z => {
+                    z.classList.add('border-blue-400/50', 'bg-blue-500/5');
+                });
             });
 
-            document.addEventListener('pointerover', e => {
-                const zone = e.target.closest('.pointer-drop-zone');
-                if (zone) zone.classList.add('hover');
-            });
-
-            document.addEventListener('pointerout', e => {
-                const zone = e.target.closest('.pointer-drop-zone');
-                if (zone) zone.classList.remove('hover');
-            });
-
-            document.addEventListener('pointerup', e => {
-                const chip = document.querySelector('.dragging');
+            document.addEventListener('dragend', (e) => {
+                const chip = e.target.closest('.address-chip');
                 if (chip) chip.classList.remove('dragging');
+                
+                document.querySelectorAll('.pointer-drop-zone').forEach(z => {
+                    z.classList.remove('hover', 'border-blue-400/50', 'bg-blue-500/5');
+                });
+                draggedData = null;
+            });
 
-                const zone = document.elementFromPoint(e.clientX, e.clientY)?.closest('.pointer-drop-zone');
-                if (zone && draggedAddr) {
+            document.addEventListener('dragover', (e) => {
+                const zone = e.target.closest('.pointer-drop-zone');
+                if (zone) {
+                    e.preventDefault(); // Required to allow drop
+                    zone.classList.add('hover');
+                    e.dataTransfer.dropEffect = 'copy';
+                }
+            });
+
+            document.addEventListener('dragleave', (e) => {
+                const zone = e.target.closest('.pointer-drop-zone');
+                if (zone) {
+                    zone.classList.remove('hover');
+                }
+            });
+
+            document.addEventListener('drop', (e) => {
+                const zone = e.target.closest('.pointer-drop-zone');
+                if (zone && draggedData) {
+                    e.preventDefault();
+                    
                     if (zone.id === 'head-pointer') {
-                        state.head = draggedAddr === 'NULL' ? null : draggedAddr;
+                        state.head = draggedData === 'NULL' ? null : draggedData;
                     } else {
                         const owner = zone.dataset.owner;
-                        state.links[owner] = draggedAddr === 'NULL' ? null : draggedAddr;
+                        state.links[owner] = draggedData === 'NULL' ? null : draggedData;
                     }
+                    
                     renderNodes();
                     updateLogic();
                 }
-                draggedAddr = null;
             });
         }
 
