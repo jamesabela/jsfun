@@ -3,261 +3,371 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Link Two Sides with Lines</title>
+  <title>Link Two Sides — jsfun by James Abela</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      position: relative;
-    }
-    #content {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      padding: 50px;
-    }
-    #left, #right {
-      width: 30%;
-    }
-    .box {
-      border: 1px solid #000;
-      padding: 10px;
-      margin: 20px 0;
-      text-align: center;
-      cursor: pointer;
-    }
-    #canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-    }
-    #input-container {
-      width: 100%;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    #input-container input,
-    #input-container textarea {
-      width: 45%;
-      display: inline-block;
-      margin-bottom: 10px;
-      padding: 10px;
-      font-size: 1em;
-    }
-    #submit-btn, #check-btn, #reset-btn {
-      display: block;
-      margin: 10px auto;
-      padding: 10px 20px;
-      font-size: 1.2em;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    #reset-btn {
-      background-color: #f44336; /* Red */
-    }
-    #result {
-      text-align: center;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #000;
-    }
-    #button-container {
-      margin-top: 20px;
-    }
+    body { font-family: 'Outfit', sans-serif; }
+    .box { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    .box.selected { border-color: #6366f1; background-color: #e0e7ff; color: #4338ca; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2); }
+    .box.correct { border-color: #10b981; background-color: #ecfdf5; color: #065f46; }
+    .box.incorrect { border-color: #ef4444; background-color: #fef2f2; color: #991b1b; }
+    #svg-canvas { pointer-events: none; z-index: 10; }
+    line { stroke-linecap: round; transition: stroke-dashoffset 0.5s ease-in-out; }
   </style>
 </head>
-<body>
+<body class="bg-slate-50 min-h-screen text-slate-900 overflow-x-hidden">
 
-<div id="input-container">
-  <textarea id="left-input" rows="5" placeholder="Enter left-side items, each on a new line"></textarea>
-  <textarea id="right-input" rows="5" placeholder="Enter right-side items, each on a new line"></textarea>
-  <br>
-  <button id="submit-btn" onclick="createBoxes()">Generate Boxes</button>
-</div>
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">🔗</span>
+        <h1 class="text-xl font-800 tracking-tight text-slate-800">Link Two Sides</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="copyShareLink()" id="share-btn" class="hidden px-4 py-2 text-sm font-600 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all">
+          Copy Student Link
+        </button>
+      </div>
+    </div>
+  </header>
 
-<div id="content">
-  <!-- Left Side -->
-  <div id="left" style="display:none;">
-    <h3>Left Side</h3>
-  </div>
+  <main class="max-w-6xl mx-auto p-6 md:p-10">
 
-  <!-- Canvas for drawing lines -->
-  <canvas id="canvas"></canvas>
+    <!-- Input Section -->
+    <div id="input-section" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xl mb-10 transition-all">
+      <h2 class="text-lg font-bold mb-4 text-slate-700 flex items-center gap-2">
+        <span>📝</span> Create Your Exercise
+      </h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Left Side (Answers)</label>
+          <textarea id="left-input" rows="6" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono text-sm" placeholder="One item per line..."></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Right Side (Matching pairs)</label>
+          <textarea id="right-input" rows="6" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono text-sm" placeholder="Matched row-for-row with left side..."></textarea>
+        </div>
+      </div>
+      
+      <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2">Try an Example:</span>
+          <button onclick="loadExample('english')" class="px-3 py-1.5 text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200 rounded-full hover:bg-amber-200 transition-all">Collocations</button>
+          <button onclick="loadExample('economics')" class="px-3 py-1.5 text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full hover:bg-emerald-200 transition-all">Economics</button>
+          <button onclick="loadExample('computing')" class="px-3 py-1.5 text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200 rounded-full hover:bg-blue-200 transition-all">Computing</button>
+        </div>
+        <button onclick="createPuzzle()" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-900/20 transition-all transform active:scale-95">
+          Generate Exercise
+        </button>
+      </div>
+    </div>
 
-  <!-- Right Side -->
-  <div id="right" style="display:none;">
-    <h3>Right Side</h3>
-  </div>
-</div>
+    <!-- Puzzle Section -->
+    <div id="puzzle-wrap" class="relative hidden">
+      <svg id="svg-canvas" class="absolute inset-0 w-full h-full min-h-[400px]"></svg>
+      
+      <div class="grid grid-cols-2 gap-20 md:gap-40 lg:gap-60 relative z-20">
+        <!-- Left Side -->
+        <div id="left-col" class="space-y-4"></div>
+        <!-- Right Side -->
+        <div id="right-col" class="space-y-4"></div>
+      </div>
 
-<!-- Button Container below the canvas -->
-<div id="button-container">
-  <button id="check-btn" style="display:none;" onclick="checkAnswer()">Check Answer</button>
-  <button id="reset-btn" style="display:none;" onclick="resetCanvas()">Reset Lines</button>
-</div>
+      <div class="mt-12 flex flex-col items-center gap-4">
+        <div id="result-msg" class="text-lg font-bold text-slate-700 h-8"></div>
+        <div class="flex gap-4">
+          <button id="reset-btn" onclick="resetPuzzle()" class="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition-all">
+            Reset Lines
+          </button>
+          <button id="check-btn" onclick="checkAnswer()" class="px-10 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">
+            Check Answer
+          </button>
+        </div>
+      </div>
+    </div>
 
-<!-- Result -->
-<div id="result"></div>
+    <!-- Empty State -->
+    <div id="empty-state" class="text-center py-20">
+      <div class="text-6xl mb-4">🧩</div>
+      <h2 class="text-2xl font-800 text-slate-300 italic">Create a puzzle to start matching!</h2>
+    </div>
 
-<script>
-  let selectedLeftBox = null;
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  let correctPairs = [];
-  let userConnections = [];
+  </main>
 
-  // Function to draw a line between two points
-  function drawLine(startX, startY, endX, endY) {
-    ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.lineTo(endX, endY);
-    ctx.stroke();
-  }
+  <script>
+    const EXAMPLES = {
+      english: {
+        left: ["Heavy", "Fast", "Make", "Do", "Take", "Pay"],
+        right: ["Rain", "Food", "a mistake", "homework", "a photo", "attention"]
+      },
+      economics: {
+        left: ["Inflation", "Fiscal Policy", "Monetary Policy", "GDP", "Supply", "Demand"],
+        right: [
+          "A general increase in prices and fall in the purchasing value of money.",
+          "Use of government spending and taxation to influence the economy.",
+          "Central bank actions to control the supply of money and interest rates.",
+          "Total value of goods produced and services provided in a country.",
+          "The total amount of a specific good or service available to consumers.",
+          "Consumer desire to purchase goods and services at a specific price."
+        ]
+      },
+      computing: {
+        left: [
+          "Identify the problem and its requirements",
+          "Develop an algorithm to solve the problem by using structure diagrams, flowcharts, or pseudocode",
+          "Write and implement the instructions to solve the problem",
+          "Detect and fix the errors in the program"
+        ],
+        right: ["Analysis", "Design", "Coding", "Testing"]
+      }
+    };
 
-  // Function to randomize an array
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+    let selectedLeft = null;
+    let userConnections = [];
+    let correctPairs = [];
+
+    function encodeBase64(str) { return btoa(unescape(encodeURIComponent(str))); }
+    function decodeBase64(str) { return decodeURIComponent(escape(atob(str))); }
+
+    function loadExample(key) {
+      document.getElementById('left-input').value = EXAMPLES[key].left.join('\n');
+      document.getElementById('right-input').value = EXAMPLES[key].right.join('\n');
     }
-    return array;
-  }
 
-  // Base64 encoding/decoding functions for encryption and decryption
-  function encodeBase64(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  }
+    function createPuzzle() {
+      const leftItems = document.getElementById('left-input').value.trim().split('\n').filter(i => i.trim());
+      const rightItems = document.getElementById('right-input').value.trim().split('\n').filter(i => i.trim());
 
-  function decodeBase64(str) {
-    return decodeURIComponent(escape(atob(str)));
-  }
+      if (leftItems.length === 0 || leftItems.length !== rightItems.length) {
+        alert("Please ensure both columns have the same number of items!");
+        return;
+      }
 
-  // Function to create boxes based on user input
-  function createBoxes() {
-    const leftInput = document.getElementById('left-input').value.trim().split('\n');
-    const rightInput = document.getElementById('right-input').value.trim().split('\n');
+      const encodedLeft = encodeBase64(leftItems.join('\n'));
+      const encodedRight = encodeBase64(rightItems.join('\n'));
+      const puzzleUrl = `${window.location.origin}${window.location.pathname}?left=${encodedLeft}&right=${encodedRight}`;
+      
+      // Open the puzzle in a new tab for testing/sharing
+      window.open(puzzleUrl, '_blank');
+      
+      // Show share button in the current (Editor) tab
+      document.getElementById('share-btn').classList.remove('hidden');
+      window.history.replaceState({}, '', puzzleUrl); // Update URL in editor too for convenience
+    }
 
-    // Save the correct pairs
-    correctPairs = leftInput.map((item, index) => ({
-      left: `left-${index}`,
-      right: `right-${index}`
-    }));
+    function renderPuzzle(leftList, rightList) {
+      const leftCol = document.getElementById('left-col');
+      const rightCol = document.getElementById('right-col');
+      leftCol.innerHTML = '';
+      rightCol.innerHTML = '';
 
-    // Hide the input container and show the left and right sections
-    document.getElementById('input-container').style.display = 'none';
-    document.getElementById('left').style.display = 'block';
-    document.getElementById('right').style.display = 'block';
-    document.getElementById('check-btn').style.display = 'block';
-    document.getElementById('reset-btn').style.display = 'block';
-
-    // Randomize both sides
-    const shuffledLeft = shuffle([...leftInput]);
-    const shuffledRight = shuffle([...rightInput]);
-
-    // Create left boxes
-    const leftContainer = document.getElementById('left');
-    shuffledLeft.forEach((item, index) => {
-      const box = document.createElement('div');
-      box.classList.add('box');
-      box.textContent = item;
-      box.dataset.id = `left-${leftInput.indexOf(item)}`; // Keep track of original index
-      box.addEventListener('click', function() {
-        selectedLeftBox = this;
-        this.style.backgroundColor = 'yellow'; // Highlight selected box
+      leftList.forEach(item => {
+        const div = document.createElement('div');
+        div.className = "box p-4 bg-white border-2 border-slate-200 rounded-xl cursor-pointer font-600 text-center shadow-sm hover:shadow-md";
+        div.innerText = item.val;
+        div.dataset.id = item.id;
+        div.onclick = () => selectLeft(div);
+        leftCol.appendChild(div);
       });
-      leftContainer.appendChild(box);
-    });
 
-    // Create right boxes
-    const rightContainer = document.getElementById('right');
-    shuffledRight.forEach((item, index) => {
-      const box = document.createElement('div');
-      box.classList.add('box');
-      box.textContent = item;
-      box.dataset.id = `right-${rightInput.indexOf(item)}`; // Keep track of original index
-      box.addEventListener('click', function() {
-        if (selectedLeftBox) {
-          // Draw line connecting left to right
-          const rectLeft = selectedLeftBox.getBoundingClientRect();
-          const rectRight = this.getBoundingClientRect();
-          drawLine(rectLeft.right, rectLeft.top + rectLeft.height / 2, rectRight.left, rectRight.top + rectRight.height / 2);
+      rightList.forEach(item => {
+        const div = document.createElement('div');
+        div.className = "box p-4 bg-white border-2 border-slate-200 rounded-xl cursor-pointer font-600 text-center shadow-sm hover:shadow-md";
+        div.innerText = item.val;
+        div.dataset.id = item.id;
+        div.onclick = () => connectToRight(div);
+        rightCol.appendChild(div);
+      });
+    }
 
-          // Save the user connection
-          userConnections.push({
-            left: selectedLeftBox.dataset.id,
-            right: this.dataset.id
-          });
+    function selectLeft(el) {
+      document.querySelectorAll('#left-col .box').forEach(b => b.classList.remove('selected'));
+      selectedLeft = el;
+      el.classList.add('selected');
+    }
 
-          // Deselect the left box
-          selectedLeftBox.style.backgroundColor = '';
-          selectedLeftBox = null;
+    function connectToRight(el) {
+      if (!selectedLeft) return;
+
+      // Check if already connected from this left item
+      const existingIdx = userConnections.findIndex(c => c.leftId === parseInt(selectedLeft.dataset.id));
+      if (existingIdx > -1) {
+        userConnections.splice(existingIdx, 1);
+      }
+
+      userConnections.push({
+        leftId: parseInt(selectedLeft.dataset.id),
+        rightId: parseInt(el.dataset.id),
+        leftEl: selectedLeft,
+        rightEl: el
+      });
+
+      selectedLeft.classList.remove('selected');
+      selectedLeft = null;
+      drawConnections();
+      document.getElementById('result-msg').innerText = "";
+    }
+
+    function drawConnections() {
+      const svg = document.getElementById('svg-canvas');
+      svg.innerHTML = '';
+      
+      // Update SVG container height to match the grid
+      const puzzleWrap = document.getElementById('puzzle-wrap');
+      svg.style.height = puzzleWrap.offsetHeight + 'px';
+
+      userConnections.forEach(conn => {
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        const rectL = conn.leftEl.getBoundingClientRect();
+        const rectR = conn.rightEl.getBoundingClientRect();
+        const wrapRect = puzzleWrap.getBoundingClientRect();
+
+        const x1 = rectL.right - wrapRect.left;
+        const y1 = rectL.top + rectL.height/2 - wrapRect.top;
+        const x2 = rectR.left - wrapRect.left;
+        const y2 = rectR.top + rectR.height/2 - wrapRect.top;
+
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        line.setAttribute("stroke", "#6366f1");
+        line.setAttribute("stroke-width", "3");
+        svg.appendChild(line);
+      });
+    }
+
+    function checkAnswer() {
+      let correctCount = 0;
+      
+      // Reset visuals
+      document.querySelectorAll('.box').forEach(b => b.classList.remove('correct', 'incorrect'));
+      const svg = document.getElementById('svg-canvas');
+      const lines = svg.querySelectorAll('line');
+
+      userConnections.forEach((conn, i) => {
+        const isCorrect = correctPairs.some(p => p.left === conn.leftId && p.right === conn.rightId);
+        if (isCorrect) {
+          correctCount++;
+          conn.leftEl.classList.add('correct');
+          conn.rightEl.classList.add('correct');
+          lines[i].setAttribute("stroke", "#10b981");
+        } else {
+          conn.leftEl.classList.add('incorrect');
+          conn.rightEl.classList.add('incorrect');
+          lines[i].setAttribute("stroke", "#ef4444");
         }
       });
-      rightContainer.appendChild(box);
-    });
 
-    // Save to encrypted URL
-    saveEncryptedUrl(leftInput, rightInput);
-  }
-
-  // Function to save the puzzle to an encrypted URL
-  function saveEncryptedUrl(leftInput, rightInput) {
-    const encodedLeft = encodeBase64(leftInput.join('\n'));
-    const encodedRight = encodeBase64(rightInput.join('\n'));
-    const newUrl = `${window.location.origin}${window.location.pathname}?left=${encodedLeft}&right=${encodedRight}`;
-    window.history.pushState({}, '', newUrl);
-  }
-
-  // Function to check if the user's connections are correct
-  function checkAnswer() {
-    let correct = 0;
-    userConnections.forEach(connection => {
-      correctPairs.forEach(pair => {
-        if (connection.left === pair.left && connection.right === pair.right) {
-          correct++;
-        }
-      });
-    });
-    const result = document.getElementById('result');
-    result.textContent = `You got ${correct} out of ${correctPairs.length} correct!`;
-  }
-
-  // Function to reset the canvas and connections
-  function resetCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
-    userConnections = []; // Reset user connections
-  }
-
-  // Resize canvas to fit screen size
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas(); // Call once on page load to set canvas size
-
-  // Automatically load from encrypted URL
-  window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const leftEncoded = urlParams.get('left');
-    const rightEncoded = urlParams.get('right');
-    if (leftEncoded && rightEncoded) {
-      const leftDecoded = decodeBase64(leftEncoded).split('\n');
-      const rightDecoded = decodeBase64(rightEncoded).split('\n');
-      document.getElementById('left-input').value = leftDecoded.join('\n');
-      document.getElementById('right-input').value = rightDecoded.join('\n');
-      createBoxes(); // Generate boxes on load if URL contains encoded values
+      document.getElementById('result-msg').innerHTML = 
+        correctCount === correctPairs.length 
+          ? `<span class="text-emerald-600">Perfect! ${correctCount}/${correctPairs.length} correct 🎉</span>`
+          : `<span class="text-slate-600">You got ${correctCount}/${correctPairs.length} correct. Try again!</span>`;
     }
-  };
-</script>
-<script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+
+    function resetPuzzle() {
+      userConnections = [];
+      document.querySelectorAll('.box').forEach(b => b.classList.remove('selected', 'correct', 'incorrect'));
+      document.getElementById('result-msg').innerText = "";
+      drawConnections();
+    }
+
+    function updateShareUrl(left, right) {
+      const url = new URL(window.location);
+      url.searchParams.set('left', encodeBase64(left.join('\n')));
+      url.searchParams.set('right', encodeBase64(right.join('\n')));
+      window.history.pushState({}, '', url);
+    }
+
+    function copyShareLink() {
+      const url = window.location.href;
+      
+      // Attempt using modern navigator.clipboard
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(() => showCopyFeedback());
+      } else {
+        // Fallback for non-HTTPS or file://
+        const textArea = document.createElement("textarea");
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          showCopyFeedback();
+        } catch (err) {
+          alert('Could not copy link. Please copy it manually from the address bar.');
+        }
+        document.body.removeChild(textArea);
+      }
+    }
+
+    function showCopyFeedback() {
+      const btn = document.getElementById('share-btn');
+      const originalText = btn.innerText;
+      btn.innerText = "Link Copied!";
+      btn.classList.replace('bg-indigo-600', 'bg-emerald-600');
+      setTimeout(() => {
+        btn.innerText = originalText;
+        btn.classList.replace('bg-emerald-600', 'bg-indigo-600');
+      }, 2000);
+    }
+
+    function updateEditVisibility() {
+      const isLocked = !document.getElementById('edit-lock').checked;
+      const editBtn = document.getElementById('edit-btn-top');
+      const inputSection = document.getElementById('input-section');
+
+      if (isLocked) {
+        editBtn.classList.add('hidden');
+        if (isEditing) toggleEdit(); // Force close editor if locked
+      } else {
+        editBtn.classList.remove('hidden');
+      }
+    }
+
+    window.onresize = drawConnections;
+
+    function resetCanvas() {
+        const svg = document.getElementById('svg-canvas');
+        svg.innerHTML = '';
+        userConnections = [];
+    }
+
+    window.onresize = drawConnections;
+
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      const isShared = params.has('left') && params.has('right');
+
+      if (isShared) {
+        try {
+          const leftItems = decodeBase64(params.get('left')).split('\n').filter(i => i.trim());
+          const rightItems = decodeBase64(params.get('right')).split('\n').filter(i => i.trim());
+
+          // Set correct pairs based on original input order
+          correctPairs = leftItems.map((_, i) => ({ left: i, right: i }));
+          userConnections = [];
+          
+          // Shuffle for display
+          const leftShuffled = leftItems.map((val, i) => ({ val, id: i })).sort(() => Math.random() - 0.5);
+          const rightShuffled = rightItems.map((val, i) => ({ val, id: i })).sort(() => Math.random() - 0.5);
+
+          renderPuzzle(leftShuffled, rightShuffled);
+          
+          document.getElementById('input-section').remove();
+          document.getElementById('empty-state').classList.add('hidden');
+          document.getElementById('puzzle-wrap').classList.remove('hidden');
+          document.getElementById('share-btn').innerText = "Copy Puzzle Link";
+          document.getElementById('share-btn').classList.remove('hidden');
+        } catch(e) { console.error("Invalid URL parameters"); }
+      } else {
+        // Teacher view (new puzzle): show input, hide puzzle
+        document.getElementById('input-section').classList.remove('hidden');
+        document.getElementById('puzzle-wrap').classList.add('hidden');
+      }
+    };
+  </script>
 </body>
 </html>
