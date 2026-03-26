@@ -7,7 +7,7 @@
   <title>jsfun — Teaching Tools by James Abela</title>
   <meta name="description"
     content="A collection of free classroom tools for computing and general teaching by James Abela.">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     *,
     *::before,
@@ -18,19 +18,19 @@
     }
 
     :root {
-      --indigo: #6366f1;
-      --indigo-dark: #4f46e5;
-      --indigo-light: #e0e7ff;
-      --text: #1e293b;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --bg: #f8fafc;
+      --primary: #1a6aff;
+      --primary-dark: #0047cc;
+      --primary-light: #e6f0ff;
+      --text: #0d1b3e;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #ffffff;
       --white: #ffffff;
-      --radius: 1rem;
+      --radius: 0.75rem;
     }
 
     body {
-      font-family: 'Outfit', sans-serif;
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -38,8 +38,8 @@
 
     /* ───── Hero ───── */
     .hero {
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 60%, #a855f7 100%);
-      color: #fff;
+      background: linear-gradient(135deg, #94c5fa 0%, #c4aff0 50%, #f0a0c8 100%);
+      color: #0d1b3e;
       text-align: center;
       padding: 3.5rem 1rem 5rem;
       clip-path: ellipse(120% 100% at 50% 0%);
@@ -50,13 +50,15 @@
       font-weight: 800;
       letter-spacing: -0.03em;
       margin-bottom: 0.5rem;
+      color: #0d1b3e;
     }
 
     .hero p {
       font-size: 1.15rem;
-      opacity: 0.85;
+      opacity: 0.75;
       max-width: 560px;
       margin: 0 auto;
+      color: #0d1b3e;
     }
 
     /* ───── Tab bar ───── */
@@ -74,7 +76,7 @@
       padding: 0.35rem;
       display: inline-flex;
       gap: 0.25rem;
-      box-shadow: 0 4px 24px rgba(99, 102, 241, 0.18);
+      box-shadow: 0 4px 24px rgba(230, 57, 70, 0.15);
       border: 1px solid var(--border);
     }
 
@@ -95,14 +97,14 @@
     }
 
     .tab-btn.active {
-      background: var(--indigo);
+      background: var(--primary);
       color: #fff;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.35);
     }
 
     .tab-btn:hover:not(.active) {
-      background: var(--indigo-light);
-      color: var(--indigo);
+      background: var(--primary-light);
+      color: var(--primary);
     }
 
     .tab-btn.link-btn {
@@ -139,10 +141,10 @@
       gap: 0.6rem;
       font-size: 1.25rem;
       font-weight: 700;
-      color: var(--indigo-dark);
+      color: var(--primary-dark);
       margin: 2.2rem 0 1rem;
       padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--indigo-light);
+      border-bottom: 2px solid var(--primary-light);
     }
 
     .section-heading .icon {
@@ -172,8 +174,8 @@
 
     .card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.14);
-      border-color: var(--indigo);
+      box-shadow: 0 8px 24px rgba(230, 57, 70, 0.14);
+      border-color: var(--primary);
     }
 
     .card-emoji {
@@ -198,8 +200,8 @@
       font-weight: 600;
       padding: 0.15em 0.7em;
       border-radius: 999px;
-      background: var(--indigo-light);
-      color: var(--indigo-dark);
+      background: var(--primary-light);
+      color: var(--primary-dark);
       margin-top: auto;
       align-self: flex-start;
     }
@@ -227,7 +229,7 @@
     }
 
     footer a {
-      color: var(--indigo);
+      color: var(--primary);
       font-weight: 600;
       text-decoration: none;
     }
@@ -261,16 +263,16 @@
     }
 
     .filter-btn.active {
-      background: var(--indigo);
+      background: var(--primary);
       color: #fff;
-      border-color: var(--indigo);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.25);
     }
 
     .filter-btn:hover:not(.active) {
-      background: var(--indigo-light);
-      border-color: var(--indigo-light);
-      color: var(--indigo);
+      background: var(--primary-light);
+      border-color: var(--primary-light);
+      color: var(--primary);
     }
 
     @media (max-width: 500px) {
