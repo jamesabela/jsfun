@@ -902,6 +902,8 @@
           show = true; // Always show All Ages items
         } else if (tag === 'Primary') {
           show = cardTag.includes('EYFS') || cardTag.includes('KS1') || cardTag.includes('KS2') || cardTag.includes('Primary');
+        } else if (tag === 'KS1' || tag === 'KS2' || tag === 'EYFS') {
+          show = cardTag.includes(tag) || cardTag.includes('Primary');
         } else {
           show = cardTag.includes(tag);
         }
