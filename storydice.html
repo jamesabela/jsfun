@@ -3,92 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Story Dice - Fun for Kids!</title>
+  <title>Story Dice - Simple Universal Vocabulary</title>
   <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #ff4081, #7b1fa2);
+      --glass-bg: rgba(255, 255, 255, 0.2);
+    }
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      text-align: center;
+      background: linear-gradient(45deg, #fce4ec, #f3e5f5);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
       padding: 20px;
-      background-color: #fce4ec;
     }
-    h1 {
-      color: #ff4081;
-      font-size: 36px;
+    h1 { color: #9c27b0; text-shadow: 2px 2px white; font-size: 3rem; margin-bottom: 0.5rem; }
+    .controls {
+      background: var(--glass-bg); backdrop-filter: blur(10px); padding: 20px;
+      border-radius: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border: 2px solid white; margin-bottom: 30px; display: flex;
+      gap: 15px; align-items: center; flex-wrap: wrap; justify-content: center;
     }
-    .dice-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-top: 20px;
-      position: relative;
-      padding: 10px;
-      background-color: white;
-      border-radius: 10px;
-      width: max-content;
-      margin-left: auto;
-      margin-right: auto;
+    .mode-selection label { cursor: pointer; margin: 0 5px; }
+    .mode-selection input { display: none; }
+    .mode-selection input:checked + span { background: #ff4081; color: white; padding: 8px 15px; border-radius: 20px; }
+    .mode-selection span { padding: 8px 15px; border-radius: 20px; transition: 0.2s; }
+    button { padding: 12px 25px; font-size: 1.2rem; border: none; border-radius: 25px; background: var(--primary-gradient); color: white; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    button.secondary { background: white; color: #7b1fa2; border: 2px solid #7b1fa2; }
+    
+    .dice-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1000px; padding: 20px; flex-grow: 1; }
+    .dice-container.grid-9 { display: grid; grid-template-columns: repeat(3, 100px); gap: 30px; width: fit-content; margin: 0 auto; }
+    
+    /* 
+      ULTIMATE SAFARI FIX: Completely removed transform-style: preserve-3d and true 3D cubes.
+      Using a 2D tile tumble to prevent ALL polygon tearing and pink flashing artifacts.
+    */
+    .dice-scene { width: 100px; height: 100px; perspective: 800px; position: relative; }
+    .dice { width: 100%; height: 100%; position: relative; cursor: pointer; }
+    
+    .dice-face { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; font-size:60px; box-sizing: border-box; background: #fff; border: 4px solid #ff4081; border-radius: 20px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
+    
+    .rolling { pointer-events: none; }
+    
+    .net-layout-container {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(4, 100px);
+        gap: 15px;
+        width: fit-content;
+        margin: 0 auto;
+        justify-content: center;
     }
-    .grid-9 {
-      display: grid;
-      grid-template-columns: repeat(3, auto);
-      justify-content: center;
-      gap: 15px;
-    }
-    .dice {
-      width: 80px;
-      height: 80px;
-      font-size: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 4px solid #ff4081;
-      border-radius: 15px;
-      background-color: #fff3e0;
-      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s;
-    }
-    .dice:hover {
-      transform: rotate(10deg) scale(1.1);
-    }
-    .net {
-      display: grid;
-      grid-template-columns: 100px 100px 100px;
-      grid-template-rows: 100px 100px 100px;
-      gap: 5px;
-      justify-content: center;
-      align-items: center;
-      margin: auto;
-    }
-    .net div {
-      width: 100px;
-      height: 100px;
-      font-size: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 4px solid #ff4081;
-      background-color: #fff3e0;
-    }
+    .empty-slot { visibility:hidden; width: 100px; height: 100px; }
+
+    .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; }
+    .frayer-modal { background:white; width:90%; max-width:850px; border-radius:24px; padding:30px; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:20px; position:relative; }
+    .frayer-quadrant { background:#fdf2f8; border:3px dashed #ff4081; border-radius:16px; padding:20px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+    .frayer-quadrant h3 { margin:0 0 10px 0; font-size:18px; color:#9d174d; border-bottom:2px solid #fbcfe8; width:100%; padding-bottom:5px; }
+    .frayer-quadrant p { font-size:16px; line-height:1.5; color:#3f3f46; margin:0; }
+    .frayer-center { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:170px; height:170px; background:white; border:6px solid #ff4081; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; }
+    #frayerEmoji { font-size:60px; line-height:1; }
+    #frayerWord { font-size:22px; font-weight:bold; color:#7b1fa2; margin-top:5px; text-transform:uppercase; }
+    .close-modal { position:absolute; top:-15px; right:-15px; width:45px; height:45px; background:#f50057; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; }
+    
+    footer { text-align:center; padding:2rem 1rem; border-top:1px solid #ffc1e3; font-size:0.95rem; color:#7b1fa2; width:100%; max-width:960px; margin-top:40px; }
+    footer a { color:#ff4081; font-weight:600; text-decoration:none; }
+    footer a.tea { color:#e73c7e; }
   </style>
 </head>
 <body>
-<h1>🎲 Fun Story Dice! 🎲</h1>
-<p>Click the button to roll the dice and create an exciting story!</p>
-<label>
-  <input type="radio" name="diceMode" value="5" checked> 5 Dice
-</label>
-<label>
-  <input type="radio" name="diceMode" value="9"> 9 Dice
-</label>
-<label>
-  <input type="radio" name="diceMode" value="net"> Dice Net
-</label>
-<br><br>
-<button onclick="rollDice()">🎲 Roll the Dice! 🎲</button>
-<button onclick="saveImage()">💾 Save as Image</button>
-<div class="dice-container" id="diceContainer"></div>
+<h1>🎲 Story Dice 🎲</h1>
+<p>Click a die to see its Frayer Model vocabulary!</p>
+<div class="controls">
+  <div class="mode-selection">
+    <label><input type="radio" name="diceMode" value="5" onchange="rollDice()" checked><span>5 Dice</span></label>
+    <label><input type="radio" name="diceMode" value="9" onchange="rollDice()"><span>9 Dice</span></label>
+    <label><input type="radio" name="diceMode" value="net" onchange="rollDice()"><span>Dice Net</span></label>
+  </div>
+  <button onclick="rollDice()">🎲 Roll Again! 🎲</button>
+  <button class="secondary" onclick="saveImage()">💾 Save Image</button>
+</div>
+<div id="diceContainer" class="dice-container"></div>
+
+<div id="modalOverlay" class="modal-overlay">
+  <div class="frayer-modal">
+    <div class="close-modal" onclick="closeFrayer()">&times;</div>
+    <div class="frayer-center"><div id="frayerEmoji"></div><div id="frayerWord"></div></div>
+    <div class="frayer-quadrant" id="q-definition"><h3>Definition</h3><p></p></div>
+    <div class="frayer-quadrant" id="q-characteristics"><h3>Characteristics</h3><p></p></div>
+    <div class="frayer-quadrant" id="q-examples"><h3>Examples</h3><p></p></div>
+    <div class="frayer-quadrant" id="q-nonexamples"><h3>Non-Examples</h3><p></p></div>
+  </div>
+</div>
+
+<footer>
+  <p>
+    Made with ❤️ for better thinking. If it helped you, support the project.
+    <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+  </p>
+  <p style="margin-top:0.5rem;font-size:0.85rem;">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
+    James Abela 2024
+  </p>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
@@ -97,125 +116,320 @@
     "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🦁", "🐯", "🐵", "🐸", "🐮", "🐔", "🦄", "🐙", "🐠", "🐉", "🐢", "🦕", "🦖", "🦥", "🦘", "🦨", "🦔", "🦡", "🐍", "🦢", "🦜", "🦩", "🐬", "🦈",
     "🏠", "🏡", "🏰", "🏯", "🏕️", "🏜️", "🏝️", "🏗️", "🏟️", "🏥", "🏛️", "🏚️", "🌆", "🌃", "🌉", "🏞️", "🌄", "🌅", "🏔️", "🌋", "🏭", "🛤️", "🏢",
     "🚗", "🚕", "🏎️", "🚓", "🚑", "🚒", "🚜", "🚲", "🛵", "🚂", "🚀", "🛸", "🚢", "🛶",
-    "🔮", "🎩", "🏰", "🦄", "👑", "💎", "📜", "🔥", "🧊",
+    "🔮", "🎩", "👑", "💎", "📜", "🔥", "🧊",
     "🌲", "🌳", "🌴", "🌾", "🍄", "🍂", "🍃", "🍁", "🏵️", "🌻", "🌸", "🌺", "🌼", "🌊", "🌪️", "🌈", "☀️", "🌤️", "⛅", "🌥️", "☁️", "🌧️", "⛈️", "🌩️", "🌙", "⭐", "💨",
     "🍎", "🍌", "🍇", "🍉", "🍒", "🍓", "🥕", "🥦", "🌽", "🥑", "🥩", "🥐", "🍞", "🍔", "🌭", "🍕", "🍩", "🍫", "🍭", "🍿", "🥤", "🧃",
     "🔪", "🗡️", "⚔️", "🏹", "🔫", "🔨", "🏺", "🎻", "🎸", "🥁", "🎭", "📖", "📜", "🗝️",
     "🎈", "🎀", "🎁", "🎊", "🎉", "🎃", "🎄", "🎆", "🎇", "🎍", "🎏", "🎎", "🎑", "🎟️"
   ];
-
-  function rollDice() {
+  const frayerData = {
+    // Basic People
+    "👨‍👩‍👧‍👦": { word: "Family", def: "A group of parents and children.", char: "Loving, supportive, live together.", ex: "Mom, dad, sisters.", non: "A crowd at a game." },
+    "🧑‍🎓": { word: "Student", def: "A person who learns at school.", char: "Learns things, has books, studies.", ex: "A kid in grade 1.", non: "A teacher." },
+    "🧑‍🚀": { word: "Astronaut", def: "A person who flies into space.", char: "Wears a suit, flies a rocket.", ex: "Moon traveler.", non: "A bus driver." },
+    "🧑‍🔬": { word: "Scientist", def: "A person who studies how things work.", char: "Does experiments, has a lab.", ex: "Chemist.", non: "Artist." },
+    "🧑‍⚖️": { word: "Judge", def: "A person who decides court cases.", char: "Wears robes, uses a gavel, fair.", ex: "Court judge.", non: "Police." },
+    "🧑‍🍳": { word: "Chef", def: "A person who cooks food for others.", char: "Uniform, cooks in kitchens.", ex: "Baker.", non: "Customer." },
+    "🧑‍🎨": { word: "Artist", def: "A person who creates paintings or drawings.", char: "Creative, uses brushes/paints.", ex: "Painter.", non: "Accountant." },
+    "🧑‍🚒": { word: "Firefighter", def: "A person who puts out fires.", char: "Brave, wears a hat, uses a hose.", ex: "Rescue worker.", non: "Policeman." },
+    "🧑‍🌾": { word: "Farmer", def: "A person who grows food or keeps animals.", char: "Works on land, grows crops.", ex: "Rancher.", non: "City worker." },
+    "🧑‍✈️": { word: "Pilot", def: "A person who flies a plane.", char: "Uniform, flies high in sky.", ex: "Captain.", non: "Passenger." },
+    "🦸‍♂️": { word: "Hero", def: "A man with special powers to help.", char: "Strong, brave, helps people.", ex: "Superman.", non: "Bad guy." },
+    "🦸‍♀️": { word: "Hero", def: "A lady with special powers to help.", char: "Brave, has a cape, helpful.", ex: "Wonder Woman.", non: "Normal person." },
+    "🦹‍♂️": { word: "Villain", def: "A bad person in a movie or story.", char: "Mean, fights the hero.", ex: "Bad guy.", non: "Good friend." },
+    "🦹‍♀️": { word: "Villain", def: "A bad lady in a movie or story.", char: "Mean, bad plans.", ex: "Evil witch.", non: "Princess." },
+    "🧙‍♂️": { word: "Wizard", def: "A man who uses magic.", char: "Magic wand, pointy hat.", ex: "Merlin.", non: "Normal man." },
+    "🧙‍♀️": { word: "Witch", def: "A lady who uses magic.", char: "Wand, broom, magic spells.", ex: "Magical lady.", non: "Normal girl." },
+    "🧛‍♂️": { word: "Vampire", def: "A scary man in dark stories.", char: "Fangs, dark cape, scary.", ex: "Dracula.", non: "Ghost." },
+    "🧛‍♀️": { word: "Vampire", def: "A scary lady in dark stories.", char: "Fangs, stays in the dark.", ex: "Scary lady.", non: "Fairy." },
+    "🧝‍♂️": { word: "Elf", def: "A magic man with pointy ears.", char: "Small or tall, magic powers.", ex: "Woodland elf.", non: "Giant." },
+    "🧝‍♀️": { word: "Elf", def: "A magic lady with pointy ears.", char: "Pretty, kind, magic.", ex: "Magic elf.", non: "Monster." },
+    // Animals
+    "🐶": { word: "Dog", def: "A furry animal often kept as a pet.", char: "Barks, wags tail, plays.", ex: "Puppy.", non: "Cat." },
+    "🐱": { word: "Cat", def: "A furry animal with pointy ears.", char: "Meows, purrs, soft.", ex: "Kitten.", non: "Dog." },
+    "🐭": { word: "Mouse", def: "A tiny grey animal with a long tail.", char: "Squeaks, likes cheese.", ex: "Little mouse.", non: "Rat." },
+    "🐹": { word: "Hamster", def: "A tiny pet that lives in a cage.", char: "Round, furry, small.", ex: "Pet hamster.", non: "Guinea pig." },
+    "🐰": { word: "Rabbit", def: "A small animal with long ears.", char: "Jumps, soft, eats carrots.", ex: "Bunny.", non: "Fox." },
+    "🦊": { word: "Fox", def: "A wild animal with orange fur.", char: "Smart, bushy tail.", ex: "Wild fox.", non: "Wolf." },
+    "🐻": { word: "Bear", def: "A big furry wild animal.", char: "Strong, hibernates, loud.", ex: "Grizzly bear.", non: "Puppy." },
+    "🐼": { word: "Panda", def: "A black and white bear from China.", char: "Eats bamboo, soft.", ex: "Giant panda.", non: "Polar bear." },
+    "🦁": { word: "Lion", def: "A big yellow cat with a mane.", char: "Roars, king of animals.", ex: "Simba.", non: "Kitten." },
+    "🐯": { word: "Tiger", def: "A big cat with orange and black stripes.", char: "Strong, roars.", ex: "Wild tiger.", non: "Lion." },
+    "🐵": { word: "Monkey", def: "An animal that jumps in trees.", char: "Tail, loud, likes bananas.", ex: "Chimp.", non: "Gorilla." },
+    "🐸": { word: "Frog", def: "A green animal that jumps.", char: "Lives in ponds, leaps.", ex: "Bullfrog.", non: "Lizard." },
+    "🐮": { word: "Cow", def: "A big farm animal.", char: "Moos, gives milk, eats grass.", ex: "Jersey cow.", non: "Horse." },
+    "🐔": { word: "Chicken", def: "A farm bird that gives eggs.", char: "Feathers, clucks.", ex: "Hen.", non: "Eagle." },
+    "🦄": { word: "Unicorn", def: "A magic horse with one horn.", char: "Magic, sparkly, rainbow.", ex: "Mythical horse.", non: "Donkey." },
+    "🐙": { word: "Octopus", def: "A sea animal with 8 arms.", char: "Swims in water, squirts ink.", ex: "Sea creature.", non: "Shark." },
+    "🐠": { word: "Fish", def: "A small colorful animal in water.", char: "Fins, gills, swims.", ex: "Goldfish.", non: "Whale." },
+    "🐉": { word: "Dragon", def: "A huge magic flying lizard.", char: "Breathes fire, scales.", ex: "Flying dragon.", non: "Snake." },
+    "🐢": { word: "Turtle", def: "A slow animal with a hard shell.", char: "Slow, scaly, has shell.", ex: "Sea turtle.", non: "Snail." },
+    "🦕": { word: "Dino", def: "A prehistoric longneck.", char: "Huge, long neck, old.", ex: "Sauropod.", non: "Giraffe." },
+    "🦖": { word: "T-Rex", def: "A scary dinosaur with big teeth.", char: "Strong predator, big mouth.", ex: "Tyrannosaur.", non: "Hamster." },
+    "🦥": { word: "Sloth", def: "A very slow animal in trees.", char: "Hangs, moves slowly, grey.", ex: "Three-toed sloth.", non: "Flash." },
+    "🦘": { word: "Kangaroo", def: "An animal that hops with a pouch.", char: "Big back legs, jumps high.", ex: "Red kangaroo.", non: "Wallaby." },
+    "🦨": { word: "Skunk", def: "An animal that makes a bad smell.", char: "Black/white, smelly.", ex: "Striped skunk.", non: "Badger." },
+    "🦔": { word: "Hedgehog", def: "A small animal with prickles.", char: "Spiky, rolls into a ball.", ex: "Prickly friend.", non: "Porcupine." },
+    "🦡": { word: "Badger", def: "A wild animal that digs holes.", char: "Strong, striped face.", ex: "Honey badger.", non: "Raccoon." },
+    "🐍": { word: "Snake", def: "A long animal with no legs.", char: "Slithers, hisses, long.", ex: "Cobra.", non: "Worm." },
+    "🦢": { word: "Swan", def: "A graceful white bird on water.", char: "Long neck, white feathers.", ex: "Mute swan.", non: "Duck." },
+    "🦜": { word: "Parrot", def: "A colorful bird that talks.", char: "Talkative, bright feathers.", ex: "Macaw.", non: "Pigeon." },
+    "🦩": { word: "Flamingo", def: "A tall pink bird with one leg.", char: "Pink, long legs, in water.", ex: "Greater flamingo.", non: "Crane." },
+    "🐬": { word: "Dolphin", def: "A smart sea animal.", char: "Friendly, jumps, swims fast.", ex: "Bottlenose.", non: "Shark." },
+    "🦈": { word: "Shark", def: "A big predatory fish.", char: "Fins, sharp teeth, grey.", ex: "Great White.", non: "Dolphin." },
+    // Places
+    "🏠": { word: "House", def: "A building where people live.", char: "Roof, walls, rooms, home.", ex: "Cottage.", non: "Store." },
+    "🏡": { word: "Home", def: "A place to live with a garden.", char: "Warm, cozy, flowers outside.", ex: "Bungalow.", non: "Factory." },
+    "🏰": { word: "Castle", def: "A big stone home for a king.", char: "Towers, stone walls.", ex: "Fort.", non: "Tent." },
+    "🏯": { word: "Tower", def: "A tall old building.", char: "Stone, many floors, high.", ex: "Japanese castle.", non: "Hut." },
+    "🏕️": { word: "Camping", def: "Sleeping outside in a tent.", char: "Forest, fire, outdoor fun.", ex: "Camping trip.", non: "Hotel." },
+    "🏜️": { word: "Desert", def: "A very dry place with sand.", char: "Hot, no rain, cacti.", ex: "Sahara.", non: "Rainforest." },
+    "🏝️": { word: "Island", def: "Land with water all around it.", char: "Beach, palms, in sea.", ex: "Small island.", non: "Mountain." },
+    "🏗️": { word: "Building", def: "Making something big with crane.", char: "Scaffold, construction.", ex: "Work site.", non: "Park." },
+    "🏟️": { word: "Stadium", def: "A place for sports and games.", char: "Huge, many seats, open.", ex: "Arena.", non: "Classroom." },
+    "🏥": { word: "Hospital", def: "A place to see a doctor.", char: "White, medicine, busy.", ex: "General hospital.", non: "School." },
+    "🏛️": { word: "Museum", def: "A place for old things of art.", char: "Quiet, old objects, statues.", ex: "Art gallery.", non: "Toy shop." },
+    "🏚️": { word: "Old House", def: "A building that is broken.", char: "Spooky, old, empty.", ex: "Ruined hut.", non: "New villa." },
+    "🌆": { word: "City", def: "A place with many tall buildings.", char: "Busy, sunset, many people.", ex: "Urban town.", non: "Farm." },
+    "🌃": { word: "Night", def: "The time when it is dark outside.", char: "Stars, moon, city lights.", ex: "Midnight.", non: "Daytime." },
+    "🌉": { word: "Bridge", def: "A road that goes over water.", char: "Tall, metal or stone.", ex: "Golden Gate.", non: "Tunnel." },
+    "🏞️": { word: "Nature", def: "A beautiful place with a river.", char: "Green, water, trees.", ex: "National park.", non: "Road." },
+    "🌄": { word: "Sunrise", def: "The sun coming up in the morning.", char: "Pink sky, early day.", ex: "Dawn.", non: "Night." },
+    "🌅": { word: "Sunset", def: "The sun going down at night.", char: "Orange sky, end of day.", ex: "Dusk.", non: "Noon." },
+    "🏔️": { word: "Mountain", def: "A very tall hill with snow.", char: "High, rocky, cold.", ex: "Mt Everest.", non: "Hill." },
+    "🌋": { word: "Volcano", def: "A mountain that shoots fire.", char: "Lava, smoke, dangerous.", ex: "Hawaii volcano.", non: "Igloo." },
+    "🏭": { word: "Factory", def: "A place where things are made.", char: "Smoke, big, machines.", ex: "Plant.", non: "Park." },
+    "🛤️": { word: "Tracks", def: "Where the train runs.", char: "Metal, long, parallel.", ex: "Railway.", non: "Road." },
+    "🏢": { word: "Office", def: "A tall building for work.", char: "Windows, desks, workers.", ex: "Skyscraper.", non: "House." },
+    // Vehicles
+    "🚗": { word: "Car", def: "A machine with wheels to drive.", char: "Fast, on roads, can sit people.", ex: "Red car.", non: "Bicycle." },
+    "🚕": { word: "Taxi", def: "A car that you pay to ride.", char: "Yellow, in city, hired.", ex: "Cab.", non: "Personal car." },
+    "🏎️": { word: "Racecar", def: "A very fast car for sport.", char: "Noisy, fast, on tracks.", ex: "Formula 1.", non: "Bus." },
+    "🚓": { word: "Police Car", def: "A car for police officers.", char: "Blue lights, siren, fast.", ex: "Patrol car.", non: "Taxi." },
+    "🚑": { word: "Ambulance", def: "A car for hurt people.", char: "Siren, white/red, helps sick.", ex: "EMS truck.", non: "Fire truck." },
+    "🚒": { word: "Fire Truck", def: "A big truck to stop fires.", char: "Red, ladder, water hose.", ex: "Fire engine.", non: "Cars." },
+    "🚜": { word: "Tractor", def: "A big machine for a farm.", char: "Large wheels, slow, on land.", ex: "Farm machine.", non: "Jeep." },
+    "🚲": { word: "Bike", def: "A vehicle with two wheels.", char: "Pedals, balance, quiet.", ex: "Bicycle.", non: "Car." },
+    "🛵": { word: "Scooter", def: "A small motorcycle.", char: "Two wheels, engine, fast.", ex: "Vespa.", non: "Skates." },
+    "🚂": { word: "Train", def: "A vehicle on metal tracks.", char: "Chug-chug, long, pulls cars.", ex: "Steam train.", non: "Van." },
+    "🚀": { word: "Rocket", def: "A vehicle for space travel.", char: "Loud, goes to moon, fire.", ex: "Space rocket.", non: "Bird." },
+    "🛸": { word: "UFO", def: "A spaceship from space.", char: "Flying saucer, magic lights.", ex: "Alien craft.", non: "Plane." },
+    "🚢": { word: "Ship", def: "A very big boat on sea.", char: "Huge, heavy, in deep water.", ex: "Ocean liner.", non: "Canoe." },
+    "🛶": { word: "Canoe", def: "A small boat for a river.", char: "Wood, paddle, quiet.", ex: "Kayak.", non: "Ship." },
+    // Nature
+    "🌲": { word: "Pine", def: "An evergreen tree with needles.", char: "Pointy, smells good.", ex: "Christmas tree.", non: "Flower." },
+    "🌳": { word: "Tree", def: "A big plant with a trunk.", char: "Leaves, wood, provides shade.", ex: "Oak tree.", non: "Grass." },
+    "🌴": { word: "Palm", def: "A tree from a sunny beach.", char: "Coconuts, big leaves.", ex: "Beach tree.", non: "Pine." },
+    "🌾": { word: "Wheat", def: "A plant we use for bread.", char: "Golden, in fields, seeds.", ex: "Grain.", non: "Roses." },
+    "🍄": { word: "Mushroom", def: "A plant that grows in woods.", char: "Cap, stem, red/white.", ex: "Fungus.", non: "Flower." },
+    "🍂": { word: "Leaves", def: "Leaves falling in autumn.", char: "Brown, dry, crunchy.", ex: "Dead leaves.", non: "Green leaf." },
+    "🍃": { word: "Leaf", def: "A green leaf on a tree.", char: "Green, soft, grows in spring.", ex: "Spring leaf.", non: "Branch." },
+    "🍁": { word: "Maple", def: "A red leaf from a maple tree.", char: "Star shape, red color.", ex: "Canada leaf.", non: "Fern." },
+    "🏵️": { word: "Flower", def: "A pretty plant with petals.", char: "Smells nice, colorful.", ex: "Rose.", non: "Rock." },
+    "🌻": { word: "Sunflower", def: "A tall yellow flower.", char: "Big seeds, yellow petals.", ex: "Field flower.", non: "Daisy." },
+    "🌸": { word: "Blossom", def: "A small pink flower.", char: "Soft, pink, on trees.", ex: "Cherry blossom.", non: "Cactus." },
+    "🌺": { word: "Hibiscus", def: "A flower from a sunny island.", char: "Red, big petals, exotic.", ex: "Island flower.", non: "Grass." },
+    "🌼": { word: "Daisy", def: "A small white/yellow flower.", char: "Cheerful, small, grows in fields.", ex: "Wild flower.", non: "Tree." },
+    "🌊": { word: "Wave", def: "Water moving in the ocean.", char: "Blue, wet, crashing.", ex: "Surfing wave.", non: "Puddle." },
+    "🌪️": { word: "Tornado", def: "Spinning wind that is strong.", char: "Fast, scary, funnel shape.", ex: "Storm.", non: "Breeze." },
+    "🌈": { word: "Rainbow", def: "Colors in sky after rain.", char: "7 colors, beautiful, magic.", ex: "Sky arc.", non: "Cloud." },
+    "☀️": { word: "Sun", def: "A bright star in day sky.", char: "Hot, yellow, bright.", ex: "Daylight.", non: "Moon." },
+    "🌤️": { word: "Sun-Cloud", def: "The sun behind a cloud.", char: "Warm, bright, a bit grey.", ex: "Fair day.", non: "Dark night." },
+    "⛅": { word: "Cloud", def: "White puffy bits in sky.", char: "Soft, floating, white.", ex: "Sky fluff.", non: "Rain." },
+    "🌥️": { word: "Grey Cloud", def: "A dark cloud with sun.", char: "Dull, cloudy, about to rain.", ex: "Overcast.", non: "Sunny day." },
+    "☁️": { word: "Big Cloud", def: "A big puffy white cloud.", char: "Soft, high up, floating.", ex: "Cotton cloud.", non: "Blue sky." },
+    "🌧️": { word: "Rain", def: "Water falling from sky.", char: "Wet, grey, makes puddles.", ex: "Shower.", non: "Snow." },
+    "⛈️": { word: "Storm", def: "Rain with thunder and flash.", char: "Loud, dark, wet.", ex: "Thunderstorm.", non: "Sun." },
+    "🌩️": { word: "Lightning", def: "A flash of light from storm.", char: "Bright, fast, dangerous.", ex: "Spark.", non: "Candle." },
+    "🌙": { word: "Moon", def: "A bright object at night.", char: "White, orbits Earth.", ex: "Crescent moon.", non: "Sun." },
+    "⭐": { word: "Star", def: "A twinkly light in sky.", char: "Five points, yellow, shiny.", ex: "North star.", non: "Planet." },
+    "💨": { word: "Wind", def: "Air moving very fast.", char: "Invisible, can feel it.", ex: "Breeze.", non: "Quiet air." },
+    // Food
+    "🍎": { word: "Apple", def: "A sweet round fruit.", char: "Red or green, crunchy.", ex: "Snack fruit.", non: "Bone." },
+    "🍌": { word: "Banana", def: "A long yellow fruit.", char: "Peels, soft, sweet.", ex: "Healthy snack.", non: "Cheese." },
+    "🍇": { word: "Grapes", def: "Small round purple fruits.", char: "In a bunch, juicy.", ex: "Fruit juice.", non: "Nuts." },
+    "🍉": { word: "Melon", def: "A huge green/red fruit.", char: "Heavy, sweet, wet.", ex: "Summer fruit.", non: "Bread." },
+    "🍒": { word: "Cherry", def: "A tiny red fruit with stem.", char: "Sweet, round, twin fruit.", ex: "Pie fruit.", non: "Melon." },
+    "🍓": { word: "Berry", def: "A red heart-shaped fruit.", char: "Small, seeds, sweet.", ex: "Strawberry.", non: "Grape." },
+    "🥕": { word: "Carrot", def: "An orange vegetable.", char: "Crunchy, grows in ground.", ex: "Root vegetable.", non: "Apple." },
+    "🥦": { word: "Broccoli", def: "A green veggie like a tree.", char: "Healthy, green, has a stem.", ex: "Veggie.", non: "Cake." },
+    "🌽": { word: "Corn", def: "A yellow plant in a cob.", char: "Yellow bits, sweet, long.", ex: "Corn pop.", non: "Bread." },
+    "🥑": { word: "Avocado", def: "A green fruit with big seed.", char: "Soft, dark skin, creamy.", ex: "Guacamole.", non: "Melon." },
+    "🥩": { word: "Meat", def: "Food from an animal.", char: "Protein, cooked, savory.", ex: "Steak.", non: "Ice cream." },
+    "🥐": { word: "Bread", def: "Flaky bread from France.", char: "Buttery, soft, curved.", ex: "Croissant.", non: "Loaf." },
+    "🍞": { word: "Loaf", def: "A slice of white bread.", char: "Soft, used for sandwich.", ex: "Toast.", non: "Cake." },
+    "🍔": { word: "Burger", def: "Meat patty in a round bun.", char: "Fast food, savory, filling.", ex: "Cheeseburger.", non: "Pizza." },
+    "🌭": { word: "Hotdog", def: "Sausage in a long bun.", char: "Long, savory, has mustard.", ex: "Fair food.", non: "Burger." },
+    "🍕": { word: "Pizza", def: "Flat bread with cheese.", char: "Round, savory, yummy.", ex: "Pepperoni.", non: "Cake." },
+    "🍩": { word: "Donut", def: "Sweet cake with a hole.", char: "Frosted, round, ring.", ex: "Treat.", non: "Bagel." },
+    "🍫": { word: "Choco", def: "A bar of brown sweet treat.", char: "Sweet, melts, brown.", ex: "Candy.", non: "Broccoli." },
+    "🍭": { word: "Lolly", def: "A candy on a stick.", char: "Hard, sweet, round.", ex: "Sucker.", non: "Gum." },
+    "🍿": { word: "Corn", def: "Puffed corn for movies.", char: "Salty, white, light.", ex: "Popcorn.", non: "Rice." },
+    "🥤": { word: "Soda", def: "A drink in a cup with straw.", char: "Cold, fizzy, has a lid.", ex: "Cola.", non: "Soup." },
+    "🧃": { word: "Juice", def: "A small box of fruit drink.", char: "Sweet, box, with straw.", ex: "Apple juice.", non: "Water." },
+    // Items
+    "🔮": { word: "Magic", def: "A crystal ball for future.", char: "Glass, purple, magic.", ex: "Magic ball.", non: "Marble." },
+    "🎩": { word: "Hat", def: "A tall black hat for magic.", char: "Black, felt, worn by magician.", ex: "Top hat.", non: "Cap." },
+    "👑": { word: "Crown", def: "A gold hat for a king.", char: "Jewels, gold, shiny.", ex: "Tiara.", non: "Helmet." },
+    "💎": { word: "Gem", def: "A very hard shiny stone.", char: "Sparkly, blue, crystal.", ex: "Diamond.", non: "Pebble." },
+    "📜": { word: "Scroll", def: "Paper with old stories.", char: "Rolled up, yellow, old.", ex: "Ancient letter.", non: "Book." },
+    "🔥": { word: "Fire", def: "Hot orange flames.", char: "Burns, light, hot.", ex: "Campfire.", non: "Snow." },
+    "🧊": { word: "Ice", def: "Square of frozen water.", char: "Cold, clear, melts.", ex: "Ice cube.", non: "Flame." },
+    "🔪": { word: "Knife", def: "Tool to cut things.", char: "Sharp, metal blade.", ex: "Kitchen knife.", non: "Spoon." },
+    "🗡️": { word: "Sword", def: "Short metal blade weapon.", char: "Sharp, metal, short.", ex: "Dagger.", non: "Shield." },
+    "⚔️": { word: "Swords", def: "Long metal blades.", char: "Two swords, for battle.", ex: "Weapon.", non: "Hammer." },
+    "🏹": { word: "Bow", def: "Tool to shoot arrows.", char: "Wood, string, long.", ex: "Bow/arrow.", non: "Gun." },
+    "🔫": { word: "Gun", def: "Toy that shoots water.", char: "Green, plastic, wet.", ex: "Water gun.", non: "Cannon." },
+    "🔨": { word: "Hammer", def: "Tool to hit nails.", char: "Heavy, has handle, metal.", ex: "Tool.", non: "Screw." },
+    "🏺": { word: "Pot", def: "Old clay jar for water.", char: "Clay, holds things, old.", ex: "Jar.", non: "Cup." },
+    "🎻": { word: "Violin", def: "Classical music tool.", char: "Strings, wood, elegant.", ex: "Music tool.", non: "Drum." },
+    "🎸": { word: "Guitar", def: "Musical tool with strings.", char: "Noisy or soft, pluck.", ex: "Music.", non: "Violin." },
+    "🥁": { word: "Drum", def: "Round tool to make rhythm.", char: "Hit it, loud, skins.", ex: "Drum set.", non: "Piano." },
+    "🎭": { word: "Masks", def: "Faces for a play.", char: "Drama, sad/happy face.", ex: "Theater.", non: "Hat." },
+    "📖": { word: "Book", def: "Pages for reading.", char: "Stories, pictures, paper.", ex: "Novel.", non: "Paper." },
+    "🗝️": { word: "Key", def: "Tool to open locks.", char: "Small, gold, unlock.", ex: "House key.", non: "Door." },
+    "🎈": { word: "Balloon", def: "Bag of air for party.", char: "Floating, colourful.", ex: "Birthday balloon.", non: "Ball." },
+    "🎀": { word: "Ribbon", def: "Pink bow for gift.", char: "Soft, silk, tied.", ex: "Bow.", non: "String." },
+    "🎁": { word: "Gift", def: "Box with a surprise inside.", char: "Wrapped, box, present.", ex: "Surprise.", non: "Mail." },
+    "🎊": { word: "Confetti", def: "Shiny paper bits for fun.", char: "Colourful, falling, celebration.", ex: "Party.", non: "Trash." },
+    "🎉": { word: "Popper", def: "Object that shoots paper.", char: "Loud, surprise, cone.", ex: "Celebration.", non: "Hat." },
+    "🎃": { word: "Pumpkin", def: "Orange fruit for scary night.", char: "Orange, round, has face.", ex: "Halloween.", non: "Melon." },
+    "🎄": { word: "Xmas Tree", def: "Tree with lights and balls.", char: "Green, bright, presents.", ex: "Christmas.", non: "Bush." },
+    "🎆": { word: "Fireworks", def: "Lights in the night sky.", char: "Loud, bright, colorful.", ex: "Holiday.", non: "Star." },
+    "🎇": { word: "Sparkler", def: "Small wand with sparks.", char: "Bright, handheld, short.", ex: "Party gem.", non: "Candle." },
+    "🎍": { word: "Bamboo", def: "Tall wood from Japan.", char: "Green, wood, cultural.", ex: "Ornament.", non: "Tree." },
+    "🎏": { word: "Flag", def: "Fish flags for kids day.", char: "Colorful, blowing in wind.", ex: "Banner.", non: "Curtain." },
+    "🎎": { word: "Dolls", def: "Small toys of people.", char: "Traditional, colorful, dolls.", ex: "Toy.", non: "Person." },
+    "🎑": { word: "Moon", def: "Viewing the moon with food.", char: "Tradition, night, quiet.", ex: "Ceremony.", non: "Party." },
+    "🎟️": { word: "Tickets", def: "Paper to enter a show.", char: "Small, paper, allowed in.", ex: "Show pass.", non: "Money." }
+  };
+  function getFrayerData(symbol) { return frayerData[symbol] || { word: "Object", def: "A story element.", char: "Used in your story.", ex: "Found on this die.", non: "Something else." }; }
+  
+  async function rollDice() {
     const mode = document.querySelector('input[name="diceMode"]:checked').value;
     const diceContainer = document.getElementById("diceContainer");
-    diceContainer.innerHTML = "";
-    diceContainer.classList.remove("grid-9");
-
+    diceContainer.innerHTML = ""; diceContainer.classList.remove("grid-9");
+    let generatedDice = [];
+    
+    // Choose our final symbols
+    const selectedSymbols = shuffleAndSlice(mode === "net" ? 6 : parseInt(mode));
+    
     if (mode === "net") {
-      generateDiceNet();
-      return;
+        diceContainer.innerHTML = `<div class="net-layout-container">
+            <div class="empty-slot"></div><div id="net-0"></div><div class="empty-slot"></div>
+            <div id="net-1"></div><div id="net-2"></div><div id="net-3"></div>
+            <div class="empty-slot"></div><div id="net-4"></div><div class="empty-slot"></div>
+            <div class="empty-slot"></div><div id="net-5"></div><div class="empty-slot"></div>
+        </div>`;
+        for (let i = 0; i < 6; i++) {
+            generatedDice.push({el: createDiceTile(document.getElementById(`net-${i}`)), final: selectedSymbols[i]});
+        }
+    } else {
+        if (mode === "9") diceContainer.classList.add("grid-9");
+        for (let i = 0; i < parseInt(mode); i++) {
+            generatedDice.push({el: createDiceTile(diceContainer), final: selectedSymbols[i]});
+        }
     }
-
-    const diceCount = parseInt(mode);
-    const shuffledSymbols = shuffleAndSlice(diceCount);
-
-    if (diceCount === 9) {
-      diceContainer.classList.add("grid-9");
-    }
-
-    displayDice(shuffledSymbols);
-    updateURL("dice", shuffledSymbols);
+    
+    // Trigger animation
+    setTimeout(() => {
+        generatedDice.forEach(d => applyDiceRoll(d.el, d.final));
+    }, 50);
+    
+    await new Promise(r => setTimeout(r, 1500));
+    updateURL(mode === "net" ? "net" : "dice", selectedSymbols);
   }
 
-  function displayDice(diceArray) {
+  function createDiceTile(container) {
+    const scene = document.createElement("div"); scene.className = "dice-scene";
+    const dice = document.createElement("div"); dice.className = "dice";
+    
+    const face = document.createElement("div"); face.className = "dice-face";
+    face.textContent = "🎲"; // Initial placeholder until JS scrambles it
+    dice.appendChild(face);
+    
+    dice.onclick = () => openFrayer(face.textContent);
+    
+    scene.appendChild(dice); container.appendChild(scene); 
+    return dice;
+  }
+
+  function applyDiceRoll(diceElement, finalSymbol) {
+    const face = diceElement.querySelector('.dice-face');
+    diceElement.classList.add('rolling');
+    
+    let rolls = 0;
+    // Fast scrambling of Emojis to simulate rolling chaos
+    const interval = setInterval(() => {
+        face.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        rolls++;
+        if(rolls > 12) {
+            clearInterval(interval);
+            face.textContent = finalSymbol;
+        }
+    }, 80);
+    
+    setTimeout(() => {
+        diceElement.classList.remove('rolling');
+    }, 1200);
+  }
+
+  function openFrayer(symbol) {
+    if (symbol === "🎲") return; // Skip if clicked mid-roll on placeholder
+    const data = getFrayerData(symbol);
+    document.getElementById("frayerEmoji").textContent = symbol;
+    document.getElementById("frayerWord").textContent = data.word;
+    document.querySelector("#q-definition p").textContent = data.def;
+    document.querySelector("#q-characteristics p").textContent = data.char;
+    document.querySelector("#q-examples p").textContent = data.ex;
+    document.querySelector("#q-nonexamples p").textContent = data.non;
+    document.getElementById("modalOverlay").style.display = 'flex';
+  }
+
+  function closeFrayer() { document.getElementById("modalOverlay").style.display = 'none'; }
+  
+  function displayDice(mode, diceArray) {
     const diceContainer = document.getElementById("diceContainer");
-    diceContainer.innerHTML = "";
-    diceArray.forEach(symbol => {
-      const dice = document.createElement("div");
-      dice.className = "dice";
-      dice.textContent = symbol;
-      diceContainer.appendChild(dice);
-    });
+    diceContainer.innerHTML = ""; diceContainer.classList.remove("grid-9");
+    if (mode === "net") {
+        diceContainer.innerHTML = `<div class="net-layout-container">
+            <div class="empty-slot"></div><div id="net-0"></div><div class="empty-slot"></div>
+            <div id="net-1"></div><div id="net-2"></div><div id="net-3"></div>
+            <div class="empty-slot"></div><div id="net-4"></div><div class="empty-slot"></div>
+            <div class="empty-slot"></div><div id="net-5"></div><div class="empty-slot"></div>
+        </div>`;
+        diceArray.forEach((sym, i) => {
+            const dice = createDiceTile(document.getElementById(`net-${i}`));
+            dice.querySelector('.dice-face').textContent = sym;
+        });
+    } else {
+        if (mode === "9") diceContainer.classList.add("grid-9");
+        diceArray.forEach(symbol => {
+            const dice = createDiceTile(diceContainer);
+            dice.querySelector('.dice-face').textContent = symbol;
+        });
+    }
   }
 
-  function generateDiceNet() {
-    const netContainer = document.getElementById("diceContainer");
-    netContainer.innerHTML = "";
-    const shuffledSymbols = shuffleAndSlice(6);
-
-    netContainer.innerHTML = `
-      <div class='net'>
-        <div></div><div>${shuffledSymbols[0]}</div><div></div>
-        <div>${shuffledSymbols[1]}</div><div>${shuffledSymbols[2]}</div><div>${shuffledSymbols[3]}</div>
-        <div></div><div>${shuffledSymbols[4]}</div><div></div>
-        <div></div><div>${shuffledSymbols[5]}</div><div></div>
-      </div>
-    `;
-    updateURL("net", shuffledSymbols);
+  function updateURL(param, array) {
+    const url = new URL(window.location); url.searchParams.delete("dice"); url.searchParams.delete("net");
+    url.searchParams.set(param, array.join("-")); window.history.pushState({}, "", url);
   }
 
-  function shuffleAndSlice(count) {
-    return [...symbols].sort(() => Math.random() - 0.5).slice(0, count);
-  }
-
-  function updateURL(paramName, symbolArray) {
-    const url = new URL(window.location);
-    url.searchParams.delete("dice");
-    url.searchParams.delete("net");
-    url.searchParams.set(paramName, symbolArray.join("-"));
-    window.history.pushState({}, "", url);
-  }
+  function shuffleAndSlice(n) { return [...symbols].sort(() => Math.random() - 0.5).slice(0, n); }
 
   function saveImage() {
-    html2canvas(document.getElementById("diceContainer")).then(canvas => {
-      let link = document.createElement("a");
-      link.download = "story_dice.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+    html2canvas(document.getElementById("diceContainer"), { useCORS: true, backgroundColor: null }).then(canvas => {
+      const link = document.createElement("a"); link.download = "story_dice.png";
+      link.href = canvas.toDataURL(); link.click();
     });
   }
 
-  // Load from URL on page load
   window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const diceParam = urlParams.get("dice");
-    const netParam = urlParams.get("net");
-
-    if (netParam) {
-      // If there's a net param, display net
-      const netContainer = document.getElementById("diceContainer");
-      netContainer.innerHTML = "";
-      const symbolsFromURL = netParam.split("-");
-      netContainer.innerHTML = `
-        <div class='net'>
-          <div></div><div>${symbolsFromURL[0]}</div><div></div>
-          <div>${symbolsFromURL[1]}</div><div>${symbolsFromURL[2]}</div><div>${symbolsFromURL[3]}</div>
-          <div></div><div>${symbolsFromURL[4]}</div><div></div>
-          <div></div><div>${symbolsFromURL[5]}</div><div></div>
-        </div>
-      `;
-      document.querySelector('input[value="net"]').checked = true;
-    } else if (diceParam) {
-      // If there's a dice param, display dice
-      const diceArray = diceParam.split("-");
-      const diceContainer = document.getElementById("diceContainer");
-      diceContainer.classList.remove("grid-9");
-      diceContainer.innerHTML = "";
-
-      diceArray.forEach(symbol => {
-        const dice = document.createElement("div");
-        dice.className = "dice";
-        dice.textContent = symbol;
-        diceContainer.appendChild(dice);
-      });
-
-      // Decide if it's 5 or 9
-      if (diceArray.length === 9) {
-        diceContainer.classList.add("grid-9");
-        document.querySelector('input[value="9"]').checked = true;
-      } else {
-        document.querySelector('input[value="5"]').checked = true;
-      }
-    }
+    const p = new URLSearchParams(window.location.search), d = p.get("dice"), n = p.get("net");
+    if (n) { document.querySelector('input[value="net"]').checked = true; displayDice("net", n.split("-"));
+    } else if (d) { const array = d.split("-"); if (array.length === 9) document.querySelector('input[value="9"]').checked = true; displayDice(array.length === 9 ? "9" : "5", array);
+    } else { rollDice(); }
   };
 </script>
 <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
