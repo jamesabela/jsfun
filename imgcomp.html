@@ -77,6 +77,7 @@
   <label for="question">Question: </label>
   <input type="text" id="question">
   <button id="submit">Submit</button>
+  <button id="randomBtn">Random Example</button>
 </div>
 
 <div class="container hidden" id="image-container">
@@ -129,6 +130,23 @@
     document.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', onMouseMove);
     }, { once: true });
+  });
+
+  // Random Example functionality
+  document.getElementById('randomBtn').addEventListener('click', function() {
+    const examples = [
+      { then: './.github/images/big_ben_then.jpg', now: './.github/images/big_ben_now.jpg', q: 'Big Ben: Then and Now' },
+      { then: './.github/images/central_park_then.jpg', now: './.github/images/central_park_now.jpg', q: 'Central Park: Then and Now' },
+      { then: './.github/images/hong_kong_then.jpg', now: './.github/images/hong_kong_now.jpg', q: 'Hong Kong: Then and Now' }
+    ];
+    const randomExample = examples[Math.floor(Math.random() * examples.length)];
+    
+    document.getElementById('image1-url').value = randomExample.then;
+    document.getElementById('image2-url').value = randomExample.now;
+    document.getElementById('question').value = randomExample.q;
+    
+    // Automatically submit to show it
+    document.getElementById('submit').click();
   });
 
   // Load from URL if provided
