@@ -286,6 +286,47 @@
         font-size: 0.8rem;
       }
     }
+
+    /* ───── Search Box ───── */
+    .search-wrap {
+      max-width: 500px;
+      margin: 2rem auto 0;
+      padding: 0 1rem;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 2.8rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.2s;
+      outline: none;
+      background: var(--white);
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1), 0 0 0 4px var(--primary-light);
+    }
+
+    .search-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 2.1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      opacity: 0.5;
+      pointer-events: none;
+    }
   </style>
 </head>
 
@@ -304,6 +345,12 @@
       <a class="tab-btn link-btn" href="https://readysetcompute.com/">🚀
         ReadySetCompute</a>
     </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" class="search-input" placeholder="Search for computing tools (e.g. binary, sort, python)..." oninput="handleSearch(this.value)">
   </div>
 
   <!-- Filter bar -->
@@ -883,32 +930,82 @@
   </footer>
 
   <script>
+    let currentTag = 'all';
+    let currentSearch = '';
+
+    function handleSearch(val) {
+      currentSearch = val;
+      updateFilters();
+    }
+
     function filterByTag(tag, btn) {
+      currentTag = tag;
       // Update button states
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      if (btn) btn.classList.add('active');
+      else {
+        // Find button by tag if btn is not provided (e.g. on reset)
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(b => {
+          if (b.textContent === tag || (tag === 'all' && b.textContent === 'All')) b.classList.add('active');
+        });
+      }
 
+      updateFilters();
+    }
+
+    function updateFilters() {
       const cards = document.querySelectorAll('.card');
+      
+      // Stemming words to handle plurals, tenses, etc.
+      const stem = (word) => {
+        return word.toLowerCase()
+          .replace(/(ing|ed|s|es)$/, '')
+          .replace(/(\w)\1$/, '$1'); // simplify double consonants (e.g. spinning -> spinn -> spin)
+      };
+
+      const queryStems = currentSearch.toLowerCase()
+        .split(/\s+/)
+        .filter(q => q.length > 0)
+        .map(q => stem(q));
+
       cards.forEach(card => {
+        const titleElements = card.querySelectorAll('.card-title');
+        const descElements = card.querySelectorAll('.card-desc');
         const tagSpan = card.querySelector('.card-tag');
-        if (!tagSpan) return;
+        
+        const title = titleElements.length > 0 ? titleElements[0].textContent.toLowerCase() : "";
+        const desc = descElements.length > 0 ? descElements[0].textContent.toLowerCase() : "";
+        const cardTag = tagSpan ? tagSpan.textContent : '';
 
-        const cardTag = tagSpan.textContent;
-        let show = false;
-
-        if (tag === 'all') {
-          show = true;
+        // Tag matching logic
+        let tagMatch = false;
+        if (currentTag === 'all') {
+          tagMatch = true;
         } else if (cardTag.includes('All ages')) {
-          show = true; // Always show All Ages items
-        } else if (tag === 'Primary') {
-          show = cardTag.includes('EYFS') || cardTag.includes('KS1') || cardTag.includes('KS2') || cardTag.includes('Primary');
-        } else if (tag === 'KS1' || tag === 'KS2' || tag === 'EYFS') {
-          show = cardTag.includes(tag) || cardTag.includes('Primary');
+          tagMatch = true; // Always show All Ages items
+        } else if (currentTag === 'Primary') {
+          tagMatch = cardTag.includes('EYFS') || cardTag.includes('KS1') || cardTag.includes('KS2') || cardTag.includes('Primary');
+        } else if (currentTag === 'KS1' || currentTag === 'KS2' || currentTag === 'EYFS') {
+          tagMatch = cardTag.includes(currentTag) || cardTag.includes('Primary');
         } else {
-          show = cardTag.includes(tag);
+          tagMatch = cardTag.includes(currentTag);
         }
 
-        card.style.display = show ? 'flex' : 'none';
+        // Search matching logic (fuzzy/forgiving)
+        let searchMatch = true;
+        if (queryStems.length > 0) {
+          const content = title + " " + desc;
+          const contentWords = content.split(/\W+/).filter(w => w.length > 0);
+          const contentStems = contentWords.map(w => stem(w));
+          
+          searchMatch = queryStems.every(qStem => {
+            // Match if stem is found in content stems OR if content contains original query
+            return contentStems.some(cStem => cStem.includes(qStem) || qStem.includes(cStem)) || content.includes(qStem);
+          });
+        }
+
+        card.style.display = (tagMatch && searchMatch) ? 'flex' : 'none';
       });
 
       // Hide section headings if no cards are visible within them
