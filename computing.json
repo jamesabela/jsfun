@@ -1,0 +1,606 @@
+[
+  {
+    "category": "Display Tool",
+    "icon": "🐍",
+    "tools": [
+      {
+        "title": "Python Code Display",
+        "emoji": "📄",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy",
+        "desc": "Display, download (.py or .txt), visualise and make puzzles from any raw Python file. Paste a GitHub Gist or Pastebin URL.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Parsons Puzzle (Reorder)",
+        "emoji": "🧩",
+        "url": "https://jamesabela.github.io/jsfun/reorder.html",
+        "desc": "Reorder scrambled lines of code back into the correct order. Works with any raw Python URL (up to 20 lines).",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Pseudocode.pro",
+        "emoji": "📝",
+        "url": "https://pseudocode.pro/",
+        "desc": "Write, check and practise pseudocode in the Cambridge International style. Specifically designed for Cambridge iGCSE and A-Level Computer Science students.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": true
+      }
+    ]
+  },
+  {
+    "category": "Early Years & Primary Computing",
+    "icon": "🧒",
+    "tools": [
+      {
+        "title": "AmberJr — ScratchJr Prep Tool",
+        "emoji": "🟠",
+        "url": "https://amberjr.vercel.app/",
+        "desc": "Create, edit and customise ScratchJr projects for class — add custom characters, backgrounds and sounds with a drag-and-drop scene editor. By Sethi De Clercq.",
+        "tag": "EYFS / KS1",
+        "isExternal": true
+      },
+      {
+        "title": "Secret Code Generator",
+        "emoji": "🔐",
+        "url": "https://sethideclercq.com/tools/secretcodegen.html",
+        "desc": "Create and crack secret codes and ciphers — a hands-on introduction to cryptography for young learners. Message Centre friendly. By Sethi De Clercq.",
+        "tag": "EYFS / KS1 / KS2",
+        "isExternal": true
+      },
+      {
+        "title": "Pixel Art Creator",
+        "emoji": "🎨",
+        "url": "https://sethideclercq.com/tools/MyCreations/mypixelart.html",
+        "desc": "Create pixel art on 8×8, 16×16 or 32×32 grids — introduces digital art, coordinates and grids. Export to PDF. By Sethi De Clercq.",
+        "tag": "EYFS / KS1 / KS2",
+        "isExternal": true
+      },
+      {
+        "title": "Paint Tool",
+        "emoji": "🖌️",
+        "url": "https://sethideclercq.com/tools/simplepaint.html",
+        "desc": "No-frills drawing tool for young learners — brush/eraser modes, adjustable sizes, and simple colour palette. Save as PNG. By Sethi De Clercq.",
+        "tag": "EYFS / KS1",
+        "isExternal": true
+      },
+      {
+        "title": "EduBlocks — Blocks to Text Made Easy",
+        "emoji": "🧱",
+        "url": "https://edublocks.org/",
+        "desc": "Free tool by Anaconda. Learn Python or HTML using familiar drag-and-drop blocks, then switch to text code — a perfect bridge from Scratch to real programming.",
+        "tag": "KS2 / KS3 / iGCSE",
+        "isExternal": true
+      }
+    ]
+  },
+  {
+    "category": "iGCSE Algorithms",
+    "icon": "📚",
+    "tools": [
+      {
+        "title": "Average",
+        "emoji": "📊",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py",
+        "desc": "Calculate the average of a list of numbers.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Bubble Sort",
+        "emoji": "🔃",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble",
+        "desc": "Classic bubble sort algorithm implementation.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Counting",
+        "emoji": "🔢",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py",
+        "desc": "Counting algorithm — tallying occurrences.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "For Loop",
+        "emoji": "🔁",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/forloop.py",
+        "desc": "A definite iteration example using a for loop.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "If / Else",
+        "emoji": "🔀",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py",
+        "desc": "Selection — branching logic with if/else.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Linear Search",
+        "emoji": "🔍",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py",
+        "desc": "Search through a list one item at a time.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Max & Min",
+        "emoji": "📈",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py",
+        "desc": "Find the maximum and minimum in a list.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Repeat Loop",
+        "emoji": "🔄",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py",
+        "desc": "Post-condition loop (repeat…until style).",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Totalling",
+        "emoji": "🧮",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py",
+        "desc": "Running total / accumulator pattern.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "While Loop",
+        "emoji": "🔁",
+        "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py",
+        "desc": "Pre-condition indefinite iteration with while.",
+        "tag": "iGCSE",
+        "isExternal": false
+      }
+    ]
+  },
+  {
+    "category": "Binary & Data",
+    "icon": "0️⃣",
+    "tools": [
+      {
+        "title": "Binary DMZ",
+        "emoji": "🎮",
+        "url": "https://jamesabela.github.io/binarydmz/",
+        "desc": "Space-themed binary game with 4 difficulty levels (Rookie → Insane) and 3 game modes: Unsigned, Two's Complement and Hexadecimal.",
+        "tag": "KS3 / iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Binary Conversion Tool",
+        "emoji": "🔢",
+        "url": "https://jamesabela.github.io/jsfun/binaryconvertor.html",
+        "desc": "Convert between decimal and binary step by step.",
+        "tag": "KS3 / iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Binary Quiz",
+        "emoji": "❓",
+        "url": "https://jamesabela.github.io/jsfun/binaryquiz.html",
+        "desc": "Test binary conversion knowledge with a quiz.",
+        "tag": "KS3 / iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Binary Timed Challenge",
+        "emoji": "⏱️",
+        "url": "https://sethideclercq.com/tools/8bitquest.html",
+        "desc": "Race against the clock on binary conversions. By Sethi De Clercq.",
+        "tag": "KS3 / iGCSE",
+        "isExternal": true
+      },
+      {
+        "title": "8-bit Binary Display",
+        "emoji": "💡",
+        "url": "https://sethideclercq.com/tools/binaryvisualiser.html",
+        "desc": "Visual 8-bit binary bulb display. By Sethi De Clercq.",
+        "tag": "KS3 / iGCSE",
+        "isExternal": true
+      },
+      {
+        "title": "Decimal → Binary Tool",
+        "emoji": "🔀",
+        "url": "https://sethideclercq.com/tools/switchmaster.html",
+        "desc": "Step-by-step decimal to binary conversion. By Sethi De Clercq.",
+        "tag": "KS3 / iGCSE",
+        "isExternal": true
+      },
+      {
+        "title": "Parity Byte",
+        "emoji": "✅",
+        "url": "https://jamesabela.github.io/jsfun/paritybyte.html",
+        "desc": "Understand how parity bits detect errors in data transmission.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Binary Snake",
+        "emoji": "🐍",
+        "url": "https://jamesabela.github.io/jsfun/binarysnake.html",
+        "desc": "Snake game with a binary challenge twist.",
+        "tag": "KS3 / iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "File Size Calculator",
+        "emoji": "📁",
+        "url": "https://ians.site/file/",
+        "desc": "Calculate file sizes for iGCSE questions. Student created.",
+        "tag": "iGCSE",
+        "isExternal": true
+      },
+      {
+        "title": "Binary Adder",
+        "emoji": "➕",
+        "url": "https://binaryadder.netlify.app/",
+        "desc": "Binary addition simulator by Matt King. Suitable for GCSE and A-level.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": true
+      }
+    ]
+  },
+  {
+    "category": "Networking",
+    "icon": "🌐",
+    "tools": [
+      {
+        "title": "Networx",
+        "emoji": "🛰️",
+        "url": "https://milesberry.net/networx/",
+        "desc": "Network simulator by Miles Berry. Useful for understanding topologies and data flow. Suitable for GCSE and A-level.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": true
+      }
+    ]
+  },
+  {
+    "category": "Diamond 9 — CS Topics",
+    "icon": "💎",
+    "tools": [
+      {
+        "title": "Computer Networks Components",
+        "emoji": "🌐",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Routers%2CSwitches%2CFirewalls%2CNICs%2CCables%2CModems%2CBridges%2CGateways%2CRepeaters",
+        "desc": "Routers, Switches, Firewalls, NICs, Cables, Modems, Bridges, Gateways, Repeaters",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Cybersecurity Threats",
+        "emoji": "🔐",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Phishing%2CMalware%2CSocial%2CRansomware%2CDDoS%2CPhysical%2CSpyware%2CAdware%2CKeyloggers",
+        "desc": "Phishing, Malware, Social Engineering, Ransomware, DDoS, Physical, Spyware, Adware, Keyloggers",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Ethical Issues in Computing",
+        "emoji": "⚖️",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Privacy%2CSecurity%2CProperty%2CDivide%2CAutomation%2COpen%2CTransparency%2CAccountability%2CConsent",
+        "desc": "Privacy, Security, Property, Divide, Automation, Open Source, Transparency, Accountability, Consent",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Hardware Components",
+        "emoji": "🖥️",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=CPU%2CRAM%2CStorage%2CMotherboard%2CPower%2CPeripheral%2CMonitor%2CKeyboard%2CMouse",
+        "desc": "CPU, RAM, Storage, Motherboard, Power Supply, Peripherals, Monitor, Keyboard, Mouse",
+        "tag": "KS3 / iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Key Algorithms",
+        "emoji": "🧠",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Sorting%2CSearching%2CGraph%2CDynamic%2CGreedy%2CRecursion%2CTree%2CBacktracking%2CHashing",
+        "desc": "Sorting, Searching, Graph, Dynamic, Greedy, Recursion, Tree, Backtracking, Hashing",
+        "tag": "A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Programming Concepts",
+        "emoji": "💻",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Variables%2CFunctions%2CLoops%2CAlgorithms%2CObjects%2CSyntax%2CData%2CPseudocode%2COperators",
+        "desc": "Variables, Functions, Loops, Algorithms, Objects, Syntax, Data, Pseudocode, Operators",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Programming Paradigms",
+        "emoji": "🏗️",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=OOP%2CProcedural%2CFunctional%2CEvent-Driven%2CLogic%2CDeclarative%2CImperative%2CConcurrent%2CAspect-Oriented",
+        "desc": "OOP, Procedural, Functional, Event-Driven, Logic, Declarative, Imperative, Concurrent, Aspect-Oriented",
+        "tag": "A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "SDLC Stages",
+        "emoji": "🔄",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Requirements%2CDesign%2CImplementation%2CTesting%2CDeployment%2CMaintenance%2CPlanning%2CReview%2CClosure",
+        "desc": "Requirements, Design, Implementation, Testing, Deployment, Maintenance, Planning, Review, Closure",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Types of Software Testing",
+        "emoji": "🧪",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Unit%2CIntegration%2CSystem%2CUAT%2CRegression%2CAlpha%2CBeta%2CLoad%2CStress",
+        "desc": "Unit, Integration, System, UAT, Regression, Alpha, Beta, Load, Stress",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      }
+    ]
+  },
+  {
+    "category": "Priority Triangle — CS Topics",
+    "icon": "🔺",
+    "tools": [
+      {
+        "title": "Security",
+        "emoji": "🔒",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Security&word2=Privacy&word3=Encryption",
+        "desc": "Security · Privacy · Encryption",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Scalability",
+        "emoji": "📈",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Scalability&word2=Performance&word3=Cost",
+        "desc": "Scalability · Performance · Cost",
+        "tag": "A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Ethics",
+        "emoji": "⚖️",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Ethics&word2=Bias&word3=Responsibility",
+        "desc": "Ethics · Bias · Responsibility",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Data",
+        "emoji": "🗄️",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Data&word2=Storage&word3=Integrity",
+        "desc": "Data · Storage · Integrity",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "AI",
+        "emoji": "🤖",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=AI&word2=Automation&word3=Intelligence",
+        "desc": "AI · Automation · Intelligence",
+        "tag": "A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Privacy",
+        "emoji": "👁️",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Privacy&word2=Consent&word3=Tracking",
+        "desc": "Privacy · Consent · Tracking",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Accessibility",
+        "emoji": "♿",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Accessibility&word2=Usability&word3=Inclusion",
+        "desc": "Accessibility · Usability · Inclusion",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Sustainability",
+        "emoji": "🌱",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Sustainability&word2=Energy&word3=Efficiency",
+        "desc": "Sustainability · Energy · Efficiency",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Cybercrime",
+        "emoji": "🦹",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Cybercrime&word2=Fraud&word3=Phishing",
+        "desc": "Cybercrime · Fraud · Phishing",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Open Source",
+        "emoji": "🤝",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=OpenSource&word2=Collaboration&word3=Transparency",
+        "desc": "Open Source · Collaboration · Transparency",
+        "tag": "A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Digital Divide",
+        "emoji": "🌍",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=DigitalDivide&word2=Access&word3=Education",
+        "desc": "Digital Divide · Access · Education",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Algorithms",
+        "emoji": "🧮",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Algorithms&word2=Optimization&word3=Complexity",
+        "desc": "Algorithms · Optimization · Complexity",
+        "tag": "A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Networking",
+        "emoji": "📡",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Networking&word2=Bandwidth&word3=Connectivity",
+        "desc": "Networking · Bandwidth · Connectivity",
+        "tag": "iGCSE",
+        "isExternal": false
+      }
+    ]
+  },
+  {
+    "category": "Link Two Sides — CS Quizzes",
+    "icon": "🔗",
+    "tools": [
+      {
+        "title": "Programming Constructs",
+        "emoji": "🔁",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSBsb29wIHRoYXQgcmVwZWF0cyBhIHNldCBvZiBpbnN0cnVjdGlvbnMgYSBrbm93biBudW1iZXIgb2YgdGltZXMuCkEgY29uZGl0aW9uIHRoYXQgY2hlY2tzIGlmIGEgc3RhdGVtZW50IGlzIHRydWUgb3IgZmFsc2UuCkEgbG9vcCB0aGF0IGNvbnRpbnVlcyB1bnRpbCBhIGNlcnRhaW4gY29uZGl0aW9uIGlzIG1ldC4KQSBjb21tYW5kIHRoYXQgYWxsb3dzIGEgcHJvZ3JhbSB0byBza2lwIGluc3RydWN0aW9ucyBpZiBhIGNvbmRpdGlvbiBpcyBmYWxzZS4=&right=Rm9yIGxvb3AKSWYgc3RhdGVtZW50CldoaWxlIGxvb3AKRWxzZSBzdGF0ZW1lbnQ=",
+        "desc": "Match: For loop, If statement, While loop, Else statement to their definitions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Logic Gates",
+        "emoji": "⚡",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=T3V0cHV0cyB0cnVlIG9ubHkgd2hlbiBib3RoIGlucHV0cyBhcmUgdHJ1ZS4KT3V0cHV0cyB0cnVlIHdoZW4gZWl0aGVyIGlucHV0IGlzIHRydWUuCk91dHB1dHMgdHJ1ZSB3aGVuIG5laXRoZXIgaW5wdXQgaXMgdHJ1ZS4KT3V0cHV0cyB0cnVlIG9ubHkgd2hlbiB0aGUgaW5wdXRzIGFyZSBkaWZmZXJlbnQu&right=QU5EIGdhdGUKT1IgZ2F0ZQpOT1IgZ2F0ZQpYT1IgZ2F0ZQ==",
+        "desc": "Match AND, OR, NOR, XOR gates to their truth-table descriptions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Data Storage",
+        "emoji": "💾",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=Vm9sYXRpbGUgbWVtb3J5IHRoYXQgc3RvcmVzIGRhdGEgdGVtcG9yYXJpbHkuCk5vbi12b2xhdGlsZSBzdG9yYWdlIGRldmljZSB0aGF0IHN0b3JlcyBkYXRhIHBlcm1hbmVudGx5LgpBIHBvcnRhYmxlIHN0b3JhZ2UgZGV2aWNlIHRoYXQgY2FuIGJlIGNvbm5lY3RlZCB2aWEgVVNCLgpEYXRhIHN0b3JhZ2UgbWVkaXVtIHRoYXQgdXNlcyBsYXNlcnMgdG8gcmVhZCBhbmQgd3JpdGUgZGF0YS4=&right=UkFNCkhhcmQgRGlzayBEcml2ZQpVU0IgRmxhc2ggRHJpdmUKT3B0aWNhbCBEaXNj",
+        "desc": "Match RAM, Hard Disk, USB Flash Drive, Optical Disc to their descriptions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Networking Concepts",
+        "emoji": "🌐",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSB1bmlxdWUgaWRlbnRpZmllciBhc3NpZ25lZCB0byBkZXZpY2VzIG9uIGEgbmV0d29yay4KVGhlIHN0YW5kYXJkIGNvbW11bmljYXRpb24gcHJvdG9jb2wgb2YgdGhlIGludGVybmV0LgpBIGRldmljZSB0aGF0IGZvcndhcmRzIGRhdGEgcGFja2V0cyBiZXR3ZWVuIG5ldHdvcmtzLgpBIGNvbXB1dGVyIHRoYXQgcHJvdmlkZXMgc2VydmljZXMgdG8gb3RoZXIgY29tcHV0ZXJzIG92ZXIgYSBuZXR3b3JrLg==&right=SVAgQWRkcmVzcwpUQ1AvSVAKUm91dGVyClNlcnZlcg==",
+        "desc": "Match IP Address, TCP/IP, Router, Server to their descriptions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Algorithm Basics",
+        "emoji": "📊",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSBzdGVwLWJ5LXN0ZXAgcHJvY2VkdXJlIGZvciBzb2x2aW5nIGEgcHJvYmxlbS4KQSBzdHJ1Y3R1cmUgdXNlZCB0byByZXByZXNlbnQgYSBkZWNpc2lvbi1tYWtpbmcgcHJvY2Vzcy4KQW4gb3JkZXJlZCBsaXN0IG9mIGVsZW1lbnRzLgpBIGJyYW5jaGluZyBwb2ludCBpbiBhIHByb2dyYW0gd2hlcmUgbXVsdGlwbGUgb3B0aW9ucyBhcmUgcG9zc2libGUu&right=QWxnb3JpdGhtCkZsb3djaGFydApBcnJheQpEZWNpc2lvbg==",
+        "desc": "Match Algorithm, Flowchart, Array, Decision to their descriptions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Pseudocode Statements",
+        "emoji": "📝",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSBzdGF0ZW1lbnQgdG8gY291bnQuCkEgc3RhdGVtZW50IHRvIHRvdGFsLgpBIHN0YXRlbWVudCB0byBzdGFydCBhIHByZS1jb25kaXRpb24gbG9vcC4KQSBzdGF0ZW1lbnQgdG8gc3RhcnQgYSBwb3N0LWNvbmRpdGlvbiBsb29wLg==&right=Rk9SIENvdW50IOKGkCAxIFRPIDEwClZhbHVlIOKGkCBWYWx1ZSArIE5ld1ZhbHVlCldISUxFIFZhbHVlID4gMTAgRE8KUkVQRUFU",
+        "desc": "Match FOR, totalling, WHILE, REPEAT to their pseudocode descriptions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Programming Concepts",
+        "emoji": "🔧",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=TGlicmFyeSByb3V0aW5lClN0cnVjdHVyZSBkaWFncmFtClByb2NlZHVyZQpGdW5jdGlvbg==&right=QSBzdGFuZGFyZCBzdWJyb3V0aW5lIHRoYXQgaXMgYXZhaWxhYmxlIGZvciBpbW1lZGlhdGUgdXNlLgpBbiBvdmVydmlldyBvZiBhIHByb2dyYW0gb3Igc3Vicm91dGluZS4KQSBzdWJyb3V0aW5lIHRoYXQgbWF5IG5vdCByZXR1cm4gYSB2YWx1ZS4KQSBzdWJyb3V0aW5lIHRoYXQgY2FuIGJlIHVzZWQgaW4gYW4gYXNzaWdubWVudCBzdGF0ZW1lbnQu",
+        "desc": "Match Library routine, Structure diagram, Procedure, Function to their definitions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Program Development Life Cycle",
+        "emoji": "🔄",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=RGV2ZWxvcCBhbiBhbGdvcml0aG0gdG8gc29sdmUgdGhlIHByb2JsZW0gYnkgdXNpbmcgc3RydWN0dXJlIGRpYWdyYW1zLCBmbG93Y2hhcnRzLCBvciBwc2V1ZG9jb2RlCkRldGVjdCBhbmQgZml4IHRoZSBlcnJvcnMgaW4gdGhlIHByb2dyYW0KSWRlbnRpZnkgdGhlIHByb2JsZW0gYW5kIGl0cyByZXF1aXJlbWVudHMKV3JpdGUgYW5kIGltcGxlbWVudCB0aGUgaW5zdHJ1Y3Rpb25zIHRvIHNvbHZlIHRoZSBwcm9ibGVt&right=RGVzaWduClRlc3RpbmcKQW5hbHlzaXMKQ29kaW5n",
+        "desc": "Match Design, Testing, Analysis, Coding to their PDLC stage descriptions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Pseudocode Keywords",
+        "emoji": "⌨️",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=U3RvcmVzIGRhdGEgaW4gYSBmaWxlClJldHJpZXZlcyBkYXRhIGZyb20gYSBmaWxlCkRpc3BsYXlzIGRhdGEgb24gYSBzY3JlZW4KRW50ZXJzIGRhdGEgZnJvbSBhIGtleWJvYXJk&right=V1JJVEUKUkVBRApPVVRQVVQKSU5QVVQ=",
+        "desc": "Match WRITE, READ, OUTPUT, INPUT to their pseudocode actions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Data Types",
+        "emoji": "🔢",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSB3aG9sZSBudW1iZXIKQSBzaW5nbGUgbGV0dGVyCkEgd29yZCBvciBwaHJhc2UKQSBudW1iZXIgd2l0aCB0d28gZGVjaW1hbCBwbGFjZXM=&right=SU5URUdFUgpDSEFSClNUUklORwpSRUFM",
+        "desc": "Match INTEGER, CHAR, STRING, REAL to their definitions.",
+        "tag": "iGCSE",
+        "isExternal": false
+      }
+    ]
+  },
+  {
+    "category": "Scratch Projects",
+    "icon": "🐱",
+    "tools": [
+      {
+        "title": "Cipher Wheel",
+        "emoji": "🔐",
+        "url": "https://scratch.mit.edu/projects/427196904/",
+        "desc": "Interactive Caesar cipher / substitution cipher wheel in Scratch.",
+        "tag": "KS3",
+        "isExternal": true
+      },
+      {
+        "title": "Von Neumann Architecture",
+        "emoji": "🖥️",
+        "url": "https://scratch.mit.edu/projects/621571362/",
+        "desc": "Visual model of the Von Neumann computer architecture.",
+        "tag": "iGCSE",
+        "isExternal": true
+      },
+      {
+        "title": "Right Hand Rule",
+        "emoji": "🔄",
+        "url": "https://scratch.mit.edu/projects/287065173/",
+        "desc": "Maze-solving using the right-hand rule algorithm.",
+        "tag": "KS3 / iGCSE",
+        "isExternal": true
+      }
+    ]
+  },
+  {
+    "category": "Challenges",
+    "icon": "🧗",
+    "tools": [
+      {
+        "title": "Python Challenges",
+        "emoji": "🏆",
+        "url": "https://pythonchallenges.weebly.com/",
+        "desc": "A collection of Python programming challenges. Entries are for GIS students only but challenges are open to all.",
+        "tag": "KS3 / iGCSE / A-Level",
+        "isExternal": true
+      },
+      {
+        "title": "Towers of Hanoi",
+        "emoji": "🗼",
+        "url": "https://hanoitowers.my.canva.site/",
+        "desc": "Classic recursive problem in an interactive visual format. By Sethi De Clercq.",
+        "tag": "All ages",
+        "isExternal": true
+      },
+      {
+        "title": "Find the Cell",
+        "emoji": "📊",
+        "url": "https://jamesabela.github.io/jsfun/cells.html",
+        "desc": "Spreadsheet cell reference game — surprisingly addictive! Builds data literacy skills.",
+        "tag": "KS3",
+        "isExternal": false
+      },
+      {
+        "title": "Linked List Puzzle",
+        "emoji": "🧠",
+        "url": "https://jamesabela.github.io/jsfun/linkedlist.html",
+        "desc": "Master memory addresses and pointers by correctly linking nodes in a chain. Visualise RAM and traversal.",
+        "tag": "A-Level",
+        "isExternal": false
+      }
+    ]
+  }
+]

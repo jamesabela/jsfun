@@ -1,0 +1,384 @@
+[
+  {
+    "category": "Question Tools",
+    "icon": "❓",
+    "tools": [
+      {
+        "title": "Link Two Sides",
+        "emoji": "🔗",
+        "url": "https://jamesabela.github.io/jsfun/linksides.html",
+        "desc": "Draw lines between matching items — a very common exam question type. Customisable with your own content.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "Sentence Ordering Quiz",
+        "emoji": "🔀",
+        "url": "https://jamesabela.github.io/jsfun/scramble.html",
+        "desc": "Order scrambled words, sentences or processes. Answers are encrypted so students can't guess from the URL.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "More Than / Less Than",
+        "emoji": "⚖️",
+        "url": "https://sethideclercq.com/tools/comparison.html",
+        "desc": "Comparison tool for numerical reasoning. By Sethi De Clercq.",
+        "tag": "Primary / KS3",
+        "isExternal": true
+      }
+    ]
+  },
+  {
+    "category": "Choosers & Pickers",
+    "icon": "🎰",
+    "tools": [
+      {
+        "title": "3D Lollipop Carousel",
+        "emoji": "🍭",
+        "url": "https://jamesabela.github.io/jsfun/lollipop.html",
+        "desc": "Choose random names, groups or questions with a beautiful 3D spinning carousel.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "Mega Spinner",
+        "emoji": "🌀",
+        "url": "https://jamesabela.github.io/jsfun/megaspinner.html",
+        "desc": "Spin the wheel to choose from large groups of names — perfect for bigger classes.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "Presentation Spinner",
+        "emoji": "👥",
+        "url": "https://jamesabela.github.io/jsfun/prezzispinner.html",
+        "desc": "Get two students presenting at once — great for peer assessment activities.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "Draggable Manipulatives",
+        "emoji": "🧲",
+        "url": "https://jamesabela.github.io/jsfun/manip.html",
+        "desc": "Drag and drop items for categorisation or grouping activities on a whiteboard.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "Number Flash Cards",
+        "emoji": "🔢",
+        "url": "https://sethideclercq.com/tools/number-gen.html",
+        "desc": "Random number flash card generator. By Sethi De Clercq.",
+        "tag": "Primary / KS3",
+        "isExternal": true
+      },
+      {
+        "title": "Debate Picker",
+        "emoji": "🗳️",
+        "url": "https://jamesabela.github.io/jsfun/debate.html",
+        "desc": "Pick a classroom debate topic and assign sides randomly.",
+        "tag": "KS3+",
+        "isExternal": false
+      }
+    ]
+  },
+  {
+    "category": "Discussion Tools",
+    "icon": "💬",
+    "tools": [
+      {
+        "title": "Priority Triangle",
+        "emoji": "🔺",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html",
+        "desc": "Which concept is most important? Editable words, dictionary look-up and image search built in.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "ThinkRank Studio",
+        "emoji": "🏆",
+        "url": "https://jamesabela.github.io/ThinkRankStudio/",
+        "desc": "Full ranking suite — Diamond 9, Diamond 5, Triangle, Line ranking, Podium and Elimination mode.",
+        "tag": "All ages",
+        "isExternal": true
+      },
+      {
+        "title": "Debate Tool",
+        "emoji": "🎙️",
+        "url": "https://jamesabela.github.io/jsfun/debate.html",
+        "desc": "Structure and run a classroom debate with this simple tool.",
+        "tag": "KS3+",
+        "isExternal": false
+      },
+      {
+        "title": "Interactive Mind Map",
+        "emoji": "🧠",
+        "url": "https://jamesabela.github.io/mindmap/",
+        "desc": "Visually organize your thoughts, brainstorm ideas, and map out concepts collaboratively.",
+        "tag": "All ages",
+        "isExternal": false
+      }
+    ]
+  },
+  {
+    "category": "Priority Triangle Topics",
+    "icon": "🔺",
+    "tools": [
+      { "title": "Cartoon Characters", "emoji": "🐭", "url": "triangle.html?word1=Mickey&word2=Donald&word3=Goofy", "desc": "Mickey • Donald • Goofy", "tag": "Primary / All ages", "isExternal": false },
+      { "title": "Food & Treats", "emoji": "🍕", "url": "triangle.html?word1=Pizza&word2=Burger&word3=Pasta", "desc": "Pizza • Burger • Pasta", "tag": "All ages", "isExternal": false },
+      { "title": "Careers & Jobs", "emoji": "👨‍⚕️", "url": "triangle.html?word1=Doctor&word2=Teacher&word3=Engineer", "desc": "Doctor • Teacher • Engineer", "tag": "All ages", "isExternal": false },
+      { "title": "Leadership", "emoji": "👔", "url": "triangle.html?word1=Strategy&word2=Execution&word3=Culture", "desc": "Strategy • Execution • Culture", "tag": "KS3 / KS4", "isExternal": false },
+      { "title": "Personal Dev", "emoji": "🧘", "url": "triangle.html?word1=Mind&word2=Body&word3=Spirit", "desc": "Mind • Body • Spirit", "tag": "All ages", "isExternal": false },
+      { "title": "Values", "emoji": "⚖️", "url": "triangle.html?word1=Liberty&word2=Equality&word3=Fraternity", "desc": "Liberty • Equality • Fraternity", "tag": "KS3 / KS4", "isExternal": false }
+    ]
+  },
+  {
+    "category": "Diamond 9 Topics",
+    "icon": "💎",
+    "tools": [
+      { "title": "Important Inventions", "emoji": "💡", "url": "diamond9.html?topic=Most+important+inventions+ever&words=Wheel,Printing+Press,Internet,Compass,Light+Bulb,Penicillin,Telephone,Steam+Engine,Airplane", "desc": "Wheel, Printing Press, Internet, Compass...", "tag": "All ages", "isExternal": false },
+      { "title": "Study Habits", "emoji": "📚", "url": "diamond9.html?topic=Best+study+habits&words=Pomodoro+Technique,Active+Recall,Spaced+Repetition,Quiet+Environment,Taking+Notes,Getting+Sleep,Practice+Tests,Mind+Mapping,Group+Study", "desc": "Pomodoro, Active Recall, Spaced Repetition...", "tag": "KS3 / KS4", "isExternal": false },
+      { "title": "Qualities of a Teacher", "emoji": "🍎", "url": "diamond9.html?topic=Qualities+of+a+good+teacher&words=Patience,Subject+Knowledge,Empathy,Communication,Engaging,Adaptability,Fairness,Enthusiasm,Listening+Skills", "desc": "Patience, Knowledge, Empathy, Engaging...", "tag": "All ages", "isExternal": false },
+      { "title": "Zombie Apocalypse", "emoji": "🧟", "url": "diamond9.html?topic=Skills+needed+in+a+zombie+apocalypse&words=Scavenging,First+Aid,Running+Fast,Melee+Combat,Stealth,Starting+Fires,Building+Shelter,Teamwork,Navigation", "desc": "Scavenging, First Aid, Stealth, Teamwork...", "tag": "All ages", "isExternal": false }
+    ]
+  },
+  {
+    "category": "Image Tools",
+    "icon": "🖼️",
+    "tools": [
+      {
+        "title": "Tile Reveal Game",
+        "emoji": "🎮",
+        "url": "https://jamesabela.github.io/jsfun/imgtiles.html",
+        "desc": "Reveal tiles one by one — who can guess the hidden image first? Great as a starter activity.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "Image Reveal Spotlight",
+        "emoji": "🔦",
+        "url": "https://jamesabela.github.io/jsfun/imgrev.html",
+        "desc": "Spotlight effect to slowly explore an image. Wonderful for younger children investigating a visual stimulus.",
+        "tag": "Primary / KS3",
+        "isExternal": false
+      },
+      {
+        "title": "Image Compare",
+        "emoji": "🔍",
+        "url": "https://jamesabela.github.io/jsfun/imgcomp.html",
+        "desc": "Overlay two images to compare them — great for Now & Then, or just \"which do you prefer?\"",
+        "tag": "All ages",
+        "isExternal": false
+      }
+    ]
+  },
+  {
+    "category": "Mathematics",
+    "icon": "🔢",
+    "tools": [
+      {
+        "title": "Pi Day in Space",
+        "emoji": "π",
+        "url": "https://jamesabela.github.io/piday/index.html",
+        "desc": "Interactive Pi Day activities including a quiz, Buffon's needle experiment, and the history of Pi.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "Ten Frame Tool",
+        "emoji": "🟡",
+        "url": "https://sethideclercq.com/tools/tenframes.html",
+        "desc": "Visual ten frames with 4 coloured counters. Choose 1 or 2 frames, horizontal or vertical. Toggle running totals on/off. By Sethi De Clercq.",
+        "tag": "EYFS / KS1",
+        "isExternal": true
+      },
+      {
+        "title": "Part-Whole Challenges",
+        "emoji": "🔵",
+        "url": "https://sethideclercq.com/tools/partwhole.html",
+        "desc": "Interactive part-whole model tool — visually explore fractions, addition and subtraction. Numbers up to 10, 20 or 50. By Sethi De Clercq.",
+        "tag": "EYFS / KS1",
+        "isExternal": true
+      },
+      {
+        "title": "Missing Number Grids",
+        "emoji": "🔍",
+        "url": "https://sethideclercq.com/tools/sheets/numbergrid.html",
+        "desc": "5×5 or 10×10 grids with missing numbers for students to fill in. Export to PDF for printing. By Sethi De Clercq.",
+        "tag": "KS1 / KS2",
+        "isExternal": true
+      }
+    ]
+  },
+  {
+    "category": "Word & Literacy",
+    "icon": "✍️",
+    "tools": [
+      {
+        "title": "Ice Maze — Sentence Builder",
+        "emoji": "❄️",
+        "url": "https://jamesabela.github.io/icemaze/",
+        "desc": "Navigate a maze collecting words in the right order to build sentences. Uses the Colourful Semantics approach — 8 progressive stages from simple to complex.",
+        "tag": "KS1 / KS2",
+        "isExternal": false
+      },
+      {
+        "title": "Word Cloud",
+        "emoji": "☁️",
+        "url": "https://jamesabela.github.io/jsfun/wordcloud.html",
+        "desc": "Quickly generate a word cloud from any text. Great for summarising themes in a text.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
+        "title": "Word Type Highlighter",
+        "emoji": "🏷️",
+        "url": "https://sethideclercq.com/tools/wordtype.html",
+        "desc": "Highlight nouns, verbs, adjectives and more with school colour codes. Build grammar awareness for young learners. By Sethi De Clercq.",
+        "tag": "KS1 / KS2",
+        "isExternal": true
+      },
+      {
+        "title": "Word Search Maker",
+        "emoji": "🔤",
+        "url": "https://sethideclercq.com/tools/wordsearch.html",
+        "desc": "Create custom word searches with your own word list. Multiple grid sizes, upper/lower case support, printable. By Sethi De Clercq.",
+        "tag": "KS1 / KS2",
+        "isExternal": true
+      },
+      {
+        "title": "Blackout Poetry Creator",
+        "emoji": "🖊️",
+        "url": "https://sethideclercq.com/tools/blackoutpoetry.html",
+        "desc": "Upload any text and use highlighting tools to create blackout poetry. Share or export your creations. By Sethi De Clercq.",
+        "tag": "KS2 / KS3",
+        "isExternal": true
+      },
+      {
+        "title": "Fun Writing Adventures",
+        "emoji": "✏️",
+        "url": "https://sethideclercq.com/tools/MyCreations/mywriting.html",
+        "desc": "Distraction-free writing tool for young learners to practise typing and build writing confidence. Export as a clean document. By Sethi De Clercq.",
+        "tag": "EYFS / KS1",
+        "isExternal": true
+      },
+      {
+        "title": "Story Dice",
+        "emoji": "🎲",
+        "url": "https://jamesabela.github.io/jsfun/storydice.html",
+        "desc": "Generate story prompts and story net images. Even saves images for you!",
+        "tag": "Primary / KS3",
+        "isExternal": false
+      },
+      {
+        "title": "Plot Device Chooser",
+        "emoji": "📖",
+        "url": "https://scratch.mit.edu/projects/2261416/fullscreen/",
+        "desc": "Scratch-based story plot device generator for creative writing inspiration.",
+        "tag": "Primary / KS3",
+        "isExternal": true
+      }
+    ]
+  },
+  {
+    "category": "Primary Creative & Fun",
+    "icon": "🎨",
+    "tools": [
+      {
+        "title": "Pixel Art Creator",
+        "emoji": "🖼️",
+        "url": "https://sethideclercq.com/tools/MyCreations/mypixelart.html",
+        "desc": "Create pixel art on 8×8, 16×16 or 32×32 grids. Introduces coordinates and digital art. Export to PDF. By Sethi De Clercq.",
+        "tag": "EYFS / KS1 / KS2",
+        "isExternal": true
+      },
+      {
+        "title": "Paint Tool",
+        "emoji": "🖌️",
+        "url": "https://sethideclercq.com/tools/simplepaint.html",
+        "desc": "Simple drawing tool with brush/eraser, adjustable sizes and basic colours. Save as PNG. By Sethi De Clercq.",
+        "tag": "EYFS / KS1",
+        "isExternal": true
+      },
+      {
+        "title": "How Many Sleeps?",
+        "emoji": "🎂",
+        "url": "https://sethideclercq.com/tools/howmanysleeps.html",
+        "desc": "Count down to birthdays and special events in days, sleeps or hours. Add names and dates, upload via CSV. By Sethi De Clercq.",
+        "tag": "EYFS / KS1",
+        "isExternal": true
+      },
+      {
+        "title": "Emoji Search & Sheet Coder",
+        "emoji": "😊",
+        "url": "https://sethideclercq.com/tools/emojisearch.html",
+        "desc": "Search emojis, get Unicode values and Google Sheets / Excel formulas. Click to copy. By Sethi De Clercq.",
+        "tag": "All ages",
+        "isExternal": true
+      },
+      {
+        "title": "Animal Soundboard",
+        "emoji": "🦁",
+        "url": "https://sethideclercq.com/tools/animalsoundboard/",
+        "desc": "Interactive soundboard with a variety of animal sounds. Perfect for primary storytelling and activities. By Sethi De Clercq.",
+        "tag": "Primary",
+        "isExternal": true
+      }
+    ]
+  },
+  {
+    "category": "Productivity",
+    "icon": "⏰",
+    "tools": [
+      {
+        "title": "Simple Timer",
+        "emoji": "⏱️",
+        "url": "https://sethideclercq.com/tools/simpletimer.html",
+        "desc": "Countdown timer with an end-of-time chime. Set minutes and seconds. Clean, minimal design for any whiteboard. By Sethi De Clercq.",
+        "tag": "All ages",
+        "isExternal": true
+      },
+      {
+        "title": "Pomodoro Timer",
+        "emoji": "🍅",
+        "url": "https://minnowfish.github.io/Pomodoro-Timer/",
+        "desc": "Classic 25/5 focus timer to help students manage their work time. Student created.",
+        "tag": "All ages",
+        "isExternal": true
+      },
+      {
+        "title": "Tutorial Friend",
+        "emoji": "📖",
+        "url": "https://tutorialfriend.vercel.app/",
+        "desc": "Create step-by-step visual guides and tutorials in seconds. Perfect for teachers building instructions. By Sethi De Clercq.",
+        "tag": "All ages",
+        "isExternal": true
+      },
+      {
+        "title": "EmeraldLens",
+        "emoji": "🎥",
+        "url": "https://emerald-lens.vercel.app/",
+        "desc": "Privacy-first video study tool. Capture timestamps, organize notes and export beautiful reports. By Sethi De Clercq.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": true
+      },
+      {
+        "title": "Supply & Demand",
+        "emoji": "📉",
+        "url": "https://jamesabela.github.io/jsfun/demandsupply.html",
+        "desc": "Interactive supply and demand curve display tool.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
+        "title": "Classroom Video Station",
+        "emoji": "📺",
+        "url": "https://sethideclercq.com/tools/classroomvideostation/",
+        "desc": "Play and manage classroom videos in a safe, distraction-free environment. By Sethi De Clercq.",
+        "tag": "All ages",
+        "isExternal": true
+      }
+    ]
+  }
+]

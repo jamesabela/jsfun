@@ -134,7 +134,7 @@
       display: block;
     }
 
-    /* ───── Section heading ───── */
+    /* ───── Section heading (Summary) ───── */
     .section-heading {
       display: flex;
       align-items: center;
@@ -145,11 +145,59 @@
       margin: 2.2rem 0 1rem;
       padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--primary-light);
+      cursor: pointer;
+      list-style: none; /* Hide default chevron */
+      position: relative;
+    }
+    
+    .section-heading::-webkit-details-marker {
+      display: none;
+    }
+
+    .section-heading:hover {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
     }
 
     .section-heading .icon {
       font-size: 1.4rem;
     }
+
+    .section-heading .chevron {
+      margin-left: auto;
+      width: 20px;
+      height: 20px;
+      position: relative;
+      transition: transform 0.3s ease;
+      opacity: 0.6;
+    }
+
+    .section-heading .chevron::before,
+    .section-heading .chevron::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 10px;
+      height: 2px;
+      background-color: currentColor;
+      border-radius: 2px;
+    }
+
+    .section-heading .chevron::before {
+      left: 0;
+      transform: rotate(45deg);
+    }
+
+    .section-heading .chevron::after {
+      right: 0;
+      transform: rotate(-45deg);
+    }
+
+    details[open] .section-heading .chevron {
+      transform: rotate(180deg);
+    }
+    
+    /* ───── Cards grid ───── */
 
     /* ───── Cards grid ───── */
     .cards {
@@ -373,412 +421,17 @@
   </div>
 
   <main>
-
-
-
-    <!-- ══════════════════════════════════════════════
-       TAB 2 — GENERAL TEACHING TOOLS
-  ══════════════════════════════════════════════════ -->
-    <div id="tab-general" class="tab-panel active">
-
-      <div class="section-heading"><span class="icon">❓</span> Question Tools</div>
-      <div class="cards">
-        <a class="card" href="https://jamesabela.github.io/jsfun/linksides.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🔗</span>
-          <div class="card-title">Link Two Sides</div>
-          <div class="card-desc">Draw lines between matching items — a very common exam question type. Customisable with
-            your own content.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/scramble.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🔀</span>
-          <div class="card-title">Sentence Ordering Quiz</div>
-          <div class="card-desc">Order scrambled words, sentences or processes. Answers are encrypted so students can't
-            guess from the URL.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/comparison.html" target="_blank" rel="noopener">
-          <span class="card-emoji">⚖️</span>
-          <div class="card-title">More Than / Less Than</div>
-          <div class="card-desc">Comparison tool for numerical reasoning. By Sethi De Clercq.</div>
-          <span class="card-tag">Primary / KS3</span>
-        </a>
-      </div>
-
-      <div class="section-heading"><span class="icon">🎰</span> Choosers &amp; Pickers</div>
-      <div class="cards">
-        <a class="card" href="https://jamesabela.github.io/jsfun/lollipop.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🍭</span>
-          <div class="card-title">3D Lollipop Carousel</div>
-          <div class="card-desc">Choose random names, groups or questions with a beautiful 3D spinning carousel.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/megaspinner.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🌀</span>
-          <div class="card-title">Mega Spinner</div>
-          <div class="card-desc">Spin the wheel to choose from large groups of names — perfect for bigger classes.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/prezzispinner.html" target="_blank" rel="noopener">
-          <span class="card-emoji">👥</span>
-          <div class="card-title">Presentation Spinner</div>
-          <div class="card-desc">Get two students presenting at once — great for peer assessment activities.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/manip.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🧲</span>
-          <div class="card-title">Draggable Manipulatives</div>
-          <div class="card-desc">Drag and drop items for categorisation or grouping activities on a whiteboard.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/number-gen.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🔢</span>
-          <div class="card-title">Number Flash Cards</div>
-          <div class="card-desc">Random number flash card generator. By Sethi De Clercq.</div>
-          <span class="card-tag">Primary / KS3</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/debate.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🗳️</span>
-          <div class="card-title">Debate Picker</div>
-          <div class="card-desc">Pick a classroom debate topic and assign sides randomly.</div>
-          <span class="card-tag">KS3+</span>
-        </a>
-      </div>
-
-      <div class="section-heading"><span class="icon">💬</span> Discussion Tools</div>
-      <div class="cards">
-        <a class="card" href="https://jamesabela.github.io/jsfun/triangle.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🔺</span>
-          <div class="card-title">Priority Triangle</div>
-          <div class="card-desc">Which concept is most important? Editable words, dictionary look-up and image search
-            built in.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card external" href="https://jamesabela.github.io/ThinkRankStudio/" target="_blank" rel="noopener">
-          <span class="card-emoji">🏆</span>
-          <div class="card-title">ThinkRank Studio</div>
-          <div class="card-desc">Full ranking suite — Diamond 9, Diamond 5, Triangle, Line ranking, Podium and
-            Elimination mode.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/debate.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🎙️</span>
-          <div class="card-title">Debate Tool</div>
-          <div class="card-desc">Structure and run a classroom debate with this simple tool.</div>
-          <span class="card-tag">KS3+</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/mindmap/" target="_blank" rel="noopener">
-          <span class="card-emoji">🧠</span>
-          <div class="card-title">Interactive Mind Map</div>
-          <div class="card-desc">Visually organize your thoughts, brainstorm ideas, and map out concepts
-            collaboratively.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-      </div>
-
-      <div class="section-heading"><span class="icon">🖼️</span> Image Tools</div>
-      <div class="cards">
-        <a class="card" href="https://jamesabela.github.io/jsfun/imgtiles.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🎮</span>
-          <div class="card-title">Tile Reveal Game</div>
-          <div class="card-desc">Reveal tiles one by one — who can guess the hidden image first? Great as a starter
-            activity.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/imgrev.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🔦</span>
-          <div class="card-title">Image Reveal Spotlight</div>
-          <div class="card-desc">Spotlight effect to slowly explore an image. Wonderful for younger children
-            investigating a visual stimulus.</div>
-          <span class="card-tag">Primary / KS3</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/imgcomp.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🔍</span>
-          <div class="card-title">Image Compare</div>
-          <div class="card-desc">Overlay two images to compare them — great for Now &amp; Then, or just "which do you
-            prefer?"</div>
-          <span class="card-tag">All ages</span>
-        </a>
-      </div>
-
-      <div class="section-heading"><span class="icon">🔢</span> Mathematics</div>
-      <div class="cards">
-        <a class="card" href="https://jamesabela.github.io/piday/index.html" target="_blank" rel="noopener">
-          <span class="card-emoji">π</span>
-          <div class="card-title">Pi Day in Space</div>
-          <div class="card-desc">Interactive Pi Day activities including a quiz, Buffon's needle experiment, and the
-            history of Pi.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/tenframes.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🟡</span>
-          <div class="card-title">Ten Frame Tool</div>
-          <div class="card-desc">Visual ten frames with 4 coloured counters. Choose 1 or 2 frames, horizontal or
-            vertical. Toggle running totals on/off. By Sethi De Clercq.</div>
-          <span class="card-tag">EYFS / KS1</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/partwhole.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🔵</span>
-          <div class="card-title">Part-Whole Challenges</div>
-          <div class="card-desc">Interactive part-whole model tool — visually explore fractions, addition and
-            subtraction. Numbers up to 10, 20 or 50. By Sethi De Clercq.</div>
-          <span class="card-tag">EYFS / KS1</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/sheets/numbergrid.html" target="_blank"
-          rel="noopener">
-          <span class="card-emoji">🔍</span>
-          <div class="card-title">Missing Number Grids</div>
-          <div class="card-desc">5×5 or 10×10 grids with missing numbers for students to fill in. Export to PDF for
-            printing. By Sethi De Clercq.</div>
-          <span class="card-tag">KS1 / KS2</span>
-        </a>
-      </div>
-
-      <div class="section-heading"><span class="icon">✍️</span> Word &amp; Literacy</div>
-      <div class="cards">
-        <a class="card" href="https://jamesabela.github.io/icemaze/" target="_blank" rel="noopener">
-          <span class="card-emoji">❄️</span>
-          <div class="card-title">Ice Maze — Sentence Builder</div>
-          <div class="card-desc">Navigate a maze collecting words in the right order to build sentences. Uses the
-            Colourful Semantics approach — 8 progressive stages from simple to complex.</div>
-          <span class="card-tag">KS1 / KS2</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/wordcloud.html" target="_blank" rel="noopener">
-          <span class="card-emoji">☁️</span>
-          <div class="card-title">Word Cloud</div>
-          <div class="card-desc">Quickly generate a word cloud from any text. Great for summarising themes in a text.
-          </div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/wordtype.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🏷️</span>
-          <div class="card-title">Word Type Highlighter</div>
-          <div class="card-desc">Highlight nouns, verbs, adjectives and more with school colour codes. Build grammar
-            awareness for young learners. By Sethi De Clercq.</div>
-          <span class="card-tag">KS1 / KS2</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/wordsearch.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🔤</span>
-          <div class="card-title">Word Search Maker</div>
-          <div class="card-desc">Create custom word searches with your own word list. Multiple grid sizes, upper/lower
-            case support, printable. By Sethi De Clercq.</div>
-          <span class="card-tag">KS1 / KS2</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/blackoutpoetry.html" target="_blank"
-          rel="noopener">
-          <span class="card-emoji">🖊️</span>
-          <div class="card-title">Blackout Poetry Creator</div>
-          <div class="card-desc">Upload any text and use highlighting tools to create blackout poetry. Share or export
-            your creations. By Sethi De Clercq.</div>
-          <span class="card-tag">KS2 / KS3</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/MyCreations/mywriting.html" target="_blank"
-          rel="noopener">
-          <span class="card-emoji">✏️</span>
-          <div class="card-title">Fun Writing Adventures</div>
-          <div class="card-desc">Distraction-free writing tool for young learners to practise typing and build writing
-            confidence. Export as a clean document. By Sethi De Clercq.</div>
-          <span class="card-tag">EYFS / KS1</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/storydice.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🎲</span>
-          <div class="card-title">Story Dice</div>
-          <div class="card-desc">Generate story prompts and story net images. Even saves images for you!</div>
-          <span class="card-tag">Primary / KS3</span>
-        </a>
-        <a class="card external" href="https://scratch.mit.edu/projects/2261416/fullscreen/" target="_blank"
-          rel="noopener">
-          <span class="card-emoji">📖</span>
-          <div class="card-title">Plot Device Chooser</div>
-          <div class="card-desc">Scratch-based story plot device generator for creative writing inspiration.</div>
-          <span class="card-tag">Primary / KS3</span>
-        </a>
-      </div>
-
-      <div class="section-heading"><span class="icon">🎨</span> Primary Creative &amp; Fun</div>
-      <div class="cards">
-        <a class="card external" href="https://sethideclercq.com/tools/MyCreations/mypixelart.html" target="_blank"
-          rel="noopener">
-          <span class="card-emoji">🖼️</span>
-          <div class="card-title">Pixel Art Creator</div>
-          <div class="card-desc">Create pixel art on 8×8, 16×16 or 32×32 grids. Introduces coordinates and digital art.
-            Export to PDF. By Sethi De Clercq.</div>
-          <span class="card-tag">EYFS / KS1 / KS2</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/simplepaint.html" target="_blank" rel="noopener">
-          <span class="card-emoji">🖌️</span>
-          <div class="card-title">Paint Tool</div>
-          <div class="card-desc">Simple drawing tool with brush/eraser, adjustable sizes and basic colours. Save as PNG.
-            By Sethi De Clercq.</div>
-          <span class="card-tag">EYFS / KS1</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/howmanysleeps.html" target="_blank"
-          rel="noopener">
-          <span class="card-emoji">🎂</span>
-          <div class="card-title">How Many Sleeps?</div>
-          <div class="card-desc">Count down to birthdays and special events in days, sleeps or hours. Add names and
-            dates, upload via CSV. By Sethi De Clercq.</div>
-          <span class="card-tag">EYFS / KS1</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/emojisearch.html" target="_blank" rel="noopener">
-          <span class="card-emoji">😊</span>
-          <div class="card-title">Emoji Search &amp; Sheet Coder</div>
-          <div class="card-desc">Search emojis, get Unicode values and Google Sheets / Excel formulas. Click to copy. By
-            Sethi De Clercq.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/animalsoundboard/" target="_blank" rel="noopener">
-          <span class="card-emoji">🦁</span>
-          <div class="card-title">Animal Soundboard</div>
-          <div class="card-desc">Interactive soundboard with a variety of animal sounds. Perfect for primary storytelling and activities. By Sethi De Clercq.</div>
-          <span class="card-tag">Primary</span>
-        </a>
-      </div>
-
-      <div class="section-heading"><span class="icon">⏰</span> Productivity</div>
-      <div class="cards">
-        <a class="card external" href="https://sethideclercq.com/tools/simpletimer.html" target="_blank" rel="noopener">
-          <span class="card-emoji">⏱️</span>
-          <div class="card-title">Simple Timer</div>
-          <div class="card-desc">Countdown timer with an end-of-time chime. Set minutes and seconds. Clean, minimal
-            design for any whiteboard. By Sethi De Clercq.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card external" href="https://minnowfish.github.io/Pomodoro-Timer/" target="_blank" rel="noopener">
-          <span class="card-emoji">🍅</span>
-          <div class="card-title">Pomodoro Timer</div>
-          <div class="card-desc">Classic 25/5 focus timer to help students manage their work time. Student created.
-          </div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card external" href="https://tutorialfriend.vercel.app/" target="_blank" rel="noopener">
-          <span class="card-emoji">📖</span>
-          <div class="card-title">Tutorial Friend</div>
-          <div class="card-desc">Create step-by-step visual guides and tutorials in seconds. Perfect for teachers
-            building instructions. By Sethi De Clercq.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-        <a class="card external" href="https://emerald-lens.vercel.app/" target="_blank" rel="noopener">
-          <span class="card-emoji">🎥</span>
-          <div class="card-title">EmeraldLens</div>
-          <div class="card-desc">Privacy-first video study tool. Capture timestamps, organize notes and export beautiful
-            reports. By Sethi De Clercq.</div>
-          <span class="card-tag">iGCSE / A-Level</span>
-        </a>
-        <a class="card" href="https://jamesabela.github.io/jsfun/demandsupply.html" target="_blank" rel="noopener">
-          <span class="card-emoji">📉</span>
-          <div class="card-title">Supply &amp; Demand</div>
-          <div class="card-desc">Interactive supply and demand curve display tool.</div>
-          <span class="card-tag">iGCSE / A-Level</span>
-        </a>
-        <a class="card external" href="https://sethideclercq.com/tools/classroomvideostation/" target="_blank" rel="noopener">
-          <span class="card-emoji">📺</span>
-          <div class="card-title">Classroom Video Station</div>
-          <div class="card-desc">Play and manage classroom videos in a safe, distraction-free environment. By Sethi De Clercq.</div>
-          <span class="card-tag">All ages</span>
-        </a>
-      </div>
-
-    </div><!-- /tab-general -->
-
+    <div id="tools-container">
+      <!-- Tools will be rendered here dynamically from index.json -->
+    </div>
   </main>
 
-  <footer>
-    <p>
-      Made with ❤️ for better thinking. If it helped you, support the project.
-      <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
-    </p>
-    <p style="margin-top:0.5rem;font-size:0.85rem;">
-      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
-      James Abela 2024
-    </p>
-  </footer>
-
+  <script src="renderer.js"></script>
   <script>
-    let currentTag = 'all';
-    let currentSearch = '';
-
-    function handleSearch(val) {
-      currentSearch = val;
-      updateFilters();
-    }
-
-    function filterByTag(tag, btn) {
-      currentTag = tag;
-      // Update button states
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      else {
-        // Find button by tag if btn is not provided (e.g. on reset)
-        const buttons = document.querySelectorAll('.filter-btn');
-        buttons.forEach(b => {
-          if (b.textContent === tag || (tag === 'all' && b.textContent === 'All')) b.classList.add('active');
-        });
-      }
-
-      updateFilters();
-    }
-
-    function updateFilters() {
-      const cards = document.querySelectorAll('.card');
-      
-      // Stemming words to handle plurals, tenses, etc.
-      const stem = (word) => {
-        return word.toLowerCase()
-          .replace(/(ing|ed|s|es)$/, '')
-          .replace(/(\w)\1$/, '$1'); // simplify double consonants (e.g. spinning -> spinn -> spin)
-      };
-
-      const queryStems = currentSearch.toLowerCase()
-        .split(/\s+/)
-        .filter(q => q.length > 0)
-        .map(q => stem(q));
-
-      cards.forEach(card => {
-        const title = card.querySelector('.card-title').textContent.toLowerCase();
-        const desc = card.querySelector('.card-desc').textContent.toLowerCase();
-        const tagSpan = card.querySelector('.card-tag');
-        const cardTag = tagSpan ? tagSpan.textContent : '';
-
-        // Tag matching logic
-        let tagMatch = false;
-        if (currentTag === 'all') {
-          tagMatch = true;
-        } else if (cardTag.includes('All ages')) {
-          tagMatch = true; // Always show All Ages items
-        } else if (currentTag === 'Primary') {
-          tagMatch = cardTag.includes('EYFS') || cardTag.includes('KS1') || cardTag.includes('KS2') || cardTag.includes('Primary');
-        } else if (currentTag === 'KS1' || currentTag === 'KS2' || currentTag === 'EYFS') {
-          tagMatch = cardTag.includes(currentTag) || cardTag.includes('Primary');
-        } else {
-          tagMatch = cardTag.includes(currentTag);
-        }
-
-        // Search matching logic (fuzzy/forgiving)
-        let searchMatch = true;
-        if (queryStems.length > 0) {
-          const content = title + " " + desc;
-          const contentWords = content.split(/\W+/).filter(w => w.length > 0);
-          const contentStems = contentWords.map(w => stem(w));
-          
-          searchMatch = queryStems.every(qStem => {
-            // Match if stem is found in content stems OR if content contains original query
-            return contentStems.some(cStem => cStem.includes(qStem) || qStem.includes(cStem)) || content.includes(qStem);
-          });
-        }
-
-        card.style.display = (tagMatch && searchMatch) ? 'flex' : 'none';
-      });
-
-      // Hide section headings if no cards are visible within them
-      document.querySelectorAll('.section-heading').forEach(heading => {
-        const sectionCards = heading.nextElementSibling;
-        if (sectionCards && sectionCards.classList.contains('cards')) {
-          const visibleCards = Array.from(sectionCards.querySelectorAll('.card')).filter(c => c.style.display !== 'none');
-          heading.style.display = visibleCards.length > 0 ? 'flex' : 'none';
-        }
-      });
-    }
+    // Initialize the tools from index.json
+    window.addEventListener('DOMContentLoaded', () => {
+      initTools('index.json');
+    });
   </script>
 
   <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
