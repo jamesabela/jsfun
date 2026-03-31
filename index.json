@@ -126,6 +126,14 @@
         "desc": "Kickstart your class with 100+ lateral thinking puzzles. Includes cryptic hints, full solutions, and a countdown timer.",
         "tag": "KS2 / KS3 / KS4",
         "isExternal": false
+      },
+      {
+        "title": "X The Haze",
+        "emoji": "🔥",
+        "url": "https://scratch.mit.edu/projects/119336460/",
+        "desc": "Understand the complexities of rainforest burning and environmental issues in this simulation. Can you avoid bribes and central government detection?",
+        "tag": "All ages",
+        "isExternal": true
       }
     ]
   },
