@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lateral Thinking Puzzles — Classroom Tool</title>
+  <meta name="description" content="Engaging lateral thinking puzzles for the classroom. Large fonts, clear display, and timer included.">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a6aff;
+      --primary-dark: #0047cc;
+      --primary-light: #e6f0ff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #f9fafb;
+      --white: #ffffff;
+      --radius: 1.5rem;
+      --shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    /* ───── Header & Navigation ───── */
+    header {
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover {
+      transform: translateX(-4px);
+    }
+
+    /* ───── Main Content ───── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ───── Timer Section ───── */
+    .timer-container {
+      background: var(--white);
+      padding: 1rem 2rem;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .timer-display {
+      font-size: 2.5rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: var(--primary-dark);
+      min-width: 120px;
+      text-align: center;
+      transition: color 0.3s;
+    }
+
+    .timer-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .timer-btn {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .timer-btn.active {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    .timer-action {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .timer-action:hover {
+      background: #dbeafe;
+    }
+
+    /* ───── Puzzle Card ───── */
+    .puzzle-card {
+      background: var(--white);
+      width: 100%;
+      border-radius: var(--radius);
+      padding: 3.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      text-align: center;
+      position: relative;
+      min-height: 450px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.5rem;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .scenario-text {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .puzzle-image {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 1rem;
+      margin: 0 auto;
+      display: none;
+    }
+
+    .info-box {
+      padding: 1.5rem;
+      border-radius: 1rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      display: none;
+      animation: slideIn 0.4s ease-out;
+    }
+
+    .clue-box {
+      background: #fef3c7; /* Amber/Yellow light */
+      color: #92400e; /* Amber dark */
+      border: 2px dashed #f59e0b;
+    }
+
+    .solution-box {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 1.5rem;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ───── Main Controls ───── */
+    .main-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 1rem;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .btn {
+      padding: 1.2rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-clue {
+      background: #fbbf24;
+      color: #78350f;
+    }
+
+    .btn-clue:hover {
+      background: #f59e0b;
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 106, 255, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--muted);
+      border: 2.5px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* ───── Footer ───── */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 960px;
+      margin: 2rem auto 0;
+      width: 100%;
+    }
+
+    footer a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    footer a.tea { color: #e73c7e; }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+      .main-controls { grid-template-columns: 1fr; }
+      .puzzle-card { padding: 2rem; min-height: 350px; }
+      .scenario-text { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="back-link">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Back to Tools
+    </a>
+    <div style="display: flex; gap: 1rem; align-items: center;">
+      <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 700; color: var(--muted); cursor: pointer; background: var(--white); padding: 0.6rem 1rem; border-radius: 999px; border: 1.5px solid var(--border); font-size: 0.9rem; transition: all 0.2s;">
+        <input type="checkbox" id="kidModeCheckbox" onchange="resetAndNext()" style="width: 1.2rem; height: 1.2rem; cursor: pointer;" checked>
+        👶 Kid Friendly
+      </label>
+      <button class="btn btn-secondary" onclick="toggleFullScreen()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.4rem;"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+        Full Screen
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="timer-container">
+      <div id="timerDisplay" class="timer-display">00:00</div>
+      <div class="timer-controls">
+        <button class="timer-btn" onclick="setTimer(60, this)">1m</button>
+        <button class="timer-btn" onclick="setTimer(120, this)">2m</button>
+        <button class="timer-btn" onclick="setTimer(180, this)">3m</button>
+        <button class="timer-btn" onclick="setTimer(300, this)">5m</button>
+        <button class="timer-btn active" onclick="setTimer(0, this)">Off</button>
+      </div>
+      <button id="timerToggle" class="timer-action" onclick="toggleTimer()">START</button>
+    </div>
+
+    <div class="puzzle-card" id="puzzleCard">
+      <div id="scenarioContent" class="scenario-text">Loading puzzles...</div>
+      <div id="deathTag" style="position: absolute; top: 1.5rem; right: 1.5rem; background: #fee2e2; color: #991b1b; padding: 0.4rem 0.8rem; border-radius: 999px; font-weight: 800; font-size: 0.8rem; display: none; align-items: center; gap: 0.4rem; border: 1px solid #fecaca;">
+        💀 Death Topic
+      </div>
+      <img id="puzzleImage" class="puzzle-image" src="" alt="Puzzle context">
+      <div id="clueBox" class="info-box clue-box"></div>
+      <div id="solutionBox" class="info-box solution-box"></div>
+    </div>
+
+    <div class="main-controls">
+      <button class="btn btn-clue" onclick="revealClue()">
+        💡 Reveal Clue (-30s)
+      </button>
+      <button class="btn btn-secondary" onclick="revealSolution()">
+        ✅ Check solution
+      </button>
+      <button class="btn btn-primary" onclick="loadNextPuzzle()">
+        ⏩ Skip to Next
+      </button>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      Made with ❤️ for better thinking. If it helped you, support the project.
+      <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.85rem;">
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
+      James Abela 2024
+    </p>
+  </footer>
+
+  <script>
+    let masterPuzzles = [];
+    let shuffledQueue = [];
+    let queueIndex = -1;
+    let currentPuzzle = null;
+    let timerInterval = null;
+    let timeRemaining = 0;
+    let isTimerRunning = false;
+    let clueRevealed = false;
+
+    // Fetch puzzles
+    async function init() {
+      try {
+        const response = await fetch('lateral.json');
+        masterPuzzles = await response.json();
+        resetAndNext();
+      } catch (error) {
+        document.getElementById('scenarioContent').textContent = "Failed to load puzzles. Please check the JSON file.";
+        console.error(error);
+      }
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function resetAndNext() {
+      const kidMode = document.getElementById('kidModeCheckbox').checked;
+      const filtered = kidMode ? masterPuzzles.filter(p => !p.containsDeath) : [...masterPuzzles];
+      
+      shuffledQueue = [...filtered];
+      shuffleArray(shuffledQueue);
+      queueIndex = 0;
+      loadNextPuzzle();
+    }
+
+    function loadNextPuzzle() {
+      if (shuffledQueue.length === 0) return;
+      
+      // Reshuffle if we hit the end
+      if (queueIndex >= shuffledQueue.length) {
+        shuffleArray(shuffledQueue);
+        queueIndex = 0;
+      }
+
+      currentPuzzle = shuffledQueue[queueIndex];
+      queueIndex++;
+
+      // Reset boxes
+      document.getElementById('solutionBox').style.display = 'none';
+      document.getElementById('clueBox').style.display = 'none';
+      document.getElementById('deathTag').style.display = 'none';
+      clueRevealed = false;
+      
+      // Update UI
+      document.getElementById('scenarioContent').textContent = currentPuzzle.scenario;
+      document.getElementById('clueBox').textContent = "Clue: " + currentPuzzle.clue;
+      document.getElementById('solutionBox').textContent = currentPuzzle.solution;
+      
+      if (currentPuzzle.containsDeath) {
+        document.getElementById('deathTag').style.display = 'flex';
+      }
+
+      const img = document.getElementById('puzzleImage');
+      if (currentPuzzle.image) {
+        img.src = currentPuzzle.image;
+        img.style.display = 'block';
+      } else {
+        img.style.display = 'none';
+      }
+    }
+
+    function revealClue() {
+      if (clueRevealed) return;
+      
+      const box = document.getElementById('clueBox');
+      box.style.display = 'block';
+      clueRevealed = true;
+
+      // Penalty logic
+      if (timeRemaining > 0) {
+        timeRemaining = Math.max(0, timeRemaining - 30);
+        updateTimerDisplay();
+        
+        // Brief visual flash for penalty
+        const display = document.getElementById('timerDisplay');
+        const oldColor = display.style.color;
+        display.style.color = '#ef4444'; // Red-500
+        display.style.transform = 'scale(1.1)';
+        setTimeout(() => { 
+          display.style.color = oldColor; 
+          display.style.transform = 'scale(1)';
+        }, 500);
+      }
+    }
+
+    function revealSolution() {
+      const box = document.getElementById('solutionBox');
+      box.style.display = 'block';
+    }
+
+    // Timer Logic
+    function setTimer(seconds, btn) {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      document.getElementById('timerToggle').textContent = "START";
+      
+      // Update active button state
+      document.querySelectorAll('.timer-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      timeRemaining = seconds;
+      updateTimerDisplay();
+    }
+
+    function toggleTimer() {
+      if (timeRemaining <= 0) return;
+      
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        document.getElementById('timerToggle').textContent = "START";
+      } else {
+        timerInterval = setInterval(() => {
+          if (timeRemaining > 0) {
+            timeRemaining--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            alert("Time's up!");
+            document.getElementById('timerToggle').textContent = "START";
+            isTimerRunning = false;
+          }
+        }, 1000);
+        document.getElementById('timerToggle').textContent = "PAUSE";
+      }
+      isTimerRunning = !isTimerRunning;
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeRemaining / 60);
+      const secs = timeRemaining % 60;
+      document.getElementById('timerDisplay').textContent = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Hide header/footer in full screen for a cleaner presentation
+    document.addEventListener('fullscreenchange', () => {
+      const header = document.querySelector('header');
+      const footer = document.querySelector('footer');
+      if (document.fullscreenElement) {
+        header.style.display = 'none';
+        footer.style.display = 'none';
+        document.querySelector('main').style.paddingTop = '5rem';
+      } else {
+        header.style.display = 'flex';
+        footer.style.display = 'block';
+        document.querySelector('main').style.paddingTop = '2rem';
+      }
+    });
+
+    window.onload = init;
+  </script>
+</body>
+</html>

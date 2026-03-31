@@ -118,29 +118,15 @@
         "desc": "Visually organize your thoughts, brainstorm ideas, and map out concepts collaboratively.",
         "tag": "All ages",
         "isExternal": false
+      },
+      {
+        "title": "Lateral Thinking Puzzles",
+        "emoji": "🧩",
+        "url": "https://jamesabela.github.io/jsfun/lateral.html",
+        "desc": "Kickstart your class with 100+ lateral thinking puzzles. Includes cryptic hints, full solutions, and a countdown timer.",
+        "tag": "KS2 / KS3 / KS4",
+        "isExternal": false
       }
-    ]
-  },
-  {
-    "category": "Priority Triangle Topics",
-    "icon": "🔺",
-    "tools": [
-      { "title": "Cartoon Characters", "emoji": "🐭", "url": "triangle.html?word1=Mickey&word2=Donald&word3=Goofy", "desc": "Mickey • Donald • Goofy", "tag": "Primary / All ages", "isExternal": false },
-      { "title": "Food & Treats", "emoji": "🍕", "url": "triangle.html?word1=Pizza&word2=Burger&word3=Pasta", "desc": "Pizza • Burger • Pasta", "tag": "All ages", "isExternal": false },
-      { "title": "Careers & Jobs", "emoji": "👨‍⚕️", "url": "triangle.html?word1=Doctor&word2=Teacher&word3=Engineer", "desc": "Doctor • Teacher • Engineer", "tag": "All ages", "isExternal": false },
-      { "title": "Leadership", "emoji": "👔", "url": "triangle.html?word1=Strategy&word2=Execution&word3=Culture", "desc": "Strategy • Execution • Culture", "tag": "KS3 / KS4", "isExternal": false },
-      { "title": "Personal Dev", "emoji": "🧘", "url": "triangle.html?word1=Mind&word2=Body&word3=Spirit", "desc": "Mind • Body • Spirit", "tag": "All ages", "isExternal": false },
-      { "title": "Values", "emoji": "⚖️", "url": "triangle.html?word1=Liberty&word2=Equality&word3=Fraternity", "desc": "Liberty • Equality • Fraternity", "tag": "KS3 / KS4", "isExternal": false }
-    ]
-  },
-  {
-    "category": "Diamond 9 Topics",
-    "icon": "💎",
-    "tools": [
-      { "title": "Important Inventions", "emoji": "💡", "url": "diamond9.html?topic=Most+important+inventions+ever&words=Wheel,Printing+Press,Internet,Compass,Light+Bulb,Penicillin,Telephone,Steam+Engine,Airplane", "desc": "Wheel, Printing Press, Internet, Compass...", "tag": "All ages", "isExternal": false },
-      { "title": "Study Habits", "emoji": "📚", "url": "diamond9.html?topic=Best+study+habits&words=Pomodoro+Technique,Active+Recall,Spaced+Repetition,Quiet+Environment,Taking+Notes,Getting+Sleep,Practice+Tests,Mind+Mapping,Group+Study", "desc": "Pomodoro, Active Recall, Spaced Repetition...", "tag": "KS3 / KS4", "isExternal": false },
-      { "title": "Qualities of a Teacher", "emoji": "🍎", "url": "diamond9.html?topic=Qualities+of+a+good+teacher&words=Patience,Subject+Knowledge,Empathy,Communication,Engaging,Adaptability,Fairness,Enthusiasm,Listening+Skills", "desc": "Patience, Knowledge, Empathy, Engaging...", "tag": "All ages", "isExternal": false },
-      { "title": "Zombie Apocalypse", "emoji": "🧟", "url": "diamond9.html?topic=Skills+needed+in+a+zombie+apocalypse&words=Scavenging,First+Aid,Running+Fast,Melee+Combat,Stealth,Starting+Fires,Building+Shelter,Teamwork,Navigation", "desc": "Scavenging, First Aid, Stealth, Teamwork...", "tag": "All ages", "isExternal": false }
     ]
   },
   {

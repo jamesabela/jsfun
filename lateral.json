@@ -1,0 +1,702 @@
+[
+  {
+    "id": 1,
+    "scenario": "A man jumps out of a 30-storey building and survives. How?",
+    "clue": "Consider which window he actually climbed out of.",
+    "solution": "He survived because he jumped from a window on the very first floor, not the top.",
+    "containsDeath": false
+  },
+  {
+    "id": 2,
+    "scenario": "Laura is restrained all night and cries out, but is happy in the morning. Why?",
+    "clue": "This type of restraint is meant to provide comfort, not punishment.",
+    "solution": "Laura is a baby who was being swaddled in a blanket to help her sleep through the night.",
+    "containsDeath": false
+  },
+  {
+    "id": 3,
+    "scenario": "A man must choose between a firing squad, fire, or tigers that haven't eaten for six months. Which is safest?",
+    "clue": "Think about the biology of a predator that goes without food for half a year.",
+    "solution": "The tiger room is the safest because tigers that haven't eaten for six months would already be dead.",
+    "containsDeath": false
+  },
+  {
+    "id": 4,
+    "scenario": "A missing child case is ignored by police. Why?",
+    "clue": "The victim in this case has four legs and a tail.",
+    "solution": "The 'child' in this case is actually a lost pet dog, which is why the police did not launch a human missing person investigation.",
+    "containsDeath": false
+  },
+  {
+    "id": 5,
+    "scenario": "A woman can only reach the 20th floor button unless it rains. Why?",
+    "clue": "She is carrying an object on rainy days that she doesn't have on sunny ones.",
+    "solution": "The woman is a dwarf; she can only reach the higher elevator buttons when she has her umbrella to press them with on rainy days.",
+    "containsDeath": false
+  },
+  {
+    "id": 6,
+    "scenario": "A man pushes his car to a hotel and is bankrupt. Why?",
+    "clue": "The car, the hotel, and the money are all part of a tabletop competition.",
+    "solution": "The man is playing a game of Monopoly and has just landed on a space with a hotel he cannot afford.",
+    "containsDeath": false
+  },
+  {
+    "id": 7,
+    "scenario": "A woman opens a door and dies, with no gunshots heard. Why?",
+    "clue": "She was thousands of feet above the ground when she did it.",
+    "solution": "The woman opened the emergency exit door of an airplane while it was still high in the sky.",
+    "containsDeath": true
+  },
+  {
+    "id": 8,
+    "scenario": "A father uses a hammer so his son cannot play video games. How?",
+    "clue": "The hammer was used to build something, not to destroy the console.",
+    "solution": "The father used the hammer to build a high shelf or a locked box to keep the video game console out of his son's reach.",
+    "containsDeath": false
+  },
+  {
+    "id": 9,
+    "scenario": "A woman cannot enter her own home after a party. Why?",
+    "clue": "Her friends were worried about her ability to drive or look after herself.",
+    "solution": "She was so intoxicated or tired that her friends took her car and house keys away for her own safety.",
+    "containsDeath": false
+  },
+  {
+    "id": 10,
+    "scenario": "A woman writes two words on 60 sheets every two weeks. Why?",
+    "clue": "Those two words are her unique legal identification on a financial document.",
+    "solution": "She is a business owner or accountant who is signing her name on the payroll checks for all her employees.",
+    "containsDeath": false
+  },
+  {
+    "id": 11,
+    "scenario": "A man escapes an island without swimming or rescue. How?",
+    "clue": "The path to the mainland is only revealed when the water retreats.",
+    "solution": "The island is connected to the mainland by a sandbar that only appears when the tide is very low.",
+    "containsDeath": false
+  },
+  {
+    "id": 12,
+    "scenario": "A woman pays for something but takes nothing. Why?",
+    "clue": "Her payment is a consequence of keeping something for too long.",
+    "solution": "She is paying a fine at the library for returning her books late.",
+    "containsDeath": false
+  },
+  {
+    "id": 13,
+    "scenario": "A stranger enters a car and the couple is happy. Why?",
+    "clue": "Wait... was that stranger already in the car before the ride started?",
+    "solution": "The couple was in a taxi on the way to the hospital when the woman gave birth to their new baby.",
+    "containsDeath": false
+  },
+  {
+    "id": 14,
+    "scenario": "A man asks for water, gets threatened, and says thank you. Why?",
+    "clue": "The man's problem was an involuntary physical sound that was cured by a sudden shock.",
+    "solution": "The man had the hiccups, and the bartender cured them by sudden fright when he pulled out the gun.",
+    "containsDeath": false
+  },
+  {
+    "id": 15,
+    "scenario": "A man trusts a woman daily but never meets her. Why?",
+    "clue": "She gives perfect directions but doesn't have a heartbeat.",
+    "solution": "The 'woman' is the automated voice of his GPS navigation system that guides him on his daily commute.",
+    "containsDeath": false
+  },
+  {
+    "id": 16,
+    "scenario": "A woman marries 10 men but is never divorced or widowed. How?",
+    "clue": "She only says 'I do' for the benefit of the cameras and a script.",
+    "solution": "She is an actress who has played the role of a bride in many different stage plays or movies.",
+    "containsDeath": false
+  },
+  {
+    "id": 17,
+    "scenario": "A man drives 200 mph past police but is not stopped. Why?",
+    "clue": "He is on a special track where such speeds are expected and encouraged.",
+    "solution": "He is a professional race car driver competing in an official race on a closed track.",
+    "containsDeath": false
+  },
+  {
+    "id": 18,
+    "scenario": "A woman books flights in different cities for the same time. Why?",
+    "clue": "The tickets she's buying aren't for herself; she's facilitating others' journeys.",
+    "solution": "She works as a travel agent and is booking flights for several different clients at once.",
+    "containsDeath": false
+  },
+  {
+    "id": 19,
+    "scenario": "A man steps on a diamond and breaks his leg. Why?",
+    "clue": "This 'diamond' is a rating for a very steep and icy slope.",
+    "solution": "He is skiing on a difficult 'Black Diamond' trail and had a serious accident.",
+    "containsDeath": false
+  },
+  {
+    "id": 20,
+    "scenario": "A man is surrounded by sharks but is safe. Why?",
+    "clue": "There is a very strong metal barrier between him and the predators.",
+    "solution": "He is a diver who is protected by a professional steel shark-proof cage.",
+    "containsDeath": false
+  },
+  {
+    "id": 21,
+    "scenario": "A man is shot repeatedly but survives. Why?",
+    "clue": "The 'bullets' are filled with neon-colored liquid, not lead.",
+    "solution": "He is playing a game of paintball with his friends and is only being hit by paint capsules.",
+    "containsDeath": false
+  },
+  {
+    "id": 22,
+    "scenario": "Voices are heard but only one person is present. Why?",
+    "clue": "The voices are coming from an electronic device designed for entertainment.",
+    "solution": "The person is alone in a room watching a television program or listening to a podcast.",
+    "containsDeath": false
+  },
+  {
+    "id": 23,
+    "scenario": "You must light one object first with one match. What is it?",
+    "clue": "Think about the very first step of the process before anything else can ignite.",
+    "solution": "You must strike and light the match itself before you can light anything else.",
+    "containsDeath": false
+  },
+  {
+    "id": 24,
+    "scenario": "A man born in 1955 dies at 75 in 1980. How?",
+    "clue": "Look closely at the numbers on the bedroom doors around him.",
+    "solution": "The numbers 1955 and 1980 are actually the room numbers in a hospital, not years in time.",
+    "containsDeath": true
+  },
+  {
+    "id": 25,
+    "scenario": "A woman takes something from a house and no one stops her. Why?",
+    "clue": "The items she's taking are things the residents no longer want or need.",
+    "solution": "She is a professional house cleaner who is removing the garbage from the premises.",
+    "containsDeath": false
+  },
+  {
+    "id": 26,
+    "scenario": "Two people drink the same drink, one dies. Why?",
+    "clue": "One of the drinkers has a hidden vulnerability to something perfectly safe for others.",
+    "solution": "One of the people had a severe allergic reaction to an ingredient in the drink that was harmless to the other.",
+    "containsDeath": true
+  },
+  {
+    "id": 27,
+    "scenario": "A man drives legally but is fined. Why?",
+    "clue": "His driving was fine, but he was facing the wrong way on a one-way path.",
+    "solution": "He was driving a car the wrong way down a one-way street, which is a traffic violation.",
+    "containsDeath": false
+  },
+  {
+    "id": 28,
+    "scenario": "Three switches control one bulb. How do you identify them?",
+    "clue": "Even if a light is off, it can still hold some energy in the form of warmth.",
+    "solution": "Turn one on for a few minutes, then off; the switch that corresponds to the warm bulb is the correct one.",
+    "containsDeath": false
+  },
+  {
+    "id": 29,
+    "scenario": "A tornado kills chickens but the total remains the same. Why?",
+    "clue": "The objects remain in the yard even if they are no longer breathing.",
+    "solution": "The chickens are still physically present on the farm, even though they are no longer alive.",
+    "containsDeath": false
+  },
+  {
+    "id": 30,
+    "scenario": "Someone snores and causes panic. Why?",
+    "clue": "The person snoring is supposed to be paying full attention to the road.",
+    "solution": "A passenger in a car fell asleep and started snoring, which startled the driver and nearly caused a crash.",
+    "containsDeath": false
+  },
+  {
+    "id": 31,
+    "scenario": "A man describes a murder but is not arrested. Why?",
+    "clue": "He is presenting a work of imagination to an audience who knows it isn't real.",
+    "solution": "He is an author who is reading a chapter from his latest mystery novel to an audience.",
+    "containsDeath": false
+  },
+  {
+    "id": 32,
+    "scenario": "A shooter dies shortly after firing. Why?",
+    "clue": "The vibrations of the blast triggered a deadly movement of snow from above.",
+    "solution": "The loud sound of the gunshot triggered a massive avalanche that buried the shooter.",
+    "containsDeath": true
+  },
+  {
+    "id": 33,
+    "scenario": "Lucy kills daily but no one reports it. Why?",
+    "clue": "She is a small hunter who brings her 'prizes' home to her human owners.",
+    "solution": "Lucy is a pet cat who catches and kills small mice or birds in the garden every day.",
+    "containsDeath": true
+  },
+  {
+    "id": 34,
+    "scenario": "A building explodes but no investigation occurs. Why?",
+    "clue": "The explosion was a carefully planned event to clear space for something new.",
+    "solution": "The building was scheduled for a controlled demolition by a professional engineering team.",
+    "containsDeath": false
+  },
+  {
+    "id": 35,
+    "scenario": "Two fish are found dead with broken glass. Why?",
+    "clue": "Their home was knocked over, depriving them of the water they need to live.",
+    "solution": "Their glass fishbowl was knocked over and shattered, leaving the fish without any water to breathe.",
+    "containsDeath": true
+  },
+  {
+    "id": 36,
+    "scenario": "A huge crash involves many vehicles but no injuries. Why?",
+    "clue": "This 'accident' is happening on a screen, and the cars are made of pixels.",
+    "solution": "The crash happened within a realistic racing simulation or a video game.",
+    "containsDeath": false
+  },
+  {
+    "id": 37,
+    "scenario": "A man dies in a field with a package. Why?",
+    "clue": "That 'package' was supposed to slow his fall from the sky.",
+    "solution": "The man was a skydiver whose parachute (the 'package') failed to open when he pulled the cord.",
+    "containsDeath": true
+  },
+  {
+    "id": 38,
+    "scenario": "A woman pulls a ring and both die. Why?",
+    "clue": "The 'ring' is a safety pin for a weapon designed to explode.",
+    "solution": "She pulled the pin on a live grenade while standing right next to another person.",
+    "containsDeath": true
+  },
+  {
+    "id": 39,
+    "scenario": "A murder happens in space with no footprints. Why?",
+    "clue": "In this environment, no one's feet ever actually touch the floor.",
+    "solution": "There are no footprints because everyone is floating in a state of weightlessness inside the space station.",
+    "containsDeath": true
+  },
+  {
+    "id": 40,
+    "scenario": "A woman weighs nothing then 130 pounds. Why?",
+    "clue": "She has just returned from a place where the force of gravity doesn't exist.",
+    "solution": "She is an astronaut who has just returned to Earth from a mission in gravity-free outer space.",
+    "containsDeath": false
+  },
+  {
+    "id": 41,
+    "scenario": "Men survive extreme heat. Why?",
+    "clue": "These 'men' are sweet treats made of dough and baked in an oven.",
+    "solution": "They are gingerbread men being baked in an oven; they are not real people.",
+    "containsDeath": false
+  },
+  {
+    "id": 42,
+    "scenario": "A poor man lives in luxury. Why?",
+    "clue": "Everything he has is provided by his parents, as he is far too young to work.",
+    "solution": "He is a small child who has no money of his own but lives with his very wealthy parents.",
+    "containsDeath": false
+  },
+  {
+    "id": 43,
+    "scenario": "A boy describes a murder but no one reacts. Why?",
+    "clue": "The story he's telling is part of a history lesson given at school.",
+    "solution": "The boy is giving a presentation in class about a historical event from a long time ago.",
+    "containsDeath": false
+  },
+  {
+    "id": 44,
+    "scenario": "Two sons are born same time but not twins. Why?",
+    "clue": "They share a birthday with at least one other sibling born with them.",
+    "solution": "They are part of a set of triplets, so they were born at the same time but aren't just two twins.",
+    "containsDeath": false
+  },
+  {
+    "id": 45,
+    "scenario": "People run from a restaurant when Sandy enters. Why?",
+    "clue": "Sandy is a name often given to a muscular, golden-maned predator.",
+    "solution": "Sandy is actually a dangerous wild animal, such as a lion, that has escaped from its enclosure.",
+    "containsDeath": false
+  },
+  {
+    "id": 46,
+    "scenario": "Coal, carrot, scarf appear on lawn. Why?",
+    "clue": "These items were the face and accessories of a winter figure that has melted away.",
+    "solution": "A snowman was built on the lawn during the winter, and these are the items left behind after it melted.",
+    "containsDeath": false
+  },
+  {
+    "id": 47,
+    "scenario": "A diver sees a shark and is not worried. Why?",
+    "clue": "The predator is swimming in a large tank behind a transparent safety wall.",
+    "solution": "The diver is visiting a public aquarium and is separated from the shark by a thick piece of glass.",
+    "containsDeath": false
+  },
+  {
+    "id": 48,
+    "scenario": "Three enter, two leave, room is empty. Why?",
+    "clue": "The third person didn't walk out because they aren't old enough to stand up.",
+    "solution": "Two adults walked out of the room, and the third person—a small baby—crawled out behind them.",
+    "containsDeath": false
+  },
+  {
+    "id": 49,
+    "scenario": "12 people take eggs but one remains. Why?",
+    "clue": "The last person took the container along with the object inside it.",
+    "solution": "The very last person picked up the egg while it was still inside the carton, taking both the egg and the container.",
+    "containsDeath": false
+  },
+  {
+    "id": 50,
+    "scenario": "A child eats all meals at 7 a.m. Why?",
+    "clue": "Crossing lines on the globe keeps the clock stuck at the same hour for every dish.",
+    "solution": "The child is on a very long transcontinental flight and the time zone changes make it appear to be 7 a.m. for every meal.",
+    "containsDeath": false
+  },
+  {
+    "id": 51,
+    "scenario": "A man is found dead in a locked room with a puddle of water. There is no furniture. What happened?",
+    "clue": "The platform he stood on simply turned into a liquid and left him hanging.",
+    "solution": "He committed suicide by standing on a large block of ice to reach a noose; the ice then melted into a puddle.",
+    "containsDeath": true
+  },
+  {
+    "id": 52,
+    "scenario": "A woman looks out of a window and screams. Moments later she is calm. Why?",
+    "clue": "She is performing a role in a cinematic production.",
+    "solution": "She is an actress filming a scene for a horror movie, and she was just following the script.",
+    "containsDeath": false
+  },
+  {
+    "id": 53,
+    "scenario": "A man shaves several times a day but still has a beard. Why?",
+    "clue": "He is performing the service for others, not for his own face.",
+    "solution": "The man works as a professional barber and shaves many different customers every single day.",
+    "containsDeath": false
+  },
+  {
+    "id": 54,
+    "scenario": "A man dies after drinking water, while another survives drinking the same glass. Why?",
+    "clue": "The harmful substance was trapped in a solid state that melted over time.",
+    "solution": "The poison was frozen inside the ice cubes, so the first person who drank quickly was safe before the ice melted.",
+    "containsDeath": true
+  },
+  {
+    "id": 55,
+    "scenario": "A man walks into a bar, orders a drink, takes one sip, and leaves satisfied. Why?",
+    "clue": "He was checking to see if his tongue's primary function had returned after a cold.",
+    "solution": "He had lost his sense of taste due to illness and just wanted to confirm that he could finally taste again.",
+    "containsDeath": false
+  },
+  {
+    "id": 56,
+    "scenario": "A man is found dead in a field with no injuries. Why?",
+    "clue": "He was caught out in the open during a sudden and violent electrical storm.",
+    "solution": "He was struck by a bolt of lightning during a sudden thunderstorm in the open field.",
+    "containsDeath": true
+  },
+  {
+    "id": 57,
+    "scenario": "A woman turns off the lights and goes to bed. Shortly after, hundreds of people die. Why?",
+    "clue": "Her beacon was the only thing preventing massive nautical disasters.",
+    "solution": "She is a lighthouse keeper who accidentally turned off the main beacon, causing several ships to crash into the rocks.",
+    "containsDeath": true
+  },
+  {
+    "id": 58,
+    "scenario": "A man opens a newspaper and immediately panics, then relaxes. Why?",
+    "clue": "A headline shared a name with a loved one, but the details didn't match.",
+    "solution": "He saw a headline about a disaster involving a person with his same name, but then realized it wasn't him.",
+    "containsDeath": false
+  },
+  {
+    "id": 59,
+    "scenario": "A woman is found dead next to a ladder and tools. Why?",
+    "clue": "Gravity did its work when she lost her balance while working high above the floor.",
+    "solution": "She was working on a high repair job and unfortunately fell from the top of the ladder.",
+    "containsDeath": true
+  },
+  {
+    "id": 60,
+    "scenario": "A man sits in a room with no windows and no doors, yet he is not trapped. Why?",
+    "clue": "He is connected to a network of people while sitting in front of a keyboard.",
+    "solution": "He is a computer user who is currently in a 'digital chat room' on the internet.",
+    "containsDeath": false
+  },
+  {
+    "id": 61,
+    "scenario": "A man runs away from a building carrying nothing, yet is relieved. Why?",
+    "clue": "The structure he was in was becoming a life-threatening inferno.",
+    "solution": "He was escaping from a dangerous situation inside the building, such as a fire or a gas leak.",
+    "containsDeath": false
+  },
+  {
+    "id": 62,
+    "scenario": "A woman sees a number and begins to cry. Why?",
+    "clue": "The sequence of digits was the final report on a patient's vital signs at the hospital.",
+    "solution": "The number represents a countdown at a hospital or a deeply personal and sad statistic.",
+    "containsDeath": false
+  },
+  {
+    "id": 63,
+    "scenario": "A man is found dead beside a phone. Why?",
+    "clue": "He was in the middle of dialing emergency services when his body failed him.",
+    "solution": "He suffered a fatal medical emergency while he was in the middle of trying to call for help.",
+    "containsDeath": true
+  },
+  {
+    "id": 64,
+    "scenario": "A woman enters a room, switches on a light, and immediately leaves smiling. Why?",
+    "clue": "A quick visual check was all she needed to see that everyone was safe and sound.",
+    "solution": "She was checking on a sleeping child or a pet to make sure they were resting peacefully.",
+    "containsDeath": false
+  },
+  {
+    "id": 65,
+    "scenario": "A man is found dead in a room with broken glass and water. Why?",
+    "clue": "A massive glass container for several small aquatic creatures shattered suddenly.",
+    "solution": "He was cleaning a large, heavy aquarium when it shattered, leading to a fatal accident.",
+    "containsDeath": true
+  },
+  {
+    "id": 66,
+    "scenario": "A man takes off his shoes before climbing a ladder. Why?",
+    "clue": "He was trying to keep a very expensive and shiny floor perfectly clean.",
+    "solution": "The ladder was placed on a very delicate floor or surface that he didn't want to scratch with his shoes.",
+    "containsDeath": false
+  },
+  {
+    "id": 67,
+    "scenario": "A woman looks at a mirror and laughs. Why?",
+    "clue": "The face staring back was wearing an absurd accessory she'd just put on.",
+    "solution": "She tried on a funny costume or a silly hat and was amused by her own reflection.",
+    "containsDeath": false
+  },
+  {
+    "id": 68,
+    "scenario": "A man is found dead in a forest with no signs of struggle. Why?",
+    "clue": "His heart simply stopped while he was enjoying a walk in nature.",
+    "solution": "He died naturally or from exposure.",
+    "containsDeath": true
+  },
+  {
+    "id": 69,
+    "scenario": "A woman hears a noise and immediately smiles. Why?",
+    "clue": "It's the specific metallic sound of a loved one arriving at the front door.",
+    "solution": "She heard the familiar sound of her husband's key in the front door, signaling he was home.",
+    "containsDeath": false
+  },
+  {
+    "id": 70,
+    "scenario": "A man is found dead in water with dry clothes. Why?",
+    "clue": "He didn't drown; the water only arrived after his final breath was taken.",
+    "solution": "He died on dry land, and a sudden flood or high tide moved the water level up to his body afterward.",
+    "containsDeath": true
+  },
+  {
+    "id": 71,
+    "scenario": "A man enters a room and knows immediately something is wrong. Why?",
+    "clue": "His trained eye noticed a tiny detail that shouldn't be there.",
+    "solution": "He is a professional detective who noticed a single, crucial piece of evidence out of place.",
+    "containsDeath": false
+  },
+  {
+    "id": 72,
+    "scenario": "A woman removes a battery and smiles. Why?",
+    "clue": "The silencing of a relentless, high-pitched chirping sound gave her great relief.",
+    "solution": "She finally turned off a broken smoke detector that had been beeping loudly for hours.",
+    "containsDeath": false
+  },
+  {
+    "id": 73,
+    "scenario": "A man is found dead next to food he did not eat. Why?",
+    "clue": "A suspicious smell or color made him choose hunger over a potential trap.",
+    "solution": "He realized the food was tainted or poisoned and chose to starve rather than eat it.",
+    "containsDeath": true
+  },
+  {
+    "id": 74,
+    "scenario": "A woman reads a message and runs. Why?",
+    "clue": "The text was a warning that her town's sirens were about to go off.",
+    "solution": "The message was an emergency alert notifying her that she needed to evacuate her home immediately.",
+    "containsDeath": false
+  },
+  {
+    "id": 75,
+    "scenario": "A man is found dead in a chair with no injuries. Why?",
+    "clue": "The end came suddenly and quietly while he was sitting in his living room.",
+    "solution": "He suffered a quiet and sudden heart attack while he was relaxing in his favorite armchair.",
+    "containsDeath": true
+  },
+  {
+    "id": 76,
+    "scenario": "A woman hears music and cries. Why?",
+    "clue": "The melody is a direct link to a memory of someone special she misses.",
+    "solution": "The song reminded her deeply of a loved one who is no longer with her.",
+    "containsDeath": false
+  },
+  {
+    "id": 77,
+    "scenario": "A man is found dead near a road. Why?",
+    "clue": "He was a pedestrian who met a tragic end when a car failed to see him.",
+    "solution": "He was involved in a roadside accident where he was struck by a passing vehicle.",
+    "containsDeath": true
+  },
+  {
+    "id": 78,
+    "scenario": "A woman closes a book and smiles. Why?",
+    "clue": "The story's protagonist reached a beautiful and happy conclusion.",
+    "solution": "She just finished reading the final chapter of a very satisfying and heartwarming story.",
+    "containsDeath": false
+  },
+  {
+    "id": 79,
+    "scenario": "A man is found dead with no wounds in a sealed room. Why?",
+    "clue": "Every single atom of oxygen in the tiny, airtight space was eventually used up.",
+    "solution": "The room was completely airtight, and he slowly ran out of oxygen to breathe.",
+    "containsDeath": true
+  },
+  {
+    "id": 80,
+    "scenario": "A woman sees someone and laughs unexpectedly. Why?",
+    "clue": "The person she bumped into was wearing an outfit meant to make people giggle.",
+    "solution": "The person she saw was wearing a very clever and funny costume that caught her off guard.",
+    "containsDeath": false
+  },
+  {
+    "id": 81,
+    "scenario": "A man is found dead beside a rope but did not hang himself. Why?",
+    "clue": "The rope was attached to a massive weight that fell when the cord snapped.",
+    "solution": "The rope was part of a heavy lifting system that snapped and caused a fatal work accident.",
+    "containsDeath": true
+  },
+  {
+    "id": 82,
+    "scenario": "A woman turns on a light and feels relieved. Why?",
+    "clue": "The visible corners of the room proved that her imagination had been tricking her.",
+    "solution": "She was afraid of what might be in the shadows and was relieved to see the room was safe.",
+    "containsDeath": false
+  },
+  {
+    "id": 83,
+    "scenario": "A man is found dead next to a glass. Why?",
+    "clue": "The liquid he swallowed wasn't the refreshing drink he thought it was.",
+    "solution": "The glass contained a highly toxic substance that he had accidentally or purposely consumed.",
+    "containsDeath": true
+  },
+  {
+    "id": 84,
+    "scenario": "A woman hears a voice and smiles. Why?",
+    "clue": "It's the sound of a person from her past she never expected to hear again.",
+    "solution": "She heard the voice of an old friend she hadn't seen in many years calling out her name.",
+    "containsDeath": false
+  },
+  {
+    "id": 85,
+    "scenario": "A man is found dead in a car. Why?",
+    "clue": "The lack of ventilation in the enclosed shed made the exhaust fumes lethal.",
+    "solution": "He died from carbon monoxide poisoning while sitting in his car inside a closed garage.",
+    "containsDeath": true
+  },
+  {
+    "id": 86,
+    "scenario": "A woman opens a letter and laughs. Why?",
+    "clue": "The paper she's holding is covered in humorous anecdotes and jokes from a friend.",
+    "solution": "The letter contained a very funny joke or a lighthearted story from a distant relative.",
+    "containsDeath": false
+  },
+  {
+    "id": 87,
+    "scenario": "A man is found dead beside a cliff. Why?",
+    "clue": "A momentary slip on the rocky edge led to a long and fatal drop.",
+    "solution": "He lost his footing while hiking near the edge and accidentally fell up to his death.",
+    "containsDeath": true
+  },
+  {
+    "id": 88,
+    "scenario": "A woman hears a bell and smiles. Why?",
+    "clue": "That chime means she's free to pack her things and leave the office.",
+    "solution": "The bell signaled the end of a long workday, and she was happy to finally go home.",
+    "containsDeath": false
+  },
+  {
+    "id": 89,
+    "scenario": "A man is found dead in a house with no marks. Why?",
+    "clue": "He was very old, and his biological clock simply reached its final second.",
+    "solution": "He was an elderly man who passed away peacefully in his sleep from natural causes.",
+    "containsDeath": true
+  },
+  {
+    "id": 90,
+    "scenario": "A woman sees a message and relaxes. Why?",
+    "clue": "The text confirmed that the long, dangerous journey of her friends had ended well.",
+    "solution": "The message was a confirmation that her family had arrived safely at their destination.",
+    "containsDeath": false
+  },
+  {
+    "id": 91,
+    "scenario": "A man is found dead beside water with no injuries. Why?",
+    "clue": "He was unable to stay afloat after falling in, despite there being no physical damage to his body.",
+    "solution": "He fell into deep water and unfortunately could not swim back to the shore.",
+    "containsDeath": true
+  },
+  {
+    "id": 92,
+    "scenario": "A woman reads something and laughs. Why?",
+    "clue": "The ink on the page forms a series of clever and funny scenarios.",
+    "solution": "She is reading a comic book or a humorous column in a local magazine.",
+    "containsDeath": false
+  },
+  {
+    "id": 93,
+    "scenario": "A man is found dead next to food. Why?",
+    "clue": "His body's immune system reacted violently to a tiny trace of something in his meal.",
+    "solution": "He had a very severe allergic reaction to a specific ingredient in the meal he just ate.",
+    "containsDeath": true
+  },
+  {
+    "id": 94,
+    "scenario": "A woman hears a sound and smiles. Why?",
+    "clue": "The intricate chirps matching the one she'd been tracking were finally nearby.",
+    "solution": "She heard the beautiful song of a rare bird that she had been trying to find for weeks.",
+    "containsDeath": false
+  },
+  {
+    "id": 95,
+    "scenario": "A man is found dead with no external injuries. Why?",
+    "clue": "Something deep inside his body went wrong, and no outside force was involved.",
+    "solution": "He died from an undiagnosed internal medical condition that suddenly worsened.",
+    "containsDeath": true
+  },
+  {
+    "id": 96,
+    "scenario": "A woman sees something unexpected and laughs. Why?",
+    "clue": "She walked into her darkened home to find it suddenly filled with cheering friends.",
+    "solution": "She came home to a surprise party and was delighted by the shock of seeing all her friends.",
+    "containsDeath": false
+  },
+  {
+    "id": 97,
+    "scenario": "A man is found dead in a field with no clues. Why?",
+    "clue": "Running such a long distance in the midday sun proved too much for his heart.",
+    "solution": "He was an endurance runner who suffered from extreme heatstroke while training in the hot sun.",
+    "containsDeath": true
+  },
+  {
+    "id": 98,
+    "scenario": "A woman opens a door and smiles. Why?",
+    "clue": "The person standing on the porch was someone she hadn't seen in many, many years.",
+    "solution": "She opened the door to find her long-lost brother standing there to surprise her.",
+    "containsDeath": false
+  },
+  {
+    "id": 99,
+    "scenario": "A man is found dead beside a building. Why?",
+    "clue": "He was suspended high on the wall when his equipment unexpectedly failed.",
+    "solution": "He was a window washer who fell when one of his safety harnesses unexpectedly broke.",
+    "containsDeath": true
+  },
+  {
+    "id": 100,
+    "scenario": "A woman hears news and smiles. Why?",
+    "clue": "A jury or a panel has just decided that her work was the best in her field.",
+    "solution": "She just received news that she won a prestigious award she had been nominated for.",
+    "containsDeath": false
+  }
+]
