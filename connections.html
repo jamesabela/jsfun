@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connections Grid Maker</title>
+    <link rel="icon" href="connections-icon.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <style>
         :root {
@@ -97,6 +98,17 @@
         .solved-group .connection-words { font-weight: normal; }
         .play-controls { text-align: center; }
         .mistakes { text-align: center; font-size: 1.1em; color: #d9534f; margin-bottom: 10px; }
+        .timer-pill { background: #f0f4f8; border: 1px solid #d1d5db; color: #374151; font-weight: bold; border-radius: 6px; padding: 6px 12px; cursor: pointer; transition: all 0.2s; }
+        .timer-pill:hover { background: #e2e8f0; }
+        .timer-pill.active { background: #4a90e2; color: #fff; border-color: #4a90e2; }
+        
+        #playTimerDisplay { max-width: 400px; margin: 15px auto; text-align: center; }
+        #timerBarWrap { background: #e2e8f0; border-radius: 12px; height: 26px; border: 1px solid #cbd5e1; position: relative; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        #timerBarFill { background: #4a90e2; height: 100%; width: 100%; transition: width 1s linear, background-color 0.5s; }
+        #timerText { position: absolute; top: 0; left: 0; right: 0; line-height: 26px; font-size: 0.95em; font-weight: bold; font-family: monospace; color: #1e293b; text-shadow: 0 0 3px rgba(255,255,255,0.8); }
+        #timerBarWrap.danger #timerBarFill { animation: pulseWarning 1s infinite alternate; }
+        @keyframes pulseWarning { from { opacity: 1; } to { opacity: 0.6; } }
+        
         footer { text-align: center; padding: 2rem; color: #666; font-size: 0.9em; margin-top: 40px; border-top: 1px solid #ddd; }
         footer a { color: #4a90e2; text-decoration: none; }
         footer a.tea { color: #e91e63; font-weight: bold; }
@@ -120,6 +132,7 @@
             <h1 style="color:#333; margin-bottom:10px;">Connections Grid Maker</h1>
             <p>Create dynamic puzzles where students group 16 interrelated terms into four mystery categories. 
             Use the tools below to design your grid, test it, and generate a secure Student Link that instantly launches the activity!</p>
+            <a href="https://chatgpt.com/g/g-69cca631dc6481919b2350909208a582-connections-puzzle-maker" target="_blank" rel="noopener" style="display:inline-block; margin-top:10px; padding:8px 16px; background:#10a37f; color:#fff; text-decoration:none; border-radius:4px; font-weight:bold; font-size:0.9em; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">✨ Generate Puzzles with AI</a>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -158,9 +171,27 @@
                 <input type="checkbox" id="allowEditInput" onchange="updateData()"> 
                 Allow students to return to Edit Mode
             </label>
-            <small style="color:#555; display:block; margin-top:4px;">
+            <small style="color:#555; display:block; margin-top:4px; margin-bottom:10px;">
                 Uncheck to lock the activity in Play Mode when you share the link.
             </small>
+
+            <!-- Timer Settings UI -->
+            <div style="border-top:1px solid #ccc; padding-top:10px; display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
+                <strong>Timer:</strong>
+                <input type="number" id="timerMinsInput" placeholder="Mins" min="0" onchange="updateData()" style="width:70px; padding:6px; border-radius:6px; border:1px solid #ccc; font-size:1em;">
+                <div style="display:flex; gap:5px;">
+                    <button class="timer-pill" onclick="setTimerPreset(0)">Untimed</button>
+                    <button class="timer-pill" onclick="setTimerPreset(3)">3</button>
+                    <button class="timer-pill" onclick="setTimerPreset(5)">5</button>
+                    <button class="timer-pill" onclick="setTimerPreset(7)">7</button>
+                    <button class="timer-pill" onclick="setTimerPreset(10)">10</button>
+                    <button class="timer-pill" onclick="setTimerPreset(15)">15</button>
+                </div>
+                <label style="margin-left:auto; cursor:pointer; font-weight:bold; color:#e91e63;">
+                    <input type="checkbox" id="timerAutoInput" onchange="updateData()"> 
+                    Auto-start
+                </label>
+            </div>
         </div>
 
         <div id="groupsContainer">
@@ -200,6 +231,16 @@
         
         <div class="mistakes" id="mistakesDisplay"></div>
         
+        <div id="playTimerDisplay" style="display:none;">
+            <div id="timerBarWrap">
+                <div id="timerBarFill"></div>
+                <div id="timerText">00:00</div>
+            </div>
+            <div style="margin-top:8px;">
+                <button id="btnStartTimer" onclick="startTimer()" style="font-size:0.8em; padding:4px 12px; border-radius:6px;">Start Timer</button>
+            </div>
+        </div>
+        
         <div id="playGrid" class="grid-container">
             <!-- Cards rendered here -->
         </div>
@@ -219,6 +260,8 @@
         inst: "",
         forPoints: true,
         allowEdit: true,
+        timerMins: 0,
+        timerAuto: false,
         groups: [
             { id: 0, title: "", words: ["", "", "", ""], color: "#fcdcae" }, // Yellow
             { id: 1, title: "", words: ["", "", "", ""], color: "#b5e3a8" }, // Green
@@ -336,19 +379,25 @@
         document.getElementById('titleInput').value = appData.title;
         document.getElementById('instInput').value = appData.inst;
         let forPointsEl = document.getElementById('forPointsInput');
-        if (forPointsEl) forPointsEl.checked = appData.forPoints;
-        let allowEditEl = document.getElementById('allowEditInput');
-        if (allowEditEl) allowEditEl.checked = appData.allowEdit;
+        document.getElementById('forPointsInput').checked = appData.forPoints;
+        document.getElementById('allowEditInput').checked = appData.allowEdit;
+        document.getElementById('timerMinsInput').value = appData.timerMins > 0 ? appData.timerMins : "";
+        document.getElementById('timerAutoInput').checked = appData.timerAuto;
+    }
+
+    function setTimerPreset(mins) {
+        document.getElementById('timerMinsInput').value = mins > 0 ? mins : "";
+        updateData();
     }
 
     // Read from UI to Data Model
     function readFromUI() {
         appData.title = document.getElementById('titleInput').value;
         appData.inst = document.getElementById('instInput').value;
-        let forPointsEl = document.getElementById('forPointsInput');
-        if (forPointsEl) appData.forPoints = forPointsEl.checked;
-        let allowEditEl = document.getElementById('allowEditInput');
-        if (allowEditEl) appData.allowEdit = allowEditEl.checked;
+        appData.forPoints = document.getElementById('forPointsInput').checked;
+        appData.allowEdit = document.getElementById('allowEditInput').checked;
+        appData.timerMins = parseInt(document.getElementById('timerMinsInput').value) || 0;
+        appData.timerAuto = document.getElementById('timerAutoInput').checked;
         
         for (let i = 0; i < 4; i++) {
             appData.groups[i].title = document.getElementById(`g${i}_title`).value;
@@ -372,6 +421,8 @@
             i: data.inst,
             p: data.forPoints !== false,
             e: data.allowEdit !== false,
+            tm: data.timerMins || 0,
+            ta: data.timerAuto || false,
             g: data.groups.map(g => ({ t: g.title, w: g.words, c: g.color }))
         };
         const str = JSON.stringify(compact);
@@ -388,6 +439,8 @@
                 inst: compact.i || "",
                 forPoints: compact.p !== false,
                 allowEdit: compact.e !== false,
+                timerMins: compact.tm || 0,
+                timerAuto: compact.ta || false,
                 groups: compact.g.map((g, idx) => ({
                     id: idx,
                     title: g.t || "",
@@ -492,7 +545,57 @@
     }
 
     // --- PLAY MODE ---
+    let timerInterval = null;
+    let timerSecondsLeft = 0;
+    let timerTotalSeconds = 0;
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        document.getElementById('btnStartTimer').style.display = "none";
+        timerInterval = setInterval(() => {
+            if (timerSecondsLeft > 0) {
+                timerSecondsLeft--;
+                updateTimerText();
+            }
+            if (timerSecondsLeft <= 0) {
+                clearInterval(timerInterval);
+                timerSecondsLeft = 0;
+                updateTimerText();
+            }
+        }, 1000);
+    }
+
+    function updateTimerText() {
+        const mins = Math.floor(timerSecondsLeft / 60);
+        const secs = timerSecondsLeft % 60;
+        const text = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        document.getElementById('timerText').textContent = text;
+        
+        const wrapEl = document.getElementById('timerBarWrap');
+        const fillEl = document.getElementById('timerBarFill');
+        
+        let pct = 0;
+        if (timerTotalSeconds > 0) {
+            pct = (timerSecondsLeft / timerTotalSeconds) * 100;
+        }
+        fillEl.style.width = Math.max(0, pct) + "%";
+        
+        if (timerSecondsLeft <= 60 && timerSecondsLeft > 0) {
+            wrapEl.classList.add('danger');
+            fillEl.style.backgroundColor = "#e91e63";
+        } else if (timerSecondsLeft <= 0) {
+            wrapEl.classList.remove('danger');
+            fillEl.style.backgroundColor = "#d32f2f";
+            fillEl.style.width = "0%";
+        } else {
+            wrapEl.classList.remove('danger');
+            fillEl.style.backgroundColor = "#4a90e2";
+        }
+    }
+
     function initPlayMode() {
+        if (timerInterval) clearInterval(timerInterval);
+        
         document.getElementById('playTitle').textContent = appData.title || "Connections Grid";
         
         const baseInst = appData.inst || "Find four groups of four related items.";
@@ -506,6 +609,26 @@
         playState.selectedCards = [];
         playState.mistakes = 0;
         updateMistakesDisplay();
+        
+        // Setup timer
+        const timerDisplay = document.getElementById('playTimerDisplay');
+        const btnStartTimer = document.getElementById('btnStartTimer');
+        
+        if (appData.timerMins > 0) {
+            timerDisplay.style.display = "block";
+            timerTotalSeconds = appData.timerMins * 60;
+            timerSecondsLeft = timerTotalSeconds;
+            updateTimerText();
+            if (appData.timerAuto) {
+                btnStartTimer.style.display = "none";
+                startTimer();
+            } else {
+                btnStartTimer.style.display = "inline-block";
+                btnStartTimer.textContent = "Start";
+            }
+        } else {
+            timerDisplay.style.display = "none";
+        }
         
         // Gather all 16 cards that have content
         let index = 0;
