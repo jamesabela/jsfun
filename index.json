@@ -88,6 +88,14 @@
     "icon": "💬",
     "tools": [
       {
+        "title": "Connections Grid",
+        "emoji": "🔠",
+        "url": "https://jamesabela.github.io/jsfun/connections.html",
+        "desc": "Create a 4x4 connection grid activity. Includes easy URL sharing and save/load features.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
         "title": "Priority Triangle",
         "emoji": "🔺",
         "url": "https://jamesabela.github.io/jsfun/triangle.html",

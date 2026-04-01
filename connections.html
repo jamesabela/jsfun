@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connections Grid Maker</title>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --primary-color: #4a90e2;
+            --border-color: #ddd;
+            --card-bg: #fff;
+            --selected-bg: #6c757d;
+            --selected-text: #fff;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1, h2 { text-align: center; }
+        .mode-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { opacity: 0.9; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .edit-section, .play-section { display: none; }
+        .active-section { display: block; }
+
+        /* Edit Mode Styles */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], textarea {
+            width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box;
+        }
+        .group-editor {
+            border: 2px solid var(--border-color); padding: 15px; margin-bottom: 20px; border-radius: 8px;
+        }
+        .word-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px;
+        }
+        .tools-panel {
+            background: #eef; padding: 15px; border-radius: 8px; margin-top: 20px;
+        }
+        .url-box {
+            word-break: break-all; padding: 10px; background: #fff; border: 1px solid #ccc; border-radius: 4px; font-family: monospace;
+            margin-bottom: 5px;
+        }
+        .url-status { font-weight: bold; margin-bottom: 10px; }
+        .safe { color: green; } .warning { color: orange; } .danger { color: red; }
+
+        /* Play Mode Styles */
+        .game-header { text-align: center; margin-bottom: 20px; }
+        .grid-container {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;
+        }
+        .card {
+            background: #eaeaea; border: 2px solid #ccc; border-radius: 8px; padding: 20px; text-align: center;
+            font-weight: bold; cursor: pointer; user-select: none; transition: transform 0.1s, background-color 0.2s;
+            display: flex; align-items: center; justify-content: center; min-height: 60px; word-break: break-word;
+        }
+        .card:hover { transform: scale(1.02); }
+        .card.selected { background-color: var(--selected-bg); color: var(--selected-text); border-color: var(--selected-bg); }
+        .card.solved { cursor: default; transform: none; color: #000; }
+        .solved-group {
+            grid-column: 1 / -1; text-align: center; border-radius: 8px; padding: 20px; margin-bottom: 15px;
+            font-weight: bold; display: flex; flex-direction: column; justify-content: center;
+            cursor: pointer; transition: opacity 0.2s;
+        }
+        .solved-group:hover { opacity: 0.8; }
+        .solved-group::after { content: '(Click to ungroup)'; font-size: 0.8em; font-weight: normal; opacity: 0.7; margin-top: 5px; }
+        .solved-group .connection-title { font-size: 1.2em; text-transform: uppercase; margin-bottom: 5px; }
+        .solved-group .connection-words { font-weight: normal; }
+        .play-controls { text-align: center; }
+        .mistakes { text-align: center; font-size: 1.1em; color: #d9534f; margin-bottom: 10px; }
+        footer { text-align: center; padding: 2rem; color: #666; font-size: 0.9em; margin-top: 40px; border-top: 1px solid #ddd; }
+        footer a { color: #4a90e2; text-decoration: none; }
+        footer a.tea { color: #e91e63; font-weight: bold; }
+        .back-link { display: inline-block; margin: 15px 20px 0 20px; text-decoration: none; background: #fff; border: 2px solid #ccc; padding: 8px 16px; border-radius: 20px; color: #333; font-weight: bold; transition: background 0.2s; }
+        .back-link:hover { background: #eee; }
+        .intro-text { text-align: center; max-width: 600px; margin: 0 auto 30px auto; color: #555; line-height: 1.5; }
+    </style>
+</head>
+<body>
+<a href="index.html" class="back-link" id="backLink">← Back to Index</a>
+
+<div class="container">
+    <div class="mode-toggle">
+        <button id="btnEditMode" onclick="setMode('edit')">Edit Mode</button>
+        <button id="btnPlayMode" onclick="setMode('play')">Play Mode</button>
+    </div>
+
+    <!-- EDIT SECTION -->
+    <div id="editSection" class="edit-section active-section">
+        <div class="intro-text">
+            <h1 style="color:#333; margin-bottom:10px;">Connections Grid Maker</h1>
+            <p>Create dynamic puzzles where students group 16 interrelated terms into four mystery categories. 
+            Use the tools below to design your grid, test it, and generate a secure Student Link that instantly launches the activity!</p>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Create / Edit Grid</h2>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label style="display:inline-block; margin-right:5px; font-weight:normal;">Load Example:</label>
+                <select id="presetSelect" onchange="loadPreset(this.value)" style="padding: 5px; border-radius: 4px; border: 1px solid var(--border-color);">
+                    <option value="">-- Choose a preset --</option>
+                    <option value="hardware">Hardware & Network</option>
+                    <option value="programming">Programming & Web</option>
+                    <option value="cybersecurity">Cybersecurity Basics</option>
+                    <option value="study">Study Skills</option>
+                    <option value="wellbeing">Wellbeing & Health</option>
+                    <option value="motivation">Motivation & Goals</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="titleInput">Activity Title</label>
+            <input type="text" id="titleInput" placeholder="e.g., Computer Hardware Components" oninput="updateData()">
+        </div>
+        <div class="form-group">
+            <label for="instInput">Instructions (Optional)</label>
+            <textarea id="instInput" rows="2" placeholder="e.g., Find four groups of four related items." oninput="updateData()"></textarea>
+        </div>
+        <div class="form-group" style="background:#eef; padding:10px; border-radius:4px;">
+            <label style="margin-bottom:0; cursor:pointer; display:block;">
+                <input type="checkbox" id="forPointsInput" onchange="updateData()"> 
+                Check for correct answers (Quiz Mode)
+            </label>
+            <small style="color:#555; display:block; margin-top:4px; margin-bottom:10px;">
+                Uncheck to enable <strong>Discussion Mode</strong> where students can freely group any 4 items and define their own connection.
+            </small>
+
+            <label style="margin-bottom:0; cursor:pointer; display:block; border-top:1px solid #ccc; padding-top:10px;">
+                <input type="checkbox" id="allowEditInput" onchange="updateData()"> 
+                Allow students to return to Edit Mode
+            </label>
+            <small style="color:#555; display:block; margin-top:4px;">
+                Uncheck to lock the activity in Play Mode when you share the link.
+            </small>
+        </div>
+
+        <div id="groupsContainer">
+            <!-- Groups 1 to 4 generated by JS -->
+        </div>
+
+        <div class="tools-panel">
+            <h3>Share & Export</h3>
+            <div style="margin-bottom: 15px;">
+                <p style="margin: 0 0 5px 0;"><strong>Teacher Link:</strong> Loads into Edit Mode (if allowed).</p>
+                <div id="urlBox" class="url-box"></div>
+                <div id="urlStatus" class="url-status">URL Length: <span id="urlLen">0</span> chars</div>
+                <button onclick="copyUrl('urlBox', this)">Copy Teacher Link</button>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <p style="margin: 0 0 5px 0;"><strong>Student Link:</strong> Forces Play Mode on launch.</p>
+                <div id="studentUrlBox" class="url-box" style="border-color: #4a90e2; background: #f0f8ff;"></div>
+                <button onclick="copyUrl('studentUrlBox', this)">Copy Student Link</button>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            
+            <button onclick="downloadJson()">Download JSON</button>
+            <button onclick="document.getElementById('fileUpload').click()">Upload JSON</button>
+            <input type="file" id="fileUpload" style="display:none" accept=".json" onchange="uploadJson(event)">
+            <button onclick="downloadPptx()">Download PPTX</button>
+        </div>
+    </div>
+
+    <!-- PLAY SECTION -->
+    <div id="playSection" class="play-section">
+        <div class="game-header">
+            <h1 id="playTitle">Title</h1>
+            <p id="playInst">Instructions</p>
+        </div>
+        
+        <div class="mistakes" id="mistakesDisplay"></div>
+        
+        <div id="playGrid" class="grid-container">
+            <!-- Cards rendered here -->
+        </div>
+
+        <div class="play-controls">
+            <button id="btnSubmit" onclick="checkConnection()" disabled>Submit (0 selected)</button>
+            <button id="btnShuffle" onclick="renderPlayGrid(true)">Shuffle</button>
+            <button id="btnRestart" onclick="initPlayMode()">Restart</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- DATA MODEL ---
+    let appData = {
+        title: "",
+        inst: "",
+        forPoints: true,
+        allowEdit: true,
+        groups: [
+            { id: 0, title: "", words: ["", "", "", ""], color: "#fcdcae" }, // Yellow
+            { id: 1, title: "", words: ["", "", "", ""], color: "#b5e3a8" }, // Green
+            { id: 2, title: "", words: ["", "", "", ""], color: "#b1c5f6" }, // Blue
+            { id: 3, title: "", words: ["", "", "", ""], color: "#d2b4de" }  // Purple
+        ]
+    };
+
+    let playState = {
+        cards: [],
+        selectedCards: [],
+        solvedGroups: [],
+        mistakes: 0
+    };
+
+    const colors = ["#fcdcae", "#b5e3a8", "#b1c5f6", "#d2b4de"];
+
+    const presets = {
+        hardware: {
+            title: "Hardware vs Network",
+            inst: "Find four groups of computing components.",
+            groups: [
+                { id: 0, title: "Networking Hardware", words: ["Router", "Switch", "Hub", "Bridge"], color: "#fcdcae" },
+                { id: 1, title: "Storage Devices", words: ["HDD", "SSD", "USB Flash", "Optical Drive"], color: "#b5e3a8" },
+                { id: 2, title: "Input Devices", words: ["Keyboard", "Mouse", "Scanner", "Microphone"], color: "#b1c5f6" },
+                { id: 3, title: "Output Devices", words: ["Monitor", "Printer", "Speaker", "Projector"], color: "#d2b4de" }
+            ]
+        },
+        programming: {
+            title: "Programming & Web",
+            inst: "Find four groups of computing concepts.",
+            groups: [
+                { id: 0, title: "Programming Languages", words: ["Python", "Java", "C++", "JavaScript"], color: "#fcdcae" },
+                { id: 1, title: "Data Types", words: ["Integer", "String", "Boolean", "Float"], color: "#b5e3a8" },
+                { id: 2, title: "Operating Systems", words: ["Windows", "Linux", "macOS", "Android"], color: "#b1c5f6" },
+                { id: 3, title: "Web Technologies", words: ["HTML", "CSS", "HTTP", "DNS"], color: "#d2b4de" }
+            ]
+        },
+        cybersecurity: {
+            title: "Cybersecurity Basics",
+            inst: "Find four groups of security terminology.",
+            groups: [
+                { id: 0, title: "Malware Types", words: ["Virus", "Worm", "Trojan", "Ransomware"], color: "#fcdcae" },
+                { id: 1, title: "Authentication", words: ["Password", "Biometrics", "Token", "PIN"], color: "#b5e3a8" },
+                { id: 2, title: "Network Security", words: ["Firewall", "VPN", "Proxy", "IDS"], color: "#b1c5f6" },
+                { id: 3, title: "Attack Types", words: ["Phishing", "DDoS", "SQL Injection", "Man-in-the-Middle"], color: "#d2b4de" }
+            ]
+        },
+        study: {
+            title: "Study Skills",
+            inst: "Find four groups of study-related concepts.",
+            groups: [
+                { id: 0, title: "Focus Techniques", words: ["Pomodoro", "Time Blocking", "Feynman", "SQ3R"], color: "#fcdcae" },
+                { id: 1, title: "Study Environments", words: ["Library", "Cafe", "Desk", "Study Room"], color: "#b5e3a8" },
+                { id: 2, title: "Note Taking Methods", words: ["Cornell", "Mind Map", "Outline", "Digital Notes"], color: "#b1c5f6" },
+                { id: 3, title: "Effective Strategies", words: ["Active Recall", "Spaced Repetition", "Interleaving", "Dual Coding"], color: "#d2b4de" }
+            ]
+        },
+        wellbeing: {
+            title: "Wellbeing & Health",
+            inst: "Find four groups of wellbeing components.",
+            groups: [
+                { id: 0, title: "Physical Health", words: ["Sleep", "Exercise", "Hydration", "Nutrition"], color: "#fcdcae" },
+                { id: 1, title: "Stress Relief", words: ["Meditation", "Breathing", "Yoga", "Journaling"], color: "#b5e3a8" },
+                { id: 2, title: "Social Connection", words: ["Friends", "Family", "Community", "Belonging"], color: "#b1c5f6" },
+                { id: 3, title: "Emotional States", words: ["Joy", "Calm", "Gratitude", "Resilience"], color: "#d2b4de" }
+            ]
+        },
+        motivation: {
+            title: "Motivation & Goals",
+            inst: "Find four groups related to motivation.",
+            groups: [
+                { id: 0, title: "Intrinsic Drivers", words: ["Passion", "Purpose", "Autonomy", "Mastery"], color: "#fcdcae" },
+                { id: 1, title: "Extrinsic Rewards", words: ["Money", "Grades", "Praise", "Trophies"], color: "#b5e3a8" },
+                { id: 2, title: "Goal Setting", words: ["SMART", "Milestones", "Vision Board", "Action Plan"], color: "#b1c5f6" },
+                { id: 3, title: "Common Barriers", words: ["Procrastination", "Burnout", "Distraction", "Self-Doubt"], color: "#d2b4de" }
+            ]
+        }
+    };
+
+    function loadPreset(key) {
+        if (!key || !presets[key]) return;
+        let newApp = JSON.parse(JSON.stringify(presets[key])); // deep copy
+        newApp.forPoints = appData.forPoints !== undefined ? appData.forPoints : true;
+        newApp.allowEdit = appData.allowEdit !== undefined ? appData.allowEdit : true;
+        appData = newApp;
+        initEditUI();
+        updateUrl();
+        document.getElementById('presetSelect').value = ""; // reset dropdown
+    }
+
+    // Initialize Edit UI
+    function initEditUI() {
+        const container = document.getElementById('groupsContainer');
+        container.innerHTML = '';
+        for (let i = 0; i < 4; i++) {
+            let html = `
+            <div class="group-editor" style="border-left-color: ${colors[i]}; border-left-width: 8px;">
+                <div class="form-group">
+                    <label>Group ${i + 1} Connection Topic</label>
+                    <input type="text" id="g${i}_title" placeholder="e.g., Input Devices" value="${appData.groups[i].title}" oninput="updateData()">
+                </div>
+                <div class="form-group">
+                    <label>4 Words</label>
+                    <div class="word-grid">
+                        <input type="text" id="g${i}_w0" placeholder="Word 1" value="${appData.groups[i].words[0]}" oninput="updateData()">
+                        <input type="text" id="g${i}_w1" placeholder="Word 2" value="${appData.groups[i].words[1]}" oninput="updateData()">
+                        <input type="text" id="g${i}_w2" placeholder="Word 3" value="${appData.groups[i].words[2]}" oninput="updateData()">
+                        <input type="text" id="g${i}_w3" placeholder="Word 4" value="${appData.groups[i].words[3]}" oninput="updateData()">
+                    </div>
+                </div>
+            </div>`;
+            container.innerHTML += html;
+        }
+        document.getElementById('titleInput').value = appData.title;
+        document.getElementById('instInput').value = appData.inst;
+        let forPointsEl = document.getElementById('forPointsInput');
+        if (forPointsEl) forPointsEl.checked = appData.forPoints;
+        let allowEditEl = document.getElementById('allowEditInput');
+        if (allowEditEl) allowEditEl.checked = appData.allowEdit;
+    }
+
+    // Read from UI to Data Model
+    function readFromUI() {
+        appData.title = document.getElementById('titleInput').value;
+        appData.inst = document.getElementById('instInput').value;
+        let forPointsEl = document.getElementById('forPointsInput');
+        if (forPointsEl) appData.forPoints = forPointsEl.checked;
+        let allowEditEl = document.getElementById('allowEditInput');
+        if (allowEditEl) appData.allowEdit = allowEditEl.checked;
+        
+        for (let i = 0; i < 4; i++) {
+            appData.groups[i].title = document.getElementById(`g${i}_title`).value;
+            for (let j = 0; j < 4; j++) {
+                appData.groups[i].words[j] = document.getElementById(`g${i}_w${j}`).value;
+            }
+        }
+    }
+
+    // Update URL and UI
+    function updateData() {
+        readFromUI();
+        updateUrl();
+    }
+
+    // Specification: Encode to Base64 to disguise so words aren't obvious 
+    function encodeData(data) {
+        // Create concise object to save URL length
+        const compact = {
+            t: data.title,
+            i: data.inst,
+            p: data.forPoints !== false,
+            e: data.allowEdit !== false,
+            g: data.groups.map(g => ({ t: g.title, w: g.words, c: g.color }))
+        };
+        const str = JSON.stringify(compact);
+        // Base64 encode, supporting unciode
+        return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function decodeData(b64) {
+        try {
+            const str = decodeURIComponent(escape(atob(b64)));
+            const compact = JSON.parse(str);
+            return {
+                title: compact.t || "",
+                inst: compact.i || "",
+                forPoints: compact.p !== false,
+                allowEdit: compact.e !== false,
+                groups: compact.g.map((g, idx) => ({
+                    id: idx,
+                    title: g.t || "",
+                    words: g.w || ["","","",""],
+                    color: g.c || colors[idx]
+                }))
+            };
+        } catch (e) {
+            console.error("Failed to decode data", e);
+            return null;
+        }
+    }
+
+    function updateUrl() {
+        const payload = encodeData(appData);
+        const url = new URL(window.location);
+        url.searchParams.set('data', payload);
+        url.searchParams.delete('play'); // clean teacher url
+        const urlStr = url.toString();
+        window.history.replaceState({}, '', urlStr);
+        
+        document.getElementById('urlBox').textContent = urlStr;
+        
+        // Generate Student Link
+        const studentUrl = new URL(urlStr);
+        studentUrl.searchParams.set('play', '1');
+        document.getElementById('studentUrlBox').textContent = studentUrl.toString();
+
+        const len = urlStr.length;
+        const lenEl = document.getElementById('urlLen');
+        lenEl.textContent = len;
+        
+        // Color code URL length
+        lenEl.className = '';
+        if (len < 1000) lenEl.classList.add('safe');
+        else if (len < 1500) lenEl.classList.add('warning');
+        else lenEl.classList.add('danger');
+    }
+
+    function copyUrl(elementId, btn) {
+        var urlText = document.getElementById(elementId).textContent;
+        
+        const showCopied = () => {
+            if (!btn) return;
+            const origText = btn.textContent;
+            btn.textContent = "Copied!";
+            btn.style.backgroundColor = "#4caf50";
+            btn.style.color = "white";
+            setTimeout(() => {
+                btn.textContent = origText;
+                btn.style.backgroundColor = "";
+                btn.style.color = "";
+            }, 2000);
+        };
+        
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(urlText)
+                .then(showCopied)
+                .catch(err => console.error('Error copying', err));
+        } else {
+            var textArea = document.createElement("textarea");
+            textArea.value = urlText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopied();
+            } catch (err) {
+                console.error('Fallback error copying', err);
+                alert('Failed to copy. Please copy manually.');
+            }
+            document.body.removeChild(textArea);
+        }
+    }
+
+    function setMode(mode, skipRead = false) {
+        if (mode === 'edit') {
+            document.getElementById('editSection').classList.add('active-section');
+            document.getElementById('playSection').classList.remove('active-section');
+            initEditUI();
+            updateUrl();
+            document.getElementById('btnEditMode').style.display = "inline-block";
+            document.getElementById('backLink').style.display = "inline-block";
+        } else {
+            // Only read from UI if the edit section is currently active and filled out!
+            if (!skipRead && document.getElementById('editSection').classList.contains('active-section')) {
+                readFromUI(); // ensure latest data before switching
+            }
+
+            document.getElementById('editSection').classList.remove('active-section');
+            document.getElementById('playSection').classList.add('active-section');
+            initPlayMode();
+            
+            // Hide edit button and back link if locked to play mode or student link
+            const urlParams = new URLSearchParams(window.location.search);
+            const isStudentLink = urlParams.get('play') === '1';
+            const showEditTools = appData.allowEdit && !isStudentLink;
+            
+            document.getElementById('btnEditMode').style.display = showEditTools ? "inline-block" : "none";
+            document.getElementById('backLink').style.display = "none";
+        }
+    }
+
+    // --- PLAY MODE ---
+    function initPlayMode() {
+        document.getElementById('playTitle').textContent = appData.title || "Connections Grid";
+        
+        const baseInst = appData.inst || "Find four groups of four related items.";
+        const helperText = appData.forPoints 
+            ? "Click to select 4 cards, then click Submit to check your group."
+            : "Click to select 4 cards, then click Group to link them.";
+            
+        document.getElementById('playInst').innerHTML = `<strong>${baseInst}</strong><br><span style="font-size:0.9em; color:#666;">${helperText}</span>`;
+        
+        playState.solvedGroups = [];
+        playState.selectedCards = [];
+        playState.mistakes = 0;
+        updateMistakesDisplay();
+        
+        // Gather all 16 cards that have content
+        let index = 0;
+        playState.cards = [];
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                let word = appData.groups[i].words[j].trim();
+                // Add card even if empty, though best experience is 16 full cards
+                playState.cards.push({
+                    id: index++,
+                    text: word,
+                    groupId: i
+                });
+            }
+        }
+        
+        // Shuffle cards
+        shuffleArray(playState.cards);
+        renderPlayGrid();
+    }
+
+    function isCardSolved(cardId) {
+        if (!appData.forPoints) {
+            return playState.solvedGroups.some(sg => sg.cardIds && sg.cardIds.includes(cardId));
+        } else {
+            let c = playState.cards.find(x => x.id === cardId);
+            return playState.solvedGroups.includes(c.groupId);
+        }
+    }
+
+    function renderPlayGrid(reshuffle = false) {
+        if (reshuffle) {
+            // Shuffle only unsolved cards
+            let unsolved = playState.cards.filter(c => !isCardSolved(c.id));
+            shuffleArray(unsolved);
+            let pIdx = 0;
+            for(let i=0; i<playState.cards.length; i++){
+                if(!isCardSolved(playState.cards[i].id)){
+                    playState.cards[i] = unsolved[pIdx++];
+                }
+            }
+        }
+
+        const grid = document.getElementById('playGrid');
+        grid.innerHTML = '';
+
+        // Render solved groups first
+        for (let item of playState.solvedGroups) {
+            let title, words, color;
+            if (typeof item === 'object') {
+                title = item.title;
+                words = item.words;
+                color = item.color;
+            } else {
+                let group = appData.groups.find(g => g.id === item);
+                title = group.title || 'Group ' + (item + 1);
+                words = group.words;
+                color = group.color;
+            }
+            
+            let div = document.createElement('div');
+            div.className = 'solved-group';
+            div.style.backgroundColor = color;
+            div.onclick = () => ungroupGroup(item);
+            div.innerHTML = `<div class="connection-title">${title}</div>
+                             <div class="connection-words">${words.join(', ')}</div>`;
+            grid.appendChild(div);
+        }
+
+        // Render remaining cards
+        for (let card of playState.cards) {
+            if (isCardSolved(card.id)) continue;
+            
+            let div = document.createElement('div');
+            div.className = 'card';
+            if (playState.selectedCards.includes(card.id)) div.classList.add('selected');
+            if (!card.text) div.style.opacity = '0.5'; // De-emphasize empty cards
+            
+            div.textContent = card.text;
+            div.onclick = () => toggleCardSelection(card.id);
+            grid.appendChild(div);
+        }
+
+        updateSubmitBtn();
+    }
+
+    function toggleCardSelection(id) {
+        const idx = playState.selectedCards.indexOf(id);
+        if (idx >= 0) {
+            playState.selectedCards.splice(idx, 1);
+        } else {
+            if (playState.selectedCards.length < 4) {
+                playState.selectedCards.push(id);
+            }
+        }
+        renderPlayGrid();
+    }
+
+    function ungroupGroup(item) {
+        if (!confirm('Ungroup these items?')) return;
+        const idx = playState.solvedGroups.indexOf(item);
+        if (idx > -1) {
+            playState.solvedGroups.splice(idx, 1);
+            renderPlayGrid();
+        }
+    }
+
+    function deselectAll() {
+        playState.selectedCards = [];
+        renderPlayGrid();
+    }
+
+    function updateSubmitBtn() {
+        const btn = document.getElementById('btnSubmit');
+        const count = playState.selectedCards.length;
+        const actionText = appData.forPoints ? "Submit" : "Group";
+        btn.textContent = `${actionText} (${count} selected)`;
+        btn.disabled = count !== 4;
+    }
+
+    function checkConnection() {
+        if (playState.selectedCards.length !== 4) return;
+        
+        // Get the chosen cards
+        let chosen = playState.cards.filter(c => playState.selectedCards.includes(c.id));
+        
+        if (!appData.forPoints) {
+            // Discussion Mode
+            let defaultName = "Group " + (playState.solvedGroups.length + 1);
+            let title = prompt("Enter a connection name for these 4 items (optional):", defaultName);
+            if (title === null) return; // Action cancelled
+            
+            let color = colors[playState.solvedGroups.length % colors.length];
+            playState.solvedGroups.push({
+                isCustom: true,
+                title: title,
+                words: chosen.map(c => c.text),
+                color: color,
+                cardIds: chosen.map(c => c.id)
+            });
+            playState.selectedCards = [];
+            renderPlayGrid();
+            
+            if (playState.solvedGroups.length === 4) {
+                setTimeout(() => alert('All items grouped!'), 100);
+            }
+            return;
+        }
+
+        let gId = chosen[0].groupId;
+        let allSame = chosen.every(c => c.groupId === gId);
+        
+        if (allSame) {
+            // Correct!
+            playState.solvedGroups.push(gId);
+            playState.selectedCards = [];
+            // Animation/Highlighting could go here...
+            renderPlayGrid();
+            
+            // Check win
+            if (playState.solvedGroups.length === 4) {
+                setTimeout(() => alert('Congratulations! You found all groups!'), 100);
+            }
+        } else {
+            // Wrong
+            playState.mistakes++;
+            updateMistakesDisplay();
+            playState.selectedCards.forEach(id => {
+               // Flash red effect could go here
+            });
+            setTimeout(() => {
+                alert('Not a group! Try again.');
+                deselectAll();
+            }, 100);
+        }
+    }
+
+    function updateMistakesDisplay() {
+        document.getElementById('mistakesDisplay').textContent = playState.mistakes > 0 ? `Mistakes: ${playState.mistakes}` : '';
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // --- IMPORT / EXPORT ---
+    function downloadJson() {
+        readFromUI();
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+        const anchor = document.createElement("a");
+        anchor.setAttribute("href", dataStr);
+        anchor.setAttribute("download", "connections_grid.json");
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+    }
+
+    function uploadJson(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const json = JSON.parse(e.target.result);
+                // Basic validation
+                if (json.groups && json.groups.length === 4) {
+                    appData = json;
+                    initEditUI();
+                    updateUrl();
+                } else {
+                    alert("Invalid JSON format.");
+                }
+            } catch (err) {
+                alert("Error reading JSON.");
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = ""; // reset
+    }
+
+    function downloadPptx() {
+        readFromUI();
+        let pres = new PptxGenJS();
+        pres.author = "Connections Grid Maker";
+        pres.title = appData.title || "Connections Grid";
+
+        // Slide 1: Activity
+        let slide = pres.addSlide();
+        slide.addText(appData.title || "Connections Activity", { x:0.5, y:0.3, w:"90%", fontSize:24, bold:true, align:"center" });
+        if (appData.inst) {
+            slide.addText(appData.inst, { x:0.5, y:0.8, w:"90%", fontSize:14, align:"center", color:"666666" });
+        }
+
+        // Shuffle all 16 words for the activity slide
+        let allWords = [];
+        for (let i=0; i<4; i++) {
+            for (let j=0; j<4; j++) {
+                allWords.push(appData.groups[i].words[j] || " ");
+            }
+        }
+        shuffleArray(allWords);
+
+        // Grid parameters
+        let startX = 1.0; let startY = 1.5; let cellW = 2.0; let cellH = 0.8; let gap = 0.1;
+        for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+                let idx = r * 4 + c;
+                slide.addText(allWords[idx], {
+                    x: startX + c * (cellW + gap),
+                    y: startY + r * (cellH + gap),
+                    w: cellW, h: cellH,
+                    align: "center", valign: "middle",
+                    fill: { color: "EAEAEA" },
+                    line: { color: "CCCCCC", width: 1 },
+                    bold: true,
+                    fontSize: 16
+                });
+            }
+        }
+
+        // Slide 2: Solutions
+        let slideSol = pres.addSlide();
+        slideSol.addText("Solutions: " + (appData.title || ""), { x:0.5, y:0.3, w:"90%", fontSize:24, bold:true, align:"center" });
+        
+        startY = 1.0; cellH = 0.9;
+        for (let i = 0; i < 4; i++) {
+            let g = appData.groups[i];
+            let colorHex = g.color.replace("#", ""); // PptxGenJS expects hex without #
+            slideSol.addText(
+                [{text: (g.title || 'Group '+(i+1)).toUpperCase() + "\n", options:{fontSize:14}}, 
+                 {text: g.words.join(", "), options:{fontSize:12, bold:false}}],
+                {
+                    x: 1.0, y: startY + i * (cellH + gap),
+                    w: 8.0, h: cellH,
+                    align: "center", valign: "middle",
+                    fill: { color: colorHex },
+                    bold: true,
+                    line: { color: "CCCCCC", width: 1 }
+                }
+            );
+        }
+
+        pres.writeFile({ fileName: "Connections_Grid.pptx" });
+    }
+
+    // --- STARTUP ---
+    window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const b64Data = urlParams.get('data');
+        if (b64Data) {
+            const decoded = decodeData(b64Data);
+            if (decoded) {
+                appData = decoded;
+            }
+        }
+        
+        if (!appData.allowEdit || urlParams.get('play') === '1') {
+            setMode('play', true);
+        } else {
+            initEditUI();
+            updateUrl();
+        }
+    };
+</script>
+
+  <footer>
+    <p>
+      Made with ❤️ for better thinking. If it helped you, support the project.
+      <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.85rem;">
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
+      James Abela 2024
+    </p>
+  </footer>
+
+  <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+</body>
+</html>
