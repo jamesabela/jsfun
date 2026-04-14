@@ -14,6 +14,7 @@ I did use AI to help program these, sometimes it really helped and sometimes it 
 * [Parity Byte](https://jamesabela.github.io/jsfun/paritybyte.html)
 * [Towers of Hanoi](https://hanoitowers.my.canva.site/) Also see the [article](https://readysetcompute.com/codeforme-canva/) (By Sethi De Clercq)
 * [Binary Snake](https://jamesabela.github.io/jsfun/binarysnake.html)
+* [KS3 Python Practice](https://mrdavekang.github.io/y8-python/python-practice-ks3.html) (By [Dave Kang](https://mrdavekang.github.io/))
 * [Python Challenges](https://pythonchallenges.weebly.com/) (Welcome to use challenges, but entries are GIS only)
 
 Scratch projects

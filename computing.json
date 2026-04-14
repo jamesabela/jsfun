@@ -578,6 +578,14 @@
         "isExternal": true
       },
       {
+        "title": "KS3 Python Practice",
+        "emoji": "🐍",
+        "url": "https://mrdavekang.github.io/y8-python/python-practice-ks3.html",
+        "desc": "An interactive Python course designed for Year 8 students. Covers fundamentals like variables, input, and selection. By Dave Kang.",
+        "tag": "KS3",
+        "isExternal": true
+      },
+      {
         "title": "Towers of Hanoi",
         "emoji": "🗼",
         "url": "https://hanoitowers.my.canva.site/",
