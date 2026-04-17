@@ -2,187 +2,1110 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python Code Display Tool</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css"
-    id="highlight-theme">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Display</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    id="prism-theme">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
+
+    :root {
+      --primary-color: #3b82f6;
+      --teacher-bg: #f8fafc;
+      --teacher-accent: #2563eb;
+      --teach-bg: #f0fdf4;
+      --teach-accent: #10b981;
+      --header-height: 64px;
     }
 
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      padding-top: var(--header-height);
+      background: #ffffff;
+      color: #111827;
+      min-height: 100vh;
+      transition: background 0.3s ease;
+    }
+
+    /* Mode Switching Banner */
+    #modeHeader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #1e293b;
+    }
+
+    .mode-toggle-pill {
+      display: flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 999px;
+      gap: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .visual-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .theme-toggle,
+    .font-size-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .theme-toggle {
+      font-size: 14px;
+    }
+
+    .theme-toggle label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .mode-btn {
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: none;
+      color: #64748b;
+      background: transparent;
+    }
+
+    .mode-btn.active {
+      background: #ffffff;
+      color: #1e293b;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    body.display-mode-active {
+      background: #f0fdf4;
+    }
+
+    body.display-mode-active #modeHeader {
+      background: #ecfdf5;
+      border-bottom-color: #d1fae5;
+    }
+
+    body.display-mode-active .mode-btn.active {
+      color: #059669;
+    }
+
+    html.dark-theme {
+      background: #151515;
+    }
+
+    body.dark-theme {
+      background: #151515 !important;
+      color: #f4f4f5;
+    }
+
+    body.dark-theme.display-mode-active {
+      background: #151515 !important;
+    }
+
+    body.dark-theme #modeHeader,
+    body.dark-theme.display-mode-active #modeHeader {
+      background: #1f1f1f;
+      border-bottom-color: #3f3f46;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+
+    body.dark-theme .brand {
+      color: #f4f4f5;
+    }
+
+    body.dark-theme .mode-toggle-pill {
+      background: #2a2a2a;
+      border-color: #3f3f46;
+    }
+
+    body.dark-theme .theme-toggle,
+    body.dark-theme .font-size-control {
+      color: #d4d4d8;
+    }
+
+    body.dark-theme .mode-btn {
+      color: #a1a1aa;
+    }
+
+    body.dark-theme .mode-btn.active {
+      background: #3a3a3a;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+    }
+
+    body.dark-theme.display-mode-active .mode-btn.active {
+      color: #5eead4;
+    }
+
+    body.dark-theme .display-badge {
+      background: #134e4a;
+      color: #99f6e4;
+    }
+
+    body.dark-theme .edit-badge {
+      background: #1e3a8a;
+      color: #bfdbfe;
+    }
+
+    body.dark-theme .toggle-row,
+    body.dark-theme .status,
+    body.dark-theme .note,
+    body.dark-theme #detectionLabel {
+      color: #d4d4d8;
+    }
+
+    body.dark-theme .panel,
+    body.dark-theme .runner-panel,
+    body.dark-theme.display-mode-active .runner-panel,
+    body.dark-theme .starter-panel,
+    body.dark-theme .console-input-panel {
+      background: #202020;
+      border-color: #3f3f46;
+      color: #f4f4f5;
+    }
+
+    body.dark-theme.display-mode-active .runner-panel {
+      box-shadow: -4px 0 12px rgba(20, 184, 166, 0.14);
+      border-color: #0f766e;
+    }
+
+    body.dark-theme .starter-panel p,
+    body.dark-theme .console-input-help {
+      color: #d4d4d8;
+    }
+
+    body.dark-theme .starter-button {
+      background: #263238;
+      border-color: #475569;
+      color: #e0f2fe;
+    }
+
+    body.dark-theme .starter-button:hover {
+      background: #334155;
+    }
+
+    body.dark-theme .editor-shell {
+      background: #151515 !important;
+      border-color: #3f3f46;
+    }
+
+    body.dark-theme #editor,
+    body.dark-theme #displayEditor,
+    body.dark-theme #displayEditor code {
+      color: #e7e5e4;
+      background: transparent;
+    }
+
+    body.dark-theme .line-numbers {
+      background: #202020 !important;
+      color: #a1a1aa !important;
+      border-right-color: #3f3f46;
+    }
+
+    body.dark-theme .highlight-line {
+      background-color: rgba(20, 184, 166, 0.24);
+      border-left-color: #2dd4bf;
+    }
+
+    body.dark-theme .message {
+      background: #172554;
+      color: #bfdbfe;
+      border-color: #1d4ed8;
+    }
+
+    body.dark-theme #callTracePanel,
+    body.dark-theme #variablePanel {
+      background: #2a2a2a !important;
+      border-color: #52525b !important;
+      color: #f4f4f5 !important;
+    }
+
+    body.dark-theme #callTracePanel h4,
+    body.dark-theme #callTraceList,
+    body.dark-theme #variablePanel h4,
+    body.dark-theme #variableList th,
+    body.dark-theme #variableList td {
+      color: #f4f4f5 !important;
+    }
+
+    body.dark-theme #variableList tr {
+      border-color: #52525b !important;
+    }
+
+    body.dark-theme #variableList td:last-child {
+      color: #86efac !important;
+    }
+
+    body.dark-theme .console-input-row input,
+    body.dark-theme .input-container input[type="text"] {
+      background: #151515;
+      color: #f4f4f5;
+      border-color: #52525b;
+    }
+
+    body.dark-theme #output {
+      background: #0f0f0f;
+      color: #bbf7d0;
+      border-color: #3f3f46;
+    }
+
+    body.dark-theme .runner-toggle {
+      background: #2a2a2a;
+      color: #f4f4f5;
+      border-color: #3f3f46;
+    }
+
+    body.dark-theme .runner-toggle:hover {
+      background: #3a3a3a;
+    }
+
+
     .input-container {
-      margin-bottom: 20px;
+      margin: 20px 24px 18px;
     }
 
     .input-container input[type="text"] {
-      width: 80%;
-      padding: 10px;
+      width: min(900px, 82%);
+      padding: 12px 16px;
       font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
     }
 
     .input-container button {
-      padding: 10px;
+      padding: 12px 20px;
       font-size: 16px;
-      background-color: #007bff;
+      background-color: var(--primary-color);
       color: white;
       border: none;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 10px;
+      font-weight: 600;
     }
 
-    .code-container {
-      position: relative;
+    .starter-panel {
+      margin-bottom: 18px;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid #dbe3ef;
+      border-radius: 10px;
+    }
+
+    .starter-panel h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .starter-panel p {
+      margin: 0 0 12px;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .starter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .starter-button {
+      background: #e0ecff;
+      color: #1e3a8a;
+      border: 1px solid #bfdbfe;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .starter-button:hover {
+      background: #dbeafe;
+    }
+
+    .workspace {
+      display: none;
+      grid-template-columns: minmax(420px, 1fr) auto;
+      gap: 18px;
+      align-items: stretch;
+      transition: grid-template-columns 0.28s ease, gap 0.28s ease;
+    }
+
+    .workspace.runner-collapsed {
+      grid-template-columns: minmax(420px, 1fr) 42px;
+      gap: 12px;
+    }
+
+    .workspace-toolbar {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: -2px;
+    }
+
+    .panel {
+      background: #f8fafc;
+      border: 1px solid #dbe3ef;
+      border-radius: 10px;
+      padding: 14px;
+      min-width: 0;
       width: 100%;
-      padding: 1em;
-      background: #f5f5f5;
-      border-radius: 5px;
-      overflow: auto;
+      box-sizing: border-box;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
-    .button-container {
-      position: absolute;
-      top: 10px;
-      left: 10px;
+    .panel h3 {
+      margin: 0 0 12px;
     }
 
-    .button-container button {
-      background: #007bff;
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    button {
       color: white;
       border: none;
-      padding: 5px 10px;
-      margin-right: 5px;
+      padding: 8px 12px;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 6px;
+      font-size: 14px;
     }
 
-    .controls-container {
-      text-align: center;
-      margin: 20px 0;
+    .primary-button {
+      background: #007bff;
     }
 
-    .controls-container input[type="range"] {
-      width: 200px;
+    .run-button {
+      background: #059669;
     }
 
-    .hljs-ln-numbers {
+    .stop-button {
+      background: #dc2626;
+    }
+
+    .console-submit-button {
+      background: #2563eb;
+    }
+
+    .toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin: 0 0 12px;
+      color: #334155;
+      font-size: 14px;
+    }
+
+    .toggle-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .mode-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-left: 8px;
+    }
+
+    .edit-badge {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .display-badge {
+      background: #d1fae5;
+      color: #065f46;
+      display: none;
+    }
+
+    body.display-mode-active .edit-badge {
+      display: none;
+    }
+
+    body.display-mode-active .display-badge {
+      display: inline-block;
+    }
+
+    .editor-shell {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+      height: 640px;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      position: relative;
+    }
+
+    #displayEditor {
+      display: none;
+      width: auto;
+      height: 100%;
+      padding: 14px;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+      font-size: 16px;
+      line-height: 24px;
+      overflow: auto;
+      white-space: pre;
+      word-break: normal;
+      background: transparent;
+      position: absolute;
+      top: 0;
+      left: 64px;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+    }
+
+    #displayEditor code {
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      background: none;
+      padding: 0;
+      text-shadow: none;
+    }
+
+    .line-numbers {
+      background: #f1f5f9;
+      color: #64748b;
+      border-right: 1px solid #cbd5e1;
+      padding: 14px 8px 14px 0;
       text-align: right;
-      border-right: 1px solid #ccc;
-      padding-right: 10px;
-      margin-right: 10px;
-      min-width: 40px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      line-height: 24px;
+      overflow: hidden;
+      user-select: none;
+      white-space: pre;
+      z-index: 3;
     }
 
-    .hljs-ln-code {
-      padding-left: 10px;
+    .highlight-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      background-color: rgba(16, 185, 129, 0.2);
+      border-left: 4px solid #10b981;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+
+    #editor {
+      width: 100%;
+      height: 100%;
+      resize: none;
+      border: none;
+      padding: 14px;
+      box-sizing: border-box;
+      font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+      font-size: 16px;
+      line-height: 24px;
+      background: transparent;
+      color: #0f172a;
+      outline: none;
+      overflow: auto;
+      white-space: pre;
+      tab-size: 4;
+      position: relative;
+      z-index: 2;
+    }
+
+    .runner-layout {
+      display: grid;
+      grid-template-columns: 42px minmax(280px, 720px);
+      gap: 0;
+      align-items: stretch;
+      height: 100%;
+      min-height: 100%;
+    }
+
+    .runner-toggle {
+      background: #e2e8f0;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      border-right: none;
+      border-radius: 10px 0 0 10px;
+      min-height: 100%;
+      width: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s ease;
+    }
+
+    .runner-toggle:hover {
+      background: #cbd5e1;
+    }
+
+    .runner-panel {
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid #dbe3ef;
+      border-radius: 0 10px 10px 0;
+      overflow: hidden;
+      transition: all 0.28s ease;
+      max-width: 720px;
+      opacity: 1;
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.display-mode-active .runner-panel {
+      background: #ffffff;
+      border-color: #34d399;
+      box-shadow: -4px 0 12px rgba(16, 185, 129, 0.05);
+    }
+
+
+    .runner-layout.collapsed .runner-panel {
+      max-width: 0;
+      opacity: 0;
+      padding-left: 0;
+      padding-right: 0;
+      border-left-width: 0;
+      border-right-width: 0;
+    }
+
+    .runner-layout.collapsed .runner-toggle {
+      border-right: 1px solid #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .status {
+      margin: 8px 0 12px;
+      color: #475569;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    .message {
+      margin: 0 0 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      display: none;
+      white-space: pre-wrap;
+    }
+
+    .console-input-panel {
+      margin-bottom: 12px;
+      padding: 12px;
+      background: #ffffff;
+      border: 1px solid #dbe3ef;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .console-input-help {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .console-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .console-input-row input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 14px;
+    }
+
+    #output {
+      background: #111827;
+      color: #d1fae5;
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 250px;
+      font-family: Consolas, Monaco, monospace;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      overflow: auto;
+      border: 1px solid #1f2937;
+      margin-bottom: 12px;
+    }
+
+    #output {
+      flex-grow: 1;
+    }
+
+    .note {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    @media (max-width: 1200px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .runner-layout {
+        grid-template-columns: 42px 1fr;
+      }
+
+      .editor-shell {
+        height: 420px;
+      }
+
     }
 
     @media print {
 
       .input-container,
-      .controls-container,
-      .button-container {
-        display: none;
+      .starter-panel,
+      .button-row,
+      .toggle-row,
+      .console-input-panel,
+      .runner-toggle {
+        display: none !important;
+      }
+
+      .workspace {
+        display: block !important;
+      }
+
+      .runner-panel {
+        max-width: none !important;
+        opacity: 1 !important;
+        border-radius: 10px !important;
+        border-left-width: 1px !important;
+        padding: 14px !important;
+      }
+
+      .runner-layout {
+        display: block !important;
       }
     }
   </style>
 </head>
 
 <body>
+  <header id="modeHeader">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color)">
+        <path d="m10 2 6 16" />
+        <path d="m14 2-6 16" />
+        <path d="M18 12h-4" />
+        <path d="M20 9h-4" />
+        <path d="M22 6h-4" />
+        <path d="M6 15H2" />
+        <path d="M4 12H2" />
+        <path d="M2 9h2" />
+      </svg>
+      Python Educator 2.0
+      <span class="mode-badge edit-badge">Edit Mode</span>
+      <span class="mode-badge display-badge">Display Mode</span>
+    </div>
+    <div class="visual-controls">
+      <div class="mode-toggle-pill">
+        <button class="mode-btn active" id="btnEditMode" onclick="setAppMode('edit')">Edit Mode</button>
+        <button class="mode-btn" id="btnDisplayMode" onclick="setAppMode('display')">Display Mode</button>
+      </div>
+
+      <div class="theme-toggle" aria-label="Theme">
+        <label><input type="radio" id="light-mode" name="mode" value="light" checked> Light</label>
+        <label><input type="radio" id="dark-mode" name="mode" value="dark"> Dark</label>
+      </div>
+
+      <div class="font-size-control">
+        <label for="font-size" style="font-size: 12px;">A</label>
+        <input type="range" id="font-size" min="10" max="40" value="16" style="width: 100px;">
+        <label for="font-size" style="font-size: 16px;">A</label>
+      </div>
+    </div>
+  </header>
 
   <div class="input-container" id="inputContainer">
-    <input type="text" id="urlInput" placeholder="Enter the raw gist URL here...">
+    <input type="text" id="urlInput" placeholder="Enter the raw gist URL here..." />
     <button onclick="updateURL()">Load Code</button>
   </div>
 
-  <div class="controls-container">
-    <label for="mode">Mode:</label>
-    <input type="radio" id="light-mode" name="mode" value="light" checked> Light
-    <input type="radio" id="dark-mode" name="mode" value="dark"> Dark
-    <br>
-    <label for="font-size">Font Size:</label>
-    <input type="range" id="font-size" min="10" max="30" value="16">
-  </div>
-
-  <div class="code-container" id="codeContainer" style="display: none;">
-    <div class="button-container">
-      <button class="copy-button">Copy</button>
-      <button class="download-py-button">Download .py</button>
-      <button class="download-txt-button">Download .txt</button>
-      <button class="fullscreen-button">Full Screen</button>
-      <button class="visualise-button">Visualise</button>
-      <button class="make-puzzle-button">Make Puzzle</button> <!-- Make Puzzle button -->
+  <div class="starter-panel" id="starterPanel">
+    <h3>Quick start with a ready-made example</h3>
+    <p>
+      Clicking a button below will load a curated iGCSE algorithm example.
+    </p>
+    <div class="starter-grid">
+      <button class="starter-button" data-action="blank">Blank File</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py">Average</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble">Bubble</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py">Counting</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/forloop.py">For
+        loop</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py">If
+        else</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py">Linear</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py">Max
+        and min</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py">Repeat</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py">Totalling</button>
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py">While
+        loop</button>
     </div>
-    <pre><code id="code" class="python hljs"></code></pre>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+  <div class="workspace" id="workspace">
+    <div class="workspace-toolbar">
+      <div class="button-row">
+        <button class="primary-button" id="blankFileButton">Blank File</button>
+        <button class="primary-button" id="copyButton">Copy</button>
+        <button class="primary-button" id="downloadPyButton">Download .py</button>
+        <button class="primary-button" id="downloadTxtButton">Download .txt</button>
+        <button class="primary-button" id="fullscreenButton">Full Screen</button>
+        <button class="primary-button" id="makePuzzleButton">Make Puzzle</button>
+      </div>
+    </div>
+
+    <section class="panel">
+      <div class="toggle-row">
+        <span id="detectionLabel">Detection: waiting for code.</span>
+      </div>
+      <div class="editor-shell" style="position: relative; background: #ffffff;" id="editorBg">
+        <div class="line-numbers" id="lineNumbers">1</div>
+        <div id="highlightLayer"
+          style="position: absolute; top: 14px; left: 64px; right: 0; bottom: 0; pointer-events: none; overflow: hidden; z-index: 5;">
+        </div>
+        <textarea id="editor" spellcheck="false"></textarea>
+        <pre id="displayEditor"><code id="displayCode" class="language-python"></code></pre>
+      </div>
+    </section>
+
+    <div class="runner-layout" id="runnerLayout">
+      <div class="runner-toggle" id="runnerToggle" title="Show or hide run window">◀</div>
+      <section class="panel runner-panel">
+        <p class="message" id="runnerMessage"></p>
+
+        <div class="button-row" id="teacherControlsRow">
+          <button class="run-button" id="runButton">Run</button>
+          <button class="stop-button" onclick="clearRunner()">Reset</button>
+        </div>
+
+        <div class="button-row" id="teachControlsRow" style="display: none;">
+          <button class="run-button" id="playPauseButton" style="min-width: 80px;">Play</button>
+          <button class="primary-button" id="stepBackButton">◀ Back</button>
+          <button class="primary-button" id="stepButton">Step ▶</button>
+          <button class="stop-button" id="resetButton">Reset</button>
+        </div>
+
+        <div id="callTracePanel"
+          style="display: none; background: #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1;">
+          <h4 style="margin: 0 0 8px; font-size: 14px; color: #1e293b;">Call Trace</h4>
+          <div id="callTraceList"
+            style="font-family: Consolas, Monaco, monospace; font-size: 13px; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 170px; overflow-y: auto;">
+          </div>
+        </div>
+
+        <div id="variablePanel"
+          style="display: none; background: #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1;">
+          <h4 style="margin: 0 0 8px; font-size: 14px; color: #1e293b;">Variables</h4>
+          <div id="variableList"
+            style="font-family: Consolas, Monaco, monospace; font-size: 13px; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 150px; overflow-y: auto;">
+          </div>
+        </div>
+
+        <div class="console-input-panel" id="consoleInputPanel">
+          <p class="console-input-help" id="consoleInputHelp">This program is waiting for input.</p>
+          <div class="console-input-row">
+            <input type="text" id="consoleInputField" placeholder="Type a value and press Enter">
+            <button class="console-submit-button" id="consoleSubmitButton">Submit</button>
+          </div>
+        </div>
+
+        <div class="status" id="runnerStatus">Ready.</div>
+        <div id="output"></div>
+        <p class="note">
+          Programs with imports should be downloaded and run locally.
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
   <script>
-    let codeText = '';
     let currentURL = '';
+    let executionCancelled = false;
+    let inputResolver = null;
+    let pyodideReadyPromise = null;
+    let pyodideInstance = null;
+    let currentAppMode = 'edit';
+
+    let displayTraceLog = [];
+    let displayInputHistory = [];
+    let displayTraceStatus = 'ready'; // ready, tracing, waiting_input, finished, error
+    let displayPendingPrompt = '';
+    let displayFinalOutput = '';
+    let displayCurrentStep = 0;
+    let displayTimeout = null;
+    let btnPlayStatus = 'idle';
+    let isTracing = false;
+    let isAwaitingDisplayInput = false;
+    let copyButtonTimeout = null;
+
+
+    // Global Error Handler for debugging
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+      console.error('Window Error:', msg, lineNo, columnNo, error);
+      // Only show alert for real script errors
+      if (msg.toLowerCase().indexOf('script error') === -1) {
+        setRunnerStatus('JS Error: ' + msg + ' (Line ' + lineNo + ')');
+      }
+      return false;
+    };
+
+
+    // Pyodide initialization
+    if (typeof loadPyodide !== "undefined") {
+      pyodideReadyPromise = loadPyodide({
+        stdout: (text) => {
+          if (currentAppMode !== 'display') {
+            outputEl.textContent += text + '\n';
+          }
+        },
+        stderr: (text) => {
+          if (currentAppMode !== 'display') {
+            outputEl.textContent += text + '\n';
+          }
+        }
+      }).then(p => {
+
+        pyodideInstance = p;
+        p.runPython(`
+import sys, builtins
+# Initialization complete
+        `);
+
+        return p;
+      });
+    }
+
+    const editor = document.getElementById('editor');
+    const lineNumbers = document.getElementById('lineNumbers');
+    const outputEl = document.getElementById('output');
+    const runnerMessage = document.getElementById('runnerMessage');
+    const runnerStatus = document.getElementById('runnerStatus');
+    const detectionLabel = document.getElementById('detectionLabel');
+    const runnerLayout = document.getElementById('runnerLayout');
+    const runnerToggle = document.getElementById('runnerToggle');
+
+    const btnEditMode = document.getElementById('btnEditMode');
+    const btnDisplayMode = document.getElementById('btnDisplayMode');
+    const teacherControlsRow = document.getElementById('teacherControlsRow');
+    const teachControlsRow = document.getElementById('teachControlsRow');
+
+    const callTracePanel = document.getElementById('callTracePanel');
+    const callTraceList = document.getElementById('callTraceList');
+    const variablePanel = document.getElementById('variablePanel');
+    const variableList = document.getElementById('variableList');
+    const highlightLayer = document.getElementById('highlightLayer');
+    const editorBg = document.getElementById('editorBg');
+    const displayEditor = document.getElementById('displayEditor');
+    const displayCode = document.getElementById('displayCode');
+
+    function setAppMode(mode) {
+      currentAppMode = mode;
+      btnEditMode.classList.toggle('active', mode === 'edit');
+      btnDisplayMode.classList.toggle('active', mode === 'display');
+      updateAppMode();
+    }
+
+    function updateAppMode() {
+      if (currentAppMode === 'display') {
+        document.body.classList.add('display-mode-active');
+        editor.style.display = 'none';
+        displayEditor.style.display = 'block';
+
+        displayCode.textContent = editor.value;
+        Prism.highlightElement(displayCode);
+
+        teacherControlsRow.style.display = 'none';
+        teachControlsRow.style.display = 'flex';
+        callTracePanel.style.display = 'block';
+        variablePanel.style.display = 'block';
+        clearRunner();
+        setRunnerStatus('Display Mode Ready. Click Play to trace code.');
+      } else {
+        document.body.classList.remove('display-mode-active');
+        editor.style.display = 'block';
+        displayEditor.style.display = 'none';
+
+        teacherControlsRow.style.display = 'flex';
+        teachControlsRow.style.display = 'none';
+        callTracePanel.style.display = 'none';
+        variablePanel.style.display = 'none';
+        clearTeachHighlight();
+        clearRunner();
+      }
+      applyTheme();
+    }
+
+    function applyTheme() {
+      const isDark = document.getElementById('dark-mode').checked;
+      document.documentElement.classList.toggle('dark-theme', isDark);
+      document.body.classList.toggle('dark-theme', isDark);
+      document.body.style.backgroundColor = '';
+      document.body.style.color = '';
+      editorBg.style.backgroundColor = '';
+      editorBg.style.background = '';
+      editor.style.backgroundColor = '';
+      editor.style.color = '';
+      lineNumbers.style.backgroundColor = '';
+      lineNumbers.style.color = '';
+      document.getElementById('prism-theme').href = isDark
+        ? 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css'
+        : 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css';
+      if (currentAppMode === 'display') {
+        Prism.highlightElement(displayCode);
+      }
+    }
+
+
 
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const url = urlParams.get('url');
 
       if (url) {
+        document.getElementById('urlInput').value = url;
+        document.getElementById('inputContainer').style.display = 'none';
+        document.getElementById('starterPanel').style.display = 'none';
         fetchCode(url);
-      } else {
-        document.getElementById('inputContainer').style.display = 'block';
       }
 
-      document.getElementById('light-mode').addEventListener('change', function () {
-        document.getElementById('highlight-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css';
-        document.querySelector('.code-container').style.backgroundColor = '#f5f5f5';
-      });
+      document.querySelectorAll('.starter-button').forEach(button => {
+        button.addEventListener('click', function () {
+          if (button.dataset.action === 'blank') {
+            startBlankFile();
+            return;
+          }
 
-      document.getElementById('dark-mode').addEventListener('change', function () {
-        document.getElementById('highlight-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/atom-one-dark.min.css';
-        document.querySelector('.code-container').style.backgroundColor = '#2d2d2d';
-      });
-
-      document.getElementById('font-size').addEventListener('input', function () {
-        document.getElementById('code').style.fontSize = this.value + 'px';
-      });
-
-      document.querySelector('.copy-button').addEventListener('click', function () {
-        navigator.clipboard.writeText(codeText).then(() => {
-          alert('Code copied to clipboard!');
-        }, (err) => {
-          console.error('Could not copy text: ', err);
+          const starterUrl = button.dataset.url;
+          document.getElementById('urlInput').value = starterUrl;
+          document.getElementById('inputContainer').style.display = 'none';
+          document.getElementById('starterPanel').style.display = 'none';
+          const newURL = `${window.location.pathname}?url=${encodeURIComponent(starterUrl)}`;
+          window.history.pushState({}, '', newURL);
+          fetchCode(starterUrl);
         });
       });
 
-      document.querySelector('.download-py-button').addEventListener('click', function () {
-        const blob = new Blob([codeText], { type: 'text/x-python' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'code.py';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+      document.getElementById('light-mode').addEventListener('change', function () {
+        applyTheme();
       });
 
-      document.querySelector('.download-txt-button').addEventListener('click', function () {
-        const blob = new Blob([codeText], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'code.txt';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+      document.getElementById('dark-mode').addEventListener('change', function () {
+        applyTheme();
       });
 
-      document.querySelector('.fullscreen-button').addEventListener('click', function () {
+
+
+      document.getElementById('font-size').addEventListener('input', function () {
+        applyCodeFontSize(this.value);
+      });
+
+      document.getElementById('copyButton').addEventListener('click', async function () {
+        const code = editor.value;
+        try {
+          await copyTextToClipboard(code);
+          showCopyButtonCopied();
+          setRunnerStatus('Code copied to clipboard.');
+        } catch (err) {
+          setRunnerStatus('Copy failed. Select the code and copy manually.');
+          alert('Copy failed. Please select the code and copy manually.');
+        }
+      });
+
+      document.getElementById('blankFileButton').addEventListener('click', startBlankFile);
+
+      document.getElementById('downloadPyButton').addEventListener('click', function () {
+        downloadText(editor.value, 'code.py', 'text/x-python');
+      });
+
+      document.getElementById('downloadTxtButton').addEventListener('click', function () {
+        downloadText(editor.value, 'code.txt', 'text/plain');
+      });
+
+      document.getElementById('fullscreenButton').addEventListener('click', function () {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch(err => {
             alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
@@ -192,15 +1115,7 @@
         }
       });
 
-      document.querySelector('.visualise-button').addEventListener('click', function () {
-        const baseURL = "https://pythontutor.com/iframe-embed.html";
-        const encodedCode = encodeURIComponent(codeText);
-        const params = `#code=${encodedCode}&codeDivHeight=400&codeDivWidth=350&cumulative=false&curInstr=3&heapPrimitives=nevernest&origin=opt-frontend.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false`;
-        const fullURL = `${baseURL}${params}`;
-        window.open(fullURL, '_blank');
-      });
-
-      document.querySelector('.make-puzzle-button').addEventListener('click', function () {
+      document.getElementById('makePuzzleButton').addEventListener('click', function () {
         if (currentURL) {
           const puzzleURL = `https://jamesabela.github.io/jsfun/reorder.html?url=${encodeURIComponent(currentURL)}`;
           window.open(puzzleURL, '_blank');
@@ -209,15 +1124,133 @@
         }
       });
 
-      document.addEventListener('fullscreenchange', () => {
-        const button = document.querySelector('.fullscreen-button');
-        if (document.fullscreenElement) {
-          button.textContent = 'Exit Full Screen';
-        } else {
-          button.textContent = 'Full Screen';
+      // Teacher Mode binds
+      document.getElementById('runButton').addEventListener('click', runCurrentCode);
+      document.getElementById('consoleSubmitButton').addEventListener('click', submitConsoleInput);
+
+
+      // Display Mode binds
+      document.getElementById('playPauseButton').addEventListener('click', displayPlayPause);
+      document.getElementById('stepBackButton').addEventListener('click', displayStepBack);
+      document.getElementById('stepButton').addEventListener('click', displayStep);
+      document.getElementById('resetButton').addEventListener('click', displayReset);
+
+      document.getElementById('consoleInputField').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          submitConsoleInput();
         }
       });
+
+      editor.addEventListener('input', () => {
+        updateLineNumbers();
+        analyseCodeAndUpdateMessage();
+      });
+
+      editor.addEventListener('scroll', syncLineNumberScroll);
+      displayEditor.addEventListener('scroll', syncLineNumberScroll);
+      runnerToggle.addEventListener('click', toggleRunner);
+
+      updateLineNumbers();
+      applyCodeFontSize(document.getElementById('font-size').value);
+      updateAppMode();
     });
+
+    function applyCodeFontSize(sizeValue) {
+      const fontSize = Number(sizeValue) || 16;
+      const lineHeight = Math.round(fontSize * 1.5);
+
+      editor.style.fontSize = fontSize + 'px';
+      editor.style.lineHeight = lineHeight + 'px';
+      displayEditor.style.fontSize = fontSize + 'px';
+      displayEditor.style.lineHeight = lineHeight + 'px';
+      displayCode.style.fontSize = 'inherit';
+      displayCode.style.lineHeight = 'inherit';
+      lineNumbers.style.fontSize = fontSize + 'px';
+      lineNumbers.style.lineHeight = lineHeight + 'px';
+      updateLineNumbers();
+    }
+
+    function getCodeLineHeight() {
+      const activeView = currentAppMode === 'display' ? displayEditor : editor;
+      const parsed = parseFloat(window.getComputedStyle(activeView).lineHeight);
+      return Number.isFinite(parsed) ? parsed : 24;
+    }
+
+    function updateLineNumbers() {
+      const lines = Math.max(1, editor.value.split('\n').length);
+      let nums = '';
+      for (let i = 1; i <= lines; i++) {
+        nums += i + (i < lines ? '\n' : '');
+      }
+      lineNumbers.textContent = nums;
+      syncLineNumberScroll();
+    }
+
+    function syncLineNumberScroll(event) {
+      if (event && event.target) {
+        const target = event.target;
+        if (target === editor) displayEditor.scrollTop = editor.scrollTop;
+        else if (target === displayEditor) editor.scrollTop = displayEditor.scrollTop;
+      }
+      const scrollTop = currentAppMode === 'display' ? displayEditor.scrollTop : editor.scrollTop;
+      lineNumbers.scrollTop = scrollTop;
+      highlightLayer.style.top = (14 - scrollTop) + 'px';
+    }
+
+    function toggleRunner() {
+      const collapsed = runnerLayout.classList.toggle('collapsed');
+      document.getElementById('workspace').classList.toggle('runner-collapsed', collapsed);
+      runnerToggle.textContent = collapsed ? '▶' : '◀';
+      runnerToggle.title = collapsed ? 'Show run window' : 'Hide run window';
+    }
+
+    function downloadText(text, filename, mimeType) {
+      const blob = new Blob([text], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    async function copyTextToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.setAttribute('readonly', '');
+      textArea.style.position = 'fixed';
+      textArea.style.top = '0';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      textArea.setSelectionRange(0, textArea.value.length);
+
+      try {
+        const copied = document.execCommand('copy');
+        if (!copied) throw new Error('Copy command failed.');
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    }
+
+    function showCopyButtonCopied() {
+      const button = document.getElementById('copyButton');
+      button.textContent = 'Copied';
+      if (copyButtonTimeout) clearTimeout(copyButtonTimeout);
+      copyButtonTimeout = setTimeout(() => {
+        button.textContent = 'Copy';
+        copyButtonTimeout = null;
+      }, 5000);
+    }
 
     function updateURL() {
       const inputURL = document.getElementById('urlInput').value.trim();
@@ -230,26 +1263,738 @@
       fetchCode(inputURL);
     }
 
+    function startBlankFile() {
+      currentURL = '';
+      editor.value = '';
+      displayCode.textContent = '';
+      document.getElementById('urlInput').value = '';
+      document.getElementById('workspace').style.display = 'grid';
+      document.getElementById('inputContainer').style.display = 'none';
+      document.getElementById('starterPanel').style.display = 'none';
+      window.history.pushState({}, '', window.location.pathname);
+      updateLineNumbers();
+      analyseCodeAndUpdateMessage();
+      clearRunner();
+      setRunnerStatus('Blank file ready.');
+      editor.focus();
+    }
+
     function fetchCode(url) {
       currentURL = url;
-      // Pastebin doesn't send CORS headers, so route it through a proxy
       const fetchURL = /pastebin\.com/i.test(url)
         ? `https://corsproxy.io/?${encodeURIComponent(url)}`
         : url;
+
       fetch(fetchURL)
         .then(response => response.text())
         .then(data => {
-          codeText = data;
-          const codeElement = document.getElementById('code');
-          codeElement.innerHTML = data.split('\n').map((line, index) => `<span class="hljs-ln-numbers">${index + 1}&nbsp;</span>${line}&nbsp;`).join('\n');
-          hljs.highlightElement(codeElement);
-          document.getElementById('codeContainer').style.display = 'block';
+          editor.value = data;
+          updateLineNumbers();
+          document.getElementById('workspace').style.display = 'grid';
           document.getElementById('inputContainer').style.display = 'none';
+          document.getElementById('starterPanel').style.display = 'none';
+          analyseCodeAndUpdateMessage();
         })
         .catch(error => {
           alert('Failed to load code. Please ensure the URL is correct and points to a raw Python file.');
           console.error('Error fetching code:', error);
         });
+    }
+
+    function extractImports(source) {
+      const imports = new Set();
+      const lines = source.split('\n');
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('import ')) {
+          const parts = trimmed.replace('import ', '').split(',');
+          for (const part of parts) {
+            const moduleName = part.trim().split(' as ')[0].split('.')[0];
+            if (moduleName) imports.add(moduleName);
+          }
+        } else if (trimmed.startsWith('from ')) {
+          const afterFrom = trimmed.replace('from ', '');
+          const moduleName = afterFrom.split(' import ')[0].trim().split('.')[0];
+          if (moduleName) imports.add(moduleName);
+        }
+      }
+      return [...imports];
+    }
+
+    function classifyCode(source) {
+      const imports = extractImports(source);
+      const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string']);
+      const localOnlyImports = imports.filter(moduleName => !browserSafeImports.has(moduleName));
+      const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
+
+      if (localOnlyImports.length > 0) {
+        return {
+          ok: false,
+          mode: 'download',
+          message: `Local-only imports detected: ${localOnlyImports.join(', ')}. Please download and run this program on a local Python installation.`
+        };
+      }
+
+      return {
+        ok: true,
+        mode: 'normal',
+        message: allowedImports.length > 0
+          ? `Browser-safe imports detected: ${allowedImports.join(', ')}. This code looks suitable for browser running.`
+          : 'No imports detected. This code looks suitable for browser running.'
+      };
+    }
+
+    function analyseCodeAndUpdateMessage() {
+      const analysis = classifyCode(editor.value);
+      runnerMessage.style.display = 'block';
+      runnerMessage.textContent = analysis.message;
+
+      if (!analysis.ok) {
+        detectionLabel.textContent = 'Detection: download required.';
+        document.getElementById('runButton').disabled = true;
+      } else {
+        detectionLabel.textContent = 'Detection: normal Python mode.';
+        document.getElementById('runButton').disabled = false;
+      }
+    }
+
+    function setRunnerStatus(text) {
+      runnerStatus.textContent = text;
+    }
+
+    function showConsoleInput(promptText) {
+      const panel = document.getElementById('consoleInputPanel');
+      const help = document.getElementById('consoleInputHelp');
+      const field = document.getElementById('consoleInputField');
+      help.textContent = promptText && promptText.trim()
+        ? `Input needed: ${promptText}`
+        : 'This program is waiting for input.';
+      panel.style.display = 'block';
+      field.value = '';
+      field.focus();
+    }
+
+    function hideConsoleInput() {
+      document.getElementById('consoleInputPanel').style.display = 'none';
+      document.getElementById('consoleInputField').value = '';
+    }
+
+    function submitConsoleInput() {
+      const field = document.getElementById('consoleInputField');
+      if (!inputResolver) return;
+      const value = field.value;
+      const resolver = inputResolver;
+      inputResolver = null;
+      hideConsoleInput();
+      resolver(value);
+    }
+
+    function clearRunner() {
+      executionCancelled = true;
+      outputEl.textContent = '';
+      hideConsoleInput();
+      clearTeachHighlight();
+
+      displayCurrentStep = 0;
+      displayTraceLog = [];
+      displayInputHistory = [];
+      displayTraceStatus = 'ready';
+      displayPendingPrompt = '';
+      displayFinalOutput = '';
+      isAwaitingDisplayInput = false;
+      document.getElementById('playPauseButton').textContent = 'Play';
+      if (displayTimeout) clearTimeout(displayTimeout);
+
+
+      if (inputResolver) {
+        const resolver = inputResolver;
+        inputResolver = null;
+        resolver('');
+      }
+
+      setRunnerStatus('System reset.');
+    }
+
+    function requestDisplayInput(promptText) {
+      showConsoleInput(promptText);
+      return new Promise(resolve => {
+        inputResolver = function (value) {
+          resolve(value);
+        };
+      });
+    }
+
+    async function runCurrentCode() {
+      const source = editor.value;
+      const analysis = classifyCode(source);
+
+      executionCancelled = false;
+      outputEl.textContent = '';
+      hideConsoleInput();
+
+      if (!analysis.ok) {
+        runnerMessage.style.display = 'block';
+        runnerMessage.textContent = analysis.message;
+        setRunnerStatus('Cannot run this code in the browser.');
+        return;
+      }
+
+      runnerMessage.style.display = 'block';
+      runnerMessage.textContent = analysis.message;
+      setRunnerStatus('Running...');
+
+      if (runnerLayout.classList.contains('collapsed')) {
+        toggleRunner();
+      }
+
+      if (!pyodideInstance && pyodideReadyPromise) {
+        setRunnerStatus('Loading Python engine...');
+        await pyodideReadyPromise;
+      }
+
+      try {
+        pyodideInstance.setStdin({
+          stdin: () => {
+            const result = prompt("Enter input:");
+            if (result !== null) {
+              outputEl.textContent += result + '\n';
+              return result;
+            }
+            return "";
+          }
+        });
+        await pyodideInstance.runPythonAsync(source);
+
+        hideConsoleInput();
+        setRunnerStatus('Finished successfully.');
+      } catch (err) {
+        hideConsoleInput();
+        outputEl.textContent += String(err);
+        setRunnerStatus('There was an error while running the code.');
+      }
+    }
+
+
+    // --- Robust Display Mode Tracing Logic ---
+    async function prepareDisplayTrace() {
+      if (isTracing) return false;
+      isTracing = true;
+
+      const analysis = classifyCode(editor.value);
+      if (!analysis.ok) {
+        runnerMessage.style.display = 'block';
+        runnerMessage.textContent = analysis.message;
+        displayTraceStatus = 'error';
+        outputEl.textContent = '';
+        setRunnerStatus('Cannot trace imported code in the browser.');
+        isTracing = false;
+        return false;
+      }
+
+      if (!pyodideInstance && pyodideReadyPromise) {
+        setRunnerStatus('Loading Python engine...');
+        await pyodideReadyPromise;
+      }
+
+      const source = editor.value;
+
+      const setupCode = `
+import sys, io, builtins, json, ast
+
+_trace_output = []
+_trace_log = []
+_call_stack = []
+_frame_states = {}
+_stdout_capture = io.StringIO()
+displayInputHistory = json.loads(displayInputHistoryJson)
+_recursive_functions = set()
+_source_lines = source_code.splitlines()
+
+try:
+    _tree = ast.parse(source_code)
+    for _node in ast.walk(_tree):
+        if isinstance(_node, ast.FunctionDef):
+            for _child in ast.walk(_node):
+                if isinstance(_child, ast.Call) and isinstance(_child.func, ast.Name) and _child.func.id == _node.name:
+                    _recursive_functions.add(_node.name)
+                    break
+except Exception:
+    pass
+
+def _safe_repr(value):
+    try:
+        text = repr(value)
+    except Exception:
+        text = "..."
+    if len(text) > 80:
+        text = text[:77] + "..."
+    return text
+
+def _frame_locals(frame):
+    locs = {}
+    for k, v in frame.f_locals.items():
+        if not k.startswith('_') and k not in ['kwargs', 'args', 'builtins', 'prompt', 'displayInputHistory', 'TraceInterrupt']:
+            try: locs[k] = str(v)
+            except Exception: locs[k] = "..."
+    return locs
+
+def _format_call(frame):
+    func_name = frame.f_code.co_name
+    arg_names = frame.f_code.co_varnames[:frame.f_code.co_argcount]
+    parts = []
+    for name in arg_names:
+        if name in frame.f_locals:
+            if len(arg_names) == 1:
+                parts.append(_safe_repr(frame.f_locals[name]))
+            else:
+                parts.append(name + "=" + _safe_repr(frame.f_locals[name]))
+    return func_name + "(" + ", ".join(parts) + ")"
+
+def _stack_text():
+    return [item['call'] for item in _call_stack]
+
+def _source_line(line_no):
+    if 1 <= line_no <= len(_source_lines):
+        return _source_lines[line_no - 1].strip()
+    return ""
+
+def _trace_hook(frame, event, arg):
+    if frame.f_code.co_filename != '<user_code>':
+        return _trace_hook
+
+    func_name = frame.f_code.co_name
+    if func_name in ['custom_catch_print', 'custom_display_input', '_run_trace']:
+        return _trace_hook
+
+    if event == 'call' and func_name != '<module>':
+        call_text = _format_call(frame)
+        is_recursive_call = any(item['name'] == func_name for item in _call_stack)
+        if is_recursive_call and _call_stack:
+            for item in reversed(_call_stack):
+                if item['name'] == func_name:
+                    item['made_recursive_call'] = True
+                    break
+
+        state = {
+            'name': func_name,
+            'call': call_text,
+            'made_recursive_call': False,
+            'recursive_function': func_name in _recursive_functions
+        }
+        _frame_states[id(frame)] = state
+        _call_stack.append(state)
+
+        note = "Calling " + call_text
+        label = "Call:"
+        if state['recursive_function'] and is_recursive_call:
+            label = "Going deeper"
+            note = "Need " + call_text
+        elif state['recursive_function']:
+            note = "Calling " + call_text + "\\nGoing down: making function calls until the base case."
+
+        _trace_log.append({
+            'event': 'call',
+            'line': frame.f_code.co_firstlineno,
+            'locals': _frame_locals(frame),
+            'output_len': len(_trace_output),
+            'call_label': label,
+            'call_note': note,
+            'call_text': call_text,
+            'call_stack': _stack_text(),
+            'depth': len(_call_stack)
+        })
+        return _trace_hook
+
+    if event == 'return' and func_name != '<module>':
+        state = _frame_states.get(id(frame), {'name': func_name, 'call': _format_call(frame), 'made_recursive_call': False, 'recursive_function': func_name in _recursive_functions})
+        return_value = _safe_repr(arg)
+        return_line = _source_line(frame.f_lineno)
+        recursive_function = state.get('recursive_function') or state.get('made_recursive_call')
+        label = "Returned value:"
+        note = state['call'] + " returns " + return_value
+
+        if recursive_function and not state.get('made_recursive_call'):
+            label = "Base case reached"
+            note = state['call'] + "\\nBase case reached\\nReturn " + return_value
+        elif recursive_function:
+            label = "Returning to previous call"
+            if len(_call_stack) > 1:
+                note = "Back to " + _call_stack[-2]['call'] + "\\n" + state['call'] + " returned " + return_value
+            else:
+                note = state['call'] + " returned " + return_value
+
+        if return_line.startswith('return'):
+            note += "\\nCode: " + return_line
+
+        _trace_log.append({
+            'event': 'return',
+            'line': frame.f_lineno,
+            'locals': _frame_locals(frame),
+            'output_len': len(_trace_output),
+            'call_label': label,
+            'call_note': note,
+            'call_text': state['call'],
+            'return_value': return_value,
+            'call_stack': _stack_text(),
+            'depth': len(_call_stack)
+        })
+
+        if _call_stack and _call_stack[-1] is state:
+            _call_stack.pop()
+        else:
+            for idx in range(len(_call_stack) - 1, -1, -1):
+                if _call_stack[idx].get('call') == state.get('call'):
+                    _call_stack.pop(idx)
+                    break
+        _frame_states.pop(id(frame), None)
+        return _trace_hook
+
+    if event == 'line':
+        _trace_log.append({
+            'event': 'line',
+            'line': frame.f_lineno,
+            'locals': _frame_locals(frame),
+            'output_len': len(_trace_output),
+            'call_stack': _stack_text(),
+            'call_text': _call_stack[-1]['call'] if _call_stack else "",
+            'call_label': "Current call:" if _call_stack else "",
+            'call_note': _call_stack[-1]['call'] if _call_stack else "",
+            'depth': len(_call_stack)
+        })
+    return _trace_hook
+
+def custom_catch_print(*args, **kwargs):
+    kwargs['file'] = _stdout_capture
+    builtins._original_print(*args, **kwargs)
+    val = _stdout_capture.getvalue()
+    _stdout_capture.truncate(0)
+    _stdout_capture.seek(0)
+    _trace_output.append(val)
+
+if not hasattr(builtins, '_original_print'):
+   builtins._original_print = builtins.print
+builtins.print = custom_catch_print
+
+if not hasattr(builtins, '_original_input'):
+   builtins._original_input = builtins.input
+
+class TraceInterrupt(Exception):
+    def __init__(self, prompt_text):
+        self.prompt_text = prompt_text
+
+def custom_display_input(p=""):
+    _trace_output.append(p)
+    # Filter log for inputs already satisfied
+    idx = len([x for x in _trace_log if '_is_input' in x])
+    
+    if idx < len(displayInputHistory):
+        ans = displayInputHistory[idx]
+        _trace_output.append(ans + '\\n')
+        if _trace_log:
+            _trace_log[-1]['_is_input'] = True
+        return ans
+    else:
+        raise TraceInterrupt(p)
+
+builtins.input = custom_display_input
+
+
+def _run_trace():
+
+    _trace_log.clear()
+    _trace_output.clear()
+    sys.settrace(_trace_hook)
+    status = "finished"
+    pending_prompt = ""
+    try:
+        exec(compile(source_code, '<user_code>', 'exec'), {"__name__": "__main__"})
+    except TraceInterrupt as ti:
+        status = "waiting_input"
+        pending_prompt = ti.prompt_text
+    except Exception as e:
+        _trace_output.append(str(e) + '\\n')
+        status = "error"
+    finally:
+        sys.settrace(None)
+        builtins.print = getattr(builtins, '_original_print', builtins.print)
+        builtins.input = getattr(builtins, '_original_input', builtins.input)
+    return {"log": _trace_log, "output": _trace_output, "status": status, "pending_prompt": pending_prompt}
+`;
+      try {
+        pyodideInstance.globals.set("source_code", source);
+        pyodideInstance.globals.set("displayInputHistoryJson", JSON.stringify(displayInputHistory));
+
+        pyodideInstance.runPython(setupCode);
+        const resProxy = pyodideInstance.runPython("_run_trace()");
+        let res;
+        try {
+          res = resProxy.toJs({ dict_converter: Object.fromEntries });
+        } finally {
+          resProxy.destroy();
+        }
+
+        displayTraceLog = res.log || [];
+        displayTraceStatus = res.status;
+        displayPendingPrompt = res.pending_prompt;
+
+        const outputArr = res.output || [];
+        displayFinalOutput = outputArr.join('');
+        displayTraceLog.forEach(step => {
+          const outLen = step.output_len || 0;
+          let outPart = '';
+          for (let i = 0; i < outLen && i < outputArr.length; i++) {
+            outPart += outputArr[i];
+          }
+          step.full_output = outPart;
+        });
+        if (displayTraceStatus === 'finished' && displayTraceLog.length > 0) {
+          displayTraceLog[displayTraceLog.length - 1].full_output = displayFinalOutput;
+        }
+
+
+
+        if (displayTraceStatus === 'error') {
+          setRunnerStatus('Trace Error.');
+          // Add error details to the output window for better debugging
+          const lastOut = outputArr.length > 0 ? outputArr[outputArr.length - 1] : "";
+          if (lastOut && lastOut.includes("Exception")) {
+            outputEl.textContent += "\n--- Traceback ---\n" + lastOut;
+          }
+        } else {
+          setRunnerStatus(displayTraceStatus === 'waiting_input' ? 'Ready (Input needed)' : 'Trace updated.');
+        }
+
+        isTracing = false;
+        return true;
+      } catch (err) {
+        console.error('Trace Generation Error:', err);
+        outputEl.textContent = "Trace Error: " + String(err);
+        displayTraceStatus = 'error';
+        isTracing = false;
+        return false;
+      }
+    }
+
+
+
+
+
+    function renderDisplayStep(stepIndex) {
+      if (stepIndex >= displayTraceLog.length) return;
+      const step = displayTraceLog[stepIndex];
+      if (!step) return;
+
+      const lineNum = step.line;
+      if (lineNum !== undefined) highlightLine(lineNum);
+      renderCallTrace(step);
+
+      const locs = step.locals || {};
+      let tableHtml = '<table style="width: 100%; border-collapse: collapse; margin-top: 8px;">';
+      tableHtml += '<tr style="border-bottom: 2px solid #cbd5e1;"><th style="text-align: left; padding: 4px; font-size: 12px; color: #64748b;">Variable</th><th style="text-align: left; padding: 4px; font-size: 12px; color: #64748b;">Value</th></tr>';
+
+      const keys = Object.keys(locs);
+      if (keys.length > 0) {
+        keys.forEach(k => {
+          tableHtml += `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 6px 4px; font-weight: 600; color: #0f172a;">${k}</td><td style="padding: 6px 4px; color: #059669;">${locs[k]}</td></tr>`;
+        });
+        tableHtml += '</table>';
+        variableList.innerHTML = tableHtml;
+      } else {
+        variableList.textContent = 'No variables.';
+      }
+
+      const out = step.full_output || '';
+      if (out !== undefined) outputEl.textContent = out;
+
+      syncLineNumberScroll();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderCallTrace(step) {
+      const stack = step.call_stack || [];
+      const label = step.call_label || '';
+      const note = step.call_note || '';
+
+      if (!stack.length && !label && !note) {
+        callTraceList.textContent = 'No function call yet.';
+        return;
+      }
+
+      let html = '';
+      if (label || note) {
+        html += `<div style="margin-bottom: 8px;"><strong>${escapeHtml(label)}</strong>`;
+        if (note) {
+          html += `<div style="margin-top: 4px;">${escapeHtml(note)}</div>`;
+        }
+        html += '</div>';
+      }
+
+      if (stack.length) {
+        html += '<div><strong>Call stack:</strong></div>';
+        html += '<div style="margin-top: 4px;">';
+        stack.forEach((call, index) => {
+          const indent = '&nbsp;'.repeat(index * 4);
+          const isCurrent = index === stack.length - 1;
+          html += `<div>${indent}${isCurrent ? '-> ' : '   '}${escapeHtml(call)}</div>`;
+        });
+        html += '</div>';
+      }
+
+      callTraceList.innerHTML = html;
+    }
+
+
+
+
+    function clearTeachHighlight() {
+      highlightLayer.innerHTML = '';
+      callTraceList.textContent = '';
+      variableList.textContent = '';
+    }
+
+    function highlightLine(lineNum) {
+      clearTeachHighlight();
+      const lineHeight = getCodeLineHeight();
+      const yPos = (lineNum - 1) * lineHeight;
+      const hl = document.createElement('div');
+      hl.className = 'highlight-line';
+      hl.style.top = yPos + 'px';
+      hl.style.height = lineHeight + 'px';
+      highlightLayer.appendChild(hl);
+
+      // Auto-scroll logic
+      const activeView = currentAppMode === 'display' ? displayEditor : editor;
+      const viewRect = activeView.getBoundingClientRect();
+      if (yPos < activeView.scrollTop || yPos > activeView.scrollTop + viewRect.height - 40) {
+        activeView.scrollTop = Math.max(0, yPos - viewRect.height / 2);
+      }
+    }
+
+    async function displayStep() {
+      if (displayTraceStatus === 'error') return;
+      if (isTracing || isAwaitingDisplayInput) return;
+
+      if (displayTraceLog.length === 0) {
+        const success = await prepareDisplayTrace();
+        if (!success) return;
+        if (displayTraceLog.length > 0 && displayCurrentStep === 0) {
+          renderDisplayStep(displayCurrentStep);
+          displayCurrentStep++;
+          setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
+        }
+        return;
+      }
+
+      if (displayCurrentStep < displayTraceLog.length) {
+        renderDisplayStep(displayCurrentStep);
+        displayCurrentStep++;
+        setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
+      } else if (displayTraceStatus === 'waiting_input') {
+        const wasPlaying = btnPlayStatus === 'playing';
+        if (displayTimeout) clearTimeout(displayTimeout);
+        isAwaitingDisplayInput = true;
+        setRunnerStatus('Waiting for input.');
+
+        try {
+          const ans = await requestDisplayInput(displayPendingPrompt || "Input required:");
+          if (!isAwaitingDisplayInput || displayTraceStatus === 'ready') return;
+          displayInputHistory.push(ans);
+          hideConsoleInput();
+
+          const success = await prepareDisplayTrace();
+          if (success && displayCurrentStep < displayTraceLog.length) {
+            renderDisplayStep(displayCurrentStep);
+            displayCurrentStep++;
+            setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
+          } else if (success && displayTraceStatus !== 'waiting_input') {
+            setRunnerStatus('Execution finished.');
+          }
+
+          if (success && wasPlaying && btnPlayStatus === 'playing' && displayTraceStatus !== 'error') {
+            startDisplayAutoPlay();
+          }
+        } finally {
+          isAwaitingDisplayInput = false;
+        }
+      } else {
+        if (displayTraceStatus === 'finished') {
+          outputEl.textContent = displayFinalOutput;
+        }
+        setRunnerStatus('Execution finished.');
+        stopDisplayAutoPlay();
+      }
+    }
+
+
+    function startDisplayAutoPlay() {
+      const btn = document.getElementById('playPauseButton');
+      if (btn) btn.textContent = 'Pause';
+      btnPlayStatus = 'playing';
+
+      function next() {
+        if (btnPlayStatus !== 'playing') return;
+
+        if (displayCurrentStep < displayTraceLog.length) {
+          displayStep();
+          displayTimeout = setTimeout(next, 800);
+        } else if (displayTraceStatus === 'waiting_input') {
+          // Pause auto-play for input
+          displayStep();
+        } else {
+          stopDisplayAutoPlay();
+        }
+      }
+
+      if (displayTimeout) clearTimeout(displayTimeout);
+      displayTimeout = setTimeout(next, 800);
+    }
+
+    function stopDisplayAutoPlay() {
+      const btn = document.getElementById('playPauseButton');
+      if (btn) btn.textContent = 'Play';
+      btnPlayStatus = 'idle';
+      if (displayTimeout) clearTimeout(displayTimeout);
+    }
+
+
+    async function displayPlayPause() {
+      if (btnPlayStatus === 'playing') {
+        stopDisplayAutoPlay();
+      } else {
+        if (displayTraceLog.length === 0) {
+          const success = await prepareDisplayTrace();
+          if (!success) return;
+        }
+        if (displayCurrentStep >= displayTraceLog.length && displayTraceStatus !== 'waiting_input') {
+          displayReset();
+        }
+        startDisplayAutoPlay();
+      }
+    }
+
+    function displayStepBack() {
+      if (displayTraceLog.length === 0 || displayCurrentStep <= 1) return;
+      displayCurrentStep -= 2;
+      if (displayCurrentStep < 0) displayCurrentStep = 0;
+      renderDisplayStep(displayCurrentStep);
+      displayCurrentStep++;
+      setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}`);
+    }
+
+    function displayReset() {
+      displayInputHistory = [];
+      displayTraceStatus = 'ready';
+      isAwaitingDisplayInput = false;
+      stopDisplayAutoPlay();
+      clearRunner();
     }
   </script>
 
