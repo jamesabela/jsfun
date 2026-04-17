@@ -19,6 +19,10 @@
       --header-height: 64px;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -747,6 +751,162 @@
         border-radius: 10px;
       }
 
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding-top: 0;
+      }
+
+      #modeHeader {
+        position: sticky;
+        height: auto;
+        min-height: var(--header-height);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 12px;
+      }
+
+      .brand {
+        font-size: 1rem;
+        gap: 8px;
+        justify-content: center;
+      }
+
+      .brand svg {
+        width: 20px;
+        height: 20px;
+        flex: 0 0 auto;
+      }
+
+      .mode-badge {
+        display: none !important;
+      }
+
+      .visual-controls {
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .mode-toggle-pill {
+        width: 100%;
+      }
+
+      .mode-btn {
+        flex: 1;
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+
+      .theme-toggle,
+      .font-size-control {
+        font-size: 13px;
+      }
+
+      .font-size-control {
+        flex: 1 1 180px;
+        justify-content: center;
+      }
+
+      .font-size-control input[type="range"] {
+        width: min(150px, 45vw) !important;
+      }
+
+      .input-container {
+        margin: 12px;
+      }
+
+      .input-container input[type="text"] {
+        width: 100%;
+        margin-bottom: 8px;
+      }
+
+      .input-container button {
+        width: 100%;
+      }
+
+      .starter-panel {
+        margin: 12px;
+      }
+
+      .starter-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+
+      .workspace {
+        gap: 10px;
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .workspace.runner-collapsed {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .workspace-toolbar {
+        padding: 0 8px;
+        gap: 6px;
+      }
+
+      .button-row {
+        width: 100%;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .workspace-toolbar .button-row button {
+        flex: 1 1 calc(50% - 6px);
+      }
+
+      button {
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+
+      .panel {
+        border-radius: 8px;
+        padding: 10px;
+      }
+
+      .editor-shell {
+        height: 52vh;
+        min-height: 300px;
+        grid-template-columns: 48px 1fr;
+      }
+
+      .line-numbers {
+        padding-right: 6px;
+      }
+
+      #displayEditor {
+        left: 48px;
+        padding: 14px 10px;
+      }
+
+      #highlightLayer {
+        left: 48px !important;
+      }
+
+      .runner-layout {
+        min-width: 0;
+      }
+
+      .runner-panel {
+        min-width: 0;
+      }
+
+      #callTraceList,
+      #variableList {
+        max-height: 120px !important;
+      }
+
+      #output {
+        min-height: 180px;
+      }
+
+      .note {
+        font-size: 12px;
+      }
     }
 
     @media print {
