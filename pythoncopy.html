@@ -708,11 +708,43 @@
       }
 
       .runner-layout {
-        grid-template-columns: 42px 1fr;
+        grid-template-columns: 1fr;
+        grid-template-rows: 38px auto;
       }
 
       .editor-shell {
         height: 420px;
+      }
+
+      .runner-toggle {
+        min-height: 38px;
+        width: 100%;
+        border: 1px solid #cbd5e1;
+        border-bottom: none;
+        border-radius: 10px 10px 0 0;
+      }
+
+      .runner-panel {
+        max-width: none;
+        border-radius: 0 0 10px 10px;
+      }
+
+      .runner-layout.collapsed {
+        grid-template-rows: 38px 0;
+      }
+
+      .runner-layout.collapsed .runner-panel {
+        max-width: none;
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-top-width: 0;
+        border-bottom-width: 0;
+      }
+
+      .runner-layout.collapsed .runner-toggle {
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
       }
 
     }
@@ -831,6 +863,7 @@
         <button class="primary-button" id="downloadPyButton">Download .py</button>
         <button class="primary-button" id="downloadTxtButton">Download .txt</button>
         <button class="primary-button" id="fullscreenButton">Full Screen</button>
+        <button class="primary-button" id="openNewTabButton" style="display: none;">Open in New Tab</button>
         <button class="primary-button" id="makePuzzleButton">Make Puzzle</button>
       </div>
     </div>
@@ -967,6 +1000,8 @@ import sys, builtins
     const detectionLabel = document.getElementById('detectionLabel');
     const runnerLayout = document.getElementById('runnerLayout');
     const runnerToggle = document.getElementById('runnerToggle');
+    const fullscreenButton = document.getElementById('fullscreenButton');
+    const openNewTabButton = document.getElementById('openNewTabButton');
 
     const btnEditMode = document.getElementById('btnEditMode');
     const btnDisplayMode = document.getElementById('btnDisplayMode');
@@ -1105,7 +1140,7 @@ import sys, builtins
         downloadText(editor.value, 'code.txt', 'text/plain');
       });
 
-      document.getElementById('fullscreenButton').addEventListener('click', function () {
+      fullscreenButton.addEventListener('click', function () {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch(err => {
             alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
@@ -1113,6 +1148,10 @@ import sys, builtins
         } else {
           document.exitFullscreen();
         }
+      });
+
+      openNewTabButton.addEventListener('click', function () {
+        window.open(window.location.href, '_blank', 'noopener');
       });
 
       document.getElementById('makePuzzleButton').addEventListener('click', function () {
@@ -1150,11 +1189,21 @@ import sys, builtins
       editor.addEventListener('scroll', syncLineNumberScroll);
       displayEditor.addEventListener('scroll', syncLineNumberScroll);
       runnerToggle.addEventListener('click', toggleRunner);
+      window.addEventListener('resize', () => updateRunnerToggleLabel());
 
+      updateFullscreenAvailability();
       updateLineNumbers();
       applyCodeFontSize(document.getElementById('font-size').value);
+      updateRunnerToggleLabel();
       updateAppMode();
     });
+
+    function updateFullscreenAvailability() {
+      const isEmbedded = window.self !== window.top;
+      openNewTabButton.style.display = isEmbedded ? 'inline-block' : 'none';
+      if (document.fullscreenEnabled) return;
+      fullscreenButton.style.display = 'none';
+    }
 
     function applyCodeFontSize(sizeValue) {
       const fontSize = Number(sizeValue) || 16;
@@ -1201,8 +1250,15 @@ import sys, builtins
     function toggleRunner() {
       const collapsed = runnerLayout.classList.toggle('collapsed');
       document.getElementById('workspace').classList.toggle('runner-collapsed', collapsed);
-      runnerToggle.textContent = collapsed ? '▶' : '◀';
+      updateRunnerToggleLabel(collapsed);
       runnerToggle.title = collapsed ? 'Show run window' : 'Hide run window';
+    }
+
+    function updateRunnerToggleLabel(collapsed = runnerLayout.classList.contains('collapsed')) {
+      const isStacked = window.matchMedia('(max-width: 1200px)').matches;
+      runnerToggle.textContent = isStacked
+        ? (collapsed ? '▼' : '▲')
+        : (collapsed ? '▶' : '◀');
     }
 
     function downloadText(text, filename, mimeType) {
