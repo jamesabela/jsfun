@@ -346,104 +346,104 @@
       {
         "title": "Security",
         "emoji": "🔒",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Security&word2=Privacy&word3=Encryption",
-        "desc": "Security · Privacy · Encryption",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Confidentiality&word2=Integrity&word3=Availability",
+        "desc": "Confidentiality · Integrity · Availability",
         "tag": "iGCSE",
         "isExternal": false
       },
       {
         "title": "Scalability",
         "emoji": "📈",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Scalability&word2=Performance&word3=Cost",
-        "desc": "Scalability · Performance · Cost",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Speed&word2=Quality&word3=Cost",
+        "desc": "Speed · Quality · Cost",
         "tag": "A-Level",
         "isExternal": false
       },
       {
         "title": "Ethics",
         "emoji": "⚖️",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Ethics&word2=Bias&word3=Responsibility",
-        "desc": "Ethics · Bias · Responsibility",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Responsibility&word2=Accountability&word3=Transparency",
+        "desc": "Responsibility · Accountability · Transparency",
         "tag": "iGCSE / A-Level",
         "isExternal": false
       },
       {
         "title": "Data",
         "emoji": "🗄️",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Data&word2=Storage&word3=Integrity",
-        "desc": "Data · Storage · Integrity",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Volume&word2=Velocity&word3=Variety",
+        "desc": "Volume · Velocity · Variety",
         "tag": "iGCSE",
         "isExternal": false
       },
       {
         "title": "AI",
         "emoji": "🤖",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=AI&word2=Automation&word3=Intelligence",
-        "desc": "AI · Automation · Intelligence",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Data&word2=Algorithm&word3=Compute",
+        "desc": "Data · Algorithm · Compute",
         "tag": "A-Level",
         "isExternal": false
       },
       {
         "title": "Privacy",
         "emoji": "👁️",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Privacy&word2=Consent&word3=Tracking",
-        "desc": "Privacy · Consent · Tracking",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Privacy&word2=Security&word3=Convenience",
+        "desc": "Privacy · Security · Convenience",
         "tag": "iGCSE",
         "isExternal": false
       },
       {
         "title": "Accessibility",
         "emoji": "♿",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Accessibility&word2=Usability&word3=Inclusion",
-        "desc": "Accessibility · Usability · Inclusion",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Usability&word2=Accessibility&word3=Inclusion",
+        "desc": "Usability · Accessibility · Inclusion",
         "tag": "iGCSE / A-Level",
         "isExternal": false
       },
       {
         "title": "Sustainability",
         "emoji": "🌱",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Sustainability&word2=Energy&word3=Efficiency",
-        "desc": "Sustainability · Energy · Efficiency",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Environmental&word2=Social&word3=Economic",
+        "desc": "Environmental · Social · Economic",
         "tag": "iGCSE / A-Level",
         "isExternal": false
       },
       {
         "title": "Cybercrime",
         "emoji": "🦹",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Cybercrime&word2=Fraud&word3=Phishing",
-        "desc": "Cybercrime · Fraud · Phishing",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Phishing&word2=Malware&word3=Hacking",
+        "desc": "Phishing · Malware · Hacking",
         "tag": "iGCSE",
         "isExternal": false
       },
       {
         "title": "Open Source",
         "emoji": "🤝",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=OpenSource&word2=Collaboration&word3=Transparency",
-        "desc": "Open Source · Collaboration · Transparency",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Community&word2=Transparency&word3=Freedom",
+        "desc": "Community · Transparency · Freedom",
         "tag": "A-Level",
         "isExternal": false
       },
       {
         "title": "Digital Divide",
         "emoji": "🌍",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=DigitalDivide&word2=Access&word3=Education",
-        "desc": "Digital Divide · Access · Education",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Access&word2=Skills&word3=Motivation",
+        "desc": "Access · Skills · Motivation",
         "tag": "iGCSE / A-Level",
         "isExternal": false
       },
       {
         "title": "Algorithms",
         "emoji": "🧮",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Algorithms&word2=Optimization&word3=Complexity",
-        "desc": "Algorithms · Optimization · Complexity",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Speed&word2=Accuracy&word3=Memory",
+        "desc": "Speed · Accuracy · Memory",
         "tag": "A-Level",
         "isExternal": false
       },
       {
         "title": "Networking",
         "emoji": "📡",
-        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Networking&word2=Bandwidth&word3=Connectivity",
-        "desc": "Networking · Bandwidth · Connectivity",
+        "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Bandwidth&word2=Latency&word3=Reliability",
+        "desc": "Bandwidth · Latency · Reliability",
         "tag": "iGCSE",
         "isExternal": false
       }
