@@ -80,6 +80,14 @@
     "icon": "📚",
     "tools": [
       {
+        "title": "Array Explorer",
+        "emoji": "🗄️",
+        "url": "https://cie-igcse-array-explorer.lovable.app/",
+        "desc": "Learn arrays interactively: memory diagrams, pseudocode, Python, searching, and classroom games. By Hari Denton.",
+        "tag": "iGCSE",
+        "isExternal": true
+      },
+      {
         "title": "Average",
         "emoji": "📊",
         "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py",
