@@ -618,5 +618,51 @@
         "isExternal": false
       }
     ]
+  },
+  {
+    "category": "Penalty Shootouts — iGCSE",
+    "icon": "⚽",
+    "tools": [
+      {
+        "title": "Data Representation",
+        "emoji": "🔢",
+        "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-representation.json",
+        "desc": "Penalty shootout game covering binary, hex, compression and data types.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Data Transmission",
+        "emoji": "📡",
+        "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-transmission.json",
+        "desc": "Penalty shootout game covering networking, packets and error detection.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Hardware",
+        "emoji": "🖥️",
+        "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-hardware.json",
+        "desc": "Penalty shootout game covering CPU, memory and storage devices.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Software",
+        "emoji": "💾",
+        "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-software.json",
+        "desc": "Penalty shootout game covering operating systems and utility software.",
+        "tag": "iGCSE",
+        "isExternal": false
+      },
+      {
+        "title": "Internet & Its Uses",
+        "emoji": "🌐",
+        "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-internet.json",
+        "desc": "Penalty shootout game covering the web, digital currency and cyber security.",
+        "tag": "iGCSE",
+        "isExternal": false
+      }
+    ]
   }
 ]
