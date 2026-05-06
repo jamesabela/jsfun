@@ -214,6 +214,20 @@
     ]
   },
   {
+    "category": "Science",
+    "icon": "🧪",
+    "tools": [
+      {
+        "title": "Half-Life Calculator",
+        "emoji": "☢️",
+        "url": "https://jamesabela.github.io/jsfun/halflife.html",
+        "desc": "Visualise radioactive decay as repeated halving. See clear workings and visual models for iGCSE Physics.",
+        "tag": "iGCSE",
+        "isExternal": false
+      }
+    ]
+  },
+  {
     "category": "Primary Creative & Fun",
     "icon": "🎨",
     "tools": [

@@ -65,6 +65,9 @@ Word & literacy tools
 * [Story Dice](https://jamesabela.github.io/jsfun/storydice.html) - Generates story prompts and nets. (Even saves images for you)
 * [Plot Device Chooser](https://scratch.mit.edu/projects/2261416/fullscreen/) - In Scratch
 
+## Science tools
+* [Half-Life Calculator](https://jamesabela.github.io/jsfun/halflife.html) - Visualise radioactive decay as repeated halving. See clear workings and visual models for iGCSE Physics.
+
 Timer
 * [Pomodoro timer](https://minnowfish.github.io/Pomodoro-Timer/) - Student created
 
