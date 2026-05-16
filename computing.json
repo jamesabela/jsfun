@@ -26,6 +26,14 @@
         "desc": "Write, check and practise pseudocode in the Cambridge International style. Specifically designed for Cambridge iGCSE and A-Level Computer Science students.",
         "tag": "iGCSE / A-Level",
         "isExternal": true
+      },
+      {
+        "title": "Syntax Styler",
+        "emoji": "🎨",
+        "url": "https://syntaxstyler.sethideclercq.com/",
+        "desc": "Google Workspace extension to easily format code in Google Docs and Slides. Perfect for creating worksheets and presentations. By Sethi De Clercq.",
+        "tag": "Teacher Tool",
+        "isExternal": true
       }
     ]
   },
