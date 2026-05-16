@@ -1000,6 +1000,28 @@
       background: #0f172a;
     }
     
+    .instruction-image {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      border-radius: 16px;
+      margin: 20px auto;
+      display: block;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: white;
+    }
+    
+    .instruction-image:hover {
+      transform: scale(1.02) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+    }
+    
+    body.dark-mode .instruction-image {
+      background: #1e293b;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+    
     .instructions-panel th, .instructions-panel td {
       text-align: left;
       padding: 12px;
@@ -1200,6 +1222,7 @@
       <div class="carousel-track" id="carouselTrack">
         <!-- Slide 1 -->
         <div class="carousel-slide">
+          <img src="python_educator_hero.png" alt="Python Educator Hero" class="instruction-image">
           <p>Python Educator 2.0 lets you load, edit, run, display, and trace Python code in the browser. It is designed for teachers who want to demonstrate algorithms clearly and for students who want to explore code step by step.</p>
           
           <h3>Getting started</h3>
@@ -1225,6 +1248,7 @@
 
         <!-- Slide 2 -->
         <div class="carousel-slide">
+          <img src="python_edit_run_mode.png" alt="Edit and Run Mode" class="instruction-image">
           <h3>Edit Mode</h3>
           <p>Edit Mode is the normal working mode. In Edit Mode, you can:</p>
           <ul>
@@ -1240,13 +1264,15 @@
 
           <h3>Running Python code</h3>
           <p>Click <strong>Run</strong> to run the code in the browser. The output appears in the panel on the right. If the program uses <code>input()</code>, the browser will ask the user to enter a value. Click <strong>Reset</strong> to clear the output and reset the runner.</p>
+          <p><strong>Supported Modules:</strong> Only <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, and <code>string</code> are supported in the browser. For any other modules or more complex libraries, please use a local IDE.</p>
 
           <h3>Import detection</h3>
-          <p>Python Educator checks whether the code uses imports. Browser-safe imports include: <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>. If the code uses other imports, the tool will show a message saying that the program should be downloaded and run locally. This is because not all Python libraries can run safely inside the browser.</p>
+          <p>Python Educator automatically checks whether the code uses imports. If the code uses modules other than the supported ones listed above, the tool will disable the run button and prompt you to download and run the program on a local Python installation.</p>
         </div>
 
         <!-- Slide 3 -->
         <div class="carousel-slide">
+          <img src="python_trace_mode.png" alt="Trace and Display Mode" class="instruction-image">
           <h3>Display Mode</h3>
           <p>Display Mode is designed for teaching and explaining code. In Display Mode, the editor becomes a cleaner code display with syntax highlighting. The code cannot be edited directly in this mode.</p>
           <p>Display Mode includes: line highlighting, step-by-step execution, automatic play mode, variable tracking, call trace display, input handling, recursion-friendly call tracing. Use Display Mode when explaining how an algorithm works line by line.</p>
@@ -1266,6 +1292,7 @@
 
         <!-- Slide 4 -->
         <div class="carousel-slide">
+          <img src="python_variables_trace.png" alt="Variables and Call Trace" class="instruction-image">
           <h3>Variables & Call Trace panels</h3>
           <p>The <strong>Variables panel</strong> shows the current values of variables while the program is being traced. This is useful for explaining: counters, totals, loop variables, list values, function parameters, return values.</p>
           <p>The <strong>Call Trace panel</strong> shows function calls as they happen. This is especially useful for teaching: functions, parameters, return values, recursion, the call stack.</p>
@@ -1388,7 +1415,7 @@
         <div class="status" id="runnerStatus">Ready.</div>
         <div id="output"></div>
         <p class="note">
-          Programs with imports should be downloaded and run locally.
+          Only these modules are supported: <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>. Use a local IDE for anything else.
         </p>
       </section>
     </div>
