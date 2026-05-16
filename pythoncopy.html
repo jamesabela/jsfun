@@ -1349,7 +1349,8 @@
     <div class="workspace-toolbar">
       <div class="button-row">
         <button class="primary-button" id="blankFileButton">Blank File</button>
-        <button class="primary-button" id="copyButton">Copy</button>
+        <button class="primary-button" id="copyButton">Copy Code</button>
+        <button class="primary-button" id="copyForDocsButton" style="background: #8b5cf6;" title="Copy with formatting and line numbers for Word/Google Docs">Copy for Docs</button>
         <button class="primary-button" id="downloadPyButton">Download .py</button>
         <button class="primary-button" id="downloadTxtButton">Download .txt</button>
         <button class="primary-button" id="openNewTabButton" style="display: none;">Open in New Tab</button>
@@ -1664,6 +1665,7 @@ import sys, builtins
 
       document.getElementById('blankFileButton').addEventListener('click', startBlankFile);
 
+      document.getElementById('copyForDocsButton').addEventListener('click', copyForDocs);
       document.getElementById('downloadPyButton').addEventListener('click', function () {
         downloadText(editor.value, 'code.py', 'text/x-python');
       });
@@ -1803,6 +1805,104 @@ import sys, builtins
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+    }
+
+    async function copyForDocs() {
+      const code = editor.value;
+      const isDarkMode = document.body.classList.contains('dark-theme');
+      
+      // Define theme colors for the pasted document
+      const theme = isDarkMode ? {
+        bg: '#1e1e1e',
+        text: '#d4d4d4',
+        gutterBg: '#2d2d2d',
+        gutterText: '#858585',
+        comment: '#6a9955',
+        keyword: '#569cd6',
+        string: '#ce9178',
+        function: '#dcdcaa',
+        number: '#b5cea8',
+        operator: '#d4d4d4'
+      } : {
+        bg: '#ffffff',
+        text: '#333333',
+        gutterBg: '#f0f0f0',
+        gutterText: '#999999',
+        comment: '#008000',
+        keyword: '#0000ff',
+        string: '#a31515',
+        function: '#795e26',
+        number: '#098658',
+        operator: '#333333'
+      };
+
+      const lines = code.split('\n');
+      // Remove width: 100% to prevent "squeezing" in Google Docs
+      let tableHtml = `<div style="background-color: ${theme.bg}; padding: 15px; border-radius: 10px; border: 1px solid #ccc; display: inline-block; min-width: 100%;">`;
+      tableHtml += `<table cellspacing="0" cellpadding="0" style="border-collapse: collapse; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 11pt; background: ${theme.bg}; color: ${theme.text};">`;
+      
+      for (let i = 0; i < lines.length; i++) {
+        const lineNum = i + 1;
+        const lineCode = lines[i] || ' ';
+        
+        let highlighted = lineCode;
+        try {
+           highlighted = Prism.highlight(lineCode, Prism.languages.python || Prism.languages.javascript, 'python');
+        } catch(e) {
+           highlighted = lineCode.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+        
+        const styledCode = highlighted
+          .replace(/class="token comment"/g, `style="color: ${theme.comment}; font-style: italic;"`)
+          .replace(/class="token keyword"/g, `style="color: ${theme.keyword}; font-weight: bold;"`)
+          .replace(/class="token string"/g, `style="color: ${theme.string};"`)
+          .replace(/class="token function"/g, `style="color: ${theme.function};"`)
+          .replace(/class="token number"/g, `style="color: ${theme.number};"`)
+          .replace(/class="token (punctuation|operator)"/g, `style="color: ${theme.operator};"`);
+
+        // Using a div with a fixed width inside the TD is the most reliable way to force width in Docs
+        tableHtml += `
+          <tr>
+            <td width="60" style="width: 60px; background-color: ${theme.gutterBg}; color: ${theme.gutterText}; text-align: right; border-right: 3px solid #007bff; vertical-align: top; font-size: 10pt; font-weight: bold; white-space: nowrap;">
+              <div style="width: 60px; padding-right: 10px; box-sizing: border-box;">${lineNum}</div>
+            </td>
+            <td style="padding-left: 15px; white-space: pre; vertical-align: top; overflow: visible;">${styledCode}</td>
+          </tr>`;
+      }
+      tableHtml += '</table></div>';
+
+      try {
+        if (navigator.clipboard && window.ClipboardItem) {
+          const blob = new Blob([tableHtml], { type: 'text/html' });
+          const plainBlob = new Blob([code], { type: 'text/plain' });
+          const data = [new ClipboardItem({
+            'text/html': blob,
+            'text/plain': plainBlob
+          })];
+          await navigator.clipboard.write(data);
+        } else {
+          // Fallback for browsers that don't support ClipboardItem
+          const div = document.createElement('div');
+          div.innerHTML = tableHtml;
+          div.style.position = 'fixed';
+          div.style.left = '-9999px';
+          document.body.appendChild(div);
+          
+          const range = document.createRange();
+          range.selectNode(div);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          document.body.removeChild(div);
+        }
+        
+        const originalText = runnerStatus.textContent;
+        setRunnerStatus('✓ Copied with line numbers!');
+        setTimeout(() => setRunnerStatus(originalText), 3000);
+      } catch (err) {
+        console.error('Failed to copy rich text:', err);
+        setRunnerStatus('Clipboard error. Try again?');
+      }
     }
 
     async function copyTextToClipboard(text) {
