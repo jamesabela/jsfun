@@ -936,6 +936,177 @@
         display: block !important;
       }
     }
+
+    /* Instructions Panel Styles */
+    .instructions-panel {
+      max-width: 1000px;
+      margin: 20px auto 40px;
+      padding: 30px;
+      background: #f8fafc;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+      color: #334155;
+    }
+    
+    @media (max-width: 768px) {
+      .instructions-panel {
+        margin: 12px 12px 40px;
+        padding: 20px;
+      }
+    }
+    
+    body.dark-mode .instructions-panel {
+      background: #1e293b;
+      border-color: #334155;
+      color: #cbd5e1;
+    }
+    
+    .instructions-panel h2 {
+      color: var(--primary-color);
+      margin-top: 0;
+      font-size: 1.5rem;
+    }
+    
+    .instructions-panel h3 {
+      margin-top: 24px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+      font-size: 1.2rem;
+    }
+    
+    body.dark-mode .instructions-panel h3 {
+      border-color: #334155;
+    }
+    
+    .instructions-panel p, .instructions-panel ul, .instructions-panel ol {
+      line-height: 1.6;
+    }
+    
+    .instructions-panel li {
+      margin-bottom: 8px;
+    }
+    
+    .instructions-panel table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: #ffffff;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    body.dark-mode .instructions-panel table {
+      background: #0f172a;
+    }
+    
+    .instructions-panel th, .instructions-panel td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    body.dark-mode .instructions-panel th, body.dark-mode .instructions-panel td {
+      border-color: #334155;
+    }
+    
+    .instructions-panel th {
+      background: #f1f5f9;
+      font-weight: 600;
+    }
+    
+    body.dark-mode .instructions-panel th {
+      background: #1e293b;
+    }
+
+    /* Carousel Styles */
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .carousel-slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      padding: 0 10px;
+    }
+    .carousel-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+    body.dark-mode .carousel-controls {
+      border-color: #334155;
+    }
+    .carousel-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .carousel-btn:hover {
+      background: #2563eb;
+    }
+    .carousel-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .dot.active {
+      background: var(--primary-color);
+    }
+    body.dark-mode .dot {
+      background: #475569;
+    }
+    body.dark-mode .dot.active {
+      background: var(--primary-color);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid #e2e8f0;
+      font-size: 0.95rem;
+      color: #64748b;
+      margin-top: 2rem;
+      background: #f8fafc;
+    }
+    body.dark-mode footer {
+      background: #0f172a;
+      border-color: #334155;
+      color: #94a3b8;
+    }
+    footer a {
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    footer a.tea {
+      color: #e73c7e;
+    }
+    footer a.computing-link {
+      display: inline-block;
+      margin-top: 10px;
+    }
   </style>
 </head>
 
@@ -963,6 +1134,10 @@
         <button class="mode-btn" id="btnDisplayMode" onclick="setAppMode('display')">Display Mode</button>
       </div>
 
+      <div class="mode-toggle-pill">
+        <button class="mode-btn" id="fullscreenButton" title="Full Screen" style="font-size: 18px; padding: 2px 12px;">⛶</button>
+      </div>
+
       <div class="theme-toggle" aria-label="Theme">
         <label><input type="radio" id="light-mode" name="mode" value="light" checked> Light</label>
         <label><input type="radio" id="dark-mode" name="mode" value="dark"> Dark</label>
@@ -973,6 +1148,10 @@
         <input type="range" id="font-size" min="10" max="40" value="16" style="width: 100px;">
         <label for="font-size" style="font-size: 16px;">A</label>
       </div>
+
+      <button onclick="showStartScreen()" title="Info & Instructions" style="background: none; border: none; cursor: pointer; color: var(--primary-color); display: flex; align-items: center; padding: 4px 8px; font-size: 20px; margin-left: auto;">
+        ℹ️
+      </button>
     </div>
   </header>
 
@@ -1015,6 +1194,130 @@
     </div>
   </div>
 
+  <div class="instructions-panel" id="instructionsPanel">
+    <h2>Python Educator 2.0 Instructions</h2>
+    <div class="carousel-container">
+      <div class="carousel-track" id="carouselTrack">
+        <!-- Slide 1 -->
+        <div class="carousel-slide">
+          <p>Python Educator 2.0 lets you load, edit, run, display, and trace Python code in the browser. It is designed for teachers who want to demonstrate algorithms clearly and for students who want to explore code step by step.</p>
+          
+          <h3>Getting started</h3>
+          <p>When the page opens, you can either:</p>
+          <ul>
+            <li>Paste a raw Python file URL into the box and click <strong>Load Code</strong>.</li>
+            <li>Choose one of the <strong>ready-made iGCSE algorithm examples</strong>.</li>
+            <li>Click <strong>Blank File</strong> to start writing your own Python code.</li>
+          </ul>
+          <p>The ready-made examples include common algorithms such as average, counting, totalling, linear search, bubble sort, if/else, for loops, while loops, and repeat-style loops.</p>
+
+          <h3>Loading code from a URL</h3>
+          <p>To load code from another source:</p>
+          <ol>
+            <li>Copy the raw URL of a Python file.</li>
+            <li>Paste it into the input box.</li>
+            <li>Click <strong>Load Code</strong>.</li>
+          </ol>
+          <p>The page URL will update automatically, so you can share the loaded version with students.</p>
+          <p>Example format:<br>
+          <code>https://jamesabela.github.io/jsfun/pythoncopy?url=RAW_FILE_URL_HERE</code></p>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-slide">
+          <h3>Edit Mode</h3>
+          <p>Edit Mode is the normal working mode. In Edit Mode, you can:</p>
+          <ul>
+            <li>edit the Python code</li>
+            <li>run the code in the browser</li>
+            <li>copy the code</li>
+            <li>download the code as a .py file</li>
+            <li>download the code as a .txt file</li>
+            <li>open the page in full screen</li>
+            <li>create a code-ordering puzzle from the current file</li>
+          </ul>
+          <p>Use Edit Mode when students need to type, modify, test, or copy the program.</p>
+
+          <h3>Running Python code</h3>
+          <p>Click <strong>Run</strong> to run the code in the browser. The output appears in the panel on the right. If the program uses <code>input()</code>, the browser will ask the user to enter a value. Click <strong>Reset</strong> to clear the output and reset the runner.</p>
+
+          <h3>Import detection</h3>
+          <p>Python Educator checks whether the code uses imports. Browser-safe imports include: <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>. If the code uses other imports, the tool will show a message saying that the program should be downloaded and run locally. This is because not all Python libraries can run safely inside the browser.</p>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-slide">
+          <h3>Display Mode</h3>
+          <p>Display Mode is designed for teaching and explaining code. In Display Mode, the editor becomes a cleaner code display with syntax highlighting. The code cannot be edited directly in this mode.</p>
+          <p>Display Mode includes: line highlighting, step-by-step execution, automatic play mode, variable tracking, call trace display, input handling, recursion-friendly call tracing. Use Display Mode when explaining how an algorithm works line by line.</p>
+
+          <h3>Step-by-step tracing</h3>
+          <p>In Display Mode, use these buttons:</p>
+          <table>
+            <tr><th>Button</th><th>What it does</th></tr>
+            <tr><td>Play</td><td>Runs through the trace automatically</td></tr>
+            <tr><td>Pause</td><td>Pauses automatic tracing</td></tr>
+            <tr><td>Step</td><td>Moves forward one step</td></tr>
+            <tr><td>Back</td><td>Moves back one step</td></tr>
+            <tr><td>Reset</td><td>Restarts the trace</td></tr>
+          </table>
+          <p>As the program runs, the current line is highlighted. The output, variables, and function calls are updated as the code progresses.</p>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="carousel-slide">
+          <h3>Variables & Call Trace panels</h3>
+          <p>The <strong>Variables panel</strong> shows the current values of variables while the program is being traced. This is useful for explaining: counters, totals, loop variables, list values, function parameters, return values.</p>
+          <p>The <strong>Call Trace panel</strong> shows function calls as they happen. This is especially useful for teaching: functions, parameters, return values, recursion, the call stack.</p>
+          <p>For recursive functions, the tool attempts to show when the function is going deeper, when the base case is reached, and when values are returned.</p>
+
+          <h3>Input in Display Mode</h3>
+          <p>If the program uses <code>input()</code>, the trace will pause and ask for a value. Type the value into the input box and click Submit, or press Enter. The trace will then continue using that input.</p>
+
+          <h3>Copying and downloading code</h3>
+          <p>Use Copy to copy the current code to the clipboard, Download .py to save it as a Python file, or Download .txt to save it as a text file. This is useful if students need to paste the code into another editor or submit it elsewhere.</p>
+
+          <h3>Making a puzzle</h3>
+          <p>Click Make Puzzle to turn the current code into a code-ordering puzzle. This opens the code in the reorder activity: <code>https://jamesabela.github.io/jsfun/reorder.html</code>. This is useful for checking whether students understand the correct sequence of an algorithm.</p>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="carousel-slide">
+          <h3>Display options</h3>
+          <p>The top toolbar includes several display controls:</p>
+          <table>
+            <tr><th>Control</th><th>Purpose</th></tr>
+            <tr><td>Edit Mode / Display Mode</td><td>Switches between editing and teaching views</td></tr>
+            <tr><td>Light / Dark</td><td>Changes the page theme</td></tr>
+            <tr><td>Font size slider</td><td>Makes the code smaller or larger</td></tr>
+            <tr><td>Full Screen</td><td>Shows the tool full screen for teaching</td></tr>
+          </table>
+
+          <h3>Teacher use cases</h3>
+          <p>Teachers can use Python Educator 2.0 to: demonstrate standard algorithms, explain code line by line, show how variables change, teach loops, selection, functions, and recursion, create code-ordering puzzles, share code examples using a URL, present Python clearly on a large screen.</p>
+
+          <h3>Student use cases</h3>
+          <p>Students can use it to: experiment with Python code, run short programs in the browser, trace algorithms step by step, check how variables change, copy or download working examples, practise rearranging code into the correct order.</p>
+
+          <h3>Important limitations</h3>
+          <p>Python Educator 2.0 runs Python in the browser, so it is best for short teaching examples and algorithm demonstrations. Programs that use unsupported imports, external files, graphics libraries, or complex packages should be downloaded and run in a local Python environment instead.</p>
+        </div>
+      </div>
+      
+      <div class="carousel-controls">
+        <button class="carousel-btn" onclick="prevInstructionSlide()">◀ Prev</button>
+        <div class="carousel-dots" id="carouselDots">
+          <span class="dot active" onclick="goToInstructionSlide(0)"></span>
+          <span class="dot" onclick="goToInstructionSlide(1)"></span>
+          <span class="dot" onclick="goToInstructionSlide(2)"></span>
+          <span class="dot" onclick="goToInstructionSlide(3)"></span>
+          <span class="dot" onclick="goToInstructionSlide(4)"></span>
+        </div>
+        <button class="carousel-btn" onclick="nextInstructionSlide()">Next ▶</button>
+      </div>
+    </div>
+  </div>
+
   <div class="workspace" id="workspace">
     <div class="workspace-toolbar">
       <div class="button-row">
@@ -1022,7 +1325,6 @@
         <button class="primary-button" id="copyButton">Copy</button>
         <button class="primary-button" id="downloadPyButton">Download .py</button>
         <button class="primary-button" id="downloadTxtButton">Download .txt</button>
-        <button class="primary-button" id="fullscreenButton">Full Screen</button>
         <button class="primary-button" id="openNewTabButton" style="display: none;">Open in New Tab</button>
         <button class="primary-button" id="makePuzzleButton">Make Puzzle</button>
       </div>
@@ -1235,6 +1537,47 @@ import sys, builtins
     }
 
 
+    function showStartScreen() {
+      document.getElementById('inputContainer').style.display = 'flex';
+      document.getElementById('starterPanel').style.display = 'block';
+      document.getElementById('instructionsPanel').style.display = 'block';
+      document.getElementById('workspace').style.display = 'none';
+      window.history.pushState({}, '', window.location.pathname);
+    }
+
+    let currentInstructionSlide = 0;
+    const totalInstructionSlides = 5;
+
+    function updateInstructionCarousel() {
+      const track = document.getElementById('carouselTrack');
+      if (track) {
+        track.style.transform = `translateX(-${currentInstructionSlide * 100}%)`;
+      }
+      
+      const dots = document.querySelectorAll('#carouselDots .dot');
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentInstructionSlide);
+      });
+    }
+
+    function prevInstructionSlide() {
+      if (currentInstructionSlide > 0) {
+        currentInstructionSlide--;
+        updateInstructionCarousel();
+      }
+    }
+
+    function nextInstructionSlide() {
+      if (currentInstructionSlide < totalInstructionSlides - 1) {
+        currentInstructionSlide++;
+        updateInstructionCarousel();
+      }
+    }
+
+    function goToInstructionSlide(index) {
+      currentInstructionSlide = index;
+      updateInstructionCarousel();
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -1244,6 +1587,7 @@ import sys, builtins
         document.getElementById('urlInput').value = url;
         document.getElementById('inputContainer').style.display = 'none';
         document.getElementById('starterPanel').style.display = 'none';
+        document.getElementById('instructionsPanel').style.display = 'none';
         fetchCode(url);
       }
 
@@ -1258,6 +1602,7 @@ import sys, builtins
           document.getElementById('urlInput').value = starterUrl;
           document.getElementById('inputContainer').style.display = 'none';
           document.getElementById('starterPanel').style.display = 'none';
+          document.getElementById('instructionsPanel').style.display = 'none';
           const newURL = `${window.location.pathname}?url=${encodeURIComponent(starterUrl)}`;
           window.history.pushState({}, '', newURL);
           fetchCode(starterUrl);
@@ -1487,6 +1832,7 @@ import sys, builtins
       document.getElementById('workspace').style.display = 'grid';
       document.getElementById('inputContainer').style.display = 'none';
       document.getElementById('starterPanel').style.display = 'none';
+      document.getElementById('instructionsPanel').style.display = 'none';
       window.history.pushState({}, '', window.location.pathname);
       updateLineNumbers();
       analyseCodeAndUpdateMessage();
@@ -1509,6 +1855,7 @@ import sys, builtins
           document.getElementById('workspace').style.display = 'grid';
           document.getElementById('inputContainer').style.display = 'none';
           document.getElementById('starterPanel').style.display = 'none';
+          document.getElementById('instructionsPanel').style.display = 'none';
           analyseCodeAndUpdateMessage();
         })
         .catch(error => {
@@ -2214,7 +2561,18 @@ def _run_trace():
     }
   </script>
 
-  <small>&nbsp;<a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a> &#169; James Abela</small>
+  <footer>
+    <p>
+      Made with ❤️ for better thinking. If it helped you, support the project.
+      <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+      <br>
+      <a href="computing.html" class="computing-link">More Computing Tools</a>
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.85rem;">
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
+      James Abela 2024
+    </p>
+  </footer>
   <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
   <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
       referrerpolicy="no-referrer-when-downgrade" /></noscript>
