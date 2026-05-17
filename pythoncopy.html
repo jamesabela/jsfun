@@ -1649,6 +1649,8 @@ import sys, builtins
         document.getElementById('starterPanel').style.display = 'none';
         document.getElementById('instructionsPanel').style.display = 'none';
         fetchCode(url);
+      } else if (urlParams.has('blank')) {
+        startBlankFile();
       }
 
       document.querySelectorAll('.starter-button').forEach(button => {
@@ -2018,7 +2020,7 @@ import sys, builtins
       document.getElementById('inputContainer').style.display = 'none';
       document.getElementById('starterPanel').style.display = 'none';
       document.getElementById('instructionsPanel').style.display = 'none';
-      window.history.pushState({}, '', window.location.pathname);
+      window.history.pushState({}, '', window.location.pathname + '?blank');
       updateLineNumbers();
       analyseCodeAndUpdateMessage();
       clearRunner();
