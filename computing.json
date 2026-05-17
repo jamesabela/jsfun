@@ -1,13 +1,13 @@
 [
   {
-    "category": "Display Tool",
+    "category": "Display & Editing Tools",
     "icon": "🐍",
     "tools": [
       {
-        "title": "Python Code Display",
+        "title": "Python Code Lab",
         "emoji": "📄",
         "url": "https://jamesabela.github.io/jsfun/pythoncopy",
-        "desc": "Display, edit, run simple code, download (.py or .txt), visualise and make puzzles from any raw Python file. Paste a GitHub Gist or Pastebin URL.",
+        "desc": "Display, edit, run simple code, upload & download (.py or .txt), visualise and make puzzles from any raw Python file. Paste a GitHub Gist or Pastebin URL.",
         "tag": "iGCSE / A-Level",
         "isExternal": false
       },
