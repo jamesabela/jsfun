@@ -1246,6 +1246,21 @@
           <code>https://jamesabela.github.io/jsfun/pythoncopy?url=RAW_FILE_URL_HERE</code></p>
         </div>
 
+        <!-- Gist Tutorial Slide -->
+        <div class="carousel-slide">
+          <img src="gist.jpg" alt="Creating a GitHub Gist" class="instruction-image">
+          <h3>How to make a Gist on GitHub</h3>
+          <p>If you don't know how to create a Gist, follow these steps to host your Python code so it can be loaded into Python Educator:</p>
+          <ol>
+            <li>Go to <a href="https://gist.github.com" target="_blank">gist.github.com</a> (you will need a GitHub account).</li>
+            <li><strong>Create a new Gist:</strong> Give your file a name ending in <code>.py</code> and type or paste your code.</li>
+            <li>Click the green <strong>Create secret gist</strong> (or public gist) button.</li>
+            <li><strong>Get the Raw URL:</strong> Click the <strong>Raw</strong> button in the top right corner of your code block.</li>
+            <li>Copy the URL from your browser's address bar. It will start with <code>https://gist.githubusercontent.com/...</code></li>
+          </ol>
+          <p>Paste this URL into the input box to load your code!</p>
+        </div>
+
         <!-- Slide 2 -->
         <div class="carousel-slide">
           <img src="python_edit_run_mode.png" alt="Edit and Run Mode" class="instruction-image">
@@ -1339,6 +1354,7 @@
           <span class="dot" onclick="goToInstructionSlide(2)"></span>
           <span class="dot" onclick="goToInstructionSlide(3)"></span>
           <span class="dot" onclick="goToInstructionSlide(4)"></span>
+          <span class="dot" onclick="goToInstructionSlide(5)"></span>
         </div>
         <button class="carousel-btn" onclick="nextInstructionSlide()">Next ▶</button>
       </div>
@@ -1574,7 +1590,7 @@ import sys, builtins
     }
 
     let currentInstructionSlide = 0;
-    const totalInstructionSlides = 5;
+    const totalInstructionSlides = 6;
 
     function updateInstructionCarousel() {
       const track = document.getElementById('carouselTrack');
