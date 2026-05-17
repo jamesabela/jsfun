@@ -1324,7 +1324,18 @@
           <p>Click Make Puzzle to turn the current code into a code-ordering puzzle. This opens the code in the reorder activity: <code>https://jamesabela.github.io/jsfun/reorder.html</code>. This is useful for checking whether students understand the correct sequence of an algorithm.</p>
         </div>
 
-        <!-- Slide 5 -->
+        <!-- Copy for Docs Slide -->
+        <div class="carousel-slide">
+          <img src="CopyCode.png" alt="Copy for Docs Feature" class="instruction-image">
+          <h3>Copy for Docs</h3>
+          <p>The <strong>Copy for Docs</strong> button is designed to copy your Python code with full syntax highlighting, line numbers, and proper formatting so it looks perfect when pasted into Microsoft Word or Google Docs.</p>
+          <p>This is ideal for creating worksheets, assessments, or documentation.</p>
+          <p style="color: #b91c1c; background: #fee2e2; padding: 12px; border-left: 4px solid #ef4444; border-radius: 4px; font-size: 14px; line-height: 1.5;">
+            <strong>⚠️ IMPORTANT:</strong> Do <strong>NOT</strong> use this button if you intend to paste the code into an IDE (like IDLE, VS Code, or PyCharm). The formatting and line numbers will break the code and cause syntax errors. Use the standard <strong>Copy Code</strong> button instead.
+          </p>
+        </div>
+
+        <!-- Slide 6 -->
         <div class="carousel-slide">
           <h3>Display options</h3>
           <p>The top toolbar includes several display controls:</p>
@@ -1356,6 +1367,7 @@
           <span class="dot" onclick="goToInstructionSlide(3)"></span>
           <span class="dot" onclick="goToInstructionSlide(4)"></span>
           <span class="dot" onclick="goToInstructionSlide(5)"></span>
+          <span class="dot" onclick="goToInstructionSlide(6)"></span>
         </div>
         <button class="carousel-btn" onclick="nextInstructionSlide()">Next ▶</button>
       </div>
@@ -1594,7 +1606,7 @@ import sys, builtins
     }
 
     let currentInstructionSlide = 0;
-    const totalInstructionSlides = 6;
+    const totalInstructionSlides = 7;
 
     function updateInstructionCarousel() {
       const track = document.getElementById('carouselTrack');
