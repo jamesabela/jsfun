@@ -1910,14 +1910,9 @@ import sys, builtins
           .replace(/class="token number"/g, `style="color: ${theme.number};"`)
           .replace(/class="token (punctuation|operator)"/g, `style="color: ${theme.operator};"`);
 
-        // Using a div with a fixed width inside the TD is the most reliable way to force width in Docs
-        tableHtml += `
-          <tr>
-            <td width="60" style="width: 60px; background-color: ${theme.gutterBg}; color: ${theme.gutterText}; text-align: right; border-right: 3px solid #007bff; vertical-align: top; font-size: 10pt; font-weight: bold; white-space: nowrap;">
-              <div style="width: 60px; padding-right: 10px; box-sizing: border-box;">${lineNum}</div>
-            </td>
-            <td style="padding-left: 15px; white-space: pre; vertical-align: top; overflow: visible;">${styledCode}</td>
-          </tr>`;
+        // Using inline styles with zero margin/padding to prevent Word from adding massive paragraph spacing
+        // and avoiding literal newlines in the HTML string which Word interprets as empty paragraphs.
+        tableHtml += `<tr style="padding:0; margin:0; line-height:1.2;"><td width="60" style="width:60px; padding:0 10px 0 0; margin:0; background-color:${theme.gutterBg}; color:${theme.gutterText}; text-align:right; border-right:3px solid #007bff; vertical-align:top; font-size:10pt; font-weight:bold; white-space:nowrap; line-height:1.2;">${lineNum}</td><td style="padding:0 0 0 15px; margin:0; white-space:pre; vertical-align:top; line-height:1.2; font-family:'Consolas', 'Monaco', 'Courier New', monospace;">${styledCode}</td></tr>`;
       }
       tableHtml += '</table></div>';
 
