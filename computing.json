@@ -278,6 +278,20 @@
     ]
   },
   {
+    "category": "CS Vocabulary",
+    "icon": "📖",
+    "tools": [
+      {
+        "title": "CS Vocabulary Concept Grids",
+        "emoji": "🗂️",
+        "url": "https://docs.google.com/presentation/d/1qqrFm8NnkZU8HFXFOTXhpg0I2mN5rA3Cx0VvEZZvOtY/template/preview",
+        "desc": "A comprehensive Google Slides presentation of Computer Science vocabulary concept grids, covering definitions, characteristics, examples, and non-examples. Created with Concept Grid.",
+        "tag": "KS3 / iGCSE / A-Level",
+        "isExternal": true
+      }
+    ]
+  },
+  {
     "category": "Diamond 9 — CS Topics",
     "icon": "💎",
     "tools": [
