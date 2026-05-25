@@ -2001,8 +2001,10 @@ _default_turtle = Turtle()
 class Screen:
     def bgcolor(self, color):
         js.setTurtleBgColor(color)
-    def setup(self, width, height):
+    def setup(self, width=None, height=None, *args, **kwargs):
         js.setupTurtleCanvas(width, height)
+    def title(self, titletext):
+        pass
     def clear(self):
         js.clearTurtleCanvas()
     def reset(self):
@@ -2064,8 +2066,12 @@ def speed(speed=None): return _default_turtle.speed(speed)
 def shape(name=None): return _default_turtle.shape(name)
 def clear(): _default_turtle.clear()
 def reset(): _default_turtle.reset()
+def bgcolor(color): _default_screen.bgcolor(color)
+def setup(width=None, height=None, *args, **kwargs): _default_screen.setup(width, height, *args, **kwargs)
+def title(titletext): pass
 def done(): pass
 mainloop = done
+exitonclick = done
 `;
 
 
