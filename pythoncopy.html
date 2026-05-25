@@ -2920,6 +2920,14 @@ import sys, builtins
             return "";
           }
         });
+        // Reset Python-side turtle module state if it exists
+        await pyodideInstance.runPythonAsync(`
+import sys
+if 'turtle' in sys.modules:
+    import turtle
+    turtle._default_turtle.reset()
+    turtle._default_screen.reset()
+        `);
         await pyodideInstance.runPythonAsync(source);
 
         hideConsoleInput();
@@ -2972,6 +2980,11 @@ import sys, builtins
 
       const setupCode = `
 import sys, io, builtins, json, ast
+
+if 'turtle' in sys.modules:
+    import turtle
+    turtle._default_turtle.reset()
+    turtle._default_screen.reset()
 
 _trace_output = []
 _trace_log = []
