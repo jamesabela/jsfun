@@ -127,6 +127,19 @@
       color: #059669;
     }
 
+    body.turtle-mode-active {
+      background: #fef8e7;
+    }
+
+    body.turtle-mode-active #modeHeader {
+      background: #fffdf5;
+      border-bottom-color: #fef08a;
+    }
+
+    body.turtle-mode-active .mode-btn.active {
+      color: #b45309;
+    }
+
     html.dark-theme {
       background: #151515;
     }
@@ -140,8 +153,13 @@
       background: #151515 !important;
     }
 
+    body.dark-theme.turtle-mode-active {
+      background: #151515 !important;
+    }
+
     body.dark-theme #modeHeader,
-    body.dark-theme.display-mode-active #modeHeader {
+    body.dark-theme.display-mode-active #modeHeader,
+    body.dark-theme.turtle-mode-active #modeHeader {
       background: #1f1f1f;
       border-bottom-color: #3f3f46;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
@@ -183,6 +201,11 @@
     body.dark-theme .edit-badge {
       background: #1e3a8a;
       color: #bfdbfe;
+    }
+
+    body.dark-theme .turtle-badge {
+      background: #713f12;
+      color: #fef08a;
     }
 
     body.dark-theme .toggle-row,
@@ -472,12 +495,10 @@
       display: none;
     }
 
-    body.display-mode-active .edit-badge {
+    .turtle-badge {
+      background: #fef08a;
+      color: #854d0e;
       display: none;
-    }
-
-    body.display-mode-active .display-badge {
-      display: inline-block;
     }
 
     .editor-shell {
@@ -1146,14 +1167,16 @@
         <path d="M4 12H2" />
         <path d="M2 9h2" />
       </svg>
-      Python Educator 2.0
+      Python Educator 3.0
       <span class="mode-badge edit-badge">Edit Mode</span>
       <span class="mode-badge display-badge">Display Mode</span>
+      <span class="mode-badge turtle-badge">Turtle Mode</span>
     </div>
     <div class="visual-controls">
       <div class="mode-toggle-pill">
         <button class="mode-btn active" id="btnEditMode" onclick="setAppMode('edit')">Edit Mode</button>
         <button class="mode-btn" id="btnDisplayMode" onclick="setAppMode('display')">Display Mode</button>
+        <button class="mode-btn" id="btnTurtleMode" onclick="setAppMode('turtle')">Turtle Mode</button>
       </div>
 
       <div class="mode-toggle-pill">
@@ -1217,13 +1240,13 @@
   </div>
 
   <div class="instructions-panel" id="instructionsPanel">
-    <h2>Python Educator 2.0 Instructions</h2>
+    <h2>Python Educator 3.0 Instructions</h2>
     <div class="carousel-container">
       <div class="carousel-track" id="carouselTrack">
         <!-- Slide 1 -->
         <div class="carousel-slide">
           <img src="python_educator_hero.png" alt="Python Educator Hero" class="instruction-image">
-          <p>Python Educator 2.0 lets you load, edit, run, display, and trace Python code in the browser. It is designed for teachers who want to demonstrate algorithms clearly and for students who want to explore code step by step.</p>
+          <p>Python Educator 3.0 lets you load, edit, run, display, and trace Python code in the browser. It is designed for teachers who want to demonstrate algorithms clearly and for students who want to explore code step by step.</p>
           
           <h3>Getting started</h3>
           <p>When the page opens, you can either:</p>
@@ -1280,7 +1303,7 @@
 
           <h3>Running Python code</h3>
           <p>Click <strong>Run</strong> to run the code in the browser. The output appears in the panel on the right. If the program uses <code>input()</code>, the browser will ask the user to enter a value. Click <strong>Reset</strong> to clear the output and reset the runner.</p>
-          <p><strong>Supported Modules:</strong> Only <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, and <code>string</code> are supported in the browser. For any other modules or more complex libraries, please use a local IDE.</p>
+          <p><strong>Supported Modules:</strong> Only <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>, and <code>turtle</code> are supported in the browser. For any other modules or more complex libraries, please use a local IDE.</p>
 
           <h3>Import detection</h3>
           <p>Python Educator automatically checks whether the code uses imports. If the code uses modules other than the supported ones listed above, the tool will disable the run button and prompt you to download and run the program on a local Python installation.</p>
@@ -1341,20 +1364,41 @@
           <p>The top toolbar includes several display controls:</p>
           <table>
             <tr><th>Control</th><th>Purpose</th></tr>
-            <tr><td>Edit Mode / Display Mode</td><td>Switches between editing and teaching views</td></tr>
+            <tr><td>Edit Mode / Display Mode / Turtle Mode</td><td>Switches between editing, teaching, and drawing views</td></tr>
             <tr><td>Light / Dark</td><td>Changes the page theme</td></tr>
             <tr><td>Font size slider</td><td>Makes the code smaller or larger</td></tr>
             <tr><td>Full Screen</td><td>Shows the tool full screen for teaching</td></tr>
           </table>
 
           <h3>Teacher use cases</h3>
-          <p>Teachers can use Python Educator 2.0 to: demonstrate standard algorithms, explain code line by line, show how variables change, teach loops, selection, functions, and recursion, create code-ordering puzzles, share code examples using a URL, present Python clearly on a large screen.</p>
+          <p>Teachers can use Python Educator 3.0 to: demonstrate standard algorithms, explain code line by line, show how variables change, teach loops, selection, functions, and recursion, create code-ordering puzzles, share code examples using a URL, present Python clearly on a large screen.</p>
 
           <h3>Student use cases</h3>
           <p>Students can use it to: experiment with Python code, run short programs in the browser, trace algorithms step by step, check how variables change, copy or download working examples, practise rearranging code into the correct order.</p>
 
           <h3>Important limitations</h3>
-          <p>Python Educator 2.0 runs Python in the browser, so it is best for short teaching examples and algorithm demonstrations. Programs that use unsupported imports, external files, graphics libraries, or complex packages should be downloaded and run in a local Python environment instead.</p>
+          <p>Python Educator 3.0 runs Python in the browser, so it is best for short teaching examples and algorithm demonstrations. Programs that use unsupported imports, external files, or complex packages should be downloaded and run in a local Python environment instead.</p>
+        </div>
+
+        <!-- Slide 7: Turtle Graphics -->
+        <div class="carousel-slide">
+          <h3>Turtle Graphics & Turtle Mode</h3>
+          <p>Python Educator 3.0 supports in-browser Turtle graphics! When your code imports <code>turtle</code>, or when you switch to <strong>Turtle Mode</strong>, a canvas will automatically appear on the right side of the editor.</p>
+          
+          <h3>What's supported?</h3>
+          <ul>
+            <li><strong>Movement:</strong> <code>forward()</code>, <code>backward()</code>, <code>left()</code>, <code>right()</code>, <code>goto()</code>, <code>home()</code>, and exact mathematical <code>circle(radius, extent)</code> drawings.</li>
+            <li><strong>Pen Control:</strong> <code>penup()</code>, <code>pendown()</code>, <code>pensize()</code> / <code>width()</code>, <code>pencolor()</code>, and <code>fillcolor()</code>.</li>
+            <li><strong>Shapes & Fills:</strong> <code>begin_fill()</code> and <code>end_fill()</code> to fill shapes. Change cursor shapes using <code>shape("turtle")</code>, <code>shape("circle")</code>, <code>shape("square")</code>, or <code>shape("classic")</code>!</li>
+            <li><strong>Screen Settings:</strong> <code>bgcolor()</code> to set the canvas background.</li>
+            <li><strong>No-op standard functions:</strong> <code>done()</code>, <code>mainloop()</code>, and <code>exitonclick()</code> are supported as no-ops to prevent crashes when importing desktop Python scripts.</li>
+          </ul>
+
+          <h3>Line-by-Line Visual Tracing</h3>
+          <p>Switch to <strong>Display Mode</strong> to trace your turtle scripts. The canvas will capture a state snapshot at every execution line, allowing you to click <strong>Step</strong> or <strong>Play</strong> to watch the turtle cursor move and draw segment-by-segment in perfect synchronization with your code!</p>
+
+          <h3>Exporting Drawings</h3>
+          <p>Click the <strong>Save Image</strong> button in the turtle graphics panel header to export and download your canvas drawing as a high-quality <code>.png</code> file.</p>
         </div>
       </div>
       
@@ -1368,6 +1412,7 @@
           <span class="dot" onclick="goToInstructionSlide(4)"></span>
           <span class="dot" onclick="goToInstructionSlide(5)"></span>
           <span class="dot" onclick="goToInstructionSlide(6)"></span>
+          <span class="dot" onclick="goToInstructionSlide(7)"></span>
         </div>
         <button class="carousel-btn" onclick="nextInstructionSlide()">Next ▶</button>
       </div>
@@ -1420,6 +1465,17 @@
           <button class="stop-button" id="resetButton">Reset</button>
         </div>
 
+        <!-- Turtle Canvas Panel -->
+        <div id="turtleCanvasContainer" style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 12px; overflow: hidden; flex-direction: column;">
+          <div style="background: #f1f5f9; padding: 8px 12px; border-bottom: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; color: #1e293b;" id="turtleHeader">
+            <span>🐢 Turtle Graphics</span>
+            <button onclick="downloadCanvasImage()" class="primary-button" style="padding: 4px 8px; font-size: 12px; background: #2563eb;">Save Image</button>
+          </div>
+          <div style="padding: 12px; display: flex; justify-content: center; background: #f8fafc;" id="turtleCanvasWrapper">
+            <canvas id="turtleCanvas" width="400" height="400" style="border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); max-width: 100%; height: auto; aspect-ratio: 1;"></canvas>
+          </div>
+        </div>
+
         <div id="callTracePanel"
           style="display: none; background: #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1;">
           <h4 style="margin: 0 0 8px; font-size: 14px; color: #1e293b;">Call Trace</h4>
@@ -1447,7 +1503,7 @@
         <div class="status" id="runnerStatus">Ready.</div>
         <div id="output"></div>
         <p class="note">
-          Only these modules are supported: <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>. Use a local IDE for anything else.
+          Only these modules are supported: <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>, <code>turtle</code>. Use a local IDE for anything else.
         </p>
       </section>
     </div>
@@ -1476,6 +1532,542 @@
     let isTracing = false;
     let isAwaitingDisplayInput = false;
     let copyButtonTimeout = null;
+
+    // --- Turtle Graphics JS State & Bridge ---
+    let turtleCommands = [];
+    let turtleX = 0;
+    let turtleY = 0;
+    let turtleHeading = 0;
+    let turtleVisible = true;
+    let turtleBgColor = '#ffffff';
+
+    window.addTurtleLine = function(x1, y1, x2, y2, color, width) {
+      turtleCommands.push({ type: 'line', x1, y1, x2, y2, color, width });
+      drawEverything();
+    };
+
+    window.addTurtleFill = function(pathJson, color) {
+      try {
+        const path = JSON.parse(pathJson);
+        turtleCommands.push({ type: 'fill', path, color });
+        drawEverything();
+      } catch (e) {
+        console.error('Error parsing fill path:', e);
+      }
+    };
+
+    window.addTurtleWrite = function(text, x, y, color, align, font) {
+      turtleCommands.push({ type: 'write', text, x, y, color, align, font });
+      drawEverything();
+    };
+
+    window.updateTurtleState = function(x, y, heading, visible) {
+      turtleX = x;
+      turtleY = y;
+      turtleHeading = heading;
+      turtleVisible = visible;
+      drawEverything();
+    };
+
+    window.clearTurtleCanvas = function() {
+      turtleCommands = [];
+      drawEverything();
+    };
+
+    window.setTurtleBgColor = function(color) {
+      turtleBgColor = color;
+      drawEverything();
+    };
+
+    window.setupTurtleCanvas = function(width, height) {
+      const canvas = document.getElementById('turtleCanvas');
+      if (canvas) {
+        canvas.width = width || 400;
+        canvas.height = height || 400;
+        drawEverything();
+      }
+    };
+
+    let turtleShape = 'classic'; // classic, turtle, circle, square, triangle
+
+    window.setTurtleShape = function(shapeName) {
+      turtleShape = shapeName || 'classic';
+      drawEverything();
+    };
+
+    window.getTurtleShape = function() {
+      return turtleShape;
+    };
+
+    window.resetTurtleCanvas = function() {
+      turtleCommands = [];
+      turtleX = 0;
+      turtleY = 0;
+      turtleHeading = 0;
+      turtleVisible = true;
+      turtleBgColor = '#ffffff';
+      turtleShape = 'classic';
+      drawEverything();
+    };
+
+    window.getTurtleSnapshot = function() {
+      return JSON.stringify({
+        commands: turtleCommands,
+        x: turtleX,
+        y: turtleY,
+        heading: turtleHeading,
+        visible: turtleVisible,
+        bgColor: turtleBgColor,
+        shape: turtleShape
+      });
+    };
+
+    window.downloadCanvasImage = function() {
+      const canvas = document.getElementById('turtleCanvas');
+      if (!canvas) return;
+      const link = document.createElement('a');
+      link.download = 'turtle_drawing.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    };
+
+    function drawEverything() {
+      const canvas = document.getElementById('turtleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      
+      // Clear and fill background
+      ctx.fillStyle = turtleBgColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Coordinate translators
+      function tx(x) { return cx + x; }
+      function ty(y) { return cy - y; } // mathematical Y goes up, canvas Y goes down
+      
+      // Draw all commands
+      for (const cmd of turtleCommands) {
+        if (cmd.type === 'line') {
+          ctx.beginPath();
+          ctx.moveTo(tx(cmd.x1), ty(cmd.y1));
+          ctx.lineTo(tx(cmd.x2), ty(cmd.y2));
+          ctx.strokeStyle = cmd.color;
+          ctx.lineWidth = cmd.width;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        } else if (cmd.type === 'fill') {
+          ctx.beginPath();
+          const path = cmd.path;
+          if (path.length > 0) {
+            ctx.moveTo(tx(path[0][0]), ty(path[0][1]));
+            for (let i = 1; i < path.length; i++) {
+              ctx.lineTo(tx(path[i][0]), ty(path[i][1]));
+            }
+            ctx.closePath();
+            ctx.fillStyle = cmd.color;
+            ctx.fill();
+          }
+        } else if (cmd.type === 'write') {
+          ctx.fillStyle = cmd.color;
+          ctx.font = cmd.font;
+          ctx.textAlign = cmd.align === 'left' ? 'left' : (cmd.align === 'right' ? 'right' : 'center');
+          ctx.fillText(cmd.text, tx(cmd.x), ty(cmd.y));
+        }
+      }
+      
+      // Draw turtle cursor
+      if (turtleVisible) {
+        if (turtleShape === 'turtle') {
+          ctx.save();
+          ctx.translate(tx(turtleX), ty(turtleY));
+          ctx.rotate(-turtleHeading * Math.PI / 180);
+          
+          // Draw legs
+          ctx.fillStyle = '#34d399';
+          ctx.strokeStyle = '#047857';
+          ctx.lineWidth = 1;
+          
+          // Front-left leg
+          ctx.beginPath();
+          ctx.ellipse(5, -5, 3, 1.5, Math.PI / 4, 0, 2 * Math.PI);
+          ctx.fill(); ctx.stroke();
+          
+          // Front-right leg
+          ctx.beginPath();
+          ctx.ellipse(5, 5, 3, 1.5, -Math.PI / 4, 0, 2 * Math.PI);
+          ctx.fill(); ctx.stroke();
+          
+          // Back-left leg
+          ctx.beginPath();
+          ctx.ellipse(-4, -4, 2.5, 1.2, -Math.PI / 4, 0, 2 * Math.PI);
+          ctx.fill(); ctx.stroke();
+          
+          // Back-right leg
+          ctx.beginPath();
+          ctx.ellipse(-4, 4, 2.5, 1.2, Math.PI / 4, 0, 2 * Math.PI);
+          ctx.fill(); ctx.stroke();
+
+          // Tail
+          ctx.beginPath();
+          ctx.moveTo(-7, 0);
+          ctx.lineTo(-10, 0);
+          ctx.strokeStyle = '#34d399';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          
+          // Shell/body
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 7, 5, 0, 0, 2 * Math.PI);
+          ctx.fillStyle = '#10b981';
+          ctx.strokeStyle = '#047857';
+          ctx.lineWidth = 1;
+          ctx.fill(); ctx.stroke();
+          
+          // Head
+          ctx.beginPath();
+          ctx.arc(9, 0, 2.5, 0, 2 * Math.PI);
+          ctx.fillStyle = '#34d399';
+          ctx.fill(); ctx.stroke();
+
+          ctx.restore();
+        } else if (turtleShape === 'circle') {
+          ctx.save();
+          ctx.translate(tx(turtleX), ty(turtleY));
+          ctx.beginPath();
+          ctx.arc(0, 0, 6, 0, 2 * Math.PI);
+          ctx.fillStyle = '#ec4899';
+          ctx.fill();
+          ctx.strokeStyle = '#1e293b';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.restore();
+        } else if (turtleShape === 'square') {
+          ctx.save();
+          ctx.translate(tx(turtleX), ty(turtleY));
+          ctx.rotate(-turtleHeading * Math.PI / 180);
+          ctx.beginPath();
+          ctx.rect(-5, -5, 10, 10);
+          ctx.fillStyle = '#ec4899';
+          ctx.fill();
+          ctx.strokeStyle = '#1e293b';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.restore();
+        } else if (turtleShape === 'triangle') {
+          ctx.save();
+          ctx.translate(tx(turtleX), ty(turtleY));
+          ctx.rotate(-turtleHeading * Math.PI / 180);
+          ctx.beginPath();
+          ctx.moveTo(8, 0);
+          ctx.lineTo(-6, -6);
+          ctx.lineTo(-6, 6);
+          ctx.closePath();
+          ctx.fillStyle = '#ec4899';
+          ctx.fill();
+          ctx.strokeStyle = '#1e293b';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.restore();
+        } else { // classic or arrow
+          ctx.save();
+          ctx.translate(tx(turtleX), ty(turtleY));
+          ctx.rotate(-turtleHeading * Math.PI / 180);
+          ctx.beginPath();
+          ctx.moveTo(10, 0);
+          ctx.lineTo(-6, -6);
+          ctx.lineTo(-3, 0);
+          ctx.lineTo(-6, 6);
+          ctx.closePath();
+          ctx.fillStyle = '#ec4899'; // nice modern pink/magenta color
+          ctx.fill();
+          ctx.strokeStyle = '#1e293b';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+    }
+
+    const turtleShimPythonCode = `
+import js
+import json
+import math
+
+class Turtle:
+    def __init__(self):
+        self._x = 0.0
+        self._y = 0.0
+        self._heading = 0.0
+        self._is_down = True
+        self._pencolor = "black"
+        self._fillcolor = "black"
+        self._width = 1.0
+        self._visible = True
+        self._is_filling = False
+        self._fill_path = []
+        self._update_js_state()
+
+    def _update_js_state(self):
+        js.updateTurtleState(self._x, self._y, self._heading, self._visible)
+
+    def forward(self, distance):
+        rad = math.radians(self._heading)
+        new_x = self._x + distance * math.cos(rad)
+        new_y = self._y + distance * math.sin(rad)
+        if self._is_down:
+            js.addTurtleLine(self._x, self._y, new_x, new_y, self._pencolor, self._width)
+        self._x = new_x
+        self._y = new_y
+        if self._is_filling:
+            self._fill_path.append((self._x, self._y))
+        self._update_js_state()
+    fd = forward
+
+    def backward(self, distance):
+        self.forward(-distance)
+    bk = backward
+    back = backward
+
+    def right(self, angle):
+        self._heading = (self._heading - angle) % 360
+        self._update_js_state()
+    rt = right
+
+    def left(self, angle):
+        self._heading = (self._heading + angle) % 360
+        self._update_js_state()
+    lt = left
+
+    def penup(self):
+        self._is_down = False
+    pu = penup
+    up = penup
+
+    def pendown(self):
+        self._is_down = True
+    pd = pendown
+    down = pendown
+
+    def isdown(self):
+        return self._is_down
+
+    def goto(self, x, y=None):
+        if y is None:
+            if isinstance(x, (tuple, list)):
+                target_x, target_y = x[0], x[1]
+            else:
+                target_x, target_y = x.xcor(), x.ycor()
+        else:
+            target_x, target_y = x, y
+            
+        if self._is_down:
+            js.addTurtleLine(self._x, self._y, target_x, target_y, self._pencolor, self._width)
+        self._x = target_x
+        self._y = target_y
+        if self._is_filling:
+            self._fill_path.append((self._x, self._y))
+        self._update_js_state()
+    setpos = goto
+    setposition = goto
+
+    def setheading(self, to_angle):
+        self._heading = to_angle % 360
+        self._update_js_state()
+    seth = setheading
+
+    def home(self):
+        self.goto(0.0, 0.0)
+        self.setheading(0.0)
+
+    def xcor(self):
+        return self._x
+
+    def ycor(self):
+        return self._y
+
+    def pos(self):
+        return (self._x, self._y)
+    position = pos
+
+    def heading(self):
+        return self._heading
+
+    def pencolor(self, color=None):
+        if color is None:
+            return self._pencolor
+        self._pencolor = color
+
+    def fillcolor(self, color=None):
+        if color is None:
+            return self._fillcolor
+        self._fillcolor = color
+
+    def color(self, color1=None, color2=None):
+        if color1 is None:
+            return (self._pencolor, self._fillcolor)
+        if color2 is None:
+            self._pencolor = color1
+            self._fillcolor = color1
+        else:
+            self._pencolor = color1
+            self._fillcolor = color2
+
+    def pensize(self, width=None):
+        if width is None:
+            return self._width
+        self._width = float(width)
+    width = pensize
+
+    def hideturtle(self):
+        self._visible = False
+        self._update_js_state()
+    ht = hideturtle
+
+    def showturtle(self):
+        self._visible = True
+        self._update_js_state()
+    st = showturtle
+
+    def isvisible(self):
+        return self._visible
+
+    def begin_fill(self):
+        self._is_filling = True
+        self._fill_path = [(self._x, self._y)]
+
+    def end_fill(self):
+        if self._is_filling:
+            self._is_filling = False
+            if len(self._fill_path) > 2:
+                js.addTurtleFill(json.dumps(self._fill_path), self._fillcolor)
+            self._update_js_state()
+
+    def circle(self, radius, extent=None, steps=None):
+        if extent is None:
+            extent = 360.0
+        if steps is None:
+            steps = int(min(abs(radius) * 2 + 10, 120))
+            steps = max(steps, 24)
+            
+        start_heading_rad = math.radians(self._heading)
+        dir_factor = 1.0 if radius >= 0 else -1.0
+        center_angle_rad = start_heading_rad + dir_factor * (math.pi / 2.0)
+        
+        abs_r = abs(radius)
+        cx = self._x - abs_r * math.cos(center_angle_rad)
+        cy = self._y - abs_r * math.sin(center_angle_rad)
+        
+        start_angle = center_angle_rad + math.pi
+        total_rot = math.radians(extent)
+        
+        for i in range(1, steps + 1):
+            t = float(i) / steps
+            current_rot = dir_factor * total_rot * t
+            angle = start_angle + current_rot
+            
+            next_x = cx + abs_r * math.cos(angle)
+            next_y = cy + abs_r * math.sin(angle)
+            self.goto(next_x, next_y)
+            
+        self.setheading(self._heading + dir_factor * extent)
+
+    def write(self, arg, move=False, align="left", font=("Arial", 8, "normal")):
+        font_str = f"{font[2]} {font[1]}pt {font[0]}" if len(font) >= 3 else f"{font[1]}pt {font[0]}"
+        js.addTurtleWrite(str(arg), self._x, self._y, self._pencolor, align, font_str)
+
+    def speed(self, speed=None):
+        return 0
+
+    def shape(self, name=None):
+        if name is None:
+            return js.getTurtleShape()
+        js.setTurtleShape(name)
+
+    def clear(self):
+        js.clearTurtleCanvas()
+
+    def reset(self):
+        self.home()
+        self.clear()
+        self.pendown()
+        self.showturtle()
+        self._pencolor = "black"
+        self._fillcolor = "black"
+        self._width = 1.0
+
+_default_turtle = Turtle()
+
+class Screen:
+    def bgcolor(self, color):
+        js.setTurtleBgColor(color)
+    def setup(self, width, height):
+        js.setupTurtleCanvas(width, height)
+    def clear(self):
+        js.clearTurtleCanvas()
+    def reset(self):
+        js.resetTurtleCanvas()
+    def done(self):
+        pass
+    def mainloop(self):
+        pass
+    def exitonclick(self):
+        pass
+
+_default_screen = Screen()
+
+def Screen():
+    return _default_screen
+
+def forward(distance): _default_turtle.forward(distance)
+fd = forward
+def backward(distance): _default_turtle.backward(distance)
+bk = backward
+back = backward
+def right(angle): _default_turtle.right(angle)
+rt = right
+def left(angle): _default_turtle.left(angle)
+lt = left
+def penup(): _default_turtle.penup()
+pu = penup
+up = penup
+def pendown(): _default_turtle.pendown()
+pd = pendown
+down = pendown
+def isdown(): return _default_turtle.isdown()
+def goto(x, y=None): _default_turtle.goto(x, y)
+setpos = goto
+setposition = goto
+def setheading(to_angle): _default_turtle.setheading(to_angle)
+seth = setheading
+def home(): _default_turtle.home()
+def xcor(): return _default_turtle.xcor()
+def ycor(): return _default_turtle.ycor()
+def pos(): return _default_turtle.pos()
+position = pos
+def heading(): return _default_turtle.heading()
+def pencolor(color=None): return _default_turtle.pencolor(color)
+def fillcolor(color=None): return _default_turtle.fillcolor(color)
+def color(color1=None, color2=None): return _default_turtle.color(color1, color2)
+def pensize(width=None): return _default_turtle.pensize(width)
+width = pensize
+def hideturtle(): _default_turtle.hideturtle()
+ht = hideturtle
+def showturtle(): _default_turtle.showturtle()
+st = showturtle
+def isvisible(): return _default_turtle.isvisible()
+def begin_fill(): _default_turtle.begin_fill()
+def end_fill(): _default_turtle.end_fill()
+def circle(radius, extent=None, steps=None): _default_turtle.circle(radius, extent, steps)
+def write(arg, move=False, align="left", font=("Arial", 8, "normal")): _default_turtle.write(arg, move, align, font)
+def speed(speed=None): return _default_turtle.speed(speed)
+def shape(name=None): return _default_turtle.shape(name)
+def clear(): _default_turtle.clear()
+def reset(): _default_turtle.reset()
+def done(): pass
+mainloop = done
+`;
+
 
 
     // Global Error Handler for debugging
@@ -1510,6 +2102,9 @@ import sys, builtins
 # Initialization complete
         `);
 
+        // Write custom virtual turtle module to VFS
+        p.FS.writeFile('/home/pyodide/turtle.py', turtleShimPythonCode);
+
         return p;
       });
     }
@@ -1527,6 +2122,7 @@ import sys, builtins
 
     const btnEditMode = document.getElementById('btnEditMode');
     const btnDisplayMode = document.getElementById('btnDisplayMode');
+    const btnTurtleMode = document.getElementById('btnTurtleMode');
     const teacherControlsRow = document.getElementById('teacherControlsRow');
     const teachControlsRow = document.getElementById('teachControlsRow');
 
@@ -1543,12 +2139,26 @@ import sys, builtins
       currentAppMode = mode;
       btnEditMode.classList.toggle('active', mode === 'edit');
       btnDisplayMode.classList.toggle('active', mode === 'display');
+      btnTurtleMode.classList.toggle('active', mode === 'turtle');
       updateAppMode();
     }
 
     function updateAppMode() {
+      // Hide all badges first
+      const editBadge = document.querySelector('.edit-badge');
+      const displayBadge = document.querySelector('.display-badge');
+      const turtleBadge = document.querySelector('.turtle-badge');
+      if (editBadge) editBadge.style.display = 'none';
+      if (displayBadge) displayBadge.style.display = 'none';
+      if (turtleBadge) turtleBadge.style.display = 'none';
+
+      const turtleContainer = document.getElementById('turtleCanvasContainer');
+
       if (currentAppMode === 'display') {
         document.body.classList.add('display-mode-active');
+        document.body.classList.remove('turtle-mode-active');
+        if (displayBadge) displayBadge.style.display = 'inline-block';
+
         editor.style.display = 'none';
         displayEditor.style.display = 'block';
 
@@ -1559,10 +2169,22 @@ import sys, builtins
         teachControlsRow.style.display = 'flex';
         callTracePanel.style.display = 'block';
         variablePanel.style.display = 'block';
+
+        // Show turtle canvas in display mode if turtle is imported
+        const imports = extractImports(editor.value);
+        if (imports.includes('turtle')) {
+          if (turtleContainer) turtleContainer.style.display = 'flex';
+        } else {
+          if (turtleContainer) turtleContainer.style.display = 'none';
+        }
+
         clearRunner();
         setRunnerStatus('Display Mode Ready. Click Play to trace code.');
-      } else {
+      } else if (currentAppMode === 'turtle') {
         document.body.classList.remove('display-mode-active');
+        document.body.classList.add('turtle-mode-active');
+        if (turtleBadge) turtleBadge.style.display = 'inline-block';
+
         editor.style.display = 'block';
         displayEditor.style.display = 'none';
 
@@ -1570,8 +2192,33 @@ import sys, builtins
         teachControlsRow.style.display = 'none';
         callTracePanel.style.display = 'none';
         variablePanel.style.display = 'none';
+
+        if (turtleContainer) {
+          turtleContainer.style.display = 'flex';
+          setupTurtleCanvas(400, 400);
+        }
+
         clearTeachHighlight();
         clearRunner();
+        setRunnerStatus('Turtle Mode Ready. Write turtle code and click Run.');
+      } else {
+        document.body.classList.remove('display-mode-active');
+        document.body.classList.remove('turtle-mode-active');
+        if (editBadge) editBadge.style.display = 'inline-block';
+
+        editor.style.display = 'block';
+        displayEditor.style.display = 'none';
+
+        teacherControlsRow.style.display = 'flex';
+        teachControlsRow.style.display = 'none';
+        callTracePanel.style.display = 'none';
+        variablePanel.style.display = 'none';
+
+        if (turtleContainer) turtleContainer.style.display = 'none';
+
+        clearTeachHighlight();
+        clearRunner();
+        setRunnerStatus('Edit Mode Ready.');
       }
       applyTheme();
     }
@@ -1591,6 +2238,28 @@ import sys, builtins
       document.getElementById('prism-theme').href = isDark
         ? 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css'
         : 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css';
+
+      const turtleContainer = document.getElementById('turtleCanvasContainer');
+      const turtleHeader = document.getElementById('turtleHeader');
+      const turtleCanvasWrapper = document.getElementById('turtleCanvasWrapper');
+      if (turtleContainer && turtleHeader && turtleCanvasWrapper) {
+        if (isDark) {
+          turtleContainer.style.borderColor = '#3f3f46';
+          turtleContainer.style.background = '#202020';
+          turtleHeader.style.background = '#2a2a2a';
+          turtleHeader.style.color = '#f4f4f5';
+          turtleHeader.style.borderColor = '#3f3f46';
+          turtleCanvasWrapper.style.background = '#151515';
+        } else {
+          turtleContainer.style.borderColor = '#cbd5e1';
+          turtleContainer.style.background = '#ffffff';
+          turtleHeader.style.background = '#f1f5f9';
+          turtleHeader.style.color = '#1e293b';
+          turtleHeader.style.borderColor = '#cbd5e1';
+          turtleCanvasWrapper.style.background = '#f8fafc';
+        }
+      }
+
       if (currentAppMode === 'display') {
         Prism.highlightElement(displayCode);
       }
@@ -1606,7 +2275,7 @@ import sys, builtins
     }
 
     let currentInstructionSlide = 0;
-    const totalInstructionSlides = 7;
+    const totalInstructionSlides = 8;
 
     function updateInstructionCarousel() {
       const track = document.getElementById('carouselTrack');
@@ -2074,7 +2743,7 @@ import sys, builtins
 
     function classifyCode(source) {
       const imports = extractImports(source);
-      const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string']);
+      const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle']);
       const localOnlyImports = imports.filter(moduleName => !browserSafeImports.has(moduleName));
       const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
 
@@ -2102,6 +2771,9 @@ import sys, builtins
       runnerMessage.style.display = 'block';
       runnerMessage.textContent = analysis.message;
 
+      const imports = extractImports(editor.value);
+      const hasTurtle = imports.includes('turtle');
+
       if (!analysis.ok) {
         detectionLabel.textContent = 'Detection: download required.';
         document.getElementById('runButton').disabled = true;
@@ -2110,7 +2782,11 @@ import sys, builtins
           hasWarnedAboutImports = true;
         }
       } else {
-        detectionLabel.textContent = 'Detection: normal Python mode.';
+        if (hasTurtle || currentAppMode === 'turtle') {
+          detectionLabel.textContent = 'Detection: Turtle graphics mode.';
+        } else {
+          detectionLabel.textContent = 'Detection: normal Python mode.';
+        }
         document.getElementById('runButton').disabled = false;
         hasWarnedAboutImports = false;
       }
@@ -2163,6 +2839,7 @@ import sys, builtins
       document.getElementById('playPauseButton').textContent = 'Play';
       if (displayTimeout) clearTimeout(displayTimeout);
 
+      resetTurtleCanvas();
 
       if (inputResolver) {
         const resolver = inputResolver;
@@ -2195,6 +2872,22 @@ import sys, builtins
         runnerMessage.textContent = analysis.message;
         setRunnerStatus('Cannot run this code in the browser.');
         return;
+      }
+
+      const imports = extractImports(source);
+      const usesTurtle = imports.includes('turtle');
+      const turtleContainer = document.getElementById('turtleCanvasContainer');
+      
+      if (usesTurtle || currentAppMode === 'turtle') {
+        if (turtleContainer) {
+          turtleContainer.style.display = 'flex';
+          setupTurtleCanvas(400, 400);
+          resetTurtleCanvas();
+        }
+      } else {
+        if (turtleContainer && currentAppMode !== 'turtle') {
+          turtleContainer.style.display = 'none';
+        }
       }
 
       runnerMessage.style.display = 'block';
@@ -2249,12 +2942,27 @@ import sys, builtins
         return false;
       }
 
+      const source = editor.value;
+      const imports = extractImports(source);
+      const usesTurtle = imports.includes('turtle');
+      const turtleContainer = document.getElementById('turtleCanvasContainer');
+      
+      if (usesTurtle || currentAppMode === 'turtle') {
+        if (turtleContainer) {
+          turtleContainer.style.display = 'flex';
+          setupTurtleCanvas(400, 400);
+          resetTurtleCanvas();
+        }
+      } else {
+        if (turtleContainer && currentAppMode !== 'turtle') {
+          turtleContainer.style.display = 'none';
+        }
+      }
+
       if (!pyodideInstance && pyodideReadyPromise) {
         setRunnerStatus('Loading Python engine...');
         await pyodideReadyPromise;
       }
-
-      const source = editor.value;
 
       const setupCode = `
 import sys, io, builtins, json, ast
@@ -2267,6 +2975,15 @@ _stdout_capture = io.StringIO()
 displayInputHistory = json.loads(displayInputHistoryJson)
 _recursive_functions = set()
 _source_lines = source_code.splitlines()
+
+def _get_turtle_snapshot():
+    try:
+        import js
+        if hasattr(js, 'getTurtleSnapshot'):
+            return js.getTurtleSnapshot()
+    except Exception:
+        pass
+    return None
 
 try:
     _tree = ast.parse(source_code)
@@ -2359,7 +3076,8 @@ def _trace_hook(frame, event, arg):
             'call_note': note,
             'call_text': call_text,
             'call_stack': _stack_text(),
-            'depth': len(_call_stack)
+            'depth': len(_call_stack),
+            'turtle_snapshot': _get_turtle_snapshot()
         })
         return _trace_hook
 
@@ -2394,7 +3112,8 @@ def _trace_hook(frame, event, arg):
             'call_text': state['call'],
             'return_value': return_value,
             'call_stack': _stack_text(),
-            'depth': len(_call_stack)
+            'depth': len(_call_stack),
+            'turtle_snapshot': _get_turtle_snapshot()
         })
 
         if _call_stack and _call_stack[-1] is state:
@@ -2417,7 +3136,8 @@ def _trace_hook(frame, event, arg):
             'call_text': _call_stack[-1]['call'] if _call_stack else "",
             'call_label': "Current call:" if _call_stack else "",
             'call_note': _call_stack[-1]['call'] if _call_stack else "",
-            'depth': len(_call_stack)
+            'depth': len(_call_stack),
+            'turtle_snapshot': _get_turtle_snapshot()
         })
     return _trace_hook
 
@@ -2541,6 +3261,23 @@ def _run_trace():
       if (stepIndex >= displayTraceLog.length) return;
       const step = displayTraceLog[stepIndex];
       if (!step) return;
+
+      // Restore turtle snapshot if available
+      if (step.turtle_snapshot) {
+        try {
+          const snap = JSON.parse(step.turtle_snapshot);
+          turtleCommands = snap.commands || [];
+          turtleX = snap.x || 0;
+          turtleY = snap.y || 0;
+          turtleHeading = snap.heading || 0;
+          turtleVisible = snap.visible !== undefined ? snap.visible : true;
+          turtleBgColor = snap.bgColor || '#ffffff';
+          turtleShape = snap.shape || 'classic';
+          drawEverything();
+        } catch (e) {
+          console.error("Error restoring turtle snapshot:", e);
+        }
+      }
 
       const lineNum = step.line;
       if (lineNum !== undefined) highlightLine(lineNum);
