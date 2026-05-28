@@ -2449,7 +2449,7 @@ import sys, builtins
       editor.addEventListener('input', () => {
         hasUnsavedChanges = true;
         updateLineNumbers();
-        analyseCodeAndUpdateMessage();
+        analyseCodeAndUpdateMessage(true);
       });
 
       editor.addEventListener('scroll', syncLineNumberScroll);
@@ -2772,29 +2772,51 @@ import sys, builtins
 
     let hasWarnedAboutImports = false;
 
-    function analyseCodeAndUpdateMessage() {
+    function analyseCodeAndUpdateMessage(isTyping = false) {
       const analysis = classifyCode(editor.value);
-      runnerMessage.style.display = 'block';
-      runnerMessage.textContent = analysis.message;
-
       const imports = extractImports(editor.value);
       const hasTurtle = imports.includes('turtle');
 
-      if (!analysis.ok) {
-        detectionLabel.textContent = 'Detection: download required.';
-        document.getElementById('runButton').disabled = true;
-        if (!hasWarnedAboutImports) {
-          alert('Warning: Complex or local imports detected. Python Code Lab cannot run this code in the browser. Please download the .py file to run it locally.');
-          hasWarnedAboutImports = true;
-        }
-      } else {
+      if (isTyping) {
+        // When typing, do not generate errors or block execution
+        document.getElementById('runButton').disabled = false;
+        hasWarnedAboutImports = false;
+
+        // Show status based only on browser-safe imports
+        const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle']);
+        const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
+
+        runnerMessage.style.display = 'block';
+        runnerMessage.textContent = allowedImports.length > 0
+          ? `Browser-safe imports detected: ${allowedImports.join(', ')}. This code looks suitable for browser running.`
+          : 'No imports detected. This code looks suitable for browser running.';
+
         if (hasTurtle || currentAppMode === 'turtle') {
           detectionLabel.textContent = 'Detection: Turtle graphics mode.';
         } else {
           detectionLabel.textContent = 'Detection: normal Python mode.';
         }
-        document.getElementById('runButton').disabled = false;
-        hasWarnedAboutImports = false;
+      } else {
+        // Original behavior when entering the page (loading code) or running/tracing
+        runnerMessage.style.display = 'block';
+        runnerMessage.textContent = analysis.message;
+
+        if (!analysis.ok) {
+          detectionLabel.textContent = 'Detection: download required.';
+          document.getElementById('runButton').disabled = true;
+          if (!hasWarnedAboutImports) {
+            alert('Warning: Complex or local imports detected. Python Code Lab cannot run this code in the browser. Please download the .py file to run it locally.');
+            hasWarnedAboutImports = true;
+          }
+        } else {
+          if (hasTurtle || currentAppMode === 'turtle') {
+            detectionLabel.textContent = 'Detection: Turtle graphics mode.';
+          } else {
+            detectionLabel.textContent = 'Detection: normal Python mode.';
+          }
+          document.getElementById('runButton').disabled = false;
+          hasWarnedAboutImports = false;
+        }
       }
     }
 
@@ -2874,8 +2896,7 @@ import sys, builtins
       hideConsoleInput();
 
       if (!analysis.ok) {
-        runnerMessage.style.display = 'block';
-        runnerMessage.textContent = analysis.message;
+        analyseCodeAndUpdateMessage(false);
         setRunnerStatus('Cannot run this code in the browser.');
         return;
       }
@@ -2947,8 +2968,7 @@ if 'turtle' in sys.modules:
 
       const analysis = classifyCode(editor.value);
       if (!analysis.ok) {
-        runnerMessage.style.display = 'block';
-        runnerMessage.textContent = analysis.message;
+        analyseCodeAndUpdateMessage(false);
         displayTraceStatus = 'error';
         outputEl.textContent = '';
         setRunnerStatus('Cannot trace imported code in the browser.');
