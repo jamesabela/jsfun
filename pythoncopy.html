@@ -1561,6 +1561,11 @@
       drawEverything();
     };
 
+    window.addTurtleDot = function(x, y, radius, color) {
+      turtleCommands.push({ type: 'dot', x, y, radius, color });
+      drawEverything();
+    };
+
     window.updateTurtleState = function(x, y, heading, visible) {
       turtleX = x;
       turtleY = y;
@@ -1673,6 +1678,11 @@
           ctx.font = cmd.font;
           ctx.textAlign = cmd.align === 'left' ? 'left' : (cmd.align === 'right' ? 'right' : 'center');
           ctx.fillText(cmd.text, tx(cmd.x), ty(cmd.y));
+        } else if (cmd.type === 'dot') {
+          ctx.beginPath();
+          ctx.arc(tx(cmd.x), ty(cmd.y), cmd.radius, 0, 2 * Math.PI);
+          ctx.fillStyle = cmd.color;
+          ctx.fill();
         }
       }
       
@@ -1976,6 +1986,46 @@ class Turtle:
         font_str = f"{font[2]} {font[1]}pt {font[0]}" if len(font) >= 3 else f"{font[1]}pt {font[0]}"
         js.addTurtleWrite(str(arg), self._x, self._y, self._pencolor, align, font_str)
 
+    def dot(self, size=None, *color):
+        if size is not None and not isinstance(size, (int, float)):
+            color = (size,) + color
+            size = None
+
+        if size is None:
+            dot_size = max(self._width + 4, self._width * 2)
+        else:
+            dot_size = float(size)
+
+        dot_color = self._pencolor
+        if len(color) > 0:
+            if len(color) == 1:
+                c = color[0]
+                if isinstance(c, (list, tuple)) and len(c) == 3:
+                    r = int(c[0]*255) if isinstance(c[0], float) and c[0] <= 1.0 else int(c[0])
+                    g = int(c[1]*255) if isinstance(c[1], float) and c[1] <= 1.0 else int(c[1])
+                    b = int(c[2]*255) if isinstance(c[2], float) and c[2] <= 1.0 else int(c[2])
+                    dot_color = f"rgb({r},{g},{b})"
+                else:
+                    dot_color = str(c)
+            elif len(color) == 3:
+                r = int(color[0]*255) if isinstance(color[0], float) and color[0] <= 1.0 else int(color[0])
+                g = int(color[1]*255) if isinstance(color[1], float) and color[1] <= 1.0 else int(color[1])
+                b = int(color[2]*255) if isinstance(color[2], float) and color[2] <= 1.0 else int(color[2])
+                dot_color = f"rgb({r},{g},{b})"
+            else:
+                dot_color = str(color[0])
+
+        if isinstance(dot_color, (list, tuple)) and len(dot_color) == 3:
+            r = int(dot_color[0]*255) if isinstance(dot_color[0], float) and dot_color[0] <= 1.0 else int(dot_color[0])
+            g = int(dot_color[1]*255) if isinstance(dot_color[1], float) and dot_color[1] <= 1.0 else int(dot_color[1])
+            b = int(dot_color[2]*255) if isinstance(dot_color[2], float) and dot_color[2] <= 1.0 else int(dot_color[2])
+            dot_color = f"rgb({r},{g},{b})"
+        else:
+            dot_color = str(dot_color)
+
+        js.addTurtleDot(self._x, self._y, dot_size / 2.0, dot_color)
+        self._update_js_state()
+
     def speed(self, speed=None):
         return 0
 
@@ -2062,6 +2112,7 @@ def begin_fill(): _default_turtle.begin_fill()
 def end_fill(): _default_turtle.end_fill()
 def circle(radius, extent=None, steps=None): _default_turtle.circle(radius, extent, steps)
 def write(arg, move=False, align="left", font=("Arial", 8, "normal")): _default_turtle.write(arg, move, align, font)
+def dot(size=None, *color): _default_turtle.dot(size, *color)
 def speed(speed=None): return _default_turtle.speed(speed)
 def shape(name=None): return _default_turtle.shape(name)
 def clear(): _default_turtle.clear()
