@@ -1370,7 +1370,7 @@ import sys, builtins
 
     function classifyCode(source) {
       const imports = extractImports(source);
-      const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle']);
+      const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle', 'time']);
       const localOnlyImports = imports.filter(moduleName => !browserSafeImports.has(moduleName));
       const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
 
@@ -1404,7 +1404,7 @@ import sys, builtins
         hasWarnedAboutImports = false;
 
         // Show status based only on browser-safe imports
-        const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle']);
+        const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle', 'time']);
         const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
 
         runnerMessage.style.display = 'block';

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Make a Joke</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --accent-gold: #d4af37;
+      --accent-gold-glow: rgba(212, 175, 55, 0.15);
+      --accent-dark: #0f172a;
+      --accent-blue: #3b82f6;
+      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --accent-purple: #8b5cf6;
+      --accent-purple-glow: rgba(139, 92, 246, 0.12);
+      --border-color: rgba(226, 201, 116, 0.25);
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+    }
+
+    /* Dark Mode overrides */
+    html.dark-theme, body.dark-theme {
+      --bg-gradient: linear-gradient(135deg, #0b0f19, #111827);
+      --card-bg: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent-gold: #f59e0b;
+      --accent-gold-glow: rgba(245, 158, 11, 0.15);
+      --accent-dark: #f8fafc;
+      --accent-blue: #60a5fa;
+      --accent-blue-glow: rgba(96, 165, 250, 0.15);
+      --accent-purple: #a78bfa;
+      --accent-purple-glow: rgba(167, 139, 250, 0.15);
+      --border-color: rgba(245, 158, 11, 0.15);
+      --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+      --code-bg: #090d16;
+      --code-text: #f1f5f9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .title-group h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .title-group p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .theme-toggle-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow);
+    }
+
+    .theme-toggle-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-gold);
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    /* Image Wrapper Styling */
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow);
+      background: var(--card-bg);
+      max-width: 100%;
+    }
+
+    .gif-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Tasks styling */
+    .tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-item {
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .task-badge {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-core {
+      background: var(--accent-blue-glow);
+      color: var(--accent-blue);
+      border: 1px solid var(--accent-blue);
+    }
+
+    .badge-ext {
+      background: var(--accent-purple-glow);
+      color: var(--accent-purple);
+      border: 1px solid var(--accent-purple);
+    }
+
+    .task-desc {
+      font-size: 0.9rem;
+      line-height: 1.45;
+      color: var(--text-main);
+    }
+
+    /* Warning Banner */
+    .banner {
+      background: var(--accent-gold-glow);
+      border-left: 4px solid var(--accent-gold);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Code Snippets */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .output-preview {
+      background: #0f172a;
+      color: #bbf7d0;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      border: 1px solid #1e293b;
+    }
+
+    /* Checklist */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--accent-blue-glow);
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .checklist-item.success {
+      background: var(--success-glow);
+      border-left-color: var(--success);
+    }
+
+    .checklist-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>LEVEL 3: MAKE TASK</p>
+        <h1>Tell Me a Joke 😂</h1>
+      </div>
+      <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeManual()">
+        <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Dark Mode</span>
+      </button>
+    </header>
+
+    <div class="card">
+      <div class="card-title">🎭 creative mission</div>
+      <p class="instruction-text">In the <strong>Make</strong> tasks you use the skills you've learned to create a program from scratch. Time to make someone laugh!</p>
+      <div class="image-wrapper">
+        <img src="jokes.gif" alt="Joke GIF" class="gif-img">
+      </div>
+    </div>
+
+    <div class="banner">
+      <span>💡</span>
+      <span><strong>No automated tests:</strong> This task is creative. Write your joke, run your code to see the output, and click <strong>Next Level ➔</strong> whenever you're happy with it!</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📝 your tasks</div>
+      <div class="tasks-list">
+        <div class="task-item">
+          <div class="task-header">
+            <span class="task-badge badge-core">Core Task</span>
+            <span>Write a Joke</span>
+          </div>
+          <div class="task-desc">
+            Write a program that outputs a joke. The joke and the punchline should output on <strong>separate lines</strong>.
+          </div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-header">
+            <span class="task-badge badge-ext">Extension</span>
+            <span>Comic Timing ⏱️</span>
+          </div>
+          <div class="task-desc">
+            You can use the <code>time</code> module to help give your joke some comic timing! Make the audience wait for the punchline.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⏱️ time module example</div>
+      <p class="instruction-text">Python's <code>time</code> module lets you pause the program. Use <code>time.sleep(seconds)</code> to add a dramatic pause before the punchline:</p>
+      <pre>import time
+print("Wait for it")
+time.sleep(2)
+print("Worth waiting for!")</pre>
+      <p class="instruction-text"><strong>Example output:</strong></p>
+      <div class="output-preview">Wait for it
+<em style="color: #94a3b8; font-style: italic;">... 2 second pause ...</em>
+Worth waiting for!</div>
+      <div class="checklist">
+        <div class="checklist-item">
+          <span class="checklist-icon">💡</span>
+          <span><code>import time</code> goes at the <strong>top</strong> of your program.</span>
+        </div>
+        <div class="checklist-item success">
+          <span class="checklist-icon">🎯</span>
+          <span><code>time.sleep(2)</code> pauses for 2 seconds. Try different numbers for different effects!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // System theme sync with parent
+    function syncTheme() {
+      try {
+        if (parent && parent.document && parent.document.body) {
+          const isDark = parent.document.body.classList.contains('dark-theme');
+          setTheme(isDark);
+        }
+      } catch (e) {
+        console.log("Could not access parent window due to browser sandbox limits. Fallback to manual theme.");
+      }
+    }
+
+    function setTheme(isDark) {
+      if (isDark) {
+        document.documentElement.classList.add('dark-theme');
+        document.body.classList.add('dark-theme');
+        document.getElementById('themeToggleIcon').textContent = '☀️';
+        document.getElementById('themeToggleText').textContent = 'Light Mode';
+      } else {
+        document.documentElement.classList.remove('dark-theme');
+        document.body.classList.remove('dark-theme');
+        document.getElementById('themeToggleIcon').textContent = '🌙';
+        document.getElementById('themeToggleText').textContent = 'Dark Mode';
+      }
+    }
+
+    function toggleThemeManual() {
+      const isCurrentlyDark = document.body.classList.contains('dark-theme');
+      setTheme(!isCurrentlyDark);
+    }
+
+    // Run theme sync on load and set up parent mutations observer
+    window.addEventListener('DOMContentLoaded', () => {
+      syncTheme();
+      try {
+        if (parent && parent.document && parent.document.body) {
+          const observer = new MutationObserver(syncTheme);
+          observer.observe(parent.document.body, { attributes: true, attributeFilter: ['class'] });
+        }
+      } catch (e) {
+        // Ignored if cross-origin
+      }
+    });
+  </script>
+</body>
+</html>

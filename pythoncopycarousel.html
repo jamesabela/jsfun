@@ -46,7 +46,8 @@
     <li><strong>Get the Raw URL:</strong> Click the <strong>Raw</strong> button in the top right corner of your
       code block.</li>
     <li>Copy the URL from your browser's address bar. It will start with
-      <code>https://gist.githubusercontent.com/...</code></li>
+      <code>https://gist.githubusercontent.com/...</code>
+    </li>
   </ol>
   <p>Paste this URL into the input box to load your code!</p>
 </div>
@@ -126,10 +127,12 @@
     step by step, check how variables change, copy or download working examples, practise rearranging code into
     the correct order.</p>
 
-  <h3>Important limitations</h3>
-  <p>Python Code Lab 4.0 runs Python in the browser, so it is best for short teaching examples and algorithm
-    demonstrations. Programs that use unsupported imports, external files, or complex packages should be
-    downloaded and run in a local Python environment instead.</p>
+  <h3>Supported Modules</h3>
+  <p>The following standard Python modules are available in the browser environment: <code>random</code>,
+    <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>,
+    <code>turtle</code>, and <code>time</code>. Programs that require other imports, external files, or complex
+    packages should be downloaded and run in a local Python environment instead.
+  </p>
 </div>
 
 <!-- Slide 7: Turtle Graphics -->
@@ -172,31 +175,39 @@
 <!-- Slide 8: Reference Links & Web Previews -->
 <div class="carousel-slide">
   <h3>Reference Links & Web Previews</h3>
-  <p>Python Code Lab 4.0 automatically scans your Python code for web links (e.g., documentation, tutorials, YouTube videos) written in comments or strings.</p>
+  <p>Python Code Lab 4.0 automatically scans your Python code for web links (e.g., documentation, tutorials, YouTube
+    videos) written in comments or strings.</p>
 
   <h3>Dynamic Links Listing</h3>
   <ul>
-    <li>A <strong>Reference Links</strong> panel will appear in the right column listing all URLs found in the code.</li>
-    <li>Click the line badge next to any link (e.g., <code>Ln 12</code>) to automatically scroll to, highlight, and select that line in the code editor.</li>
+    <li>A <strong>Reference Links</strong> panel will appear in the right column listing all URLs found in the code.
+    </li>
+    <li>Click the line badge next to any link (e.g., <code>Ln 12</code>) to automatically scroll to, highlight, and
+      select that line in the code editor.</li>
     <li>Click <strong>Open</strong> to view the link directly in a new browser tab.</li>
   </ul>
 
   <h3>Interactive Web Embedding & Previews</h3>
   <ul>
-    <li>Click <strong>Preview</strong> next to any link to display it inside an interactive embed frame within Python Code Lab.</li>
-    <li>Click the <strong>Preview: On</strong> toggle button at the top of the Reference Links header to easily show or hide the preview window at any time.</li>
-    <li><strong>YouTube Integration:</strong> Regular YouTube video links and shorts are automatically translated to embed links, allowing you to watch tutorials directly next to your workspace!</li>
+    <li>Click <strong>Preview</strong> next to any link to display it inside an interactive embed frame within Python
+      Code Lab.</li>
+    <li>Click the <strong>Preview: On</strong> toggle button at the top of the Reference Links header to easily show or
+      hide the preview window at any time.</li>
+    <li><strong>YouTube Integration:</strong> Regular YouTube video links and shorts are automatically translated to
+      embed links, allowing you to watch tutorials directly next to your workspace!</li>
   </ul>
 </div>
 
 <!-- Slide 9: Coding Quizzes & Auto-Testing -->
 <div class="carousel-slide">
   <h3>Coding Quizzes & Course Progression</h3>
-  <p>Python Code Lab 4.0 supports custom coding quizzes and multi-file course progression using simple comments. Students can test their algorithms and progress through structured lessons instantly.</p>
+  <p>Python Code Lab 4.0 supports custom coding quizzes and multi-file course progression using simple comments.
+    Students can test their algorithms and progress through structured lessons instantly.</p>
 
   <h3>How to define Test Cases & Progression</h3>
   <p>Add comments to your Python code using this structure:</p>
-  <pre style="background: #f1f5f9; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 13px; color: #1e293b;">#Input
+  <pre
+    style="background: #f1f5f9; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 13px; color: #1e293b;">#Input
 # 5, 10
 # 3, 2
 
@@ -209,12 +220,18 @@
 
   <h3>Comment Keywords:</h3>
   <ul>
-    <li><strong><code>#Input</code></strong>: Followed by rows of comma-separated inputs (one row per test case). Speech marks are not required.</li>
+    <li><strong><code>#Input</code></strong>: Followed by rows of comma-separated inputs (one row per test case). Speech
+      marks are not required.</li>
     <li><strong><code>#output</code></strong>: Followed by rows of expected outputs (one row per test case).</li>
-    <li><strong><code>#Next</code></strong>: Followed by the URL of the next level. When all tests pass, a <strong>Next Level ➔</strong> button is unlocked to load the next file.</li>
-    <li><strong><code>#End</code></strong>: Followed by the Course Title (e.g. <code># iGCSE Algorithms Basics</code>). Put this on the final level to display a congratulatory completion card and unlock a customizable **Canvas Completion Certificate (PNG)** download!</li>
+    <li><strong><code>#Next</code></strong>: Followed by the URL of the next level. When all tests pass, a <strong>Next
+        Level ➔</strong> button is unlocked to load the next file.</li>
+    <li><strong><code>#End</code></strong>: Followed by the Course Title (e.g. <code># iGCSE Algorithms Basics</code>).
+      Put this on the final level to display a congratulatory completion card and unlock a customizable **Canvas
+      Completion Certificate (PNG)** download!</li>
   </ul>
 
   <h3>Running the Tests</h3>
-  <p>When the editor detects <code>#Input</code> and <code>#output</code> comments, a purple <strong>Run Tests (N)</strong> button appears next to <strong>Run</strong>. Clicking it runs all tests programmatically in Pyodide, compares outputs, and displays a dashboard summary with expandable details for each run.</p>
+  <p>When the editor detects <code>#Input</code> and <code>#output</code> comments, a purple <strong>Run Tests
+      (N)</strong> button appears next to <strong>Run</strong>. Clicking it runs all tests programmatically in Pyodide,
+    compares outputs, and displays a dashboard summary with expandable details for each run.</p>
 </div>
