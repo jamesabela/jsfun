@@ -8,7 +8,7 @@
         "emoji": "📄",
         "url": "https://jamesabela.github.io/jsfun/pythoncopy",
         "desc": "Display, edit, run simple code, upload & download (.py or .txt), visualise and make puzzles from any raw Python file. Paste a GitHub Gist or Pastebin URL.",
-        "tag": "iGCSE / A-Level",
+        "tag": "KS2 / KS3 / iGCSE / A-Level",
         "isExternal": false
       },
       {
@@ -79,6 +79,22 @@
         "url": "https://edublocks.org/",
         "desc": "Free tool by Anaconda. Learn Python or HTML using familiar drag-and-drop blocks, then switch to text code — a perfect bridge from Scratch to real programming.",
         "tag": "KS2 / KS3 / iGCSE",
+        "isExternal": true
+      },
+      {
+        "title": "Mail Merge Cards",
+        "emoji": "📇",
+        "url": "https://mailmerge.primary-apps.com/",
+        "desc": "Create your own trading cards by merging data from a spreadsheet. A visual way to learn about databases and mail merge. By Dave Salt.",
+        "tag": "KS2 / KS3",
+        "isExternal": true
+      },
+      {
+        "title": "Whodunnit Database Detective",
+        "emoji": "🕵️",
+        "url": "https://whodunnit.primary-apps.com/whodunnit.html",
+        "desc": "Solve mysteries using a suspect database by filtering and comparing records. Great for introducing database queries. By Dave Salt.",
+        "tag": "KS2 / KS3",
         "isExternal": true
       }
     ]
