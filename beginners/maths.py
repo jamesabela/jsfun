@@ -4,8 +4,7 @@
 #output
 # 15
 
-#End
-# Intro to Python: Basic Math
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/beginners/friends.py
 
 # Learn more: https://jamesabela.github.io/jsfun/beginners/maths.html
 

@@ -996,6 +996,30 @@ import sys, builtins
       if (quizBtn) {
         quizBtn.addEventListener('click', runQuizTests);
       }
+      const creativeNextBtn = document.getElementById('creativeNextButton');
+      if (creativeNextBtn) {
+        creativeNextBtn.addEventListener('click', () => {
+          const code = editor.value;
+          const parsed = parseQuizTests(code);
+          if (parsed.nextUrl) {
+            window.location.href = window.location.pathname + '?url=' + encodeURIComponent(parsed.nextUrl);
+          }
+        });
+      }
+      const creativeEndBtn = document.getElementById('creativeEndButton');
+      if (creativeEndBtn) {
+        creativeEndBtn.addEventListener('click', () => {
+          const code = editor.value;
+          const parsed = parseQuizTests(code);
+          if (parsed.isEnd) {
+            renderQuizResults([], 0, 0, null, true, parsed.courseTitle);
+            const runnerLayout = document.getElementById('runnerLayout');
+            if (runnerLayout && runnerLayout.classList.contains('collapsed')) {
+              toggleRunner();
+            }
+          }
+        });
+      }
       document.getElementById('consoleSubmitButton').addEventListener('click', submitConsoleInput);
 
 
@@ -1422,6 +1446,13 @@ import sys, builtins
       const parsed = parseQuizTests(code);
       const testCases = parsed.testCases;
       const quizBtn = document.getElementById('quizButton');
+      const creativeNextBtn = document.getElementById('creativeNextButton');
+      const creativeEndBtn = document.getElementById('creativeEndButton');
+
+      if (quizBtn) quizBtn.style.display = 'none';
+      if (creativeNextBtn) creativeNextBtn.style.display = 'none';
+      if (creativeEndBtn) creativeEndBtn.style.display = 'none';
+
       if (testCases.length > 0) {
         if (quizBtn) {
           quizBtn.style.display = 'inline-block';
@@ -1429,11 +1460,17 @@ import sys, builtins
         }
         const currentText = detectionLabel.textContent;
         if (!currentText.includes('Coding Quiz')) {
-          detectionLabel.textContent = currentText + ` | Coding Quiz (${testCases.length} test${testCases.length > 1 ? 's' : ''})`;
+          detectionLabel.textContent = currentText.split(' | ')[0] + ` | Coding Quiz (${testCases.length} test${testCases.length > 1 ? 's' : ''})`;
         }
-      } else {
-        if (quizBtn) {
-          quizBtn.style.display = 'none';
+      } else if (parsed.nextUrl || parsed.isEnd) {
+        if (parsed.nextUrl) {
+          if (creativeNextBtn) creativeNextBtn.style.display = 'inline-block';
+        } else if (parsed.isEnd) {
+          if (creativeEndBtn) creativeEndBtn.style.display = 'inline-block';
+        }
+        const currentText = detectionLabel.textContent;
+        if (!currentText.includes('Creative Assignment')) {
+          detectionLabel.textContent = currentText.split(' | ')[0] + ` | Creative Assignment (No tests)`;
         }
       }
     }
@@ -2039,12 +2076,13 @@ json.dumps(_test_result)
     }
 
     function renderQuizResults(results, passedCount, totalCount, nextUrl = null, isEnd = false, courseTitle = "") {
-      const isAllPassed = passedCount === totalCount;
-      const isNonePassed = passedCount === 0;
-      const badgeClass = isAllPassed ? 'pass' : (isNonePassed ? 'fail' : 'fail');
-      const badgeText = `${passedCount} / ${totalCount} Passed`;
+      const isCreative = (totalCount === 0);
+      const isAllPassed = isCreative || (passedCount === totalCount);
+      const isNonePassed = !isCreative && (passedCount === 0);
+      const badgeClass = isAllPassed ? 'pass' : 'fail';
+      const badgeText = isCreative ? 'Completed 🎉' : `${passedCount} / ${totalCount} Passed`;
       const fillClass = isAllPassed ? 'pass' : 'fail';
-      const percentage = (passedCount / totalCount) * 100;
+      const percentage = isCreative ? 100 : ((passedCount / totalCount) * 100);
 
       if (!window.toggleTestCaseDetails) {
         window.toggleTestCaseDetails = function(index) {
