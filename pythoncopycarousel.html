@@ -1,7 +1,7 @@
 <!-- Slide 1 -->
 <div class="carousel-slide">
   <img src="python_educator_hero.png" alt="Python Code Lab Hero" class="instruction-image">
-  <p>Python Code Lab 3.1 lets you load, edit, run, display, and trace Python code in the browser. It is designed
+  <p>Python Code Lab 4.0 lets you load, edit, run, display, and trace Python code in the browser. It is designed
     for teachers who want to demonstrate algorithms clearly and for students who want to explore code step by
     step.</p>
 
@@ -117,7 +117,7 @@
   </table>
 
   <h3>Teacher use cases</h3>
-  <p>Teachers can use Python Code Lab 3.1 to: demonstrate standard algorithms, explain code line by line, show
+  <p>Teachers can use Python Code Lab 4.0 to: demonstrate standard algorithms, explain code line by line, show
     how variables change, teach loops, selection, functions, and recursion, create code-ordering puzzles, share
     code examples using a URL, present Python clearly on a large screen.</p>
 
@@ -127,7 +127,7 @@
     the correct order.</p>
 
   <h3>Important limitations</h3>
-  <p>Python Code Lab 3.1 runs Python in the browser, so it is best for short teaching examples and algorithm
+  <p>Python Code Lab 4.0 runs Python in the browser, so it is best for short teaching examples and algorithm
     demonstrations. Programs that use unsupported imports, external files, or complex packages should be
     downloaded and run in a local Python environment instead.</p>
 </div>
@@ -135,7 +135,7 @@
 <!-- Slide 7: Turtle Graphics -->
 <div class="carousel-slide">
   <h3>Turtle Graphics & Turtle Mode</h3>
-  <p>Python Code Lab 3.1 supports in-browser Turtle graphics! When your code imports <code>turtle</code>, or
+  <p>Python Code Lab 4.0 supports in-browser Turtle graphics! When your code imports <code>turtle</code>, or
     when you switch to <strong>Turtle Mode</strong>, a canvas will automatically appear on the right side of the
     editor.</p>
 
@@ -172,7 +172,7 @@
 <!-- Slide 8: Reference Links & Web Previews -->
 <div class="carousel-slide">
   <h3>Reference Links & Web Previews</h3>
-  <p>Python Code Lab 3.1 automatically scans your Python code for web links (e.g., documentation, tutorials, YouTube videos) written in comments or strings.</p>
+  <p>Python Code Lab 4.0 automatically scans your Python code for web links (e.g., documentation, tutorials, YouTube videos) written in comments or strings.</p>
 
   <h3>Dynamic Links Listing</h3>
   <ul>
@@ -187,4 +187,34 @@
     <li>Click the <strong>Preview: On</strong> toggle button at the top of the Reference Links header to easily show or hide the preview window at any time.</li>
     <li><strong>YouTube Integration:</strong> Regular YouTube video links and shorts are automatically translated to embed links, allowing you to watch tutorials directly next to your workspace!</li>
   </ul>
+</div>
+
+<!-- Slide 9: Coding Quizzes & Auto-Testing -->
+<div class="carousel-slide">
+  <h3>Coding Quizzes & Course Progression</h3>
+  <p>Python Code Lab 4.0 supports custom coding quizzes and multi-file course progression using simple comments. Students can test their algorithms and progress through structured lessons instantly.</p>
+
+  <h3>How to define Test Cases & Progression</h3>
+  <p>Add comments to your Python code using this structure:</p>
+  <pre style="background: #f1f5f9; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 13px; color: #1e293b;">#Input
+# 5, 10
+# 3, 2
+
+#output
+# 15
+# 5
+
+#Next
+# https://jamesabela.github.io/jsfun/pythoncopy?url=...level2.py</pre>
+
+  <h3>Comment Keywords:</h3>
+  <ul>
+    <li><strong><code>#Input</code></strong>: Followed by rows of comma-separated inputs (one row per test case). Speech marks are not required.</li>
+    <li><strong><code>#output</code></strong>: Followed by rows of expected outputs (one row per test case).</li>
+    <li><strong><code>#Next</code></strong>: Followed by the URL of the next level. When all tests pass, a <strong>Next Level ➔</strong> button is unlocked to load the next file.</li>
+    <li><strong><code>#End</code></strong>: Followed by the Course Title (e.g. <code># iGCSE Algorithms Basics</code>). Put this on the final level to display a congratulatory completion card and unlock a customizable **Canvas Completion Certificate (PNG)** download!</li>
+  </ul>
+
+  <h3>Running the Tests</h3>
+  <p>When the editor detects <code>#Input</code> and <code>#output</code> comments, a purple <strong>Run Tests (N)</strong> button appears next to <strong>Run</strong>. Clicking it runs all tests programmatically in Pyodide, compares outputs, and displays a dashboard summary with expandable details for each run.</p>
 </div>

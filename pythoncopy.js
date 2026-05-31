@@ -992,6 +992,10 @@ import sys, builtins
 
       // Teacher Mode binds
       document.getElementById('runButton').addEventListener('click', runCurrentCode);
+      const quizBtn = document.getElementById('quizButton');
+      if (quizBtn) {
+        quizBtn.addEventListener('click', runQuizTests);
+      }
       document.getElementById('consoleSubmitButton').addEventListener('click', submitConsoleInput);
 
 
@@ -1410,6 +1414,28 @@ import sys, builtins
         }
       }
       updateReferenceLinks();
+      updateQuizDetection();
+    }
+
+    function updateQuizDetection() {
+      const code = editor.value;
+      const parsed = parseQuizTests(code);
+      const testCases = parsed.testCases;
+      const quizBtn = document.getElementById('quizButton');
+      if (testCases.length > 0) {
+        if (quizBtn) {
+          quizBtn.style.display = 'inline-block';
+          quizBtn.textContent = `Run Tests (${testCases.length})`;
+        }
+        const currentText = detectionLabel.textContent;
+        if (!currentText.includes('Coding Quiz')) {
+          detectionLabel.textContent = currentText + ` | Coding Quiz (${testCases.length} test${testCases.length > 1 ? 's' : ''})`;
+        }
+      } else {
+        if (quizBtn) {
+          quizBtn.style.display = 'none';
+        }
+      }
     }
 
     function extractLinksFromCode(code) {
@@ -1722,6 +1748,580 @@ import sys, builtins
         };
       });
     }
+
+    function parseQuizTests(code) {
+      const lines = code.split('\n');
+      const inputsList = [];
+      const outputsList = [];
+      let nextUrl = null;
+      let isEnd = false;
+      let courseTitle = "Python Algorithms";
+      let mode = null;
+
+      const isHelpText = /entered|seperator|separator|speech\s+marks|between|expected|same\s+format|how\s+to|example/i;
+
+      for (let line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('#')) {
+          const commentContent = trimmed.substring(1).trim();
+          
+          if (/^input\b/i.test(commentContent)) {
+            mode = 'input';
+          } else if (/^output\b/i.test(commentContent)) {
+            mode = 'output';
+          } else if (/^next\b/i.test(commentContent)) {
+            const rest = commentContent.substring(4).trim();
+            const match = rest.match(/https?:\/\/[^\s'"`()]+/);
+            if (match) {
+              nextUrl = match[0];
+              mode = null;
+            } else {
+              mode = 'next';
+            }
+          } else if (/^end\b/i.test(commentContent)) {
+            isEnd = true;
+            const rest = commentContent.substring(3).trim();
+            if (rest !== '') {
+              courseTitle = rest;
+              mode = null;
+            } else {
+              mode = 'end';
+            }
+          } else {
+            if (commentContent !== '' && !isHelpText.test(commentContent)) {
+              if (mode === 'input' || mode === 'output') {
+                const parts = commentContent.split(',').map(part => {
+                  let p = part.trim();
+                  if ((p.startsWith('"') && p.endsWith('"')) || (p.startsWith("'") && p.endsWith("'"))) {
+                    p = p.substring(1, p.length - 1);
+                  }
+                  return p;
+                });
+                if (mode === 'input') {
+                  inputsList.push(parts);
+                } else {
+                  outputsList.push(parts);
+                }
+              } else if (mode === 'next') {
+                const match = commentContent.match(/https?:\/\/[^\s'"`()]+/);
+                if (match) {
+                  nextUrl = match[0];
+                }
+                mode = null;
+              } else if (mode === 'end') {
+                courseTitle = commentContent;
+                mode = null;
+              }
+            }
+          }
+        }
+      }
+
+      const testCases = [];
+      const count = Math.min(inputsList.length, outputsList.length);
+      for (let i = 0; i < count; i++) {
+        testCases.push({
+          inputs: inputsList[i],
+          expected: outputsList[i]
+        });
+      }
+      return {
+        testCases: testCases,
+        nextUrl: nextUrl,
+        isEnd: isEnd,
+        courseTitle: courseTitle
+      };
+    }
+
+    async function runSingleTestCase(source, inputs) {
+      if (!pyodideInstance && pyodideReadyPromise) {
+        await pyodideReadyPromise;
+      }
+
+      const setupCode = `
+import sys, io, builtins, json
+
+# Save originals
+if not hasattr(builtins, '_original_input'):
+    builtins._original_input = builtins.input
+if not hasattr(builtins, '_original_print'):
+    builtins._original_print = builtins.print
+
+_test_inputs = json.loads(_test_inputs_raw)
+_test_input_index = 0
+_test_output = io.StringIO()
+
+def _test_input(prompt=""):
+    global _test_input_index
+    if prompt:
+        _test_output.write(str(prompt))
+    if _test_input_index < len(_test_inputs):
+        val = str(_test_inputs[_test_input_index])
+        _test_input_index += 1
+        _test_output.write(val + '\\n')
+        return val
+    else:
+        return ""
+
+def _test_print(*args, **kwargs):
+    kwargs['file'] = _test_output
+    builtins._original_print(*args, **kwargs)
+
+builtins.input = _test_input
+builtins.print = _test_print
+
+# Reset turtle module state if it exists
+if 'turtle' in sys.modules:
+    import turtle
+    try:
+        turtle._default_turtle.reset()
+        turtle._default_screen.reset()
+    except Exception:
+        pass
+`;
+
+      const runCode = `
+_test_error = None
+try:
+    exec(compile(source_code, '<user_code>', 'exec'), {"__name__": "__main__"})
+except Exception as e:
+    _test_error = str(e)
+finally:
+    builtins.input = builtins._original_input
+    builtins.print = builtins._original_print
+
+# Get results
+_test_result = {
+    "output": _test_output.getvalue(),
+    "error": _test_error
+}
+import json
+json.dumps(_test_result)
+`;
+
+      try {
+        pyodideInstance.globals.set("source_code", source);
+        pyodideInstance.globals.set("_test_inputs_raw", JSON.stringify(inputs));
+        await pyodideInstance.runPythonAsync(setupCode);
+        const resultJson = await pyodideInstance.runPythonAsync(runCode);
+        return JSON.parse(resultJson);
+      } catch (err) {
+        return {
+          output: "",
+          error: String(err)
+        };
+      }
+    }
+
+    async function runQuizTests() {
+      const code = editor.value;
+      const parsed = parseQuizTests(code);
+      const testCases = parsed.testCases;
+      if (testCases.length === 0) return;
+
+      executionCancelled = false;
+      outputEl.textContent = '';
+      hideConsoleInput();
+
+      const runnerLayout = document.getElementById('runnerLayout');
+      if (runnerLayout && runnerLayout.classList.contains('collapsed')) {
+        toggleRunner();
+      }
+
+      setRunnerStatus('Running quiz tests...');
+      outputEl.innerHTML = `
+        <div style="padding: 12px; font-family: sans-serif; color: #475569;">
+          <div style="font-weight: 600; font-size: 15px; margin-bottom: 8px;">Running ${testCases.length} tests...</div>
+          <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow:hidden;">
+            <div style="height: 100%; background: #6366f1; width: 0%; transition: width 0.2s;" id="quizProgressBar"></div>
+          </div>
+        </div>
+      `;
+
+      if (!pyodideInstance && pyodideReadyPromise) {
+        setRunnerStatus('Loading Python engine...');
+        await pyodideReadyPromise;
+      }
+
+      const results = [];
+      let passedCount = 0;
+
+      for (let i = 0; i < testCases.length; i++) {
+        if (executionCancelled) {
+          setRunnerStatus('Tests cancelled.');
+          return;
+        }
+
+        const tc = testCases[i];
+        setRunnerStatus(`Running test ${i + 1} of ${testCases.length}...`);
+
+        const runRes = await runSingleTestCase(code, tc.inputs);
+
+        // Evaluate outputs
+        const actualOutput = runRes.output || "";
+        const error = runRes.error;
+
+        const expectedChecks = [];
+        let isPass = true;
+
+        if (error) {
+          isPass = false;
+          expectedChecks.push({
+            expected: tc.expected.join(', '),
+            matched: false,
+            msg: `Error: ${error}`
+          });
+        } else {
+          // Check each expected output string
+          for (let expectedItem of tc.expected) {
+            const cleanExpected = expectedItem.trim();
+            // Perform a case-insensitive check
+            const matched = actualOutput.toLowerCase().includes(cleanExpected.toLowerCase());
+            if (!matched) {
+              isPass = false;
+            }
+            expectedChecks.push({
+              expected: cleanExpected,
+              matched: matched
+            });
+          }
+        }
+
+        if (isPass) {
+          passedCount++;
+        }
+
+        results.push({
+          index: i + 1,
+          inputs: tc.inputs,
+          expected: tc.expected,
+          actual: actualOutput,
+          error: error,
+          isPass: isPass,
+          checks: expectedChecks
+        });
+
+        // Update progress bar
+        const progressFill = document.getElementById('quizProgressBar');
+        if (progressFill) {
+          progressFill.style.width = `${((i + 1) / testCases.length) * 100}%`;
+        }
+      }
+
+      renderQuizResults(results, passedCount, testCases.length, parsed.nextUrl, parsed.isEnd, parsed.courseTitle);
+    }
+
+    function renderQuizResults(results, passedCount, totalCount, nextUrl = null, isEnd = false, courseTitle = "") {
+      const isAllPassed = passedCount === totalCount;
+      const isNonePassed = passedCount === 0;
+      const badgeClass = isAllPassed ? 'pass' : (isNonePassed ? 'fail' : 'fail');
+      const badgeText = `${passedCount} / ${totalCount} Passed`;
+      const fillClass = isAllPassed ? 'pass' : 'fail';
+      const percentage = (passedCount / totalCount) * 100;
+
+      if (!window.toggleTestCaseDetails) {
+        window.toggleTestCaseDetails = function(index) {
+          const el = document.getElementById(`test-case-details-${index}`);
+          const btn = document.getElementById(`toggle-btn-${index}`);
+          if (el) {
+            if (el.style.display === 'none') {
+              el.style.display = 'block';
+              btn.textContent = 'Hide Details';
+            } else {
+              el.style.display = 'none';
+              btn.textContent = 'Details';
+            }
+          }
+        };
+      }
+
+      let html = `
+        <div class="test-results-container">
+          <div class="test-results-header">
+            <span class="test-results-title">Quiz Test Results</span>
+            <span class="test-results-badge ${badgeClass}">${badgeText}</span>
+          </div>
+          <div class="test-results-progress-bar">
+            <div class="test-results-progress-fill ${fillClass}" style="width: ${percentage}%"></div>
+          </div>
+          <div class="test-case-list">
+      `;
+
+      results.forEach(res => {
+        const icon = res.isPass ? '✔' : '❌';
+        const statusText = res.isPass ? 'Pass' : 'Fail';
+        const statusClass = res.isPass ? 'pass' : 'fail';
+
+        const inputsDisplay = res.inputs.join(', ') || '(no input)';
+
+        html += `
+          <div class="test-case-item">
+            <div class="test-case-summary" onclick="toggleTestCaseDetails(${res.index})">
+              <span class="status-icon ${statusClass}">${icon}</span>
+              <span class="test-case-name">Test Case ${res.index}: inputs [${escapeHtml(inputsDisplay)}]</span>
+              <span class="test-case-status-text ${statusClass}">${statusText}</span>
+              <button class="toggle-details-btn" id="toggle-btn-${res.index}">Details</button>
+            </div>
+            <div class="test-case-details" id="test-case-details-${res.index}" style="display: none;">
+              <div class="detail-grid">
+                <div class="detail-section">
+                  <span class="detail-label">Inputs</span>
+                  <pre class="detail-value">${escapeHtml(res.inputs.join('\n') || '(none)')}</pre>
+                </div>
+                <div class="detail-section">
+                  <span class="detail-label">Expected Checks</span>
+                  <div class="detail-value">
+                    <ul class="expected-check-list">
+        `;
+
+        res.checks.forEach(chk => {
+          const chkIcon = chk.matched ? '✔' : '❌';
+          const chkClass = chk.matched ? 'pass' : 'fail';
+          if (chk.msg) {
+            html += `<li class="expected-check-item ${chkClass}"><span>${chkIcon}</span> <span>${escapeHtml(chk.msg)}</span></li>`;
+          } else {
+            html += `<li class="expected-check-item ${chkClass}"><span>${chkIcon}</span> <span>Contains: "${escapeHtml(chk.expected)}"</span></li>`;
+          }
+        });
+
+        html += `
+                    </ul>
+                  </div>
+                </div>
+                <div class="detail-section" style="grid-column: span 2;">
+                  <span class="detail-label">Actual Console Output</span>
+                  <pre class="detail-value ${res.isPass ? 'pass' : 'fail'}">${escapeHtml(res.actual || (res.error ? 'Error during execution:\n' + res.error : '(no output)'))}</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `
+          </div>
+      `;
+
+      if (isAllPassed) {
+        if (nextUrl) {
+          html += `
+            <div class="quiz-completion-panel pass">
+              <h4>🎉 Level Passed!</h4>
+              <p>You have successfully completed all tests for this level.</p>
+              <button class="next-level-btn" onclick="window.location.href = window.location.pathname + '?url=' + encodeURIComponent('${nextUrl}')">Next Level ➔</button>
+            </div>
+          `;
+        } else if (isEnd) {
+          html += `
+            <div class="quiz-completion-panel end">
+              <h4>🏆 Course Completed!</h4>
+              <p>Outstanding! You have completed the final level of: <strong>${escapeHtml(courseTitle)}</strong></p>
+              <div class="cert-input-row">
+                <input type="text" id="studentCertName" placeholder="Enter your name for the certificate" />
+                <button class="download-cert-btn" onclick="window.triggerCertDownload('${escapeHtml(courseTitle).replace(/'/g, "\\'")}')">Claim Certificate 🎓</button>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      html += `
+        </div>
+      `;
+
+      outputEl.innerHTML = html;
+      setRunnerStatus(isAllPassed ? 'All tests passed!' : `${totalCount - passedCount} test(s) failed.`);
+    }
+
+    function generateCertificatePNG(studentName, courseTitle) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1200;
+      canvas.height = 800;
+      const ctx = canvas.getContext('2d');
+
+      // Helper to draw the ReadySetCompute Laptop Icon
+      function drawLaptopIcon(c, x, y, size) {
+        c.save();
+        c.fillStyle = '#0f172a';
+        c.strokeStyle = '#0f172a';
+        c.lineJoin = 'round';
+        c.lineCap = 'round';
+
+        const w = size;
+        const h = size * 0.6;
+        const sx = x - w/2;
+        const sy = y - h/2 - size * 0.05;
+
+        // Screen frame
+        c.lineWidth = size * 0.08;
+        c.strokeRect(sx + w*0.1, sy, w*0.8, h);
+        
+        // Base keyboard with built-in center notch (transparent vector path)
+        c.beginPath();
+        c.moveTo(sx, sy + h);
+        c.lineTo(x - w * 0.12, sy + h);
+        c.lineTo(x - w * 0.12, sy + h + size * 0.03);
+        c.lineTo(x + w * 0.12, sy + h + size * 0.03);
+        c.lineTo(x + w * 0.12, sy + h);
+        c.lineTo(sx + w, sy + h);
+        c.lineTo(sx + w * 0.95, sy + h + size * 0.08);
+        c.lineTo(sx + w * 0.05, sy + h + size * 0.08);
+        c.closePath();
+        c.fill();
+
+        // Code characters <>
+        c.font = `bold ${Math.round(size * 0.22)}px sans-serif`;
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText('<>', x, sy + h/2);
+
+        c.restore();
+      }
+
+      // Background Gradient (Matches ReadySetCompute soft background mesh gradient)
+      const grad = ctx.createLinearGradient(0, 800, 1200, 0); // Diagonal bottom-left to top-right
+      grad.addColorStop(0, '#f0fdf4');   // Soft mint green
+      grad.addColorStop(0.35, '#eff6ff'); // Soft sky blue
+      grad.addColorStop(0.7, '#f5f3ff');  // Soft violet/purple
+      grad.addColorStop(1, '#fdf2f8');   // Soft pink
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Outer Border (Vibrant diagonal brand gradient to match the website)
+      const borderGrad = ctx.createLinearGradient(0, 800, 1200, 0);
+      borderGrad.addColorStop(0, '#4ade80');   // Mint Green
+      borderGrad.addColorStop(0.35, '#3b82f6'); // Sky Blue
+      borderGrad.addColorStop(0.7, '#8b5cf6');  // Violet/Purple
+      borderGrad.addColorStop(1, '#ec4899');   // Hot Pink
+      ctx.strokeStyle = borderGrad;
+      ctx.lineWidth = 14;
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(55, 55, canvas.width - 110, canvas.height - 110);
+
+      // Corner Ornaments
+      ctx.fillStyle = '#3b82f6';
+      ctx.fillRect(60, 60, 20, 20);
+      ctx.fillRect(canvas.width - 80, 60, 20, 20);
+      ctx.fillRect(60, canvas.height - 80, 20, 20);
+      ctx.fillRect(canvas.width - 80, canvas.height - 80, 20, 20);
+
+      ctx.textBaseline = 'middle';
+
+      // 1. Draw ReadySetCompute Logo Centered at Top
+      ctx.font = 'bold 36px "Segoe UI", sans-serif';
+      const textWidth = ctx.measureText('ReadySetCompute').width;
+      const iconSize = 44;
+      const gap = 12;
+      const totalWidth = iconSize + gap + textWidth;
+      const startX = 600 - totalWidth / 2;
+
+      // Draw Icon
+      drawLaptopIcon(ctx, startX + iconSize / 2, 110, iconSize);
+
+      // Draw Brand Text
+      ctx.fillStyle = '#0f172a'; // Navy
+      ctx.textAlign = 'left';
+      ctx.fillText('ReadySetCompute', startX + iconSize + gap, 110);
+
+      // 2. Draw Certificate Info
+      ctx.textAlign = 'center';
+
+      // Main title
+      ctx.font = 'bold 44px "Segoe UI", sans-serif';
+      ctx.fillStyle = '#0f172a';
+      ctx.fillText('CERTIFICATE OF COMPLETION', 600, 200);
+
+      // Subtitle
+      ctx.font = 'italic 20px "Segoe UI", Georgia, serif';
+      ctx.fillStyle = '#475569';
+      ctx.fillText('This certifies that', 600, 270);
+
+      // Student Name
+      ctx.font = 'bold 44px Georgia, serif';
+      ctx.fillStyle = '#2563eb'; // Brand Blue Name
+      ctx.fillText(studentName.toUpperCase(), 600, 340);
+
+      // Underline (Vibrant Gradient line)
+      ctx.strokeStyle = borderGrad;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(350, 380);
+      ctx.lineTo(850, 380);
+      ctx.stroke();
+
+      // Text
+      ctx.font = '18px "Segoe UI", sans-serif';
+      ctx.fillStyle = '#475569';
+      ctx.fillText('has successfully completed the programming lab course', 600, 430);
+
+      // Course Name
+      ctx.font = 'bold 32px "Segoe UI", sans-serif';
+      ctx.fillStyle = '#0f172a';
+      ctx.fillText(courseTitle, 600, 490);
+
+      // 3. Date / Certification stamp line
+      ctx.font = '16px "Segoe UI", sans-serif';
+      ctx.fillStyle = '#64748b';
+      
+      const today = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      ctx.fillText('Date: ' + today, 350, 610);
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(250, 590);
+      ctx.lineTo(450, 590);
+      ctx.stroke();
+
+      ctx.fillText('ReadySetCompute Certified', 850, 610);
+      ctx.beginPath();
+      ctx.moveTo(750, 590);
+      ctx.lineTo(950, 590);
+      ctx.stroke();
+
+      // 4. Seal Badge
+      // Gradient Outer (Vibrant mesh color matches border)
+      ctx.fillStyle = borderGrad;
+      ctx.beginPath();
+      ctx.arc(600, 630, 44, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Navy Center
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.arc(600, 630, 34, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 15px "Segoe UI", sans-serif';
+      ctx.fillText('PASSED', 600, 630);
+
+      return canvas.toDataURL('image/png');
+    }
+
+    window.triggerCertDownload = function(courseTitle) {
+      const nameInput = document.getElementById('studentCertName');
+      const name = nameInput ? nameInput.value.trim() : "";
+      if (!name) {
+        alert("Please enter your name to claim your certificate.");
+        return;
+      }
+
+      const dataUrl = generateCertificatePNG(name, courseTitle);
+      const link = document.createElement('a');
+      link.download = `${name.replace(/\s+/g, '_')}_python_certificate.png`;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
 
     async function runCurrentCode() {
       const source = editor.value;
