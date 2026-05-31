@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial: Simple Use of Variables</title>
+  <title>Tutorial: Basic Math with Variables</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
@@ -30,8 +27,7 @@
     }
 
     /* Dark Mode overrides */
-    html.dark-theme,
-    body.dark-theme {
+    html.dark-theme, body.dark-theme {
       --bg-gradient: linear-gradient(135deg, #0b0f19, #111827);
       --card-bg: #1e293b;
       --text-main: #f1f5f9;
@@ -144,24 +140,24 @@
       color: var(--text-main);
     }
 
-    /* Video Frame Styling */
-    .video-wrapper {
-      position: relative;
-      width: 100%;
+    /* Image Wrapper Styling */
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       border-radius: 12px;
       overflow: hidden;
-      aspect-ratio: 16/9;
       border: 2px solid var(--border-color);
       box-shadow: var(--shadow);
-      background: #000;
+      background: var(--card-bg);
+      max-width: 100%;
     }
 
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    .maths-king-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
     }
 
     /* Checklist */
@@ -228,13 +224,12 @@
     }
   </style>
 </head>
-
 <body>
   <div class="container">
     <header>
       <div class="title-group">
-        <p>LEVEL 1: BASICS</p>
-        <h1>Simple Use of Variables 🕵️‍♂️</h1>
+        <p>LEVEL 2: VARIABLES & MATH</p>
+        <h1>Basic Math with Variables 👑</h1>
       </div>
       <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeManual()">
         <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Dark Mode</span>
@@ -242,14 +237,10 @@
     </header>
 
     <div class="card">
-      <div class="card-title">🎬 briefing video</div>
-      <p class="instruction-text">Watch the briefing video below to understand how variables store information in
-        computer programs.</p>
-      <div class="video-wrapper">
-        <iframe width="300" height="150" src="https://www.youtube.com/embed/YT0Qhyv3pjo?si=FuZunuX6sQ-lCG0-"
-          title="YouTube video player" frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen></iframe>
+      <div class="card-title">👑 maths king challenge</div>
+      <p class="instruction-text">Look at the variables and calculate the values in your head first.</p>
+      <div class="image-wrapper">
+        <img src="MathsKing.jpg" alt="Maths King Challenge" class="maths-king-img">
       </div>
     </div>
 
@@ -258,34 +249,33 @@
       <div class="checklist">
         <div class="checklist-item">
           <span class="checklist-icon">💡</span>
-          <span><strong>The Challenge:</strong> Look at how we can put variables into our print statements. Can you
-            introduce James Bond in style?</span>
+          <span><strong>The Challenge:</strong> Study the mathematical operations performed on <code>num1</code> and <code>num2</code>. Determine which of the totals evaluates to exactly 15.</span>
         </div>
         <div class="checklist-item success">
           <span class="checklist-icon">🎯</span>
-          <span><strong>Objective:</strong> Make the code print <code class="highlight">Bond James Bond</code> instead
-            of just <code class="highlight">James Bond</code>.</span>
+          <span><strong>Objective:</strong> Change the print statement to print the result 15.</span>
         </div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-title">⚙️ code guidance</div>
-      <p class="instruction-text">Currently, the code prints the name in the normal order. Recall that when calling
-        <code>print()</code>, you can pass variables separated by commas:
-      </p>
+      <p class="instruction-text">We have declared the following variables and sums. One of these variables contains the value 15:</p>
       <div class="code-comparison">
         <p class="instruction-text"><strong>Starter code:</strong></p>
-        <pre># So can you do the right intro with Bond James Bond?
-print(firstName, lastName)</pre>
+        <pre>num1 = 20
+num2 = 5
+
+total1 = num1 + 15
+total2 = num2 * 2
+total3 = num1 - num2
+
+# Which of these will print 15?
+print()</pre>
         <p class="instruction-text"><strong>Expected Output:</strong></p>
-        <div class="output-preview">
-          Bond James Bond</div>
+        <div class="output-preview">15</div>
       </div>
-      <p class="instruction-text">Rearrange your <code>print()</code> statement variables to output
-        <code>lastName</code>, then <code>firstName</code>, and then <code>lastName</code> again to complete the
-        mission!
-      </p>
+      <p class="instruction-text">Pass the variable name that holds the value 15 inside the <code>print()</code> function to solve the challenge!</p>
     </div>
   </div>
 
@@ -335,5 +325,4 @@ print(firstName, lastName)</pre>
     });
   </script>
 </body>
-
 </html>

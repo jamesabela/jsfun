@@ -4,8 +4,8 @@
 #output
 # Bond James Bond
 
-#End
-# Intro to Python: Variables
+#Next
+# https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/beginners/maths.py
 
 # Learn more: https://jamesabela.github.io/jsfun/beginners/variables.html
 
