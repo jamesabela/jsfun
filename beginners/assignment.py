@@ -1,5 +1,4 @@
-#End
-# Intro to Python: Variable Assignment
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/beginners/hello.py
 
 # Learn more: https://jamesabela.github.io/jsfun/beginners/assignment.html
 
