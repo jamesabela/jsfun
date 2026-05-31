@@ -1443,8 +1443,35 @@ import sys, builtins
       const links = [];
       const seen = new Set();
       const urlRegex = /https?:\/\/[^\s'"`()]+/g;
+      let mode = null;
 
       lines.forEach((line, index) => {
+        const trimmed = line.trim();
+        let isNextLine = false;
+
+        if (trimmed.startsWith('#')) {
+          const commentContent = trimmed.substring(1).trim();
+          if (/^next\b/i.test(commentContent)) {
+            isNextLine = true;
+            const rest = commentContent.substring(4).trim();
+            const match = rest.match(/https?:\/\/[^\s'"`()]+/);
+            if (!match) {
+              mode = 'next';
+            }
+          } else if (mode === 'next') {
+            isNextLine = true;
+            mode = null;
+          } else if (/^(input|output|end)\b/i.test(commentContent)) {
+            mode = null;
+          }
+        } else {
+          mode = null;
+        }
+
+        if (isNextLine) {
+          return;
+        }
+
         let match;
         urlRegex.lastIndex = 0;
         while ((match = urlRegex.exec(line)) !== null) {
