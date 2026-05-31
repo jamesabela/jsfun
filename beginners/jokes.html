@@ -20,8 +20,6 @@
       --accent-blue-glow: rgba(59, 130, 246, 0.1);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --accent-purple: #8b5cf6;
-      --accent-purple-glow: rgba(139, 92, 246, 0.12);
       --border-color: rgba(226, 201, 116, 0.25);
       --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
       --code-bg: #0f172a;
@@ -39,8 +37,6 @@
       --accent-dark: #f8fafc;
       --accent-blue: #60a5fa;
       --accent-blue-glow: rgba(96, 165, 250, 0.15);
-      --accent-purple: #a78bfa;
-      --accent-purple-glow: rgba(167, 139, 250, 0.15);
       --border-color: rgba(245, 158, 11, 0.15);
       --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
       --code-bg: #090d16;
@@ -204,12 +200,6 @@
       border: 1px solid var(--accent-blue);
     }
 
-    .badge-ext {
-      background: var(--accent-purple-glow);
-      color: var(--accent-purple);
-      border: 1px solid var(--accent-purple);
-    }
-
     .task-desc {
       font-size: 0.9rem;
       line-height: 1.45;
@@ -227,28 +217,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-    }
-
-    /* Code Snippets */
-    pre {
-      background: var(--code-bg);
-      color: var(--code-text);
-      padding: 14px;
-      border-radius: 8px;
-      font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
-      overflow-x: auto;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .output-preview {
-      background: #0f172a;
-      color: #bbf7d0;
-      padding: 12px;
-      border-radius: 8px;
-      font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
-      border: 1px solid #1e293b;
     }
 
     /* Checklist */
@@ -280,6 +248,27 @@
       font-size: 1.1rem;
       flex-shrink: 0;
     }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .output-preview {
+      background: #0f172a;
+      color: #bbf7d0;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      border: 1px solid #1e293b;
+    }
   </style>
 </head>
 <body>
@@ -308,7 +297,7 @@
     </div>
 
     <div class="card">
-      <div class="card-title">📝 your tasks</div>
+      <div class="card-title">📝 your task</div>
       <div class="tasks-list">
         <div class="task-item">
           <div class="task-header">
@@ -319,38 +308,25 @@
             Write a program that outputs a joke. The joke and the punchline should output on <strong>separate lines</strong>.
           </div>
         </div>
-
-        <div class="task-item">
-          <div class="task-header">
-            <span class="task-badge badge-ext">Extension</span>
-            <span>Comic Timing ⏱️</span>
-          </div>
-          <div class="task-desc">
-            You can use the <code>time</code> module to help give your joke some comic timing! Make the audience wait for the punchline.
-          </div>
-        </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">⏱️ time module example</div>
-      <p class="instruction-text">Python's <code>time</code> module lets you pause the program. Use <code>time.sleep(seconds)</code> to add a dramatic pause before the punchline:</p>
-      <pre>import time
-print("Wait for it")
-time.sleep(2)
-print("Worth waiting for!")</pre>
+      <div class="card-title">💡 example</div>
+      <p class="instruction-text">Here's an example of how your program might look:</p>
+      <pre>print("Why did the chicken cross the road?")
+print("To get to the other side!")</pre>
       <p class="instruction-text"><strong>Example output:</strong></p>
-      <div class="output-preview">Wait for it
-<em style="color: #94a3b8; font-style: italic;">... 2 second pause ...</em>
-Worth waiting for!</div>
+      <div class="output-preview">Why did the chicken cross the road?
+To get to the other side!</div>
       <div class="checklist">
         <div class="checklist-item">
           <span class="checklist-icon">💡</span>
-          <span><code>import time</code> goes at the <strong>top</strong> of your program.</span>
+          <span>Use a separate <code>print()</code> statement for each line of the joke.</span>
         </div>
         <div class="checklist-item success">
           <span class="checklist-icon">🎯</span>
-          <span><code>time.sleep(2)</code> pauses for 2 seconds. Try different numbers for different effects!</span>
+          <span>Be creative! Find or make up a joke that will make your classmates laugh.</span>
         </div>
       </div>
     </div>

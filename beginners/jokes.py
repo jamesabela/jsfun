@@ -5,9 +5,5 @@
 # Write a program that outputs a joke!
 # The joke and the punchline should be on separate lines.
 
-# Extension: Use time.sleep() for comic timing!
-
-import time
-print("Wait for it")
-time.sleep(2)
-print("Worth waiting for!")
+print("Why did the chicken cross the road?")
+print("To get to the other side!")
