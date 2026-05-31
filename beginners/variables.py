@@ -5,7 +5,7 @@
 # Bond James Bond
 
 #Next
-# https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/beginners/maths.py
+# https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/beginners/maths.py
 
 # Learn more: https://jamesabela.github.io/jsfun/beginners/variables.html
 
