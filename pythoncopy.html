@@ -5,6 +5,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Python Code Lab</title>
+  <link rel="manifest" href="pythoncopy.webmanifest">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Python Code Lab">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
     id="prism-theme">
   <link rel="stylesheet" href="pythoncopy.css">
@@ -327,6 +331,14 @@
   <script src="https://unpkg.com/blockly/msg/en.js"></script>
   <script src="pythoncopyblocks.js"></script>
   <script src="pythoncopy.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('pythoncopy-sw.js')
+          .catch(err => console.warn('Service worker registration failed:', err));
+      });
+    }
+  </script>
 
   <footer>
     <p>

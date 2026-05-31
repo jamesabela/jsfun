@@ -1,0 +1,54 @@
+{
+  "name": "Python Code Lab",
+  "short_name": "Code Lab",
+  "description": "Load, edit, run, trace, and build Python code with text or blocks.",
+  "id": "./pythoncopy.html",
+  "start_url": "./pythoncopy.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./python_educator_hero.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./python_blocks_mode.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Blank Python File",
+      "short_name": "Blank",
+      "description": "Start a blank text Python file.",
+      "url": "./pythoncopy.html?blank=true",
+      "icons": [
+        {
+          "src": "./python_educator_hero.png",
+          "sizes": "1024x1024",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Blocks File",
+      "short_name": "Blocks",
+      "description": "Start a blank Blocks file.",
+      "url": "./pythoncopy.html?blocks=true&blank=true",
+      "icons": [
+        {
+          "src": "./python_blocks_mode.png",
+          "sizes": "1024x1024",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
