@@ -952,6 +952,7 @@ import sys, builtins
           analyseCodeAndUpdateMessage();
           clearRunner();
           setRunnerStatus('File loaded successfully.');
+          autoPreviewFirstLink();
         };
         reader.readAsText(file);
         e.target.value = '';
@@ -1339,6 +1340,7 @@ import sys, builtins
           document.getElementById('instructionsPanel').style.display = 'none';
           analyseCodeAndUpdateMessage();
           clearRunner();
+          autoPreviewFirstLink();
         })
         .catch(error => {
           alert('Failed to load code. Please ensure the URL is correct and points to a raw Python file.');
@@ -1696,6 +1698,14 @@ import sys, builtins
       } else {
         toggleBtn.style.background = '#ef4444'; // Red
         toggleBtn.textContent = 'Preview: Off';
+      }
+    }
+
+    function autoPreviewFirstLink() {
+      const code = editor.value;
+      const links = extractLinksFromCode(code);
+      if (links.length > 0) {
+        previewWebLink(links[0].url);
       }
     }
 
