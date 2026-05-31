@@ -4,8 +4,7 @@
 #output
 # Bond James Bond
 
-#Next
-# https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/beginners/maths.py
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/beginners/maths.py
 
 # Learn more: https://jamesabela.github.io/jsfun/beginners/variables.html
 
