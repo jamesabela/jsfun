@@ -4,7 +4,11 @@
     let inputResolver = null;
     let pyodideReadyPromise = null;
     let pyodideInstance = null;
-    let currentAppMode = 'edit';
+    window.currentAppMode = 'edit';
+    // Shared blockly state is declared on window by pythoncopyblocks.js
+    if (typeof window.updateBlocksButtonState !== 'function') {
+      window.updateBlocksButtonState = function() {};
+    }
 
     let displayTraceLog = [];
     let displayInputHistory = [];
@@ -665,6 +669,7 @@ import sys, builtins
     const btnEditMode = document.getElementById('btnEditMode');
     const btnDisplayMode = document.getElementById('btnDisplayMode');
     const btnTurtleMode = document.getElementById('btnTurtleMode');
+    const btnBlocksMode = document.getElementById('btnBlocksMode');
     const teacherControlsRow = document.getElementById('teacherControlsRow');
     const teachControlsRow = document.getElementById('teachControlsRow');
 
@@ -672,16 +677,91 @@ import sys, builtins
     const callTraceList = document.getElementById('callTraceList');
     const variablePanel = document.getElementById('variablePanel');
     const variableList = document.getElementById('variableList');
-    const highlightLayer = document.getElementById('highlightLayer');
-    const editorBg = document.getElementById('editorBg');
-    const displayEditor = document.getElementById('displayEditor');
-    const displayCode = document.getElementById('displayCode');
+      const highlightLayer = document.getElementById('highlightLayer');
+      const editorBg = document.getElementById('editorBg');
+      const displayEditor = document.getElementById('displayEditor');
+      const displayCode = document.getElementById('displayCode');
+      const blocksCodePreview = document.getElementById('blocksCodePreview');
+      const blocksCodePreviewText = document.getElementById('blocksCodePreviewText');
+      const blocksCodePreviewCode = document.getElementById('blocksCodePreviewCode');
+      const blocksPreviewTextColors = document.getElementById('blocksPreviewTextColors');
+      const blocksPreviewBlockColors = document.getElementById('blocksPreviewBlockColors');
+
+    function updateBlocksCodePreview(code) {
+      if (!blocksCodePreviewCode) return;
+
+      const generatedCode = code !== undefined
+        ? code
+        : (typeof getWorkspacePythonCode === 'function' ? getWorkspacePythonCode() : '');
+      blocksCodePreviewCode.dataset.rawCode = generatedCode.trim() ? generatedCode : '# Build blocks to generate Python here.';
+      applyBlocksPreviewColorMode();
+    }
+    window.updateBlocksCodePreview = updateBlocksCodePreview;
+
+    function applyBlocksPreviewColorMode() {
+      if (!blocksCodePreviewText) return;
+      const useBlocksColors = blocksPreviewBlockColors && blocksPreviewBlockColors.checked;
+      blocksCodePreviewText.classList.toggle('blocks-colors', Boolean(useBlocksColors));
+
+      const rawCode = blocksCodePreviewCode ? blocksCodePreviewCode.dataset.rawCode || '' : '';
+      if (!blocksCodePreviewCode) return;
+
+      if (useBlocksColors) {
+        renderBlocksColoredCode(rawCode);
+        return;
+      }
+
+      blocksCodePreviewCode.textContent = rawCode;
+      if (typeof Prism !== 'undefined') {
+        Prism.highlightElement(blocksCodePreviewCode);
+      }
+    }
+
+    function renderBlocksColoredCode(code) {
+      blocksCodePreviewCode.innerHTML = '';
+      const lines = code.split('\n');
+      for (const line of lines) {
+        const lineEl = document.createElement('span');
+        lineEl.className = 'blocks-code-line ' + getBlocksLineClass(line);
+        lineEl.textContent = line || ' ';
+        blocksCodePreviewCode.appendChild(lineEl);
+      }
+    }
+
+    function getBlocksLineClass(line) {
+      const trimmed = line.trim();
+      if (!trimmed) return 'blocks-line-empty';
+      if (trimmed.startsWith('#')) return 'blocks-line-comment';
+      if (trimmed.startsWith('import ') || trimmed.startsWith('from ')) return 'blocks-line-import';
+      if (/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|penup|up|pu|pendown|down|pd)\(/.test(trimmed)) return 'blocks-line-turtle';
+      if (/^(?:time\.)?sleep\(/.test(trimmed)) return 'blocks-line-loop';
+      if (/^(for|while)\b/.test(trimmed)) return 'blocks-line-loop';
+      if (/^(if|elif|else)\b/.test(trimmed)) return 'blocks-line-logic';
+      if (/^print\(/.test(trimmed)) return 'blocks-line-text';
+      if (/input\(/.test(trimmed)) return 'blocks-line-input';
+      if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*=/.test(trimmed)) return 'blocks-line-variable';
+      return 'blocks-line-default';
+    }
 
     function setAppMode(mode) {
+      if (mode === 'blocks' && currentAppMode !== 'blocks') {
+        if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(editor.value)) {
+          const proceed = confirm("This program contains lines of code that cannot be fully converted to blocks. Switching to Blocks Mode may lose some code. Do you want to proceed?");
+          if (!proceed) {
+            btnEditMode.classList.toggle('active', currentAppMode === 'edit');
+            btnDisplayMode.classList.toggle('active', currentAppMode === 'display');
+            btnTurtleMode.classList.toggle('active', currentAppMode === 'turtle');
+            if (btnBlocksMode) btnBlocksMode.classList.toggle('active', currentAppMode === 'blocks');
+            return;
+          }
+        }
+      }
+
       currentAppMode = mode;
       btnEditMode.classList.toggle('active', mode === 'edit');
       btnDisplayMode.classList.toggle('active', mode === 'display');
       btnTurtleMode.classList.toggle('active', mode === 'turtle');
+      if (btnBlocksMode) btnBlocksMode.classList.toggle('active', mode === 'blocks');
       updateAppMode();
     }
 
@@ -690,77 +770,149 @@ import sys, builtins
       const editBadge = document.querySelector('.edit-badge');
       const displayBadge = document.querySelector('.display-badge');
       const turtleBadge = document.querySelector('.turtle-badge');
+      const blocksBadge = document.querySelector('.blocks-badge');
       if (editBadge) editBadge.style.display = 'none';
       if (displayBadge) displayBadge.style.display = 'none';
       if (turtleBadge) turtleBadge.style.display = 'none';
+      if (blocksBadge) blocksBadge.style.display = 'none';
 
       const turtleContainer = document.getElementById('turtleCanvasContainer');
+      const blocklyArea = document.getElementById('blocklyArea');
+      const editorSplitResizer = document.getElementById('editorSplitResizer');
 
-      if (currentAppMode === 'display') {
-        document.body.classList.add('display-mode-active');
+      if (currentAppMode === 'blocks') {
+        document.body.classList.remove('display-mode-active');
         document.body.classList.remove('turtle-mode-active');
-        if (displayBadge) displayBadge.style.display = 'inline-block';
+        document.body.classList.add('blocks-mode-active');
+        if (blocksBadge) blocksBadge.style.display = 'inline-block';
 
+        // Hide text editor elements in blocks mode, but keep the runner beside the blocks.
         editor.style.display = 'none';
-        displayEditor.style.display = 'block';
-
-        displayCode.textContent = editor.value;
-        Prism.highlightElement(displayCode);
-
-        teacherControlsRow.style.display = 'none';
-        teachControlsRow.style.display = 'flex';
-        callTracePanel.style.display = 'block';
-        variablePanel.style.display = 'block';
-
-        // Show turtle canvas in display mode if turtle is imported
-        const imports = extractImports(editor.value);
-        if (imports.includes('turtle')) {
-          if (turtleContainer) turtleContainer.style.display = 'flex';
-        } else {
-          if (turtleContainer) turtleContainer.style.display = 'none';
-        }
-
-        clearRunner();
-        setRunnerStatus('Display Mode Ready. Click Play to trace code.');
-      } else if (currentAppMode === 'turtle') {
-        document.body.classList.remove('display-mode-active');
-        document.body.classList.add('turtle-mode-active');
-        if (turtleBadge) turtleBadge.style.display = 'inline-block';
-
-        editor.style.display = 'block';
         displayEditor.style.display = 'none';
-
-        teacherControlsRow.style.display = 'flex';
-        teachControlsRow.style.display = 'none';
-        callTracePanel.style.display = 'none';
-        variablePanel.style.display = 'none';
-
-        if (turtleContainer) {
-          turtleContainer.style.display = 'flex';
-          setupTurtleCanvas(400, 400);
-        }
-
-        clearTeachHighlight();
-        clearRunner();
-        setRunnerStatus('Turtle Mode Ready. Write turtle code and click Run.');
-      } else {
-        document.body.classList.remove('display-mode-active');
-        document.body.classList.remove('turtle-mode-active');
-        if (editBadge) editBadge.style.display = 'inline-block';
-
-        editor.style.display = 'block';
-        displayEditor.style.display = 'none';
-
-        teacherControlsRow.style.display = 'flex';
-        teachControlsRow.style.display = 'none';
-        callTracePanel.style.display = 'none';
-        variablePanel.style.display = 'none';
-
+        if (editorBg) editorBg.style.display = 'none';
+        if (editorSplitResizer) editorSplitResizer.style.display = 'none';
         if (turtleContainer) turtleContainer.style.display = 'none';
 
+        if (runnerLayout) runnerLayout.style.display = '';
+        const workspace = document.getElementById('workspace');
+        if (workspace) workspace.style.gridTemplateColumns = '';
+
+        teacherControlsRow.style.display = 'none';
+        teachControlsRow.style.display = 'none';
+        callTracePanel.style.display = 'none';
+        variablePanel.style.display = 'none';
+        if (blocksCodePreview) blocksCodePreview.style.display = 'block';
+
+        // Show Blockly Area taking full height
+        if (blocklyArea) {
+          blocklyArea.style.display = 'block';
+          blocklyArea.style.height = '640px';
+        }
+
+        // Initialize and sync Blockly
+        if (typeof Blockly !== 'undefined') {
+          initBlockly();
+          Blockly.svgResize(blocklyWorkspace);
+
+          if (editor.value !== lastGeneratedBlocklyPython) {
+            isUpdatingBlocklyFromText = true;
+            try {
+              convertPythonToWorkspace(editor.value, blocklyWorkspace);
+              lastGeneratedBlocklyPython = getWorkspacePythonCode();
+            } catch (e) {
+              console.error("Error parsing python code to blocks:", e);
+            }
+            isUpdatingBlocklyFromText = false;
+          }
+
+          resizeBlocklyWorkspaceSoon();
+          updateBlocksCodePreview();
+        }
+
         clearTeachHighlight();
         clearRunner();
-        setRunnerStatus('Edit Mode Ready.');
+        setRunnerStatus('Blocks Mode Ready.');
+      } else {
+        document.body.classList.remove('blocks-mode-active');
+        if (blocklyArea) blocklyArea.style.display = 'none';
+        if (editorSplitResizer) editorSplitResizer.style.display = 'none';
+
+        if (runnerLayout) runnerLayout.style.display = '';
+        if (blocksCodePreview) blocksCodePreview.style.display = 'none';
+        const workspace = document.getElementById('workspace');
+        if (workspace) workspace.style.gridTemplateColumns = '';
+
+        if (editorBg) {
+          editorBg.style.display = '';
+          editorBg.style.height = '';
+        }
+
+        if (currentAppMode === 'display') {
+          document.body.classList.add('display-mode-active');
+          document.body.classList.remove('turtle-mode-active');
+          if (displayBadge) displayBadge.style.display = 'inline-block';
+
+          editor.style.display = 'none';
+          displayEditor.style.display = 'block';
+
+          displayCode.textContent = editor.value;
+          Prism.highlightElement(displayCode);
+
+          teacherControlsRow.style.display = 'none';
+          teachControlsRow.style.display = 'flex';
+          callTracePanel.style.display = 'block';
+          variablePanel.style.display = 'block';
+
+          // Show turtle canvas in display mode if turtle is imported
+          const imports = extractImports(editor.value);
+          if (imports.includes('turtle')) {
+            if (turtleContainer) turtleContainer.style.display = 'flex';
+          } else {
+            if (turtleContainer) turtleContainer.style.display = 'none';
+          }
+
+          clearRunner();
+          setRunnerStatus('Display Mode Ready. Click Play to trace code.');
+        } else if (currentAppMode === 'turtle') {
+          document.body.classList.remove('display-mode-active');
+          document.body.classList.add('turtle-mode-active');
+          if (turtleBadge) turtleBadge.style.display = 'inline-block';
+
+          editor.style.display = 'block';
+          displayEditor.style.display = 'none';
+
+          teacherControlsRow.style.display = 'flex';
+          teachControlsRow.style.display = 'none';
+          callTracePanel.style.display = 'none';
+          variablePanel.style.display = 'none';
+
+          if (turtleContainer) {
+            turtleContainer.style.display = 'flex';
+            setupTurtleCanvas(400, 400);
+          }
+
+          clearTeachHighlight();
+          clearRunner();
+          setRunnerStatus('Turtle Mode Ready. Write turtle code and click Run.');
+        } else {
+          document.body.classList.remove('display-mode-active');
+          document.body.classList.remove('turtle-mode-active');
+          if (editBadge) editBadge.style.display = 'inline-block';
+
+          editor.style.display = 'block';
+          displayEditor.style.display = 'none';
+
+          teacherControlsRow.style.display = 'flex';
+          teachControlsRow.style.display = 'none';
+          callTracePanel.style.display = 'none';
+          variablePanel.style.display = 'none';
+
+          if (turtleContainer) turtleContainer.style.display = 'none';
+
+          clearTeachHighlight();
+          clearRunner();
+          setRunnerStatus('Edit Mode Ready.');
+        }
       }
       applyTheme();
     }
@@ -804,6 +956,10 @@ import sys, builtins
 
       if (currentAppMode === 'display') {
         Prism.highlightElement(displayCode);
+      }
+
+      if (typeof applyBlocklyTheme === 'function') {
+        applyBlocklyTheme(isDark);
       }
     }
 
@@ -877,22 +1033,84 @@ import sys, builtins
         .catch(err => console.error('Error loading instruction carousel:', err));
 
       const urlParams = new URLSearchParams(window.location.search);
-      const url = urlParams.get('url');
+      const isBlocksTab = urlParams.has('blocks');
 
-      if (url) {
-        document.getElementById('urlInput').value = url;
+      function getInitialBlocksCode(params) {
+        if (params.has('blank')) return '';
+
+        const syncKey = params.get('blocksKey');
+        if (syncKey) {
+          try {
+            const keyedCode = localStorage.getItem(syncKey);
+            if (keyedCode !== null) return keyedCode;
+          } catch (err) {
+            console.warn('Could not read keyed blocks code:', err);
+          }
+        }
+
+        try {
+          const savedCode = localStorage.getItem('blockly_sync_code');
+          if (savedCode !== null) return savedCode;
+        } catch (err) {
+          console.warn('Could not read saved blocks code:', err);
+        }
+
+        try {
+          if (window.opener && !window.opener.closed) {
+            const openerEditor = window.opener.document.getElementById('editor');
+            if (openerEditor) return openerEditor.value;
+          }
+        } catch (err) {
+          console.warn('Could not read code from opener tab:', err);
+        }
+
+        return '';
+      }
+
+      if (isBlocksTab) {
+        document.getElementById('workspace').style.display = 'grid';
         document.getElementById('inputContainer').style.display = 'none';
         document.getElementById('starterPanel').style.display = 'none';
         document.getElementById('instructionsPanel').style.display = 'none';
-        fetchCode(url);
-      } else if (urlParams.has('blank')) {
-        startBlankFile();
+
+        const workspaceToolbar = document.querySelector('.workspace-toolbar');
+        if (workspaceToolbar) workspaceToolbar.style.display = 'none';
+
+        const brandBadgeContainer = document.querySelector('.brand');
+        if (brandBadgeContainer) {
+          brandBadgeContainer.querySelectorAll('.mode-badge').forEach(el => el.style.display = 'none');
+        }
+        const modeTogglePill = document.getElementById('modeTogglePill');
+        if (modeTogglePill) modeTogglePill.style.display = 'none';
+
+        document.getElementById('blocksTabHeader').style.display = 'flex';
+
+        const initialCode = getInitialBlocksCode(urlParams);
+        editor.value = initialCode;
+
+        // Force initialize Blocks
+        setAppMode('blocks');
+      } else {
+        const url = urlParams.get('url');
+        if (url) {
+          document.getElementById('urlInput').value = url;
+          document.getElementById('inputContainer').style.display = 'none';
+          document.getElementById('starterPanel').style.display = 'none';
+          document.getElementById('instructionsPanel').style.display = 'none';
+          fetchCode(url);
+        } else if (urlParams.has('blank')) {
+          startBlankFile();
+        }
       }
 
       document.querySelectorAll('.starter-button').forEach(button => {
         button.addEventListener('click', function () {
           if (button.dataset.action === 'blank') {
             startBlankFile();
+            return;
+          }
+          if (button.dataset.action === 'blocks') {
+            window.open(window.location.pathname + '?blocks=true&blank=true', '_blank');
             return;
           }
 
@@ -933,40 +1151,248 @@ import sys, builtins
         }
       });
 
-      document.getElementById('blankFileButton').addEventListener('click', startBlankFile);
+      const blocklyRunBtn = document.getElementById('blocklyRunButton');
+      if (blocklyRunBtn) {
+        blocklyRunBtn.addEventListener('click', () => {
+          if (typeof getWorkspacePythonCode === 'function') {
+            editor.value = getWorkspacePythonCode();
+            updateBlocksCodePreview(editor.value);
+          }
+          runCurrentCode({ preserveBlocksMode: true });
+        });
+      }
+
+      const copyBlocksCodeBtn = document.getElementById('copyBlocksCodeButton');
+      if (copyBlocksCodeBtn) {
+        copyBlocksCodeBtn.addEventListener('click', async () => {
+          const code = getCurrentEditorCode();
+          try {
+            await copyTextToClipboard(code);
+            setRunnerStatus('Generated Python copied to clipboard.');
+          } catch (err) {
+            setRunnerStatus('Copy failed. Select the generated Python and copy manually.');
+          }
+        });
+      }
+
+      if (blocksPreviewTextColors) {
+        blocksPreviewTextColors.addEventListener('change', () => {
+          applyBlocksPreviewColorMode();
+        });
+      }
+
+      if (blocksPreviewBlockColors) {
+        blocksPreviewBlockColors.addEventListener('change', () => {
+          applyBlocksPreviewColorMode();
+        });
+      }
+
+      const tryBlocksBtn = document.getElementById('tryBlocksButton');
+      if (tryBlocksBtn) {
+        tryBlocksBtn.addEventListener('click', () => {
+          window.open(window.location.pathname + '?blocks=true&blank=true', '_blank');
+        });
+      }
+
+      const applyBlocksBtn = document.getElementById('applyBlocksButton');
+      if (applyBlocksBtn) {
+        applyBlocksBtn.addEventListener('click', () => {
+          const code = getWorkspacePythonCode();
+          if (window.opener && !window.opener.closed) {
+            window.opener.updateCodeFromChild(code);
+            window.opener.focus();
+            window.close();
+            return;
+          }
+          editor.value = code;
+          setAppMode('edit');
+        });
+      }
+
+      function getCurrentEditorCode() {
+        if (currentAppMode === 'blocks' && typeof getWorkspacePythonCode === 'function') {
+          const code = getWorkspacePythonCode();
+          editor.value = code;
+          updateBlocksCodePreview(code);
+          return code;
+        }
+        return editor.value;
+      }
+
+      function loadCodeIntoCurrentEditor(code) {
+        if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
+          if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(code)) {
+            setRunnerStatus('This file contains Python code that cannot be converted to blocks.');
+            alert('This file contains Python code that cannot be converted to blocks. Please upload a simpler Blocks-compatible Python file.');
+            return;
+          }
+
+          const previousCode = editor.value;
+          const previousBlocksDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+          isUpdatingBlocklyFromText = true;
+          try {
+            const converted = convertPythonToWorkspace(code, blocklyWorkspace);
+            const hasCodeLines = code.split('\n').some(line => {
+              const trimmed = line.trim();
+              return trimmed && !trimmed.startsWith('#') && !trimmed.startsWith('import ') && !trimmed.startsWith('from ');
+            });
+
+            if (!converted && hasCodeLines) {
+              blocklyWorkspace.clear();
+              Blockly.Xml.domToWorkspace(previousBlocksDom, blocklyWorkspace);
+              editor.value = previousCode;
+              setRunnerStatus('Upload cancelled: this file could not be converted to blocks.');
+              alert('This file could not be converted into Blocks. Your current Blocks file was left unchanged.');
+              return;
+            }
+
+            editor.value = code;
+            lastGeneratedBlocklyPython = getWorkspacePythonCode();
+            resizeBlocklyWorkspaceSoon();
+          } catch (ex) {
+            console.error("Error parsing uploaded code to blocks:", ex);
+            blocklyWorkspace.clear();
+            Blockly.Xml.domToWorkspace(previousBlocksDom, blocklyWorkspace);
+            editor.value = previousCode;
+            setRunnerStatus('Upload cancelled: this file could not be converted to blocks.');
+            alert('This file could not be converted into Blocks. Your current Blocks file was left unchanged.');
+            return;
+          } finally {
+            isUpdatingBlocklyFromText = false;
+          }
+        } else {
+          editor.value = code;
+        }
+
+        hasUnsavedChanges = false;
+        updateLineNumbers();
+        analyseCodeAndUpdateMessage();
+        clearRunner();
+        setRunnerStatus('File loaded successfully.');
+        autoPreviewFirstLink();
+        updateBlocksButtonState();
+      }
+
+      function downloadBlocksFile() {
+        if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
+
+        const xmlDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        let xmlText = Blockly.Xml.domToPrettyText
+          ? Blockly.Xml.domToPrettyText(xmlDom)
+          : Blockly.Xml.domToText(xmlDom);
+        if (!xmlText || !xmlText.trim()) {
+          xmlText = new XMLSerializer().serializeToString(xmlDom);
+        }
+        if (!xmlText || !xmlText.trim()) {
+          setRunnerStatus('No Blocks data was available to download.');
+          return;
+        }
+        downloadText(xmlText, 'blocks.blocks', 'application/xml');
+        hasUnsavedChanges = false;
+      }
+
+      function uploadBlocksFile(xmlText) {
+        if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
+
+        const previousDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        try {
+          const xmlDom = parseBlocklyXmlText(xmlText);
+          blocklyWorkspace.clear();
+          Blockly.Xml.domToWorkspace(xmlDom, blocklyWorkspace);
+          resizeBlocklyWorkspaceSoon();
+          editor.value = getWorkspacePythonCode();
+          hasUnsavedChanges = false;
+          updateLineNumbers();
+          analyseCodeAndUpdateMessage();
+          clearRunner();
+          setRunnerStatus('Blocks file loaded successfully.');
+        } catch (err) {
+          console.error('Error loading Blocks file:', err);
+          blocklyWorkspace.clear();
+          Blockly.Xml.domToWorkspace(previousDom, blocklyWorkspace);
+          resizeBlocklyWorkspaceSoon();
+          alert('This Blocks file could not be loaded. Please choose a valid .blocks or .xml file.');
+          setRunnerStatus('Blocks upload failed.');
+        }
+      }
+
+      function parseBlocklyXmlText(xmlText) {
+        if (Blockly.Xml.textToDom) {
+          return Blockly.Xml.textToDom(xmlText);
+        }
+
+        if (Blockly.utils && Blockly.utils.xml && Blockly.utils.xml.textToDom) {
+          return Blockly.utils.xml.textToDom(xmlText);
+        }
+
+        const parsed = new DOMParser().parseFromString(xmlText, 'text/xml');
+        const errorNode = parsed.querySelector('parsererror');
+        if (errorNode) {
+          throw new Error(errorNode.textContent || 'Invalid Blockly XML.');
+        }
+        return parsed.documentElement;
+      }
+
+      const blankFileBtn = document.getElementById('blankFileButton');
+      if (blankFileBtn) {
+        blankFileBtn.addEventListener('click', startBlankFile);
+      }
 
       document.getElementById('copyForDocsButton').addEventListener('click', copyForDocs);
 
-      document.getElementById('uploadPyButton').addEventListener('click', function () {
+      function openUploadPicker() {
         document.getElementById('uploadPyInput').click();
-      });
+      }
+
+      document.getElementById('uploadPyButton').addEventListener('click', openUploadPicker);
+
+      const uploadBlocksInput = document.getElementById('uploadBlocksInput');
+      const blocksUploadFileBtn = document.getElementById('blocksUploadFileButton');
+      if (blocksUploadFileBtn && uploadBlocksInput) {
+        blocksUploadFileBtn.addEventListener('click', () => uploadBlocksInput.click());
+      }
+
+      if (uploadBlocksInput) {
+        uploadBlocksInput.addEventListener('change', function (e) {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            uploadBlocksFile(event.target.result);
+          };
+          reader.readAsText(file);
+          e.target.value = '';
+        });
+      }
 
       document.getElementById('uploadPyInput').addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = function (event) {
-          editor.value = event.target.result;
-          hasUnsavedChanges = false;
-          updateLineNumbers();
-          analyseCodeAndUpdateMessage();
-          clearRunner();
-          setRunnerStatus('File loaded successfully.');
-          autoPreviewFirstLink();
+          loadCodeIntoCurrentEditor(event.target.result);
         };
         reader.readAsText(file);
         e.target.value = '';
       });
 
-      document.getElementById('downloadPyButton').addEventListener('click', function () {
+      function downloadCurrentPy() {
         hasUnsavedChanges = false;
-        downloadText(editor.value, 'code.py', 'text/x-python');
-      });
+        downloadText(getCurrentEditorCode(), 'code.py', 'text/x-python');
+      }
 
-      document.getElementById('downloadTxtButton').addEventListener('click', function () {
+      function downloadCurrentTxt() {
         hasUnsavedChanges = false;
-        downloadText(editor.value, 'code.txt', 'text/plain');
-      });
+        downloadText(getCurrentEditorCode(), 'code.txt', 'text/plain');
+      }
+
+      document.getElementById('downloadPyButton').addEventListener('click', downloadCurrentPy);
+      document.getElementById('downloadTxtButton').addEventListener('click', downloadCurrentTxt);
+
+      const blocksDownloadFileBtn = document.getElementById('blocksDownloadFileButton');
+      if (blocksDownloadFileBtn) {
+        blocksDownloadFileBtn.addEventListener('click', downloadBlocksFile);
+      }
 
       fullscreenButton.addEventListener('click', function () {
         if (!document.fullscreenElement) {
@@ -1041,6 +1467,7 @@ import sys, builtins
         hasUnsavedChanges = true;
         updateLineNumbers();
         analyseCodeAndUpdateMessage(true);
+        updateBlocksButtonState();
       });
 
       editor.addEventListener('scroll', syncLineNumberScroll);
@@ -1081,6 +1508,7 @@ import sys, builtins
       applyCodeFontSize(document.getElementById('font-size').value);
       updateRunnerToggleLabel();
       updateAppMode();
+      updateBlocksButtonState();
 
       window.addEventListener('beforeunload', function (e) {
         if (hasUnsavedChanges) {
@@ -1110,6 +1538,10 @@ import sys, builtins
       lineNumbers.style.fontSize = fontSize + 'px';
       lineNumbers.style.lineHeight = lineHeight + 'px';
       updateLineNumbers();
+
+      if (blocklyWorkspace && typeof Blockly !== 'undefined') {
+        blocklyWorkspace.setScale(fontSize / 16);
+      }
     }
 
     function getCodeLineHeight() {
@@ -1144,6 +1576,7 @@ import sys, builtins
       document.getElementById('workspace').classList.toggle('runner-collapsed', collapsed);
       updateRunnerToggleLabel(collapsed);
       runnerToggle.title = collapsed ? 'Show run window' : 'Hide run window';
+      resizeBlocklyWorkspaceSoon();
     }
 
     function updateRunnerToggleLabel(collapsed = runnerLayout.classList.contains('collapsed')) {
@@ -1153,16 +1586,30 @@ import sys, builtins
         : (collapsed ? '▶' : '◀');
     }
 
+    function resizeBlocklyWorkspaceSoon() {
+      if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
+
+      Blockly.svgResize(blocklyWorkspace);
+      window.setTimeout(() => Blockly.svgResize(blocklyWorkspace), 100);
+      window.setTimeout(() => Blockly.svgResize(blocklyWorkspace), 300);
+    }
+
     function downloadText(text, filename, mimeType) {
       const blob = new Blob([text], { type: mimeType });
       const url = URL.createObjectURL(blob);
+      downloadUrl(url, filename, true);
+    }
+
+    function downloadUrl(url, filename, shouldRevoke = false) {
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      if (shouldRevoke) {
+        window.setTimeout(() => URL.revokeObjectURL(url), 30000);
+      }
     }
 
     async function copyForDocs() {
@@ -1315,10 +1762,16 @@ import sys, builtins
       document.getElementById('starterPanel').style.display = 'none';
       document.getElementById('instructionsPanel').style.display = 'none';
       window.history.pushState({}, '', window.location.pathname + '?blank');
+
+      if (blocklyWorkspace && typeof Blockly !== 'undefined') {
+        blocklyWorkspace.clear();
+      }
+
       updateLineNumbers();
       analyseCodeAndUpdateMessage();
       clearRunner();
       setRunnerStatus('Blank file ready.');
+      updateBlocksButtonState();
       editor.focus();
     }
 
@@ -1341,6 +1794,23 @@ import sys, builtins
           analyseCodeAndUpdateMessage();
           clearRunner();
           autoPreviewFirstLink();
+          updateBlocksButtonState();
+
+          if (currentAppMode === 'blocks') {
+            if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(editor.value)) {
+              alert("This loaded program contains statements that cannot be fully converted to blocks. Switching to Edit Mode.");
+              setAppMode('edit');
+            } else if (blocklyWorkspace) {
+              isUpdatingBlocklyFromText = true;
+              try {
+                convertPythonToWorkspace(editor.value, blocklyWorkspace);
+                lastGeneratedBlocklyPython = getWorkspacePythonCode();
+              } catch (ex) {
+                console.error("Error parsing python code to blocks:", ex);
+              }
+              isUpdatingBlocklyFromText = false;
+            }
+          }
         })
         .catch(error => {
           alert('Failed to load code. Please ensure the URL is correct and points to a raw Python file.');
@@ -1811,6 +2281,8 @@ import sys, builtins
         resolver('');
       }
 
+
+
       setRunnerStatus('System reset.');
     }
 
@@ -1988,6 +2460,7 @@ json.dumps(_test_result)
     }
 
     async function runQuizTests() {
+      switchModeFromBlocks();
       const code = editor.value;
       const parsed = parseQuizTests(code);
       const testCases = parsed.testCases;
@@ -2381,6 +2854,24 @@ json.dumps(_test_result)
       return canvas.toDataURL('image/png');
     }
 
+    window.updateCodeFromChild = function (code) {
+      const editor = document.getElementById('editor');
+      if (editor) {
+        editor.value = code;
+        hasUnsavedChanges = true;
+        document.getElementById('workspace').style.display = 'grid';
+        document.getElementById('inputContainer').style.display = 'none';
+        document.getElementById('starterPanel').style.display = 'none';
+        document.getElementById('instructionsPanel').style.display = 'none';
+        window.history.pushState({}, '', window.location.pathname + '?blank');
+        updateLineNumbers();
+        analyseCodeAndUpdateMessage();
+        updateBlocksButtonState();
+        setAppMode('edit');
+        editor.focus();
+      }
+    };
+
     window.triggerCertDownload = function(courseTitle) {
       const nameInput = document.getElementById('studentCertName');
       const name = nameInput ? nameInput.value.trim() : "";
@@ -2398,7 +2889,10 @@ json.dumps(_test_result)
       document.body.removeChild(link);
     };
 
-    async function runCurrentCode() {
+    async function runCurrentCode(options = {}) {
+      if (!options.preserveBlocksMode) {
+        switchModeFromBlocks();
+      }
       const source = editor.value;
       const analysis = classifyCode(source);
 
@@ -3040,4 +3534,80 @@ def _run_trace():
       isAwaitingDisplayInput = false;
       stopDisplayAutoPlay();
       clearRunner();
+    }
+
+    // --- Blockly Integration Support (Moved to pythoncopyblocks.js) ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const resizer = document.getElementById('editorSplitResizer');
+      const blocklyArea = document.getElementById('blocklyArea');
+      const editorBg = document.getElementById('editorBg');
+
+      if (resizer && blocklyArea && editorBg) {
+        let isDragging = false;
+        let startY, startBlocklyHeight, startEditorBgHeight;
+
+        const startDrag = (e) => {
+          isDragging = true;
+          startY = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
+          startBlocklyHeight = blocklyArea.offsetHeight;
+          startEditorBgHeight = editorBg.offsetHeight;
+          document.body.style.cursor = 'ns-resize';
+          e.preventDefault();
+        };
+
+        const onDrag = (e) => {
+          if (!isDragging) return;
+          const clientY = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
+          if (clientY === undefined) return;
+          const deltaY = clientY - startY;
+
+          let newBlocklyHeight = startBlocklyHeight + deltaY;
+          let newEditorBgHeight = startEditorBgHeight - deltaY;
+
+          if (newBlocklyHeight < 100) {
+            newBlocklyHeight = 100;
+            newEditorBgHeight = startBlocklyHeight + startEditorBgHeight - 100;
+          }
+          if (newEditorBgHeight < 100) {
+            newEditorBgHeight = 100;
+            newBlocklyHeight = startBlocklyHeight + startEditorBgHeight - 100;
+          }
+
+          blocklyArea.style.height = newBlocklyHeight + 'px';
+          editorBg.style.height = newEditorBgHeight + 'px';
+
+          if (blocklyWorkspace && typeof Blockly !== 'undefined') {
+            Blockly.svgResize(blocklyWorkspace);
+          }
+        };
+
+        const endDrag = () => {
+          if (isDragging) {
+            isDragging = false;
+            document.body.style.cursor = '';
+          }
+        };
+
+        resizer.addEventListener('mousedown', startDrag);
+        resizer.addEventListener('touchstart', startDrag);
+        document.addEventListener('mousemove', onDrag);
+        document.addEventListener('touchmove', onDrag);
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (currentAppMode === 'blocks' && blocklyWorkspace && typeof Blockly !== 'undefined') {
+        Blockly.svgResize(blocklyWorkspace);
+      }
+    });
+
+    function switchModeFromBlocks() {
+      if (currentAppMode === 'blocks') {
+        const source = editor.value;
+        const imports = extractImports(source);
+        const usesTurtle = imports.includes('turtle');
+        setAppMode(usesTurtle ? 'turtle' : 'edit');
+      }
     }
