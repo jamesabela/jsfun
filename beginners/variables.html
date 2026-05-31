@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Simple Use of Variables</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
@@ -27,7 +30,8 @@
     }
 
     /* Dark Mode overrides */
-    html.dark-theme, body.dark-theme {
+    html.dark-theme,
+    body.dark-theme {
       --bg-gradient: linear-gradient(135deg, #0b0f19, #111827);
       --card-bg: #1e293b;
       --text-main: #f1f5f9;
@@ -84,6 +88,7 @@
       letter-spacing: -0.02em;
       background: linear-gradient(to right, var(--text-main), var(--accent-gold));
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 4px;
     }
@@ -223,6 +228,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <header>
@@ -237,9 +243,13 @@
 
     <div class="card">
       <div class="card-title">🎬 briefing video</div>
-      <p class="instruction-text">Watch the briefing video below to understand how variables store information in computer programs.</p>
+      <p class="instruction-text">Watch the briefing video below to understand how variables store information in
+        computer programs.</p>
       <div class="video-wrapper">
-        <iframe width="300" height="150" src="https://www.youtube.com/embed/YT0Qhyv3pjo?si=FuZunuX6sQ-lCG0-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="300" height="150" src="https://www.youtube.com/embed/YT0Qhyv3pjo?si=FuZunuX6sQ-lCG0-"
+          title="YouTube video player" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
       </div>
     </div>
 
@@ -248,28 +258,33 @@
       <div class="checklist">
         <div class="checklist-item">
           <span class="checklist-icon">💡</span>
-          <span><strong>The Challenge:</strong> Look at how we can put variables into our print statements. Can you introduce James Bond in style?</span>
+          <span><strong>The Challenge:</strong> Look at how we can put variables into our print statements. Can you
+            introduce James Bond in style?</span>
         </div>
         <div class="checklist-item success">
           <span class="checklist-icon">🎯</span>
-          <span><strong>Objective:</strong> Make the code print <code class="highlight">Bond James Bond</code> instead of just <code class="highlight">James Bond</code>.</span>
+          <span><strong>Objective:</strong> Make the code print <code class="highlight">Bond James Bond</code> instead
+            of just <code class="highlight">James Bond</code>.</span>
         </div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-title">⚙️ code guidance</div>
-      <p class="instruction-text">Currently, the code prints the name in the normal order. Recall that when calling <code>print()</code>, you can pass variables separated by commas:</p>
+      <p class="instruction-text">Currently, the code prints the name in the normal order. Recall that when calling
+        <code>print()</code>, you can pass variables separated by commas:</p>
       <div class="code-comparison">
         <p class="instruction-text"><strong>Starter code:</strong></p>
         <pre># So can you do the right intro with Bond James Bond?
 print(firstName, lastName)</pre>
         <p class="instruction-text"><strong>Expected Output:</strong></p>
         <div class="output-preview">James
-Bond
-Bond James Bond</div>
+          Bond
+          Bond James Bond</div>
       </div>
-      <p class="instruction-text">Rearrange your <code>print()</code> statement variables to output <code>lastName</code>, then <code>firstName</code>, and then <code>lastName</code> again to complete the mission!</p>
+      <p class="instruction-text">Rearrange your <code>print()</code> statement variables to output
+        <code>lastName</code>, then <code>firstName</code>, and then <code>lastName</code> again to complete the
+        mission!</p>
     </div>
   </div>
 
@@ -319,4 +334,5 @@ Bond James Bond</div>
     });
   </script>
 </body>
+
 </html>
