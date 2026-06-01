@@ -821,6 +821,13 @@ import sys, builtins
       updateEditorActionButtons();
     }
 
+    function handleProgrammaticEdit(reason = 'Typing') {
+      const highlightLayer = document.getElementById('highlightLayer');
+      if (highlightLayer) highlightLayer.innerHTML = '';
+      refreshEditorAfterEdit();
+      recordPlaybackSnapshot(reason, false);
+    }
+
     function handleEditorTabKey(event) {
       if (event.key !== 'Tab') return;
 
@@ -844,7 +851,7 @@ import sys, builtins
           editor.selectionStart = start + indent.length;
           editor.selectionEnd = end + (indentedBlock.length - selectedBlock.length);
         }
-        refreshEditorAfterEdit();
+        handleProgrammaticEdit('Typing');
         return;
       }
 
@@ -854,7 +861,7 @@ import sys, builtins
         if (spacesToRemove > 0) {
           editor.setRangeText('', start - spacesToRemove, start, 'end');
         }
-        refreshEditorAfterEdit();
+        handleProgrammaticEdit('Typing');
         return;
       }
 
@@ -875,7 +882,34 @@ import sys, builtins
         editor.selectionStart = Math.max(lineStart, start - removedBeforeSelection);
         editor.selectionEnd = Math.max(editor.selectionStart, end - totalRemoved);
       }
-      refreshEditorAfterEdit();
+      handleProgrammaticEdit('Typing');
+    }
+
+    function handleEditorEnterKey(event) {
+      if (event.key !== 'Enter') return;
+
+      const value = editor.value;
+      const start = editor.selectionStart;
+      const end = editor.selectionEnd;
+
+      // Find current line context
+      const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+      const currentLine = value.slice(lineStart, start);
+
+      // Extract leading spaces or tabs
+      const leadingWhitespaceMatch = currentLine.match(/^[ \t]*/);
+      const leadingWhitespace = leadingWhitespaceMatch ? leadingWhitespaceMatch[0] : "";
+
+      // Check for colon ending (ignoring comments/spaces)
+      const cleaned = currentLine.replace(/#.*$/, '').trim();
+      const endsWithColon = cleaned.endsWith(':');
+
+      const extraIndent = endsWithColon ? '    ' : '';
+      const insertText = '\n' + leadingWhitespace + extraIndent;
+
+      event.preventDefault();
+      editor.setRangeText(insertText, start, end, 'end');
+      handleProgrammaticEdit('Typing');
     }
 
     function applyBlocksPreviewColorMode() {
@@ -2060,7 +2094,10 @@ import sys, builtins
         recordPlaybackSnapshot('Paste', true, 'paste');
       });
 
-      editor.addEventListener('keydown', handleEditorTabKey);
+      editor.addEventListener('keydown', (event) => {
+        handleEditorTabKey(event);
+        handleEditorEnterKey(event);
+      });
       editor.addEventListener('scroll', syncLineNumberScroll);
       displayEditor.addEventListener('scroll', syncLineNumberScroll);
       runnerToggle.addEventListener('click', toggleRunner);
@@ -3034,11 +3071,21 @@ if 'turtle' in sys.modules:
 
       const runCode = `
 _test_error = None
+import time, sys
+_test_start = time.time()
+
+def _test_trace(frame, event, arg):
+    if time.time() - _test_start > 5.0:
+        raise Exception("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
+    return _test_trace
+
+sys.settrace(_test_trace)
 try:
     exec(compile(source_code, '<user_code>', 'exec'), {"__name__": "__main__"})
 except Exception as e:
     _test_error = str(e)
 finally:
+    sys.settrace(None)
     builtins.input = builtins._original_input
     builtins.print = builtins._original_print
 
@@ -3560,14 +3607,35 @@ json.dumps(_test_result)
           }
         });
         // Reset Python-side turtle module state if it exists
+        pyodideInstance.globals.set("user_code", source);
         await pyodideInstance.runPythonAsync(`
 import sys
 if 'turtle' in sys.modules:
     import turtle
     turtle._default_turtle.reset()
     turtle._default_screen.reset()
+
+import time
+class TimeoutException(Exception):
+    pass
+
+_start_time = time.time()
+_limit = 5.0  # 5 seconds timeout limit
+
+def _timeout_trace(frame, event, arg):
+    if time.time() - _start_time > _limit:
+        raise TimeoutException("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
+    return _timeout_trace
+
+sys.settrace(_timeout_trace)
+try:
+    exec(compile(user_code, '<user_code>', 'exec'), globals())
+finally:
+    sys.settrace(None)
+    for var in ['_start_time', '_limit', '_timeout_trace', 'TimeoutException', 'user_code']:
+        if var in globals():
+            del globals()[var]
         `);
-        await pyodideInstance.runPythonAsync(source);
 
         hideConsoleInput();
         setRunnerStatus('Finished successfully.');
@@ -3658,6 +3726,9 @@ if 'turtle' in sys.modules:
       } else if (errStr.includes("KeyError")) {
         tipTitle = "💡 Key Error Tip";
         tipBody = "You're trying to look up a key in a dictionary that doesn't exist. Make sure the key exists or use the dictionary's <code>.get()</code> method to provide a default value.";
+      } else if (errStr.includes("TimeoutException") || errStr.includes("InfiniteLoopTimeout") || /timeout/i.test(errStr)) {
+        tipTitle = "💡 Infinite Loop Warning";
+        tipBody = "Your code took too long to run and was stopped. This usually happens when you have an **infinite loop** (like a <code>while</code> loop that never ends) or a function calling itself forever. Check your loop conditions and ensure they eventually become false!";
       }
 
       if (tipBody) {
@@ -3735,7 +3806,10 @@ if 'turtle' in sys.modules:
       }
 
       const setupCode = `
-import sys, io, builtins, json, ast
+import sys, io, builtins, json, ast, time
+
+_start_time = time.time()
+_limit = 5.0
 
 if 'turtle' in sys.modules:
     import turtle
@@ -3809,6 +3883,9 @@ def _source_line(line_no):
     return ""
 
 def _trace_hook(frame, event, arg):
+    if time.time() - _start_time > _limit:
+        raise Exception("Timeout: Execution took too long (possible infinite loop). Maximum execution time is 5 seconds.")
+
     if frame.f_code.co_filename != '<user_code>':
         return _trace_hook
 
