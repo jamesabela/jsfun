@@ -765,6 +765,49 @@ import sys, builtins
       updateAppMode();
     }
 
+    function restoreTextEditorToolbar() {
+      const blocksTabHeader = document.getElementById('blocksTabHeader');
+      if (blocksTabHeader) blocksTabHeader.style.display = 'none';
+
+      const workspaceToolbar = document.querySelector('.workspace-toolbar');
+      if (workspaceToolbar) workspaceToolbar.style.display = 'flex';
+
+      const modeTogglePill = document.getElementById('modeTogglePill');
+      if (modeTogglePill) modeTogglePill.style.display = '';
+    }
+
+    function showBlocksEditorToolbar() {
+      const workspaceToolbar = document.querySelector('.workspace-toolbar');
+      if (workspaceToolbar) workspaceToolbar.style.display = 'none';
+
+      const modeTogglePill = document.getElementById('modeTogglePill');
+      if (modeTogglePill) modeTogglePill.style.display = 'none';
+
+      const blocksTabHeader = document.getElementById('blocksTabHeader');
+      if (blocksTabHeader) blocksTabHeader.style.display = 'flex';
+    }
+
+    function startBlankBlocksFile() {
+      currentURL = '';
+      editor.value = '';
+      hasUnsavedChanges = false;
+      displayCode.textContent = '';
+      document.getElementById('urlInput').value = '';
+      document.getElementById('workspace').style.display = 'grid';
+      document.getElementById('inputContainer').style.display = 'none';
+      document.getElementById('starterPanel').style.display = 'none';
+      document.getElementById('instructionsPanel').style.display = 'none';
+      window.history.pushState({}, '', window.location.pathname + '?blocks=true&blank=true');
+
+      if (blocklyWorkspace && typeof Blockly !== 'undefined') {
+        blocklyWorkspace.clear();
+        lastGeneratedBlocklyPython = '';
+      }
+
+      showBlocksEditorToolbar();
+      setAppMode('blocks');
+    }
+
     function updateAppMode() {
       // Hide all badges first
       const editBadge = document.querySelector('.edit-badge');
@@ -784,6 +827,7 @@ import sys, builtins
         document.body.classList.remove('display-mode-active');
         document.body.classList.remove('turtle-mode-active');
         document.body.classList.add('blocks-mode-active');
+        showBlocksEditorToolbar();
         if (blocksBadge) blocksBadge.style.display = 'inline-block';
 
         // Hide text editor elements in blocks mode, but keep the runner beside the blocks.
@@ -833,6 +877,7 @@ import sys, builtins
         clearRunner();
         setRunnerStatus('Blocks Mode Ready.');
       } else {
+        restoreTextEditorToolbar();
         document.body.classList.remove('blocks-mode-active');
         if (blocklyArea) blocklyArea.style.display = 'none';
         if (editorSplitResizer) editorSplitResizer.style.display = 'none';
@@ -1073,17 +1118,11 @@ import sys, builtins
         document.getElementById('starterPanel').style.display = 'none';
         document.getElementById('instructionsPanel').style.display = 'none';
 
-        const workspaceToolbar = document.querySelector('.workspace-toolbar');
-        if (workspaceToolbar) workspaceToolbar.style.display = 'none';
-
         const brandBadgeContainer = document.querySelector('.brand');
         if (brandBadgeContainer) {
           brandBadgeContainer.querySelectorAll('.mode-badge').forEach(el => el.style.display = 'none');
         }
-        const modeTogglePill = document.getElementById('modeTogglePill');
-        if (modeTogglePill) modeTogglePill.style.display = 'none';
-
-        document.getElementById('blocksTabHeader').style.display = 'flex';
+        showBlocksEditorToolbar();
 
         const initialCode = getInitialBlocksCode(urlParams);
         editor.value = initialCode;
@@ -1110,7 +1149,7 @@ import sys, builtins
             return;
           }
           if (button.dataset.action === 'blocks') {
-            window.open(window.location.pathname + '?blocks=true&blank=true', '_blank');
+            startBlankBlocksFile();
             return;
           }
 
@@ -1190,7 +1229,7 @@ import sys, builtins
       const tryBlocksBtn = document.getElementById('tryBlocksButton');
       if (tryBlocksBtn) {
         tryBlocksBtn.addEventListener('click', () => {
-          window.open(window.location.pathname + '?blocks=true&blank=true', '_blank');
+          startBlankBlocksFile();
         });
       }
 
