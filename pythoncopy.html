@@ -166,7 +166,13 @@
 
     <section class="panel">
       <div class="toggle-row">
-        <span id="detectionLabel">Detection: waiting for code.</span>
+        <span id="detectionLabel" hidden>Detection: waiting for code.</span>
+        <div class="editor-action-row" aria-label="Editor actions">
+          <button type="button" class="editor-action-button" id="undoEditorButton" title="Undo last edit">Undo</button>
+          <button type="button" class="editor-action-button" id="redoEditorButton" title="Redo last edit">Redo</button>
+          <button type="button" class="editor-action-button" id="revertEditorButton" title="Revert to the last loaded or downloaded file">Revert</button>
+          <span id="pasteCounter" class="paste-counter" title="Paste/upload count">0</span>
+        </div>
       </div>
       <!-- Blockly Workspace Area -->
       <div id="blocklyArea" style="display: none; height: 350px; position: relative; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 0;">

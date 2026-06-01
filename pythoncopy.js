@@ -1,6 +1,8 @@
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
+    let savedEditorCode = '';
+    let pasteCount = 0;
     let inputResolver = null;
     let pyodideReadyPromise = null;
     let pyodideInstance = null;
@@ -660,11 +662,15 @@ import sys, builtins
     const outputEl = document.getElementById('output');
     const runnerMessage = document.getElementById('runnerMessage');
     const runnerStatus = document.getElementById('runnerStatus');
+    const pasteCounter = document.getElementById('pasteCounter');
     const detectionLabel = document.getElementById('detectionLabel');
     const runnerLayout = document.getElementById('runnerLayout');
     const runnerToggle = document.getElementById('runnerToggle');
     const fullscreenButton = document.getElementById('fullscreenButton');
     const openNewTabButton = document.getElementById('openNewTabButton');
+    const undoEditorButton = document.getElementById('undoEditorButton');
+    const redoEditorButton = document.getElementById('redoEditorButton');
+    const revertEditorButton = document.getElementById('revertEditorButton');
 
     const btnEditMode = document.getElementById('btnEditMode');
     const btnDisplayMode = document.getElementById('btnDisplayMode');
@@ -697,6 +703,90 @@ import sys, builtins
       applyBlocksPreviewColorMode();
     }
     window.updateBlocksCodePreview = updateBlocksCodePreview;
+
+    function markCurrentEditorCodeSaved(code) {
+      savedEditorCode = code !== undefined ? code : editor.value;
+      hasUnsavedChanges = false;
+      updateEditorActionButtons();
+    }
+
+    function refreshEditorAfterProgrammaticChange(statusMessage) {
+      updateLineNumbers();
+      analyseCodeAndUpdateMessage(true);
+      updateBlocksButtonState();
+      if (currentAppMode === 'blocks') {
+        updateBlocksCodePreview(editor.value);
+      }
+      if (statusMessage) {
+        setRunnerStatus(statusMessage);
+      }
+      updateEditorActionButtons();
+    }
+
+    function updateEditorActionButtons() {
+      if (revertEditorButton) {
+        revertEditorButton.disabled = editor.value === savedEditorCode;
+      }
+    }
+
+    function updatePasteCounter() {
+      if (pasteCounter) {
+        pasteCounter.textContent = String(pasteCount);
+      }
+    }
+
+    function incrementPasteCounter() {
+      pasteCount += 1;
+      updatePasteCounter();
+    }
+
+    function runEditorHistoryCommand(command) {
+      if (!editor) return;
+      const before = editor.value;
+      editor.focus();
+      document.execCommand(command);
+      window.setTimeout(() => {
+        if (editor.value !== before) {
+          hasUnsavedChanges = editor.value !== savedEditorCode;
+          refreshEditorAfterProgrammaticChange(command === 'undo' ? 'Undo applied.' : 'Redo applied.');
+        } else {
+          updateEditorActionButtons();
+        }
+      }, 0);
+    }
+
+    function revertEditorToSavedFile() {
+      if (editor.value === savedEditorCode) {
+        setRunnerStatus('Already matches the saved file.');
+        updateEditorActionButtons();
+        return;
+      }
+
+      if (hasUnsavedChanges && !confirm('Revert to the last loaded or downloaded file? Unsaved edits will be lost.')) {
+        return;
+      }
+
+      editor.value = savedEditorCode;
+      hasUnsavedChanges = false;
+
+      if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
+        isUpdatingBlocklyFromText = true;
+        try {
+          blocklyWorkspace.clear();
+          convertPythonToWorkspace(editor.value, blocklyWorkspace);
+          lastGeneratedBlocklyPython = typeof getWorkspacePythonCode === 'function' ? getWorkspacePythonCode() : editor.value;
+          resizeBlocklyWorkspaceSoon();
+        } catch (err) {
+          console.warn('Could not sync reverted code to Blocks:', err);
+        } finally {
+          isUpdatingBlocklyFromText = false;
+        }
+      }
+
+      clearRunner();
+      refreshEditorAfterProgrammaticChange('Reverted to saved file.');
+      editor.focus();
+    }
 
     function applyBlocksPreviewColorMode() {
       if (!blocksCodePreviewText) return;
@@ -790,7 +880,7 @@ import sys, builtins
     function startBlankBlocksFile() {
       currentURL = '';
       editor.value = '';
-      hasUnsavedChanges = false;
+      markCurrentEditorCodeSaved('');
       displayCode.textContent = '';
       document.getElementById('urlInput').value = '';
       document.getElementById('workspace').style.display = 'grid';
@@ -1145,6 +1235,7 @@ import sys, builtins
 
         const initialCode = getInitialBlocksCode(urlParams);
         editor.value = initialCode;
+        markCurrentEditorCodeSaved(initialCode);
 
         // Force initialize Blocks
         setAppMode('blocks');
@@ -1209,6 +1300,20 @@ import sys, builtins
         }
       });
 
+      [undoEditorButton, redoEditorButton, revertEditorButton].forEach(button => {
+        if (!button) return;
+        button.addEventListener('mousedown', event => event.preventDefault());
+      });
+      if (undoEditorButton) {
+        undoEditorButton.addEventListener('click', () => runEditorHistoryCommand('undo'));
+      }
+      if (redoEditorButton) {
+        redoEditorButton.addEventListener('click', () => runEditorHistoryCommand('redo'));
+      }
+      if (revertEditorButton) {
+        revertEditorButton.addEventListener('click', revertEditorToSavedFile);
+      }
+
       const blocklyRunBtn = document.getElementById('blocklyRunButton');
       if (blocklyRunBtn) {
         blocklyRunBtn.addEventListener('click', () => {
@@ -1263,6 +1368,8 @@ import sys, builtins
             return;
           }
           editor.value = code;
+          hasUnsavedChanges = editor.value !== savedEditorCode;
+          updateEditorActionButtons();
           setAppMode('edit');
         });
       }
@@ -1322,7 +1429,7 @@ import sys, builtins
           editor.value = code;
         }
 
-        hasUnsavedChanges = false;
+        markCurrentEditorCodeSaved(code);
         updateLineNumbers();
         analyseCodeAndUpdateMessage();
         clearRunner();
@@ -1346,7 +1453,7 @@ import sys, builtins
           return;
         }
         downloadText(xmlText, 'blocks.blocks', 'application/xml');
-        hasUnsavedChanges = false;
+        markCurrentEditorCodeSaved(getCurrentEditorCode());
       }
 
       function uploadBlocksFile(xmlText) {
@@ -1359,7 +1466,7 @@ import sys, builtins
           Blockly.Xml.domToWorkspace(xmlDom, blocklyWorkspace);
           resizeBlocklyWorkspaceSoon();
           editor.value = getWorkspacePythonCode();
-          hasUnsavedChanges = false;
+          markCurrentEditorCodeSaved(editor.value);
           updateLineNumbers();
           analyseCodeAndUpdateMessage();
           clearRunner();
@@ -1416,6 +1523,7 @@ import sys, builtins
           if (!file) return;
           const reader = new FileReader();
           reader.onload = function (event) {
+            incrementPasteCounter();
             uploadBlocksFile(event.target.result);
           };
           reader.readAsText(file);
@@ -1428,6 +1536,7 @@ import sys, builtins
         if (!file) return;
         const reader = new FileReader();
         reader.onload = function (event) {
+          incrementPasteCounter();
           loadCodeIntoCurrentEditor(event.target.result);
         };
         reader.readAsText(file);
@@ -1435,13 +1544,15 @@ import sys, builtins
       });
 
       function downloadCurrentPy() {
-        hasUnsavedChanges = false;
-        downloadText(getCurrentEditorCode(), 'code.py', 'text/x-python');
+        const code = getCurrentEditorCode();
+        markCurrentEditorCodeSaved(code);
+        downloadText(code, 'code.py', 'text/x-python');
       }
 
       function downloadCurrentTxt() {
-        hasUnsavedChanges = false;
-        downloadText(getCurrentEditorCode(), 'code.txt', 'text/plain');
+        const code = getCurrentEditorCode();
+        markCurrentEditorCodeSaved(code);
+        downloadText(code, 'code.txt', 'text/plain');
       }
 
       document.getElementById('downloadPyButton').addEventListener('click', downloadCurrentPy);
@@ -1522,10 +1633,15 @@ import sys, builtins
       });
 
       editor.addEventListener('input', () => {
-        hasUnsavedChanges = true;
+        hasUnsavedChanges = editor.value !== savedEditorCode;
         updateLineNumbers();
         analyseCodeAndUpdateMessage(true);
         updateBlocksButtonState();
+        updateEditorActionButtons();
+      });
+
+      editor.addEventListener('paste', () => {
+        incrementPasteCounter();
       });
 
       editor.addEventListener('scroll', syncLineNumberScroll);
@@ -1567,6 +1683,8 @@ import sys, builtins
       updateRunnerToggleLabel();
       updateAppMode();
       updateBlocksButtonState();
+      updateEditorActionButtons();
+      updatePasteCounter();
 
       window.addEventListener('beforeunload', function (e) {
         if (hasUnsavedChanges) {
@@ -1812,7 +1930,7 @@ import sys, builtins
     function startBlankFile() {
       currentURL = '';
       editor.value = '';
-      hasUnsavedChanges = false;
+      markCurrentEditorCodeSaved('');
       displayCode.textContent = '';
       document.getElementById('urlInput').value = '';
       document.getElementById('workspace').style.display = 'grid';
@@ -1843,7 +1961,7 @@ import sys, builtins
         .then(response => response.text())
         .then(data => {
           editor.value = data;
-          hasUnsavedChanges = false;
+          markCurrentEditorCodeSaved(data);
           updateLineNumbers();
           document.getElementById('workspace').style.display = 'grid';
           document.getElementById('inputContainer').style.display = 'none';
@@ -2916,7 +3034,7 @@ json.dumps(_test_result)
       const editor = document.getElementById('editor');
       if (editor) {
         editor.value = code;
-        hasUnsavedChanges = true;
+        hasUnsavedChanges = editor.value !== savedEditorCode;
         document.getElementById('workspace').style.display = 'grid';
         document.getElementById('inputContainer').style.display = 'none';
         document.getElementById('starterPanel').style.display = 'none';
@@ -2925,6 +3043,7 @@ json.dumps(_test_result)
         updateLineNumbers();
         analyseCodeAndUpdateMessage();
         updateBlocksButtonState();
+        updateEditorActionButtons();
         setAppMode('edit');
         editor.focus();
       }

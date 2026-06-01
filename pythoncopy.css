@@ -598,6 +598,47 @@
       font-size: 14px;
     }
 
+    .paste-counter {
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1;
+      margin-left: 4px;
+      min-width: 1ch;
+      user-select: none;
+    }
+
+    body.dark-theme .paste-counter {
+      color: #94a3b8;
+    }
+
+    .editor-action-row {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    .editor-action-button {
+      background: #475569;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 9px;
+      font-size: 13px;
+      line-height: 1.2;
+      min-width: 54px;
+    }
+
+    .editor-action-button:hover {
+      background: #334155;
+    }
+
+    .editor-action-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
     .toggle-row label {
       display: inline-flex;
       align-items: center;
