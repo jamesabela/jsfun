@@ -32,16 +32,27 @@
     let turtleVisible = true;
     let turtleBgColor = '#ffffff';
 
+    let drawPending = false;
+    function queueDraw() {
+      if (!drawPending) {
+        drawPending = true;
+        requestAnimationFrame(() => {
+          drawEverything();
+          drawPending = false;
+        });
+      }
+    }
+
     window.addTurtleLine = function (x1, y1, x2, y2, color, width) {
       turtleCommands.push({ type: 'line', x1, y1, x2, y2, color, width });
-      drawEverything();
+      queueDraw();
     };
 
     window.addTurtleFill = function (pathJson, color) {
       try {
         const path = JSON.parse(pathJson);
         turtleCommands.push({ type: 'fill', path, color });
-        drawEverything();
+        queueDraw();
       } catch (e) {
         console.error('Error parsing fill path:', e);
       }
@@ -49,12 +60,12 @@
 
     window.addTurtleWrite = function (text, x, y, color, align, font) {
       turtleCommands.push({ type: 'write', text, x, y, color, align, font });
-      drawEverything();
+      queueDraw();
     };
 
     window.addTurtleDot = function (x, y, radius, color) {
       turtleCommands.push({ type: 'dot', x, y, radius, color });
-      drawEverything();
+      queueDraw();
     };
 
     window.updateTurtleState = function (x, y, heading, visible) {
@@ -62,17 +73,17 @@
       turtleY = y;
       turtleHeading = heading;
       turtleVisible = visible;
-      drawEverything();
+      queueDraw();
     };
 
     window.clearTurtleCanvas = function () {
       turtleCommands = [];
-      drawEverything();
+      queueDraw();
     };
 
     window.setTurtleBgColor = function (color) {
       turtleBgColor = color;
-      drawEverything();
+      queueDraw();
     };
 
     window.setupTurtleCanvas = function (width, height) {
@@ -88,7 +99,7 @@
 
     window.setTurtleShape = function (shapeName) {
       turtleShape = shapeName || 'classic';
-      drawEverything();
+      queueDraw();
     };
 
     window.getTurtleShape = function () {
@@ -103,7 +114,7 @@
       turtleVisible = true;
       turtleBgColor = '#ffffff';
       turtleShape = 'classic';
-      drawEverything();
+      queueDraw();
     };
 
     window.getTurtleSnapshot = function () {
@@ -118,7 +129,10 @@
       });
     };
 
-    window.downloadCanvasImage = function () {
+     window.downloadCanvasImage = function () {
+      if (drawPending) {
+        drawEverything();
+      }
       const canvas = document.getElementById('turtleCanvas');
       if (!canvas) return;
       const link = document.createElement('a');
