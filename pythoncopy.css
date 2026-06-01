@@ -1355,20 +1355,20 @@
     }
 
     .instruction-image {
-      width: 100%;
-      max-width: 500px;
+      width: 160px;
+      max-width: 100%;
       height: auto;
-      border-radius: 16px;
-      margin: 20px auto;
+      border-radius: 8px;
+      margin: 12px auto;
       display: block;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       background: white;
     }
 
     .instruction-image:hover {
-      transform: scale(1.02) translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+      transform: scale(1.03) translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
     }
 
     body.dark-theme .instruction-image {
