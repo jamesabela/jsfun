@@ -1006,6 +1006,7 @@ import sys, builtins
         exitPlaybackMode(true);
       }
       currentURL = '';
+      updatePuzzleButtonVisibility();
       editor.value = '';
       markCurrentEditorCodeSaved('');
       displayCode.textContent = '';
@@ -1820,6 +1821,8 @@ import sys, builtins
         if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
           exitPlaybackMode(true);
         }
+        currentURL = '';
+        updatePuzzleButtonVisibility();
         if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
           if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(code)) {
             setRunnerStatus('This file contains Python code that cannot be converted to blocks.');
@@ -1900,6 +1903,8 @@ import sys, builtins
         if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
           exitPlaybackMode(true);
         }
+        currentURL = '';
+        updatePuzzleButtonVisibility();
 
         const previousDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         try {
@@ -2139,6 +2144,7 @@ import sys, builtins
       updateBlocksButtonState();
       updateEditorActionButtons();
       updatePasteCounter();
+      updatePuzzleButtonVisibility();
 
       // Record initial load state
       recordPlaybackSnapshot('Initial Load', true, 'save');
@@ -2389,6 +2395,7 @@ import sys, builtins
         exitPlaybackMode(true);
       }
       currentURL = '';
+      updatePuzzleButtonVisibility();
       editor.value = '';
       markCurrentEditorCodeSaved('');
       displayCode.textContent = '';
@@ -2418,6 +2425,7 @@ import sys, builtins
         exitPlaybackMode(true);
       }
       currentURL = url;
+      updatePuzzleButtonVisibility();
       const fetchURL = /pastebin\.com/i.test(url)
         ? `https://corsproxy.io/?${encodeURIComponent(url)}`
         : url;
@@ -2458,6 +2466,8 @@ import sys, builtins
         .catch(error => {
           alert('Failed to load code. Please ensure the URL is correct and points to a raw Python file.');
           console.error('Error fetching code:', error);
+          currentURL = '';
+          updatePuzzleButtonVisibility();
         });
     }
 
@@ -4417,5 +4427,16 @@ def _run_trace():
         const imports = extractImports(source);
         const usesTurtle = imports.includes('turtle');
         setAppMode(usesTurtle ? 'turtle' : 'edit');
+      }
+    }
+
+    function updatePuzzleButtonVisibility() {
+      const makePuzzleBtn = document.getElementById('makePuzzleButton');
+      if (makePuzzleBtn) {
+        if (currentURL) {
+          makePuzzleBtn.style.display = '';
+        } else {
+          makePuzzleBtn.style.display = 'none';
+        }
       }
     }
