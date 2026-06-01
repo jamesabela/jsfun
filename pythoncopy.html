@@ -31,7 +31,7 @@
         <path d="M4 12H2" />
         <path d="M2 9h2" />
       </svg>
-      Python Code Lab 4.1
+      Python Code Lab 4.5
       <span class="mode-badge edit-badge">Edit</span>
       <span class="mode-badge display-badge">Display</span>
       <span class="mode-badge turtle-badge">Turtle</span>
@@ -46,9 +46,15 @@
       <div id="blocksTabHeader" style="display: none; align-items: center; gap: 12px; margin-left: auto;">
         <span style="font-weight: bold; color: var(--primary-color);">Blocks Editor</span>
         <input type="file" id="uploadBlocksInput" accept=".blocks,.xml" style="display: none;">
-        <button id="blocksUploadFileButton" style="background: #7c3aed; color: white; font-weight: bold; padding: 6px 14px; border: none; border-radius: 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">Upload Blocks</button>
-        <button id="blocksDownloadFileButton" style="background: #7c3aed; color: white; font-weight: bold; padding: 6px 14px; border: none; border-radius: 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">Download Blocks</button>
-        <button id="applyBlocksButton" style="background: #10b981; color: white; font-weight: bold; padding: 6px 16px; border: none; border-radius: 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">Ready to code with text!</button>
+        <button id="blocksUploadFileButton"
+          style="background: #7c3aed; color: white; font-weight: bold; padding: 6px 14px; border: none; border-radius: 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">Upload
+          Blocks</button>
+        <button id="blocksDownloadFileButton"
+          style="background: #7c3aed; color: white; font-weight: bold; padding: 6px 14px; border: none; border-radius: 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">Download
+          Blocks</button>
+        <button id="applyBlocksButton"
+          style="background: #10b981; color: white; font-weight: bold; padding: 6px 16px; border: none; border-radius: 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">Ready
+          to code with text!</button>
       </div>
 
       <div class="mode-toggle-pill">
@@ -175,20 +181,67 @@
         <div class="editor-action-row" aria-label="Editor actions">
           <button type="button" class="editor-action-button" id="undoEditorButton" title="Undo last edit">Undo</button>
           <button type="button" class="editor-action-button" id="redoEditorButton" title="Redo last edit">Redo</button>
-          <button type="button" class="editor-action-button" id="revertEditorButton" title="Revert to the last loaded or downloaded file">Revert</button>
+          <button type="button" class="editor-action-button" id="revertEditorButton"
+            title="Revert to the last loaded or downloaded file">Revert</button>
+          <button type="button" class="editor-action-button" id="playbackButton" title="Play back editing history">⏱️
+            Playback</button>
           <span id="pasteCounter" class="paste-counter" title="Paste/upload count">0</span>
         </div>
       </div>
+      <!-- Playback Controls Bar -->
+      <div id="playbackControlsBar" class="playback-controls-bar"
+        style="display: none; flex-direction: column; gap: 10px;">
+        <!-- Row 1: Full-width Timeline Slider -->
+        <div class="playback-timeline-row" style="width: 100%;">
+          <div class="playback-timeline-container" id="playbackTimelineContainer" style="width: 100%;">
+            <div class="playback-timeline-track" id="playbackTimelineTrack">
+              <div id="playbackMarkersContainer" class="playback-markers-container"></div>
+              <input type="range" id="playbackTimeline" min="0" max="0" value="0">
+            </div>
+          </div>
+        </div>
+        <!-- Row 2: Controls, revisions label and actions -->
+        <div class="playback-controls-row"
+          style="display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <!-- Playback buttons -->
+            <div class="playback-btn-group">
+              <button type="button" class="playback-control-btn" id="pbFirst" title="Previous checkpoint">⏮️</button>
+              <button type="button" class="playback-control-btn" id="pbPrev" title="Previous character">◀</button>
+              <button type="button" class="playback-control-btn" id="pbPlay" title="Auto Play">⏯️ Play</button>
+              <button type="button" class="playback-control-btn" id="pbNext" title="Next character">▶</button>
+              <button type="button" class="playback-control-btn" id="pbLast" title="Next checkpoint">⏭️</button>
+            </div>
+          </div>
+
+          <!-- Revisions label -->
+          <span id="playbackStatusLabel" class="playback-status-label"
+            style="flex-grow: 1; text-align: center; font-size: 13px; font-weight: 600; padding: 0 10px;">No
+            history</span>
+
+          <!-- Action buttons -->
+          <div class="playback-action-group">
+            <button type="button" class="playback-action-btn restore" id="pbRestore"
+              title="Restore this revision to editor">Restore</button>
+            <button type="button" class="playback-action-btn close" id="pbClose"
+              title="Exit playback mode">Close</button>
+          </div>
+        </div>
+      </div>
       <!-- Blockly Workspace Area -->
-      <div id="blocklyArea" style="display: none; height: 350px; position: relative; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 0;">
+      <div id="blocklyArea"
+        style="display: none; height: 350px; position: relative; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 0;">
         <div id="blocklyDiv" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
         <!-- Floating Run Button within blocks area -->
-        <button id="blocklyRunButton" style="position: absolute; top: 10px; right: 50px; z-index: 100; background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);" title="Run Code">
+        <button id="blocklyRunButton"
+          style="position: absolute; top: 10px; right: 50px; z-index: 100; background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);"
+          title="Run Code">
           Run 🚩
         </button>
       </div>
       <!-- Split Resizer -->
-      <div id="editorSplitResizer" style="display: none; height: 10px; background: #f1f5f9; cursor: ns-resize; border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1; align-items: center; justify-content: center; user-select: none;">
+      <div id="editorSplitResizer"
+        style="display: none; height: 10px; background: #f1f5f9; cursor: ns-resize; border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1; align-items: center; justify-content: center; user-select: none;">
         <div style="width: 30px; height: 4px; border-radius: 2px; background: #cbd5e1;"></div>
       </div>
 
@@ -209,8 +262,10 @@
           <div class="blocks-code-preview-header">
             <span>Generated Python</span>
             <div class="blocks-preview-theme-toggle" aria-label="Generated Python colors">
-              <label><input type="radio" id="blocksPreviewTextColors" name="blocksPreviewColors" value="text" checked> Text</label>
-              <label><input type="radio" id="blocksPreviewBlockColors" name="blocksPreviewColors" value="blocks"> Blocks</label>
+              <label><input type="radio" id="blocksPreviewTextColors" name="blocksPreviewColors" value="text" checked>
+                Text</label>
+              <label><input type="radio" id="blocksPreviewBlockColors" name="blocksPreviewColors" value="blocks">
+                Blocks</label>
             </div>
             <button id="copyBlocksCodeButton" type="button">Copy</button>
           </div>

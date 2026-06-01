@@ -24,6 +24,14 @@
     let isAwaitingDisplayInput = false;
     let copyButtonTimeout = null;
 
+    // --- Editor Session Playback State ---
+    let playbackHistory = [];
+    let playbackIndex = -1;
+    let playbackInterval = null;
+    let isPlaybackPlaying = false;
+    let originalCodeBeforePlayback = '';
+    let saveHistoryTimeout = null;
+
     // --- Turtle Graphics JS State & Bridge ---
     let turtleCommands = [];
     let turtleX = 0;
@@ -770,6 +778,9 @@ import sys, builtins
     }
 
     function revertEditorToSavedFile() {
+      if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+        exitPlaybackMode(true);
+      }
       if (editor.value === savedEditorCode) {
         setRunnerStatus('Already matches the saved file.');
         updateEditorActionButtons();
@@ -957,6 +968,9 @@ import sys, builtins
     }
 
     function startBlankBlocksFile() {
+      if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+        exitPlaybackMode(true);
+      }
       currentURL = '';
       editor.value = '';
       markCurrentEditorCodeSaved('');
@@ -975,6 +989,7 @@ import sys, builtins
 
       showBlocksEditorToolbar();
       setAppMode('blocks');
+      recordPlaybackSnapshot('Blank Blocks', true, 'save');
     }
 
     function updateAppMode() {
@@ -1235,6 +1250,228 @@ import sys, builtins
       scheduleInstructionAutoFade();
     }
 
+    let playbackZoomLevel = 1;
+
+    function recordPlaybackSnapshot(reason = 'Edit', isCheckpoint = false, checkpointType = '') {
+      const code = editor.value;
+      
+      if (playbackHistory.length > 0 && playbackHistory[playbackHistory.length - 1].code === code) {
+        if (isCheckpoint) {
+          playbackHistory[playbackHistory.length - 1].isCheckpoint = true;
+          playbackHistory[playbackHistory.length - 1].reason = reason;
+          if (checkpointType) {
+            playbackHistory[playbackHistory.length - 1].checkpointType = checkpointType;
+          }
+        }
+        return;
+      }
+      
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      
+      playbackHistory.push({
+        code: code,
+        timestamp: timeStr,
+        reason: reason,
+        isCheckpoint: isCheckpoint,
+        checkpointType: checkpointType
+      });
+      
+      if (playbackHistory.length > 1000) {
+        playbackHistory.shift();
+      }
+    }
+
+    function scheduleRecordHistoryDebounced(reason = 'Typing') {
+      if (saveHistoryTimeout) {
+        clearTimeout(saveHistoryTimeout);
+      }
+      saveHistoryTimeout = setTimeout(() => {
+        recordPlaybackSnapshot(reason, true, 'save');
+      }, 1500);
+    }
+
+    function startPlaybackMode() {
+      if (saveHistoryTimeout) {
+        clearTimeout(saveHistoryTimeout);
+        saveHistoryTimeout = null;
+      }
+      recordPlaybackSnapshot('Last Edit', true, 'save');
+
+      if (playbackHistory.length === 0) {
+        alert('No editing history recorded yet in this session.');
+        return;
+      }
+
+      originalCodeBeforePlayback = editor.value;
+
+      const pbBar = document.getElementById('playbackControlsBar');
+      if (pbBar) pbBar.style.display = 'flex';
+
+      editor.readOnly = true;
+      editor.classList.add('playback-readonly');
+
+      renderTimelineMarkers();
+
+      const timeline = document.getElementById('playbackTimeline');
+      if (timeline) {
+        timeline.min = 0;
+        timeline.max = playbackHistory.length - 1;
+        timeline.value = playbackHistory.length - 1;
+      }
+
+      playbackIndex = playbackHistory.length - 1;
+      updatePlaybackUI();
+    }
+
+    function renderTimelineMarkers() {
+      const markersContainer = document.getElementById('playbackMarkersContainer');
+      if (!markersContainer) return;
+      markersContainer.innerHTML = '';
+      
+      if (playbackHistory.length <= 1) return;
+      
+      playbackHistory.forEach((state, idx) => {
+        if (state.isCheckpoint) {
+          const marker = document.createElement('div');
+          const pct = (idx / (playbackHistory.length - 1)) * 100;
+          marker.className = 'playback-marker';
+          
+          const type = state.checkpointType || 
+                       (state.reason.toLowerCase().includes('run') ? 'play' : 
+                       (state.reason.toLowerCase().includes('paste') ? 'paste' : 'save'));
+          marker.classList.add(`checkpoint-${type}`);
+          
+          marker.style.left = `${pct}%`;
+          marker.title = `${state.reason} at ${state.timestamp}`;
+          
+          marker.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playbackIndex = idx;
+            updatePlaybackUI();
+          });
+          
+          markersContainer.appendChild(marker);
+        }
+      });
+    }
+
+    function updatePlaybackUI() {
+      if (playbackIndex < 0 || playbackIndex >= playbackHistory.length) return;
+
+      const state = playbackHistory[playbackIndex];
+      editor.value = state.code;
+      updateLineNumbers();
+      analyseCodeAndUpdateMessage(true);
+
+      if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
+        isUpdatingBlocklyFromText = true;
+        try {
+          blocklyWorkspace.clear();
+          convertPythonToWorkspace(state.code, blocklyWorkspace);
+        } catch (err) {
+          console.warn('Could not sync playback code to blocks:', err);
+        } finally {
+          isUpdatingBlocklyFromText = false;
+        }
+      }
+
+      const timeline = document.getElementById('playbackTimeline');
+      if (timeline) {
+        timeline.value = playbackIndex;
+      }
+
+      const statusLabel = document.getElementById('playbackStatusLabel');
+      if (statusLabel) {
+        statusLabel.textContent = `Revision ${playbackIndex + 1} / ${playbackHistory.length} (${state.timestamp} - ${state.reason})`;
+      }
+
+      const pbFirst = document.getElementById('pbFirst');
+      const pbPrev = document.getElementById('pbPrev');
+      const pbNext = document.getElementById('pbNext');
+      const pbLast = document.getElementById('pbLast');
+
+      if (pbFirst) pbFirst.disabled = playbackIndex === 0;
+      if (pbPrev) pbPrev.disabled = playbackIndex === 0;
+      if (pbNext) pbNext.disabled = playbackIndex === playbackHistory.length - 1;
+      if (pbLast) pbLast.disabled = playbackIndex === playbackHistory.length - 1;
+    }
+
+    function togglePlaybackPlay() {
+      const playBtn = document.getElementById('pbPlay');
+      if (isPlaybackPlaying) {
+        clearInterval(playbackInterval);
+        playbackInterval = null;
+        isPlaybackPlaying = false;
+        if (playBtn) playBtn.textContent = '⏯️ Play';
+      } else {
+        if (playbackIndex === playbackHistory.length - 1) {
+          playbackIndex = 0;
+          updatePlaybackUI();
+        }
+        isPlaybackPlaying = true;
+        if (playBtn) playBtn.textContent = '⏸️ Pause';
+        
+        playbackInterval = setInterval(() => {
+          if (playbackIndex < playbackHistory.length - 1) {
+            playbackIndex++;
+            updatePlaybackUI();
+            
+            const nextState = playbackHistory[playbackIndex];
+            if (nextState && nextState.isCheckpoint && playbackIndex < playbackHistory.length - 1) {
+              clearInterval(playbackInterval);
+              playbackInterval = null;
+              isPlaybackPlaying = false;
+              if (playBtn) playBtn.textContent = '⏯️ Play';
+              
+              const statusLabel = document.getElementById('playbackStatusLabel');
+              if (statusLabel) {
+                statusLabel.textContent = `Stopped: ${nextState.reason} (Press Play to continue)`;
+              }
+            }
+          } else {
+            togglePlaybackPlay();
+          }
+        }, 80);
+      }
+    }
+
+    function restorePlaybackVersion() {
+      if (playbackIndex < 0 || playbackIndex >= playbackHistory.length) return;
+      const chosenCode = playbackHistory[playbackIndex].code;
+      if (isPlaybackPlaying) togglePlaybackPlay();
+      exitPlaybackMode(true, chosenCode);
+    }
+
+    function exitPlaybackMode(keepChanges = false, codeToKeep = null) {
+      if (isPlaybackPlaying) {
+        clearInterval(playbackInterval);
+        playbackInterval = null;
+        isPlaybackPlaying = false;
+        const playBtn = document.getElementById('pbPlay');
+        if (playBtn) playBtn.textContent = '⏯️ Play';
+      }
+
+      const pbBar = document.getElementById('playbackControlsBar');
+      if (pbBar) pbBar.style.display = 'none';
+
+      editor.readOnly = false;
+      editor.classList.remove('playback-readonly');
+
+      if (keepChanges) {
+        const finalCode = codeToKeep !== null ? codeToKeep : editor.value;
+        editor.value = finalCode;
+        hasUnsavedChanges = finalCode !== savedEditorCode;
+        recordPlaybackSnapshot('Restored Revision', true, 'save');
+      } else {
+        editor.value = originalCodeBeforePlayback;
+      }
+
+      updateLineNumbers();
+      analyseCodeAndUpdateMessage(true);
+      updateEditorActionButtons();
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // Fetch and build instruction carousel dynamically
       fetch('pythoncopycarousel.html')
@@ -1393,6 +1630,86 @@ import sys, builtins
         revertEditorButton.addEventListener('click', revertEditorToSavedFile);
       }
 
+      // Playback event listeners
+      const pbBtn = document.getElementById('playbackButton');
+      if (pbBtn) {
+        pbBtn.addEventListener('click', startPlaybackMode);
+      }
+
+      const pbFirst = document.getElementById('pbFirst');
+      if (pbFirst) {
+        pbFirst.addEventListener('click', () => {
+          let targetIndex = -1;
+          for (let i = playbackIndex - 1; i >= 0; i--) {
+            if (playbackHistory[i].isCheckpoint) {
+              targetIndex = i;
+              break;
+            }
+          }
+          playbackIndex = targetIndex !== -1 ? targetIndex : 0;
+          updatePlaybackUI();
+        });
+      }
+
+      const pbPrev = document.getElementById('pbPrev');
+      if (pbPrev) {
+        pbPrev.addEventListener('click', () => {
+          if (playbackIndex > 0) {
+            playbackIndex--;
+            updatePlaybackUI();
+          }
+        });
+      }
+
+      const pbPlay = document.getElementById('pbPlay');
+      if (pbPlay) {
+        pbPlay.addEventListener('click', togglePlaybackPlay);
+      }
+
+      const pbNext = document.getElementById('pbNext');
+      if (pbNext) {
+        pbNext.addEventListener('click', () => {
+          if (playbackIndex < playbackHistory.length - 1) {
+            playbackIndex++;
+            updatePlaybackUI();
+          }
+        });
+      }
+
+      const pbLast = document.getElementById('pbLast');
+      if (pbLast) {
+        pbLast.addEventListener('click', () => {
+          let targetIndex = -1;
+          for (let i = playbackIndex + 1; i < playbackHistory.length; i++) {
+            if (playbackHistory[i].isCheckpoint) {
+              targetIndex = i;
+              break;
+            }
+          }
+          playbackIndex = targetIndex !== -1 ? targetIndex : playbackHistory.length - 1;
+          updatePlaybackUI();
+        });
+      }
+
+      const timeline = document.getElementById('playbackTimeline');
+      if (timeline) {
+        timeline.addEventListener('input', (e) => {
+          playbackIndex = parseInt(e.target.value, 10);
+          updatePlaybackUI();
+        });
+      }
+
+      const pbRestore = document.getElementById('pbRestore');
+      if (pbRestore) {
+        pbRestore.addEventListener('click', restorePlaybackVersion);
+      }
+
+      const pbClose = document.getElementById('pbClose');
+      if (pbClose) {
+        pbClose.addEventListener('click', () => exitPlaybackMode(false));
+      }
+
+
       const blocklyRunBtn = document.getElementById('blocklyRunButton');
       if (blocklyRunBtn) {
         blocklyRunBtn.addEventListener('click', () => {
@@ -1449,6 +1766,7 @@ import sys, builtins
           editor.value = code;
           hasUnsavedChanges = editor.value !== savedEditorCode;
           updateEditorActionButtons();
+          recordPlaybackSnapshot('Apply Blocks', true, 'save');
           setAppMode('edit');
         });
       }
@@ -1464,6 +1782,9 @@ import sys, builtins
       }
 
       function loadCodeIntoCurrentEditor(code) {
+        if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+          exitPlaybackMode(true);
+        }
         if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
           if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(code)) {
             setRunnerStatus('This file contains Python code that cannot be converted to blocks.');
@@ -1515,6 +1836,7 @@ import sys, builtins
         setRunnerStatus('File loaded successfully.');
         autoPreviewFirstLink();
         updateBlocksButtonState();
+        recordPlaybackSnapshot('Load File', true, 'save');
       }
 
       function downloadBlocksFile() {
@@ -1533,6 +1855,7 @@ import sys, builtins
         }
         downloadText(xmlText, 'blocks.blocks', 'application/xml');
         markCurrentEditorCodeSaved(getCurrentEditorCode());
+        recordPlaybackSnapshot('Save Blocks', true, 'save');
       }
 
       function uploadBlocksFile(xmlText) {
@@ -1550,6 +1873,7 @@ import sys, builtins
           analyseCodeAndUpdateMessage();
           clearRunner();
           setRunnerStatus('Blocks file loaded successfully.');
+          recordPlaybackSnapshot('Load Blocks', true, 'save');
         } catch (err) {
           console.error('Error loading Blocks file:', err);
           blocklyWorkspace.clear();
@@ -1626,12 +1950,14 @@ import sys, builtins
         const code = getCurrentEditorCode();
         markCurrentEditorCodeSaved(code);
         downloadText(code, 'code.py', 'text/x-python');
+        recordPlaybackSnapshot('Save File (py)', true, 'save');
       }
 
       function downloadCurrentTxt() {
         const code = getCurrentEditorCode();
         markCurrentEditorCodeSaved(code);
         downloadText(code, 'code.txt', 'text/plain');
+        recordPlaybackSnapshot('Save File (txt)', true, 'save');
       }
 
       document.getElementById('downloadPyButton').addEventListener('click', downloadCurrentPy);
@@ -1717,10 +2043,12 @@ import sys, builtins
         analyseCodeAndUpdateMessage(true);
         updateBlocksButtonState();
         updateEditorActionButtons();
+        recordPlaybackSnapshot('Typing', false);
       });
 
       editor.addEventListener('paste', () => {
         incrementPasteCounter();
+        recordPlaybackSnapshot('Paste', true, 'paste');
       });
 
       editor.addEventListener('keydown', handleEditorTabKey);
@@ -1765,6 +2093,9 @@ import sys, builtins
       updateBlocksButtonState();
       updateEditorActionButtons();
       updatePasteCounter();
+
+      // Record initial load state
+      recordPlaybackSnapshot('Initial Load', true, 'save');
 
       window.addEventListener('beforeunload', function (e) {
         if (hasUnsavedChanges) {
@@ -2008,6 +2339,9 @@ import sys, builtins
     }
 
     function startBlankFile() {
+      if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+        exitPlaybackMode(true);
+      }
       currentURL = '';
       editor.value = '';
       markCurrentEditorCodeSaved('');
@@ -2028,10 +2362,14 @@ import sys, builtins
       clearRunner();
       setRunnerStatus('Blank file ready.');
       updateBlocksButtonState();
+      recordPlaybackSnapshot('Blank File', true, 'save');
       editor.focus();
     }
 
     function fetchCode(url) {
+      if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+        exitPlaybackMode(true);
+      }
       currentURL = url;
       const fetchURL = /pastebin\.com/i.test(url)
         ? `https://corsproxy.io/?${encodeURIComponent(url)}`
@@ -2051,6 +2389,7 @@ import sys, builtins
           clearRunner();
           autoPreviewFirstLink();
           updateBlocksButtonState();
+          recordPlaybackSnapshot('Load Gist', true, 'save');
 
           if (currentAppMode === 'blocks') {
             if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(editor.value)) {
@@ -3147,6 +3486,12 @@ json.dumps(_test_result)
     };
 
     async function runCurrentCode(options = {}) {
+      if (saveHistoryTimeout) {
+        clearTimeout(saveHistoryTimeout);
+        saveHistoryTimeout = null;
+      }
+      recordPlaybackSnapshot('Run Code', true, 'play');
+
       if (!options.preserveBlocksMode) {
         switchModeFromBlocks();
       }
