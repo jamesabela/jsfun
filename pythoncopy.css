@@ -1400,43 +1400,94 @@
     /* Carousel Styles */
     .carousel-container {
       position: relative;
-      overflow: hidden;
+      overflow: visible;
       margin-top: 20px;
     }
 
     .carousel-track {
-      display: flex;
-      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      display: block;
     }
 
-    .carousel-slide {
-      min-width: 100%;
-      box-sizing: border-box;
-      padding: 0 10px;
+    .pythoncopy-hero-carousel {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #0f172a;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.18);
+    }
+
+    .pythoncopy-hero-carousel img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.1s ease-in-out;
+    }
+
+    .pythoncopy-hero-carousel img.active {
+      opacity: 1;
+    }
+
+    .pythoncopy-instructions-link {
+      margin: 18px 0 0;
+      text-align: center;
+    }
+
+    .pythoncopy-instructions-link a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      background: var(--primary-color);
+      color: #ffffff;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 8px 16px rgba(59, 130, 246, 0.22);
+    }
+
+    .pythoncopy-instructions-link a:hover {
+      background: #2563eb;
+    }
+
+    body.dark-theme .pythoncopy-hero-carousel {
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pythoncopy-hero-carousel img {
+        transition: none;
+      }
     }
 
     .carousel-controls {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid #e2e8f0;
-    }
-
-    body.dark-theme .carousel-controls {
-      border-color: #334155;
+      gap: 14px;
+      margin-top: 14px;
     }
 
     .carousel-btn {
-      background: var(--primary-color);
-      color: white;
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
       border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
+      background: var(--primary-color);
+      color: #ffffff;
       cursor: pointer;
-      font-weight: 500;
-      transition: background 0.2s;
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
     }
 
     .carousel-btn:hover {
@@ -1455,6 +1506,8 @@
       background: #cbd5e1;
       cursor: pointer;
       transition: background 0.3s;
+      border: none;
+      padding: 0;
     }
 
     .dot.active {

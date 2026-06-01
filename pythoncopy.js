@@ -1019,36 +1019,51 @@ import sys, builtins
 
     let currentInstructionSlide = 0;
     let totalInstructionSlides = 0;
+    let instructionSlideTimer = null;
+
+    function getInstructionImages() {
+      return document.querySelectorAll('.pythoncopy-hero-carousel img');
+    }
 
     function updateInstructionCarousel() {
-      const track = document.getElementById('carouselTrack');
-      if (track) {
-        track.style.transform = `translateX(-${currentInstructionSlide * 100}%)`;
-      }
+      const images = getInstructionImages();
+      images.forEach((image, index) => {
+        image.classList.toggle('active', index === currentInstructionSlide);
+      });
 
       const dots = document.querySelectorAll('#carouselDots .dot');
       dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === currentInstructionSlide);
+        dot.setAttribute('aria-current', index === currentInstructionSlide ? 'true' : 'false');
       });
     }
 
-    function prevInstructionSlide() {
-      if (currentInstructionSlide > 0) {
-        currentInstructionSlide--;
-        updateInstructionCarousel();
-      }
+    function scheduleInstructionAutoFade() {
+      window.clearInterval(instructionSlideTimer);
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion || totalInstructionSlides <= 1) return;
+      instructionSlideTimer = window.setInterval(() => nextInstructionSlide(true), 5000);
     }
 
-    function nextInstructionSlide() {
-      if (currentInstructionSlide < totalInstructionSlides - 1) {
-        currentInstructionSlide++;
-        updateInstructionCarousel();
-      }
+    function prevInstructionSlide(fromAuto = false) {
+      if (!totalInstructionSlides) return;
+      currentInstructionSlide = (currentInstructionSlide - 1 + totalInstructionSlides) % totalInstructionSlides;
+      updateInstructionCarousel();
+      if (!fromAuto) scheduleInstructionAutoFade();
+    }
+
+    function nextInstructionSlide(fromAuto = false) {
+      if (!totalInstructionSlides) return;
+      currentInstructionSlide = (currentInstructionSlide + 1) % totalInstructionSlides;
+      updateInstructionCarousel();
+      if (!fromAuto) scheduleInstructionAutoFade();
     }
 
     function goToInstructionSlide(index) {
+      if (index < 0 || index >= totalInstructionSlides) return;
       currentInstructionSlide = index;
       updateInstructionCarousel();
+      scheduleInstructionAutoFade();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -1059,20 +1074,24 @@ import sys, builtins
           const track = document.getElementById('carouselTrack');
           if (track) {
             track.innerHTML = html;
-            const slides = track.querySelectorAll('.carousel-slide');
+            const slides = getInstructionImages();
             totalInstructionSlides = slides.length;
             
             const dotsContainer = document.getElementById('carouselDots');
             if (dotsContainer) {
               dotsContainer.innerHTML = '';
               for (let i = 0; i < totalInstructionSlides; i++) {
-                const dot = document.createElement('span');
+                const dot = document.createElement('button');
+                dot.type = 'button';
                 dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Show screenshot ${i + 1}`);
                 dot.onclick = () => goToInstructionSlide(i);
                 dotsContainer.appendChild(dot);
               }
             }
+            currentInstructionSlide = 0;
             updateInstructionCarousel();
+            scheduleInstructionAutoFade();
           }
         })
         .catch(err => console.error('Error loading instruction carousel:', err));
