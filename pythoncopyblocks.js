@@ -5,6 +5,21 @@ window.blocklyWorkspace = null;
 window.isUpdatingBlocklyFromText = false;
 window.lastGeneratedBlocklyPython = null;
 
+function getBlocklyPythonVariableName(gen, block, fieldName) {
+  const variableId = block.getFieldValue(fieldName);
+  if (typeof gen.getVariableName === 'function') {
+    return gen.getVariableName(variableId);
+  }
+  if (gen.nameDB_ && typeof gen.nameDB_.getName === 'function') {
+    const variableCategory = Blockly.VARIABLE_CATEGORY_NAME ||
+      (Blockly.Names && Blockly.Names.NameType && Blockly.Names.NameType.VARIABLE) ||
+      'VARIABLE';
+    return gen.nameDB_.getName(variableId, variableCategory);
+  }
+  const variable = block.workspace && block.workspace.getVariableById(variableId);
+  return variable ? variable.name : variableId;
+}
+
 // Custom blocks definition and Python code generation
 function registerCustomBlocks() {
   if (typeof Blockly === 'undefined') return;
@@ -24,6 +39,12 @@ function registerCustomBlocks() {
   const defineBlock = (type, initFn, generatorFn) => {
     Blockly.Blocks[type] = { init: initFn };
     target[type] = generatorFn;
+  };
+
+  target.math_change = function(block) {
+    const varName = getBlocklyPythonVariableName(gen, block, 'VAR');
+    const delta = gen.valueToCode(block, 'DELTA', gen.ORDER_ADDITIVE || orderAtomic) || '0';
+    return varName + ' = ' + varName + ' + ' + delta + '\n';
   };
 
   const inputPromptWithNewline = (block) => {
@@ -427,8 +448,10 @@ function getWorkspacePythonCode() {
   
   let code = gen.workspaceToCode(window.blocklyWorkspace);
   code = normalizeGeneratedPythonQuotes(code);
+  const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   let hasTurtleBlocks = false;
   let hasWaitBlocks = false;
+  const changedVariableNames = new Set();
   const blocks = window.blocklyWorkspace.getAllBlocks(false);
   for (const b of blocks) {
     if (b.type.startsWith('turtle_')) {
@@ -437,7 +460,19 @@ function getWorkspacePythonCode() {
     if (b.type === 'wait_seconds') {
       hasWaitBlocks = true;
     }
+    if (b.type === 'math_change') {
+      changedVariableNames.add(getBlocklyPythonVariableName(gen, b, 'VAR'));
+    }
   }
+
+  for (const varName of changedVariableNames) {
+    const initPattern = new RegExp('(^|\\n)' + escapeRegExp(varName) + ' = None(?=\\n|$)');
+    code = code.replace(initPattern, '$1' + varName + ' = 0');
+  }
+  code = code.replace(
+    /^([A-Za-z_][A-Za-z0-9_]*) = None(?=[\s\S]*^\1 = \1 \+ )/gm,
+    '$1 = 0'
+  );
   
   let prepend = '';
   if (hasTurtleBlocks && !code.includes('import turtle') && !code.includes('from turtle import')) {
