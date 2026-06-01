@@ -634,9 +634,31 @@
       background: #334155;
     }
 
+    body.dark-theme .editor-action-button {
+      background: #3a3a3a;
+      color: #f4f4f5;
+      border: 1px solid #52525b;
+    }
+
+    body.dark-theme .editor-action-button:hover {
+      background: #4a4a4a;
+      border-color: #71717a;
+    }
+
+    body.dark-theme .editor-action-button:focus-visible {
+      outline: 2px solid #60a5fa;
+      outline-offset: 2px;
+    }
+
     .editor-action-button:disabled {
       cursor: not-allowed;
       opacity: 0.5;
+    }
+
+    body.dark-theme .editor-action-button:disabled {
+      background: #2a2a2a;
+      color: #a1a1aa;
+      border-color: #3f3f46;
     }
 
     .toggle-row label {
