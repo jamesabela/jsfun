@@ -788,6 +788,71 @@ import sys, builtins
       editor.focus();
     }
 
+    function refreshEditorAfterEdit() {
+      hasUnsavedChanges = editor.value !== savedEditorCode;
+      updateLineNumbers();
+      analyseCodeAndUpdateMessage(true);
+      updateBlocksButtonState();
+      updateEditorActionButtons();
+    }
+
+    function handleEditorTabKey(event) {
+      if (event.key !== 'Tab') return;
+
+      event.preventDefault();
+      const indent = '    ';
+      const value = editor.value;
+      const start = editor.selectionStart;
+      const end = editor.selectionEnd;
+      const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+      const lineEnd = end > start
+        ? (value.indexOf('\n', end) === -1 ? value.length : value.indexOf('\n', end))
+        : end;
+
+      if (!event.shiftKey) {
+        if (start === end) {
+          editor.setRangeText(indent, start, end, 'end');
+        } else {
+          const selectedBlock = value.slice(lineStart, lineEnd);
+          const indentedBlock = selectedBlock.replace(/^/gm, indent);
+          editor.setRangeText(indentedBlock, lineStart, lineEnd, 'select');
+          editor.selectionStart = start + indent.length;
+          editor.selectionEnd = end + (indentedBlock.length - selectedBlock.length);
+        }
+        refreshEditorAfterEdit();
+        return;
+      }
+
+      if (start === end) {
+        const beforeCursor = value.slice(lineStart, start);
+        const spacesToRemove = Math.min(4, beforeCursor.match(/ *$/)[0].length);
+        if (spacesToRemove > 0) {
+          editor.setRangeText('', start - spacesToRemove, start, 'end');
+        }
+        refreshEditorAfterEdit();
+        return;
+      }
+
+      const selectedBlock = value.slice(lineStart, lineEnd);
+      let removedBeforeSelection = 0;
+      let totalRemoved = 0;
+      const outdentedBlock = selectedBlock.replace(/^( {1,4}|\t)/gm, (match, removed, offset) => {
+        const removeLength = removed.length;
+        totalRemoved += removeLength;
+        if (lineStart + offset < start) {
+          removedBeforeSelection += removeLength;
+        }
+        return '';
+      });
+
+      if (totalRemoved > 0) {
+        editor.setRangeText(outdentedBlock, lineStart, lineEnd, 'select');
+        editor.selectionStart = Math.max(lineStart, start - removedBeforeSelection);
+        editor.selectionEnd = Math.max(editor.selectionStart, end - totalRemoved);
+      }
+      refreshEditorAfterEdit();
+    }
+
     function applyBlocksPreviewColorMode() {
       if (!blocksCodePreviewText) return;
       const useBlocksColors = blocksPreviewBlockColors && blocksPreviewBlockColors.checked;
@@ -1644,6 +1709,7 @@ import sys, builtins
         incrementPasteCounter();
       });
 
+      editor.addEventListener('keydown', handleEditorTabKey);
       editor.addEventListener('scroll', syncLineNumberScroll);
       displayEditor.addEventListener('scroll', syncLineNumberScroll);
       runnerToggle.addEventListener('click', toggleRunner);
