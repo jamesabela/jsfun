@@ -2046,6 +2046,8 @@ import sys, builtins
 
       editor.addEventListener('input', () => {
         hasUnsavedChanges = editor.value !== savedEditorCode;
+        const highlightLayer = document.getElementById('highlightLayer');
+        if (highlightLayer) highlightLayer.innerHTML = '';
         updateLineNumbers();
         analyseCodeAndUpdateMessage(true);
         updateBlocksButtonState();
@@ -3571,8 +3573,126 @@ if 'turtle' in sys.modules:
         setRunnerStatus('Finished successfully.');
       } catch (err) {
         hideConsoleInput();
-        outputEl.textContent += String(err);
-        setRunnerStatus('There was an error while running the code.');
+        handlePythonError(err);
+      }
+    }
+
+    function handlePythonError(err) {
+      const errStr = String(err);
+      outputEl.textContent = errStr;
+      setRunnerStatus('There was an error while running the code.');
+
+      const lineMatch = errStr.match(/File\s+"[^"]+",\s+line\s+(\d+)/i) || 
+                        errStr.match(/line\s+(\d+)/i);
+      
+      let lineNum = null;
+      if (lineMatch) {
+        lineNum = parseInt(lineMatch[1], 10);
+        if (!isNaN(lineNum)) {
+          highlightErrorLine(lineNum);
+        }
+      }
+
+      let tipTitle = "💡 Python Tip";
+      let tipBody = "";
+
+      if (errStr.includes("SyntaxError")) {
+        tipTitle = "💡 Syntax Error Tip";
+        if (errStr.includes("was never closed") || errStr.includes("unmatched")) {
+          tipBody = "It looks like you opened a parenthesis <code>(</code>, square bracket <code>[</code>, or curly brace <code>{</code>, but forgot to close it. Check the line containing the error and ensure all brackets/quotes match up.";
+        } else if (errStr.includes("expected ':'") || errStr.includes("expected inline block") || /invalid syntax/i.test(errStr)) {
+          let isMissingColon = false;
+          let isComparisonError = false;
+          if (lineNum !== null) {
+            const lines = editor.value.split('\n');
+            const targetLine = lines[lineNum - 1] ? lines[lineNum - 1].trim() : "";
+            if (targetLine) {
+              const startsControl = /^(if|elif|else|for|while|def|class)\b/.test(targetLine);
+              if (startsControl && !targetLine.endsWith(':')) {
+                isMissingColon = true;
+              }
+              if (/^(if|elif|while)\b/.test(targetLine) && /\s+=\s+/.test(targetLine) && !/\s+==\s+/.test(targetLine)) {
+                isComparisonError = true;
+              }
+            }
+          }
+          
+          if (isMissingColon) {
+            tipBody = "Did you forget a colon <code>:</code> at the end of your statement? Statements starting with <code>if</code>, <code>elif</code>, <code>else</code>, <code>for</code>, <code>while</code>, or <code>def</code> must end with a colon.";
+          } else if (isComparisonError) {
+            tipBody = "It looks like you used a single equals sign <code>=</code> inside a condition. In Python, use double equals <code>==</code> for comparing values, and a single equals <code>=</code> only when assigning values to variables.";
+          } else {
+            tipBody = "Check this line for typos or extra characters. Ensure all statements are written correctly and end with colons if they define loops, functions, or conditionals.";
+          }
+        } else {
+          tipBody = "Check this line for typos, missing characters, or incorrect formatting. Double-check that loops, functions, and conditional blocks end with a colon <code>:</code>.";
+        }
+      } else if (errStr.includes("IndentationError") || errStr.includes("TabError")) {
+        tipTitle = "💡 Indentation Error Tip";
+        tipBody = "Python is very strict about spaces (indentation). Make sure that the code inside your functions, loops, or <code>if</code> blocks is indented with exactly the same number of spaces (usually 4 spaces). Avoid mixing tabs and spaces.";
+      } else if (errStr.includes("NameError")) {
+        tipTitle = "💡 Name Error Tip";
+        const nameMatch = errStr.match(/name\s+'([^']+)'\s+is\s+not\s+defined/i);
+        const name = nameMatch ? nameMatch[1] : null;
+        if (name) {
+          tipBody = `You tried to use <code>${name}</code>, but Python doesn't know what that is. Check if you spelled it correctly, or if you forgot to define/assign it first (e.g., <code>${name} = ...</code>).`;
+        } else {
+          tipBody = "You used a variable or function name that has not been defined. Check for spelling typos, capitalization, or missing assignments.";
+        }
+      } else if (errStr.includes("ZeroDivisionError")) {
+        tipTitle = "💡 Zero Division Tip";
+        tipBody = "You're trying to divide a number by zero. Mathematically this is not defined, so make sure the denominator is not zero.";
+      } else if (errStr.includes("TypeError")) {
+        tipTitle = "💡 Type Error Tip";
+        if (errStr.includes("can only concatenate") || errStr.includes("must be str, not int") || errStr.includes("unsupported operand type")) {
+          tipBody = "You're trying to combine different types of data (like adding text and numbers together). Use the <code>str()</code> function to convert numbers to text first (e.g., <code>\"Age: \" + str(age)</code>).";
+        } else {
+          tipBody = "You are trying to perform an operation on incompatible types of data. Double-check the types of variables you are combining or passing to functions.";
+        }
+      } else if (errStr.includes("ModuleNotFoundError")) {
+        tipTitle = "💡 Module Not Found Tip";
+        tipBody = "You're trying to import a module that isn't supported in this browser environment. Stick to standard browser-safe modules: <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>, <code>turtle</code>, and <code>time</code>.";
+      } else if (errStr.includes("IndexError")) {
+        tipTitle = "💡 Index Error Tip";
+        tipBody = "You're trying to access a list element that doesn't exist. Remember that Python list indexes start at <code>0</code>, so the last element of a list of length <code>N</code> is at index <code>N - 1</code>.";
+      } else if (errStr.includes("KeyError")) {
+        tipTitle = "💡 Key Error Tip";
+        tipBody = "You're trying to look up a key in a dictionary that doesn't exist. Make sure the key exists or use the dictionary's <code>.get()</code> method to provide a default value.";
+      }
+
+      if (tipBody) {
+        const tipContainer = document.createElement('div');
+        tipContainer.className = 'friendly-error-tip';
+        
+        const header = document.createElement('div');
+        header.className = 'friendly-error-header';
+        header.innerHTML = tipTitle;
+        
+        const body = document.createElement('div');
+        body.className = 'friendly-error-body';
+        body.innerHTML = tipBody;
+        
+        tipContainer.appendChild(header);
+        tipContainer.appendChild(body);
+        
+        outputEl.appendChild(tipContainer);
+      }
+    }
+
+    function highlightErrorLine(lineNum) {
+      clearTeachHighlight();
+      const lineHeight = getCodeLineHeight();
+      const yPos = (lineNum - 1) * lineHeight;
+      const hl = document.createElement('div');
+      hl.className = 'highlight-line-error';
+      hl.style.top = yPos + 'px';
+      hl.style.height = lineHeight + 'px';
+      highlightLayer.appendChild(hl);
+
+      const activeView = currentAppMode === 'display' ? displayEditor : editor;
+      const viewRect = activeView.getBoundingClientRect();
+      if (yPos < activeView.scrollTop || yPos > activeView.scrollTop + viewRect.height - 40) {
+        activeView.scrollTop = Math.max(0, yPos - viewRect.height / 2);
       }
     }
 
@@ -3901,7 +4021,7 @@ def _run_trace():
         return true;
       } catch (err) {
         console.error('Trace Generation Error:', err);
-        outputEl.textContent = "Trace Error: " + String(err);
+        handlePythonError(err);
         displayTraceStatus = 'error';
         isTracing = false;
         return false;

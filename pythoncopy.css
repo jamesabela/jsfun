@@ -2482,3 +2482,57 @@
     body.dark-theme #editor.playback-readonly {
       background: #1a1a1a !important;
     }
+
+    /* Friendly Error Tips and Highlights */
+    .highlight-line-error {
+      position: absolute;
+      left: 0;
+      right: 0;
+      background-color: rgba(239, 68, 68, 0.2);
+      border-left: 4px solid #ef4444;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .friendly-error-tip {
+      background-color: #1e1b4b; /* Dark indigo */
+      border: 1px solid #312e81;
+      border-left: 6px solid #ef4444; /* Highlight left border with red to indicate error */
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 15px;
+      color: #e0e7ff;
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.5;
+      white-space: normal; /* Override console pre-wrap spacing */
+    }
+
+    body.dark-theme .friendly-error-tip {
+      background-color: #0f0b29;
+      border-color: #231b54;
+    }
+
+    .friendly-error-header {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #fca5a5; /* Soft light red */
+    }
+
+    .friendly-error-body {
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+
+    .friendly-error-body code {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: Consolas, Monaco, monospace;
+      color: #f472b6; /* Pink code tag */
+    }
