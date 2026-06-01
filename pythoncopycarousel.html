@@ -1,24 +1,39 @@
 <!-- Slide 1 -->
 <div class="carousel-slide">
   <img src="python_educator_hero.png" alt="Python Code Lab Hero" class="instruction-image">
-  <p>Python Code Lab 4.1 lets you load, edit, run, display, and trace Python code in the browser. It is designed
-    for teachers who want to demonstrate algorithms clearly and for students who want to explore code step by
-    step.</p>
+  <h3>Python Code Lab 4.1</h3>
+  <p>Python Code Lab 4.1 lets you load, edit, run, display, and trace Python code in the browser.</p>
+  <p>It is designed for teachers who want to demonstrate algorithms clearly and for students who want to explore
+    code step by step.</p>
+</div>
 
+<!-- Slide 2 -->
+<div class="carousel-slide">
   <h3>Getting started</h3>
-  <p>When the page opens, you can either:</p>
+  <p>When the page opens, you can:</p>
   <ul>
-    <li>Paste a raw Python file URL into the box and click <strong>Load Code</strong>.</li>
-    <li>Click <strong>Upload .py</strong> to load a local Python file from your computer. This also allows
-      <code>.txt</code> files in case of firewall restrictions.
-    </li>
-    <li>Choose one of the <strong>ready-made iGCSE algorithm examples</strong>.</li>
-    <li>Click <strong>Blank File</strong> to start writing your own Python code.</li>
-    <li>Click <strong>Use Blocks 🧩</strong> to start a new visual Blocks program.</li>
+    <li>Paste a raw Python file URL and click <strong>Load Code</strong>.</li>
+    <li>Click <strong>Upload .py</strong> to load a local Python or text file.</li>
+    <li>Choose one of the ready-made iGCSE algorithm examples.</li>
+    <li>Click <strong>Blank File</strong> to write your own code.</li>
+    <li>Click <strong>Use Blocks</strong> to start a visual Blocks program.</li>
   </ul>
-  <p>The ready-made examples include common algorithms such as average, counting, totalling, linear search,
-    bubble sort, if/else, for loops, while loops, and repeat-style loops.</p>
+</div>
 
+<!-- Slide 3 -->
+<div class="carousel-slide">
+  <h3>Ready-made examples</h3>
+  <p>The built-in examples cover common iGCSE algorithm patterns:</p>
+  <ul>
+    <li>Average, counting, and totalling</li>
+    <li>Linear search and bubble sort</li>
+    <li>If/else selection</li>
+    <li>For loops, while loops, and repeat-style loops</li>
+  </ul>
+</div>
+
+<!-- Slide 4 -->
+<div class="carousel-slide">
   <h3>Loading code from a URL</h3>
   <p>To load code from another source:</p>
   <ol>
@@ -26,97 +41,132 @@
     <li>Paste it into the input box.</li>
     <li>Click <strong>Load Code</strong>.</li>
   </ol>
-  <p>The page URL will update automatically, so you can share the loaded version with students.</p>
+  <p>The page URL updates automatically, so you can share the loaded version with students.</p>
   <p>Example format:<br>
     <code>https://jamesabela.github.io/jsfun/pythoncopy?url=RAW_FILE_URL_HERE</code>
   </p>
 </div>
 
-<!-- Gist Tutorial Slide -->
+<!-- Slide 5 -->
 <div class="carousel-slide">
   <img src="gist.jpg" alt="Creating a GitHub Gist" class="instruction-image">
-  <h3>How to make a Gist on GitHub</h3>
-  <p>If you don't know how to create a Gist, follow these steps to host your Python code so it can be loaded
-    into Python Code Lab:</p>
+  <h3>Making a GitHub Gist</h3>
+  <p>If you do not already have a raw Python file online, GitHub Gist is a simple way to host one.</p>
   <ol>
-    <li>Go to <a href="https://gist.github.com" target="_blank">gist.github.com</a> (you will need a GitHub
-      account).</li>
-    <li><strong>Create a new Gist:</strong> Give your file a name ending in <code>.py</code> and type or paste
-      your code.</li>
-    <li>Click the green <strong>Create secret gist</strong> (or public gist) button.</li>
-    <li><strong>Get the Raw URL:</strong> Click the <strong>Raw</strong> button in the top right corner of your
-      code block.</li>
-    <li>Copy the URL from your browser's address bar. It will start with
-      <code>https://gist.githubusercontent.com/...</code>
-    </li>
+    <li>Go to <a href="https://gist.github.com" target="_blank">gist.github.com</a>.</li>
+    <li>Create a new Gist and name the file with a <code>.py</code> ending.</li>
+    <li>Type or paste your Python code.</li>
   </ol>
-  <p>Paste this URL into the input box to load your code!</p>
-</div>
-
-<!-- Slide 2 -->
-<div class="carousel-slide">
-  <img src="python_edit_run_mode.png" alt="Edit and Run Mode" class="instruction-image">
-  <h3>Edit Mode</h3>
-  <p>Edit Mode is the normal working mode. In Edit Mode, you can:</p>
-  <ul>
-    <li>Write, paste, or load Python code in the text editor.</li>
-    <li>Click <strong>Run</strong> to run the code.</li>
-    <li>See the output and interact with <code>input()</code> prompts in the console window on the right.</li>
-    <li>Press <strong>Reset</strong> to clear the output or cancel execution at any time.</li>
-  </ul>
-</div>
-
-<!-- Blocks Mode Slide -->
-<div class="carousel-slide">
-  <img src="python_blocks_mode.png" alt="Blocks Mode" class="instruction-image">
-  <h3>Blocks Mode (Scratch-Friendly Coding)</h3>
-  <p>Blocks Mode is designed for students coming from Scratch. It provides a visual block interface that generates
-    standard Python code as students build their program.</p>
-  <ul>
-    <li><strong>Start with Blocks:</strong> From the Quick start area, click <strong>Use Blocks 🧩</strong> to
-      open a blank Blocks file.</li>
-    <li><strong>Scratch Events:</strong> Starts with a yellow <code>when 🚩 clicked</code> hat block. Drag and snap statements directly underneath.</li>
-    <li><strong>Control & Loops:</strong> Use standard Scratch-like control loops such as <code>forever</code> (which compiles to <code>while True:</code>) and <code>wait X seconds</code> (which compiles to <code>time.sleep(X)</code>).</li>
-    <li><strong>Turtle & Pen blocks:</strong> Draw using blue motion blocks (e.g. <code>move 100 steps</code>) and green pen blocks (e.g. <code>pen down</code>).</li>
-    <li><strong>Simple input:</strong> Use <code>input Enter value</code> for text or
-      <code>input number Enter number</code> for numbers. The generated prompt places the answer on a new line.</li>
-    <li><strong>Join text:</strong> Use <code>join</code> to combine two pieces of text, such as
-      <code>"Hello "</code> and a variable name.</li>
-    <li><strong>Run inside Blocks:</strong> Click the floating green <strong>Run 🚩</strong> button in the blocks
-      area to compile and run your code while staying in Blocks Mode. Output and input prompts appear in the run
-      panel on the right.</li>
-    <li><strong>Expand the workspace:</strong> Collapse or reopen the run panel using the side arrow. The Blocks
-      workspace resizes to fit the available space.</li>
-    <li><strong>Back to text:</strong> Click <strong>Back to Text Mode</strong> to send the generated Python back
-      to the text editor.</li>
-  </ul>
-</div>
-
-<!-- Slide 3 -->
-<div class="carousel-slide">
-  <img src="python_trace_mode.png" alt="Display and Visual Tracing Mode" class="instruction-image">
-  <h3>Display Mode</h3>
-  <p>Display Mode lets you visually trace your Python code line by line. When you switch to Display Mode, the editor
-    becomes read-only, and the program is analysed to prepare for tracing.</p>
-  <p>Display Mode includes: line highlighting, step-by-step execution, automatic play mode, variable tracking,
-    and call stack tracing. It is highly recommended for teachers explaining code to students.</p>
-</div>
-
-<!-- Slide 4 -->
-<div class="carousel-slide">
-  <img src="python_variables_trace.png" alt="Visual Tracing Interface" class="instruction-image">
-  <h3>Visual Tracing Interface</h3>
-  <p>As you step through code, the current active line is highlighted. The panels on the right show:</p>
-  <ul>
-    <li><strong>Call Trace:</strong> The stack of active functions.</li>
-    <li><strong>Variables:</strong> A table of all variables in scope and their current values.</li>
-    <li><strong>Output:</strong> The program's standard output.</li>
-  </ul>
 </div>
 
 <!-- Slide 6 -->
 <div class="carousel-slide">
-  <h3>Quick Reference & Limitations</h3>
+  <h3>Getting the raw Gist URL</h3>
+  <ol>
+    <li>Click <strong>Create secret gist</strong> or <strong>Create public gist</strong>.</li>
+    <li>Click the <strong>Raw</strong> button above the code.</li>
+    <li>Copy the URL from your browser's address bar.</li>
+  </ol>
+  <p>The URL should start with <code>https://gist.githubusercontent.com/</code>.</p>
+  <p>Paste this URL into Python Code Lab to load your code.</p>
+</div>
+
+<!-- Slide 7 -->
+<div class="carousel-slide">
+  <img src="python_edit_run_mode.png" alt="Edit and Run Mode" class="instruction-image">
+  <h3>Edit Mode</h3>
+  <p>Edit Mode is the normal working mode. You can:</p>
+  <ul>
+    <li>Write, paste, or load Python code in the text editor.</li>
+    <li>Click <strong>Run</strong> to run the code.</li>
+    <li>Use the console window for output and <code>input()</code> prompts.</li>
+    <li>Press <strong>Reset</strong> to clear output or cancel execution.</li>
+  </ul>
+</div>
+
+<!-- Slide 8 -->
+<div class="carousel-slide">
+  <img src="python_blocks_mode.png" alt="Blocks Mode" class="instruction-image">
+  <h3>Blocks Mode</h3>
+  <p>Blocks Mode is designed for students coming from Scratch. It provides a visual block interface that generates
+    standard Python code.</p>
+  <ul>
+    <li>Click <strong>Use Blocks</strong> to open a blank Blocks file.</li>
+    <li>Start with a yellow <code>when clicked</code> hat block.</li>
+    <li>Drag and snap statements underneath it.</li>
+  </ul>
+</div>
+
+<!-- Slide 9 -->
+<div class="carousel-slide">
+  <h3>Blocks: control and drawing</h3>
+  <ul>
+    <li>Use Scratch-like control loops such as <code>forever</code>, which compiles to <code>while True:</code>.</li>
+    <li>Use <code>wait X seconds</code>, which compiles to <code>time.sleep(X)</code>.</li>
+    <li>Draw using blue motion blocks such as <code>move 100 steps</code>.</li>
+    <li>Use green pen blocks such as <code>pen down</code>.</li>
+  </ul>
+</div>
+
+<!-- Slide 10 -->
+<div class="carousel-slide">
+  <h3>Blocks: input and running</h3>
+  <ul>
+    <li>Use <code>input Enter value</code> for text input.</li>
+    <li>Use <code>input number Enter number</code> for numeric input.</li>
+    <li>Use <code>join</code> to combine text, values, and variables.</li>
+    <li>Click the floating <strong>Run</strong> button to compile and run while staying in Blocks Mode.</li>
+  </ul>
+</div>
+
+<!-- Slide 11 -->
+<div class="carousel-slide">
+  <h3>Blocks workspace controls</h3>
+  <ul>
+    <li>Output and input prompts appear in the run panel on the right.</li>
+    <li>Collapse or reopen the run panel using the side arrow.</li>
+    <li>The Blocks workspace resizes to fit the available space.</li>
+    <li>Click <strong>Back to Text Mode</strong> to send generated Python back to the text editor.</li>
+  </ul>
+</div>
+
+<!-- Slide 12 -->
+<div class="carousel-slide">
+  <img src="python_trace_mode.png" alt="Display and Visual Tracing Mode" class="instruction-image">
+  <h3>Display Mode</h3>
+  <p>Display Mode lets you visually trace Python code line by line.</p>
+  <p>When you switch to Display Mode, the editor becomes read-only and the program is analysed to prepare for
+    tracing.</p>
+  <p>It is useful for teachers explaining code to students on a projector or shared screen.</p>
+</div>
+
+<!-- Slide 13 -->
+<div class="carousel-slide">
+  <h3>Display Mode features</h3>
+  <ul>
+    <li>Line-by-line highlighting</li>
+    <li>Step-by-step execution</li>
+    <li>Automatic play mode</li>
+    <li>Variable tracking</li>
+    <li>Call stack tracing</li>
+  </ul>
+</div>
+
+<!-- Slide 14 -->
+<div class="carousel-slide">
+  <img src="python_variables_trace.png" alt="Visual Tracing Interface" class="instruction-image">
+  <h3>Visual tracing interface</h3>
+  <p>As you step through code, the current active line is highlighted. The panels on the right show:</p>
+  <ul>
+    <li><strong>Call Trace:</strong> the stack of active functions.</li>
+    <li><strong>Variables:</strong> all variables in scope and their current values.</li>
+    <li><strong>Output:</strong> the program's standard output.</li>
+  </ul>
+</div>
+
+<!-- Slide 15 -->
+<div class="carousel-slide">
+  <h3>Quick reference</h3>
   <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 13px;">
     <tr style="border-bottom: 1px solid #cbd5e1;">
       <th style="text-align: left; padding: 4px;">Control</th>
@@ -124,7 +174,7 @@
     </tr>
     <tr>
       <td>Play / Pause</td>
-      <td>Automatically step through the code at a regular interval</td>
+      <td>Automatically step through the code</td>
     </tr>
     <tr>
       <td>Step</td>
@@ -136,102 +186,133 @@
     </tr>
     <tr>
       <td>Reset</td>
-      <td>Reset the visual tracing session to the beginning</td>
+      <td>Reset tracing to the beginning</td>
     </tr>
     <tr>
       <td>Full Screen</td>
-      <td>Shows the tool full screen for teaching</td>
+      <td>Show the tool full screen for teaching</td>
     </tr>
   </table>
-
-  <h3>Teacher use cases</h3>
-  <p>Teachers can use Python Code Lab 4.1 to: demonstrate standard algorithms, explain code line by line, show
-    how variables change, teach loops, selection, functions, and recursion, create code-ordering puzzles, share
-    code examples using a URL, present Python clearly on a large screen.</p>
-
-  <h3>Student use cases</h3>
-  <p>Students can use it to: experiment with Python code, run short programs in the browser, trace algorithms
-    step by step, check how variables change, copy or download working examples, practise rearranging code into
-    the correct order.</p>
-
-  <h3>Supported Modules</h3>
-  <p>The following standard Python modules are available in the browser environment: <code>random</code>,
-    <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>,
-    <code>turtle</code>, and <code>time</code>. Programs that require other imports, external files, or complex
-    packages should be downloaded and run in a local Python environment instead.
-  </p>
 </div>
 
-<!-- Slide 7: Turtle Graphics -->
+<!-- Slide 16 -->
+<div class="carousel-slide">
+  <h3>Teacher use cases</h3>
+  <p>Teachers can use Python Code Lab 4.1 to:</p>
+  <ul>
+    <li>Demonstrate standard algorithms</li>
+    <li>Explain code line by line</li>
+    <li>Show how variables change</li>
+    <li>Teach loops, selection, functions, and recursion</li>
+    <li>Create code-ordering puzzles and share examples by URL</li>
+  </ul>
+</div>
+
+<!-- Slide 17 -->
+<div class="carousel-slide">
+  <h3>Student use cases</h3>
+  <p>Students can use Python Code Lab 4.1 to:</p>
+  <ul>
+    <li>Experiment with Python code in the browser</li>
+    <li>Run short programs</li>
+    <li>Trace algorithms step by step</li>
+    <li>Check how variables change</li>
+    <li>Copy or download working examples</li>
+  </ul>
+</div>
+
+<!-- Slide 18 -->
+<div class="carousel-slide">
+  <h3>Supported modules</h3>
+  <p>The following standard Python modules are available in the browser environment:</p>
+  <ul>
+    <li><code>random</code>, <code>math</code>, and <code>statistics</code></li>
+    <li><code>datetime</code>, <code>string</code>, and <code>time</code></li>
+    <li><code>turtle</code></li>
+  </ul>
+  <p>Programs that require other imports, external files, or complex packages should be downloaded and run locally.</p>
+</div>
+
+<!-- Slide 19 -->
 <div class="carousel-slide">
   <h3>Turtle Graphics & Turtle Mode</h3>
-  <p>Python Code Lab 4.1 supports in-browser Turtle graphics! When your code imports <code>turtle</code>, or
-    when you switch to <strong>Turtle Mode</strong>, a canvas will automatically appear on the right side of the
-    editor.</p>
-
-  <h3>What's supported?</h3>
-  <ul>
-    <li><strong>Movement:</strong> <code>forward()</code>, <code>backward()</code>, <code>left()</code>,
-      <code>right()</code>, <code>goto()</code>, <code>home()</code>, and exact mathematical
-      <code>circle(radius, extent)</code> drawings.
-    </li>
-    <li><strong>Pen Control:</strong> <code>penup()</code>, <code>pendown()</code>, <code>pensize()</code> /
-      <code>width()</code>, <code>pencolor()</code>, and <code>fillcolor()</code>.
-    </li>
-    <li><strong>Shapes & Fills:</strong> <code>begin_fill()</code> and <code>end_fill()</code> to fill shapes.
-      Change cursor shapes using <code>shape("turtle")</code>, <code>shape("circle")</code>,
-      <code>shape("square")</code>, or <code>shape("classic")</code>!
-    </li>
-    <li><strong>Screen Settings:</strong> <code>bgcolor()</code> to set the canvas background.</li>
-    <li><strong>No-op standard functions:</strong> <code>done()</code>, <code>mainloop()</code>, and
-      <code>exitonclick()</code> are supported as no-ops to prevent crashes when importing desktop Python
-      scripts.
-    </li>
-  </ul>
-
-  <h3>Line-by-Line Visual Tracing</h3>
-  <p>Switch to <strong>Display Mode</strong> to trace your turtle scripts. The canvas will capture a state
-    snapshot at every execution line, allowing you to click <strong>Step</strong> or <strong>Play</strong> to
-    watch the turtle cursor move and draw segment-by-segment in perfect synchronization with your code!</p>
-
-  <h3>Exporting Drawings</h3>
-  <p>Click the <strong>Save Image</strong> button in the turtle graphics panel header to export and download
-    your canvas drawing as a high-quality <code>.png</code> file.</p>
+  <p>Python Code Lab 4.1 supports in-browser Turtle graphics.</p>
+  <p>When your code imports <code>turtle</code>, or when you switch to <strong>Turtle Mode</strong>, a canvas appears
+    on the right side of the editor.</p>
 </div>
 
-<!-- Slide 8: Reference Links & Web Previews -->
+<!-- Slide 20 -->
 <div class="carousel-slide">
-  <h3>Reference Links & Web Previews</h3>
-  <p>Python Code Lab 4.1 automatically scans your Python code for web links (e.g., documentation, tutorials, YouTube
-    videos) written in comments or strings.</p>
-
-  <h3>Dynamic Links Listing</h3>
+  <h3>Turtle movement</h3>
+  <p>Supported movement commands include:</p>
   <ul>
-    <li>A <strong>Reference Links</strong> panel will appear in the right column listing all URLs found in the code.
-    </li>
-    <li>Click the line badge next to any link (e.g., <code>Ln 12</code>) to automatically scroll to, highlight, and
-      select that line in the code editor.</li>
-    <li>Click <strong>Open</strong> to view the link directly in a new browser tab.</li>
-  </ul>
-
-  <h3>Interactive Web Embedding & Previews</h3>
-  <ul>
-    <li>Click <strong>Preview</strong> next to any link to display it inside an interactive embed frame within Python
-      Code Lab.</li>
-    <li>Click the <strong>Preview: On</strong> toggle button at the top of the Reference Links header to easily show or
-      hide the preview window at any time.</li>
-    <li><strong>YouTube Integration:</strong> Regular YouTube video links and shorts are automatically translated to
-      embed links, allowing you to watch tutorials directly next to your workspace!</li>
+    <li><code>forward()</code>, <code>backward()</code>, <code>left()</code>, and <code>right()</code></li>
+    <li><code>goto()</code> and <code>home()</code></li>
+    <li>Exact mathematical <code>circle(radius, extent)</code> drawings</li>
   </ul>
 </div>
 
-<!-- Slide 9: Coding Quizzes & Auto-Testing -->
+<!-- Slide 21 -->
+<div class="carousel-slide">
+  <h3>Turtle pen and shapes</h3>
+  <ul>
+    <li>Use <code>penup()</code>, <code>pendown()</code>, <code>pensize()</code>, and <code>width()</code>.</li>
+    <li>Set colours with <code>pencolor()</code> and <code>fillcolor()</code>.</li>
+    <li>Use <code>begin_fill()</code> and <code>end_fill()</code> to fill shapes.</li>
+    <li>Change cursor shape with <code>shape("turtle")</code>, <code>shape("circle")</code>,
+      <code>shape("square")</code>, or <code>shape("classic")</code>.</li>
+  </ul>
+</div>
+
+<!-- Slide 22 -->
+<div class="carousel-slide">
+  <h3>Turtle screen and tracing</h3>
+  <ul>
+    <li>Use <code>bgcolor()</code> to set the canvas background.</li>
+    <li><code>done()</code>, <code>mainloop()</code>, and <code>exitonclick()</code> are supported as no-op functions.</li>
+    <li>Switch to <strong>Display Mode</strong> to trace turtle scripts line by line.</li>
+    <li>The canvas stores a snapshot at every execution line.</li>
+  </ul>
+</div>
+
+<!-- Slide 23 -->
+<div class="carousel-slide">
+  <h3>Exporting turtle drawings</h3>
+  <p>Click the <strong>Save Image</strong> button in the turtle graphics panel header to export the canvas drawing.</p>
+  <p>The exported file is downloaded as a high-quality <code>.png</code> image.</p>
+</div>
+
+<!-- Slide 24 -->
+<div class="carousel-slide">
+  <h3>Reference Links</h3>
+  <p>Python Code Lab 4.1 automatically scans Python code for web links written in comments or strings.</p>
+  <p>A <strong>Reference Links</strong> panel appears in the right column listing all URLs found in the code.</p>
+  <ul>
+    <li>Click a line badge such as <code>Ln 12</code> to jump to that line.</li>
+    <li>Click <strong>Open</strong> to view the link in a new browser tab.</li>
+  </ul>
+</div>
+
+<!-- Slide 25 -->
+<div class="carousel-slide">
+  <h3>Web previews</h3>
+  <ul>
+    <li>Click <strong>Preview</strong> next to a link to display it inside Python Code Lab.</li>
+    <li>Use the <strong>Preview: On</strong> toggle to show or hide the preview window.</li>
+    <li>YouTube videos and Shorts links are automatically translated to embed links.</li>
+  </ul>
+</div>
+
+<!-- Slide 26 -->
 <div class="carousel-slide">
   <h3>Coding Quizzes & Course Progression</h3>
-  <p>Python Code Lab 4.1 supports custom coding quizzes and multi-file course progression using simple comments.
-    Students can test their algorithms and progress through structured lessons instantly.</p>
+  <p>Python Code Lab 4.1 supports custom coding quizzes and multi-file course progression using comments.</p>
+  <p>Students can test algorithms and move through structured lessons instantly.</p>
+</div>
 
-  <h3>How to define Test Cases & Progression</h3>
+<!-- Slide 27 -->
+<div class="carousel-slide">
+  <h3>Test case comment format</h3>
   <p>Add comments to your Python code using this structure:</p>
   <pre
     style="background: #f1f5f9; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 13px; color: #1e293b;">#Input
@@ -244,21 +325,32 @@
 
 #Next
 # https://jamesabela.github.io/jsfun/pythoncopy?url=...level2.py</pre>
+</div>
 
-  <h3>Comment Keywords:</h3>
+<!-- Slide 28 -->
+<div class="carousel-slide">
+  <h3>Quiz comment keywords</h3>
   <ul>
-    <li><strong><code>#Input</code></strong>: Followed by rows of comma-separated inputs (one row per test case). Speech
-      marks are not required.</li>
-    <li><strong><code>#output</code></strong>: Followed by rows of expected outputs (one row per test case).</li>
-    <li><strong><code>#Next</code></strong>: Followed by the URL of the next level. When all tests pass, a <strong>Next
-        Level ➔</strong> button is unlocked to load the next file.</li>
-    <li><strong><code>#End</code></strong>: Followed by the Course Title (e.g. <code># iGCSE Algorithms Basics</code>).
-      Put this on the final level to display a congratulatory completion card and unlock a customizable **Canvas
-      Completion Certificate (PNG)** download!</li>
+    <li><strong><code>#Input</code></strong>: rows of comma-separated inputs, one row per test case.</li>
+    <li><strong><code>#output</code></strong>: rows of expected outputs, one row per test case.</li>
+    <li><strong><code>#Next</code></strong>: the URL of the next level.</li>
+    <li><strong><code>#End</code></strong>: the course title for the final level.</li>
   </ul>
+</div>
 
-  <h3>Running the Tests</h3>
-  <p>When the editor detects <code>#Input</code> and <code>#output</code> comments, a purple <strong>Run Tests
-      (N)</strong> button appears next to <strong>Run</strong>. Clicking it runs all tests programmatically in Pyodide,
-    compares outputs, and displays a dashboard summary with expandable details for each run.</p>
+<!-- Slide 29 -->
+<div class="carousel-slide">
+  <h3>Running the tests</h3>
+  <p>When the editor detects <code>#Input</code> and <code>#output</code> comments, a purple
+    <strong>Run Tests (N)</strong> button appears next to <strong>Run</strong>.</p>
+  <p>Clicking it runs all tests in Pyodide, compares outputs, and displays a dashboard summary with expandable
+    details for each run.</p>
+</div>
+
+<!-- Slide 30 -->
+<div class="carousel-slide">
+  <h3>Finishing a course</h3>
+  <p>When all tests pass, the <strong>Next Level</strong> button is unlocked to load the next file.</p>
+  <p>On the final level, <code>#End</code> displays a completion card and unlocks a customizable Canvas completion
+    certificate as a PNG download.</p>
 </div>
