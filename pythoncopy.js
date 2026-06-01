@@ -989,6 +989,7 @@ import sys, builtins
 
       showBlocksEditorToolbar();
       setAppMode('blocks');
+      playbackHistory = [];
       recordPlaybackSnapshot('Blank Blocks', true, 'save');
     }
 
@@ -1836,6 +1837,7 @@ import sys, builtins
         setRunnerStatus('File loaded successfully.');
         autoPreviewFirstLink();
         updateBlocksButtonState();
+        playbackHistory = [];
         recordPlaybackSnapshot('Load File', true, 'save');
       }
 
@@ -1861,6 +1863,10 @@ import sys, builtins
       function uploadBlocksFile(xmlText) {
         if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
 
+        if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+          exitPlaybackMode(true);
+        }
+
         const previousDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         try {
           const xmlDom = parseBlocklyXmlText(xmlText);
@@ -1873,6 +1879,7 @@ import sys, builtins
           analyseCodeAndUpdateMessage();
           clearRunner();
           setRunnerStatus('Blocks file loaded successfully.');
+          playbackHistory = [];
           recordPlaybackSnapshot('Load Blocks', true, 'save');
         } catch (err) {
           console.error('Error loading Blocks file:', err);
@@ -2362,6 +2369,7 @@ import sys, builtins
       clearRunner();
       setRunnerStatus('Blank file ready.');
       updateBlocksButtonState();
+      playbackHistory = [];
       recordPlaybackSnapshot('Blank File', true, 'save');
       editor.focus();
     }
@@ -2389,6 +2397,7 @@ import sys, builtins
           clearRunner();
           autoPreviewFirstLink();
           updateBlocksButtonState();
+          playbackHistory = [];
           recordPlaybackSnapshot('Load Gist', true, 'save');
 
           if (currentAppMode === 'blocks') {
