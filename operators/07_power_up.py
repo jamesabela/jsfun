@@ -1,6 +1,8 @@
 # Operator Academy - Lesson 7
 # Arcade Power-Up
 #
+# Learn more: https://jamesabela.github.io/jsfun/operators/07_power_up.html
+#
 # You have found the final arcade power-up.
 # It raises your score to a power to create the final unlock code.
 #

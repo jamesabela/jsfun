@@ -1,6 +1,8 @@
 # Operator Academy - Lesson 2
 # Robot Battery Rescue
 #
+# Learn more: https://jamesabela.github.io/jsfun/operators/02_robot_battery.html
+#
 # A tiny robot is trying to reach the charging station.
 # It starts with some battery power and loses some during the mission.
 #

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Arcade Power-Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #020617, #311042);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-neon: #ec4899;
+      --accent-neon-glow: rgba(236, 72, 153, 0.25);
+      --accent-purple: #c084fc;
+      --accent-purple-glow: rgba(192, 132, 252, 0.15);
+      --success: #ec4899;
+      --success-glow: rgba(236, 72, 153, 0.15);
+      --border-color: rgba(236, 72, 153, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #f472b6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .title-group h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #f8fafc, #f472b6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .title-group p {
+      font-size: 0.9rem;
+      color: var(--accent-neon);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-neon);
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    /* Interactive Arcade Panel */
+    .arcade-container {
+      display: flex;
+      gap: 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .arcade-visual {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .cabinet-svg {
+      width: 140px;
+      height: 220px;
+      filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.25));
+    }
+
+    .arcade-controls {
+      flex: 1.2;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-val {
+      color: var(--accent-neon);
+      font-weight: 700;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-neon);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-neon);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-neon);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-neon);
+    }
+
+    .calc-screen {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--accent-neon);
+      text-align: center;
+      box-shadow: inset 0 0 8px rgba(236, 72, 153, 0.2);
+      white-space: normal;
+      word-break: break-all;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      border: 1px solid rgba(236, 72, 153, 0.2);
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--accent-neon-glow);
+      border-left: 3px solid var(--accent-neon);
+    }
+
+    .checklist-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>Lesson 7: Exponentiation (**)</p>
+        <h1>Arcade Power-Up 👾</h1>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-title">💡 The Exponent Operator</div>
+      <p class="instruction-text">
+        In Python, raising a number to a power (exponentiation) is written with two asterisks <code>**</code>. 
+        It multiplies the base number by itself, the number of times specified by the exponent. 
+        For example, <code>3 ** 2</code> means <code>3 * 3</code>, which equals <code>9</code>.
+      </p>
+      <div class="image-wrapper">
+        <img src="power_up.jpg" alt="Arcade Power-Up" class="hero-img">
+      </div>
+
+      <!-- Interactive Playground -->
+      <div class="arcade-container">
+        <div class="arcade-visual">
+          <!-- Animated SVG Arcade Cabinet -->
+          <svg class="cabinet-svg" viewBox="0 0 140 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Machine Body -->
+            <rect x="15" y="10" width="110" height="200" rx="10" fill="#1e1b4b" stroke="#ec4899" stroke-width="4"/>
+            <!-- Top Light-up Panel -->
+            <rect x="25" y="20" width="90" height="20" rx="2" fill="#ec4899"/>
+            <text x="70" y="34" fill="#020617" font-family="'Outfit', sans-serif" font-size="10" font-weight="900" text-anchor="middle">POWER UP</text>
+
+            <!-- Screen bezel -->
+            <rect x="25" y="50" width="90" height="70" rx="4" fill="#0f172a" stroke="#cbd5e1" stroke-width="2"/>
+            <!-- Active retro game screen -->
+            <rect x="30" y="55" width="80" height="60" rx="2" fill="#020617"/>
+            <g id="screen-shapes">
+              <!-- Player ship -->
+              <polygon points="70,95 64,105 76,105" fill="#22d3ee" filter="drop-shadow(0 0 4px #22d3ee)"/>
+              <!-- Multiplier text -->
+              <text id="screen-score" x="70" y="75" fill="#f472b6" font-family="'Fira Code', monospace" font-size="9" text-anchor="middle">LVL: 2</text>
+              <text id="screen-calc" x="70" y="87" fill="#34d399" font-family="'Fira Code', monospace" font-size="7" text-anchor="middle">3 * 3 = 9</text>
+            </g>
+
+            <!-- Console Deck (slanted view block) -->
+            <path d="M 15 150 L 125 150 L 120 170 L 20 170 Z" fill="#312e81" stroke="#ec4899" stroke-width="2"/>
+            <!-- Joystick -->
+            <circle cx="50" cy="158" r="4" fill="#ef4444"/>
+            <line x1="50" y1="158" x2="50" y2="164" stroke="#94a3b8" stroke-width="2"/>
+            <!-- Buttons -->
+            <circle cx="85" cy="158" r="3" fill="#eab308"/>
+            <circle cx="95" cy="158" r="3" fill="#10b981"/>
+            <circle cx="105" cy="158" r="3" fill="#3b82f6"/>
+
+            <!-- Lower Cabinet door -->
+            <rect x="45" y="180" width="50" height="25" rx="2" fill="#0f172a" stroke="#475569"/>
+            <rect x="68" y="183" width="14" height="8" rx="1" fill="#475569"/>
+          </svg>
+        </div>
+
+        <div class="arcade-controls">
+          <div class="control-group">
+            <div class="control-label">Score (Base): <span class="control-val" id="val-score">3</span></div>
+            <input type="range" class="slider" id="slider-score" min="1" max="10" value="3">
+          </div>
+          <div class="control-group">
+            <div class="control-label">Power-Up Level: <span class="control-val" id="val-power">2</span></div>
+            <input type="range" class="slider" id="slider-power" min="1" max="6" value="2">
+          </div>
+          <div class="calc-screen">
+            <span id="formula">3 ** 2 = 9</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Your Task</div>
+      <p class="instruction-text">
+        You have found the final arcade power-up. It raises your current score to the power of the power-up level to generate the final secret code.
+        Complete the exponent calculation.
+      </p>
+      <pre>unlock_code = score ** power_up</pre>
+      
+      <div class="checklist">
+        <div class="checklist-item">
+          <span class="checklist-icon">💡</span>
+          <span>In `07_power_up.py`, look at line 14: <code>unlock_code = 0</code></span>
+        </div>
+        <div class="checklist-item">
+          <span class="checklist-icon">🎯</span>
+          <span>Replace <code>0</code> with the exponent calculation: <code>score ** power_up</code></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sliderScore = document.getElementById('slider-score');
+    const sliderPower = document.getElementById('slider-power');
+    const valScore = document.getElementById('val-score');
+    const valPower = document.getElementById('val-power');
+    const formula = document.getElementById('formula');
+    const screenScore = document.getElementById('screen-score');
+    const screenCalc = document.getElementById('screen-calc');
+
+    function update() {
+      const score = parseInt(sliderScore.value);
+      const power = parseInt(sliderPower.value);
+
+      valScore.textContent = score;
+      valPower.textContent = `LVL ${power}`;
+
+      const total = Math.pow(score, power);
+      formula.textContent = `${score} ** ${power} = ${total}`;
+
+      // Build multiplication string representation, e.g. "2 * 2 * 2 = 8"
+      const factors = Array(power).fill(score).join(' * ');
+      screenScore.textContent = `LVL: ${power}`;
+      
+      let calcText = `${factors} = ${total}`;
+      if (calcText.length > 18) {
+        calcText = `Code: ${total}`;
+      }
+      screenCalc.textContent = calcText;
+    }
+
+    sliderScore.addEventListener('input', update);
+    sliderPower.addEventListener('input', update);
+    update();
+  </script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 # Operator Academy - Lesson 5
 # Pirate Treasure Split
 #
+# Learn more: https://jamesabela.github.io/jsfun/operators/05_pirate_treasure.html
+#
 # A pirate crew has found a chest of coins.
 # They only want to count whole coins, not fractions of coins.
 #

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Robot Battery Rescue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a, #022c22);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-neon: #10b981;
+      --accent-neon-glow: rgba(16, 185, 129, 0.2);
+      --accent-emerald: #34d399;
+      --accent-emerald-glow: rgba(52, 211, 153, 0.15);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --border-color: rgba(16, 185, 129, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #34d399;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .title-group h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #f8fafc, #34d399);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .title-group p {
+      font-size: 0.9rem;
+      color: var(--accent-emerald);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-emerald);
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    /* Interactive Robot Simulator */
+    .robot-container {
+      display: flex;
+      gap: 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .robot-visual {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .robot-svg {
+      width: 150px;
+      height: 200px;
+      filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.2));
+    }
+
+    .robot-controls {
+      flex: 1.2;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-val {
+      color: var(--accent-emerald);
+      font-weight: 700;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-emerald);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-emerald);
+    }
+
+    .calc-screen {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--accent-emerald);
+      text-align: center;
+      box-shadow: inset 0 0 8px rgba(16, 185, 129, 0.2);
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--accent-emerald-glow);
+      border-left: 3px solid var(--accent-emerald);
+    }
+
+    .checklist-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>Lesson 2: Subtraction (-)</p>
+        <h1>Robot Battery Rescue 🤖</h1>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-title">💡 The Subtraction Operator</div>
+      <p class="instruction-text">
+        In Python, the subtraction operator is the hyphen <code>-</code>. 
+        It subtracts the number on its right from the number on its left.
+      </p>
+      <div class="image-wrapper">
+        <img src="robot_battery.jpg" alt="Robot Battery" class="hero-img">
+      </div>
+
+      <!-- Interactive Playground -->
+      <div class="robot-container">
+        <div class="robot-visual">
+          <!-- Animated SVG Robot -->
+          <svg class="robot-svg" viewBox="0 0 150 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Antenna -->
+            <rect x="72" y="10" width="6" height="20" fill="#64748b"/>
+            <circle id="antenna-light" cx="75" cy="10" r="6" fill="#10b981"/>
+            
+            <!-- Head -->
+            <rect x="40" y="30" width="70" height="50" rx="10" fill="#475569" stroke="#64748b" stroke-width="3"/>
+            <!-- Eyes -->
+            <circle cx="58" cy="50" r="7" fill="#0f172a"/>
+            <circle id="left-eye" cx="58" cy="50" r="3" fill="#22d3ee"/>
+            <circle cx="92" cy="50" r="7" fill="#0f172a"/>
+            <circle id="right-eye" cx="92" cy="50" r="3" fill="#22d3ee"/>
+            <!-- Mouth -->
+            <path id="robot-mouth" d="M 60 68 Q 75 78 90 68" stroke="#22d3ee" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+            <!-- Body -->
+            <rect x="30" y="90" width="90" height="90" rx="15" fill="#334155" stroke="#475569" stroke-width="3"/>
+            <!-- Battery Gauge Graphic -->
+            <rect x="45" y="115" width="60" height="35" rx="5" fill="#0f172a" stroke="#64748b" stroke-width="2"/>
+            <rect id="battery-bar" x="48" y="118" width="54" height="29" rx="3" fill="#10b981"/>
+            <!-- Battery Level Indicator text inside gauge -->
+            <text id="battery-text" x="75" y="137" fill="#020617" font-family="'Fira Code', monospace" font-size="12" font-weight="bold" text-anchor="middle">100%</text>
+
+            <!-- Neck / Connectors -->
+            <rect x="65" y="80" width="20" height="10" fill="#1e293b"/>
+          </svg>
+        </div>
+
+        <div class="robot-controls">
+          <div class="control-group">
+            <div class="control-label">Starting Battery: <span class="control-val" id="val-start">100%</span></div>
+            <input type="range" class="slider" id="slider-start" min="10" max="100" value="100">
+          </div>
+          <div class="control-group">
+            <div class="control-label">Battery Used: <span class="control-val" id="val-used">25%</span></div>
+            <input type="range" class="slider" id="slider-used" min="0" max="100" value="25">
+          </div>
+          <div class="calc-screen">
+            <span id="formula">100 - 25 = 75%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Your Mission</div>
+      <p class="instruction-text">
+        A tiny exploration robot is returning to the charging dock. It starts with some battery power and consumes a portion of it during its trip.
+        Calculate how much battery is left.
+      </p>
+      <pre>battery_left = start_battery - battery_used</pre>
+      
+      <div class="checklist">
+        <div class="checklist-item">
+          <span class="checklist-icon">💡</span>
+          <span>In `02_robot_battery.py`, look at line 14: <code>battery_left = 0</code></span>
+        </div>
+        <div class="checklist-item">
+          <span class="checklist-icon">🎯</span>
+          <span>Replace <code>0</code> with the calculation: <code>start_battery - battery_used</code></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sliderStart = document.getElementById('slider-start');
+    const sliderUsed = document.getElementById('slider-used');
+    const valStart = document.getElementById('val-start');
+    const valUsed = document.getElementById('val-used');
+    const formula = document.getElementById('formula');
+    const batteryBar = document.getElementById('battery-bar');
+    const batteryText = document.getElementById('battery-text');
+    const antennaLight = document.getElementById('antenna-light');
+    const leftEye = document.getElementById('left-eye');
+    const rightEye = document.getElementById('right-eye');
+    const mouth = document.getElementById('robot-mouth');
+
+    function update() {
+      let start = parseInt(sliderStart.value);
+      let used = parseInt(sliderUsed.value);
+      
+      // Used battery cannot be higher than starting battery in real simulation
+      if (used > start) {
+        used = start;
+        sliderUsed.value = start;
+      }
+
+      valStart.textContent = `${start}%`;
+      valUsed.textContent = `${used}%`;
+
+      const left = start - used;
+      formula.textContent = `${start} - ${used} = ${left}%`;
+
+      // Update SVG Battery
+      const pct = Math.max(0, left);
+      const widthPct = (pct / 100) * 54;
+      batteryBar.setAttribute('width', widthPct);
+      batteryText.textContent = `${pct}%`;
+
+      // Change colors/face based on charge left
+      if (pct > 50) {
+        batteryBar.setAttribute('fill', '#10b981'); // Emerald
+        antennaLight.setAttribute('fill', '#10b981');
+        leftEye.setAttribute('fill', '#22d3ee');
+        rightEye.setAttribute('fill', '#22d3ee');
+        mouth.setAttribute('d', 'M 60 65 Q 75 75 90 65'); // Smile
+      } else if (pct > 20) {
+        batteryBar.setAttribute('fill', '#f59e0b'); // Amber
+        antennaLight.setAttribute('fill', '#f59e0b');
+        leftEye.setAttribute('fill', '#f59e0b');
+        rightEye.setAttribute('fill', '#f59e0b');
+        mouth.setAttribute('d', 'M 60 70 Q 75 70 90 70'); // Flat mouth
+      } else {
+        batteryBar.setAttribute('fill', '#ef4444'); // Red
+        antennaLight.setAttribute('fill', '#ef4444');
+        leftEye.setAttribute('fill', '#ef4444');
+        rightEye.setAttribute('fill', '#ef4444');
+        mouth.setAttribute('d', 'M 60 72 Q 75 62 90 72'); // Sad mouth
+      }
+    }
+
+    sliderStart.addEventListener('input', update);
+    sliderUsed.addEventListener('input', update);
+    update();
+  </script>
+</body>
+</html>

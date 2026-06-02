@@ -1,6 +1,8 @@
 # Operator Academy - Lesson 4
 # Pizza Slice Share
 #
+# Learn more: https://jamesabela.github.io/jsfun/operators/04_pizza_party.html
+#
 # A gaming club orders pizza after a tournament.
 # The slices must be shared equally between the players.
 #

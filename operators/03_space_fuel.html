@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Space Fuel Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a, #311042);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-neon: #ec4899;
+      --accent-neon-glow: rgba(236, 72, 153, 0.2);
+      --accent-pink: #f472b6;
+      --accent-pink-glow: rgba(244, 114, 182, 0.15);
+      --success: #f472b6;
+      --success-glow: rgba(244, 114, 182, 0.15);
+      --border-color: rgba(236, 72, 153, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #f472b6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .title-group h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #f8fafc, #f472b6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .title-group p {
+      font-size: 0.9rem;
+      color: var(--accent-pink);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-pink);
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    /* Interactive Space Dashboard */
+    .space-container {
+      display: flex;
+      gap: 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .space-visual {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+      background: #020617;
+      border-radius: 8px;
+      height: 200px;
+      position: relative;
+    }
+
+    .space-svg {
+      width: 150px;
+      height: 180px;
+      z-index: 2;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: flyby 2s linear infinite;
+    }
+
+    @keyframes flyby {
+      from { transform: translateY(-20px); opacity: 0; }
+      50% { opacity: 1; }
+      to { transform: translateY(220px); opacity: 0; }
+    }
+
+    .space-controls {
+      flex: 1.2;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-val {
+      color: var(--accent-pink);
+      font-weight: 700;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-pink);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-pink);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-pink);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-pink);
+    }
+
+    .calc-screen {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--accent-pink);
+      text-align: center;
+      box-shadow: inset 0 0 8px rgba(236, 72, 153, 0.2);
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      border: 1px solid rgba(236, 72, 153, 0.2);
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--accent-pink-glow);
+      border-left: 3px solid var(--accent-pink);
+    }
+
+    .checklist-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>Lesson 3: Multiplication (*)</p>
+        <h1>Space Fuel Calculator 🚀</h1>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-title">💡 The Multiplication Operator</div>
+      <p class="instruction-text">
+        In Python, multiplication uses the asterisk symbol <code>*</code> (shift + 8 on most keyboards). 
+        Do not use the letter 'x', as Python will think it is a variable!
+      </p>
+      <div class="image-wrapper">
+        <img src="space_fuel.jpg" alt="Space Fuel" class="hero-img">
+      </div>
+
+      <!-- Interactive Playground -->
+      <div class="space-container">
+        <div class="space-visual" id="starfield">
+          <!-- Animated SVG Rocket -->
+          <svg class="space-svg" viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Thruster Flame -->
+            <path id="flame" d="M 42 110 Q 50 140 58 110" fill="#f97316" filter="drop-shadow(0 0 8px #f97316)"/>
+            <path id="inner-flame" d="M 46 110 Q 50 125 54 110" fill="#ef4444"/>
+
+            <!-- Rocket Fins -->
+            <path d="M 30 110 L 15 120 L 32 90 Z" fill="#ec4899"/>
+            <path d="M 70 110 L 85 120 L 68 90 Z" fill="#ec4899"/>
+
+            <!-- Rocket Body -->
+            <rect x="32" y="40" width="36" height="70" rx="18" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2"/>
+            <!-- Rocket Nose -->
+            <path d="M 32 45 C 32 15, 68 15, 68 45 Z" fill="#ec4899"/>
+            <!-- Window -->
+            <circle cx="50" cy="65" r="10" fill="#0f172a" stroke="#cbd5e1" stroke-width="2"/>
+            <circle cx="47" cy="62" r="3" fill="#22d3ee"/>
+          </svg>
+        </div>
+
+        <div class="space-controls">
+          <div class="control-group">
+            <div class="control-label">Space Jumps: <span class="control-val" id="val-jumps">4</span></div>
+            <input type="range" class="slider" id="slider-jumps" min="1" max="15" value="4">
+          </div>
+          <div class="control-group">
+            <div class="control-label">Fuel per Jump: <span class="control-val" id="val-fuel">10 L</span></div>
+            <input type="range" class="slider" id="slider-fuel" min="5" max="50" value="10">
+          </div>
+          <div class="calc-screen">
+            <span id="formula">4 * 10 = 40 Liters</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Your Task</div>
+      <p class="instruction-text">
+        Your rocket ship consumes a constant amount of fuel for each jump through hyper-space. 
+        Multiply the number of jumps by fuel per jump to calculate total fuel.
+      </p>
+      <pre>total_fuel = jumps * fuel_per_jump</pre>
+      
+      <div class="checklist">
+        <div class="checklist-item">
+          <span class="checklist-icon">💡</span>
+          <span>In `03_space_fuel.py`, check line 14: <code>total_fuel = 0</code></span>
+        </div>
+        <div class="checklist-item">
+          <span class="checklist-icon">🎯</span>
+          <span>Replace <code>0</code> with the multiplication formula: <code>jumps * fuel_per_jump</code></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sliderJumps = document.getElementById('slider-jumps');
+    const sliderFuel = document.getElementById('slider-fuel');
+    const valJumps = document.getElementById('val-jumps');
+    const valFuel = document.getElementById('val-fuel');
+    const formula = document.getElementById('formula');
+    const flame = document.getElementById('flame');
+    const innerFlame = document.getElementById('inner-flame');
+    const starfield = document.getElementById('starfield');
+
+    // Create background stars
+    for (let i = 0; i < 20; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.width = `${Math.random() * 3 + 1}px`;
+      star.style.height = star.style.width;
+      star.style.animationDelay = `${Math.random() * 2}s`;
+      star.style.animationDuration = `${Math.random() * 1.5 + 0.5}s`;
+      starfield.appendChild(star);
+    }
+
+    function update() {
+      const jumps = parseInt(sliderJumps.value);
+      const fuel = parseInt(sliderFuel.value);
+      
+      valJumps.textContent = jumps;
+      valFuel.textContent = `${fuel} L`;
+
+      const total = jumps * fuel;
+      formula.textContent = `${jumps} * ${fuel} = ${total} Liters`;
+
+      // Animate thruster flame based on fuel power
+      const flameLength = 110 + (fuel / 2);
+      const flameWidthLeft = 50 - (jumps / 2) - 4;
+      const flameWidthRight = 50 + (jumps / 2) + 4;
+      flame.setAttribute('d', `M ${flameWidthLeft} 110 Q 50 ${flameLength} ${flameWidthRight} 110`);
+      innerFlame.setAttribute('d', `M ${flameWidthLeft+4} 110 Q 50 ${110 + (flameLength-110)*0.6} ${flameWidthRight-4} 110`);
+
+      // Make stars fly faster if fuel is higher
+      const stars = document.querySelectorAll('.star');
+      stars.forEach(star => {
+        star.style.animationDuration = `${2 / (1 + fuel / 25)}s`;
+      });
+    }
+
+    sliderJumps.addEventListener('input', update);
+    sliderFuel.addEventListener('input', update);
+    update();
+  </script>
+</body>
+</html>

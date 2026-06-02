@@ -1,6 +1,8 @@
 # Operator Academy - Lesson 3
 # Space Fuel Calculator
 #
+# Learn more: https://jamesabela.github.io/jsfun/operators/03_space_fuel.html
+#
 # Your rocket uses the same amount of fuel for each space jump.
 # Work out the total fuel needed before launch.
 #

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Pizza Slice Share</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a, #3b1c1c);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-neon: #ef4444;
+      --accent-neon-glow: rgba(239, 68, 68, 0.2);
+      --accent-orange: #f97316;
+      --accent-orange-glow: rgba(249, 115, 22, 0.15);
+      --success: #f97316;
+      --success-glow: rgba(249, 115, 22, 0.15);
+      --border-color: rgba(239, 68, 68, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #f97316;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .title-group h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #f8fafc, #f97316);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .title-group p {
+      font-size: 0.9rem;
+      color: var(--accent-orange);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-orange);
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    /* Interactive Pizza Panel */
+    .pizza-container {
+      display: flex;
+      gap: 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .pizza-visual {
+      flex: 1.1;
+      min-width: 210px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .pizza-svg {
+      width: 180px;
+      height: 180px;
+      filter: drop-shadow(0 4px 12px rgba(239, 68, 68, 0.3));
+    }
+
+    .plates-container {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .plate {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-main);
+      font-weight: 700;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .plate-value {
+      font-size: 0.95rem;
+      color: var(--accent-orange);
+    }
+
+    .pizza-controls {
+      flex: 1.2;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-val {
+      color: var(--accent-orange);
+      font-weight: 700;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-orange);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-orange);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-orange);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-orange);
+    }
+
+    .calc-screen {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--accent-orange);
+      text-align: center;
+      box-shadow: inset 0 0 8px rgba(249, 115, 22, 0.2);
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--accent-orange-glow);
+      border-left: 3px solid var(--accent-orange);
+    }
+
+    .checklist-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>Lesson 4: Normal Division (/)</p>
+        <h1>Pizza Slice Share 🍕</h1>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-title">💡 The Division Operator</div>
+      <p class="instruction-text">
+        In Python, normal division uses a single forward slash <code>/</code>. 
+        Normal division **always** returns a decimal number (a float), even if the numbers divide perfectly. 
+        For example, <code>12 / 4</code> outputs <code>3.0</code>.
+      </p>
+      <div class="image-wrapper">
+        <img src="pizza_party.jpg" alt="Pizza Party" class="hero-img">
+      </div>
+
+      <!-- Interactive Playground -->
+      <div class="pizza-container">
+        <div style="display:flex; flex-direction:column; align-items:center; flex:1.1;">
+          <div class="pizza-visual">
+            <svg class="pizza-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" id="pizza-graphic">
+              <!-- Pizza Crust -->
+              <circle cx="50" cy="50" r="44" fill="#d97706" stroke="#b45309" stroke-width="2"/>
+              <!-- Cheese -->
+              <circle cx="50" cy="50" r="39" fill="#facc15"/>
+              <!-- Sauce/Pepperoni base group -->
+              <g id="pepperonis"></g>
+              <!-- Slicing Lines -->
+              <g id="slice-lines"></g>
+            </svg>
+          </div>
+          <div class="plates-container" id="plates-list">
+            <!-- Dynamically populated plates -->
+          </div>
+        </div>
+
+        <div class="pizza-controls">
+          <div class="control-group">
+            <div class="control-label">Total Slices: <span class="control-val" id="val-slices">12</span></div>
+            <input type="range" class="slider" id="slider-slices" min="4" max="24" value="12" step="2">
+          </div>
+          <div class="control-group">
+            <div class="control-label">Number of Players: <span class="control-val" id="val-players">4</span></div>
+            <input type="range" class="slider" id="slider-players" min="2" max="6" value="4">
+          </div>
+          <div class="calc-screen">
+            <span id="formula">12 / 4 = 3.0 slices</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Your Task</div>
+      <p class="instruction-text">
+        A gaming club is sharing a pizza after a match. Divide the total number of slices by the number of players.
+        Use normal division so players can receive decimal slices (fractions of slices).
+      </p>
+      <pre>slices_each = slices / players</pre>
+      
+      <div class="checklist">
+        <div class="checklist-item">
+          <span class="checklist-icon">💡</span>
+          <span>In `04_pizza_party.py`, look at line 15: <code>slices_each = 0</code></span>
+        </div>
+        <div class="checklist-item">
+          <span class="checklist-icon">🎯</span>
+          <span>Replace <code>0</code> with the division: <code>slices / players</code></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sliderSlices = document.getElementById('slider-slices');
+    const sliderPlayers = document.getElementById('slider-players');
+    const valSlices = document.getElementById('val-slices');
+    const valPlayers = document.getElementById('val-players');
+    const formula = document.getElementById('formula');
+    const pizzaGraphic = document.getElementById('pizza-graphic');
+    const pepsGroup = document.getElementById('pepperonis');
+    const linesGroup = document.getElementById('slice-lines');
+    const platesList = document.getElementById('plates-list');
+
+    function update() {
+      const slices = parseInt(sliderSlices.value);
+      const players = parseInt(sliderPlayers.value);
+
+      valSlices.textContent = slices;
+      valPlayers.textContent = players;
+
+      const slicesEach = slices / players;
+      // Format to 1 decimal place to mimic Python float output
+      formula.textContent = `${slices} / ${players} = ${slicesEach.toFixed(1)} slices`;
+
+      // Clear old peps and lines
+      pepsGroup.innerHTML = '';
+      linesGroup.innerHTML = '';
+      platesList.innerHTML = '';
+
+      // Draw slice lines
+      for (let i = 0; i < slices; i++) {
+        const angle = (i * 2 * Math.PI) / slices;
+        const x2 = 50 + 39 * Math.cos(angle);
+        const y2 = 50 + 39 * Math.sin(angle);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', '50');
+        line.setAttribute('y1', '50');
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('stroke', '#78350f');
+        line.setAttribute('stroke-width', '1.5');
+        linesGroup.appendChild(line);
+      }
+
+      // Add pepperoni drops in slices
+      for (let i = 0; i < slices; i++) {
+        const midAngle = ((i + 0.5) * 2 * Math.PI) / slices;
+        const dist = 22; // distance from center
+        const px = 50 + dist * Math.cos(midAngle);
+        const py = 50 + dist * Math.sin(midAngle);
+        
+        const pep = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pep.setAttribute('cx', px);
+        pep.setAttribute('cy', py);
+        pep.setAttribute('r', '3');
+        pep.setAttribute('fill', '#dc2626'); // Red Pepperoni
+        pepsGroup.appendChild(pep);
+      }
+
+      // Populate plates
+      for (let i = 0; i < players; i++) {
+        const plate = document.createElement('div');
+        plate.className = 'plate';
+        plate.innerHTML = `P${i+1}<div class="plate-value">${slicesEach.toFixed(1)}</div>`;
+        platesList.appendChild(plate);
+      }
+    }
+
+    sliderSlices.addEventListener('input', update);
+    sliderPlayers.addEventListener('input', update);
+    update();
+  </script>
+</body>
+</html>

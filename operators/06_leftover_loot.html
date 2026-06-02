@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Leftover Loot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a, #16281a);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-neon: #10b981;
+      --accent-neon-glow: rgba(16, 185, 129, 0.2);
+      --accent-green: #34d399;
+      --accent-green-glow: rgba(52, 211, 153, 0.15);
+      --success: #34d399;
+      --success-glow: rgba(52, 211, 153, 0.15);
+      --border-color: rgba(16, 185, 129, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #34d399;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .title-group h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #f8fafc, #34d399);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .title-group p {
+      font-size: 0.9rem;
+      color: var(--accent-green);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-green);
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    /* Interactive Modulo Panel */
+    .modulo-container {
+      display: flex;
+      gap: 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .modulo-visual {
+      flex: 1.1;
+      min-width: 210px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .bag-svg {
+      width: 130px;
+      height: 130px;
+      filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.25));
+    }
+
+    .loot-status {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .chests-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      margin-top: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .loot-chest {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 6px;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #cbd5e1;
+      width: 60px;
+    }
+
+    .loot-coins {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      justify-content: center;
+      margin-top: 4px;
+      min-height: 15px;
+    }
+
+    .gold-coin {
+      width: 6px;
+      height: 6px;
+      background: #facc15;
+      border: 0.5px solid #ca8a04;
+      border-radius: 50%;
+    }
+
+    .modulo-controls {
+      flex: 1.2;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-val {
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    .calc-screen {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--accent-green);
+      text-align: center;
+      box-shadow: inset 0 0 8px rgba(52, 211, 153, 0.2);
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--accent-green-glow);
+      border-left: 3px solid var(--accent-green);
+    }
+
+    .checklist-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>Lesson 6: Modulo (%)</p>
+        <h1>Leftover Loot 💰</h1>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-title">💡 The Modulo Operator</div>
+      <p class="instruction-text">
+        In Python, the Modulo operator is the percent sign <code>%</code>. 
+        Instead of returning the division result, it divides two numbers and returns **only the remainder** that is left over. 
+        For example, <code>7 % 3</code> is <code>1</code>, because 3 goes into 7 twice, with 1 left over.
+      </p>
+      <div class="image-wrapper">
+        <img src="leftover_loot.jpg" alt="Leftover Loot" class="hero-img">
+      </div>
+
+      <!-- Interactive Playground -->
+      <div class="modulo-container">
+        <div class="modulo-visual">
+          <!-- Animated SVG Loot Pouch -->
+          <svg class="bag-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Leftover Bag -->
+            <path d="M 30 40 Q 50 20 70 40 C 85 60, 80 90, 50 90 C 20 90, 15 60, 30 40 Z" fill="#b45309" stroke="#78350f" stroke-width="3"/>
+            <!-- Rope tying bag -->
+            <ellipse cx="50" cy="45" rx="16" ry="4" fill="none" stroke="#fed7aa" stroke-width="2"/>
+            <!-- Dollar/Coin Sign -->
+            <circle cx="50" cy="65" r="10" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+            <text x="50" y="70" fill="#78350f" font-family="'Inter', sans-serif" font-size="14" font-weight="900" text-anchor="middle">%</text>
+            <!-- Render coins floating outside bag for remainder -->
+            <g id="bag-remainder-coins"></g>
+          </svg>
+          <div class="loot-status" id="loot-status">
+            Remainder Leftover Bag
+          </div>
+
+          <div class="chests-row" id="chests-row">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <div class="modulo-controls">
+          <div class="control-group">
+            <div class="control-label">Total Coins: <span class="control-val" id="val-coins">23</span></div>
+            <input type="range" class="slider" id="slider-coins" min="5" max="60" value="23">
+          </div>
+          <div class="control-group">
+            <div class="control-label">Number of Pirates: <span class="control-val" id="val-pirates">5</span></div>
+            <input type="range" class="slider" id="slider-pirates" min="2" max="6" value="5">
+          </div>
+          <div class="calc-screen">
+            <span id="formula">23 % 5 = 3 leftover coins</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Your Task</div>
+      <p class="instruction-text">
+        Now that the pirates have split the treasure chest equally, some gold coins might be left over.
+        Calculate the remainder of the split.
+      </p>
+      <pre>leftover_coins = coins % pirates</pre>
+      
+      <div class="checklist">
+        <div class="checklist-item">
+          <span class="checklist-icon">💡</span>
+          <span>In `06_leftover_loot.py`, look at line 14: <code>leftover_coins = 0</code></span>
+        </div>
+        <div class="checklist-item">
+          <span class="checklist-icon">🎯</span>
+          <span>Replace <code>0</code> with the modulo operation: <code>coins % pirates</code></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sliderCoins = document.getElementById('slider-coins');
+    const sliderPirates = document.getElementById('slider-pirates');
+    const valCoins = document.getElementById('val-coins');
+    const valPirates = document.getElementById('val-pirates');
+    const formula = document.getElementById('formula');
+    const chestsRow = document.getElementById('chests-row');
+    const bagRemainderCoins = document.getElementById('bag-remainder-coins');
+    const lootStatus = document.getElementById('loot-status');
+
+    function update() {
+      const coins = parseInt(sliderCoins.value);
+      const pirates = parseInt(sliderPirates.value);
+
+      valCoins.textContent = coins;
+      valPirates.textContent = pirates;
+
+      const each = Math.floor(coins / pirates);
+      const remainder = coins % pirates;
+
+      formula.textContent = `${coins} % ${pirates} = ${remainder} leftover coins`;
+      lootStatus.textContent = `Leftover Bag: ${remainder} coins remaining`;
+
+      // Draw remainder coins on SVG bag
+      bagRemainderCoins.innerHTML = '';
+      for (let i = 0; i < remainder; i++) {
+        // Distribute them around the base of the bag
+        const cx = 35 + (i * 12) + (Math.random() * 4 - 2);
+        const cy = 82 + (Math.random() * 4 - 2);
+        const coin = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        coin.setAttribute('cx', cx);
+        coin.setAttribute('cy', cy);
+        coin.setAttribute('r', '3.5');
+        coin.setAttribute('fill', '#fbbf24');
+        coin.setAttribute('stroke', '#ca8a04');
+        coin.setAttribute('stroke-width', '0.5');
+        bagRemainderCoins.appendChild(coin);
+      }
+
+      // Draw distributed chests
+      chestsRow.innerHTML = '';
+      for (let i = 0; i < pirates; i++) {
+        const chest = document.createElement('div');
+        chest.className = 'loot-chest';
+        chest.innerHTML = `P${i+1} (${each})<div class="loot-coins"></div>`;
+        const coinGrid = chest.querySelector('.loot-coins');
+        const visualCoins = Math.min(8, each);
+        for (let j = 0; j < visualCoins; j++) {
+          const coin = document.createElement('div');
+          coin.className = 'gold-coin';
+          coinGrid.appendChild(coin);
+        }
+        if (each > 8) {
+          const plus = document.createElement('span');
+          plus.style.fontSize = '0.5rem';
+          plus.style.color = '#fbbf24';
+          plus.textContent = `+${each-8}`;
+          coinGrid.appendChild(plus);
+        }
+        chestsRow.appendChild(chest);
+      }
+    }
+
+    sliderCoins.addEventListener('input', update);
+    sliderPirates.addEventListener('input', update);
+    update();
+  </script>
+</body>
+</html>

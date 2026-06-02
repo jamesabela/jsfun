@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Snack Shop Secret Code</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-neon: #a855f7;
+      --accent-neon-glow: rgba(168, 85, 247, 0.2);
+      --accent-cyan: #22d3ee;
+      --accent-cyan-glow: rgba(34, 211, 238, 0.15);
+      --success: #34d399;
+      --success-glow: rgba(52, 211, 153, 0.15);
+      --border-color: rgba(168, 85, 247, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #38bdf8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .title-group h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #f8fafc, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .title-group p {
+      font-size: 0.9rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-cyan);
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    /* Interactive Vending Machine Simulator */
+    .vending-machine-container {
+      display: flex;
+      gap: 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .machine-visual {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .machine-svg {
+      width: 140px;
+      height: 220px;
+      filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.2));
+    }
+
+    .machine-controls {
+      flex: 1.2;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .control-val {
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .calc-screen {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--success);
+      text-align: center;
+      box-shadow: inset 0 0 8px rgba(52, 211, 153, 0.2);
+    }
+
+    .calc-screen span {
+      animation: blink 1s infinite alternate;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; text-shadow: 0 0 8px var(--success); }
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--accent-cyan-glow);
+      border-left: 3px solid var(--accent-cyan);
+    }
+
+    .checklist-item.success {
+      background: var(--success-glow);
+      border-left-color: var(--success);
+    }
+
+    .checklist-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>Lesson 1: Addition (+)</p>
+        <h1>Snack Shop Secret Code 🍫</h1>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-title">💡 The Addition Operator</div>
+      <p class="instruction-text">
+        Welcome to Operator Academy! In Python, the <code>+</code> sign is used to add numbers together. 
+        It works just like a calculator, adding the values on its left and right sides.
+      </p>
+      <div class="image-wrapper">
+        <img src="snack_shop.jpg" alt="Snack Shop" class="hero-img">
+      </div>
+
+      <!-- Interactive Playground -->
+      <div class="vending-machine-container">
+        <div class="machine-visual">
+          <!-- Animated SVG Vending Machine -->
+          <svg class="machine-svg" viewBox="0 0 140 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Machine Body -->
+            <rect x="10" y="10" width="120" height="200" rx="10" fill="#1e1e38" stroke="#a855f7" stroke-width="4"/>
+            <!-- Glass Window -->
+            <rect x="20" y="25" width="80" height="100" rx="5" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+            <!-- Drinks / Snacks inside -->
+            <rect x="30" y="40" width="15" height="25" rx="3" fill="#ec4899" opacity="0.8"/>
+            <rect x="52" y="40" width="15" height="25" rx="3" fill="#3b82f6" opacity="0.8"/>
+            <rect x="75" y="40" width="15" height="25" rx="3" fill="#eab308" opacity="0.8"/>
+            <rect x="30" y="80" width="15" height="25" rx="3" fill="#10b981" opacity="0.8"/>
+            <rect x="52" y="80" width="15" height="25" rx="3" fill="#f97316" opacity="0.8"/>
+            <rect x="75" y="80" width="15" height="25" rx="3" fill="#a855f7" opacity="0.8"/>
+            <!-- Keypad Panel -->
+            <rect x="106" y="25" width="18" height="60" rx="3" fill="#0f172a" stroke="#475569"/>
+            <circle cx="111" cy="35" r="2" fill="#ef4444"/>
+            <circle cx="119" cy="35" r="2" fill="#10b981"/>
+            <rect x="110" y="45" width="10" height="30" rx="1" fill="#334155"/>
+            <!-- Dispenser flap -->
+            <rect x="25" y="150" width="70" height="35" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+            <rect id="dispensed-item" x="50" y="160" width="20" height="20" rx="3" fill="#ec4899" opacity="0"/>
+            <!-- Coin Slot -->
+            <rect x="110" y="105" width="10" height="15" rx="2" fill="#475569"/>
+            <line x1="115" y1="108" x2="115" y2="117" stroke="#eab308" stroke-width="2"/>
+          </svg>
+        </div>
+
+        <div class="machine-controls">
+          <div class="control-group">
+            <div class="control-label">Snack Price: <span class="control-val" id="val-snack">$5</span></div>
+            <input type="range" class="slider" id="slider-snack" min="1" max="50" value="5">
+          </div>
+          <div class="control-group">
+            <div class="control-label">Drink Price: <span class="control-val" id="val-drink">$3</span></div>
+            <input type="range" class="slider" id="slider-drink" min="1" max="50" value="3">
+          </div>
+          <div class="calc-screen">
+            <span id="formula">5 + 3 = 8</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Your Mission</div>
+      <p class="instruction-text">
+        The school snack machine requires a secret entry code to unlock. The code is calculated by 
+        <strong>adding</strong> the snack price and the drink price.
+      </p>
+      <pre>secret_code = snack_price + drink_price</pre>
+      
+      <div class="checklist">
+        <div class="checklist-item">
+          <span class="checklist-icon">💡</span>
+          <span>In `start.py`, look at line 14: <code>secret_code = 0</code></span>
+        </div>
+        <div class="checklist-item success">
+          <span class="checklist-icon">🎯</span>
+          <span>Replace <code>0</code> with the calculation: <code>snack_price + drink_price</code></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sliderSnack = document.getElementById('slider-snack');
+    const sliderDrink = document.getElementById('slider-drink');
+    const valSnack = document.getElementById('val-snack');
+    const valDrink = document.getElementById('val-drink');
+    const formula = document.getElementById('formula');
+    const dispensedItem = document.getElementById('dispensed-item');
+
+    function update() {
+      const snack = parseInt(sliderSnack.value);
+      const drink = parseInt(sliderDrink.value);
+      valSnack.textContent = `$${snack}`;
+      valDrink.textContent = `$${drink}`;
+      const sum = snack + drink;
+      formula.textContent = `${snack} + ${drink} = ${sum}`;
+
+      // Animation triggers when change occurs
+      dispensedItem.style.opacity = 1;
+      dispensedItem.style.transform = 'translateY(5px)';
+      setTimeout(() => {
+        dispensedItem.style.transform = 'translateY(0)';
+      }, 150);
+    }
+
+    sliderSnack.addEventListener('input', update);
+    sliderDrink.addEventListener('input', update);
+    update();
+  </script>
+</body>
+</html>

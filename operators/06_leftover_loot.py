@@ -1,6 +1,8 @@
 # Operator Academy - Lesson 6
 # Leftover Loot
 #
+# Learn more: https://jamesabela.github.io/jsfun/operators/06_leftover_loot.html
+#
 # The pirates have shared the treasure.
 # Some coins may be left over after each pirate gets an equal amount.
 #

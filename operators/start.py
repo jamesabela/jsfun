@@ -1,6 +1,8 @@
 # Operator Academy - Lesson 1
 # Snack Shop Secret Code
 #
+# Learn more: https://jamesabela.github.io/jsfun/operators/start.html
+#
 # The school snack machine is locked.
 # To open it, add the price of the snack and the drink.
 #
