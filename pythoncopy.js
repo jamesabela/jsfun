@@ -693,11 +693,13 @@ exitonclick = done
         stdout: (text) => {
           if (currentAppMode !== 'display') {
             outputEl.textContent += text + '\n';
+            outputEl.scrollTop = outputEl.scrollHeight;
           }
         },
         stderr: (text) => {
           if (currentAppMode !== 'display') {
             outputEl.textContent += text + '\n';
+            outputEl.scrollTop = outputEl.scrollHeight;
           }
         }
       }).then(p => {
@@ -3990,53 +3992,108 @@ json.dumps(_test_result)
         await pyodideReadyPromise;
       }
 
-      try {
-        pyodideInstance.setStdin({
-          stdin: () => {
-            const result = prompt("Enter input:");
-            if (result !== null) {
-              outputEl.textContent += result + '\n';
-              return result;
-            }
-            return "";
-          }
-        });
-        // Reset Python-side turtle module state if it exists
-        pyodideInstance.globals.set("user_code", source);
-        await pyodideInstance.runPythonAsync(`
-import sys
-if 'turtle' in sys.modules:
-    import turtle
-    turtle._default_turtle.reset()
-    turtle._default_screen.reset()
+      const sessionSeed = Math.floor(Math.random() * 1000000);
+      let runInputHistory = [];
+      let executionFinished = false;
 
-import time
-class TimeoutException(Exception):
-    pass
+      while (!executionFinished && !executionCancelled) {
+        let runInputCount = 0;
+        let pendingPrompt = "";
+        
+        outputEl.textContent = '';
+        
+        pyodideInstance.globals.set("user_code", source);
+        pyodideInstance.globals.set("runInputHistoryJson", JSON.stringify(runInputHistory));
+        pyodideInstance.globals.set("session_seed", sessionSeed);
+        
+        window.getRunInput = (promptMsg) => {
+          if (runInputCount < runInputHistory.length) {
+            const val = runInputHistory[runInputCount];
+            runInputCount++;
+            return val;
+          } else {
+            pendingPrompt = promptMsg;
+            if (promptMsg) {
+              outputEl.textContent += promptMsg;
+              outputEl.scrollTop = outputEl.scrollHeight;
+            }
+            throw new Error("__INPUT_INTERRUPT__");
+          }
+        };
+
+        try {
+          await pyodideInstance.runPythonAsync(`
+import sys, builtins, json, time, js
+
+class InputInterrupt(BaseException):
+    def __init__(self, prompt):
+        self.prompt = prompt
 
 _start_time = time.time()
 _limit = 5.0  # 5 seconds timeout limit
 
 def _timeout_trace(frame, event, arg):
     if time.time() - _start_time > _limit:
-        raise TimeoutException("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
+        raise Exception("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
     return _timeout_trace
+
+# Seed random module
+try:
+    import random
+    random.seed(session_seed)
+except Exception:
+    pass
+
+def custom_run_input(prompt_msg=""):
+    try:
+        val = js.getRunInput(prompt_msg)
+        if prompt_msg:
+            sys.stdout.write(prompt_msg)
+        sys.stdout.write(val + "\\n")
+        sys.stdout.flush()
+        return val
+    except BaseException as e:
+        if "__INPUT_INTERRUPT__" in str(e):
+            raise InputInterrupt(prompt_msg)
+        raise e
+
+# Save original input/print if not saved
+if not hasattr(builtins, '_original_run_print'):
+    builtins._original_run_print = builtins.print
+if not hasattr(builtins, '_original_run_input'):
+    builtins._original_run_input = builtins.input
+
+builtins.input = custom_run_input
 
 sys.settrace(_timeout_trace)
 try:
     exec(compile(user_code, '<user_code>', 'exec'), globals())
 finally:
     sys.settrace(None)
-    for var in ['_start_time', '_limit', '_timeout_trace', 'TimeoutException', 'user_code']:
+    # Restore original input
+    builtins.input = builtins._original_run_input
+    # Clean globals
+    for var in ['_start_time', '_limit', '_timeout_trace', 'user_code', 'custom_run_input', 'InputInterrupt']:
         if var in globals():
             del globals()[var]
-        `);
-
-        hideConsoleInput();
-        setRunnerStatus('Finished successfully.');
-      } catch (err) {
-        hideConsoleInput();
-        handlePythonError(err);
+          `);
+          
+          executionFinished = true;
+          hideConsoleInput();
+          setRunnerStatus('Finished successfully.');
+        } catch (err) {
+          // Check if this was an input interrupt
+          if (err.message && err.message.includes("InputInterrupt")) {
+            setRunnerStatus('Waiting for input...');
+            const ans = await requestDisplayInput(pendingPrompt || "Input required:");
+            if (executionCancelled) return;
+            runInputHistory.push(ans);
+          } else {
+            executionFinished = true;
+            hideConsoleInput();
+            handlePythonError(err);
+          }
+        }
       }
     }
 
