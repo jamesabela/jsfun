@@ -1,0 +1,50 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="x~cgXK!.bD57]u:H9#-S">greeting</variable>
+  </variables>
+  <block type="when_run_clicked" id="B*omu2z7L0jtAWqk7:~c" x="-82" y="-243">
+    <next>
+      <block type="text_print" id="xW,-8YY-ISQ+-Ssn2Zoc">
+        <value name="TEXT">
+          <shadow type="text" id=",jS)5$Um8Ddp~NEr;Pe.">
+            <field name="TEXT">hello</field>
+          </shadow>
+        </value>
+        <next>
+          <block type="variables_set" id=":F(03~@|R%`BkF?-81kf">
+            <field name="VAR" id="x~cgXK!.bD57]u:H9#-S">greeting</field>
+            <value name="VALUE">
+              <block type="simple_input_text" id="#UwLdb3ia|9p/{08s%7.">
+                <field name="PROMPT">What's your name?</field>
+              </block>
+            </value>
+            <next>
+              <block type="text_print" id="hMi3LDqD{Xy((r#RNR/P">
+                <value name="TEXT">
+                  <shadow type="text" id="X,{op,yUe[qE$,Qece3[">
+                    <field name="TEXT">hello</field>
+                  </shadow>
+                  <block type="simple_text_join" id="TY];/[JK32uKdUz.zt0}">
+                    <value name="LEFT">
+                      <shadow type="text" id="#1T7Mkay|;Fkf:P,W,]Q">
+                        <field name="TEXT">Hello </field>
+                      </shadow>
+                    </value>
+                    <value name="RIGHT">
+                      <shadow type="text" id="=R#3@J_uY0,aVX5Zup|j">
+                        <field name="TEXT">world</field>
+                      </shadow>
+                      <block type="variables_get" id="lwsdMpvNT@5%658H`V[1">
+                        <field name="VAR" id="x~cgXK!.bD57]u:H9#-S">greeting</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
