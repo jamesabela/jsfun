@@ -9,28 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --accent-gold: #d4af37;
-      --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #c084fc;
+      --accent-purple: #c084fc;
+      --accent-purple-glow: rgba(192, 132, 252, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --border-color: rgba(226, 201, 116, 0.25);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --code-bg: #0f172a;
-      --code-text: #f8fafc;
+      --border-color: rgba(192, 132, 252, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #c084fc;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     body {
@@ -63,9 +60,9 @@
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      background: linear-gradient(to right, #f8fafc, #c084fc);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -74,11 +71,15 @@
 
     .title-group p {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-purple);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 24px;
@@ -90,44 +91,42 @@
 
     .card-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--accent-gold);
+      color: var(--accent-purple);
     }
 
     .instruction-text {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-main);
+      line-height: 1.6;
+      color: #cbd5e1;
     }
 
-    /* Image Wrapper Styling */
     .image-wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
       border-radius: 12px;
       overflow: hidden;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow);
-      background: var(--card-bg);
-      max-width: 100%;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .hero-img {
-      max-width: 100%;
+      width: 100%;
       height: auto;
       display: block;
-      object-fit: contain;
     }
 
-    /* Warning Banner */
     .banner {
-      background: var(--accent-gold-glow);
-      border-left: 4px solid var(--accent-gold);
+      background: var(--accent-purple-glow);
+      border-left: 4px solid var(--accent-purple);
       padding: 12px 16px;
       border-radius: 8px;
       font-size: 0.9rem;
@@ -135,6 +134,155 @@
       display: flex;
       align-items: center;
       gap: 10px;
+    }
+
+    /* Smartphone Chat UI */
+    .chat-playground {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .celeb-select {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn-celeb {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 6px 12px;
+      border-radius: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .btn-celeb.active {
+      background: var(--accent-purple);
+      border-color: var(--accent-purple);
+      color: #020617;
+      box-shadow: 0 0 8px var(--accent-purple-glow);
+    }
+
+    .phone-container {
+      width: 250px;
+      height: 380px;
+      background: #020617;
+      border: 6px fill #1e293b;
+      border: 4px solid #334155;
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .phone-header {
+      background: #0f172a;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .phone-screen {
+      flex: 1;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .msg-bubble {
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .msg-bubble.celeb {
+      background: #1e293b;
+      color: #cbd5e1;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+
+    .msg-bubble.user {
+      background: var(--accent-purple);
+      color: #020617;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+      font-weight: 600;
+    }
+
+    .phone-input-bar {
+      height: 45px;
+      background: #0f172a;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      padding: 6px;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .phone-input {
+      flex: 1;
+      height: 100%;
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      color: white;
+      padding: 0 10px;
+      font-size: 0.75rem;
+      outline: none;
+    }
+
+    .phone-send {
+      background: var(--accent-purple);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: #020617;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    .var-monitor {
+      width: 100%;
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: #38bdf8;
+    }
+
+    .var-line {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #1e293b;
+      padding: 4px 0;
     }
 
     /* Checklist */
@@ -153,8 +301,8 @@
       line-height: 1.4;
       padding: 10px 14px;
       border-radius: 8px;
-      background: var(--accent-blue-glow);
-      border-left: 3px solid var(--accent-blue);
+      background: var(--accent-purple-glow);
+      border-left: 3px solid var(--accent-purple);
     }
 
     .checklist-item.success {
@@ -175,22 +323,7 @@
       font-family: 'Fira Code', Consolas, Monaco, monospace;
       font-size: 0.85rem;
       overflow-x: auto;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .output-preview {
-      background: #0f172a;
-      color: #bbf7d0;
-      padding: 12px;
-      border-radius: 8px;
-      font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
-      border: 1px solid #1e293b;
-    }
-
-    .output-preview .user-input {
-      color: #93c5fd;
-      font-style: italic;
+      border: 1px solid rgba(192, 132, 252, 0.2);
     }
   </style>
 </head>
@@ -204,9 +337,10 @@
     </header>
 
     <div class="card">
-      <div class="card-title">💬 celeb chat</div>
-      <p class="instruction-text">Lots of websites use chatbots to interact with their customers. These chatbots are often very sophisticated and use AI to learn and adapt to the user. Our chatbot is going to be a bit simpler.</p>
-      <p class="instruction-text">We are going to pretend to be a celebrity or fictional character and ask and answer a few questions!</p>
+      <div class="card-title">💬 Chatbots & Variables</div>
+      <p class="instruction-text">
+        Many websites use chatbots to talk to users. In this final project, we are going to write our own chatbot! We will pretend to be a celebrity and ask the user questions, storing their inputs in variables.
+      </p>
       <div class="image-wrapper">
         <img src="celebs.webp" alt="Celebrities" class="hero-img">
       </div>
@@ -217,20 +351,47 @@
       <span><strong>No tests in this exercise.</strong> Go ahead and make something cool! Click <strong>Complete Course 🎓</strong> when you're done.</span>
     </div>
 
+    <!-- Smartphone Chat App visualizer -->
     <div class="card">
-      <div class="card-title">⚙️ starter example</div>
-      <p class="instruction-text">Here's a simple celebrity chat to get you started:</p>
+      <div class="card-title">📱 Interactive Chatbot App</div>
+      <p class="instruction-text">
+        Pick a celebrity, talk with them, and observe how variable values (represented in memory slots) update as you type!
+      </p>
+
+      <div class="chat-playground">
+        <div class="celeb-select">
+          <button class="btn-celeb active" data-name="Taylor Swift" data-greeting="Hi! I'm Taylor Swift! 🎤">Taylor Swift</button>
+          <button class="btn-celeb" data-name="Ronaldo" data-greeting="Siuuu! I'm Cristiano Ronaldo! ⚽">Ronaldo</button>
+          <button class="btn-celeb" data-name="Batman" data-greeting="I am vengeance. I am Batman. 🦇">Batman</button>
+        </div>
+
+        <div class="phone-container">
+          <div class="phone-header" id="phone-title">Taylor Swift</div>
+          <div class="phone-screen" id="phone-screen">
+            <div class="msg-bubble celeb" id="phone-greeting">Hi! I'm Taylor Swift! 🎤</div>
+          </div>
+          <div class="phone-input-bar">
+            <input type="text" class="phone-input" id="phone-input" placeholder="Type your answer..." maxlength="20">
+            <button class="phone-send" id="phone-send">➔</button>
+          </div>
+        </div>
+
+        <div class="var-monitor">
+          <div style="font-weight:bold; margin-bottom:4px; color:#cbd5e1;">💾 Variable Memory Slots</div>
+          <div class="var-line"><span>firstName</span> <span id="slot-name">""</span></div>
+          <div class="var-line"><span>faveFood</span> <span id="slot-food">""</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Code Template Example</div>
+      <p class="instruction-text">Here is the starter code template you can write in the editor:</p>
       <pre>print("Hi! I'm Taylor Swift!")
 name = input("What's your name? ")
 print("Nice to meet you,", name)
 food = input("What's your favourite food? ")
 print("I love", food, "too!")</pre>
-      <p class="instruction-text"><strong>Example run:</strong></p>
-      <div class="output-preview">Hi! I'm Taylor Swift!
-What's your name? <span class="user-input">Alex</span>
-Nice to meet you, Alex
-What's your favourite food? <span class="user-input">pizza</span>
-I love pizza too!</div>
     </div>
 
     <div class="card">
@@ -250,20 +411,113 @@ I love pizza too!</div>
         </div>
         <div class="checklist-item success">
           <span class="checklist-icon">⭐</span>
-          <span>The more creative and funny, the better! Make your classmates laugh when they try your chatbot.</span>
+          <span>The more creative and funny, the better! Click Complete Course when you are done.</span>
         </div>
       </div>
     </div>
-
-    <div class="card">
-      <div class="card-title">📋 original code</div>
-      <p class="instruction-text">Just in case you need to start again:</p>
-      <pre>print("Hi! I'm Taylor Swift!")
-name = input("What's your name? ")
-print("Nice to meet you,", name)
-food = input("What's your favourite food? ")
-print("I love", food, "too!")</pre>
-    </div>
   </div>
+
+  <script>
+    const btns = document.querySelectorAll('.btn-celeb');
+    const phoneTitle = document.getElementById('phone-title');
+    const phoneScreen = document.getElementById('phone-screen');
+    const phoneInput = document.getElementById('phone-input');
+    const phoneSend = document.getElementById('phone-send');
+    const slotName = document.getElementById('slot-name');
+    const slotFood = document.getElementById('slot-food');
+
+    let celebName = "Taylor Swift";
+    let step = 0; // 0: ask name, 1: ask food, 2: completed
+    let userName = "";
+    let userFood = "";
+
+    const dialogues = {
+      "Taylor Swift": {
+        q1: "What's your name? 📝",
+        r1: (name) => `Nice to meet you, ${name}! ✨`,
+        q2: "What's your favourite food? 🍕",
+        r2: (food) => `I love ${food} too! We should eat it on tour! 🎸`
+      },
+      "Ronaldo": {
+        q1: "What's your name, friend? ⚽",
+        r1: (name) => `Hello, ${name}! Keep training hard! 💪`,
+        q2: "What's your favourite post-match food? 🥩",
+        r2: (food) => `Siuuu! ${food} is good fuel! 🏆`
+      },
+      "Batman": {
+        q1: "Identify yourself. What is your name? 🔍",
+        r1: (name) => `${name}... I will add you to the Batcomputer. 💻`,
+        q2: "What food do you eat to stay strong? 🍲",
+        r2: (food) => `Interesting. Alfred will prepare some ${food}. 🦇`
+      }
+    };
+
+    function selectCeleb(name, greeting) {
+      celebName = name;
+      phoneTitle.textContent = name;
+      phoneScreen.innerHTML = `<div class="msg-bubble celeb">${greeting}</div>`;
+      step = 0;
+      userName = "";
+      userFood = "";
+      slotName.textContent = '""';
+      slotFood.textContent = '""';
+      
+      // Prompt first question
+      setTimeout(() => {
+        appendBubble('celeb', dialogues[celebName].q1);
+      }, 500);
+    }
+
+    function appendBubble(sender, text) {
+      const bubble = document.createElement('div');
+      bubble.className = `msg-bubble ${sender}`;
+      bubble.textContent = text;
+      phoneScreen.appendChild(bubble);
+      phoneScreen.scrollTop = phoneScreen.scrollHeight;
+    }
+
+    function handleSend() {
+      const val = phoneInput.value.trim();
+      if (!val) return;
+
+      appendBubble('user', val);
+      phoneInput.value = '';
+
+      if (step === 0) {
+        userName = val;
+        slotName.textContent = `"${userName}"`;
+        step = 1;
+        setTimeout(() => {
+          appendBubble('celeb', dialogues[celebName].r1(userName));
+          setTimeout(() => {
+            appendBubble('celeb', dialogues[celebName].q2);
+          }, 800);
+        }, 600);
+      } else if (step === 1) {
+        userFood = val;
+        slotFood.textContent = `"${userFood}"`;
+        step = 2;
+        setTimeout(() => {
+          appendBubble('celeb', dialogues[celebName].r2(userFood));
+        }, 600);
+      }
+    }
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectCeleb(btn.getAttribute('data-name'), btn.getAttribute('data-greeting'));
+      });
+    });
+
+    phoneSend.addEventListener('click', handleSend);
+    phoneInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleSend();
+    });
+
+    // Start initial conversation
+    selectCeleb("Taylor Swift", "Hi! I'm Taylor Swift! 🎤");
+  </script>
 </body>
 </html>

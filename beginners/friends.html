@@ -9,28 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --accent-gold: #d4af37;
-      --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --bg-gradient: linear-gradient(135deg, #0f172a, #2e1065);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #c084fc;
+      --accent-purple: #c084fc;
+      --accent-purple-glow: rgba(192, 132, 252, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --border-color: rgba(226, 201, 116, 0.25);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --code-bg: #0f172a;
-      --code-text: #f8fafc;
+      --border-color: rgba(192, 132, 252, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #e9d5ff;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     body {
@@ -63,9 +60,9 @@
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      background: linear-gradient(to right, #f8fafc, #c084fc);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -74,11 +71,15 @@
 
     .title-group p {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-purple);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 24px;
@@ -90,18 +91,18 @@
 
     .card-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--accent-gold);
+      color: var(--accent-purple);
     }
 
     .instruction-text {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-main);
+      line-height: 1.6;
+      color: #cbd5e1;
     }
 
     /* Image Wrapper Styling */
@@ -111,14 +112,15 @@
       align-items: center;
       border-radius: 12px;
       overflow: hidden;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow);
-      background: var(--card-bg);
-      max-width: 100%;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .friends-img {
-      max-width: 100%;
+    .hero-img {
+      width: 100%;
       height: auto;
       display: block;
       object-fit: contain;
@@ -128,29 +130,28 @@
     .checklist {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 4px;
+      gap: 12px;
     }
 
     .checklist-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      padding: 10px 14px;
-      border-radius: 8px;
-      background: var(--accent-blue-glow);
-      border-left: 3px solid var(--accent-blue);
+      gap: 12px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.5);
+      border-left: 4px solid var(--accent-purple);
     }
 
     .checklist-item.success {
-      background: var(--success-glow);
       border-left-color: var(--success);
+      background: var(--success-glow);
     }
 
     .checklist-icon {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       flex-shrink: 0;
     }
 
@@ -163,28 +164,209 @@
 
     pre {
       background: var(--code-bg);
-      color: var(--code-text);
+      color: #f8fafc;
       padding: 14px;
       border-radius: 8px;
       font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       overflow-x: auto;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .output-preview {
-      background: #0f172a;
-      color: #bbf7d0;
+      background: #020617;
+      color: #34d399;
       padding: 12px;
       border-radius: 8px;
       font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
-      border: 1px solid #1e293b;
+      font-size: 0.9rem;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
-    .highlight {
-      color: var(--accent-gold);
+    /* Switch / Toggle Button */
+    .backup-toggle-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .switch-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    .switch-label input {
+      display: none;
+    }
+
+    .custom-switch {
+      width: 44px;
+      height: 22px;
+      background: #334155;
+      border-radius: 11px;
+      position: relative;
+      transition: background 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .custom-switch::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #f8fafc;
+      top: 2px;
+      left: 3px;
+      transition: left 0.3s ease;
+    }
+
+    .switch-label input:checked + .custom-switch {
+      background: var(--accent-purple);
+    }
+
+    .switch-label input:checked + .custom-switch::after {
+      left: 23px;
+    }
+
+    .switch-text {
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    /* Memory Slots */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .memory-cell {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      min-height: 90px;
+      justify-content: center;
+    }
+
+    .memory-cell.disabled {
+      opacity: 0.3;
+      border-style: dashed;
+      background: transparent;
+    }
+
+    .cell-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      position: absolute;
+      top: 6px;
+      left: 8px;
+    }
+
+    .cell-value {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-main);
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    /* Controls */
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 0.85rem;
       font-weight: 600;
+      outline: none;
+    }
+
+    .btn:hover {
+      background: rgba(192, 132, 252, 0.2);
+      border-color: var(--accent-purple);
+    }
+
+    .step-indicator {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .step-explanation {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+      min-height: 64px;
+    }
+
+    .lab-terminal {
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .terminal-header {
+      background: rgba(30, 41, 59, 0.5);
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .term-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .term-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+
+    .term-dots span:nth-child(2) { background: #eab308; }
+    .term-dots span:nth-child(3) { background: #22c55e; }
+
+    .terminal-body {
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--success);
+      min-height: 90px;
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -201,7 +383,61 @@
       <div class="card-title">👯‍♀️ friends challenge</div>
       <p class="instruction-text">Look carefully at the variables. Look at how they can change names as they go through the program.</p>
       <div class="image-wrapper">
-        <img src="friends.jpg" alt="Friends Challenge" class="friends-img">
+        <img src="friends.jpg" alt="Friends Challenge" class="hero-img">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔬 Variable Overwrite Simulator</div>
+      <p class="instruction-text">Watch what happens to memory slots step-by-step as Python runs. Enable or disable backup to see the difference!</p>
+
+      <div class="playground-box">
+        <div class="backup-toggle-container">
+          <label class="switch-label">
+            <input type="checkbox" id="backup-checkbox" checked>
+            <span class="custom-switch"></span>
+            <span class="switch-text">Enable Backup Variable (<code>name4 = name3</code>)</span>
+          </label>
+        </div>
+
+        <div class="memory-grid">
+          <div class="memory-cell" id="cell-name1">
+            <span class="cell-label">name1</span>
+            <span class="cell-value" id="val-name1">-</span>
+          </div>
+          <div class="memory-cell" id="cell-name2">
+            <span class="cell-label">name2</span>
+            <span class="cell-value" id="val-name2">-</span>
+          </div>
+          <div class="memory-cell" id="cell-name3">
+            <span class="cell-label">name3</span>
+            <span class="cell-value" id="val-name3">-</span>
+          </div>
+          <div class="memory-cell" id="cell-name4">
+            <span class="cell-label">name4</span>
+            <span class="cell-value" id="val-name4">-</span>
+          </div>
+        </div>
+
+        <div class="controls-row">
+          <button class="btn" id="btn-prev" onclick="changeStep(-1)">&larr; Back</button>
+          <div class="step-indicator">Step <span id="current-step">1</span> of 5</div>
+          <button class="btn" id="btn-next" onclick="changeStep(1)">Next &rarr;</button>
+        </div>
+
+        <div class="step-explanation" id="step-desc">
+          Step 1 description
+        </div>
+
+        <div class="lab-terminal">
+          <div class="terminal-header">
+            <span>interactive_python_console</span>
+            <div class="term-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="terminal-body" id="friends-console">
+            Console output...
+          </div>
+        </div>
       </div>
     </div>
 
@@ -242,5 +478,114 @@ print(name1, name2, name3)</pre>
       <p class="instruction-text"><strong>Solution:</strong> Store the value of <code>name3</code> in a new variable (like <code>name4 = name3</code>) <em>before</em> <code>name3</code> is updated to <code>"Phoebe"</code>. Then, print all four variables at the end!</p>
     </div>
   </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 5;
+
+    function getBackupEnabled() {
+      return document.getElementById('backup-checkbox').checked;
+    }
+
+    function updateUI() {
+      const backupEnabled = getBackupEnabled();
+      const name4Cell = document.getElementById('cell-name4');
+      const val1 = document.getElementById('val-name1');
+      const val2 = document.getElementById('val-name2');
+      const val3 = document.getElementById('val-name3');
+      const val4 = document.getElementById('val-name4');
+      const stepDesc = document.getElementById('step-desc');
+      const consoleEl = document.getElementById('friends-console');
+      const stepIndicator = document.getElementById('current-step');
+      
+      stepIndicator.textContent = currentStep;
+      
+      if (backupEnabled) {
+        name4Cell.classList.remove('disabled');
+      } else {
+        name4Cell.classList.add('disabled');
+      }
+
+      // Reset values
+      val1.textContent = "-";
+      val2.textContent = "-";
+      val3.textContent = "-";
+      val4.textContent = "-";
+      
+      let consoleText = "";
+      let descText = "";
+
+      switch(currentStep) {
+        case 1:
+          val1.textContent = "Ross";
+          val2.textContent = "Monica";
+          val3.textContent = "Joey";
+          descText = "<strong>Step 1:</strong> Variables <code>name1</code>, <code>name2</code>, and <code>name3</code> are declared. Memory is allocated for Ross, Monica, and Joey.";
+          consoleText = "> name1 = \"Ross\"\n> name2 = \"Monica\"\n> name3 = \"Joey\"";
+          break;
+        case 2:
+          val1.textContent = "Ross";
+          val2.textContent = "Monica";
+          val3.textContent = "Joey";
+          descText = "<strong>Step 2:</strong> We print the current value of <code>name3</code>. This outputs <em>Joey</em> to the console.";
+          consoleText = "> print(name3)\nJoey";
+          break;
+        case 3:
+          val1.textContent = "Ross";
+          val2.textContent = "Monica";
+          val3.textContent = "Joey";
+          if (backupEnabled) {
+            val4.textContent = "Joey";
+            descText = "<strong>Step 3:</strong> <span style='color: var(--success)'>Backup Enabled!</span> We execute <code>name4 = name3</code>. Joey is safely copied into slot <code>name4</code> before he can be overwritten.";
+            consoleText = "> name4 = name3";
+          } else {
+            descText = "<strong>Step 3:</strong> <span style='color: #fb7185'>Backup Disabled!</span> We skip saving Joey's value. <code>name4</code> remains empty. The next instruction will overwrite Joey!";
+            consoleText = "# (No backup variable created)";
+          }
+          break;
+        case 4:
+          val1.textContent = "Ross";
+          val2.textContent = "Monica";
+          val3.textContent = "Phoebe";
+          if (backupEnabled) {
+            val4.textContent = "Joey";
+            descText = "<strong>Step 4:</strong> We assign <code>name3 = \"Phoebe\"</code>. Slot <code>name3</code> gets updated. Joey is erased from slot <code>name3</code>, but is still safe in <code>name4</code>!";
+          } else {
+            descText = "<strong>Step 4:</strong> We assign <code>name3 = \"Phoebe\"</code>. Joey is overwritten in slot <code>name3</code> and <span style='color: #fb7185; font-weight: bold;'>lost forever</span> from memory!";
+          }
+          consoleText = "> name3 = \"Phoebe\"";
+          break;
+        case 5:
+          val1.textContent = "Ross";
+          val2.textContent = "Monica";
+          val3.textContent = "Phoebe";
+          if (backupEnabled) {
+            val4.textContent = "Joey";
+            descText = "<strong>Step 5:</strong> Final Print! We run <code>print(name1, name2, name3, name4)</code>. All four characters are successfully printed!";
+            consoleText = "> print(name1, name2, name3, name4)\nRoss Monica Phoebe Joey";
+          } else {
+            descText = "<strong>Step 5:</strong> Final Print! We can only print <code>name1, name2, name3</code>. Since Joey was overwritten and not backed up, we can't print him!";
+            consoleText = "> print(name1, name2, name3)\nRoss Monica Phoebe";
+          }
+          break;
+      }
+
+      consoleEl.innerHTML = consoleText.replace(/\n/g, '<br>');
+      stepDesc.innerHTML = descText;
+    }
+
+    function changeStep(dir) {
+      currentStep += dir;
+      if (currentStep < 1) currentStep = 1;
+      if (currentStep > totalSteps) currentStep = totalSteps;
+      updateUI();
+    }
+
+    document.getElementById('backup-checkbox').addEventListener('change', () => {
+      updateUI();
+    });
+
+    updateUI();
+  </script>
 </body>
 </html>

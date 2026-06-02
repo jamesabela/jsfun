@@ -9,28 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --accent-gold: #d4af37;
-      --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --bg-gradient: linear-gradient(135deg, #0f172a, #0d9488);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #2dd4bf;
+      --accent-teal: #2dd4bf;
+      --accent-teal-glow: rgba(45, 212, 191, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --border-color: rgba(226, 201, 116, 0.25);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --code-bg: #0f172a;
-      --code-text: #f8fafc;
+      --border-color: rgba(45, 212, 191, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #e6fcf5;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     body {
@@ -63,9 +60,9 @@
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      background: linear-gradient(to right, #f8fafc, #2dd4bf);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -74,11 +71,15 @@
 
     .title-group p {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-teal);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 24px;
@@ -90,81 +91,274 @@
 
     .card-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--accent-gold);
+      color: var(--accent-teal);
     }
 
     .instruction-text {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-main);
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    /* Image Wrapper Styling */
+    .image-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
     }
 
     /* Checklist */
     .checklist {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 4px;
+      gap: 12px;
     }
 
     .checklist-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      padding: 10px 14px;
-      border-radius: 8px;
-      background: var(--accent-blue-glow);
-      border-left: 3px solid var(--accent-blue);
+      gap: 12px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.5);
+      border-left: 4px solid var(--accent-teal);
     }
 
     .checklist-item.success {
-      background: var(--success-glow);
       border-left-color: var(--success);
+      background: var(--success-glow);
     }
 
     .checklist-icon {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       flex-shrink: 0;
     }
 
-    /* Code Snippets */
-    .code-comparison {
+    /* Interactive Playground */
+    .playground-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
+      gap: 14px;
+    }
+
+    .tab-selectors {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 10px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 8px 12px;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .tab-btn:hover {
+      background: rgba(45, 212, 191, 0.1);
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-teal);
+      color: #020617;
+      box-shadow: 0 0 10px var(--accent-teal-glow);
+    }
+
+    .input-row {
+      display: flex;
       gap: 12px;
+      margin-top: 10px;
+    }
+
+    .input-row .input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-row label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .text-input {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      color: var(--text-main);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 8px var(--accent-teal-glow);
+    }
+
+    .joiner-toggle-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
+
+    /* Switch / Toggle Button */
+    .switch-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    .switch-label input {
+      display: none;
+    }
+
+    .custom-switch {
+      width: 44px;
+      height: 22px;
+      background: #334155;
+      border-radius: 11px;
+      position: relative;
+      transition: background 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .custom-switch::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #f8fafc;
+      top: 2px;
+      left: 3px;
+      transition: left 0.3s ease;
+    }
+
+    .switch-label input:checked + .custom-switch {
+      background: var(--accent-teal);
+    }
+
+    .switch-label input:checked + .custom-switch::after {
+      left: 23px;
+    }
+
+    .switch-text {
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .code-editor-header {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: none;
+      padding: 6px 12px;
+      border-radius: 8px 8px 0 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 12px;
     }
 
     pre {
       background: var(--code-bg);
-      color: var(--code-text);
+      color: #f8fafc;
       padding: 14px;
       border-radius: 8px;
       font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       overflow-x: auto;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .output-preview {
-      background: #0f172a;
-      color: #bbf7d0;
-      padding: 12px;
-      border-radius: 8px;
-      font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
-      border: 1px solid #1e293b;
+    #newline-code-display, #joiner-code-display {
+      margin-top: 0;
+      border-radius: 0 0 8px 8px;
     }
 
-    .highlight {
-      color: var(--accent-gold);
-      font-weight: 600;
+    .lab-terminal {
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .terminal-header {
+      background: rgba(30, 41, 59, 0.5);
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .term-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .term-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+
+    .term-dots span:nth-child(2) { background: #eab308; }
+    .term-dots span:nth-child(3) { background: #22c55e; }
+
+    .terminal-body {
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--success);
+      min-height: 80px;
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -180,6 +374,85 @@
     <div class="card">
       <div class="card-title">🎓 the computing pass mark</div>
       <p class="instruction-text">Let's be honest, you are only passing computing if you output <code>"I love Computer Science"</code>. But wait! We want you to put it on three separate lines using the newline escape character <code>\n</code>!</p>
+      <div class="image-wrapper">
+        <img src="meet.jpg" alt="Computer Science Meeting" class="hero-img">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔬 String Formatter & Joiner Laboratory</div>
+      <p class="instruction-text">Learn how different print formatting techniques work in Python. Toggle between the tabs to see the interactive outputs!</p>
+
+      <div class="playground-box">
+        <div class="tab-selectors">
+          <button class="tab-btn active" id="tab-btn-newline" onclick="setTab('newline')">Newline Escape (\n)</button>
+          <button class="tab-btn" id="tab-btn-joiner" onclick="setTab('joiner')">Comma vs Plus Joiner</button>
+        </div>
+
+        <!-- Newline Tab -->
+        <div id="tab-content-newline" class="tab-content">
+          <div class="input-row">
+            <div class="input-group">
+              <label for="newline-word1">Word 1:</label>
+              <input type="text" id="newline-word1" class="text-input" value="I" placeholder="I">
+            </div>
+            <div class="input-group">
+              <label for="newline-word2">Word 2:</label>
+              <input type="text" id="newline-word2" class="text-input" value="love" placeholder="love">
+            </div>
+            <div class="input-group">
+              <label for="newline-word3">Word 3:</label>
+              <input type="text" id="newline-word3" class="text-input" value="Computer Science" placeholder="Computer Science">
+            </div>
+          </div>
+          
+          <div class="code-editor-header">
+            <span>newline_demo.py</span>
+          </div>
+          <pre id="newline-code-display">print("I\nlove\nComputer Science")</pre>
+        </div>
+
+        <!-- Joiner Tab -->
+        <div id="tab-content-joiner" class="tab-content" style="display: none;">
+          <div class="input-row">
+            <div class="input-group">
+              <label for="joiner-word1">Word 1:</label>
+              <input type="text" id="joiner-word1" class="text-input" value="I" placeholder="I">
+            </div>
+            <div class="input-group">
+              <label for="joiner-word2">Word 2:</label>
+              <input type="text" id="joiner-word2" class="text-input" value="love" placeholder="love">
+            </div>
+            <div class="input-group">
+              <label for="joiner-word3">Word 3:</label>
+              <input type="text" id="joiner-word3" class="text-input" value="CS" placeholder="CS">
+            </div>
+          </div>
+
+          <div class="joiner-toggle-container">
+            <label class="switch-label">
+              <input type="checkbox" id="joiner-checkbox" checked>
+              <span class="custom-switch"></span>
+              <span class="switch-text" id="joiner-switch-label">Using Commas (Adds Spaces Automatically)</span>
+            </label>
+          </div>
+
+          <div class="code-editor-header">
+            <span>joiner_demo.py</span>
+          </div>
+          <pre id="joiner-code-display">print(word1, word2, word3)</pre>
+        </div>
+
+        <div class="lab-terminal">
+          <div class="terminal-header">
+            <span>console_output.log</span>
+            <div class="term-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="terminal-body" id="computerscience-console">
+            Output goes here...
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -215,5 +488,66 @@ Computer Science</div>
       <p class="instruction-text">Replace the starter text inside the print statement with the three words separated by <code>\n</code> to complete the mission!</p>
     </div>
   </div>
+
+  <script>
+    let currentTab = 'newline';
+
+    function setTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('tab-btn-' + tab).classList.add('active');
+      
+      if (tab === 'newline') {
+        document.getElementById('tab-content-newline').style.display = 'block';
+        document.getElementById('tab-content-joiner').style.display = 'none';
+      } else {
+        document.getElementById('tab-content-newline').style.display = 'none';
+        document.getElementById('tab-content-joiner').style.display = 'block';
+      }
+      
+      updateCSLab();
+    }
+
+    function updateCSLab() {
+      const consoleEl = document.getElementById('computerscience-console');
+      
+      if (currentTab === 'newline') {
+        const w1 = document.getElementById('newline-word1').value || "I";
+        const w2 = document.getElementById('newline-word2').value || "love";
+        const w3 = document.getElementById('newline-word3').value || "Computer Science";
+        
+        const codeDisplay = document.getElementById('newline-code-display');
+        codeDisplay.textContent = `print("${w1}\\n${w2}\\n${w3}")`;
+        
+        consoleEl.innerHTML = `> python newline_demo.py\n${w1}\n${w2}\n${w3}`.replace(/\n/g, '<br>');
+      } else {
+        const w1 = document.getElementById('joiner-word1').value || "I";
+        const w2 = document.getElementById('joiner-word2').value || "love";
+        const w3 = document.getElementById('joiner-word3').value || "CS";
+        const isCommas = document.getElementById('joiner-checkbox').checked;
+        const codeDisplay = document.getElementById('joiner-code-display');
+        const labelText = document.getElementById('joiner-switch-label');
+
+        if (isCommas) {
+          labelText.textContent = "Using Commas (Adds Spaces Automatically)";
+          codeDisplay.textContent = `print("${w1}", "${w2}", "${w3}")`;
+          consoleEl.innerHTML = `> python joiner_demo.py\n${w1} ${w2} ${w3}`.replace(/\n/g, '<br>');
+        } else {
+          labelText.textContent = "Using Plus (Concatenates Directly)";
+          codeDisplay.textContent = `print("${w1}" + "${w2}" + "${w3}")`;
+          consoleEl.innerHTML = `> python joiner_demo.py\n${w1}${w2}${w3}`.replace(/\n/g, '<br>');
+        }
+      }
+    }
+
+    // Event Listeners
+    ['newline-word1', 'newline-word2', 'newline-word3', 'joiner-word1', 'joiner-word2', 'joiner-word3'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateCSLab);
+    });
+    
+    document.getElementById('joiner-checkbox').addEventListener('change', updateCSLab);
+
+    updateCSLab();
+  </script>
 </body>
 </html>

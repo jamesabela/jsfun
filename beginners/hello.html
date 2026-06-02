@@ -9,28 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --accent-gold: #d4af37;
-      --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #22d3ee;
+      --accent-cyan-glow: rgba(34, 211, 238, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --border-color: rgba(226, 201, 116, 0.25);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --code-bg: #0f172a;
-      --code-text: #f8fafc;
+      --border-color: rgba(34, 211, 238, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #38bdf8;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     body {
@@ -63,9 +60,9 @@
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      background: linear-gradient(to right, #f8fafc, #22d3ee);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -74,11 +71,15 @@
 
     .title-group p {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-cyan);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 24px;
@@ -90,18 +91,18 @@
 
     .card-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--accent-gold);
+      color: var(--accent-cyan);
     }
 
     .instruction-text {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-main);
+      line-height: 1.6;
+      color: #cbd5e1;
     }
 
     /* Image Wrapper Styling */
@@ -111,23 +112,23 @@
       align-items: center;
       border-radius: 12px;
       overflow: hidden;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow);
-      background: var(--card-bg);
-      max-width: 100%;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .hero-img {
-      max-width: 100%;
+      width: 100%;
       height: auto;
       display: block;
-      object-fit: contain;
     }
 
     /* Warning Banner */
     .banner {
-      background: var(--accent-gold-glow);
-      border-left: 4px solid var(--accent-gold);
+      background: var(--accent-cyan-glow);
+      border-left: 4px solid var(--accent-cyan);
       padding: 12px 16px;
       border-radius: 8px;
       font-size: 0.9rem;
@@ -135,6 +136,91 @@
       display: flex;
       align-items: center;
       gap: 10px;
+    }
+
+    /* Interactive Playground */
+    .playground-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-group label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .text-input {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      color: var(--text-main);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--accent-cyan-glow);
+    }
+
+    .persona-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .btn-persona {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 6px 12px;
+      border-radius: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .btn-persona.active {
+      background: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      color: #020617;
+      box-shadow: 0 0 8px var(--accent-cyan-glow);
+    }
+
+    .console-box {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .console-input-line {
+      color: #94a3b8;
+    }
+
+    .console-output-line {
+      color: var(--success);
+      font-weight: 700;
+      text-shadow: 0 0 4px rgba(16, 185, 129, 0.2);
     }
 
     /* Checklist */
@@ -153,8 +239,8 @@
       line-height: 1.4;
       padding: 10px 14px;
       border-radius: 8px;
-      background: var(--accent-blue-glow);
-      border-left: 3px solid var(--accent-blue);
+      background: rgba(34, 211, 238, 0.1);
+      border-left: 3px solid var(--accent-cyan);
     }
 
     .checklist-item.success {
@@ -175,22 +261,7 @@
       font-family: 'Fira Code', Consolas, Monaco, monospace;
       font-size: 0.85rem;
       overflow-x: auto;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .output-preview {
-      background: #0f172a;
-      color: #bbf7d0;
-      padding: 12px;
-      border-radius: 8px;
-      font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
-      border: 1px solid #1e293b;
-    }
-
-    .output-preview .user-input {
-      color: #93c5fd;
-      font-style: italic;
+      border: 1px solid rgba(34, 211, 238, 0.2);
     }
   </style>
 </head>
@@ -204,8 +275,10 @@
     </header>
 
     <div class="card">
-      <div class="card-title">👋 saying hello</div>
-      <p class="instruction-text">Now we can input our own things! Hooray! The <code>input()</code> function lets your program ask a question and wait for the user to type an answer.</p>
+      <div class="card-title">👋 Introduction to Input</div>
+      <p class="instruction-text">
+        Now we can input our own things! The <code>input()</code> function lets your program ask a question and wait for the user to type an answer.
+      </p>
       <div class="image-wrapper">
         <img src="hello.jpg" alt="Saying Hello" class="hero-img">
       </div>
@@ -216,14 +289,44 @@
       <span><strong>No tests in this exercise.</strong> Don't forget to type in your name when you run it!</span>
     </div>
 
+    <!-- Interactive Persona Greeting Simulator -->
+    <div class="card">
+      <div class="card-title">🕹️ Interactive Greeting Simulator</div>
+      <p class="instruction-text">
+        Type a name and choose a secret agent persona to see how Python variables dynamically construct a print message!
+      </p>
+
+      <div class="playground-box">
+        <div class="input-group">
+          <label for="input-name">Name Variable</label>
+          <input type="text" class="text-input" id="input-name" value="Alice" maxlength="15">
+        </div>
+
+        <div class="input-group">
+          <label>Choose Persona</label>
+          <div class="persona-selector">
+            <button class="btn-persona active" data-type="friendly">Friendly 🙂</button>
+            <button class="btn-persona" data-type="spy">Secret Agent 🕵️‍♂️</button>
+            <button class="btn-persona" data-type="hacker">Cyber-Hacker 💻</button>
+            <button class="btn-persona" data-type="pirate">Pirate Captain 🏴‍☠️</button>
+          </div>
+        </div>
+
+        <div class="console-box">
+          <div class="console-input-line" id="console-code">name = input("Hi! What's your name?")</div>
+          <div class="console-input-line" id="console-in">Hi! What's your name? <span style="color:#93c5fd; font-style:italic;" id="in-name-text">Alice</span></div>
+          <div class="console-input-line" id="console-print-code">print("Hi", name)</div>
+          <div class="console-output-line" id="console-out">Hi Alice</div>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-title">⚙️ how it works</div>
       <p class="instruction-text">Look at the code carefully:</p>
-      <pre>name = input("Hi! What's your name?")
+      <pre>name = input("Hi! What's your name? ")
 print("Hi", name)</pre>
-      <p class="instruction-text"><strong>What happens when you run it:</strong></p>
-      <div class="output-preview">Hi! What's your name? <span class="user-input">Alice</span>
-Hi Alice</div>
+      
       <div class="checklist">
         <div class="checklist-item">
           <span class="checklist-icon">💡</span>
@@ -246,9 +349,60 @@ print("¡Hola", name + "!")</pre>
     <div class="card">
       <div class="card-title">📋 original code</div>
       <p class="instruction-text">Just in case you need to start again:</p>
-      <pre>name = input("Hi! What's your name?")
+      <pre>name = input("Hi! What's your name? ")
 print("Hi", name)</pre>
     </div>
   </div>
+
+  <script>
+    const inputName = document.getElementById('input-name');
+    const inNameText = document.getElementById('in-name-text');
+    const consolePrintCode = document.getElementById('console-print-code');
+    const consoleOut = document.getElementById('console-out');
+    const btns = document.querySelectorAll('.btn-persona');
+
+    let currentPersona = 'friendly';
+
+    const personas = {
+      friendly: {
+        code: 'print("Hi", name)',
+        out: (name) => `Hi ${name}`
+      },
+      spy: {
+        code: 'print("Agent", name, "the database is ready.")',
+        out: (name) => `Agent ${name} the database is ready.`
+      },
+      hacker: {
+        code: 'print("ACCESS GRANTED:", name.upper())',
+        out: (name) => `ACCESS GRANTED: ${name.toUpperCase()}`
+      },
+      pirate: {
+        code: 'print("Ahoy,", name + "!", "Set sail!")',
+        out: (name) => `Ahoy, ${name}! Set sail!`
+      }
+    };
+
+    function update() {
+      const name = inputName.value || "Alice";
+      inNameText.textContent = name;
+      
+      const p = personas[currentPersona];
+      consolePrintCode.textContent = p.code;
+      consoleOut.textContent = p.out(name);
+    }
+
+    inputName.addEventListener('input', update);
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentPersona = btn.getAttribute('data-type');
+        update();
+      });
+    });
+
+    update();
+  </script>
 </body>
 </html>

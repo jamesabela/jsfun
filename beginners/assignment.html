@@ -9,28 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --accent-gold: #d4af37;
-      --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e3a8a);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #60a5fa;
       --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --accent-blue-glow: rgba(59, 130, 246, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --border-color: rgba(226, 201, 116, 0.25);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --code-bg: #0f172a;
-      --code-text: #f8fafc;
+      --border-color: rgba(59, 130, 246, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #93c5fd;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     body {
@@ -63,9 +60,9 @@
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      background: linear-gradient(to right, #f8fafc, #3b82f6);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -74,11 +71,15 @@
 
     .title-group p {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-blue);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 24px;
@@ -90,18 +91,18 @@
 
     .card-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--accent-gold);
+      color: var(--accent-blue);
     }
 
     .instruction-text {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-main);
+      line-height: 1.6;
+      color: #cbd5e1;
     }
 
     /* Image Wrapper Styling */
@@ -111,14 +112,15 @@
       align-items: center;
       border-radius: 12px;
       overflow: hidden;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow);
-      background: var(--card-bg);
-      max-width: 100%;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .friends-img {
-      max-width: 100%;
+    .hero-img {
+      width: 100%;
       height: auto;
       display: block;
       object-fit: contain;
@@ -132,13 +134,13 @@
     }
 
     .task-item {
-      padding: 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background: var(--card-bg);
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(30, 41, 59, 0.4);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .task-header {
@@ -165,27 +167,27 @@
     }
 
     .badge-ext1 {
-      background: var(--accent-gold-glow);
-      color: var(--accent-gold);
-      border: 1px solid var(--accent-gold);
+      background: rgba(251, 191, 36, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.3);
     }
 
     .badge-ext2 {
       background: var(--success-glow);
       color: var(--success);
-      border: 1px solid var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
     }
 
     .task-desc {
       font-size: 0.9rem;
-      line-height: 1.45;
-      color: var(--text-main);
+      line-height: 1.5;
+      color: #cbd5e1;
     }
 
     /* Warning Banner */
     .banner {
-      background: var(--accent-gold-glow);
-      border-left: 4px solid var(--accent-gold);
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid var(--accent-blue);
       padding: 12px 16px;
       border-radius: 8px;
       font-size: 0.9rem;
@@ -193,6 +195,157 @@
       display: flex;
       align-items: center;
       gap: 10px;
+    }
+
+    /* Interactive Playground */
+    .playground-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .input-row .input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-row label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .text-input {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      color: var(--text-main);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 8px var(--accent-blue-glow);
+    }
+
+    .mode-selector {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn-mode {
+      flex: 1;
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 10px;
+      border-radius: 8px;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .btn-mode:hover {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: var(--accent-blue);
+      color: var(--text-main);
+    }
+
+    .btn-mode.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #020617;
+      box-shadow: 0 0 10px var(--accent-blue-glow);
+    }
+
+    .code-editor-header {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: none;
+      padding: 6px 12px;
+      border-radius: 8px 8px 0 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: #f8fafc;
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    #code-display {
+      margin-top: 0;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .lab-terminal {
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .terminal-header {
+      background: rgba(30, 41, 59, 0.5);
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .term-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .term-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+
+    .term-dots span:nth-child(2) { background: #eab308; }
+    .term-dots span:nth-child(3) { background: #22c55e; }
+
+    .terminal-body {
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--success);
+      min-height: 90px;
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -209,7 +362,46 @@
       <div class="card-title">💡 creative mission</div>
       <p class="instruction-text">Write your own variables and format output sentences dynamically! Have fun and be creative.</p>
       <div class="image-wrapper">
-        <img src="friends.jpg" alt="Creative assignment image" class="friends-img">
+        <img src="friends.jpg" alt="Creative assignment image" class="hero-img">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔬 Sentence Builder Console</div>
+      <p class="instruction-text">Type your name and favorite food, then select a mode to generate dynamic Python code and see the console output!</p>
+
+      <div class="playground-box">
+        <div class="input-row">
+          <div class="input-group">
+            <label for="name-input">name =</label>
+            <input type="text" id="name-input" class="text-input" value="Ross" placeholder="Your Name">
+          </div>
+          <div class="input-group">
+            <label for="food-input">food =</label>
+            <input type="text" id="food-input" class="text-input" value="Sandwich" placeholder="Favorite Food">
+          </div>
+        </div>
+
+        <div class="mode-selector">
+          <button class="btn-mode active" id="btn-mode-simple" onclick="setMode('simple')">Simple</button>
+          <button class="btn-mode" id="btn-mode-medium" onclick="setMode('medium')">Medium</button>
+          <button class="btn-mode" id="btn-mode-complex" onclick="setMode('complex')">Complex</button>
+        </div>
+
+        <div class="code-editor-header">
+          <span>sentence_generator.py</span>
+        </div>
+        <pre id="code-display">code goes here...</pre>
+
+        <div class="lab-terminal">
+          <div class="terminal-header">
+            <span>console_output.log</span>
+            <div class="term-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="terminal-body" id="console-output">
+            Console output goes here...
+          </div>
+        </div>
       </div>
     </div>
 
@@ -253,5 +445,45 @@
       </div>
     </div>
   </div>
+
+  <script>
+    let currentMode = 'simple';
+
+    function updateSentenceBuilder() {
+      const name = document.getElementById('name-input').value || "Ross";
+      const food = document.getElementById('food-input').value || "Sandwich";
+      const codeDisplay = document.getElementById('code-display');
+      const consoleOutput = document.getElementById('console-output');
+
+      let codeText = "";
+      let outputText = "";
+
+      if (currentMode === 'simple') {
+        codeText = `name = "${name}"\nfood = "${food}"\n\nprint(name)\nprint(food)`;
+        outputText = `${name}\n${food}`;
+      } else if (currentMode === 'medium') {
+        codeText = `name = "${name}"\nfood = "${food}"\n\nprint("My name is", name)\nprint("My favorite food is", food)`;
+        outputText = `My name is ${name}\nMy favorite food is ${food}`;
+      } else if (currentMode === 'complex') {
+        codeText = `name = "${name}"\nfood = "${food}"\n\nprint("Hello, my name is " + name + " and I absolutely love eating " + food + "!")`;
+        outputText = `Hello, my name is ${name} and I absolutely love eating ${food}!`;
+      }
+
+      codeDisplay.textContent = codeText;
+      consoleOutput.innerHTML = `> python sentence_generator.py\n${outputText}`.replace(/\n/g, '<br>');
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.btn-mode').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn-mode-' + mode).classList.add('active');
+      updateSentenceBuilder();
+    }
+
+    document.getElementById('name-input').addEventListener('input', updateSentenceBuilder);
+    document.getElementById('food-input').addEventListener('input', updateSentenceBuilder);
+
+    updateSentenceBuilder();
+  </script>
 </body>
 </html>

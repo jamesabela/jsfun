@@ -1,39 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Simple Use of Variables</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --accent-gold: #d4af37;
-      --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-gold: #eab308;
+      --accent-gold-glow: rgba(234, 179, 8, 0.2);
+      --accent-cyan: #06b6d4;
+      --accent-cyan-glow: rgba(6, 182, 212, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --border-color: rgba(226, 201, 116, 0.25);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --code-bg: #0f172a;
-      --code-text: #f8fafc;
+      --border-color: rgba(6, 182, 212, 0.3);
+      --shadow: 0 10px 35px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #38bdf8;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     body {
@@ -66,9 +62,9 @@
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      background: linear-gradient(to right, #f8fafc, #06b6d4);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -77,11 +73,15 @@
 
     .title-group p {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-cyan);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 24px;
@@ -93,18 +93,18 @@
 
     .card-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--accent-gold);
+      color: var(--accent-cyan);
     }
 
     .instruction-text {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-main);
+      line-height: 1.6;
+      color: #cbd5e1;
     }
 
     /* Video Frame Styling */
@@ -127,6 +127,141 @@
       height: 100%;
     }
 
+    /* Interactive Variable Box Visualizer */
+    .visualizer-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .input-field {
+      flex: 1;
+      min-width: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-field label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .text-input {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      color: var(--text-main);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--accent-cyan-glow);
+    }
+
+    .memory-boxes {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .mem-box {
+      background: rgba(6, 182, 212, 0.1);
+      border: 2px solid var(--accent-cyan);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 160px;
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.1);
+    }
+
+    .mem-box.gold {
+      background: rgba(234, 179, 8, 0.1);
+      border-color: var(--accent-gold);
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.1);
+    }
+
+    .mem-box-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+      margin-bottom: 6px;
+    }
+
+    .mem-box-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .order-select-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .btn-select {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      border-radius: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .btn-select.active {
+      background: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      color: #020617;
+      box-shadow: 0 0 10px var(--accent-cyan-glow);
+    }
+
+    .code-output-box {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .code-statement {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      border-bottom: 1px dashed #334155;
+      padding-bottom: 8px;
+    }
+
+    .console-out {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      color: var(--success);
+      font-weight: 700;
+    }
+
     /* Checklist */
     .checklist {
       display: flex;
@@ -143,8 +278,8 @@
       line-height: 1.4;
       padding: 10px 14px;
       border-radius: 8px;
-      background: var(--accent-blue-glow);
-      border-left: 3px solid var(--accent-blue);
+      background: var(--accent-cyan-glow);
+      border-left: 3px solid var(--accent-cyan);
     }
 
     .checklist-item.success {
@@ -157,13 +292,6 @@
       flex-shrink: 0;
     }
 
-    /* Code Snippets */
-    .code-comparison {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
     pre {
       background: var(--code-bg);
       color: var(--code-text);
@@ -172,22 +300,7 @@
       font-family: 'Fira Code', Consolas, Monaco, monospace;
       font-size: 0.85rem;
       overflow-x: auto;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .output-preview {
-      background: #0f172a;
-      color: #bbf7d0;
-      padding: 12px;
-      border-radius: 8px;
-      font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
-      border: 1px solid #1e293b;
-    }
-
-    .highlight {
-      color: var(--accent-gold);
-      font-weight: 600;
+      border: 1px solid rgba(6, 182, 212, 0.2);
     }
   </style>
 </head>
@@ -196,15 +309,17 @@
   <div class="container">
     <header>
       <div class="title-group">
-        <p>LEVEL 1: BASICS</p>
-        <h1>Simple Use of Variables 🕵️‍♂️</h1>
+        <p>Level 1: Variables</p>
+        <h1>Secret Agent Codes 🕵️‍♂️</h1>
       </div>
     </header>
 
+    <!-- Briefing Video Card -->
     <div class="card">
-      <div class="card-title">🎬 briefing video</div>
-      <p class="instruction-text">Watch the briefing video below to understand how variables store information in
-        computer programs.</p>
+      <div class="card-title">🎬 Spy Briefing Video (For Fun!) 🍿</div>
+      <p class="instruction-text">
+        Watch this brief spy trailer clip to get into character and set your secret agent mood before tackling the code mission!
+      </p>
       <div class="video-wrapper">
         <iframe width="300" height="150" src="https://www.youtube.com/embed/YT0Qhyv3pjo?si=FuZunuX6sQ-lCG0-"
           title="YouTube video player" frameborder="0"
@@ -213,41 +328,128 @@
       </div>
     </div>
 
+    <!-- Explanation & Interactive Playground -->
     <div class="card">
-      <div class="card-title">🔍 your mission</div>
+      <div class="card-title">💡 What is a Variable?</div>
+      <p class="instruction-text">
+        Think of a variable as a labeled **storage box** in your computer's memory. 
+        You put a value (like text or a number) inside, and give the box a name so you can find it later.
+      </p>
+
+      <div class="visualizer-box">
+        <p class="instruction-text" style="font-weight:600; font-size:0.9rem;">📦 Interactive Variable Playground:</p>
+        <div class="input-row">
+          <div class="input-field">
+            <label for="fname">First Name Variable</label>
+            <input type="text" class="text-input" id="fname" value="James" maxlength="15">
+          </div>
+          <div class="input-field">
+            <label for="lname">Last Name Variable</label>
+            <input type="text" class="text-input" id="lname" value="Bond" maxlength="15">
+          </div>
+        </div>
+
+        <div class="memory-boxes">
+          <div class="mem-box">
+            <span class="mem-box-label">firstName</span>
+            <span class="mem-box-value" id="box-fname">"James"</span>
+          </div>
+          <div class="mem-box gold">
+            <span class="mem-box-label">lastName</span>
+            <span class="mem-box-value" id="box-lname">"Bond"</span>
+          </div>
+        </div>
+
+        <div class="order-select-container">
+          <button class="btn-select active" id="btn-normal">Normal Print</button>
+          <button class="btn-select" id="btn-spy">Agent Print</button>
+        </div>
+
+        <div class="code-output-box">
+          <div class="code-statement" id="code-stmt">print(firstName, lastName)</div>
+          <div class="console-out" id="console-out">James Bond</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mission Objective Card -->
+    <div class="card">
+      <div class="card-title">🔍 Your Coding Mission</div>
+      <p class="instruction-text">
+        In Python, you can print multiple variables on the same line by separating them with commas. 
+        You can also print the same variable more than once if you need to!
+      </p>
+      
       <div class="checklist">
         <div class="checklist-item">
           <span class="checklist-icon">💡</span>
-          <span><strong>The Challenge:</strong> Look at how we can put variables into our print statements. Can you
-            introduce James Bond in style?</span>
+          <span><strong>The Challenge:</strong> Introduce the agent in classic spy fashion: last name first, then first name, then last name again.</span>
         </div>
         <div class="checklist-item success">
           <span class="checklist-icon">🎯</span>
-          <span><strong>Objective:</strong> Make the code print <code class="highlight">Bond James Bond</code> instead
-            of just <code class="highlight">James Bond</code>.</span>
+          <span><strong>Objective:</strong> Edit the final line in <code>variables.py</code> to output exactly: <code>Bond James Bond</code></span>
         </div>
       </div>
     </div>
 
+    <!-- Code Guidance Card -->
     <div class="card">
-      <div class="card-title">⚙️ code guidance</div>
-      <p class="instruction-text">Currently, the code prints the name in the normal order. Recall that when calling
-        <code>print()</code>, you can pass variables separated by commas:
+      <div class="card-title">⚙️ Code Guidance</div>
+      <p class="instruction-text">
+        Currently, the code prints `James Bond`. Rearrange the variables inside your <code>print()</code> statement on line 19. 
+        Remember, you can use the same variable box twice!
       </p>
-      <div class="code-comparison">
-        <p class="instruction-text"><strong>Starter code:</strong></p>
-        <pre># So can you do the right intro with Bond James Bond?
-print(firstName, lastName)</pre>
-        <p class="instruction-text"><strong>Expected Output:</strong></p>
-        <div class="output-preview">
-          Bond James Bond</div>
-      </div>
-      <p class="instruction-text">Rearrange your <code>print()</code> statement variables to output
-        <code>lastName</code>, then <code>firstName</code>, and then <code>lastName</code> again to complete the
-        mission!
-      </p>
+      <pre># Change this print statement:
+print(lastName, firstName, lastName)</pre>
     </div>
   </div>
-</body>
 
+  <script>
+    const fnameInput = document.getElementById('fname');
+    const lnameInput = document.getElementById('lname');
+    const boxFname = document.getElementById('box-fname');
+    const boxLname = document.getElementById('box-lname');
+    const btnNormal = document.getElementById('btn-normal');
+    const btnSpy = document.getElementById('btn-spy');
+    const codeStmt = document.getElementById('code-stmt');
+    const consoleOut = document.getElementById('console-out');
+
+    let mode = 'normal';
+
+    function update() {
+      const f = fnameInput.value || "James";
+      const l = lnameInput.value || "Bond";
+
+      boxFname.textContent = `"${f}"`;
+      boxLname.textContent = `"${l}"`;
+
+      if (mode === 'normal') {
+        codeStmt.textContent = "print(firstName, lastName)";
+        consoleOut.textContent = `${f} ${l}`;
+      } else {
+        codeStmt.textContent = "print(lastName, firstName, lastName)";
+        consoleOut.textContent = `${l} ${f} ${l}`;
+      }
+    }
+
+    fnameInput.addEventListener('input', update);
+    lnameInput.addEventListener('input', update);
+
+    btnNormal.addEventListener('click', () => {
+      mode = 'normal';
+      btnNormal.classList.add('active');
+      btnSpy.classList.remove('active');
+      update();
+    });
+
+    btnSpy.addEventListener('click', () => {
+      mode = 'spy';
+      btnSpy.classList.add('active');
+      btnNormal.classList.remove('active');
+      update();
+    });
+
+    update();
+  </script>
+</body>
 </html>

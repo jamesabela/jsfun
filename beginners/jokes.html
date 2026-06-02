@@ -9,28 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --accent-gold: #d4af37;
-      --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1c1917);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #fbbf24;
+      --accent-amber: #f59e0b;
+      --accent-amber-glow: rgba(245, 158, 11, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --border-color: rgba(226, 201, 116, 0.25);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --code-bg: #0f172a;
-      --code-text: #f8fafc;
+      --border-color: rgba(245, 158, 11, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #fde68a;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     body {
@@ -63,9 +60,9 @@
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      background: linear-gradient(to right, #f8fafc, #f59e0b);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -74,11 +71,15 @@
 
     .title-group p {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-amber);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 24px;
@@ -90,18 +91,18 @@
 
     .card-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--accent-gold);
+      color: var(--accent-amber);
     }
 
     .instruction-text {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-main);
+      line-height: 1.6;
+      color: #cbd5e1;
     }
 
     /* Image Wrapper Styling */
@@ -111,14 +112,15 @@
       align-items: center;
       border-radius: 12px;
       overflow: hidden;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow);
-      background: var(--card-bg);
-      max-width: 100%;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .gif-img {
-      max-width: 100%;
+    .hero-img {
+      width: 100%;
       height: auto;
       display: block;
       object-fit: contain;
@@ -132,13 +134,13 @@
     }
 
     .task-item {
-      padding: 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background: var(--card-bg);
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(30, 41, 59, 0.4);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .task-header {
@@ -159,21 +161,21 @@
     }
 
     .badge-core {
-      background: var(--accent-blue-glow);
-      color: var(--accent-blue);
-      border: 1px solid var(--accent-blue);
+      background: var(--accent-amber-glow);
+      color: var(--accent-amber);
+      border: 1px solid var(--accent-amber);
     }
 
     .task-desc {
       font-size: 0.9rem;
-      line-height: 1.45;
-      color: var(--text-main);
+      line-height: 1.5;
+      color: #cbd5e1;
     }
 
     /* Warning Banner */
     .banner {
-      background: var(--accent-gold-glow);
-      border-left: 4px solid var(--accent-gold);
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid var(--accent-amber);
       padding: 12px 16px;
       border-radius: 8px;
       font-size: 0.9rem;
@@ -187,51 +189,223 @@
     .checklist {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 4px;
+      gap: 12px;
     }
 
     .checklist-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      padding: 10px 14px;
-      border-radius: 8px;
-      background: var(--accent-blue-glow);
-      border-left: 3px solid var(--accent-blue);
+      gap: 12px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.5);
+      border-left: 4px solid var(--accent-amber);
     }
 
     .checklist-item.success {
-      background: var(--success-glow);
       border-left-color: var(--success);
+      background: var(--success-glow);
     }
 
     .checklist-icon {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       flex-shrink: 0;
     }
 
     pre {
       background: var(--code-bg);
-      color: var(--code-text);
+      color: #f8fafc;
       padding: 14px;
       border-radius: 8px;
       font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       overflow-x: auto;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .output-preview {
-      background: #0f172a;
-      color: #bbf7d0;
+      background: #020617;
+      color: #34d399;
       padding: 12px;
       border-radius: 8px;
       font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-size: 0.9rem;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    /* Interactive Playground */
+    .playground-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .input-row .input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-row label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .text-input {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      color: var(--text-main);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--accent-amber);
+      box-shadow: 0 0 8px var(--accent-amber-glow);
+    }
+
+    .road-container {
+      display: flex;
+      height: 80px;
+      background: #334155;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-top: 10px;
+    }
+
+    .grass {
+      width: 60px;
+      height: 100%;
+      background: #15803d;
+      color: #f8fafc;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .grass-left { border-right: 2px solid #22c55e; }
+    .grass-right { border-left: 2px solid #22c55e; }
+
+    .road-surface {
+      flex: 1;
+      height: 100%;
+      background: #1e293b;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .road-stripes {
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      border-top: 2px dashed #94a3b8;
+      opacity: 0.3;
+      top: 38px;
+    }
+
+    .chicken-character {
+      font-size: 2.2rem;
+      position: absolute;
+      left: 10px;
+      transition: left 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 3;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-joke {
+      background: var(--accent-amber);
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      color: #020617;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .btn-joke:hover {
+      background: #fbbf24;
+      box-shadow: 0 0 12px var(--accent-amber-glow);
+      transform: scale(1.05);
+    }
+
+    .btn-joke:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .lab-terminal {
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .terminal-header {
+      background: rgba(30, 41, 59, 0.5);
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .term-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .term-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+
+    .term-dots span:nth-child(2) { background: #eab308; }
+    .term-dots span:nth-child(3) { background: #22c55e; }
+
+    .terminal-body {
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
       font-size: 0.85rem;
-      border: 1px solid #1e293b;
+      color: var(--success);
+      min-height: 80px;
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -248,7 +422,48 @@
       <div class="card-title">🎭 creative mission</div>
       <p class="instruction-text">In the <strong>Make</strong> tasks you use the skills you've learned to create a program from scratch. Time to make someone laugh!</p>
       <div class="image-wrapper">
-        <img src="jokes.gif" alt="Joke GIF" class="gif-img">
+        <img src="jokes.gif" alt="Joke GIF" class="hero-img">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔬 Interactive Joke Machine</div>
+      <p class="instruction-text">Type your setup and punchline, then click <strong>Cross Road 🐔</strong> to watch the chicken run and print the lines sequentially!</p>
+
+      <div class="playground-box">
+        <div class="input-row">
+          <div class="input-group">
+            <label for="setup-input">Joke Setup:</label>
+            <input type="text" id="setup-input" class="text-input" value="Why did the chicken cross the road?" placeholder="Why did the chicken...">
+          </div>
+          <div class="input-group">
+            <label for="punchline-input">Punchline:</label>
+            <input type="text" id="punchline-input" class="text-input" value="To get to the other side!" placeholder="To get to the...">
+          </div>
+        </div>
+
+        <div class="road-container">
+          <div class="grass grass-left">🏡 Start</div>
+          <div class="road-surface">
+            <div class="road-stripes"></div>
+            <div class="chicken-character" id="chicken-sprite">🐔</div>
+          </div>
+          <div class="grass grass-right">🌽 Side</div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-joke" id="btn-run-joke" onclick="animateJoke()">Cross Road 🐔</button>
+        </div>
+
+        <div class="lab-terminal">
+          <div class="terminal-header">
+            <span>joke_teller.py</span>
+            <div class="term-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="terminal-body" id="joke-console">
+            Click "Cross Road 🐔" to start...
+          </div>
+        </div>
       </div>
     </div>
 
@@ -292,5 +507,48 @@ To get to the other side!</div>
       </div>
     </div>
   </div>
+
+  <script>
+    let animating = false;
+
+    function animateJoke() {
+      if (animating) return;
+      animating = true;
+
+      const chicken = document.getElementById('chicken-sprite');
+      const btn = document.getElementById('btn-run-joke');
+      const consoleEl = document.getElementById('joke-console');
+      const setup = document.getElementById('setup-input').value || "Why did the chicken cross the road?";
+      const punchline = document.getElementById('punchline-input').value || "To get to the other side!";
+
+      btn.disabled = true;
+      consoleEl.innerHTML = `> print("${setup}")<br><span style="color: var(--text-muted)">Waiting for chicken to cross...</span>`;
+
+      // Reset chicken position
+      chicken.style.transition = 'none';
+      chicken.style.left = '10px';
+      
+      // Force layout reflow
+      chicken.offsetHeight;
+
+      // Start movement
+      chicken.style.transition = 'left 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      const roadWidth = chicken.parentElement.clientWidth;
+      const finalLeft = roadWidth - 50;
+      chicken.style.left = finalLeft + 'px';
+
+      // print setup in 1 second
+      setTimeout(() => {
+        consoleEl.innerHTML = `> print("${setup}")\n${setup}`.replace(/\n/g, '<br>');
+      }, 1000);
+
+      // print punchline in 2.5 seconds
+      setTimeout(() => {
+        consoleEl.innerHTML = `> print("${setup}")\n${setup}\n\n> print("${punchline}")\n<span style="color: var(--success); font-weight: bold;">${punchline}</span>`.replace(/\n/g, '<br>');
+        btn.disabled = false;
+        animating = false;
+      }, 2600);
+    }
+  </script>
 </body>
 </html>

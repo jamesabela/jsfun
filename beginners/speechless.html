@@ -9,28 +9,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --accent-gold: #d4af37;
-      --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --bg-gradient: linear-gradient(135deg, #0f172a, #4c0519);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #fda4af;
+      --accent-rose: #f43f5e;
+      --accent-rose-glow: rgba(244, 63, 94, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --border-color: rgba(226, 201, 116, 0.25);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --code-bg: #0f172a;
-      --code-text: #f8fafc;
+      --error: #ef4444;
+      --error-glow: rgba(239, 68, 68, 0.15);
+      --border-color: rgba(244, 63, 94, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #ffe4e6;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     body {
@@ -63,9 +62,9 @@
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      background: linear-gradient(to right, #f8fafc, #f43f5e);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -74,11 +73,15 @@
 
     .title-group p {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-rose);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 24px;
@@ -90,18 +93,18 @@
 
     .card-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--accent-gold);
+      color: var(--accent-rose);
     }
 
     .instruction-text {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-main);
+      line-height: 1.6;
+      color: #cbd5e1;
     }
 
     /* Image Wrapper Styling */
@@ -111,14 +114,15 @@
       align-items: center;
       border-radius: 12px;
       overflow: hidden;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow);
-      background: var(--card-bg);
-      max-width: 100%;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .speechless-img {
-      max-width: 100%;
+    .hero-img {
+      width: 100%;
       height: auto;
       display: block;
       object-fit: contain;
@@ -128,29 +132,28 @@
     .checklist {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 4px;
+      gap: 12px;
     }
 
     .checklist-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      padding: 10px 14px;
-      border-radius: 8px;
-      background: var(--accent-blue-glow);
-      border-left: 3px solid var(--accent-blue);
+      gap: 12px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.5);
+      border-left: 4px solid var(--accent-rose);
     }
 
     .checklist-item.success {
-      background: var(--success-glow);
       border-left-color: var(--success);
+      background: var(--success-glow);
     }
 
     .checklist-icon {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       flex-shrink: 0;
     }
 
@@ -159,16 +162,15 @@
       border: 1px dashed var(--border-color);
       border-radius: 10px;
       padding: 14px;
-      background: var(--accent-gold-glow);
+      background: var(--accent-rose-glow);
       cursor: pointer;
-      margin-top: 6px;
     }
 
     summary {
       font-family: 'Outfit', sans-serif;
       font-weight: 700;
       font-size: 0.95rem;
-      color: var(--accent-gold);
+      color: var(--accent-rose);
       outline: none;
       user-select: none;
       display: flex;
@@ -185,14 +187,7 @@
     .hint-content {
       font-size: 0.9rem;
       color: var(--text-main);
-      line-height: 1.4;
-    }
-
-    /* Code Snippets */
-    .code-comparison {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      line-height: 1.5;
     }
 
     pre {
@@ -201,24 +196,19 @@
       padding: 14px;
       border-radius: 8px;
       font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       overflow-x: auto;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .output-preview {
-      background: #0f172a;
-      color: #bbf7d0;
+      background: #020617;
+      color: #34d399;
       padding: 12px;
       border-radius: 8px;
       font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
-      border: 1px solid #1e293b;
-    }
-
-    .highlight {
-      color: var(--accent-gold);
-      font-weight: 600;
+      font-size: 0.9rem;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
   </style>
 </head>
@@ -235,7 +225,7 @@
       <div class="card-title">🤫 speechless challenge</div>
       <p class="instruction-text">Congratulations, you've found the instructions to the first unit! Great job!</p>
       <div class="image-wrapper">
-        <img src="speechless.jpeg" alt="Speechless Challenge" class="speechless-img">
+        <img src="speechless.jpeg" alt="Speechless Challenge" class="hero-img">
       </div>
     </div>
 

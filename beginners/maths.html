@@ -9,28 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --accent-gold: #d4af37;
-      --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-gold: #fbbf24;
+      --accent-gold-glow: rgba(251, 191, 36, 0.15);
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
-      --border-color: rgba(226, 201, 116, 0.25);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      --code-bg: #0f172a;
-      --code-text: #f8fafc;
+      --border-color: rgba(251, 191, 36, 0.3);
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 8px 15px -6px rgba(0, 0, 0, 0.3);
+      --code-bg: #020617;
+      --code-text: #fbe3b4;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     body {
@@ -63,9 +60,9 @@
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, var(--text-main), var(--accent-gold));
+      background: linear-gradient(to right, #f8fafc, #fbbf24);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -74,11 +71,15 @@
 
     .title-group p {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-gold);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .card {
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 24px;
@@ -90,7 +91,7 @@
 
     .card-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -100,8 +101,8 @@
 
     .instruction-text {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: var(--text-main);
+      line-height: 1.6;
+      color: #cbd5e1;
     }
 
     /* Image Wrapper Styling */
@@ -111,14 +112,15 @@
       align-items: center;
       border-radius: 12px;
       overflow: hidden;
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow);
-      background: var(--card-bg);
-      max-width: 100%;
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.4);
+      max-width: 360px;
+      margin: 12px auto 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .maths-king-img {
-      max-width: 100%;
+    .hero-img {
+      width: 100%;
       height: auto;
       display: block;
       object-fit: contain;
@@ -128,29 +130,28 @@
     .checklist {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 4px;
+      gap: 12px;
     }
 
     .checklist-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      padding: 10px 14px;
-      border-radius: 8px;
-      background: var(--accent-blue-glow);
-      border-left: 3px solid var(--accent-blue);
+      gap: 12px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.5);
+      border-left: 4px solid var(--accent-gold);
     }
 
     .checklist-item.success {
-      background: var(--success-glow);
       border-left-color: var(--success);
+      background: var(--success-glow);
     }
 
     .checklist-icon {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       flex-shrink: 0;
     }
 
@@ -163,28 +164,178 @@
 
     pre {
       background: var(--code-bg);
-      color: var(--code-text);
+      color: #f8fafc;
       padding: 14px;
       border-radius: 8px;
       font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       overflow-x: auto;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .output-preview {
-      background: #0f172a;
-      color: #bbf7d0;
+      background: #020617;
+      color: #34d399;
       padding: 12px;
       border-radius: 8px;
       font-family: 'Fira Code', Consolas, Monaco, monospace;
-      font-size: 0.85rem;
-      border: 1px solid #1e293b;
+      font-size: 0.9rem;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
-    .highlight {
-      color: var(--accent-gold);
+    /* Interactive Playground */
+    .playground-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .math-inputs {
+      display: flex;
+      gap: 16px;
+    }
+
+    .math-inputs .input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .math-inputs label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
       font-weight: 600;
+    }
+
+    .text-input {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px;
+      color: var(--text-main);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 8px var(--accent-gold-glow);
+    }
+
+    .formula-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .formula-card {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(251, 191, 36, 0.15);
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .formula-card:hover {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    .formula-card.active {
+      background: rgba(251, 191, 36, 0.08);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.15);
+    }
+
+    .formula-header {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .formula-flow {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    .glow-text {
+      color: var(--accent-gold);
+      text-shadow: 0 0 8px var(--accent-gold-glow);
+    }
+
+    .match-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      text-transform: uppercase;
+    }
+
+    .match-badge.success {
+      background: var(--success-glow);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .lab-terminal {
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .terminal-header {
+      background: rgba(30, 41, 59, 0.5);
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .term-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .term-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+
+    .term-dots span:nth-child(2) { background: #eab308; }
+    .term-dots span:nth-child(3) { background: #22c55e; }
+
+    .terminal-body {
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--success);
+      min-height: 80px;
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -201,7 +352,61 @@
       <div class="card-title">👑 maths king challenge</div>
       <p class="instruction-text">Look at the variables and calculate the values in your head first.</p>
       <div class="image-wrapper">
-        <img src="MathsKing.jpg" alt="Maths King Challenge" class="maths-king-img">
+        <img src="MathsKing.jpg" alt="Maths King Challenge" class="hero-img">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔬 Variable Math Lab</div>
+      <p class="instruction-text">Experiment with changing the variables <code>num1</code> and <code>num2</code> to see how they calculate! Click the formula cards to run them in the simulator.</p>
+      
+      <div class="playground-box">
+        <div class="math-inputs">
+          <div class="input-group">
+            <label for="num1-input">num1 =</label>
+            <input type="number" id="num1-input" class="text-input" value="20" placeholder="20">
+          </div>
+          <div class="input-group">
+            <label for="num2-input">num2 =</label>
+            <input type="number" id="num2-input" class="text-input" value="5" placeholder="5">
+          </div>
+        </div>
+
+        <div class="formula-grid">
+          <div class="formula-card" id="card-total1" onclick="runFormula(1)">
+            <div class="formula-header">total1 = num1 + 15</div>
+            <div class="formula-flow">
+              <span id="flow-total1-val">20</span> + 15 = <strong class="glow-text" id="val-total1">35</strong>
+            </div>
+            <div class="match-badge" id="badge-total1">Not 15</div>
+          </div>
+
+          <div class="formula-card" id="card-total2" onclick="runFormula(2)">
+            <div class="formula-header">total2 = num2 * 2</div>
+            <div class="formula-flow">
+              <span id="flow-total2-val">5</span> * 2 = <strong class="glow-text" id="val-total2">10</strong>
+            </div>
+            <div class="match-badge" id="badge-total2">Not 15</div>
+          </div>
+
+          <div class="formula-card" id="card-total3" onclick="runFormula(3)">
+            <div class="formula-header">total3 = num1 - num2</div>
+            <div class="formula-flow">
+              <span id="flow-total3-val1">20</span> - <span id="flow-total3-val2">5</span> = <strong class="glow-text" id="val-total3">15</strong>
+            </div>
+            <div class="match-badge success" id="badge-total3">🎯 Match 15!</div>
+          </div>
+        </div>
+
+        <div class="lab-terminal">
+          <div class="terminal-header">
+            <span>console_output.log</span>
+            <div class="term-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="terminal-body" id="lab-console">
+            Click any formula card above to calculate its value...
+          </div>
+        </div>
       </div>
     </div>
 
@@ -239,5 +444,88 @@ print()</pre>
       <p class="instruction-text">Pass the variable name that holds the value 15 inside the <code>print()</code> function to solve the challenge!</p>
     </div>
   </div>
+
+  <script>
+    function updateCalculations() {
+      const num1Input = document.getElementById('num1-input');
+      const num2Input = document.getElementById('num2-input');
+      
+      let num1 = parseFloat(num1Input.value);
+      let num2 = parseFloat(num2Input.value);
+      
+      if (isNaN(num1)) num1 = 0;
+      if (isNaN(num2)) num2 = 0;
+      
+      const total1 = num1 + 15;
+      const total2 = num2 * 2;
+      const total3 = num1 - num2;
+      
+      // Update displays
+      document.getElementById('flow-total1-val').textContent = num1;
+      document.getElementById('val-total1').textContent = total1;
+      
+      document.getElementById('flow-total2-val').textContent = num2;
+      document.getElementById('val-total2').textContent = total2;
+      
+      document.getElementById('flow-total3-val1').textContent = num1;
+      document.getElementById('flow-total3-val2').textContent = num2;
+      document.getElementById('val-total3').textContent = total3;
+      
+      // Update badges
+      updateBadge('badge-total1', total1);
+      updateBadge('badge-total2', total2);
+      updateBadge('badge-total3', total3);
+
+      // Refresh console output if active
+      const activeCard = document.querySelector('.formula-card.active');
+      if (activeCard) {
+        const id = activeCard.id;
+        const num = parseInt(id.replace('card-total', ''));
+        runFormula(num);
+      }
+    }
+
+    function updateBadge(id, value) {
+      const badge = document.getElementById(id);
+      if (value === 15) {
+        badge.textContent = "🎯 Match 15!";
+        badge.className = "match-badge success";
+      } else {
+        badge.textContent = "Not 15";
+        badge.className = "match-badge";
+      }
+    }
+
+    function runFormula(num) {
+      // Remove active classes
+      document.querySelectorAll('.formula-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('card-total' + num).classList.add('active');
+      
+      const num1 = parseFloat(document.getElementById('num1-input').value) || 0;
+      const num2 = parseFloat(document.getElementById('num2-input').value) || 0;
+      const consoleEl = document.getElementById('lab-console');
+      
+      let resultText = "";
+      if (num === 1) {
+        const val = num1 + 15;
+        resultText = `> total1 = num1 + 15\n> total1 = ${num1} + 15\n> print(total1)\n<span style="color: ${val === 15 ? 'var(--success)' : '#fb7185'}">${val}</span>`;
+      } else if (num === 2) {
+        const val = num2 * 2;
+        resultText = `> total2 = num2 * 2\n> total2 = ${num2} * 2\n> print(total2)\n<span style="color: ${val === 15 ? 'var(--success)' : '#fb7185'}">${val}</span>`;
+      } else if (num === 3) {
+        const val = num1 - num2;
+        resultText = `> total3 = num1 - num2\n> total3 = ${num1} - ${num2}\n> print(total3)\n<span style="color: ${val === 15 ? 'var(--success)' : '#fb7185'}">${val}</span>`;
+      }
+      
+      consoleEl.innerHTML = resultText.replace(/\n/g, '<br>');
+    }
+
+    document.getElementById('num1-input').addEventListener('input', updateCalculations);
+    document.getElementById('num2-input').addEventListener('input', updateCalculations);
+    
+    // Run initial calculations
+    updateCalculations();
+    runFormula(3); // Start with active formula showing the match
+  </script>
 </body>
 </html>

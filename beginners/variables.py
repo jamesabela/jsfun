@@ -10,10 +10,7 @@
 
 firstName = "James"
 lastName = "Bond"
-# This is a variable, it can change as the program works
 
-print(firstName)
-print(lastName)
-
-# So can you do the right intro with Bond James Bond?
-print(firstName,lastName)
+# Mission: Change the print statement below to print the spy introduction:
+# Bond James Bond
+print(firstName, lastName)
