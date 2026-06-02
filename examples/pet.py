@@ -65,3 +65,5 @@ while True:
 
     if energy == 0:
         print(pet_name, "is exhausted!")
+
+# Make this more fun https://jamesabela.github.io/jsfun/examples/pet.html
