@@ -681,6 +681,165 @@
       display: inline-block;
       margin-top: 10px;
     }
+
+    /* Search styles */
+    .search-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 6px 14px;
+      width: 240px;
+      transition: all 0.3s ease;
+    }
+
+    html.light-theme .search-container {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .search-container:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+      width: 280px;
+    }
+
+    .search-icon {
+      font-size: 0.9rem;
+      margin-right: 8px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-container input {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      outline: none;
+      width: 100%;
+    }
+
+    .search-container input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .clear-search-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .clear-search-btn:hover {
+      color: var(--text-main);
+    }
+
+    /* Search results formatting */
+    .search-result-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .search-result-item:hover {
+      transform: translateY(-2px);
+      background: var(--card-hover);
+      border-color: var(--primary);
+    }
+
+    .search-result-category {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+    }
+
+    .search-result-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 0;
+    }
+
+    .search-result-snippet {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .search-result-snippet mark {
+      background: rgba(139, 92, 246, 0.3);
+      color: var(--text-main);
+      border-radius: 2px;
+      padding: 0 2px;
+      font-weight: 600;
+    }
+
+    html.light-theme .search-result-snippet mark {
+      background: rgba(99, 102, 241, 0.25);
+    }
+
+    /* Fallback search elements */
+    .no-results-card {
+      text-align: center;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-fallback-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .fallback-search-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    /* Smooth glow highlight animation on cards when navigated to */
+    .card-highlight-pulse {
+      animation: pulseHighlight 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    @keyframes pulseHighlight {
+      0% {
+        box-shadow: var(--shadow);
+        border-color: var(--border-color);
+      }
+      25% {
+        box-shadow: 0 0 25px var(--primary), var(--shadow);
+        border-color: var(--primary);
+      }
+      100% {
+        box-shadow: var(--shadow);
+        border-color: var(--border-color);
+      }
+    }
   </style>
 </head>
 
@@ -690,6 +849,11 @@
       🐍 PythonManual
     </div>
     <div class="header-actions">
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search manual..." oninput="handleSearch()" autocomplete="off">
+        <button id="clearSearchBtn" class="clear-search-btn" onclick="clearSearch()" style="display: none;" title="Clear search">✕</button>
+      </div>
       <button class="theme-btn" id="themeToggleBtn" onclick="toggleThemeManual()">
         <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Dark Mode</span>
       </button>
@@ -1125,6 +1289,17 @@ MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
         </div>
       </div>
 
+      <!-- TAB 10: Search Results -->
+      <div id="tab-search-results" class="tab-content">
+        <div class="card">
+          <h2>🔍 Search Results</h2>
+          <p id="search-results-info">Results matching your query will appear here.</p>
+          <div id="search-results-list" style="display: flex; flex-direction: column; gap: 16px; margin-top: 8px;">
+            <!-- Matches populated dynamically -->
+          </div>
+        </div>
+      </div>
+
       <!-- Footer -->
       <footer>
         <p>
@@ -1145,22 +1320,212 @@ MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
   <script>
     // Tab switching logic
+    let lastActiveTab = 'print-var';
     function showTab(tabId) {
+      if (tabId !== 'search-results') {
+        lastActiveTab = tabId;
+        // Also clear the search bar if they click a tab button directly
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput && searchInput.value && tabId !== 'search-results') {
+          searchInput.value = '';
+          const clearBtn = document.getElementById('clearSearchBtn');
+          if (clearBtn) clearBtn.style.display = 'none';
+        }
+      }
+
       document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
       });
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
       });
-      document.getElementById('tab-' + tabId).classList.add('active');
+      
+      const targetTab = document.getElementById('tab-' + tabId);
+      if (targetTab) {
+        targetTab.classList.add('active');
+      }
 
       // Highlight sidebar button
       const buttons = document.querySelectorAll('.nav-btn');
       buttons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+      buttons.forEach(btn => {
+        if (tabId === 'search-results') {
+          // Deselect all buttons when search results are showing
+          return;
+        }
         if (btn.textContent.toLowerCase().includes(tabId.split('-')[0])) {
           btn.classList.add('active');
         }
       });
+    }
+
+    // Search implementation
+    function handleSearch() {
+      const searchInput = document.getElementById('searchInput');
+      const query = searchInput.value.trim().toLowerCase();
+      const clearBtn = document.getElementById('clearSearchBtn');
+      const resultsContainer = document.getElementById('search-results-list');
+      const resultsInfo = document.getElementById('search-results-info');
+
+      if (!query) {
+        clearSearch();
+        return;
+      }
+
+      // Show clear button
+      if (clearBtn) clearBtn.style.display = 'block';
+
+      // Switch to search results tab
+      showTab('search-results');
+
+      // Clear previous results
+      resultsContainer.innerHTML = '';
+
+      // Find all tab contents except the search results itself
+      const tabs = document.querySelectorAll('.tab-content:not(#tab-search-results)');
+      const matches = [];
+
+      tabs.forEach(tab => {
+        const tabId = tab.id.replace('tab-', '');
+        // Determine user-friendly category name from tab heading/buttons
+        let categoryName = tabId;
+        const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.textContent.toLowerCase().includes(tabId.split('-')[0]));
+        if (btn) {
+          categoryName = btn.textContent.trim();
+        } else if (tabId === 'resources') {
+          categoryName = '📚 Further Learning';
+        }
+
+        // Search each card inside the tab
+        const cards = tab.querySelectorAll('.card');
+        cards.forEach((card, cardIdx) => {
+          // Assign an ID to card if it doesn't have one, so we can scroll to it
+          if (!card.id) {
+            card.id = `card-${tabId}-${cardIdx}`;
+          }
+
+          const h2 = card.querySelector('h2');
+          const h2Text = h2 ? h2.textContent : '';
+          const cardText = card.textContent || '';
+          
+          if (cardText.toLowerCase().includes(query)) {
+            matches.push({
+              tabId: tabId,
+              cardId: card.id,
+              category: categoryName,
+              title: h2Text || 'Snippet',
+              fullText: cardText
+            });
+          }
+        });
+      });
+
+      if (matches.length > 0) {
+        resultsInfo.innerHTML = `Found <strong>${matches.length}</strong> matching section${matches.length === 1 ? '' : 's'} for "<strong>${escapeHtml(searchInput.value)}</strong>":`;
+        
+        matches.forEach(match => {
+          const resultItem = document.createElement('div');
+          resultItem.className = 'search-result-item';
+          resultItem.onclick = () => selectSearchResult(match.tabId, match.cardId);
+
+          // Create snippet around query
+          const textLower = match.fullText.toLowerCase();
+          const queryIdx = textLower.indexOf(query);
+          let snippet = '';
+          const snippetLength = 160;
+
+          if (queryIdx !== -1) {
+            const start = Math.max(0, queryIdx - 40);
+            const end = Math.min(match.fullText.length, queryIdx + query.length + 100);
+            snippet = match.fullText.substring(start, end).trim();
+            if (start > 0) snippet = '...' + snippet;
+            if (end < match.fullText.length) snippet = snippet + '...';
+            
+            // Highlight the query inside snippet using regex for case-insensitive replacement
+            const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            const regex = new RegExp(`(${escapedQuery})`, 'gi');
+            snippet = snippet.replace(regex, '<mark>$1</mark>');
+          } else {
+            snippet = match.fullText.substring(0, snippetLength) + '...';
+          }
+
+          resultItem.innerHTML = `
+            <span class="search-result-category">${escapeHtml(match.category)}</span>
+            <h3 class="search-result-title">${escapeHtml(match.title)}</h3>
+            <p class="search-result-snippet">${snippet}</p>
+          `;
+          resultsContainer.appendChild(resultItem);
+        });
+      } else {
+        resultsInfo.textContent = '';
+        
+        const noResults = document.createElement('div');
+        noResults.className = 'no-results-card';
+        noResults.innerHTML = `
+          <div style="font-size: 3rem; margin-bottom: 8px;">🔍</div>
+          <h3 class="search-result-title">No local results found for "${escapeHtml(searchInput.value)}"</h3>
+          <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto; line-height: 1.6;">We couldn't find any matching topics in this manual. How about searching one of our recommended external resources?</p>
+          <div class="search-fallback-buttons">
+            <a href="https://docs.python.org/3/search.html?q=${encodeURIComponent(searchInput.value)}" target="_blank" class="list-btn fallback-search-btn" id="fallback-btn-python-docs">
+              📚 Official Python Docs
+            </a>
+            <a href="https://www.google.com/search?q=site:w3schools.com/python+${encodeURIComponent(searchInput.value)}" target="_blank" class="list-btn fallback-search-btn secondary" id="fallback-btn-w3schools">
+              💚 W3Schools Tutorial
+            </a>
+            <a href="https://realpython.com/search?q=${encodeURIComponent(searchInput.value)}" target="_blank" class="list-btn fallback-search-btn secondary" id="fallback-btn-realpython">
+              🐍 Real Python
+            </a>
+          </div>
+        `;
+        resultsContainer.appendChild(noResults);
+      }
+    }
+
+    function clearSearch() {
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = '';
+      
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.style.display = 'none';
+
+      // Restore previously active tab
+      showTab(lastActiveTab);
+    }
+
+    function selectSearchResult(tabId, cardId) {
+      showTab(tabId);
+      
+      // Allow DOM update and scroll to card
+      setTimeout(() => {
+        const card = document.getElementById(cardId);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          
+          // Add pulse highlight animation
+          card.classList.remove('card-highlight-pulse');
+          // Trigger reflow to restart animation
+          void card.offsetWidth;
+          card.classList.add('card-highlight-pulse');
+          
+          // Remove class after animation finishes
+          setTimeout(() => {
+            card.classList.remove('card-highlight-pulse');
+          }, 1500);
+        }
+      }, 100);
+    }
+
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
     }
 
     // Copy code snippet
