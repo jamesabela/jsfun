@@ -1,0 +1,433 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="sizeVar">size</variable>
+    <variable id="depthVar">depth</variable>
+  </variables>
+  
+  <!-- Definition of sierpinski(size, depth) -->
+  <block type="procedures_defnoreturn" id="defineSierpinski" x="20" y="20">
+    <mutation>
+      <arg name="size" varid="sizeVar"></arg>
+      <arg name="depth" varid="depthVar"></arg>
+    </mutation>
+    <field name="NAME">sierpinski</field>
+    <statement name="STACK">
+      <block type="comment_line" id="commentSierpinski">
+        <field name="TEXT">Recursive Sierpinski Triangle: base case fills, recursive case splits.</field>
+        <next>
+          <block type="controls_if" id="ifDepthZero">
+            <mutation else="1"></mutation>
+            <value name="IF0">
+              <block type="logic_compare" id="compareDepthZero">
+                <field name="OP">EQ</field>
+                <value name="A">
+                  <block type="variables_get" id="getDepthForCompare">
+                    <field name="VAR" id="depthVar">depth</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="numZero">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <!-- Base Case: draw a single filled triangle -->
+              <block type="turtle_begin_fill" id="beginFillBase">
+                <next>
+                  <block type="turtle_forward" id="fwdBase1">
+                    <value name="DISTANCE">
+                      <block type="variables_get" id="getSizeBase1">
+                        <field name="VAR" id="sizeVar">size</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="turtle_left" id="leftBase1">
+                        <value name="ANGLE">
+                          <shadow type="math_number" id="angleBase1">
+                            <field name="NUM">120</field>
+                          </shadow>
+                        </value>
+                        <next>
+                          <block type="turtle_forward" id="fwdBase2">
+                            <value name="DISTANCE">
+                              <block type="variables_get" id="getSizeBase2">
+                                <field name="VAR" id="sizeVar">size</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="turtle_left" id="leftBase2">
+                                <value name="ANGLE">
+                                  <shadow type="math_number" id="angleBase2">
+                                    <field name="NUM">120</field>
+                                  </shadow>
+                                </value>
+                                <next>
+                                  <block type="turtle_forward" id="fwdBase3">
+                                    <value name="DISTANCE">
+                                      <block type="variables_get" id="getSizeBase3">
+                                        <field name="VAR" id="sizeVar">size</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="turtle_left" id="leftBase3">
+                                        <value name="ANGLE">
+                                          <shadow type="math_number" id="angleBase3">
+                                            <field name="NUM">120</field>
+                                          </shadow>
+                                        </value>
+                                        <next>
+                                          <block type="turtle_end_fill" id="endFillBase"></block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <!-- Recursive Case: draw 3 smaller triangles -->
+              <!-- 1. Call sierpinski(size / 2, depth - 1) -->
+              <block type="procedures_callnoreturn" id="callSierpinski1">
+                <mutation name="sierpinski">
+                  <arg name="size"></arg>
+                  <arg name="depth"></arg>
+                </mutation>
+                <value name="ARG0">
+                  <block type="math_arithmetic" id="sizeDivTwo1">
+                    <field name="OP">DIVIDE</field>
+                    <value name="A">
+                      <block type="variables_get" id="getSizeDiv1">
+                        <field name="VAR" id="sizeVar">size</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="math_number" id="divTwo1">
+                        <field name="NUM">2</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="ARG1">
+                  <block type="math_arithmetic" id="depthSubOne1">
+                    <field name="OP">MINUS</field>
+                    <value name="A">
+                      <block type="variables_get" id="getDepthSub1">
+                        <field name="VAR" id="depthVar">depth</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="math_number" id="subOne1">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <!-- 2. move forward (size / 2) -->
+                  <block type="turtle_forward" id="fwdRec1">
+                    <value name="DISTANCE">
+                      <block type="math_arithmetic" id="sizeDivTwo2">
+                        <field name="OP">DIVIDE</field>
+                        <value name="A">
+                          <block type="variables_get" id="getSizeDiv2">
+                            <field name="VAR" id="sizeVar">size</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="math_number" id="divTwo2">
+                            <field name="NUM">2</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <!-- 3. Call sierpinski(size / 2, depth - 1) -->
+                      <block type="procedures_callnoreturn" id="callSierpinski2">
+                        <mutation name="sierpinski">
+                          <arg name="size"></arg>
+                          <arg name="depth"></arg>
+                        </mutation>
+                        <value name="ARG0">
+                          <block type="math_arithmetic" id="sizeDivTwo3">
+                            <field name="OP">DIVIDE</field>
+                            <value name="A">
+                              <block type="variables_get" id="getSizeDiv3">
+                                <field name="VAR" id="sizeVar">size</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="divTwo3">
+                                <field name="NUM">2</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ARG1">
+                          <block type="math_arithmetic" id="depthSubOne2">
+                            <field name="OP">MINUS</field>
+                            <value name="A">
+                              <block type="variables_get" id="getDepthSub2">
+                                <field name="VAR" id="depthVar">depth</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="subOne2">
+                                <field name="NUM">1</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <next>
+                          <!-- 4. move backward (size / 2) -->
+                          <block type="turtle_backward" id="bkRec1">
+                            <value name="DISTANCE">
+                              <block type="math_arithmetic" id="sizeDivTwo4">
+                                <field name="OP">DIVIDE</field>
+                                <value name="A">
+                                  <block type="variables_get" id="getSizeDiv4">
+                                    <field name="VAR" id="sizeVar">size</field>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="math_number" id="divTwo4">
+                                    <field name="NUM">2</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <!-- 5. turn left 60 -->
+                              <block type="turtle_left" id="leftRec1">
+                                <value name="ANGLE">
+                                  <shadow type="math_number" id="angleRec1">
+                                    <field name="NUM">60</field>
+                                  </shadow>
+                                </value>
+                                <next>
+                                  <!-- 6. move forward (size / 2) -->
+                                  <block type="turtle_forward" id="fwdRec2">
+                                    <value name="DISTANCE">
+                                      <block type="math_arithmetic" id="sizeDivTwo5">
+                                        <field name="OP">DIVIDE</field>
+                                        <value name="A">
+                                          <block type="variables_get" id="getSizeDiv5">
+                                            <field name="VAR" id="sizeVar">size</field>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="math_number" id="divTwo5">
+                                            <field name="NUM">2</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <!-- 7. turn right 60 -->
+                                      <block type="turtle_right" id="rightRec1">
+                                        <value name="ANGLE">
+                                          <shadow type="math_number" id="angleRec2">
+                                            <field name="NUM">60</field>
+                                          </shadow>
+                                        </value>
+                                        <next>
+                                          <!-- 8. Call sierpinski(size / 2, depth - 1) -->
+                                          <block type="procedures_callnoreturn" id="callSierpinski3">
+                                            <mutation name="sierpinski">
+                                              <arg name="size"></arg>
+                                              <arg name="depth"></arg>
+                                            </mutation>
+                                            <value name="ARG0">
+                                              <block type="math_arithmetic" id="sizeDivTwo6">
+                                                <field name="OP">DIVIDE</field>
+                                                <value name="A">
+                                                  <block type="variables_get" id="getSizeDiv6">
+                                                    <field name="VAR" id="sizeVar">size</field>
+                                                  </block>
+                                                </value>
+                                                <value name="B">
+                                                  <block type="math_number" id="divTwo6">
+                                                    <field name="NUM">2</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <value name="ARG1">
+                                              <block type="math_arithmetic" id="depthSubOne3">
+                                                <field name="OP">MINUS</field>
+                                                <value name="A">
+                                                  <block type="variables_get" id="getDepthSub3">
+                                                    <field name="VAR" id="depthVar">depth</field>
+                                                  </block>
+                                                </value>
+                                                <value name="B">
+                                                  <block type="math_number" id="subOne3">
+                                                    <field name="NUM">1</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <!-- 9. turn left 60 -->
+                                              <block type="turtle_left" id="leftRec2">
+                                                <value name="ANGLE">
+                                                  <shadow type="math_number" id="angleRec3">
+                                                    <field name="NUM">60</field>
+                                                  </shadow>
+                                                </value>
+                                                <next>
+                                                  <!-- 10. move backward (size / 2) -->
+                                                  <block type="turtle_backward" id="bkRec2">
+                                                    <value name="DISTANCE">
+                                                      <block type="math_arithmetic" id="sizeDivTwo7">
+                                                        <field name="OP">DIVIDE</field>
+                                                        <value name="A">
+                                                          <block type="variables_get" id="getSizeDiv7">
+                                                            <field name="VAR" id="sizeVar">size</field>
+                                                          </block>
+                                                        </value>
+                                                        <value name="B">
+                                                          <block type="math_number" id="divTwo7">
+                                                            <field name="NUM">2</field>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <!-- 11. turn right 60 -->
+                                                      <block type="turtle_right" id="rightRec2">
+                                                        <value name="ANGLE">
+                                                          <shadow type="math_number" id="angleRec4">
+                                                            <field name="NUM">60</field>
+                                                          </shadow>
+                                                        </value>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+
+  <!-- Start when_run_clicked -->
+  <block type="when_run_clicked" id="startSierpinski" x="20" y="700">
+    <next>
+      <block type="comment_line" id="commentInit">
+        <field name="TEXT">Setup position/colors and draw the mathematical Sierpinski triangle.</field>
+        <next>
+          <block type="turtle_penup" id="penUpInit">
+            <next>
+              <!-- Setup colors -->
+              <block type="turtle_pencolor" id="setPenColor">
+                <field name="COLOR">#4f46e5</field>
+                <next>
+                  <block type="turtle_fillcolor" id="setFillColor">
+                    <field name="COLOR">#6366f1</field>
+                    <next>
+                      <!-- Move to starting position bottom-left -->
+                      <block type="turtle_right" id="turnInit1">
+                        <value name="ANGLE">
+                          <shadow type="math_number" id="angleInit1">
+                            <field name="NUM">90</field>
+                          </shadow>
+                        </value>
+                        <next>
+                          <block type="turtle_forward" id="fwdInit1">
+                            <value name="DISTANCE">
+                              <shadow type="math_number" id="distInit1">
+                                <field name="NUM">130</field>
+                              </shadow>
+                            </value>
+                            <next>
+                              <block type="turtle_right" id="turnInit2">
+                                <value name="ANGLE">
+                                  <shadow type="math_number" id="angleInit2">
+                                    <field name="NUM">90</field>
+                                  </shadow>
+                                </value>
+                                <next>
+                                  <block type="turtle_forward" id="fwdInit2">
+                                    <value name="DISTANCE">
+                                      <shadow type="math_number" id="distInit2">
+                                        <field name="NUM">150</field>
+                                      </shadow>
+                                    </value>
+                                    <next>
+                                      <block type="turtle_right" id="turnInit3">
+                                        <value name="ANGLE">
+                                          <shadow type="math_number" id="angleInit3">
+                                            <field name="NUM">180</field>
+                                          </shadow>
+                                        </value>
+                                        <next>
+                                          <block type="turtle_pendown" id="penDownInit">
+                                            <next>
+                                              <!-- Call sierpinski(300, 4) -->
+                                              <block type="procedures_callnoreturn" id="callSierpinskiStart">
+                                                <mutation name="sierpinski">
+                                                  <arg name="size"></arg>
+                                                  <arg name="depth"></arg>
+                                                </mutation>
+                                                <value name="ARG0">
+                                                  <block type="math_number" id="startSize">
+                                                    <field name="NUM">300</field>
+                                                  </block>
+                                                </value>
+                                                <value name="ARG1">
+                                                  <block type="math_number" id="startDepth">
+                                                    <field name="NUM">4</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
