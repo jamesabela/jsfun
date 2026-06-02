@@ -3,14 +3,13 @@
     <variable id="sizeVar">size</variable>
     <variable id="depthVar">depth</variable>
   </variables>
-  
-  <!-- Definition of sierpinski(size, depth) -->
   <block type="procedures_defnoreturn" id="defineSierpinski" x="20" y="20">
     <mutation>
       <arg name="size" varid="sizeVar"></arg>
       <arg name="depth" varid="depthVar"></arg>
     </mutation>
     <field name="NAME">sierpinski</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="comment_line" id="commentSierpinski">
         <field name="TEXT">Recursive Sierpinski Triangle: base case fills, recursive case splits.</field>
@@ -33,7 +32,6 @@
               </block>
             </value>
             <statement name="DO0">
-              <!-- Base Case: draw a single filled triangle -->
               <block type="turtle_begin_fill" id="beginFillBase">
                 <next>
                   <block type="turtle_forward" id="fwdBase1">
@@ -95,8 +93,6 @@
               </block>
             </statement>
             <statement name="ELSE">
-              <!-- Recursive Case: draw 3 smaller triangles -->
-              <!-- 1. Call sierpinski(size / 2, depth - 1) -->
               <block type="procedures_callnoreturn" id="callSierpinski1">
                 <mutation name="sierpinski">
                   <arg name="size"></arg>
@@ -133,7 +129,6 @@
                   </block>
                 </value>
                 <next>
-                  <!-- 2. move forward (size / 2) -->
                   <block type="turtle_forward" id="fwdRec1">
                     <value name="DISTANCE">
                       <block type="math_arithmetic" id="sizeDivTwo2">
@@ -151,7 +146,6 @@
                       </block>
                     </value>
                     <next>
-                      <!-- 3. Call sierpinski(size / 2, depth - 1) -->
                       <block type="procedures_callnoreturn" id="callSierpinski2">
                         <mutation name="sierpinski">
                           <arg name="size"></arg>
@@ -188,7 +182,6 @@
                           </block>
                         </value>
                         <next>
-                          <!-- 4. move backward (size / 2) -->
                           <block type="turtle_backward" id="bkRec1">
                             <value name="DISTANCE">
                               <block type="math_arithmetic" id="sizeDivTwo4">
@@ -206,7 +199,6 @@
                               </block>
                             </value>
                             <next>
-                              <!-- 5. turn left 60 -->
                               <block type="turtle_left" id="leftRec1">
                                 <value name="ANGLE">
                                   <shadow type="math_number" id="angleRec1">
@@ -214,7 +206,6 @@
                                   </shadow>
                                 </value>
                                 <next>
-                                  <!-- 6. move forward (size / 2) -->
                                   <block type="turtle_forward" id="fwdRec2">
                                     <value name="DISTANCE">
                                       <block type="math_arithmetic" id="sizeDivTwo5">
@@ -232,7 +223,6 @@
                                       </block>
                                     </value>
                                     <next>
-                                      <!-- 7. turn right 60 -->
                                       <block type="turtle_right" id="rightRec1">
                                         <value name="ANGLE">
                                           <shadow type="math_number" id="angleRec2">
@@ -240,7 +230,6 @@
                                           </shadow>
                                         </value>
                                         <next>
-                                          <!-- 8. Call sierpinski(size / 2, depth - 1) -->
                                           <block type="procedures_callnoreturn" id="callSierpinski3">
                                             <mutation name="sierpinski">
                                               <arg name="size"></arg>
@@ -277,7 +266,6 @@
                                               </block>
                                             </value>
                                             <next>
-                                              <!-- 9. turn left 60 -->
                                               <block type="turtle_left" id="leftRec2">
                                                 <value name="ANGLE">
                                                   <shadow type="math_number" id="angleRec3">
@@ -285,7 +273,6 @@
                                                   </shadow>
                                                 </value>
                                                 <next>
-                                                  <!-- 10. move backward (size / 2) -->
                                                   <block type="turtle_backward" id="bkRec2">
                                                     <value name="DISTANCE">
                                                       <block type="math_arithmetic" id="sizeDivTwo7">
@@ -303,7 +290,6 @@
                                                       </block>
                                                     </value>
                                                     <next>
-                                                      <!-- 11. turn right 60 -->
                                                       <block type="turtle_right" id="rightRec2">
                                                         <value name="ANGLE">
                                                           <shadow type="math_number" id="angleRec4">
@@ -337,23 +323,19 @@
       </block>
     </statement>
   </block>
-
-  <!-- Start when_run_clicked -->
-  <block type="when_run_clicked" id="startSierpinski" x="20" y="700">
+  <block type="when_run_clicked" id="startSierpinski" x="25" y="1121">
     <next>
       <block type="comment_line" id="commentInit">
         <field name="TEXT">Setup position/colors and draw the mathematical Sierpinski triangle.</field>
         <next>
           <block type="turtle_penup" id="penUpInit">
             <next>
-              <!-- Setup colors -->
               <block type="turtle_pencolor" id="setPenColor">
                 <field name="COLOR">#4f46e5</field>
                 <next>
                   <block type="turtle_fillcolor" id="setFillColor">
                     <field name="COLOR">#6366f1</field>
                     <next>
-                      <!-- Move to starting position bottom-left -->
                       <block type="turtle_right" id="turnInit1">
                         <value name="ANGLE">
                           <shadow type="math_number" id="angleInit1">
@@ -391,7 +373,6 @@
                                         <next>
                                           <block type="turtle_pendown" id="penDownInit">
                                             <next>
-                                              <!-- Call sierpinski(300, 4) -->
                                               <block type="procedures_callnoreturn" id="callSierpinskiStart">
                                                 <mutation name="sierpinski">
                                                   <arg name="size"></arg>
