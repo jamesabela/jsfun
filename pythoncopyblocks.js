@@ -2,6 +2,7 @@
 
 // Shared state with pythoncopy.js
 window.blocklyWorkspace = null;
+window.blocklyWorkspaceSearch = null;
 window.isUpdatingBlocklyFromText = false;
 window.lastGeneratedBlocklyPython = null;
 
@@ -315,6 +316,7 @@ function applyBlocklyTheme(isDark) {
 // Blockly Toolbox XML Configuration
 window.toolboxXml = `
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+  <category name="Search" kind="search"></category>
   <category name="Events" colour="#ffbf00">
     <block type="when_run_clicked"></block>
   </category>
@@ -456,6 +458,18 @@ window.toolboxXml = `
 </xml>
 `;
 
+function getBlocklyToolboxConfig() {
+  if (typeof Blockly !== 'undefined' &&
+      Blockly.registry &&
+      Blockly.registry.Type &&
+      Blockly.registry.hasItem &&
+      Blockly.registry.hasItem(Blockly.registry.Type.TOOLBOX_ITEM, 'search')) {
+    return window.toolboxXml;
+  }
+
+  return window.toolboxXml.replace(/\s*<category name="Search" kind="search"><\/category>/, '');
+}
+
 function getWorkspacePythonCode() {
   if (!window.blocklyWorkspace) return '';
   const gen = (typeof Blockly.Python !== 'undefined') 
@@ -566,7 +580,7 @@ function initBlockly() {
 
   const blocklyDiv = document.getElementById('blocklyDiv');
   window.blocklyWorkspace = Blockly.inject(blocklyDiv, {
-    toolbox: window.toolboxXml,
+    toolbox: getBlocklyToolboxConfig(),
     zoom: {
       controls: true,
       wheel: true,
@@ -585,6 +599,18 @@ function initBlockly() {
   window.blocklyWorkspace.setScale(fontSize / 16);
 
   window.blocklyWorkspace.addChangeListener(onBlocklyWorkspaceChange);
+  initBlocklyWorkspaceSearch();
+}
+
+function initBlocklyWorkspaceSearch() {
+  if (!window.blocklyWorkspace || window.blocklyWorkspaceSearch) return;
+  if (typeof WorkspaceSearch === 'undefined') return;
+
+  window.blocklyWorkspaceSearch = new WorkspaceSearch(window.blocklyWorkspace);
+  window.blocklyWorkspaceSearch.init();
+  if (typeof window.blocklyWorkspaceSearch.setSearchPlaceholder === 'function') {
+    window.blocklyWorkspaceSearch.setSearchPlaceholder('Search workspace blocks');
+  }
 }
 
 function onBlocklyWorkspaceChange(event) {
