@@ -117,9 +117,20 @@
     </div>
   </header>
 
-  <div class="input-container" id="inputContainer">
-    <input type="text" id="urlInput" placeholder="Enter the raw gist URL here..." />
-    <button onclick="updateURL()">Load Code</button>
+
+
+  <div class="instructions-panel" id="instructionsPanel">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <h2>Welcome to Python Code Lab! 🐍</h2>
+      <p style="margin: 8px 0 0 0; font-size: 15px; line-height: 1.5;">
+        Write, run, and step-trace your Python code using text or visual blocks. Browse the slides below to see what you can do!
+      </p>
+    </div>
+    <div class="carousel-container">
+      <div class="carousel-track" id="carouselTrack">
+        <!-- Loaded dynamically from pythoncopycarousel.html -->
+      </div>
+    </div>
   </div>
 
   <div class="starter-panel" id="starterPanel">
@@ -228,13 +239,7 @@
     </div>
   </div>
 
-  <div class="instructions-panel" id="instructionsPanel">
-    <div class="carousel-container">
-      <div class="carousel-track" id="carouselTrack">
-        <!-- Loaded dynamically from pythoncopycarousel.html -->
-      </div>
-    </div>
-  </div>
+
 
   <div class="workspace" id="workspace">
     <div class="workspace-toolbar">
@@ -477,6 +482,14 @@
       });
     }
   </script>
+
+  <div class="input-container" id="inputContainer" style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
+    <p style="font-size: 14px; margin: 0 0 8px; font-weight: 600; color: var(--primary-color);">
+      Teachers &amp; Advanced: Load code from a raw Gist URL
+    </p>
+    <input type="text" id="urlInput" placeholder="Enter the raw gist URL here..." />
+    <button onclick="updateURL()">Load Code</button>
+  </div>
 
   <footer>
     <p>
