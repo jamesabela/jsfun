@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Movie Tickets</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
@@ -146,6 +149,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <header>
@@ -157,7 +161,8 @@
 
     <div class="card">
       <div class="card-title">🎬 Ticket Counter</div>
-      <p class="instruction-text">Let's calculate the total cost for movie tickets! Different audiences pay different prices:</p>
+      <p class="instruction-text">Let's calculate the total cost for movie tickets! Different audiences pay different
+        prices:</p>
       <ul class="instruction-text" style="margin-left: 20px; display: flex; flex-direction: column; gap: 6px;">
         <li>👶 <strong>Child</strong>: RM 5</li>
         <li>🎓 <strong>Student</strong>: RM 6</li>
@@ -169,30 +174,36 @@
       </div>
     </div>
 
-    <div class="banner" style="background: var(--accent-gold-glow); border-left: 4px solid var(--accent-gold); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; line-height: 1.4; display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+    <div class="banner"
+      style="background: var(--accent-gold-glow); border-left: 4px solid var(--accent-gold); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; line-height: 1.4; display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
       <span>💡</span>
-      <span><strong>Case Insensitivity:</strong> Users might type <code>Child</code>, <code>child</code>, or <code>CHILD</code>. To make your string checks robust, you can normalize the ticket type using <code>.lower().strip()</code> (e.g. <code>ticket_type = input(...).lower().strip()</code>).</span>
+      <span><strong>Case Insensitivity:</strong> Users might type <code>Child</code>, <code>child</code>, or
+        <code>CHILD</code>. To make your string checks robust, you can normalize the ticket type using
+        <code>.lower().strip()</code> (e.g. <code>ticket_type = input(...).lower().strip()</code>).</span>
     </div>
 
     <div class="card">
       <div class="card-title">🎯 Your Task</div>
-      <p class="instruction-text">Ask the user for the number of tickets and the ticket type. Calculate and print the total price:</p>
+      <p class="instruction-text">Ask the user for the number of tickets and the ticket type. Calculate and print the
+        total price:</p>
       <ol class="instruction-text" style="margin-left: 20px; display: flex; flex-direction: column; gap: 8px;">
         <li>Read <code>tickets</code> as an integer.</li>
         <li>Read <code>ticket_type</code> as a string.</li>
-        <li>Use <code>if</code>, <code>elif</code>, and <code>else</code> selection statements to determine the price per ticket.</li>
+        <li>Use <code>if</code>, <code>elif</code>, and <code>else</code> selection statements to determine the price
+          per ticket.</li>
         <li>Multiply the price by the number of tickets and print the final total.</li>
       </ol>
     </div>
 
-    <div class="banner" style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--accent-blue); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; line-height: 1.4; display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+    <div class="banner"
+      style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--accent-blue); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; line-height: 1.4; display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
       <span>⚙️</span>
       <span><strong>How Tests Work:</strong> The test runner checks five ticket bookings:
-      <br>• Inputting <code>3</code> and <code>child</code> must print <code>15</code>.
-      <br>• Inputting <code>2</code> and <code>student</code> must print <code>12</code>.
-      <br>• Inputting <code>1</code> and <code>adult</code> must print <code>10</code>.
-      <br>• Inputting <code>5</code> and <code>senior</code> must print <code>30</code>.
-      <br>• Inputting <code>4</code> and <code>Child</code> must print <code>20</code>.</span>
+        <br>• Inputting <code>3</code> and <code>child</code> must print <code>15</code>.
+        <br>• Inputting <code>2</code> and <code>student</code> must print <code>12</code>.
+        <br>• Inputting <code>1</code> and <code>adult</code> must print <code>10</code>.
+        <br>• Inputting <code>5</code> and <code>senior</code> must print <code>30</code>.
+        <br>• Inputting <code>4</code> and <code>Child</code> must print <code>20</code>.</span>
     </div>
 
     <div class="card">
@@ -207,8 +218,11 @@ ticket_type = input("Ticket type:")
 
     <div class="card">
       <div class="card-title">🔗 Resources</div>
-      <p class="instruction-text">Need help? Read the <a class="resource-link" href="https://docs.google.com/document/d/1OpK-pP74RvHYjkwe3gNHBu2bnr1ok3bMlK-xIPnhJ-k/view" target="_blank" rel="noopener">Code Reference Guide</a>.</p>
+      <p class="instruction-text">Need help? Read the <a class="resource-link"
+          href="https://jamesabela.github.io/jsfun/pythonmanual.html" target="_blank" rel="noopener">Code Reference
+          Guide</a>.</p>
     </div>
   </div>
 </body>
+
 </html>
