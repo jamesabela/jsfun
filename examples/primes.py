@@ -1,3 +1,4 @@
+#Learn more about primes at: https://jamesabela.github.io/jsfun/examples/primes.html
 import datetime
 def generate_n_primes(N):
     primes  = [2]
