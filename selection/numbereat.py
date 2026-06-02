@@ -11,8 +11,8 @@
 # smaller than 10
 # bigger than 5
 
-num = 6
-print("I am 6. I am afraid!")
+num = 6 # You need to change this line!
+print("I am 6. I am afraid!") 
 if 5 < num:
     print("6 you are bigger than 5")
 if 10 > num:
