@@ -599,6 +599,12 @@
       background: #007bff;
     }
 
+    .primary-button:disabled {
+      background: #94a3b8 !important;
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .run-button {
       background: #059669;
     }

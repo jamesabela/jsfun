@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Code Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" id="prism-theme">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
+      --sidebar-bg: rgba(15, 23, 42, 0.6);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-hover: rgba(51, 65, 85, 0.8);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --primary-glow: rgba(139, 92, 246, 0.15);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --accent-pink: #ec4899;
+      --accent-gold: #f59e0b;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+
+      /* Dynamic layout theme variables */
+      --header-bg: rgba(15, 23, 42, 0.25);
+      --content-bg: rgba(15, 23, 42, 0.15);
+      --code-bg: #0f172a;
+      --code-border: rgba(255, 255, 255, 0.05);
+      --copy-btn-bg: rgba(255, 255, 255, 0.1);
+      --copy-btn-border: rgba(255, 255, 255, 0.15);
+      --copy-btn-color: #ffffff;
+      --copy-btn-hover-bg: rgba(255, 255, 255, 0.2);
+      --list-input-bg: rgba(15, 23, 42, 0.3);
+      --turtle-playground-bg: rgba(15, 23, 42, 0.4);
+      --turtle-wrapper-bg: #1e293b;
+    }
+
+    /* Light Theme overrides */
+    html.light-theme {
+      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
+      --sidebar-bg: rgba(255, 255, 255, 0.8);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-hover: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.1);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+
+      /* Dynamic layout theme variables for light theme */
+      --header-bg: rgba(255, 255, 255, 0.45);
+      --content-bg: rgba(255, 255, 255, 0.15);
+      --code-bg: #f8fafc;
+      --code-border: rgba(0, 0, 0, 0.06);
+      --copy-btn-bg: rgba(0, 0, 0, 0.05);
+      --copy-btn-border: rgba(0, 0, 0, 0.08);
+      --copy-btn-color: #0f172a;
+      --copy-btn-hover-bg: rgba(0, 0, 0, 0.1);
+      --list-input-bg: #ffffff;
+      --turtle-playground-bg: rgba(255, 255, 255, 0.45);
+      --turtle-wrapper-bg: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Navigation header */
+    header {
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      position: sticky;
+      top: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, #a78bfa, var(--accent-pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand span {
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      -webkit-text-fill-color: white;
+      margin-left: 6px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .theme-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow);
+    }
+
+    .theme-btn:hover {
+      transform: translateY(-1px);
+      background: var(--primary-glow);
+    }
+
+    /* App container */
+    .app-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 65px);
+      position: relative;
+    }
+
+    /* Sidebar navigation */
+    .sidebar {
+      width: 280px;
+      background: var(--sidebar-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 20px 12px;
+      gap: 6px;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin: 12px 12px 6px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    .nav-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    /* Content Area */
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px;
+      background: var(--content-bg);
+    }
+
+    .tab-content {
+      display: none;
+      max-width: 800px;
+      margin: 0 auto;
+      flex-direction: column;
+      gap: 24px;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .card:hover {
+      background: var(--card-hover);
+    }
+
+    .card h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .card strong {
+      color: var(--text-main);
+    }
+
+    /* Code Blocks */
+    .code-wrapper {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--code-border);
+      background: var(--code-bg);
+    }
+
+    pre[class*="language-"] {
+      margin: 0 !important;
+      background: transparent !important;
+      padding: 16px !important;
+      font-size: 0.85rem !important;
+    }
+
+    code[class*="language-"] {
+      font-family: var(--font-mono) !important;
+    }
+
+    .code-actions {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .copy-code-btn,
+    .open-editor-btn {
+      background: var(--copy-btn-bg);
+      border: 1px solid var(--copy-btn-border);
+      color: var(--copy-btn-color);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .copy-code-btn:hover {
+      background: var(--copy-btn-hover-bg);
+    }
+
+    .open-editor-btn {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .open-editor-btn:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+      color: #ffffff;
+    }
+
+    /* Interactive Grids / Tables */
+    .op-grid {
+      display: grid;
+      grid-template-columns: 80px 180px 1fr 150px;
+      gap: 12px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .op-header {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      padding: 12px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      font-family: var(--font-display);
+    }
+
+    .op-cell {
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .op-cell code {
+      font-family: var(--font-mono);
+      color: var(--accent-pink);
+    }
+
+    .op-cell.code-eval {
+      cursor: pointer;
+      color: var(--success);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .op-cell.code-eval:hover {
+      text-decoration: underline;
+    }
+
+    /* Banners & Callouts */
+    .banner {
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      gap: 14px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .banner.bug {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid #ef4444;
+      color: #fca5a5;
+    }
+
+    .banner.bug strong {
+      color: #ef4444;
+    }
+
+    .banner.info {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid #3b82f6;
+      color: #93c5fd;
+    }
+
+    .banner.info strong {
+      color: #3b82f6;
+    }
+
+
+
+    /* Lists Visualizer Section */
+    .list-visualizer {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .list-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      min-height: 85px;
+      align-items: flex-start;
+    }
+
+    .list-item-box {
+      background: var(--primary-glow);
+      border: 2px dashed var(--primary);
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      position: relative;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .list-item-box.highlight {
+      background: var(--success-glow);
+      border-color: var(--success);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    }
+
+    .list-item-val {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .list-item-idx {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .list-controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .list-input {
+      background: var(--list-input-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .list-btn {
+      background: var(--primary);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .list-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .list-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .list-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Interactive Quiz */
+    .quiz-question {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 10px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .quiz-option {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .quiz-option:hover {
+      border-color: var(--primary);
+      color: var(--text-main);
+    }
+
+    .quiz-option.correct {
+      background: var(--success-glow);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .quiz-option.incorrect {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: #ef4444;
+      color: #f87171;
+    }
+
+    /* Turtle playground */
+    .turtle-playground {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--turtle-playground-bg);
+    }
+
+    .turtle-canvas-wrapper {
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--turtle-wrapper-bg);
+      min-height: 300px;
+      position: relative;
+    }
+
+    .turtle-canvas {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+    }
+
+    .turtle-controls {
+      padding: 16px;
+      background: var(--card-bg);
+      border-left: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .turtle-btn-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .turtle-cmd-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .turtle-cmd-btn:hover {
+      background: var(--primary-glow);
+      border-color: var(--primary);
+    }
+
+    /* Image Hero display */
+    .hero-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-img {
+      max-width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid #334155;
+      font-size: 0.95rem;
+      color: #94a3b8;
+      margin-top: 40px;
+      margin-left: -32px;
+      margin-right: -32px;
+      margin-bottom: -32px;
+      background: #0f172a;
+    }
+
+    html.light-theme footer {
+      background: #f8fafc;
+      border-top-color: #e2e8f0;
+      color: #64748b;
+    }
+
+    footer a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    footer a.tea {
+      color: #e73c7e;
+    }
+
+    footer a.computing-link {
+      display: inline-block;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      🐍 PythonManual
+    </div>
+    <div class="header-actions">
+      <button class="theme-btn" id="themeToggleBtn" onclick="toggleThemeManual()">
+        <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Dark Mode</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-title">Getting Started</div>
+      <button class="nav-btn active" onclick="showTab('print-var')">📢 Print & Variables</button>
+      <button class="nav-btn" onclick="showTab('operators')">➗ Operators</button>
+
+      <div class="sidebar-title">User Interaction</div>
+      <button class="nav-btn" onclick="showTab('inputs')">📥 Inputs & Delays</button>
+      <button class="nav-btn" onclick="showTab('selection')">🔀 Selection (If/Else)</button>
+
+      <div class="sidebar-title">Loops & Logic</div>
+      <button class="nav-btn" onclick="showTab('loops')">🔁 Loops & Break</button>
+      <button class="nav-btn" onclick="showTab('strings')">📏 String Helpers (len/or)</button>
+
+      <div class="sidebar-title">Data & Graphics</div>
+      <button class="nav-btn" onclick="showTab('lists')">🗂️ Lists Guide</button>
+      <button class="nav-btn" onclick="showTab('turtle')">🐢 Turtle Commands</button>
+
+      <div class="sidebar-title">Resources</div>
+      <button class="nav-btn" onclick="showTab('resources')">📚 Further Learning</button>
+    </aside>
+
+    <main class="content-area">
+
+      <!-- TAB 1: Print & Variables -->
+      <div id="tab-print-var" class="tab-content active">
+        <div class="card">
+          <h2>📢 The print() Function</h2>
+          <p>The <code>print()</code> function is used to output text, numbers, or variables to the screen.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">print("hello", "\nworld")</code></pre>
+          </div>
+          <p><strong>Spacing:</strong> You can use a comma <code>,</code> to combine variables, strings, and numbers in
+            the same print statement. Python automatically adds a space between items separated by a comma.</p>
+          <p><strong>Concatenation:</strong> You can also use the <code>+</code> operator to combine items, but
+            <strong>be careful</strong>: you can only concatenate strings with other strings, or add numbers to other
+            numbers. Mixing them will cause a type error! The benefit of <code>+</code> is that it doesn't add any
+            spaces automatically.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>📦 Variable Assignment</h2>
+          <p>Variables are like boxes that store values. You assign a value to a variable using a single equals sign
+            <code>=</code>.
+          </p>
+          <div class="code-wrapper">
+            <pre><code class="language-python"># Assigning a number
+a = 5
+
+# Assigning text (strings)
+a = "hello"</code></pre>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Common Bug:</strong> Text values (strings) <strong>always</strong> need speech marks
+              <code>" "</code> or <code>' '</code>. Numbers and variable names do not!</span>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- TAB 2: Operators -->
+      <div id="tab-operators" class="tab-content">
+        <div class="card">
+          <h2>➗ Python Operators</h2>
+          <p>Python uses standard symbols to do calculations. Below is your quick reference guide. Click on any example
+            value to evaluate it live in the simulator!</p>
+
+          <div class="op-grid" style="grid-template-columns: 80px 180px 1fr 150px;">
+            <div class="op-header">Symbol</div>
+            <div class="op-header">What it does</div>
+            <div class="op-header">Example</div>
+            <div class="op-header">Result</div>
+
+            <div class="op-cell"><code>+</code></div>
+            <div class="op-cell">Addition</div>
+            <div class="op-cell"><code>print(8 + 2)</code></div>
+            <div class="op-cell"><code>10</code></div>
+
+            <div class="op-cell"><code>-</code></div>
+            <div class="op-cell">Subtraction</div>
+            <div class="op-cell"><code>print(8 - 2)</code></div>
+            <div class="op-cell"><code>6</code></div>
+
+            <div class="op-cell"><code>*</code></div>
+            <div class="op-cell">Multiplication</div>
+            <div class="op-cell"><code>print(8 * 2)</code></div>
+            <div class="op-cell"><code>16</code></div>
+
+            <div class="op-cell"><code>/</code></div>
+            <div class="op-cell">Division</div>
+            <div class="op-cell"><code>print(10 / 4)</code></div>
+            <div class="op-cell"><code>2.5</code></div>
+
+            <div class="op-cell"><code>%</code></div>
+            <div class="op-cell">Modulus (Remainder)</div>
+            <div class="op-cell"><code>print(10 % 3)</code></div>
+            <div class="op-cell"><code>1</code></div>
+
+            <div class="op-cell"><code>//</code></div>
+            <div class="op-cell">Floor Divide (Whole number)</div>
+            <div class="op-cell"><code>print(10 // 4)</code></div>
+            <div class="op-cell"><code>2</code></div>
+
+            <div class="op-cell"><code>**</code></div>
+            <div class="op-cell">Exponent (Power of)</div>
+            <div class="op-cell"><code>print(10 ** 4)</code></div>
+            <div class="op-cell"><code>10000</code></div>
+
+            <div class="op-cell"><code>*</code> (on text)</div>
+            <div class="op-cell">String Multiplication</div>
+            <div class="op-cell"><code>print("7" * 2)</code></div>
+            <div class="op-cell"><code>77</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Inputs & Delays -->
+      <div id="tab-inputs" class="tab-content">
+        <div class="card">
+          <h2>📥 Read User Inputs</h2>
+          <p>The <code>input()</code> function allows programs to pause and ask the user for information.</p>
+
+          <div class="code-wrapper">
+            <pre><code class="language-python"># 1. Text Inputs (Default)
+name = input("Hi! What's your name? ")</code></pre>
+          </div>
+          <p>By default, everything entered is treated as <strong>Text (a string)</strong>. You cannot perform
+            mathematical operations on text, even if the user types in numbers like <code>123</code>.</p>
+
+          <div class="code-wrapper">
+            <pre><code class="language-python"># 2. Number Inputs
+MyAge = int(input("When were you born? "))</code></pre>
+          </div>
+          <p>By wrapping <code>input()</code> inside <code>int()</code>, the text input is converted into an **Integer
+            (a whole number)**, allowing you to calculate values with it.</p>
+        </div>
+
+        <div class="card">
+          <h2>⏰ Time Delays (time.sleep)</h2>
+          <p>You can create pauses or delays in your code using the <code>time</code> module.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">import time
+
+print("Wait for it...")
+time.sleep(2)  # Pause for 2 seconds
+print("Worth waiting for!")</code></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- TAB 4: Selection (If/Else) -->
+      <div id="tab-selection" class="tab-content">
+        <div class="card">
+          <h2>🔀 Selection: If & Else</h2>
+          <p>Selection allows programs to make decisions and execute different blocks of code depending on conditions.
+          </p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">test = input("Is it raining? y/n ")
+if test == "y":
+    print("Oh dear, no football today!")
+else: 
+    print("Great, let's go and play football!")</code></pre>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Common Bug:</strong> Use one equals sign <code>=</code> to assign values (e.g.
+              <code>a = 5</code>). Use double equals <code>==</code> to compare values (e.g.
+              <code>if test == "y":</code>). Missing a colon <code>:</code> or correct indenting will crash your
+              code!</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔀 Elif (Else If)</h2>
+          <p>Use <code>elif</code> when you need to check multiple conditions sequentially. Once a condition is met, the
+            subsequent checks are skipped.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">age = 18
+
+if age < 17:
+  print("You are not old enough to drive or vote.")
+elif age == 17:
+  print("You are old enough to drive!")
+else:
+  print("You are old enough to drive and vote!")</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧠 Quick Quiz: Selection</h2>
+          <p>Given this code block, what will it print if the user inputs <code>18</code>?</p>
+          <pre><code class="language-python">age = int(input("Age: "))
+if age >= 17:
+    print("Drive!")
+elif age >= 18:
+    print("Vote!")
+else:
+    print("Wait!")</code></pre>
+          <div class="quiz-question">
+            <div class="quiz-options">
+              <button class="quiz-option" onclick="checkQuiz(this, false)">A. Drive! and Vote!</button>
+              <button class="quiz-option" onclick="checkQuiz(this, true)">(Recommended) B. Drive!</button>
+              <button class="quiz-option" onclick="checkQuiz(this, false)">C. Vote!</button>
+              <button class="quiz-option" onclick="checkQuiz(this, false)">D. Wait!</button>
+            </div>
+            <p style="margin-top: 12px; font-size: 0.85rem; font-style: italic;" class="quiz-feedback"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: Loops & Break -->
+      <div id="tab-loops" class="tab-content">
+        <div class="card">
+          <h2>🔁 Iteration: While Loops</h2>
+          <p>Loops allow computers to repeat instructions quickly. A <code>while</code> loop repeats as long as a
+            condition is true.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">love_status = "y"
+while love_status == "y":
+    love_status = input('Do you love iteration? y/n ')</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🛑 The Break Statement</h2>
+          <p>You can end a loop instantly using the <code>break</code> statement, even if the loop condition is still
+            true.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">while True:
+  user_input = input("Enter Q to quit: ")
+  if user_input == "Q":
+    break</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔁 For Loops & range()</h2>
+          <p>A <code>for</code> loop repeats a set number of times. You can use <code>range()</code> to customize the
+            loop sequence.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python"># 1. Repeat 20 times (0 to 19)
+for i in range(20):
+    print(i)
+
+# 2. Start, Stop, and Steps
+# Goes from 1 to 99 in steps of 2 (stops before 100)
+for i in range(1, 100, 2):
+    print(i)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 6: String Helpers -->
+      <div id="tab-strings" class="tab-content">
+        <div class="card">
+          <h2>📏 String Length: len()</h2>
+          <p>The <code>len()</code> function returns the number of characters in a string.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">greeting = "Good Day!"
+print(len(greeting)) # Outputs: 9</code></pre>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Common Bug:</strong> <code>len()</code> does not work on numbers (integers). To find the
+              length of a number, convert it to a string first: <br><code>print(len(str(mynum)))</code></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔍 Logical Operator: or</h2>
+          <p>Use the <code>or</code> operator to check if at least one of multiple statements is true.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">number = 0
+while number < 15 or number > 20:
+    print("Please enter a number between 15 and 20")
+    number = int(input("enter a number: "))</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 7: Lists Guide -->
+      <div id="tab-lists" class="tab-content">
+        <div class="card">
+          <h2>🗂️ Working with Lists</h2>
+          <p>Lists store collections of items under a single variable name using square brackets <code>[ ]</code>.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python"># Empty List
+emptylist = []
+
+# List with items
+MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
+          </div>
+          <p><strong>Indexing:</strong> Lists start counting from index <code>0</code>.
+            <br>• Print index 0: <code>print(MyList[0])</code> -> Prints <code>Kuala Lumpur</code>.
+            <br>• Print a range: <code>print(MyList[0:3])</code> -> Prints indexes 0, 1, 2.
+            <br>• Format range print: <code>print(*MyList[0:3], sep=", ")</code> -> Removes brackets and separates with
+            commas.
+            <br>• Right-to-left: <code>print(MyList[-1])</code> -> Prints the last item <code>Bangkok</code>.
+          </p>
+        </div>
+
+        <!-- Interactive Visual List Builder -->
+        <div class="list-visualizer">
+          <h2>🛠️ Interactive List Playground</h2>
+          <p>Play with the list visualization below! Modify items or slice ranges to see the changes visually.</p>
+
+          <div class="list-row" id="visual-list-container">
+            <!-- Populated dynamically -->
+          </div>
+
+          <div class="list-controls">
+            <input type="text" class="list-input" id="list-input-val" placeholder="New Item Name..." />
+            <button class="list-btn" onclick="appendVisualList()">append()</button>
+            <button class="list-btn secondary" onclick="changeVisualList()">Change Index [1]</button>
+            <button class="list-btn secondary" onclick="sliceVisualList()">Slice [0:3]</button>
+            <button class="list-btn secondary" onclick="resetVisualList()">Reset List</button>
+          </div>
+          <div class="instruction-text" id="list-feedback" style="font-weight: 600; color: var(--accent-pink);"></div>
+        </div>
+      </div>
+
+      <!-- TAB 8: Turtle Commands -->
+      <div id="tab-turtle" class="tab-content">
+        <div class="card">
+          <h2>🐢 Basic Turtle Graphics</h2>
+          <p>Turtle allows you to draw shapes and lines in Python. Below are the basic movements and configuration
+            options.</p>
+
+          <div class="op-grid" style="grid-template-columns: 200px 1fr;">
+            <div class="op-header">Turtle Command</div>
+            <div class="op-header">What it does</div>
+
+            <div class="op-cell"><code>turtle.forward(50)</code></div>
+            <div class="op-cell">Go forward 50 steps</div>
+
+            <div class="op-cell"><code>turtle.backward(50)</code></div>
+            <div class="op-cell">Go backward 50 steps</div>
+
+            <div class="op-cell"><code>turtle.right(90)</code></div>
+            <div class="op-cell">Turn right 90 degrees</div>
+
+            <div class="op-cell"><code>turtle.left(90)</code></div>
+            <div class="op-cell">Turn left 90 degrees</div>
+
+            <div class="op-cell"><code>turtle.penup()</code></div>
+            <div class="op-cell">Lifts the pen up (moving without drawing)</div>
+
+            <div class="op-cell"><code>turtle.pendown()</code></div>
+            <div class="op-cell">Drops the pen back down (draws when moving)</div>
+
+            <div class="op-cell"><code>turtle.pencolor("Red")</code></div>
+            <div class="op-cell">Changes the drawing pen line color</div>
+
+            <div class="op-cell"><code>turtle.fillcolor("Brown")</code></div>
+            <div class="op-cell">Changes the shape fill color</div>
+
+            <div class="op-cell"><code>turtle.begin_fill()</code></div>
+            <div class="op-cell">Starts tracking lines to fill shape</div>
+
+            <div class="op-cell"><code>turtle.end_fill()</code></div>
+            <div class="op-cell">Fills shape drawn since begin_fill()</div>
+
+            <div class="op-cell"><code>turtle.speed(0)</code></div>
+            <div class="op-cell">Fastest speed. Normal speeds are 1 (slow) to 9 (fast).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 9: Further Learning & Reference -->
+      <div id="tab-resources" class="tab-content">
+        <div class="card">
+          <h2>🔗 Further Learning & Reference</h2>
+          <p>If you want to dive deeper into Python programming, these highly recommended tutorials and documentations are excellent places to expand your knowledge:</p>
+          <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 8px;">
+            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
+              <h3 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                📚 <a href="https://www.w3schools.com/python/" target="_blank" style="color: inherit; text-decoration: none;">W3Schools Python Tutorial</a>
+              </h3>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">An exceptionally beginner-friendly, structured guide with simple explanations and lots of small interactive code examples.</p>
+            </div>
+
+            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
+              <h3 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                🐍 <a href="https://docs.python.org/3/" target="_blank" style="color: inherit; text-decoration: none;">Official Python Documentation</a>
+              </h3>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">The definitive source for Python standard libraries, syntax rules, and official explanations. Great for looking up specific modules or features.</p>
+            </div>
+
+            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
+              <h3 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                👑 <a href="https://realpython.com/" target="_blank" style="color: inherit; text-decoration: none;">Real Python Tutorials</a>
+              </h3>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">A collection of high-quality, practical articles and step-by-step guides covering core concepts and real-world Python applications.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔍 Python Search Engines</h2>
+          <p>Looking for a specific function, library, or error solution? Use these specialized search portals to search directly within trusted python documentation:</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 8px;">
+            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 12px;">
+              <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin: 0; color: var(--text-main);">Python Official Search</h3>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1;">Search official guides, modules, and built-in function references.</p>
+              <form action="https://docs.python.org/3/search.html" method="GET" target="_blank" style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="text" name="q" placeholder="e.g. lists, dict..." class="list-input" style="flex: 1; padding: 6px 10px; font-size: 0.85rem;" required>
+                <button type="submit" class="list-btn" style="padding: 6px 12px; font-size: 0.85rem;">Go</button>
+              </form>
+            </div>
+
+            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 12px;">
+              <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin: 0; color: var(--text-main);">W3Schools Python Search</h3>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1;">Search user-friendly tutorials and code examples on W3Schools.</p>
+              <form action="https://www.google.com/search" method="GET" target="_blank" style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="hidden" name="as_sitesearch" value="w3schools.com/python">
+                <input type="text" name="q" placeholder="e.g. loops, arrays..." class="list-input" style="flex: 1; padding: 6px 10px; font-size: 0.85rem;" required>
+                <button type="submit" class="list-btn" style="padding: 6px 12px; font-size: 0.85rem;">Go</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer>
+        <p>
+          Made with ❤️ for better thinking. If it helped you, support the project.
+          <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+          <br>
+          <a href="computing.html" class="computing-link">More Computing Tools</a>
+        </p>
+        <p style="margin-top:0.5rem;font-size:0.85rem;">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
+          James Abela 2024
+        </p>
+      </footer>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script>
+    // Tab switching logic
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.getElementById('tab-' + tabId).classList.add('active');
+
+      // Highlight sidebar button
+      const buttons = document.querySelectorAll('.nav-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(tabId.split('-')[0])) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // Copy code snippet
+    function copyCode(btn) {
+      const code = btn.nextElementSibling.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+    }
+
+
+
+    // Selection quiz evaluation
+    function checkQuiz(btn, isCorrect) {
+      const feedback = btn.parentElement.nextElementSibling;
+      btn.parentElement.querySelectorAll('.quiz-option').forEach(opt => {
+        opt.className = 'quiz-option';
+      });
+
+      if (isCorrect) {
+        btn.classList.add('correct');
+        feedback.innerHTML = "🎉 <strong>Correct!</strong> The program matches <code>age >= 17</code> first, so it prints 'Drive!' and completely skips the <code>elif age >= 18</code> block! This is a classic logical logic flow trap.";
+        feedback.style.color = "var(--success)";
+      } else {
+        btn.classList.add('incorrect');
+        feedback.innerHTML = "❌ <strong>Incorrect.</strong> Remember that conditional selection checks are run sequentially. As soon as one check is true, the rest are skipped.";
+        feedback.style.color = "var(--accent-pink)";
+      }
+    }
+
+    // Visual list builder state & controls
+    let visualList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"];
+    function renderVisualList(highlightIdx = null) {
+      const container = document.getElementById('visual-list-container');
+      container.innerHTML = "";
+      visualList.forEach((city, idx) => {
+        const itemBox = document.createElement('div');
+        itemBox.className = 'list-item-box';
+        if (highlightIdx !== null && (highlightIdx === idx || (Array.isArray(highlightIdx) && highlightIdx.includes(idx)))) {
+          itemBox.classList.add('highlight');
+        }
+        itemBox.innerHTML = `
+          <span class="list-item-val">${city}</span>
+          <span class="list-item-idx">index ${idx}</span>
+        `;
+        container.appendChild(itemBox);
+      });
+    }
+
+    function appendVisualList() {
+      const input = document.getElementById('list-input-val');
+      const val = input.value.trim();
+      if (!val) return;
+      visualList.push(val);
+      input.value = "";
+      renderVisualList(visualList.length - 1);
+      document.getElementById('list-feedback').innerHTML = `<code>MyList.append("${val}")</code> added to the end of the list!`;
+    }
+
+    function changeVisualList() {
+      if (visualList.length < 2) return;
+      visualList[1] = "Ipoh";
+      renderVisualList(1);
+      document.getElementById('list-feedback').innerHTML = `<code>MyList[1] = "Ipoh"</code> updated index 1! London replaced.`;
+    }
+
+    function sliceVisualList() {
+      renderVisualList([0, 1, 2]);
+      document.getElementById('list-feedback').innerHTML = `<code>MyList[0:3]</code> selects indexes 0, 1, 2 (excludes stop index 3).`;
+    }
+
+    function resetVisualList() {
+      visualList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"];
+      renderVisualList();
+      document.getElementById('list-feedback').textContent = "List reset to initial values.";
+    }
+
+
+    // Theme toggling system (with mutate support to match parent theme)
+    function toggleThemeManual() {
+      const isCurrentlyDark = !document.documentElement.classList.contains('light-theme');
+      const newDarkState = !isCurrentlyDark;
+      setTheme(newDarkState);
+      localStorage.setItem('theme-preference', newDarkState ? 'dark' : 'light');
+    }
+
+    function setTheme(isDark) {
+      const prismTheme = document.getElementById('prism-theme');
+      if (isDark) {
+        document.documentElement.classList.remove('light-theme');
+        document.body.classList.remove('light-theme');
+        document.getElementById('themeToggleIcon').textContent = '☀️';
+        document.getElementById('themeToggleText').textContent = 'Light Mode';
+        if (prismTheme) {
+          prismTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css';
+        }
+      } else {
+        document.documentElement.classList.add('light-theme');
+        document.body.classList.add('light-theme');
+        document.getElementById('themeToggleIcon').textContent = '🌙';
+        document.getElementById('themeToggleText').textContent = 'Dark Mode';
+        if (prismTheme) {
+          prismTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css';
+        }
+      }
+    }
+
+    function syncTheme() {
+      try {
+        if (parent && parent !== window && parent.document && parent.document.body) {
+          const isDark = parent.document.body.classList.contains('dark-theme');
+          setTheme(isDark);
+        }
+      } catch (e) {
+        // Ignored
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderVisualList();
+      
+      // Determine initial theme
+      let isDark = true;
+      if (parent && parent !== window) {
+        try {
+          if (parent.document && parent.document.body) {
+            isDark = parent.document.body.classList.contains('dark-theme');
+          }
+        } catch (e) {
+          // Ignored
+        }
+      } else {
+        const savedPreference = localStorage.getItem('theme-preference');
+        if (savedPreference) {
+          isDark = (savedPreference === 'dark');
+        } else {
+          // Fallback to system preference
+          isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+      }
+      
+      setTheme(isDark);
+
+      // Dynamic code action button builder for all code samples
+      document.querySelectorAll('.code-wrapper').forEach(wrapper => {
+        const codeEl = wrapper.querySelector('code');
+        if (!codeEl) return;
+        
+        // Remove existing copy button if present to prevent duplicates
+        const existingBtn = wrapper.querySelector('.copy-code-btn');
+        if (existingBtn) {
+          existingBtn.remove();
+        }
+        
+        const actionsContainer = document.createElement('div');
+        actionsContainer.className = 'code-actions';
+        
+        // Copy Button
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-code-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(codeEl.textContent).then(() => {
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+          });
+        };
+        
+        // Open/Edit in Editor Button
+        const openBtn = document.createElement('button');
+        openBtn.className = 'open-editor-btn';
+        openBtn.textContent = 'Edit 🚀';
+        openBtn.onclick = () => {
+          const codeText = codeEl.textContent;
+          // Unicode-safe Base64 encode
+          const utf8Bytes = new TextEncoder().encode(codeText);
+          let binary = '';
+          for (let i = 0; i < utf8Bytes.length; i++) {
+            binary += String.fromCharCode(utf8Bytes[i]);
+          }
+          const base64 = btoa(binary);
+          const editorUrl = `pythoncopy.html?code=${encodeURIComponent(base64)}`;
+          window.open(editorUrl, '_blank');
+        };
+        
+        actionsContainer.appendChild(copyBtn);
+        actionsContainer.appendChild(openBtn);
+        wrapper.appendChild(actionsContainer);
+      });
+
+      try {
+        if (parent && parent !== window && parent.document && parent.document.body) {
+          const observer = new MutationObserver(syncTheme);
+          observer.observe(parent.document.body, { attributes: true, attributeFilter: ['class'] });
+        }
+      } catch (e) {
+        // Ignored if sandboxed
+      }
+    });
+  </script>
+  <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
+      referrerpolicy="no-referrer-when-downgrade" /></noscript>
+</body>
+
+</html>

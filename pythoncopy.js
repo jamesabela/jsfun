@@ -8,6 +8,14 @@
     let pyodideReadyPromise = null;
     let pyodideInstance = null;
     window.currentAppMode = 'edit';
+    let currentQuizMetadata = {
+      testCases: [],
+      nextUrl: null,
+      isEnd: false,
+      courseTitle: "Python Algorithms",
+      links: []
+    };
+    let loadedMetadataLinks = [];
     // Shared blockly state is declared on window by pythoncopyblocks.js
     if (typeof window.updateBlocksButtonState !== 'function') {
       window.updateBlocksButtonState = function() {};
@@ -1602,7 +1610,52 @@ import sys, builtins
       }
 
       const url = urlParams.get('url');
-      if (url) {
+      const codeParam = urlParams.get('code');
+      if (codeParam) {
+        try {
+          const binary = atob(codeParam);
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          const decodedCode = new TextDecoder().decode(bytes);
+
+          if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+            exitPlaybackMode(true);
+          }
+          currentURL = '';
+          currentQuizMetadata = {
+            testCases: [],
+            nextUrl: null,
+            isEnd: false,
+            courseTitle: "Python Algorithms",
+            links: []
+          };
+          loadedMetadataLinks = [];
+          updatePuzzleButtonVisibility();
+
+          editor.value = decodedCode;
+          markCurrentEditorCodeSaved(decodedCode);
+          displayCode.textContent = '';
+          document.getElementById('urlInput').value = '';
+          document.getElementById('workspace').style.display = 'grid';
+          document.getElementById('inputContainer').style.display = 'none';
+          document.getElementById('starterPanel').style.display = 'none';
+          document.getElementById('instructionsPanel').style.display = 'none';
+
+          updateLineNumbers();
+          analyseCodeAndUpdateMessage();
+          clearRunner();
+          setRunnerStatus('Code loaded from manual.');
+          updateBlocksButtonState();
+          playbackHistory = [];
+          recordPlaybackSnapshot('Code Loaded', true, 'save');
+          editor.focus();
+        } catch (err) {
+          console.error('Failed to load code parameter:', err);
+          setRunnerStatus('Error loading code from URL.');
+        }
+      } else if (url) {
         document.getElementById('urlInput').value = url;
         document.getElementById('inputContainer').style.display = 'none';
         document.getElementById('starterPanel').style.display = 'none';
@@ -1677,6 +1730,11 @@ import sys, builtins
           alert('Copy failed. Please select the code and copy manually.');
         }
       });
+
+      const shareLinkBtn = document.getElementById('shareLinkButton');
+      if (shareLinkBtn) {
+        shareLinkBtn.addEventListener('click', copyShareLink);
+      }
 
       [undoEditorButton, redoEditorButton, revertEditorButton].forEach(button => {
         if (!button) return;
@@ -2059,20 +2117,16 @@ import sys, builtins
       const creativeNextBtn = document.getElementById('creativeNextButton');
       if (creativeNextBtn) {
         creativeNextBtn.addEventListener('click', () => {
-          const code = editor.value;
-          const parsed = parseQuizTests(code);
-          if (parsed.nextUrl) {
-            window.location.href = window.location.pathname + '?url=' + encodeURIComponent(parsed.nextUrl);
+          if (currentQuizMetadata.nextUrl) {
+            window.location.href = window.location.pathname + '?url=' + encodeURIComponent(currentQuizMetadata.nextUrl);
           }
         });
       }
       const creativeEndBtn = document.getElementById('creativeEndButton');
       if (creativeEndBtn) {
         creativeEndBtn.addEventListener('click', () => {
-          const code = editor.value;
-          const parsed = parseQuizTests(code);
-          if (parsed.isEnd) {
-            renderQuizResults([], 0, 0, null, true, parsed.courseTitle);
+          if (currentQuizMetadata.isEnd) {
+            renderQuizResults([], 0, 0, null, true, currentQuizMetadata.courseTitle);
             const runnerLayout = document.getElementById('runnerLayout');
             if (runnerLayout && runnerLayout.classList.contains('collapsed')) {
               toggleRunner();
@@ -2392,6 +2446,79 @@ import sys, builtins
       }, 5000);
     }
 
+    let shareButtonTimeout = null;
+
+    function updateShareLinkButton() {
+      const shareBtn = document.getElementById('shareLinkButton');
+      if (!shareBtn) return;
+      
+      const codeText = editor.value;
+      if (!codeText.trim()) {
+        shareBtn.disabled = true;
+        shareBtn.title = 'Write some code first to generate a link.';
+        return;
+      }
+      
+      let base64 = '';
+      try {
+        const utf8Bytes = new TextEncoder().encode(codeText);
+        let binary = '';
+        for (let i = 0; i < utf8Bytes.length; i++) {
+          binary += String.fromCharCode(utf8Bytes[i]);
+        }
+        base64 = btoa(binary);
+      } catch (err) {
+        console.error('Failed to encode code for share link:', err);
+      }
+      
+      const baseUrl = window.location.href.split('?')[0];
+      const shareUrl = `${baseUrl}?code=${encodeURIComponent(base64)}`;
+      
+      // Standard safe limit for URLs is 2048 characters
+      if (shareUrl.length > 2048) {
+        shareBtn.disabled = true;
+        shareBtn.title = `Code is too long to share via link (${shareUrl.length} / 2048 characters).`;
+      } else {
+        shareBtn.disabled = false;
+        shareBtn.title = 'Copy a shareable link that loads this code directly in Python Code Lab';
+      }
+    }
+
+    function copyShareLink() {
+      const shareBtn = document.getElementById('shareLinkButton');
+      if (!shareBtn || shareBtn.disabled) return;
+      
+      const codeText = editor.value;
+      let base64 = '';
+      try {
+        const utf8Bytes = new TextEncoder().encode(codeText);
+        let binary = '';
+        for (let i = 0; i < utf8Bytes.length; i++) {
+          binary += String.fromCharCode(utf8Bytes[i]);
+        }
+        base64 = btoa(binary);
+      } catch (err) {
+        console.error('Failed to encode code for share link:', err);
+        return;
+      }
+      
+      const baseUrl = window.location.href.split('?')[0];
+      const shareUrl = `${baseUrl}?code=${encodeURIComponent(base64)}`;
+      
+      copyTextToClipboard(shareUrl).then(() => {
+        shareBtn.textContent = 'Link Copied';
+        if (shareButtonTimeout) clearTimeout(shareButtonTimeout);
+        shareButtonTimeout = setTimeout(() => {
+          shareBtn.textContent = 'Copy Link';
+          shareButtonTimeout = null;
+        }, 3000);
+        setRunnerStatus('Share link copied to clipboard.');
+      }).catch(err => {
+        console.error('Could not copy share link:', err);
+        alert('Failed to copy link. Please manually copy the URL.');
+      });
+    }
+
     function updateURL() {
       const inputURL = document.getElementById('urlInput').value.trim();
       if (inputURL === '') {
@@ -2408,6 +2535,14 @@ import sys, builtins
         exitPlaybackMode(true);
       }
       currentURL = '';
+      currentQuizMetadata = {
+        testCases: [],
+        nextUrl: null,
+        isEnd: false,
+        courseTitle: "Python Algorithms",
+        links: []
+      };
+      loadedMetadataLinks = [];
       updatePuzzleButtonVisibility();
       editor.value = '';
       markCurrentEditorCodeSaved('');
@@ -2452,6 +2587,14 @@ import sys, builtins
                            trimmedData.startsWith('<?xml');
 
           if (isBlocks) {
+            currentQuizMetadata = {
+              testCases: [],
+              nextUrl: null,
+              isEnd: false,
+              courseTitle: "Python Algorithms",
+              links: []
+            };
+            loadedMetadataLinks = [];
             editor.value = '';
             setAppMode('blocks');
             if (window.blocklyWorkspace && typeof Blockly !== 'undefined') {
@@ -2494,8 +2637,13 @@ import sys, builtins
             }
           }
 
-          editor.value = data;
-          markCurrentEditorCodeSaved(data);
+          const parsedRes = parseAndStripMetadata(data);
+          currentQuizMetadata = parsedRes.metadata;
+          loadedMetadataLinks = currentQuizMetadata.links || [];
+          const strippedData = parsedRes.strippedCode;
+
+          editor.value = strippedData;
+          markCurrentEditorCodeSaved(strippedData);
           updateLineNumbers();
           document.getElementById('workspace').style.display = 'grid';
           document.getElementById('inputContainer').style.display = 'none';
@@ -2625,12 +2773,11 @@ import sys, builtins
       }
       updateReferenceLinks();
       updateQuizDetection();
+      updateShareLinkButton();
     }
 
     function updateQuizDetection() {
-      const code = editor.value;
-      const parsed = parseQuizTests(code);
-      const testCases = parsed.testCases;
+      const testCases = currentQuizMetadata.testCases || [];
       const quizBtn = document.getElementById('quizButton');
       const creativeNextBtn = document.getElementById('creativeNextButton');
       const creativeEndBtn = document.getElementById('creativeEndButton');
@@ -2648,10 +2795,10 @@ import sys, builtins
         if (!currentText.includes('Coding Quiz')) {
           detectionLabel.textContent = currentText.split(' | ')[0] + ` | Coding Quiz (${testCases.length} test${testCases.length > 1 ? 's' : ''})`;
         }
-      } else if (parsed.nextUrl || parsed.isEnd) {
-        if (parsed.nextUrl) {
+      } else if (currentQuizMetadata.nextUrl || currentQuizMetadata.isEnd) {
+        if (currentQuizMetadata.nextUrl) {
           if (creativeNextBtn) creativeNextBtn.style.display = 'inline-block';
-        } else if (parsed.isEnd) {
+        } else if (currentQuizMetadata.isEnd) {
           if (creativeEndBtn) creativeEndBtn.style.display = 'inline-block';
         }
         const currentText = detectionLabel.textContent;
@@ -2667,6 +2814,15 @@ import sys, builtins
       const seen = new Set();
       const urlRegex = /https?:\/\/[^\s'"`()]+/g;
       let mode = null;
+
+      if (typeof loadedMetadataLinks !== 'undefined' && Array.isArray(loadedMetadataLinks)) {
+        loadedMetadataLinks.forEach(link => {
+          if (!seen.has(link.url)) {
+            seen.add(link.url);
+            links.push(link);
+          }
+        });
+      }
 
       lines.forEach((line, index) => {
         const trimmed = line.trim();
@@ -2818,11 +2974,14 @@ import sys, builtins
         leftSide.style.minWidth = '0';
         leftSide.style.flex = '1';
 
-        const badge = document.createElement('span');
-        badge.className = 'link-item-badge';
-        badge.textContent = `Ln ${link.line}`;
-        badge.title = `Click to scroll to line ${link.line}`;
-        badge.onclick = () => scrollToCodeLine(link.line);
+        if (link.line) {
+          const badge = document.createElement('span');
+          badge.className = 'link-item-badge';
+          badge.textContent = `Ln ${link.line}`;
+          badge.title = `Click to scroll to line ${link.line}`;
+          badge.onclick = () => scrollToCodeLine(link.line);
+          leftSide.appendChild(badge);
+        }
 
         const anchor = document.createElement('a');
         anchor.className = 'link-item-anchor';
@@ -2831,7 +2990,6 @@ import sys, builtins
         anchor.textContent = cleanUrlDisplay(link.url);
         anchor.title = link.url;
 
-        leftSide.appendChild(badge);
         leftSide.appendChild(anchor);
 
         const rightSide = document.createElement('div');
@@ -3093,6 +3251,173 @@ import sys, builtins
       };
     }
 
+    function parseAndStripMetadata(code) {
+      if (typeof code !== 'string') {
+        return {
+          strippedCode: code,
+          metadata: { testCases: [], nextUrl: null, isEnd: false, courseTitle: "Python Algorithms", links: [] }
+        };
+      }
+      
+      const lines = code.split(/\r?\n/);
+      const inputsList = [];
+      const outputsList = [];
+      let nextUrl = null;
+      let isEnd = false;
+      let courseTitle = "Python Algorithms";
+      let mode = null;
+      const links = [];
+
+      const isHelpText = /entered|seperator|separator|speech\s+marks|between|expected|same\s+format|how\s+to|example/i;
+      const metadataLineIndices = new Set();
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
+        
+        if (trimmed.startsWith('#')) {
+          const commentContent = trimmed.substring(1).trim();
+          
+          if (/^learn\s+more\b/i.test(commentContent)) {
+            metadataLineIndices.add(i);
+            const match = commentContent.match(/https?:\/\/[^\s'"`()]+/);
+            if (match) {
+              links.push({ url: match[0], line: 0 });
+            }
+            continue;
+          }
+
+          if (/^input\b/i.test(commentContent)) {
+            mode = 'input';
+            metadataLineIndices.add(i);
+          } else if (/^output\b/i.test(commentContent)) {
+            mode = 'output';
+            metadataLineIndices.add(i);
+          } else if (/^next\b/i.test(commentContent)) {
+            metadataLineIndices.add(i);
+            const rest = commentContent.substring(4).trim();
+            const match = rest.match(/https?:\/\/[^\s'"`()]+/);
+            if (match) {
+              nextUrl = match[0];
+              mode = null;
+            } else {
+              mode = 'next';
+            }
+          } else if (/^end\b/i.test(commentContent)) {
+            metadataLineIndices.add(i);
+            isEnd = true;
+            const rest = commentContent.substring(3).trim();
+            if (rest !== '') {
+              courseTitle = rest;
+              mode = null;
+            } else {
+              mode = 'end';
+            }
+          } else {
+            if (commentContent !== '' && !isHelpText.test(commentContent)) {
+              if (mode === 'input' || mode === 'output') {
+                const parts = commentContent.split(',').map(part => {
+                  let p = part.trim();
+                  if ((p.startsWith('"') && p.endsWith('"')) || (p.startsWith("'") && p.endsWith("'"))) {
+                    p = p.substring(1, p.length - 1);
+                  }
+                  return p;
+                });
+                if (mode === 'input') {
+                  inputsList.push(parts);
+                  metadataLineIndices.add(i);
+                } else if (mode === 'output') {
+                  outputsList.push(parts);
+                  metadataLineIndices.add(i);
+                }
+              } else if (mode === 'next') {
+                const match = commentContent.match(/https?:\/\/[^\s'"`()]+/);
+                if (match) {
+                  nextUrl = match[0];
+                }
+                metadataLineIndices.add(i);
+                mode = null;
+              } else if (mode === 'end') {
+                courseTitle = commentContent;
+                metadataLineIndices.add(i);
+                mode = null;
+              }
+            } else if (commentContent !== '' && isHelpText.test(commentContent) && (mode === 'input' || mode === 'output')) {
+              metadataLineIndices.add(i);
+            }
+          }
+        } else {
+          if (trimmed !== '') {
+            mode = null;
+          }
+        }
+      }
+
+      // Add empty lines adjacent to metadata to metadataLineIndices
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].trim() === '') {
+          let beforeIsMetadata = true;
+          for (let j = 0; j < i; j++) {
+            if (lines[j].trim() !== '' && !metadataLineIndices.has(j)) {
+              beforeIsMetadata = false;
+              break;
+            }
+          }
+          let afterIsMetadata = false;
+          for (let j = i + 1; j < lines.length; j++) {
+            if (lines[j].trim() !== '') {
+              if (metadataLineIndices.has(j)) {
+                afterIsMetadata = true;
+              }
+              break;
+            }
+          }
+          if (beforeIsMetadata || afterIsMetadata) {
+            metadataLineIndices.add(i);
+          }
+        }
+      }
+
+      const strippedLines = [];
+      for (let i = 0; i < lines.length; i++) {
+        if (!metadataLineIndices.has(i)) {
+          strippedLines.push(lines[i]);
+        }
+      }
+
+      // Trim leading/trailing blank lines
+      let startIdx = 0;
+      while (startIdx < strippedLines.length && strippedLines[startIdx].trim() === '') {
+        startIdx++;
+      }
+      let endIdx = strippedLines.length - 1;
+      while (endIdx >= startIdx && strippedLines[endIdx].trim() === '') {
+        endIdx--;
+      }
+      
+      const strippedCode = strippedLines.slice(startIdx, endIdx + 1).join('\n');
+
+      const testCases = [];
+      const count = Math.min(inputsList.length, outputsList.length);
+      for (let i = 0; i < count; i++) {
+        testCases.push({
+          inputs: inputsList[i],
+          expected: outputsList[i]
+        });
+      }
+
+      return {
+        strippedCode: strippedCode,
+        metadata: {
+          testCases: testCases,
+          nextUrl: nextUrl,
+          isEnd: isEnd,
+          courseTitle: courseTitle,
+          links: links
+        }
+      };
+    }
+
     async function runSingleTestCase(source, inputs) {
       if (!pyodideInstance && pyodideReadyPromise) {
         await pyodideReadyPromise;
@@ -3186,8 +3511,7 @@ json.dumps(_test_result)
     async function runQuizTests() {
       switchModeFromBlocks();
       const code = editor.value;
-      const parsed = parseQuizTests(code);
-      const testCases = parsed.testCases;
+      const testCases = currentQuizMetadata.testCases || [];
       if (testCases.length === 0) return;
 
       executionCancelled = false;
@@ -3279,7 +3603,7 @@ json.dumps(_test_result)
         }
       }
 
-      renderQuizResults(results, passedCount, testCases.length, parsed.nextUrl, parsed.isEnd, parsed.courseTitle);
+      renderQuizResults(results, passedCount, testCases.length, currentQuizMetadata.nextUrl, currentQuizMetadata.isEnd, currentQuizMetadata.courseTitle);
     }
 
     function renderQuizResults(results, passedCount, totalCount, nextUrl = null, isEnd = false, courseTitle = "") {

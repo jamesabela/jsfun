@@ -12,6 +12,14 @@
         "isExternal": false
       },
       {
+        "title": "Python Code Guide",
+        "emoji": "📖",
+        "url": "https://jamesabela.github.io/jsfun/pythonmanual.html",
+        "desc": "An interactive cheat sheet and syntax reference guide for Python. Covers variables, operators, selection, loops, lists, and turtle commands.",
+        "tag": "KS2 / KS3 / iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
         "title": "Parsons Puzzle (Reorder)",
         "emoji": "🧩",
         "url": "https://jamesabela.github.io/jsfun/reorder.html",

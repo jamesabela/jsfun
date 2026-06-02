@@ -64,7 +64,7 @@
         <path d="M4 12H2" />
         <path d="M2 9h2" />
       </svg>
-      Python Code Lab 4.6
+      Python Code Lab 4.7
       <span class="mode-badge edit-badge">Edit</span>
       <span class="mode-badge display-badge">Display</span>
       <span class="mode-badge turtle-badge">Turtle</span>
@@ -106,10 +106,14 @@
         <label for="font-size" style="font-size: 16px;">A</label>
       </div>
 
-      <button onclick="showStartScreen()" title="Info & Instructions"
-        style="background: none; border: none; cursor: pointer; color: var(--primary-color); display: flex; align-items: center; padding: 4px 8px; font-size: 20px; margin-left: auto;">
+      <a href="pythoncopy.html" target="_blank" title="Clean Home Screen"
+        style="text-decoration: none; background: none; border: none; cursor: pointer; color: var(--primary-color); display: flex; align-items: center; padding: 4px 8px; font-size: 20px; margin-left: auto;">
+        🏠
+      </a>
+      <a href="pythonmanual.html" target="_blank" title="Python Manual"
+        style="text-decoration: none; background: none; border: none; cursor: pointer; color: var(--primary-color); display: flex; align-items: center; padding: 4px 8px; font-size: 20px;">
         ℹ️
-      </button>
+      </a>
     </div>
   </header>
 
@@ -223,6 +227,8 @@
         <button class="primary-button" id="copyButton">Copy Code</button>
         <button class="primary-button" id="copyForDocsButton" style="background: #8b5cf6;"
           title="Copy with formatting and line numbers for Word/Google Docs">Copy for Docs</button>
+        <button class="primary-button" id="shareLinkButton" style="background: #10b981;"
+          title="Copy a shareable link that loads this code directly in Python Code Lab">Copy Link</button>
         <input type="file" id="uploadPyInput" accept=".py,.txt" style="display: none;">
         <button class="primary-button" id="uploadPyButton">Upload .py</button>
         <button class="primary-button" id="downloadPyButton">Download .py</button>
