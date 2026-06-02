@@ -1,0 +1,75 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="itemsVar">items</variable>
+    <variable id="targetVar">target</variable>
+    <variable id="countVar">count</variable>
+    <variable id="itemVar">item</variable>
+  </variables>
+  <block type="when_run_clicked" id="startCount" x="20" y="20">
+    <next>
+      <block type="comment_line" id="commentCount">
+        <field name="TEXT">Count how many times a target value appears in a list.</field>
+        <next>
+          <block type="variables_set" id="setItems">
+            <field name="VAR" id="itemsVar">items</field>
+            <value name="VALUE">
+              <block type="lists_create_with" id="itemsList">
+                <mutation items="5"></mutation>
+                <value name="ADD0"><block type="text" id="cat0"><field name="TEXT">cat</field></block></value>
+                <value name="ADD1"><block type="text" id="dog1"><field name="TEXT">dog</field></block></value>
+                <value name="ADD2"><block type="text" id="cat2"><field name="TEXT">cat</field></block></value>
+                <value name="ADD3"><block type="text" id="bird3"><field name="TEXT">bird</field></block></value>
+                <value name="ADD4"><block type="text" id="cat4"><field name="TEXT">cat</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="setTarget">
+                <field name="VAR" id="targetVar">target</field>
+                <value name="VALUE"><block type="text" id="targetText"><field name="TEXT">cat</field></block></value>
+                <next>
+                  <block type="variables_set" id="setCount">
+                    <field name="VAR" id="countVar">count</field>
+                    <value name="VALUE"><block type="math_number" id="zeroCount"><field name="NUM">0</field></block></value>
+                    <next>
+                      <block type="python_for_each" id="forEachItem">
+                        <field name="ITEM" id="itemVar">item</field>
+                        <field name="LIST" id="itemsVar">items</field>
+                        <statement name="DO">
+                          <block type="controls_if" id="ifMatch">
+                            <value name="IF0">
+                              <block type="logic_compare" id="compareItemTarget">
+                                <field name="OP">EQ</field>
+                                <value name="A"><block type="variables_get" id="getItem"><field name="VAR" id="itemVar">item</field></block></value>
+                                <value name="B"><block type="variables_get" id="getTarget"><field name="VAR" id="targetVar">target</field></block></value>
+                              </block>
+                            </value>
+                            <statement name="DO0">
+                              <block type="math_change" id="increaseCount">
+                                <field name="VAR" id="countVar">count</field>
+                                <value name="DELTA"><shadow type="math_number" id="countStep"><field name="NUM">1</field></shadow></value>
+                              </block>
+                            </statement>
+                          </block>
+                        </statement>
+                        <next>
+                          <block type="text_print" id="printCount">
+                            <value name="TEXT">
+                              <block type="simple_text_join" id="joinCountText">
+                                <value name="LEFT"><block type="text" id="countLabel"><field name="TEXT">Count is </field></block></value>
+                                <value name="RIGHT"><block type="variables_get" id="getCount"><field name="VAR" id="countVar">count</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

@@ -1,0 +1,41 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="when_run_clicked" id="startTurtleFill" x="20" y="20">
+    <next>
+      <block type="comment_line" id="commentTurtleFill">
+        <field name="TEXT">Draw a filled square using repeat, turn, pen color, and fill color.</field>
+        <next>
+          <block type="turtle_pencolor" id="setPenBlue">
+            <field name="COLOR">#3366ff</field>
+            <next>
+              <block type="turtle_fillcolor" id="setFillGreen">
+                <field name="COLOR">#00cc00</field>
+                <next>
+                  <block type="turtle_begin_fill" id="beginFill">
+                    <next>
+                      <block type="python_for_repeat" id="repeatFour">
+                        <value name="TIMES"><shadow type="math_number" id="fourTimes"><field name="NUM">4</field></shadow></value>
+                        <statement name="DO">
+                          <block type="turtle_forward" id="moveForward">
+                            <value name="DISTANCE"><shadow type="math_number" id="sideLength"><field name="NUM">100</field></shadow></value>
+                            <next>
+                              <block type="turtle_right" id="turnRight">
+                                <value name="ANGLE"><shadow type="math_number" id="rightAngle"><field name="NUM">90</field></shadow></value>
+                              </block>
+                            </next>
+                          </block>
+                        </statement>
+                        <next>
+                          <block type="turtle_end_fill" id="endFill"></block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

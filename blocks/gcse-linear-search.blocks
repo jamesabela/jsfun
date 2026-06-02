@@ -1,0 +1,113 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="itemsVar">items</variable>
+    <variable id="targetVar">target</variable>
+    <variable id="positionVar">position</variable>
+    <variable id="indexVar">index</variable>
+    <variable id="itemVar">item</variable>
+  </variables>
+  <block type="when_run_clicked" id="startLinearSearch" x="20" y="20">
+    <next>
+      <block type="comment_line" id="commentLinearSearch">
+        <field name="TEXT">Linear search checks each item until it finds the target.</field>
+        <next>
+          <block type="variables_set" id="setItems">
+            <field name="VAR" id="itemsVar">items</field>
+            <value name="VALUE">
+              <block type="lists_create_with" id="itemsList">
+                <mutation items="4"></mutation>
+                <value name="ADD0">
+                  <block type="text" id="item0"><field name="TEXT">red</field></block>
+                </value>
+                <value name="ADD1">
+                  <block type="text" id="item1"><field name="TEXT">green</field></block>
+                </value>
+                <value name="ADD2">
+                  <block type="text" id="item2"><field name="TEXT">blue</field></block>
+                </value>
+                <value name="ADD3">
+                  <block type="text" id="item3"><field name="TEXT">yellow</field></block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="setTarget">
+                <field name="VAR" id="targetVar">target</field>
+                <value name="VALUE">
+                  <block type="text" id="targetText"><field name="TEXT">blue</field></block>
+                </value>
+                <next>
+                  <block type="variables_set" id="setPosition">
+                    <field name="VAR" id="positionVar">position</field>
+                    <value name="VALUE">
+                      <block type="math_number" id="notFound"><field name="NUM">-1</field></block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="setIndex">
+                        <field name="VAR" id="indexVar">index</field>
+                        <value name="VALUE">
+                          <block type="math_number" id="zeroIndex"><field name="NUM">0</field></block>
+                        </value>
+                        <next>
+                          <block type="python_for_each" id="forEachItem">
+                            <field name="ITEM" id="itemVar">item</field>
+                            <field name="LIST" id="itemsVar">items</field>
+                            <statement name="DO">
+                              <block type="controls_if" id="ifFound">
+                                <value name="IF0">
+                                  <block type="logic_compare" id="compareItemTarget">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                      <block type="variables_get" id="getItem"><field name="VAR" id="itemVar">item</field></block>
+                                    </value>
+                                    <value name="B">
+                                      <block type="variables_get" id="getTarget"><field name="VAR" id="targetVar">target</field></block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <statement name="DO0">
+                                  <block type="variables_set" id="storeFoundIndex">
+                                    <field name="VAR" id="positionVar">position</field>
+                                    <value name="VALUE">
+                                      <block type="variables_get" id="getIndexForPosition"><field name="VAR" id="indexVar">index</field></block>
+                                    </value>
+                                  </block>
+                                </statement>
+                                <next>
+                                  <block type="math_change" id="increaseIndex">
+                                    <field name="VAR" id="indexVar">index</field>
+                                    <value name="DELTA">
+                                      <shadow type="math_number" id="indexStep"><field name="NUM">1</field></shadow>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                            <next>
+                              <block type="text_print" id="printPosition">
+                                <value name="TEXT">
+                                  <block type="simple_text_join" id="joinPositionText">
+                                    <value name="LEFT">
+                                      <block type="text" id="foundLabel"><field name="TEXT">Found at index </field></block>
+                                    </value>
+                                    <value name="RIGHT">
+                                      <block type="variables_get" id="getPosition"><field name="VAR" id="positionVar">position</field></block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

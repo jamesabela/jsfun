@@ -1,0 +1,56 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="secretVar">secret</variable>
+    <variable id="guessVar">guess</variable>
+  </variables>
+  <block type="when_run_clicked" id="startGuess" x="20" y="20">
+    <next>
+      <block type="comment_line" id="commentGuess">
+        <field name="TEXT">Generate a random number and compare it with the user's guess.</field>
+        <next>
+          <block type="variables_set" id="setSecret">
+            <field name="VAR" id="secretVar">secret</field>
+            <value name="VALUE">
+              <block type="random_integer" id="randomSecret">
+                <value name="FROM"><shadow type="math_number" id="fromOne"><field name="NUM">1</field></shadow></value>
+                <value name="TO"><shadow type="math_number" id="toTen"><field name="NUM">10</field></shadow></value>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="setGuess">
+                <field name="VAR" id="guessVar">guess</field>
+                <value name="VALUE">
+                  <block type="simple_input_number" id="askGuess">
+                    <field name="PROMPT">Guess a number from 1 to 10</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="controls_if" id="ifCorrect">
+                    <mutation else="1"></mutation>
+                    <value name="IF0">
+                      <block type="logic_compare" id="compareGuessSecret">
+                        <field name="OP">EQ</field>
+                        <value name="A"><block type="variables_get" id="getGuess"><field name="VAR" id="guessVar">guess</field></block></value>
+                        <value name="B"><block type="variables_get" id="getSecret"><field name="VAR" id="secretVar">secret</field></block></value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="text_print" id="printCorrect">
+                        <value name="TEXT"><block type="text" id="correctText"><field name="TEXT">Correct</field></block></value>
+                      </block>
+                    </statement>
+                    <statement name="ELSE">
+                      <block type="text_print" id="printTryAgain">
+                        <value name="TEXT"><block type="text" id="tryAgainText"><field name="TEXT">Not this time</field></block></value>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

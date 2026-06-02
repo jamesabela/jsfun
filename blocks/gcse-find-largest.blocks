@@ -1,0 +1,68 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="numbersVar">numbers</variable>
+    <variable id="largestVar">largest</variable>
+    <variable id="numberVar">number</variable>
+  </variables>
+  <block type="when_run_clicked" id="startLargest" x="20" y="20">
+    <next>
+      <block type="comment_line" id="commentLargest">
+        <field name="TEXT">Find the largest number by comparing each item with the current largest.</field>
+        <next>
+          <block type="variables_set" id="setNumbers">
+            <field name="VAR" id="numbersVar">numbers</field>
+            <value name="VALUE">
+              <block type="lists_create_with" id="numbersList">
+                <mutation items="5"></mutation>
+                <value name="ADD0"><block type="math_number" id="n0"><field name="NUM">4</field></block></value>
+                <value name="ADD1"><block type="math_number" id="n1"><field name="NUM">9</field></block></value>
+                <value name="ADD2"><block type="math_number" id="n2"><field name="NUM">2</field></block></value>
+                <value name="ADD3"><block type="math_number" id="n3"><field name="NUM">12</field></block></value>
+                <value name="ADD4"><block type="math_number" id="n4"><field name="NUM">7</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="setLargest">
+                <field name="VAR" id="largestVar">largest</field>
+                <value name="VALUE"><block type="math_number" id="startLargestValue"><field name="NUM">0</field></block></value>
+                <next>
+                  <block type="python_for_each" id="forEachNumber">
+                    <field name="ITEM" id="numberVar">number</field>
+                    <field name="LIST" id="numbersVar">numbers</field>
+                    <statement name="DO">
+                      <block type="controls_if" id="ifBigger">
+                        <value name="IF0">
+                          <block type="logic_compare" id="compareNumberLargest">
+                            <field name="OP">GT</field>
+                            <value name="A"><block type="variables_get" id="getNumber"><field name="VAR" id="numberVar">number</field></block></value>
+                            <value name="B"><block type="variables_get" id="getLargestCompare"><field name="VAR" id="largestVar">largest</field></block></value>
+                          </block>
+                        </value>
+                        <statement name="DO0">
+                          <block type="variables_set" id="storeLargest">
+                            <field name="VAR" id="largestVar">largest</field>
+                            <value name="VALUE"><block type="variables_get" id="getNumberForLargest"><field name="VAR" id="numberVar">number</field></block></value>
+                          </block>
+                        </statement>
+                      </block>
+                    </statement>
+                    <next>
+                      <block type="text_print" id="printLargest">
+                        <value name="TEXT">
+                          <block type="simple_text_join" id="joinLargestText">
+                            <value name="LEFT"><block type="text" id="largestLabel"><field name="TEXT">Largest is </field></block></value>
+                            <value name="RIGHT"><block type="variables_get" id="getLargest"><field name="VAR" id="largestVar">largest</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
