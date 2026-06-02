@@ -26,23 +26,6 @@
       --code-text: #f8fafc;
     }
 
-    /* Dark Mode overrides */
-    html.dark-theme, body.dark-theme {
-      --bg-gradient: linear-gradient(135deg, #0b0f19, #111827);
-      --card-bg: #1e293b;
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      --accent-gold: #f59e0b;
-      --accent-gold-glow: rgba(245, 158, 11, 0.15);
-      --accent-dark: #f8fafc;
-      --accent-blue: #60a5fa;
-      --accent-blue-glow: rgba(96, 165, 250, 0.15);
-      --border-color: rgba(245, 158, 11, 0.15);
-      --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
-      --code-bg: #090d16;
-      --code-text: #f1f5f9;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -92,25 +75,6 @@
     .title-group p {
       font-size: 0.9rem;
       color: var(--text-muted);
-    }
-
-    .theme-toggle-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: var(--shadow);
-    }
-
-    .theme-toggle-btn:hover {
-      transform: translateY(-1px);
     }
 
     .card {
@@ -278,9 +242,6 @@
         <p>LEVEL 3: MAKE TASK</p>
         <h1>Tell Me a Joke 😂</h1>
       </div>
-      <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeManual()">
-        <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Dark Mode</span>
-      </button>
     </header>
 
     <div class="card">
@@ -331,51 +292,5 @@ To get to the other side!</div>
       </div>
     </div>
   </div>
-
-  <script>
-    // System theme sync with parent
-    function syncTheme() {
-      try {
-        if (parent && parent.document && parent.document.body) {
-          const isDark = parent.document.body.classList.contains('dark-theme');
-          setTheme(isDark);
-        }
-      } catch (e) {
-        console.log("Could not access parent window due to browser sandbox limits. Fallback to manual theme.");
-      }
-    }
-
-    function setTheme(isDark) {
-      if (isDark) {
-        document.documentElement.classList.add('dark-theme');
-        document.body.classList.add('dark-theme');
-        document.getElementById('themeToggleIcon').textContent = '☀️';
-        document.getElementById('themeToggleText').textContent = 'Light Mode';
-      } else {
-        document.documentElement.classList.remove('dark-theme');
-        document.body.classList.remove('dark-theme');
-        document.getElementById('themeToggleIcon').textContent = '🌙';
-        document.getElementById('themeToggleText').textContent = 'Dark Mode';
-      }
-    }
-
-    function toggleThemeManual() {
-      const isCurrentlyDark = document.body.classList.contains('dark-theme');
-      setTheme(!isCurrentlyDark);
-    }
-
-    // Run theme sync on load and set up parent mutations observer
-    window.addEventListener('DOMContentLoaded', () => {
-      syncTheme();
-      try {
-        if (parent && parent.document && parent.document.body) {
-          const observer = new MutationObserver(syncTheme);
-          observer.observe(parent.document.body, { attributes: true, attributeFilter: ['class'] });
-        }
-      } catch (e) {
-        // Ignored if cross-origin
-      }
-    });
-  </script>
 </body>
 </html>
