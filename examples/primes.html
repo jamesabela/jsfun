@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primes & Algorithmic Efficiency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    id="prism-theme">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-hover: rgba(51, 65, 85, 0.8);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --primary-glow: rgba(139, 92, 246, 0.15);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --accent-pink: #ec4899;
+      --accent-gold: #f59e0b;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      --code-bg: #0f172a;
+    }
+
+    html.light-theme {
+      --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-hover: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.1);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      --code-bg: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+    }
+
+    header {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-b: 1px solid var(--border-color);
+    }
+
+    .brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.6rem;
+      background: linear-gradient(135deg, #a78bfa, var(--accent-pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow);
+    }
+
+    .theme-btn:hover {
+      transform: translateY(-1px);
+      background: var(--primary-glow);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card:hover {
+      background: var(--card-hover);
+    }
+
+    .card h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid var(--primary-glow);
+      padding-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .card strong {
+      color: var(--text-main);
+    }
+
+    .banner {
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      gap: 14px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .banner.info {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid #3b82f6;
+      color: #93c5fd;
+    }
+
+    html.light-theme .banner.info {
+      background: rgba(59, 130, 246, 0.05);
+      color: #1e3a8a;
+    }
+
+    .banner.info strong {
+      color: #3b82f6;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Code Blocks */
+    .code-wrapper {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: var(--code-bg);
+      margin-top: 8px;
+    }
+
+    pre[class*="language-"] {
+      margin: 0 !important;
+      background: transparent !important;
+      padding: 16px !important;
+      font-size: 0.85rem !important;
+    }
+
+    code[class*="language-"] {
+      font-family: var(--font-mono) !important;
+    }
+
+    .code-actions {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .copy-code-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .copy-code-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Interactive Simulator Styling */
+    .sim-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .sim-input {
+      background: rgba(15, 23, 42, 0.3);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      width: 140px;
+      font-family: var(--font-mono);
+    }
+
+    html.light-theme .sim-input {
+      background: #ffffff;
+    }
+
+    .sim-btn {
+      background: var(--primary);
+      border: none;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sim-btn:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .benchmark-results {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .algo-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .algo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .algo-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      font-family: var(--font-display);
+    }
+
+    .algo-stat {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .algo-stat strong {
+      color: var(--text-main);
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .chart-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-pink));
+      border-radius: 12px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .chart-bar.optimized {
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+    }
+
+    .chart-bar.sieve {
+      background: linear-gradient(90deg, #f59e0b, #ec4899);
+    }
+
+    /* Lists/Cards of Uses */
+    .use-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    .use-icon {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+
+    .use-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 40px;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    footer a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    footer a.tea {
+      color: #e73c7e;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      🔢 Prime Numbers & Efficiency
+    </div>
+    <button class="theme-btn" id="themeToggleBtn" onclick="toggleThemeManual()">
+      <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Dark Mode</span>
+    </button>
+  </header>
+
+  <div class="container">
+    <!-- Intro Card -->
+    <div class="card">
+      <h2>✨ What is a Prime Number?</h2>
+      <p>A <strong>Prime Number</strong> is a whole number greater than 1 that cannot be formed by multiplying two
+        smaller natural numbers. In other words, its only divisors are 1 and itself. Numbers that have other divisors
+        are called <strong>composite numbers</strong>.</p>
+      <p>Primes are the "atoms" of number theory because of the <strong>Fundamental Theorem of Arithmetic</strong>:
+        every integer greater than 1 is either a prime itself or can be represented as a unique product of prime
+        numbers.</p>
+    </div>
+
+    <!-- Importance Card -->
+    <div class="card">
+      <h2>🛡️ Why are Prime Numbers Important?</h2>
+      <p>While prime numbers might seem like abstract math puzzles, they are the silent foundation of modern digital
+        infrastructure.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="use-item">
+          <div class="use-icon">🔐</div>
+          <div class="use-content">
+            <h3>Cryptography & Internet Security</h3>
+            <p>Every time you log into your bank, buy something online, or send a secure chat, you use prime numbers.
+              Algorithms like **RSA Encryption** rely on a simple mathematical asymmetry: it is extremely easy to
+              multiply two large prime numbers together (e.g. $p \times q = N$), but incredibly difficult to do the
+              reverse (factoring $N$ back into $p$ and $q$) if the primes are hundreds of digits long.</p>
+          </div>
+        </div>
+
+        <div class="use-item">
+          <div class="use-icon">🗄️</div>
+          <div class="use-content">
+            <h3>Hash Tables & Data Indexing</h3>
+            <p>In computer science, hash tables store key-value pairs for ultra-fast lookups. To minimize **collisions**
+              (when different keys resolve to the same index), the size of a hash table is typically set to a prime
+              number. Primes prevent patterns in key intervals from overlapping with indexing strides.</p>
+          </div>
+        </div>
+
+        <div class="use-item">
+          <div class="use-icon">🐜</div>
+          <div class="use-content">
+            <h3>Evolutionary Biology</h3>
+            <p>Certain species of cicadas (like *Magicicada*) spend most of their lives underground, emerging only once
+              every 13 or 17 years to breed. By emerging in cycles that are prime numbers, they minimize the chance of
+              their emergence coinciding with the population peaks of predators that have shorter, composite-number
+              cycles (like 2, 3, or 4 years).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Original vs Optimized Python Algorithms -->
+    <div class="card">
+      <h2>⚙️ Code Optimizations</h2>
+      <p>Let's look at the basic Python algorithm from <code>primes.py</code> and see how we can make it run
+        dramatically faster using mathematical properties.</p>
+
+      <div class="grid-2">
+        <div>
+          <h3>1. Basic Search Loop</h3>
+          <p>This code checks divisibility by **every** prime number generated so far. As the list grows, the number of
+            modulo operations sky-rockets.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def generate_n_primes(N):
+    primes  = [2]
+    chkthis = 3
+    while len(primes) < N:
+        ptest = False
+        for i in primes:
+            if chkthis % i == 0:
+                ptest = True
+                break
+        primes += [] if ptest else [chkthis]
+        chkthis += 2
+    return primes</code></pre>
+          </div>
+        </div>
+
+        <div>
+          <h3>2. Square Root Limit Optimization</h3>
+          <p>We do not need to check all primes. If a number $X$ has a factor, it must have a factor less than or equal
+            to $\sqrt{X}$. Testing factors beyond this point is redundant.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">import math
+
+def generate_n_primes_opt(N):
+    primes  = [2]
+    chkthis = 3
+    while len(primes) < N:
+        ptest = False
+        limit = math.isqrt(chkthis) # Square root limit
+        for i in primes:
+            if i > limit:
+                break
+            if chkthis % i == 0:
+                ptest = True
+                break
+        primes += [] if ptest else [chkthis]
+        chkthis += 2
+    return primes</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 12px;">
+        <h3>3. Sieve of Eratosthenes</h3>
+        <p>Instead of testing each number individually, the ancient **Sieve of Eratosthenes** works by pre-allocating an
+          array and proactively marking out multiples of each prime starting from 2. It avoids expensive division modulo
+          operations entirely!</p>
+        <div class="code-wrapper">
+          <pre><code class="language-python">def sieve_of_eratosthenes(N):
+    if N < 1: return []
+    # Estimate the Nth prime using prime number theorem bound
+    import math
+    if N >= 6:
+        limit = Math.ceil(N * (math.log(N) + math.log(math.log(N))))
+    else:
+        limit = 15
+    
+    sieve = [True] * (limit + 1)
+    sieve[0] = sieve[1] = False
+    primes = []
+    
+    for p in range(2, limit + 1):
+        if sieve[p]:
+            primes.append(p)
+            if len(primes) == N:
+                break
+            for i in range(p * p, limit + 1, p):
+                sieve[i] = False
+    return primes</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Benchmarking Simulator -->
+    <div class="card">
+      <h2>🚀 Live Algorithm Benchmark</h2>
+      <p>Run these three algorithms side-by-side in your browser. Enter the number of primes ($N$) you want to generate
+        and click **Run Benchmark** to see execution times and operation counts compared in real-time!</p>
+
+      <div class="sim-controls">
+        <label for="primeLimit" style="font-weight: 600;">Primes to generate (N):</label>
+        <input type="number" id="primeLimit" class="sim-input" value="1000" min="1" max="25000">
+        <button class="sim-btn" onclick="runBenchmark()">Run Benchmark</button>
+      </div>
+
+      <div class="benchmark-results">
+        <!-- Basic -->
+        <div class="algo-card">
+          <div class="algo-header">
+            <span class="algo-title">❌ Basic Search Loop</span>
+            <span class="algo-stat" id="basic-ops">Operations: <strong>-</strong></span>
+            <span class="algo-stat" id="basic-time">Time: <strong>-</strong></span>
+          </div>
+          <div class="chart-container">
+            <div class="chart-bar" id="bar-basic"></div>
+          </div>
+        </div>
+
+        <!-- Optimized -->
+        <div class="algo-card">
+          <div class="algo-header">
+            <span class="algo-title">✔️ Square Root Optimized</span>
+            <span class="algo-stat" id="opt-ops">Operations: <strong>-</strong></span>
+            <span class="algo-stat" id="opt-time">Time: <strong>-</strong></span>
+          </div>
+          <div class="chart-container">
+            <div class="chart-bar optimized" id="bar-opt"></div>
+          </div>
+        </div>
+
+        <!-- Sieve -->
+        <div class="algo-card">
+          <div class="algo-header">
+            <span class="algo-title">⚡ Sieve of Eratosthenes</span>
+            <span class="algo-stat" id="sieve-ops">Operations: <strong>-</strong></span>
+            <span class="algo-stat" id="sieve-time">Time: <strong>-</strong></span>
+          </div>
+          <div class="chart-container">
+            <div class="chart-bar sieve" id="bar-sieve"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="banner info">
+        <span>ℹ️</span>
+        <span><strong>Key Insight:</strong> Notice how the **Square Root Optimized** and **Sieve** methods perform
+          significantly fewer operations as $N$ increases. The difference between $O(N^2)$ behavior and optimized
+          searching becomes more pronounced for larger numbers.</span>
+      </div>
+    </div>
+
+    <!-- Python Extensions -->
+    <div class="card">
+      <h2>💡 Python Code Extensions</h2>
+      <p>Here are useful functions to extend your prime number experiments in Python, covering primality checks,
+        factorization, and conjectures.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <h3>1. Fast Primality Test: <code>is_prime(n)</code></h3>
+          <p>Checks if a single specific number is prime using trial division up to $\sqrt{n}$, skipping multiples of 2
+            and 3 for efficiency ($6k \pm 1$ rule).</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">def is_prime(n):
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True</code></pre>
+          </div>
+        </div>
+
+        <div>
+          <h3>2. Prime Factorization: <code>prime_factors(n)</code></h3>
+          <p>Decomposes any positive integer into its prime number multipliers.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">def prime_factors(n):
+    factors = []
+    # Divide out the 2s
+    while n % 2 == 0:
+        factors.append(2)
+        n //= 2
+    # Divide out odd numbers
+    i = 3
+    while i * i <= n:
+        while n % i == 0:
+            factors.append(i)
+            n //= i
+        i += 2
+    if n > 2:
+        factors.append(n)
+    return factors</code></pre>
+          </div>
+        </div>
+
+        <div>
+          <h3>3. Goldbach's Conjecture Verification</h3>
+          <p>Goldbach's Conjecture states that every even integer greater than 2 is the sum of two prime numbers. This
+            function finds those primes.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">def goldbach_conjecture(n):
+    if n <= 2 or n % 2 != 0:
+        return "Number must be even and greater than 2"
+    
+    # Generate helper prime check
+    def is_p(val):
+        if val <= 1: return False
+        for x in range(2, int(val**0.5) + 1):
+            if val % x == 0: return False
+        return True
+
+    for i in range(2, n // 2 + 1):
+        if is_p(i) and is_p(n - i):
+            return f"{n} = {i} + {n - i}"
+    return "Conjecture disproven (highly unlikely!)"</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      Made with ❤️ for computer science education.
+      <br>
+      <a href="../computing.html">Back to Computing Tools</a> |
+      <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.85rem;">
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
+      James Abela 2026
+    </p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script>
+    // Theme Toggle Functionality
+    function toggleThemeManual() {
+      const isCurrentlyDark = !document.documentElement.classList.contains('light-theme');
+      setTheme(!isCurrentlyDark);
+    }
+
+    function setTheme(isDark) {
+      const prismTheme = document.getElementById('prism-theme');
+      if (isDark) {
+        document.documentElement.classList.remove('light-theme');
+        document.getElementById('themeToggleIcon').textContent = '☀️';
+        document.getElementById('themeToggleText').textContent = 'Light Mode';
+        if (prismTheme) {
+          prismTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css';
+        }
+        localStorage.setItem('theme-preference', 'dark');
+      } else {
+        document.documentElement.classList.add('light-theme');
+        document.getElementById('themeToggleIcon').textContent = '🌙';
+        document.getElementById('themeToggleText').textContent = 'Dark Mode';
+        if (prismTheme) {
+          prismTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css';
+        }
+        localStorage.setItem('theme-preference', 'light');
+      }
+    }
+
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('theme-preference');
+    if (savedTheme) {
+      setTheme(savedTheme === 'dark');
+    } else {
+      setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+
+    // Copy Code Helper
+    function copyCode(btn) {
+      const code = btn.nextElementSibling.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+    }
+
+    // Benchmark Implementations in JavaScript
+    function runBenchmark() {
+      const inputVal = parseInt(document.getElementById('primeLimit').value);
+      if (isNaN(inputVal) || inputVal < 1) {
+        alert('Please enter a valid positive number');
+        return;
+      }
+
+      if (inputVal > 25000) {
+        alert('N is limited to 25,000 to prevent browser lockups.');
+        return;
+      }
+
+      // Basic Search
+      const basic = runBasic(inputVal);
+      document.getElementById('basic-ops').innerHTML = `Operations: <strong>${basic.ops.toLocaleString()}</strong>`;
+      document.getElementById('basic-time').innerHTML = `Time: <strong>${basic.duration.toFixed(2)} ms</strong>`;
+
+      // Optimized Search
+      const opt = runOptimized(inputVal);
+      document.getElementById('opt-ops').innerHTML = `Operations: <strong>${opt.ops.toLocaleString()}</strong>`;
+      document.getElementById('opt-time').innerHTML = `Time: <strong>${opt.duration.toFixed(2)} ms</strong>`;
+
+      // Sieve
+      const sieve = runSieve(inputVal);
+      document.getElementById('sieve-ops').innerHTML = `Operations: <strong>${sieve.ops.toLocaleString()}</strong>`;
+      document.getElementById('sieve-time').innerHTML = `Time: <strong>${sieve.duration.toFixed(2)} ms</strong>`;
+
+      // Update Chart Bars
+      const maxOps = Math.max(basic.ops, opt.ops, sieve.ops) || 1;
+      document.getElementById('bar-basic').style.width = `${(basic.ops / maxOps) * 100}%`;
+      document.getElementById('bar-opt').style.width = `${(opt.ops / maxOps) * 100}%`;
+      document.getElementById('bar-sieve').style.width = `${(sieve.ops / maxOps) * 100}%`;
+    }
+
+    function runBasic(N) {
+      let ops = 0;
+      const startTime = performance.now();
+      const primes = [2];
+      let chkthis = 3;
+      while (primes.length < N) {
+        let ptest = false;
+        for (let i = 0; i < primes.length; i++) {
+          ops++;
+          if (chkthis % primes[i] === 0) {
+            ptest = true;
+            break;
+          }
+        }
+        if (!ptest) {
+          primes.push(chkthis);
+        }
+        chkthis += 2;
+      }
+      const duration = performance.now() - startTime;
+      return { ops, duration };
+    }
+
+    function runOptimized(N) {
+      let ops = 0;
+      const startTime = performance.now();
+      const primes = [2];
+      let chkthis = 3;
+      while (primes.length < N) {
+        let ptest = false;
+        const limit = Math.sqrt(chkthis);
+        for (let i = 0; i < primes.length; i++) {
+          const p = primes[i];
+          if (p > limit) break;
+          ops++;
+          if (chkthis % p === 0) {
+            ptest = true;
+            break;
+          }
+        }
+        if (!ptest) {
+          primes.push(chkthis);
+        }
+        chkthis += 2;
+      }
+      const duration = performance.now() - startTime;
+      return { ops, duration };
+    }
+
+    function runSieve(N) {
+      let ops = 0;
+      const startTime = performance.now();
+
+      // Upper bound estimate for N-th prime using prime number theorem
+      let limit = 15;
+      if (N >= 6) {
+        limit = Math.ceil(N * (Math.log(N) + Math.log(Math.log(N))));
+      }
+
+      const sieve = new Array(limit + 1).fill(true);
+      sieve[0] = sieve[1] = false;
+      const primes = [];
+
+      for (let p = 2; p <= limit; p++) {
+        if (sieve[p]) {
+          primes.push(p);
+          if (primes.length === N) break;
+          for (let i = p * p; i <= limit; i += p) {
+            ops++;
+            sieve[i] = false;
+          }
+        }
+      }
+
+      // Fallback in case estimate was slightly off
+      if (primes.length < N) {
+        let chkthis = primes.length > 0 ? primes[primes.length - 1] + 2 : 3;
+        while (primes.length < N) {
+          let ptest = false;
+          const limitSqrt = Math.sqrt(chkthis);
+          for (let i = 0; i < primes.length; i++) {
+            const p = primes[i];
+            if (p > limitSqrt) break;
+            ops++;
+            if (chkthis % p === 0) {
+              ptest = true;
+              break;
+            }
+          }
+          if (!ptest) {
+            primes.push(chkthis);
+          }
+          chkthis += 2;
+        }
+      }
+
+      const duration = performance.now() - startTime;
+      return { ops, duration };
+    }
+  </script>
+</body>
+
+</html>
