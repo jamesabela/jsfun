@@ -503,13 +503,13 @@ class Turtle:
             
         start_heading_rad = math.radians(self._heading)
         dir_factor = 1.0 if radius >= 0 else -1.0
-        center_angle_rad = start_heading_rad + dir_factor * (math.pi / 2.0)
+        center_angle_rad = start_heading_rad + (math.pi / 2.0)
         
         abs_r = abs(radius)
-        cx = self._x - abs_r * math.cos(center_angle_rad)
-        cy = self._y - abs_r * math.sin(center_angle_rad)
+        cx = self._x + radius * math.cos(center_angle_rad)
+        cy = self._y + radius * math.sin(center_angle_rad)
         
-        start_angle = center_angle_rad + math.pi
+        start_angle = center_angle_rad + (math.pi if radius >= 0 else 0.0)
         total_rot = math.radians(extent)
         
         for i in range(1, steps + 1):
@@ -975,7 +975,7 @@ import sys, builtins
       if (!trimmed) return 'blocks-line-empty';
       if (trimmed.startsWith('#')) return 'blocks-line-comment';
       if (trimmed.startsWith('import ') || trimmed.startsWith('from ')) return 'blocks-line-import';
-      if (/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|penup|up|pu|pendown|down|pd)\(/.test(trimmed)) return 'blocks-line-turtle';
+      if (/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|fillcolor|begin_fill|end_fill|penup|up|pu|pendown|down|pd)\(/.test(trimmed)) return 'blocks-line-turtle';
       if (/^(?:time\.)?sleep\(/.test(trimmed)) return 'blocks-line-loop';
       if (/^(for|while)\b/.test(trimmed)) return 'blocks-line-loop';
       if (/^(if|elif|else)\b/.test(trimmed)) return 'blocks-line-logic';

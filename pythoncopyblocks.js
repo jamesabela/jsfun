@@ -21,6 +21,24 @@ function getBlocklyPythonVariableName(gen, block, fieldName) {
   return variable ? variable.name : variableId;
 }
 
+function createBlocklyColourField(defaultColor) {
+  if (typeof FieldColour === 'function') {
+    return new FieldColour(defaultColor);
+  }
+
+  return new Blockly.FieldDropdown([
+    ["red", "#ff0000"],
+    ["orange", "#ff9900"],
+    ["yellow", "#ffff00"],
+    ["green", "#00cc00"],
+    ["blue", "#3366ff"],
+    ["purple", "#6633ff"],
+    ["pink", "#ff99ff"],
+    ["black", "#000000"],
+    ["white", "#ffffff"]
+  ]);
+}
+
 // Custom blocks definition and Python code generation
 function registerCustomBlocks() {
   if (typeof Blockly === 'undefined') return;
@@ -32,6 +50,10 @@ function registerCustomBlocks() {
   if (!gen) {
     console.error("Blockly Python generator not found.");
     return;
+  }
+
+  if (typeof registerFieldColour === 'function') {
+    registerFieldColour();
   }
   
   const target = gen.forBlock || gen;
@@ -90,6 +112,43 @@ function registerCustomBlocks() {
     return 'while True:\n' + branch;
   });
 
+  defineBlock('python_for_repeat', function() {
+    this.appendValueInput("TIMES")
+        .setCheck("Number")
+        .appendField("for repeat");
+    this.appendDummyInput()
+        .appendField("times");
+    this.appendStatementInput("DO")
+        .appendField("do");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#5ba55b');
+    this.setTooltip("A Python for loop that repeats code a set number of times.");
+  }, function(block) {
+    const times = gen.valueToCode(block, 'TIMES', orderAtomic) || '10';
+    const branch = gen.statementToCode(block, 'DO') || '  pass\n';
+    return 'for i in range(' + times + '):\n' + branch;
+  });
+
+  defineBlock('python_for_each', function() {
+    this.appendDummyInput()
+        .appendField("for each")
+        .appendField(new Blockly.FieldVariable("item"), "ITEM")
+        .appendField("in list")
+        .appendField(new Blockly.FieldVariable("items"), "LIST");
+    this.appendStatementInput("DO")
+        .appendField("do");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#5ba55b');
+    this.setTooltip("Loop through each item in a Python list.");
+  }, function(block) {
+    const itemName = getBlocklyPythonVariableName(gen, block, 'ITEM');
+    const listName = getBlocklyPythonVariableName(gen, block, 'LIST');
+    const branch = gen.statementToCode(block, 'DO') || '  pass\n';
+    return 'for ' + itemName + ' in ' + listName + ':\n' + branch;
+  });
+
   defineBlock('wait_seconds', function() {
     this.appendValueInput("SECONDS")
         .setCheck("Number")
@@ -128,6 +187,59 @@ function registerCustomBlocks() {
   }, function(block) {
     const prompt = inputPromptWithNewline(block);
     return ['int(input(' + JSON.stringify(prompt) + '))', gen.ORDER_FUNCTION_CALL || orderAtomic];
+  });
+
+  defineBlock('python_to_int', function() {
+    this.appendValueInput("VALUE")
+        .appendField("int");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour('#5b67a5');
+    this.setTooltip("Convert a value to a whole number with int(...).");
+  }, function(block) {
+    const value = gen.valueToCode(block, 'VALUE', orderAtomic) || '0';
+    return ['int(' + value + ')', gen.ORDER_FUNCTION_CALL || orderAtomic];
+  });
+
+  defineBlock('python_to_float', function() {
+    this.appendValueInput("VALUE")
+        .appendField("float");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour('#5b67a5');
+    this.setTooltip("Convert a value to a decimal number with float(...).");
+  }, function(block) {
+    const value = gen.valueToCode(block, 'VALUE', orderAtomic) || '0';
+    return ['float(' + value + ')', gen.ORDER_FUNCTION_CALL || orderAtomic];
+  });
+
+  defineBlock('python_to_string', function() {
+    this.appendValueInput("VALUE")
+        .appendField("str");
+    this.setInputsInline(true);
+    this.setOutput(true, "String");
+    this.setColour('#5ba58c');
+    this.setTooltip("Convert a value to text with str(...).");
+  }, function(block) {
+    const value = gen.valueToCode(block, 'VALUE', orderAtomic) || '""';
+    return ['str(' + value + ')', gen.ORDER_FUNCTION_CALL || orderAtomic];
+  });
+
+  defineBlock('random_integer', function() {
+    this.appendValueInput("FROM")
+        .setCheck("Number")
+        .appendField("random integer from");
+    this.appendValueInput("TO")
+        .setCheck("Number")
+        .appendField("to");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour('#5b67a5');
+    this.setTooltip("Pick a random whole number using random.randint(...).");
+  }, function(block) {
+    const from = gen.valueToCode(block, 'FROM', orderAtomic) || '1';
+    const to = gen.valueToCode(block, 'TO', orderAtomic) || '10';
+    return ['random.randint(' + from + ', ' + to + ')', gen.ORDER_FUNCTION_CALL || orderAtomic];
   });
 
   defineBlock('simple_text_join', function() {
@@ -244,17 +356,68 @@ function registerCustomBlocks() {
   });
 
   defineBlock('turtle_pencolor', function() {
-    this.appendValueInput("COLOR")
-        .setCheck("String")
-        .appendField("set pen color to");
-    this.setInputsInline(true);
+    const colourField = createBlocklyColourField("#000000");
+    this.appendDummyInput()
+        .appendField("set pen color to")
+        .appendField(colourField, "COLOR");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour('#0fbd8c');
     this.setTooltip("Sets pen color.");
   }, function(block) {
-    const color = gen.valueToCode(block, 'COLOR', orderAtomic) || '"black"';
-    return 'turtle.pencolor(' + color + ')\n';
+    const color = block.getFieldValue('COLOR') || '#000000';
+    return 'turtle.pencolor(' + JSON.stringify(color) + ')\n';
+  });
+
+  defineBlock('turtle_fillcolor', function() {
+    const colourField = createBlocklyColourField("#ff0000");
+    this.appendDummyInput()
+        .appendField("set fill color to")
+        .appendField(colourField, "COLOR");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#0fbd8c');
+    this.setTooltip("Choose the color used to fill closed turtle shapes.");
+  }, function(block) {
+    const color = block.getFieldValue('COLOR') || '#ff0000';
+    return 'turtle.fillcolor(' + JSON.stringify(color) + ')\n';
+  });
+
+  defineBlock('turtle_begin_fill', function() {
+    this.appendDummyInput().appendField("begin fill");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#0fbd8c');
+    this.setTooltip("Start recording the shape to fill.");
+  }, function(block) {
+    return 'turtle.begin_fill()\n';
+  });
+
+  defineBlock('turtle_end_fill', function() {
+    this.appendDummyInput().appendField("end fill");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#0fbd8c');
+    this.setTooltip("Fill the shape drawn since begin fill.");
+  }, function(block) {
+    return 'turtle.end_fill()\n';
+  });
+
+  defineBlock('list_append', function() {
+    this.appendValueInput("VALUE")
+        .appendField("append");
+    this.appendDummyInput()
+        .appendField("to list")
+        .appendField(new Blockly.FieldVariable("items"), "LIST");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#745ba5');
+    this.setTooltip("Add an item to the end of a Python list.");
+  }, function(block) {
+    const value = gen.valueToCode(block, 'VALUE', orderAtomic) || 'None';
+    const listName = getBlocklyPythonVariableName(gen, block, 'LIST');
+    return listName + '.append(' + value + ')\n';
   });
 }
 
@@ -332,6 +495,14 @@ window.toolboxXml = `
   </category>
   <category name="Loops" colour="#5ba55b">
     <block type="forever_loop"></block>
+    <block type="python_for_repeat">
+      <value name="TIMES">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="python_for_each"></block>
     <block type="controls_repeat_ext">
       <value name="TIMES">
         <shadow type="math_number">
@@ -353,6 +524,20 @@ window.toolboxXml = `
       <field name="NUM">0</field>
     </block>
     <block type="simple_input_number"></block>
+    <block type="python_to_int">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT">5</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="python_to_float">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT">3.14</field>
+        </shadow>
+      </value>
+    </block>
     <block type="math_arithmetic">
       <value name="A">
         <shadow type="math_number">
@@ -366,9 +551,30 @@ window.toolboxXml = `
       </value>
     </block>
   </category>
+  <category name="Random" colour="#5b67a5">
+    <block type="random_integer">
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
   <category name="Text" colour="#5ba58c">
     <block type="text"></block>
     <block type="simple_input_text"></block>
+    <block type="python_to_string">
+      <value name="VALUE">
+        <shadow type="math_number">
+          <field name="NUM">42</field>
+        </shadow>
+      </value>
+    </block>
     <block type="simple_text_join">
       <value name="LEFT">
         <shadow type="text">
@@ -408,6 +614,13 @@ window.toolboxXml = `
     <block type="lists_indexOf"></block>
     <block type="lists_getIndex"></block>
     <block type="lists_setIndex"></block>
+    <block type="list_append">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT">new item</field>
+        </shadow>
+      </value>
+    </block>
   </category>
   <category name="Turtle" colour="#a58a5b">
     <block type="turtle_forward">
@@ -447,12 +660,13 @@ window.toolboxXml = `
     </block>
     <block type="turtle_penup"></block>
     <block type="turtle_pendown"></block>
+    <block type="turtle_begin_fill"></block>
+    <block type="turtle_end_fill"></block>
     <block type="turtle_pencolor">
-      <value name="COLOR">
-        <shadow type="text">
-          <field name="TEXT">red</field>
-        </shadow>
-      </value>
+      <field name="COLOR">#000000</field>
+    </block>
+    <block type="turtle_fillcolor">
+      <field name="COLOR">#ff0000</field>
     </block>
   </category>
 </xml>
@@ -483,6 +697,7 @@ function getWorkspacePythonCode() {
   const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   let hasTurtleBlocks = false;
   let hasWaitBlocks = false;
+  let hasRandomBlocks = false;
   const changedVariableNames = new Set();
   const blocks = window.blocklyWorkspace.getAllBlocks(false);
   for (const b of blocks) {
@@ -491,6 +706,9 @@ function getWorkspacePythonCode() {
     }
     if (b.type === 'wait_seconds') {
       hasWaitBlocks = true;
+    }
+    if (b.type === 'random_integer') {
+      hasRandomBlocks = true;
     }
     if (b.type === 'math_change') {
       changedVariableNames.add(getBlocklyPythonVariableName(gen, b, 'VAR'));
@@ -512,6 +730,9 @@ function getWorkspacePythonCode() {
   }
   if (hasWaitBlocks && !code.includes('import time') && !code.includes('from time import')) {
     prepend += 'import time\n';
+  }
+  if (hasRandomBlocks && !code.includes('import random') && !code.includes('from random import')) {
+    prepend += 'import random\n';
   }
   return prepend + code;
 }
@@ -650,7 +871,8 @@ function checkCodeConvertibility(code) {
       line.startsWith('while ') ||
       line.startsWith('print(') ||
       line.match(/^[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*/) ||
-      line.match(/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|penup|up|pu|pendown|down|pd)\(/) ||
+      line.match(/^[a-zA-Z_][a-zA-Z0-9_]*\.append\(/) ||
+      line.match(/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|fillcolor|begin_fill|end_fill|penup|up|pu|pendown|down|pd)\(/) ||
       line.match(/^(?:time\.)?sleep\(/) ||
       line === 'pass';
 
@@ -703,6 +925,42 @@ function getWrappedCallArgument(exprString, functionName) {
   }
 
   return depth === 0 ? expr.slice(prefix.length, -1) : null;
+}
+
+function splitTopLevelArguments(argsString) {
+  const args = [];
+  let start = 0;
+  let depth = 0;
+  let quote = null;
+  let escaped = false;
+
+  for (let i = 0; i < argsString.length; i++) {
+    const ch = argsString[i];
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+      } else if (ch === '\\') {
+        escaped = true;
+      } else if (ch === quote) {
+        quote = null;
+      }
+      continue;
+    }
+
+    if (ch === '"' || ch === "'") {
+      quote = ch;
+    } else if (ch === '(' || ch === '[' || ch === '{') {
+      depth++;
+    } else if (ch === ')' || ch === ']' || ch === '}') {
+      depth--;
+    } else if (ch === ',' && depth === 0) {
+      args.push(argsString.slice(start, i).trim());
+      start = i + 1;
+    }
+  }
+
+  args.push(argsString.slice(start).trim());
+  return args;
 }
 
 function findTopLevelOperator(exprString, operators) {
@@ -767,11 +1025,6 @@ function parseExpression(exprString, workspace) {
     }
   }
 
-  const strInner = getWrappedCallArgument(exprString, 'str');
-  if (strInner !== null) {
-    return parseExpression(strInner, workspace);
-  }
-
   const numberInputInner = getWrappedCallArgument(exprString, 'int') ||
     getWrappedCallArgument(exprString, 'float');
   const inputInner = getWrappedCallArgument(numberInputInner || exprString, 'input');
@@ -782,6 +1035,41 @@ function parseExpression(exprString, workspace) {
     const block = workspace.newBlock(numberInputInner !== null ? 'simple_input_number' : 'simple_input_text');
     block.setFieldValue(promptTextContent, 'PROMPT');
     return block;
+  }
+
+  const randomIntInner = getWrappedCallArgument(exprString, 'random.randint') ||
+    getWrappedCallArgument(exprString, 'randint');
+  if (randomIntInner !== null) {
+    const args = splitTopLevelArguments(randomIntInner);
+    if (args.length === 2) {
+      const block = workspace.newBlock('random_integer');
+      const fromBlock = parseExpression(args[0], workspace);
+      const toBlock = parseExpression(args[1], workspace);
+      if (fromBlock) {
+        block.getInput('FROM').connection.connect(fromBlock.outputConnection);
+      }
+      if (toBlock) {
+        block.getInput('TO').connection.connect(toBlock.outputConnection);
+      }
+      return block;
+    }
+  }
+
+  const conversionTypes = [
+    { fn: 'int', blockType: 'python_to_int', input: 'VALUE' },
+    { fn: 'float', blockType: 'python_to_float', input: 'VALUE' },
+    { fn: 'str', blockType: 'python_to_string', input: 'VALUE' }
+  ];
+  for (const conversion of conversionTypes) {
+    const inner = getWrappedCallArgument(exprString, conversion.fn);
+    if (inner !== null) {
+      const block = workspace.newBlock(conversion.blockType);
+      const innerBlock = parseExpression(inner, workspace);
+      if (innerBlock) {
+        block.getInput(conversion.input).connection.connect(innerBlock.outputConnection);
+      }
+      return block;
+    }
   }
 
   const compIndex = findTopLevelOperator(exprString, ['<', '>', '=']);
@@ -873,6 +1161,25 @@ function parseNodeToBlock(node, workspace) {
     }
     return block;
   }
+
+  const appendMatch = node.text.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\.append\((.*)\)$/);
+  if (appendMatch) {
+    const listName = appendMatch[1];
+    const expr = appendMatch[2].trim();
+    const block = workspace.newBlock('list_append');
+    let variable = workspace.getVariable(listName);
+    if (!variable) {
+      variable = workspace.createVariable(listName);
+    }
+    block.setFieldValue(variable.getId(), 'LIST');
+    if (expr) {
+      const exprBlock = parseExpression(expr, workspace);
+      if (exprBlock) {
+        block.getInput('VALUE').connection.connect(exprBlock.outputConnection);
+      }
+    }
+    return block;
+  }
   
   const assignMatch = node.text.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)$/);
   if (assignMatch) {
@@ -923,7 +1230,7 @@ function parseNodeToBlock(node, workspace) {
   const forRangeMatch = node.text.match(/^for\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+in\s+range\((.+)\):$/);
   if (forRangeMatch) {
     const rangeArgs = forRangeMatch[2].split(',').map(s => s.trim());
-    const block = workspace.newBlock('controls_repeat_ext');
+    const block = workspace.newBlock('python_for_repeat');
     let timesVal = 10;
     if (rangeArgs.length === 1) {
       timesVal = Number(rangeArgs[0]) || 10;
@@ -944,7 +1251,31 @@ function parseNodeToBlock(node, workspace) {
     return block;
   }
 
-  const turtleMatch = node.text.match(/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor)\((.*)\)$/);
+  const forEachMatch = node.text.match(/^for\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+in\s+([a-zA-Z_][a-zA-Z0-9_]*):$/);
+  if (forEachMatch) {
+    const itemName = forEachMatch[1];
+    const listName = forEachMatch[2];
+    const block = workspace.newBlock('python_for_each');
+    let itemVariable = workspace.getVariable(itemName);
+    if (!itemVariable) {
+      itemVariable = workspace.createVariable(itemName);
+    }
+    let listVariable = workspace.getVariable(listName);
+    if (!listVariable) {
+      listVariable = workspace.createVariable(listName);
+    }
+    block.setFieldValue(itemVariable.getId(), 'ITEM');
+    block.setFieldValue(listVariable.getId(), 'LIST');
+    if (node.children.length > 0) {
+      const bodyBlock = convertNodesToBlocks(node.children, workspace);
+      if (bodyBlock) {
+        block.getInput('DO').connection.connect(bodyBlock.previousConnection);
+      }
+    }
+    return block;
+  }
+
+  const turtleMatch = node.text.match(/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|fillcolor)\((.*)\)$/);
   if (turtleMatch) {
     const cmd = turtleMatch[1];
     const arg = turtleMatch[2].trim();
@@ -956,10 +1287,19 @@ function parseNodeToBlock(node, workspace) {
     else if (cmd === 'left' || cmd === 'lt') { blockType = 'turtle_left'; inputName = 'ANGLE'; }
     else if (cmd === 'right' || cmd === 'rt') { blockType = 'turtle_right'; inputName = 'ANGLE'; }
     else if (cmd === 'circle') { blockType = 'turtle_circle'; inputName = 'RADIUS'; }
-    else if (cmd === 'pencolor') { blockType = 'turtle_pencolor'; inputName = 'COLOR'; }
+    else if (cmd === 'pencolor') { blockType = 'turtle_pencolor'; }
+    else if (cmd === 'fillcolor') { blockType = 'turtle_fillcolor'; }
     
     if (blockType) {
       const block = workspace.newBlock(blockType);
+      if ((cmd === 'pencolor' || cmd === 'fillcolor') && arg) {
+        const color = arg.trim();
+        const isQuoted = (color.startsWith('"') && color.endsWith('"')) ||
+          (color.startsWith("'") && color.endsWith("'"));
+        if (isQuoted) {
+          block.setFieldValue(color.slice(1, -1), 'COLOR');
+        }
+      }
       if (inputName && arg) {
         const argBlock = parseExpression(arg, workspace);
         if (argBlock) {
@@ -977,6 +1317,14 @@ function parseNodeToBlock(node, workspace) {
   const pendownMatch = node.text.match(/^(?:turtle\.)?(pendown|down|pd)\(\)$/);
   if (pendownMatch) {
     return workspace.newBlock('turtle_pendown');
+  }
+  const beginFillMatch = node.text.match(/^(?:turtle\.)?begin_fill\(\)$/);
+  if (beginFillMatch) {
+    return workspace.newBlock('turtle_begin_fill');
+  }
+  const endFillMatch = node.text.match(/^(?:turtle\.)?end_fill\(\)$/);
+  if (endFillMatch) {
+    return workspace.newBlock('turtle_end_fill');
   }
 
   const sleepMatch = node.text.match(/^(?:time\.)?sleep\((.*)\)$/);
