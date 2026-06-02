@@ -64,6 +64,16 @@ function registerCustomBlocks() {
     target[type] = generatorFn;
   };
 
+  target.text = function(block) {
+    const text = block.getFieldValue('TEXT') || '';
+    return [JSON.stringify(text), orderAtomic];
+  };
+
+  target.text_print = function(block) {
+    const text = gen.valueToCode(block, 'TEXT', gen.ORDER_NONE || orderAtomic) || '""';
+    return 'print(' + text + ')\n';
+  };
+
   target.math_change = function(block) {
     const varName = getBlocklyPythonVariableName(gen, block, 'VAR');
     const delta = gen.valueToCode(block, 'DELTA', gen.ORDER_ADDITIVE || orderAtomic) || '0';
