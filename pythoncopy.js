@@ -1,3 +1,4 @@
+    window.pythonCopyVersion = 9;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -11,6 +12,33 @@
     if (typeof window.updateBlocksButtonState !== 'function') {
       window.updateBlocksButtonState = function() {};
     }
+
+    window.parseBlocklyXmlText = function(xmlText) {
+      if (typeof Blockly === 'undefined') {
+        throw new Error('Blockly is not loaded.');
+      }
+      if (typeof xmlText === 'string') {
+        xmlText = xmlText.replace(/^\ufeff/, '').trim();
+      }
+      if (!xmlText) {
+        throw new Error('Empty Blockly XML.');
+      }
+
+      if (Blockly.Xml.textToDom) {
+        return Blockly.Xml.textToDom(xmlText);
+      }
+
+      if (Blockly.utils && Blockly.utils.xml && Blockly.utils.xml.textToDom) {
+        return Blockly.utils.xml.textToDom(xmlText);
+      }
+
+      const parsed = new DOMParser().parseFromString(xmlText, 'text/xml');
+      const errorNode = parsed.querySelector('parsererror');
+      if (errorNode) {
+        throw new Error(errorNode.textContent || 'Invalid Blockly XML.');
+      }
+      return parsed.documentElement;
+    };
 
     let displayTraceLog = [];
     let displayInputHistory = [];
@@ -1573,7 +1601,14 @@ import sys, builtins
         return '';
       }
 
-      if (isBlocksTab) {
+      const url = urlParams.get('url');
+      if (url) {
+        document.getElementById('urlInput').value = url;
+        document.getElementById('inputContainer').style.display = 'none';
+        document.getElementById('starterPanel').style.display = 'none';
+        document.getElementById('instructionsPanel').style.display = 'none';
+        fetchCode(url);
+      } else if (isBlocksTab) {
         document.getElementById('workspace').style.display = 'grid';
         document.getElementById('inputContainer').style.display = 'none';
         document.getElementById('starterPanel').style.display = 'none';
@@ -1591,17 +1626,8 @@ import sys, builtins
 
         // Force initialize Blocks
         setAppMode('blocks');
-      } else {
-        const url = urlParams.get('url');
-        if (url) {
-          document.getElementById('urlInput').value = url;
-          document.getElementById('inputContainer').style.display = 'none';
-          document.getElementById('starterPanel').style.display = 'none';
-          document.getElementById('instructionsPanel').style.display = 'none';
-          fetchCode(url);
-        } else if (urlParams.has('blank')) {
-          startBlankFile();
-        }
+      } else if (urlParams.has('blank')) {
+        startBlankFile();
       }
 
       document.querySelectorAll('.starter-button').forEach(button => {
@@ -1931,20 +1957,7 @@ import sys, builtins
       }
 
       function parseBlocklyXmlText(xmlText) {
-        if (Blockly.Xml.textToDom) {
-          return Blockly.Xml.textToDom(xmlText);
-        }
-
-        if (Blockly.utils && Blockly.utils.xml && Blockly.utils.xml.textToDom) {
-          return Blockly.utils.xml.textToDom(xmlText);
-        }
-
-        const parsed = new DOMParser().parseFromString(xmlText, 'text/xml');
-        const errorNode = parsed.querySelector('parsererror');
-        if (errorNode) {
-          throw new Error(errorNode.textContent || 'Invalid Blockly XML.');
-        }
-        return parsed.documentElement;
+        return window.parseBlocklyXmlText(xmlText);
       }
 
       const blankFileBtn = document.getElementById('blankFileButton');
@@ -2433,6 +2446,54 @@ import sys, builtins
       fetch(fetchURL)
         .then(response => response.text())
         .then(data => {
+          const trimmedData = data && typeof data === 'string' ? data.replace(/^\ufeff/, '').trim() : '';
+          const isBlocks = (url && (url.toLowerCase().endsWith('.blocks') || url.toLowerCase().endsWith('.xml'))) ||
+                           trimmedData.startsWith('<xml') ||
+                           trimmedData.startsWith('<?xml');
+
+          if (isBlocks) {
+            editor.value = '';
+            setAppMode('blocks');
+            if (window.blocklyWorkspace && typeof Blockly !== 'undefined') {
+              try {
+                const xmlDom = window.parseBlocklyXmlText(data);
+                window.blocklyWorkspace.clear();
+                Blockly.Xml.domToWorkspace(xmlDom, window.blocklyWorkspace);
+                resizeBlocklyWorkspaceSoon();
+
+                const code = getWorkspacePythonCode();
+                editor.value = code;
+                markCurrentEditorCodeSaved(code);
+                updateLineNumbers();
+
+                document.getElementById('workspace').style.display = 'grid';
+                document.getElementById('inputContainer').style.display = 'none';
+                document.getElementById('starterPanel').style.display = 'none';
+                document.getElementById('instructionsPanel').style.display = 'none';
+
+                analyseCodeAndUpdateMessage();
+                clearRunner();
+                autoPreviewFirstLink();
+                updateBlocksButtonState();
+                playbackHistory = [];
+                recordPlaybackSnapshot('Load Blocks Gist', true, 'save');
+
+                lastGeneratedBlocklyPython = code;
+                if (typeof updateBlocksCodePreview === 'function') {
+                  updateBlocksCodePreview(code);
+                }
+                setRunnerStatus('Blocks file loaded successfully.');
+                return;
+              } catch (err) {
+                console.error('Error loading Blocks file:', err);
+                alert('Failed to parse blocks XML: ' + err.message + '\nLoading as plain text instead.');
+                setAppMode('edit');
+              }
+            } else {
+              setAppMode('edit');
+            }
+          }
+
           editor.value = data;
           markCurrentEditorCodeSaved(data);
           updateLineNumbers();
@@ -2451,10 +2512,10 @@ import sys, builtins
             if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(editor.value)) {
               alert("This loaded program contains statements that cannot be fully converted to blocks. Switching to Edit Mode.");
               setAppMode('edit');
-            } else if (blocklyWorkspace) {
+            } else if (window.blocklyWorkspace) {
               isUpdatingBlocklyFromText = true;
               try {
-                convertPythonToWorkspace(editor.value, blocklyWorkspace);
+                convertPythonToWorkspace(editor.value, window.blocklyWorkspace);
                 lastGeneratedBlocklyPython = getWorkspacePythonCode();
               } catch (ex) {
                 console.error("Error parsing python code to blocks:", ex);
@@ -2464,7 +2525,7 @@ import sys, builtins
           }
         })
         .catch(error => {
-          alert('Failed to load code. Please ensure the URL is correct and points to a raw Python file.');
+          alert('Failed to load code. Please ensure the URL is correct and points to a raw Python or Blocks file.');
           console.error('Error fetching code:', error);
           currentURL = '';
           updatePuzzleButtonVisibility();

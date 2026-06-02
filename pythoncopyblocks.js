@@ -52,6 +52,20 @@ function registerCustomBlocks() {
     return prompt.endsWith('\n') ? prompt : prompt + '\n';
   };
 
+  defineBlock('comment_line', function() {
+    this.appendDummyInput()
+        .appendField("comment")
+        .appendField(new Blockly.FieldTextInput("explain what happens here"), "TEXT");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#6a9955');
+    this.setTooltip("Add a Python comment. Comments explain code but do not run.");
+  }, function(block) {
+    const text = block.getFieldValue('TEXT') || '';
+    const singleLineText = text.replace(/[\r\n]+/g, ' ').trim();
+    return singleLineText ? '# ' + singleLineText + '\n' : '#\n';
+  });
+
   defineBlock('when_run_clicked', function() {
     this.appendDummyInput()
         .appendField("when 🚩 clicked");
@@ -304,6 +318,9 @@ window.toolboxXml = `
   <category name="Events" colour="#ffbf00">
     <block type="when_run_clicked"></block>
   </category>
+  <category name="Comments" colour="#6a9955">
+    <block type="comment_line"></block>
+  </category>
   <category name="Logic" colour="#5b80a5">
     <block type="controls_if"></block>
     <block type="logic_compare"></block>
@@ -448,6 +465,7 @@ function getWorkspacePythonCode() {
   
   let code = gen.workspaceToCode(window.blocklyWorkspace);
   code = normalizeGeneratedPythonQuotes(code);
+  code = ensureCommentOnlyPythonSuitesHavePass(code);
   const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   let hasTurtleBlocks = false;
   let hasWaitBlocks = false;
@@ -489,6 +507,56 @@ function normalizeGeneratedPythonQuotes(code) {
     if (content.includes('"')) return match;
     return '"' + content.replace(/\\"/g, '"').replace(/"/g, '\\"') + '"';
   });
+}
+
+function ensureCommentOnlyPythonSuitesHavePass(code) {
+  const lines = code.split('\n');
+  const result = lines.slice();
+  let insertionOffset = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    if (!line.trim().endsWith(':')) continue;
+
+    const parentIndent = line.match(/^ */)[0].length;
+    let hasIndentedLine = false;
+    let hasExecutableLine = false;
+    let childIndent = parentIndent + 2;
+    let insertIndex = i + 1;
+
+    for (let j = i + 1; j < lines.length; j++) {
+      const candidate = lines[j];
+      const trimmed = candidate.trim();
+      if (!trimmed) {
+        if (hasIndentedLine) {
+          insertIndex = j + 1;
+        }
+        continue;
+      }
+
+      const indent = candidate.match(/^ */)[0].length;
+      if (indent <= parentIndent) break;
+
+      if (!hasIndentedLine) {
+        childIndent = indent;
+      }
+      hasIndentedLine = true;
+      insertIndex = j + 1;
+
+      if (!trimmed.startsWith('#')) {
+        hasExecutableLine = true;
+        break;
+      }
+    }
+
+    if (hasIndentedLine && !hasExecutableLine) {
+      result.splice(insertIndex + insertionOffset, 0, ' '.repeat(childIndent) + 'pass');
+      insertionOffset++;
+    }
+  }
+
+  return result.join('\n');
 }
 
 function initBlockly() {
@@ -761,6 +829,12 @@ function parseExpression(exprString, workspace) {
 }
 
 function parseNodeToBlock(node, workspace) {
+  if (node.text.startsWith('#')) {
+    const block = workspace.newBlock('comment_line');
+    block.setFieldValue(node.text.slice(1).replace(/^ /, ''), 'TEXT');
+    return block;
+  }
+
   const printMatch = node.text.match(/^print\((.*)\)$/);
   if (printMatch) {
     const block = workspace.newBlock('text_print');
@@ -1009,7 +1083,7 @@ function convertPythonToWorkspace(code, workspace) {
   const lines = code.split('\n')
     .map(line => {
       const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) return null;
+      if (!trimmed) return null;
       if (trimmed.startsWith('import ') || trimmed.startsWith('from ')) return null;
 
       const indent = line.match(/^ */)[0].length;

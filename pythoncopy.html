@@ -15,6 +15,39 @@
   <style id="dynamicLinksStyle">
     /* Extra dynamic overrides if needed */
   </style>
+  <script>
+    window.addEventListener('load', () => {
+      if (window.pythonCopyVersion !== 9) {
+        console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            const promises = registrations.map(r => r.unregister());
+            Promise.all(promises).then(() => {
+              if ('caches' in window) {
+                caches.keys().then(names => {
+                  Promise.all(names.map(name => caches.delete(name))).then(() => {
+                    window.location.reload();
+                  });
+                });
+              } else {
+                window.location.reload();
+              }
+            });
+          });
+        } else {
+          if ('caches' in window) {
+            caches.keys().then(names => {
+              Promise.all(names.map(name => caches.delete(name))).then(() => {
+                window.location.reload();
+              });
+            });
+          } else {
+            window.location.reload();
+          }
+        }
+      }
+    });
+  </script>
 </head>
 
 <body>
