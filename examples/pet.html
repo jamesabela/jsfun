@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Virtual Pet Challenges</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #3b82f6;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        header p {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .intro {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+            border-top: 8px solid #3b82f6;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .easy {
+            border-top-color: #22c55e;
+        }
+
+        .medium {
+            border-top-color: #f59e0b;
+        }
+
+        .hard {
+            border-top-color: #ef4444;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: white;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .easy .tag {
+            background: #22c55e;
+        }
+
+        .medium .tag {
+            background: #f59e0b;
+        }
+
+        .hard .tag {
+            background: #ef4444;
+        }
+
+        code {
+            background: #eef2ff;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Virtual Pet Challenges</h1>
+        <p>Improve your Python virtual pet by adding new features.</p>
+    </header>
+
+    <main>
+
+        <section class="intro">
+            <h2>Your starting point</h2>
+            <p>
+                Your virtual pet already has values such as
+                <code>hunger</code>, <code>happiness</code> and <code>energy</code>.
+                Each action should change these values.
+            </p>
+            <p>
+                Choose one challenge at a time. Test your program after each change.
+            </p>
+        </section>
+
+        <section class="grid">
+
+            <div class="card easy">
+                <span class="tag">Easy</span>
+                <h2>1. Add an Age</h2>
+                <p>Add a variable called <code>age</code>.</p>
+                <p>Each time the player chooses an action, increase the age by 1.</p>
+                <pre>age = age + 1</pre>
+            </div>
+
+            <div class="card easy">
+                <span class="tag">Easy</span>
+                <h2>2. Rename the Pet</h2>
+                <p>Add a menu option that lets the player rename their pet.</p>
+                <p>Use <code>input()</code> to ask for the new name.</p>
+            </div>
+
+            <div class="card easy">
+                <span class="tag">Easy</span>
+                <h2>3. Add a Cleanliness Stat</h2>
+                <p>Add a new variable called <code>cleanliness</code>.</p>
+                <p>Playing should make the pet less clean. Washing should make it cleaner.</p>
+            </div>
+
+            <div class="card easy">
+                <span class="tag">Easy</span>
+                <h2>4. Add Status Messages</h2>
+                <p>Print different messages depending on the pet's stats.</p>
+                <pre>if hunger > 7:
+    print("Your pet is very hungry!")</pre>
+            </div>
+
+            <div class="card medium">
+                <span class="tag">Medium</span>
+                <h2>5. Add Random Events</h2>
+                <p>Use the <code>random</code> module to make unexpected things happen.</p>
+                <p>For example, the pet might find a toy or get muddy.</p>
+                <pre>import random
+
+event = random.randint(1, 3)</pre>
+            </div>
+
+            <div class="card medium">
+                <span class="tag">Medium</span>
+                <h2>6. Add a Shop</h2>
+                <p>Add coins to the game.</p>
+                <p>The player can spend coins on food, toys or medicine.</p>
+            </div>
+
+            <div class="card medium">
+                <span class="tag">Medium</span>
+                <h2>7. Add a Score</h2>
+                <p>Create a score based on how healthy and happy the pet is.</p>
+                <pre>score = happiness + energy + (10 - hunger)</pre>
+            </div>
+
+            <div class="card medium">
+                <span class="tag">Medium</span>
+                <h2>8. Add Health</h2>
+                <p>Add a <code>health</code> variable.</p>
+                <p>If hunger is too high or energy is too low, health should decrease.</p>
+            </div>
+
+            <div class="card hard">
+                <span class="tag">Hard</span>
+                <h2>9. Save the Pet</h2>
+                <p>Save the pet's name and stats to a text file.</p>
+                <p>When the program starts, load the saved data.</p>
+            </div>
+
+            <div class="card hard">
+                <span class="tag">Hard</span>
+                <h2>10. Use Functions</h2>
+                <p>Move repeated code into functions.</p>
+                <pre>def show_stats():
+    print("Hunger:", hunger)
+    print("Energy:", energy)</pre>
+            </div>
+
+            <div class="card hard">
+                <span class="tag">Hard</span>
+                <h2>11. Use a Class</h2>
+                <p>Create a <code>Pet</code> class.</p>
+                <p>The pet's name, hunger, happiness and energy can become attributes.</p>
+                <pre>class Pet:
+    def __init__(self, name):
+        self.name = name
+        self.hunger = 5</pre>
+            </div>
+
+            <div class="card hard">
+                <span class="tag">Hard</span>
+                <h2>12. Add Different Pet Types</h2>
+                <p>Let the player choose a cat, dog, dragon or robot.</p>
+                <p>Each pet type could have different starting stats.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Challenge: Can you keep your pet happy, healthy and alive?</p>
+    </footer>
+
+</body>
+
+</html>
