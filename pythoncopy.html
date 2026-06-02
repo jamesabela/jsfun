@@ -17,7 +17,7 @@
   </style>
   <script>
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 9) {
+      if (window.pythonCopyVersion !== 10) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -64,7 +64,7 @@
         <path d="M4 12H2" />
         <path d="M2 9h2" />
       </svg>
-      Python Code Lab 4.7
+      Python Code Lab 4.8
       <span class="mode-badge edit-badge">Edit</span>
       <span class="mode-badge display-badge">Display</span>
       <span class="mode-badge turtle-badge">Turtle</span>
@@ -162,6 +162,8 @@
 
     <p style="margin: 12px 0 6px; font-weight: 600; font-size: 15px;">Turtle Graphics:</p>
     <div class="starter-grid" style="margin-bottom: 16px;">
+      <button class="starter-button"
+        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/6b44d12f117fc4081f9de784b85a4882a631d65c/bubbleturtle.py">Bubble Turtle</button>
       <button class="starter-button"
         data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/confetti.py">Confetti</button>
       <button class="starter-button"
