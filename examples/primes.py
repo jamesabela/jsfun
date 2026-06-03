@@ -15,7 +15,7 @@ def generate_n_primes(N):
 
 # Tests time on your PC
 a = datetime.datetime.now()
-print(generate_n_primes(1000))
+print(generate_n_primes(100))
 b = datetime.datetime.now()
 c = b-a
 seconds = c.total_seconds()
