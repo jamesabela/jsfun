@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Use a Function in an Expression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --accent-gold: #d4af37;
+  --accent-gold-glow: rgba(212, 175, 55, 0.15);
+  --accent-dark: #0f172a;
+  --accent-blue: #3b82f6;
+  --accent-blue-glow: rgba(59, 130, 246, 0.1);
+  --success: #10b981;
+  --success-glow: rgba(16, 185, 129, 0.15);
+  --border-color: rgba(226, 201, 116, 0.25);
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --code-bg: #0f172a;
+  --code-text: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg-gradient); color: var(--text-main); font-family: 'Inter', system-ui, -apple-system, sans-serif; min-height: 100vh; padding: 24px; display: flex; justify-content: center; align-items: flex-start; }
+.container { width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; gap: 16px; }
+.title-group h1 { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.7rem; letter-spacing: -0.02em; background: linear-gradient(to right, var(--text-main), var(--accent-gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
+.title-group p { font-size: 0.9rem; color: var(--text-muted); }
+.breadcrumb { min-width: 190px; text-align: right; font-size: 0.85rem; color: var(--text-muted); }
+.progress-label { font-weight: 700; color: var(--accent-dark); margin-bottom: 6px; }
+.progress-shell { width: 100%; height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--success)); border-radius: 999px; }
+.card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 16px; }
+.card-title { font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--accent-gold); text-transform: uppercase; }
+.instruction-text { font-size: 0.96rem; line-height: 1.55; color: var(--text-main); }
+.banner { background: var(--accent-gold-glow); border-left: 4px solid var(--accent-gold); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; line-height: 1.4; }
+.keywords { display: flex; flex-wrap: wrap; gap: 8px; }
+.keyword { background: var(--accent-blue-glow); color: #1d4ed8; padding: 6px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
+pre { background: var(--code-bg); color: var(--code-text); padding: 14px; border-radius: 8px; font-family: 'Fira Code', Consolas, Monaco, monospace; font-size: 0.85rem; overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.05); white-space: pre-wrap; }
+.checklist { padding-left: 20px; line-height: 1.55; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>LEVEL 5: Functions</p>
+        <h1>Use a Function in an Expression 🧮</h1>
+      </div>
+      <div class="breadcrumb">
+        <div class="progress-label">Level 5 of 10</div>
+        <div class="progress-shell"><div class="progress-fill" style="width: 50%"></div></div>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-title">💡 Idea</div>
+      <p class="instruction-text">A function call can be placed inside a larger calculation because the return value replaces the call.</p>
+      <div class="keywords"><span class="keyword">function call</span><span class="keyword">expression</span><span class="keyword">return value</span><span class="keyword">assignment</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎓 Cambridge 9618 link</div>
+      <p class="instruction-text">In Cambridge pseudocode, CALL is not used for functions. A function should be used inside an expression, such as OUTPUT Max(10, Fine).</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Task</div>
+      <p class="instruction-text">Complete the area function and use it to calculate the total area of two rectangles.</p>
+      <div class="banner">Hint: The area of a rectangle is width * height.</div>
+      <pre>def add_numbers(a, b):
+    return a + b
+
+answer = add_numbers(3, 4)</pre>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Success check</div>
+      <ul class="checklist">
+        <li>The program should run without an error.</li>
+        <li>The output should include the words shown in the test panel.</li>
+        <li>Use the key terms above when explaining your code to someone else.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

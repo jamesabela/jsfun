@@ -710,5 +710,19 @@
         "isExternal": false
       }
     ]
+  },
+  {
+    "category": "Educational Video Channels",
+    "icon": "🎥",
+    "tools": [
+      {
+        "title": "Branch Education",
+        "emoji": "📺",
+        "url": "https://www.youtube.com/@BranchEducation",
+        "desc": "Stunning 3D animations explaining computer hardware, CPU architectures, transistors, fiber optics, and networking in deep technical detail.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": true
+      }
+    ]
   }
 ]
