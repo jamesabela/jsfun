@@ -15,9 +15,6 @@ for row in range(4):
 # ""
 
 #output
-# ####
-# ####
-# ####
-# ####
+# ####, ####, ####, ####
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/forloops/13_turtle_dot_grid.py

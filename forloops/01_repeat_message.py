@@ -10,10 +10,6 @@ for i in range(1):
 # ""
 
 #output
-# Python
-# Python
-# Python
-# Python
-# Python
+# Python, Python, Python, Python, Python
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/forloops/02_counting_up.py

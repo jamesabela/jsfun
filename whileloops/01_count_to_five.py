@@ -13,10 +13,6 @@ while number < 3:
 # ""
 
 #output
-# 1
-# 2
-# 3
-# 4
-# 5
+# 1, 2, 3, 4, 5
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/whileloops/02_countdown.py

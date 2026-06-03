@@ -12,9 +12,6 @@ for colour in colours:
 # ""
 
 #output
-# red
-# green
-# blue
-# purple
+# red, green, blue, purple
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/forloops/08_emoji_stairs.py

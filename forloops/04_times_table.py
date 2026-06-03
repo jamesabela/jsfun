@@ -14,16 +14,8 @@ for i in range(1, 6):
 # 10
 
 #output
-# 3
-# 6
-# 9
-
-# 7
-# 14
-# 21
-
-# 10
-# 20
-# 30
+# 3, 6, 9, 12, 15
+# 7, 14, 21, 28, 35
+# 10, 20, 30, 40, 50
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/forloops/05_total_score.py

@@ -26,9 +26,7 @@ print("Goodbye")
 
 #output
 # Goodbye
-# Hello
-# Goodbye
-# Computer jokes are byte-sized
-# Goodbye
+# Hello, Goodbye
+# Computer jokes are byte-sized, Goodbye
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/whileloops/09_input_validation.py

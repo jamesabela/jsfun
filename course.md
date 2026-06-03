@@ -40,8 +40,13 @@ Used on the **final level** of a course to mark the end. When all tests pass, th
 
 Defines inputs and expected output checks for automated grading.
 
-* **`#Input`**: Each comment line underneath represents a test case. Multiple inputs for the same test case are separated by commas.
+> [!IMPORTANT]
+> The number of lines under `#Input` and `#output` must match exactly. Each line corresponds to one test case. Do not split expected outputs for a single test case across multiple lines, as each subsequent line will be treated as the expected output for a separate test case.
+
+* **`#Input`**: Each comment line underneath represents a single test case. Multiple inputs for the same test case are separated by commas.
 * **`#output`**: Each comment line represents the expected substring(s) that the terminal output must contain for that test case (case-insensitive checks).
+  * **Multiple Substrings**: If a test case expects multiple distinct substrings to be present in the output, list them separated by commas on the same line (e.g., `# Hello, Goodbye`).
+  * **Duplicate Substrings (Occurrences)**: If a test case expects a substring to appear multiple times, list it multiple times separated by commas (e.g., `# Python, Python, Python`). The test runner will verify that the output contains at least that many occurrences of the substring.
 * Example:
 
   ```python
@@ -56,14 +61,14 @@ Defines inputs and expected output checks for automated grading.
   # 40
   ```
 
-* **No Inputs**: If a test case does not require keyboard input, represent it with empty quotes `""`:
+* **No Inputs / Multi-line Outputs**: If a test case does not require keyboard input, represent it with empty quotes `""`, and combine all expected outputs for that single test case into a single comma-separated line:
 
   ```python
   #Input
   # ""
 
   #output
-  # 15
+  # 1, 2, 3, 4, 5
   ```
 
 ### Tutorial & Reference Links

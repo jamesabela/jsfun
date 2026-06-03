@@ -23,9 +23,7 @@ print("Correct")
 
 #output
 # Correct
-# Too low
-# Correct
-# Too high
-# Correct
+# Too low, Correct
+# Too high, Correct
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/whileloops/06_limited_attempts.py

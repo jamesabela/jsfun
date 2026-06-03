@@ -12,11 +12,6 @@ print("Blast off!")
 # ""
 
 #output
-# 5
-# 4
-# 3
-# 2
-# 1
-# Blast off!
+# 5, 4, 3, 2, 1, Blast off!
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/forloops/04_times_table.py

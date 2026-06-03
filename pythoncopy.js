@@ -3472,20 +3472,28 @@ _test_error = None
 import time, sys
 _test_start = time.time()
 
+class TimeoutInterrupt(BaseException):
+    pass
+
+_test_timeout_raised = False
+
 def _test_trace(frame, event, arg):
-    if time.time() - _test_start > 5.0:
-        raise Exception("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
+    global _test_timeout_raised
+    if _test_timeout_raised or time.time() - _test_start > 5.0:
+        _test_timeout_raised = True
+        raise TimeoutInterrupt("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
     return _test_trace
 
 sys.settrace(_test_trace)
 try:
     exec(compile(source_code, '<user_code>', 'exec'), {"__name__": "__main__"})
-except Exception as e:
+except BaseException as e:
     _test_error = str(e)
 finally:
     sys.settrace(None)
     builtins.input = builtins._original_input
     builtins.print = builtins._original_print
+
 
 # Get results
 _test_result = {
@@ -3569,16 +3577,36 @@ json.dumps(_test_result)
             msg: `Error: ${error}`
           });
         } else {
-          // Check each expected output string
+          // Check each expected output string, taking into account duplicate expected items
+          const expectedCounts = {};
+          for (let expectedItem of tc.expected) {
+            const cleanExpected = expectedItem.trim().toLowerCase();
+            expectedCounts[cleanExpected] = (expectedCounts[cleanExpected] || 0) + 1;
+          }
+
+          const matchedCounts = {};
+          for (let cleanExpected of Object.keys(expectedCounts)) {
+            let count = 0;
+            if (cleanExpected !== "") {
+              let pos = 0;
+              const lowerActual = actualOutput.toLowerCase();
+              while ((pos = lowerActual.indexOf(cleanExpected, pos)) !== -1) {
+                count++;
+                pos += cleanExpected.length;
+              }
+            }
+            matchedCounts[cleanExpected] = count;
+          }
+
           for (let expectedItem of tc.expected) {
             const cleanExpected = expectedItem.trim();
-            // Perform a case-insensitive check
-            const matched = actualOutput.toLowerCase().includes(cleanExpected.toLowerCase());
+            const lowerExpected = cleanExpected.toLowerCase();
+            const matched = (matchedCounts[lowerExpected] >= expectedCounts[lowerExpected]);
             if (!matched) {
               isPass = false;
             }
             expectedChecks.push({
-              expected: cleanExpected,
+              expected: cleanExpected + (expectedCounts[lowerExpected] > 1 ? ` (x${expectedCounts[lowerExpected]})` : ''),
               matched: matched
             });
           }
@@ -4029,12 +4057,18 @@ class InputInterrupt(BaseException):
     def __init__(self, prompt):
         self.prompt = prompt
 
+class TimeoutInterrupt(BaseException):
+    pass
+
+_timeout_raised = False
 _start_time = time.time()
 _limit = 5.0  # 5 seconds timeout limit
 
 def _timeout_trace(frame, event, arg):
-    if time.time() - _start_time > _limit:
-        raise Exception("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
+    global _timeout_raised
+    if _timeout_raised or time.time() - _start_time > _limit:
+        _timeout_raised = True
+        raise TimeoutInterrupt("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
     return _timeout_trace
 
 # Seed random module
@@ -4073,7 +4107,7 @@ finally:
     # Restore original input
     builtins.input = builtins._original_run_input
     # Clean globals
-    for var in ['_start_time', '_limit', '_timeout_trace', 'user_code', 'custom_run_input', 'InputInterrupt']:
+    for var in ['_start_time', '_limit', '_timeout_trace', '_timeout_raised', 'TimeoutInterrupt', 'user_code', 'custom_run_input', 'InputInterrupt']:
         if var in globals():
             del globals()[var]
           `);
@@ -4260,6 +4294,10 @@ finally:
       const setupCode = `
 import sys, io, builtins, json, ast, time
 
+class TimeoutInterrupt(BaseException):
+    pass
+
+_trace_timeout_raised = False
 _start_time = time.time()
 _limit = 5.0
 
@@ -4335,8 +4373,10 @@ def _source_line(line_no):
     return ""
 
 def _trace_hook(frame, event, arg):
-    if time.time() - _start_time > _limit:
-        raise Exception("Timeout: Execution took too long (possible infinite loop). Maximum execution time is 5 seconds.")
+    global _trace_timeout_raised
+    if _trace_timeout_raised or time.time() - _start_time > _limit:
+        _trace_timeout_raised = True
+        raise TimeoutInterrupt("Timeout: Execution took too long (possible infinite loop). Maximum execution time is 5 seconds.")
 
     if frame.f_code.co_filename != '<user_code>':
         return _trace_hook
@@ -4493,7 +4533,7 @@ def _run_trace():
     except TraceInterrupt as ti:
         status = "waiting_input"
         pending_prompt = ti.prompt_text
-    except Exception as e:
+    except BaseException as e:
         _trace_output.append(str(e) + '\\n')
         status = "error"
     finally:

@@ -14,16 +14,8 @@ for i in range(1, 6):
 # :)
 
 #output
-# *
-# **
-# ***
-
-# #
-# ##
-# ###
-
-# :)
-# :):)
-# :):):)
+# *, **, ***, ****, *****
+# #, ##, ###, ####, #####
+# :), :):), :):):), :):):):), :):):):):)
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/forloops/09_turtle_square.py

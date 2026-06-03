@@ -10,10 +10,6 @@ for number in range(0, 5):
 # ""
 
 #output
-# 1
-# 2
-# 3
-# 4
-# 5
+# 1, 2, 3, 4, 5
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/forloops/03_counting_down.py

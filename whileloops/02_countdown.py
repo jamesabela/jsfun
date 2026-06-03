@@ -15,11 +15,6 @@ print("Go!")
 # ""
 
 #output
-# 5
-# 4
-# 3
-# 2
-# 1
-# Go!
+# 5, 4, 3, 2, 1, Go!
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/whileloops/03_password_gate.py
