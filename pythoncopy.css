@@ -2715,3 +2715,167 @@
       font-family: Consolas, Monaco, monospace;
       color: #f472b6; /* Pink code tag */
     }
+
+    /* File Request Modal Styles */
+    .file-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .file-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .file-modal-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      width: 90%;
+      max-width: 440px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .file-modal-overlay.active .file-modal-card {
+      transform: scale(1);
+    }
+
+    .file-modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .file-modal-body {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .file-modal-filename {
+      font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 3px 6px;
+      border-radius: 6px;
+      font-size: 13px;
+      border: 1px solid #e2e8f0;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .file-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .file-modal-btn {
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .file-modal-btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .file-modal-btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .file-modal-btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .file-modal-btn-primary:hover {
+      background: #1d4ed8;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+    }
+
+    .file-modal-btn-primary input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* Dark Mode Overrides */
+    body.dark-theme .file-modal-card {
+      background: #1e1e24;
+      border-color: #2d2d34;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-theme .file-modal-title {
+      color: #f8fafc;
+    }
+
+    body.dark-theme .file-modal-body {
+      color: #94a3b8;
+    }
+
+    body.dark-theme .file-modal-filename {
+      background: #111115;
+      color: #38bdf8;
+      border-color: #2d2d34;
+    }
+
+    body.dark-theme .file-modal-btn-secondary {
+      background: #2d2d34;
+      color: #94a3b8;
+    }
+
+    body.dark-theme .file-modal-btn-secondary:hover {
+      background: #3e3e4a;
+      color: #f8fafc;
+    }
+
+    body.dark-theme .file-modal-btn-primary {
+      background: #3b82f6;
+    }
+
+    body.dark-theme .file-modal-btn-primary:hover {
+      background: #2563eb;
+    }
+

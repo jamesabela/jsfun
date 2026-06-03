@@ -227,6 +227,9 @@
       <button class="starter-button"
         data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/primes.py">Primes
       </button>
+      <button class="starter-button"
+        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/file_load.py">File
+        Handling</button>
     </div>
 
     <p style="margin: 12px 0 6px; font-weight: 600; font-size: 15px;">Blocks Examples:</p>
@@ -560,6 +563,24 @@
   <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
   <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
       referrerpolicy="no-referrer-when-downgrade" /></noscript>
+  <!-- File Request Modal Overlay -->
+  <div id="fileRequestModal" class="file-modal-overlay">
+    <div class="file-modal-card">
+      <h3 class="file-modal-title">
+        📁 File Required
+      </h3>
+      <p class="file-modal-body">
+        The Python script requires a file named <span id="fileRequestName" class="file-modal-filename">file.txt</span> to continue running. Please select the file from your computer:
+      </p>
+      <div class="file-modal-actions">
+        <button id="fileRequestCancelBtn" class="file-modal-btn file-modal-btn-secondary">Cancel</button>
+        <button class="file-modal-btn file-modal-btn-primary">
+          Choose File
+          <input type="file" id="fileRequestInput">
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

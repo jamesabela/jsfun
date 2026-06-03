@@ -693,13 +693,13 @@ exitonclick = done
       pyodideReadyPromise = loadPyodide({
         stdout: (text) => {
           if (currentAppMode !== 'display') {
-            outputEl.textContent += text + '\n';
+            outputEl.appendChild(document.createTextNode(text + '\n'));
             outputEl.scrollTop = outputEl.scrollHeight;
           }
         },
         stderr: (text) => {
           if (currentAppMode !== 'display') {
-            outputEl.textContent += text + '\n';
+            outputEl.appendChild(document.createTextNode(text + '\n'));
             outputEl.scrollTop = outputEl.scrollHeight;
           }
         }
@@ -2709,6 +2709,9 @@ import sys, builtins
       const localOnlyImports = imports.filter(moduleName => !browserSafeImports.has(moduleName));
       const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
 
+      const hasSleep = /time\.sleep\b|sleep\s*\(/.test(source);
+      const sleepWarning = hasSleep ? ' ⚠️ Note: time.sleep() blocks browser rendering, meaning all prints will output at once. Instead, try using input("Press Enter to continue...") to pause execution.' : '';
+
       if (localOnlyImports.length > 0) {
         return {
           ok: false,
@@ -2720,9 +2723,9 @@ import sys, builtins
       return {
         ok: true,
         mode: 'normal',
-        message: allowedImports.length > 0
+        message: (allowedImports.length > 0
           ? `Browser-safe imports detected: ${allowedImports.join(', ')}. This code looks suitable for browser running.`
-          : 'No imports detected. This code looks suitable for browser running.'
+          : 'No imports detected. This code looks suitable for browser running.') + sleepWarning
       };
     }
 
@@ -2742,10 +2745,13 @@ import sys, builtins
         const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle', 'time']);
         const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
 
+        const hasSleep = /time\.sleep\b|sleep\s*\(/.test(editor.value);
+        const sleepWarning = hasSleep ? ' ⚠️ Note: time.sleep() blocks browser rendering, meaning all prints will output at once. Instead, try using input("Press Enter to continue...") to pause execution.' : '';
+
         runnerMessage.style.display = 'block';
-        runnerMessage.textContent = allowedImports.length > 0
+        runnerMessage.textContent = (allowedImports.length > 0
           ? `Browser-safe imports detected: ${allowedImports.join(', ')}. This code looks suitable for browser running.`
-          : 'No imports detected. This code looks suitable for browser running.';
+          : 'No imports detected. This code looks suitable for browser running.') + sleepWarning;
 
         if (hasTurtle || currentAppMode === 'turtle') {
           detectionLabel.textContent = 'Detection: Turtle graphics mode.';
@@ -2940,6 +2946,39 @@ import sys, builtins
       highlightLine(lineNum);
     }
 
+    function canPreviewUrl(url) {
+      try {
+        const parsed = new URL(url);
+        const host = parsed.hostname.toLowerCase();
+        
+        // YouTube is embeddable after transformation
+        if (host.includes('youtube.com') || host.includes('youtu.be')) {
+          return true;
+        }
+
+        // List of domains known to block iframe embedding via X-Frame-Options or CSP ancestors
+        const blockedDomains = [
+          'github.com',
+          'githubusercontent.com',
+          'google.com',
+          'wikipedia.org',
+          'stackoverflow.com',
+          'w3schools.com',
+          'replit.com',
+          'twitter.com',
+          'x.com',
+          'facebook.com',
+          'instagram.com',
+          'linkedin.com',
+          'medium.com'
+        ];
+        
+        return !blockedDomains.some(domain => host === domain || host.endsWith('.' + domain));
+      } catch (e) {
+        return false;
+      }
+    }
+
     function updateReferenceLinks() {
       const code = editor.value;
       const links = extractLinksFromCode(code);
@@ -3000,18 +3039,22 @@ import sys, builtins
         rightSide.style.gap = '6px';
         rightSide.style.flexShrink = '0';
 
-        const previewBtn = document.createElement('button');
-        if (isPreviewed) {
-          previewBtn.className = 'link-item-btn-preview';
-          previewBtn.style.background = '#ef4444'; // Red
-          previewBtn.textContent = 'Close';
-          previewBtn.onclick = () => closeWebPreview();
-          previewBtn.onmouseenter = () => { previewBtn.style.background = '#dc2626'; };
-          previewBtn.onmouseleave = () => { previewBtn.style.background = '#ef4444'; };
-        } else {
-          previewBtn.className = 'link-item-btn-preview';
-          previewBtn.textContent = 'Preview';
-          previewBtn.onclick = () => previewWebLink(link.url);
+        const showPreview = canPreviewUrl(link.url);
+        if (showPreview) {
+          const previewBtn = document.createElement('button');
+          if (isPreviewed) {
+            previewBtn.className = 'link-item-btn-preview';
+            previewBtn.style.background = '#ef4444'; // Red
+            previewBtn.textContent = 'Close';
+            previewBtn.onclick = () => closeWebPreview();
+            previewBtn.onmouseenter = () => { previewBtn.style.background = '#dc2626'; };
+            previewBtn.onmouseleave = () => { previewBtn.style.background = '#ef4444'; };
+          } else {
+            previewBtn.className = 'link-item-btn-preview';
+            previewBtn.textContent = 'Preview';
+            previewBtn.onclick = () => previewWebLink(link.url);
+          }
+          rightSide.appendChild(previewBtn);
         }
 
         const openBtn = document.createElement('a');
@@ -3020,7 +3063,6 @@ import sys, builtins
         openBtn.target = '_blank';
         openBtn.textContent = 'Open';
 
-        rightSide.appendChild(previewBtn);
         rightSide.appendChild(openBtn);
 
         item.appendChild(leftSide);
@@ -3049,7 +3091,7 @@ import sys, builtins
     function autoPreviewFirstLink() {
       const code = editor.value;
       const links = extractLinksFromCode(code);
-      if (links.length > 0) {
+      if (links.length > 0 && canPreviewUrl(links[0].url)) {
         previewWebLink(links[0].url);
       }
     }
@@ -3167,6 +3209,71 @@ import sys, builtins
 
       setRunnerStatus('System reset.');
     }
+
+    function requestFileUpload(filename) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById('fileRequestModal');
+        const nameEl = document.getElementById('fileRequestName');
+        const inputEl = document.getElementById('fileRequestInput');
+        const cancelBtn = document.getElementById('fileRequestCancelBtn');
+
+        if (!modal || !nameEl || !inputEl || !cancelBtn) {
+          resolve(null);
+          return;
+        }
+
+        nameEl.textContent = filename;
+        inputEl.value = ''; // Clear file input
+
+        const onFileChange = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            cleanup();
+            resolve({ name: filename, data: new Uint8Array(event.target.result) });
+          };
+          reader.readAsArrayBuffer(file);
+        };
+
+        const onCancel = () => {
+          cleanup();
+          resolve(null);
+        };
+
+        const cleanup = () => {
+          inputEl.removeEventListener('change', onFileChange);
+          cancelBtn.removeEventListener('click', onCancel);
+          modal.classList.remove('active');
+        };
+
+        inputEl.addEventListener('change', onFileChange);
+        cancelBtn.addEventListener('click', onCancel);
+        modal.classList.add('active');
+      });
+    }
+
+    window.toggleFilePreview = (filename, btnId, previewId) => {
+      const btn = document.getElementById(btnId);
+      const pre = document.getElementById(previewId);
+      if (!btn || !pre) return;
+
+      if (pre.style.display === 'none') {
+        try {
+          const content = pyodideInstance.FS.readFile(`/home/pyodide/${filename}`, { encoding: 'utf8' });
+          pre.textContent = content;
+          pre.style.display = 'block';
+          btn.textContent = 'Hide Preview';
+        } catch (e) {
+          pre.textContent = "Error reading file contents (binary file?).";
+          pre.style.display = 'block';
+          btn.textContent = 'Hide Preview';
+        }
+      } else {
+        pre.style.display = 'none';
+        btn.textContent = 'Show Preview';
+      }
+    };
 
     function requestDisplayInput(promptText) {
       showConsoleInput(promptText);
@@ -4032,6 +4139,75 @@ json.dumps(_test_result)
         await pyodideReadyPromise;
       }
 
+      // 1. Clean up transient files in /home/pyodide from previous runs
+      if (pyodideInstance) {
+        try {
+          const files = pyodideInstance.FS.readdir('/home/pyodide');
+          for (const file of files) {
+            if (file !== '.' && file !== '..' && file !== 'turtle.py') {
+              try {
+                pyodideInstance.FS.unlink(`/home/pyodide/${file}`);
+              } catch (e) {
+                try { pyodideInstance.FS.rmdir(`/home/pyodide/${file}`); } catch (e2) {}
+              }
+            }
+          }
+        } catch (e) {
+          console.error("Error clearing VFS:", e);
+        }
+      }
+
+      // 2. Scan and pre-load '#load <url>' directives
+      const loadedFilesSnapshot = {};
+      const loadRegex = /^\s*#\s*load\s+(https?:\/\/\S+|[^\s#]+)/gim;
+      let loadMatch;
+      const loadPromises = [];
+      while ((loadMatch = loadRegex.exec(source)) !== null) {
+        const fileUrl = loadMatch[1];
+        try {
+          const resolvedUrl = new URL(fileUrl, window.location.href).href;
+          const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+          setRunnerStatus(`Loading remote file: ${filename}...`);
+          loadPromises.push(
+            fetch(resolvedUrl)
+              .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.arrayBuffer();
+              })
+              .then(buf => {
+                const data = new Uint8Array(buf);
+                pyodideInstance.FS.writeFile(`/home/pyodide/${filename}`, data);
+                try {
+                  const stat = pyodideInstance.FS.stat(`/home/pyodide/${filename}`);
+                  loadedFilesSnapshot[filename] = stat.mtime.getTime();
+                } catch (e) {}
+              })
+              .catch(err => {
+                outputEl.textContent += `Warning: Failed to load ${fileUrl} (${err.message})\n`;
+              })
+          );
+        } catch (e) {
+          outputEl.textContent += `Warning: Invalid load URL: ${fileUrl}\n`;
+        }
+      }
+      if (loadPromises.length > 0) {
+        await Promise.all(loadPromises);
+        setRunnerStatus('Running...');
+      }
+
+      // 3. Take a snapshot of files in the virtual filesystem before execution
+      const filesBefore = {};
+      try {
+        const list = pyodideInstance.FS.readdir('/home/pyodide');
+        for (const name of list) {
+          if (name === '.' || name === '..' || name === 'turtle.py') continue;
+          try {
+            const stat = pyodideInstance.FS.stat(`/home/pyodide/${name}`);
+            filesBefore[name] = stat.mtime.getTime();
+          } catch (e) {}
+        }
+      } catch (e) {}
+
       const sessionSeed = Math.floor(Math.random() * 1000000);
       let runInputHistory = [];
       let executionFinished = false;
@@ -4040,7 +4216,41 @@ json.dumps(_test_result)
         let runInputCount = 0;
         let pendingPrompt = "";
         
-        outputEl.textContent = '';
+        outputEl.innerHTML = '';
+        
+        // Show banner for files loaded/uploaded during this session
+        const loadedFiles = Object.keys(loadedFilesSnapshot);
+        if (loadedFiles.length > 0) {
+          const banner = document.createElement('div');
+          banner.className = 'loaded-files-banner';
+          banner.style.cssText = 'margin-bottom: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #166534; display: flex; flex-direction: column; gap: 8px;';
+          if (document.body.classList.contains('dark-theme')) {
+            banner.style.backgroundColor = '#064e3b';
+            banner.style.borderColor = '#047857';
+            banner.style.color = '#d1fae5';
+          }
+          
+          for (let i = 0; i < loadedFiles.length; i++) {
+            const filename = loadedFiles[i];
+            const item = document.createElement('div');
+            item.style.cssText = 'display: flex; flex-direction: column; gap: 4px;';
+            
+            const rowId = `btn-prev-${i}`;
+            const preId = `pre-prev-${i}`;
+            
+            item.innerHTML = `
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                  📄 File <strong>${escapeHtml(filename)}</strong> is loaded and available to use.
+                </span>
+                <button id="${rowId}" onclick="window.toggleFilePreview('${escapeHtml(filename)}', '${rowId}', '${preId}')" style="background: #10b981; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; height: 22px;">Show Preview</button>
+              </div>
+              <pre id="${preId}" style="display: none; margin: 4px 0 0; padding: 8px; background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 6px; font-family: 'JetBrains Mono', Consolas, Monaco, monospace; font-size: 11px; white-space: pre-wrap; max-height: 120px; overflow-y: auto; color: inherit; width: 100%; box-sizing: border-box;"></pre>
+            `;
+            banner.appendChild(item);
+          }
+          outputEl.appendChild(banner);
+        }
         
         pyodideInstance.globals.set("user_code", source);
         pyodideInstance.globals.set("runInputHistoryJson", JSON.stringify(runInputHistory));
@@ -4054,7 +4264,7 @@ json.dumps(_test_result)
           } else {
             pendingPrompt = promptMsg;
             if (promptMsg) {
-              outputEl.textContent += promptMsg;
+              outputEl.appendChild(document.createTextNode(promptMsg));
               outputEl.scrollTop = outputEl.scrollHeight;
             }
             throw new Error("__INPUT_INTERRUPT__");
@@ -4068,6 +4278,11 @@ import sys, builtins, json, time, js
 class InputInterrupt(BaseException):
     def __init__(self, prompt):
         self.prompt = prompt
+
+class FileInterrupt(BaseException):
+    def __init__(self, filename):
+        self.filename = filename
+        super().__init__(f"__FILE_INTERRUPT__:{filename}")
 
 class TimeoutInterrupt(BaseException):
     pass
@@ -4107,13 +4322,25 @@ def custom_run_input(prompt_msg=""):
             raise InputInterrupt(prompt_msg)
         raise e
 
-# Save original input/print if not saved
+# Save original input/print/open if not saved
 if not hasattr(builtins, '_original_run_print'):
     builtins._original_run_print = builtins.print
 if not hasattr(builtins, '_original_run_input'):
     builtins._original_run_input = builtins.input
+if not hasattr(builtins, '_original_run_open'):
+    builtins._original_run_open = builtins.open
+
+def custom_run_open(file, mode='r', *args, **kwargs):
+    import os
+    if isinstance(file, str) and any(m in mode for m in ['r', '+']) and not 'w' in mode and not 'a' in mode:
+        abs_path = os.path.abspath(file)
+        if not os.path.exists(abs_path):
+            basename = os.path.basename(abs_path)
+            raise FileInterrupt(basename)
+    return builtins._original_run_open(file, mode, *args, **kwargs)
 
 builtins.input = custom_run_input
+builtins.open = custom_run_open
 
 # Reset turtle module state if it exists
 if 'turtle' in sys.modules:
@@ -4135,10 +4362,11 @@ try:
     exec(compile(user_code, '<user_code>', 'exec'), globals())
 finally:
     sys.settrace(None)
-    # Restore original input
+    # Restore original input and open
     builtins.input = builtins._original_run_input
+    builtins.open = builtins._original_run_open
     # Clean globals
-    for var in ['_start_time', '_limit', '_timeout_trace', '_timeout_raised', '_step_count', 'TimeoutInterrupt', 'user_code', 'custom_run_input', 'InputInterrupt']:
+    for var in ['_start_time', '_limit', '_timeout_trace', '_timeout_raised', '_step_count', 'TimeoutInterrupt', 'user_code', 'custom_run_input', 'InputInterrupt', 'FileInterrupt', 'custom_run_open']:
         if var in globals():
             del globals()[var]
           `);
@@ -4153,6 +4381,20 @@ finally:
             const ans = await requestDisplayInput(pendingPrompt || "Input required:");
             if (executionCancelled) return;
             runInputHistory.push(ans);
+          } else if (err.message && err.message.includes("__FILE_INTERRUPT__")) {
+            const parts = err.message.split("__FILE_INTERRUPT__:");
+            const filename = parts[1] ? parts[1].trim() : "file.txt";
+            setRunnerStatus(`Waiting for file: ${filename}...`);
+            const fileData = await requestFileUpload(filename);
+            if (executionCancelled || !fileData) {
+              setRunnerStatus('Execution cancelled (file upload required).');
+              return;
+            }
+            pyodideInstance.FS.writeFile(`/home/pyodide/${filename}`, fileData.data);
+            try {
+              const stat = pyodideInstance.FS.stat(`/home/pyodide/${filename}`);
+              loadedFilesSnapshot[filename] = stat.mtime.getTime();
+            } catch (e) {}
           } else {
             executionFinished = true;
             hideConsoleInput();
@@ -4160,11 +4402,57 @@ finally:
           }
         }
       }
+
+      // 4. Post-run scan for newly created or modified files to trigger auto-downloads
+      if (pyodideInstance && !executionCancelled) {
+        try {
+          const list = pyodideInstance.FS.readdir('/home/pyodide');
+          for (const name of list) {
+            if (name === '.' || name === '..' || name === 'turtle.py') continue;
+            try {
+              const stat = pyodideInstance.FS.stat(`/home/pyodide/${name}`);
+              const currentMtime = stat.mtime.getTime();
+              
+              let shouldDownload = false;
+              if (!filesBefore.hasOwnProperty(name) && !loadedFilesSnapshot.hasOwnProperty(name)) {
+                shouldDownload = true; // New file written by Python
+              } else if (filesBefore.hasOwnProperty(name) && currentMtime > filesBefore[name]) {
+                shouldDownload = true; // Existing file modified by Python
+              } else if (loadedFilesSnapshot.hasOwnProperty(name) && currentMtime > loadedFilesSnapshot[name]) {
+                shouldDownload = true; // User-uploaded file modified by Python
+              }
+              
+              if (shouldDownload) {
+                const content = pyodideInstance.FS.readFile(`/home/pyodide/${name}`);
+                const blob = new Blob([content], { type: 'application/octet-stream' });
+                const url = URL.createObjectURL(blob);
+                downloadUrl(url, name, true);
+              }
+            } catch (e) {
+              console.error("Error reading file for download:", e);
+            }
+          }
+        } catch (e) {
+          console.error("Error diffing files:", e);
+        }
+      }
     }
 
     function handlePythonError(err) {
       const errStr = String(err);
-      outputEl.textContent = errStr;
+      
+      // Clear outputEl but preserve the files loaded banner if it exists
+      const banner = outputEl.querySelector('.loaded-files-banner');
+      outputEl.innerHTML = '';
+      if (banner) {
+        outputEl.appendChild(banner);
+      }
+      
+      const errPre = document.createElement('pre');
+      errPre.style.cssText = 'color: #ef4444; font-family: inherit; margin: 0; white-space: pre-wrap; font-size: inherit; line-height: 1.5;';
+      errPre.textContent = errStr;
+      outputEl.appendChild(errPre);
+      
       setRunnerStatus('There was an error while running the code.');
 
       const lineMatch = errStr.match(/File\s+"[^"]+",\s+line\s+(\d+)/i) || 

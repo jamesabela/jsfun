@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>File Handling in Python</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #10b981;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        header p {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .intro {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+            border-top: 8px solid #10b981;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .easy {
+            border-top-color: #22c55e;
+        }
+
+        .medium {
+            border-top-color: #f59e0b;
+        }
+
+        .hard {
+            border-top-color: #ef4444;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: white;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .easy .tag {
+            background: #22c55e;
+        }
+
+        .medium .tag {
+            background: #f59e0b;
+        }
+
+        .hard .tag {
+            background: #ef4444;
+        }
+
+        code {
+            background: #eef2ff;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>File Handling in Python</h1>
+        <p>Learn how to load, read, and write files in the Python Code Lab browser editor.</p>
+    </header>
+
+    <main>
+
+        <section class="intro">
+            <h2>How it works in Python Code Lab</h2>
+            <p>
+                In a browser sandbox, Python runs in a virtual memory space.
+                To load external files, you can use the special <code>#load URL</code> directive at the top of your code.
+                This downloads the file directly into Python's virtual memory so your code can read it using standard file operations!
+            </p>
+            <p>
+                Take a look at the three main components of the starter code:
+            </p>
+            <ol>
+                <li>
+                    <strong>The <code>with</code> statement:</strong> This opens the file and <em>automatically closes it</em> when the block finishes. Always use this format, as it is much safer than manual <code>open()</code> and <code>close()</code> calls.
+                </li>
+                <li>
+                    <strong>Reading with loops:</strong> We can loop through <code>whole_file</code> directly using a <code>for</code> loop. Python automatically knows the length of the file, so you do not have to worry about looking for the EOF (End of File).
+                </li>
+                <li>
+                    <strong>Printing:</strong> We print each line with <code>end=""</code> because lines inside text files already end with a newline character.
+                </li>
+            </ol>
+        </section>
+
+        <section class="grid">
+
+            <div class="card easy">
+                <span class="tag">Easy</span>
+                <h2>1. Use a Variable for Filename</h2>
+                <p>Change the code to store the filename in a variable, then open the file using that variable.</p>
+                <pre>my_filename = "rudyard.txt"
+with open(my_filename, "r") as whole_file:</pre>
+            </div>
+
+            <div class="card medium">
+                <span class="tag">Medium</span>
+                <h2>2. Exercise: Line Filter</h2>
+                <p>Create a program that counts the total number of lines in the poem, and only prints the lines that start with the word <code>"If"</code>.</p>
+                <p><em>Hint: Use <code>.startswith()</code> to check!</em></p>
+                <pre>if line.strip().startswith("If"):
+    print(line, end="")</pre>
+            </div>
+
+            <div class="card hard">
+                <span class="tag">Hard</span>
+                <h2>3. Count Words & Save</h2>
+                <p>Modify the script to count how many times the word "If" appears in the poem, and then save the result to a new file named <code>stats.txt</code>.</p>
+                <p>Once the script runs, check your downloads folder for the automatic save download!</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Challenge: Can you write an interactive terminal reader for Rudyard Kipling's poem?</p>
+    </footer>
+
+</body>
+
+</html>
