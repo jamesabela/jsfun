@@ -56,6 +56,8 @@
             padding: 20px;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
             border-top: 8px solid #10b981;
+            display: flex;
+            flex-direction: column;
         }
 
         .card h2 {
@@ -82,6 +84,7 @@
             color: white;
             font-size: 13px;
             margin-bottom: 10px;
+            align-self: flex-start;
         }
 
         .easy .tag {
@@ -110,6 +113,37 @@
             border-radius: 8px;
             overflow-x: auto;
             font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+        }
+
+        /* Spoiler details & summary styling */
+        details {
+            margin-top: 15px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.2s ease;
+        }
+
+        details[open] {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: #0f766e;
+            outline: none;
+            user-select: none;
+        }
+
+        details[open] summary {
+            margin-bottom: 10px;
+            color: #0d9488;
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 4px;
         }
 
         footer {
@@ -152,30 +186,91 @@
             </ol>
         </section>
 
+        <section class="intro" style="border-left: 6px solid #10b981; padding-left: 20px;">
+            <h2>Writing vs. Appending Files</h2>
+            <p>
+                When you want Python to output data to a file, you must specify the correct mode. Unlike reading (<code>"r"</code>), outputting has two distinct modes:
+            </p>
+            <ul>
+                <li style="margin-bottom: 20px;">
+                    <strong>Write Mode (<code>"w"</code>): Overwrite or Create Fresh</strong>
+                    <p style="margin: 6px 0;">
+                        Use <code>"w"</code> when you want to create a new file or completely replace the content of an existing file. If the file already exists, <strong>all its previous text will be deleted</strong>.
+                    </p>
+                    <pre style="margin-top: 8px; margin-bottom: 8px;">with open("my_file.txt", "w") as f:
+    f.write("This is a fresh line of text.\n")
+    f.write("This overwrites any old data in my_file.txt.\n")</pre>
+                </li>
+                <li>
+                    <strong>Append Mode (<code>"a"</code>): Add to the End</strong>
+                    <p style="margin: 6px 0;">
+                        Use <code>"a"</code> when you want to add new content to the very bottom of the file while <strong>preserving all original text</strong>. This is perfect for logs or running lists.
+                    </p>
+                    <pre style="margin-top: 8px; margin-bottom: 8px;">with open("my_file.txt", "a") as f:
+    f.write("This new line gets added at the very bottom.\n")</pre>
+                </li>
+            </ul>
+            <p style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 10px; border-radius: 6px; font-size: 14px; color: #78350f;">
+                💡 <strong>Top Tip:</strong> The <code>f.write()</code> function does not automatically add a new line like <code>print()</code> does. Remember to add <code>\n</code> at the end of your text strings to start a new line!
+            </p>
+        </section>
+
         <section class="grid">
 
             <div class="card easy">
                 <span class="tag">Easy</span>
                 <h2>1. Use a Variable for Filename</h2>
                 <p>Change the code to store the filename in a variable, then open the file using that variable.</p>
-                <pre>my_filename = "rudyard.txt"
-with open(my_filename, "r") as whole_file:</pre>
+                <details>
+                    <summary>🔍 Show Solution</summary>
+                    <p>Declare your filename string first, then pass it as the first argument to <code>open()</code>:</p>
+                    <pre style="margin-bottom: 0;">my_filename = "rudyard.txt"
+
+with open(my_filename, "r") as whole_file:
+    for line in whole_file:
+        print(line, end="")</pre>
+                </details>
             </div>
 
             <div class="card medium">
                 <span class="tag">Medium</span>
                 <h2>2. Exercise: Line Filter</h2>
                 <p>Create a program that counts the total number of lines in the poem, and only prints the lines that start with the word <code>"If"</code>.</p>
-                <p><em>Hint: Use <code>.startswith()</code> to check!</em></p>
-                <pre>if line.strip().startswith("If"):
-    print(line, end="")</pre>
+                <details>
+                    <summary>🔍 Show Solution</summary>
+                    <p>Use a counter variable inside the loop, and filter lines using <code>.strip().startswith("If")</code>:</p>
+                    <pre style="margin-bottom: 0;">line_count = 0
+
+with open("rudyard.txt", "r") as whole_file:
+    for line in whole_file:
+        if line.strip().startswith("If"):
+            print(line, end="")
+            line_count += 1
+
+print("\n--- Summary ---")
+print(f"Found {line_count} matching lines.")</pre>
+                </details>
             </div>
 
             <div class="card hard">
                 <span class="tag">Hard</span>
                 <h2>3. Count Words & Save</h2>
-                <p>Modify the script to count how many times the word "If" appears in the poem, and then save the result to a new file named <code>stats.txt</code>.</p>
-                <p>Once the script runs, check your downloads folder for the automatic save download!</p>
+                <p>Modify the script to count how many times the word <code>"If"</code> appears anywhere in the poem, and save the result to a new file named <code>stats.txt</code>.</p>
+                <details>
+                    <summary>🔍 Show Solution</summary>
+                    <p>Read the whole file contents using <code>.read()</code>, count the target string, and write to a new file in write mode:</p>
+                    <pre style="margin-bottom: 0;">with open("rudyard.txt", "r") as whole_file:
+    poem_text = whole_file.read()
+
+count_if = poem_text.count("If")
+print(f"Counting done: {count_if} times.")
+
+# Save results
+with open("stats.txt", "w") as out:
+    out.write(f"The word 'If' appears {count_if} times.\n")
+
+print("stats.txt has been downloaded to your computer!")</pre>
+                </details>
             </div>
 
         </section>
