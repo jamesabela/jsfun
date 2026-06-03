@@ -3476,14 +3476,16 @@ class TimeoutInterrupt(BaseException):
     pass
 
 _test_timeout_raised = False
+_test_step_count = 0
 
 def _test_trace(frame, event, arg):
     if frame.f_code.co_filename != '<user_code>':
         return _test_trace
-    global _test_timeout_raised
-    if _test_timeout_raised or time.time() - _test_start > 5.0:
+    global _test_timeout_raised, _test_step_count
+    _test_step_count += 1
+    if _test_timeout_raised or _test_step_count > 30000 or time.time() - _test_start > 5.0:
         _test_timeout_raised = True
-        raise TimeoutInterrupt("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
+        raise TimeoutInterrupt("Execution timed out (possible infinite loop). Maximum execution limit is 5 seconds or 30,000 steps.")
     return _test_trace
 
 sys.settrace(_test_trace)
@@ -4065,14 +4067,16 @@ class TimeoutInterrupt(BaseException):
 _timeout_raised = False
 _start_time = time.time()
 _limit = 5.0  # 5 seconds timeout limit
+_step_count = 0
 
 def _timeout_trace(frame, event, arg):
     if frame.f_code.co_filename != '<user_code>':
         return _timeout_trace
-    global _timeout_raised
-    if _timeout_raised or time.time() - _start_time > _limit:
+    global _timeout_raised, _step_count
+    _step_count += 1
+    if _timeout_raised or _step_count > 30000 or time.time() - _start_time > _limit:
         _timeout_raised = True
-        raise TimeoutInterrupt("Execution timed out (possible infinite loop). Maximum execution time is 5 seconds.")
+        raise TimeoutInterrupt("Execution timed out (possible infinite loop). Maximum execution limit is 5 seconds or 30,000 steps.")
     return _timeout_trace
 
 # Seed random module
@@ -4111,7 +4115,7 @@ finally:
     # Restore original input
     builtins.input = builtins._original_run_input
     # Clean globals
-    for var in ['_start_time', '_limit', '_timeout_trace', '_timeout_raised', 'TimeoutInterrupt', 'user_code', 'custom_run_input', 'InputInterrupt']:
+    for var in ['_start_time', '_limit', '_timeout_trace', '_timeout_raised', '_step_count', 'TimeoutInterrupt', 'user_code', 'custom_run_input', 'InputInterrupt']:
         if var in globals():
             del globals()[var]
           `);
@@ -4318,6 +4322,7 @@ _stdout_capture = io.StringIO()
 displayInputHistory = json.loads(displayInputHistoryJson)
 _recursive_functions = set()
 _source_lines = source_code.splitlines()
+_trace_step_count = 0
 
 def _get_turtle_snapshot():
     try:
@@ -4380,10 +4385,11 @@ def _trace_hook(frame, event, arg):
     if frame.f_code.co_filename != '<user_code>':
         return _trace_hook
 
-    global _trace_timeout_raised
-    if _trace_timeout_raised or time.time() - _start_time > _limit:
+    global _trace_timeout_raised, _trace_step_count
+    _trace_step_count += 1
+    if _trace_timeout_raised or _trace_step_count > 30000 or time.time() - _start_time > _limit:
         _trace_timeout_raised = True
-        raise TimeoutInterrupt("Timeout: Execution took too long (possible infinite loop). Maximum execution time is 5 seconds.")
+        raise TimeoutInterrupt("Timeout: Execution took too long (possible infinite loop). Maximum execution limit is 5 seconds or 30,000 steps.")
 
     func_name = frame.f_code.co_name
     if func_name in ['custom_catch_print', 'custom_display_input', '_run_trace']:
