@@ -174,6 +174,25 @@
                 ℹ️ <strong>Auto-Prompt &amp; Renaming:</strong> If your Python script tries to open a file that has not been pre-loaded (i.e. there is no <code>#load</code> directive), the Code Lab will automatically show a popup prompting you to upload it. 
                 Note that the file you select from your computer <strong>does not need to match the name requested in Python</strong>. The Code Lab will automatically rename your selected file in virtual memory to match the name expected by the script so it runs successfully.
             </p>
+            <details style="margin-top: 15px; margin-bottom: 15px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px;">
+                <summary style="font-weight: 600; cursor: pointer; color: #0284c7; outline: none;">⚙️ Advanced: Working with Multiple Files</summary>
+                <p style="margin-top: 10px; margin-bottom: 10px; font-size: 14px; line-height: 1.5;">
+                    You are not limited to one file! You can load and use as many files as you need in a single script:
+                </p>
+                <ul style="font-size: 14px; line-height: 1.5; padding-left: 20px;">
+                    <li style="margin-bottom: 12px;">
+                        <strong>Pre-load multiple files:</strong> Simply write multiple <code>#load</code> lines at the top of your code. The Code Lab will download all of them before starting Python:
+                        <pre style="margin-top: 8px; margin-bottom: 0;">#load https://example.com/rudyard.txt
+#load https://example.com/scores.csv
+
+with open("rudyard.txt", "r") as f1, open("scores.csv", "r") as f2:
+    # You can read from both files here</pre>
+                    </li>
+                    <li>
+                        <strong>Multiple Upload Prompts:</strong> If your script opens multiple missing files without <code>#load</code> directives, the Code Lab will prompt you to upload each file one by one. Each uploaded file will be preserved in the virtual memory, and once all files are uploaded, your script will run through completely.
+                    </li>
+                </ul>
+            </details>
             <p>
                 Take a look at the three main components of the starter code:
             </p>
