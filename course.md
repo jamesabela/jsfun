@@ -281,7 +281,27 @@ The tutorial files are clean, responsive HTML documents loaded in the side ifram
 
 ---
 
-## 3. Hosting & Deployment
+## 3. Course Directory Structure & Documentation (README.md & Teachers.md)
+
+To keep courses organized and accessible for both teachers and developers, each course folder should include standard documentation files that act as a "breadcrumb trail" and teacher guide.
+
+### 1. `README.md` (Course Index & Launch Guide)
+The `README.md` serves as the entry point and quick-launch breadcrumb trail for the course. It should contain:
+- **Course Name & Purpose**: What programming concepts are covered in this folder.
+- **Includes**: A numbered list of the files in order of progression, detailing the focus of each puzzle level.
+- **Upload Location**: The expected path where the directory is deployed (e.g., `jsfun/whileloops/` or `jsfun/selection/`).
+- **Start URL**: The exact raw URL of the first level (`.py` file) and the pre-constructed direct loader link for Python Code Lab.
+  - Example Loader Link Format: `https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/<course-dir>/<first-file>.py`
+
+### 2. `teachers.md` (Teacher Guide & Solution Key)
+The `teachers.md` provides answers and a guide for teachers running the course. It should contain:
+- **Pedagogical/Teacher Notes**: Pedagogical explanations of what each exercise teaches (e.g., "Teaches basic selection using `if` and `else` with string equality checking").
+- **Goals**: A clear summary of the expected outcome for each level.
+- **Correct Solution Codes**: Drop-in Python code solutions for every level. This helps teachers quickly assist stuck students.
+
+---
+
+## 4. Hosting & Deployment
 
 1. Upload the files (e.g. to a GitHub repository).
 2. Get the **raw URL** of the start level (e.g., from `raw.githubusercontent.com`).
