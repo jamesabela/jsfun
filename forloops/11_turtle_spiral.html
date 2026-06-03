@@ -118,7 +118,49 @@
       overflow-x: auto;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
-  </style>
+    .breadcrumbs a:hover {
+      background: var(--accent-gold-glow, var(--accent-blue-glow, rgba(0,0,0,0.05)));
+      color: var(--accent-gold, var(--accent-blue, #3b82f6));
+      border-color: var(--accent-gold, var(--accent-blue, #3b82f6));
+      transform: translateY(-2px);
+    }
+    .breadcrumbs a.active {
+      background: var(--accent-gold, var(--accent-blue, #3b82f6));
+      color: #ffffff !important;
+      border-color: var(--accent-gold, var(--accent-blue, #3b82f6));
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Breadcrumbs Styling */
+    .breadcrumbs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      padding: 4px 0;
+    }
+    .breadcrumbs span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color, rgba(0,0,0,0.15));
+      color: var(--text-muted, #64748b);
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      background: var(--card-bg, #ffffff);
+      user-select: none;
+    }
+    .breadcrumbs span.active {
+      background: var(--accent-gold, var(--accent-blue, #3b82f6));
+      color: #ffffff !important;
+      border-color: var(--accent-gold, var(--accent-blue, #3b82f6));
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+</style>
 </head>
 <body>
   <div class="container">
@@ -128,6 +170,22 @@
         <h1>Turtle Spiral</h1>
       </div>
     </header>
+    <div class="breadcrumbs">
+      <span>1</span>
+      <span>2</span>
+      <span>3</span>
+      <span>4</span>
+      <span>5</span>
+      <span>6</span>
+      <span>7</span>
+      <span>8</span>
+      <span>9</span>
+      <span>10</span>
+      <span class="active">11</span>
+      <span>12</span>
+      <span>13</span>
+      <span>14</span>
+    </div>
 
     <div class="card">
       <div class="card-title">💡 Idea</div>
