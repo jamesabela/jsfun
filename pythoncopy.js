@@ -3478,6 +3478,8 @@ class TimeoutInterrupt(BaseException):
 _test_timeout_raised = False
 
 def _test_trace(frame, event, arg):
+    if frame.f_code.co_filename != '<user_code>':
+        return _test_trace
     global _test_timeout_raised
     if _test_timeout_raised or time.time() - _test_start > 5.0:
         _test_timeout_raised = True
@@ -4065,6 +4067,8 @@ _start_time = time.time()
 _limit = 5.0  # 5 seconds timeout limit
 
 def _timeout_trace(frame, event, arg):
+    if frame.f_code.co_filename != '<user_code>':
+        return _timeout_trace
     global _timeout_raised
     if _timeout_raised or time.time() - _start_time > _limit:
         _timeout_raised = True
@@ -4373,13 +4377,13 @@ def _source_line(line_no):
     return ""
 
 def _trace_hook(frame, event, arg):
+    if frame.f_code.co_filename != '<user_code>':
+        return _trace_hook
+
     global _trace_timeout_raised
     if _trace_timeout_raised or time.time() - _start_time > _limit:
         _trace_timeout_raised = True
         raise TimeoutInterrupt("Timeout: Execution took too long (possible infinite loop). Maximum execution time is 5 seconds.")
-
-    if frame.f_code.co_filename != '<user_code>':
-        return _trace_hook
 
     func_name = frame.f_code.co_name
     if func_name in ['custom_catch_print', 'custom_display_input', '_run_trace']:
