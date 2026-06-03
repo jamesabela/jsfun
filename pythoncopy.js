@@ -54,6 +54,7 @@
     let displayPendingPrompt = '';
     let displayFinalOutput = '';
     let displayCurrentStep = 0;
+    let displayMaxRevealedStep = -1;
     let displayTimeout = null;
     let btnPlayStatus = 'idle';
     let isTracing = false;
@@ -3138,6 +3139,7 @@ import sys, builtins
       clearTeachHighlight();
 
       displayCurrentStep = 0;
+      displayMaxRevealedStep = -1;
       displayTraceLog = [];
       displayInputHistory = [];
       displayTraceStatus = 'ready';
@@ -4589,6 +4591,7 @@ def _run_trace():
         displayTraceLog = res.log || [];
         displayTraceStatus = res.status;
         displayPendingPrompt = res.pending_prompt;
+        displayMaxRevealedStep = -1;
 
         const outputArr = res.output || [];
         displayFinalOutput = outputArr.join('');
@@ -4682,6 +4685,7 @@ def _run_trace():
       syncLineNumberScroll();
 
       // Show/hide trace table rows dynamically based on the current step
+      displayMaxRevealedStep = Math.max(displayMaxRevealedStep, stepIndex);
       updateTraceTableRowsVisibility();
       highlightTraceTableRow(stepIndex);
     }
@@ -4749,9 +4753,8 @@ def _run_trace():
 
     function updateTraceTableRowsVisibility() {
       const rows = document.querySelectorAll('.trace-table-row');
-      const currentActiveIdx = displayCurrentStep - 1;
       rows.forEach((row, idx) => {
-        if (idx <= currentActiveIdx) {
+        if (idx <= displayMaxRevealedStep) {
           row.style.display = '';
         } else {
           row.style.display = 'none';
