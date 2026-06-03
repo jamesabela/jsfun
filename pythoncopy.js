@@ -4387,9 +4387,9 @@ def _trace_hook(frame, event, arg):
 
     global _trace_timeout_raised, _trace_step_count
     _trace_step_count += 1
-    if _trace_timeout_raised or _trace_step_count > 30000 or time.time() - _start_time > _limit:
+    if _trace_timeout_raised or _trace_step_count > 2000 or time.time() - _start_time > _limit:
         _trace_timeout_raised = True
-        raise TimeoutInterrupt("Timeout: Execution took too long (possible infinite loop). Maximum execution limit is 5 seconds or 30,000 steps.")
+        raise TimeoutInterrupt("Timeout: Execution took too long (possible infinite loop or too many steps). Maximum trace limit is 5 seconds or 2,000 steps.")
 
     func_name = frame.f_code.co_name
     if func_name in ['custom_catch_print', 'custom_display_input', '_run_trace']:
@@ -4589,8 +4589,8 @@ def _run_trace():
           setRunnerStatus('Trace Error.');
           // Add error details to the output window for better debugging
           const lastOut = outputArr.length > 0 ? outputArr[outputArr.length - 1] : "";
-          if (lastOut && lastOut.includes("Exception")) {
-            outputEl.textContent += "\n--- Traceback ---\n" + lastOut;
+          if (lastOut) {
+            outputEl.textContent += "\n--- Error ---\n" + lastOut;
           }
         } else {
           setRunnerStatus(displayTraceStatus === 'waiting_input' ? 'Ready (Input needed)' : 'Trace updated.');
