@@ -1,12 +1,12 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/07_loop_through_colours.html
 
 # Level 7 - Loop Through Colours
-# Print each colour in the list.
+# Puzzle: print each colour, not the whole list.
 
 colours = ["red", "green", "blue", "purple"]
 
 for colour in colours:
-    print(colour)
+    print(colours)
 
 #Input
 # ""

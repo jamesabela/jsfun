@@ -15,11 +15,6 @@
       --text-muted: #64748b;
       --accent-gold: #d4af37;
       --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
-      --success: #10b981;
-      --success-glow: rgba(16, 185, 129, 0.15);
       --border-color: rgba(226, 201, 116, 0.25);
       --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
       --code-bg: #0f172a;
@@ -111,9 +106,6 @@
       border-radius: 8px;
       font-size: 0.9rem;
       line-height: 1.4;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     pre {
@@ -148,29 +140,22 @@
 
     <div class="card">
       <div class="card-title">💡 Idea</div>
-      <p class="instruction-text">Selection can be placed inside a while loop so the program can respond differently each time.</p>
+      <p class="instruction-text">Selection can be placed inside a while loop so the program can respond differently each time. This puzzle gives the wrong clues.</p>
       <div class="loop-box">
         A while loop needs three things: a starting value, a condition, and something that changes inside the loop.
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">⚙️ Task</div>
-      <p class="instruction-text">Keep asking for a guess. Say Too low, Too high, or Correct.</p>
-      <pre>secret = 7
-guess = 0
-while guess != secret:
-    guess = int(input(&quot;Guess: &quot;))
-    if guess &lt; secret:
-        print(&quot;Too low&quot;)
-    elif guess &gt; secret:
-        print(&quot;Too high&quot;)
-print(&quot;Correct&quot;)</pre>
+      <div class="card-title">⚙️ Puzzle</div>
+      <p class="instruction-text">Fix the selection so it prints Too low when the guess is below 7 and Too high when the guess is above 7.</p>
+      <pre>if guess &gt; secret:
+    print(&quot;Too low&quot;)</pre>
     </div>
 
     <div class="card">
-      <div class="card-title">✅ Check</div>
-      <div class="banner">Run your code. If it passes the checks, move to the next level.</div>
+      <div class="card-title">💬 Hint</div>
+      <div class="banner">Check whether guess is less than secret first.</div>
     </div>
   </div>
 </body>

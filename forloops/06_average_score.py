@@ -1,8 +1,7 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/06_average_score.html
 
 # Level 6 - Average Score
-# Ask the user for 4 scores.
-# Print the average score.
+# Puzzle: fix the average calculation.
 
 total = 0
 
@@ -10,7 +9,7 @@ for i in range(4):
     score = int(input("Score: "))
     total = total + score
 
-average = total / 4
+average = total / 2
 print("Average:", average)
 
 #Input

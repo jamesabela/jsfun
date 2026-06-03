@@ -1,14 +1,12 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/05_total_score.html
 
 # Level 5 - Total Score
-# Ask the user for 3 scores.
-# Add them together using a for loop.
+# Puzzle: fix the running total.
 
 total = 0
 
 for i in range(3):
     score = int(input("Score: "))
-    total = total + score
 
 print("Total:", total)
 

@@ -1,27 +1,31 @@
-# Python For Loops Course
+# Python For Loops Puzzle Course
 
 This course is designed for Python Code Lab.
 
-It focuses only on `for` loops and includes a mixture of:
+All Python files and tutorial HTML files are in one folder:
 
-- printed output tasks
+`forloops`
+
+Each Python file starts as a mini puzzle. The starter code is intentionally incomplete or incorrect, so students need to edit the code to pass the tests.
+
+## Includes
+
+- simple for loops
+- range puzzles
+- counting up and down
 - input and output tasks
-- running total tasks
+- running totals
 - list iteration
-- pattern tasks
-- turtle drawing tasks
+- pattern printing
+- turtle drawing
 - nested loops
-- a final turtle art challenge
+- final turtle art challenge
 
 ## Suggested upload location
 
-Python files:
+Upload the whole folder to:
 
 `jsfun/forloops/`
-
-Tutorial files:
-
-`jsfun/forloops_tutorials/`
 
 ## Start URL after uploading
 
@@ -35,5 +39,5 @@ Then load it in Python Code Lab:
 
 ## Notes
 
-The first normal link in each Python file points to its tutorial page.
+The first normal link in each Python file points to the matching tutorial page in the same folder.
 Each level uses `#Next`, except the final level which uses `#End Python For Loops`.

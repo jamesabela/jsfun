@@ -1,7 +1,7 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/13_turtle_dot_grid.html
 
 # Level 13 - Turtle Dot Grid
-# Use nested loops to draw a 5 by 5 dot grid.
+# Puzzle: fix the columns so each row has five dots.
 
 import turtle
 
@@ -10,7 +10,7 @@ turtle.penup()
 turtle.goto(-100, 100)
 
 for row in range(5):
-    for column in range(5):
+    for column in range(3):
         turtle.dot(10)
         turtle.forward(40)
 

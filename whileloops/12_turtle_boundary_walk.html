@@ -15,11 +15,6 @@
       --text-muted: #64748b;
       --accent-gold: #d4af37;
       --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
-      --success: #10b981;
-      --success-glow: rgba(16, 185, 129, 0.15);
       --border-color: rgba(226, 201, 116, 0.25);
       --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
       --code-bg: #0f172a;
@@ -111,9 +106,6 @@
       border-radius: 8px;
       font-size: 0.9rem;
       line-height: 1.4;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     pre {
@@ -148,23 +140,21 @@
 
     <div class="card">
       <div class="card-title">💡 Idea</div>
-      <p class="instruction-text">This example shows the main strength of a while loop: keep going until a condition is no longer true.</p>
+      <p class="instruction-text">This example shows the main strength of a while loop: keep going until a condition is no longer true. This puzzle stops too early.</p>
       <div class="loop-box">
         A while loop needs three things: a starting value, a condition, and something that changes inside the loop.
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">⚙️ Task</div>
-      <p class="instruction-text">Move the turtle forward while its x position is less than 160.</p>
-      <pre>while turtle.xcor() &lt; 160:
-    turtle.forward(20)
-    turtle.dot(8)</pre>
+      <div class="card-title">⚙️ Puzzle</div>
+      <p class="instruction-text">Fix the condition so the turtle walks until its x position reaches 160.</p>
+      <pre>while turtle.xcor() &lt; 60:</pre>
     </div>
 
     <div class="card">
-      <div class="card-title">✅ Check</div>
-      <div class="banner">Run your code. If it passes the checks, move to the next level.</div>
+      <div class="card-title">💬 Hint</div>
+      <div class="banner">The loop should continue while turtle.xcor() is less than 160.</div>
     </div>
   </div>
 </body>

@@ -1,8 +1,7 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/10_turtle_polygon.html
 
 # Level 10 - Turtle Polygon
-# Ask for the number of sides.
-# Draw a regular polygon using a for loop.
+# Puzzle: fix the turn angle so it works for any regular polygon.
 
 import turtle
 
@@ -12,7 +11,7 @@ sides = int(input("Sides: "))
 
 for i in range(sides):
     turtle.forward(70)
-    turtle.right(360 / sides)
+    turtle.right(90)
 
 print("Polygon complete")
 

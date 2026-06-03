@@ -20,11 +20,13 @@
       --code-bg: #0f172a;
       --code-text: #f8fafc;
     }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     body {
       background: var(--bg-gradient);
       color: var(--text-main);
@@ -35,6 +37,7 @@
       justify-content: center;
       align-items: flex-start;
     }
+
     .container {
       width: 100%;
       max-width: 680px;
@@ -42,6 +45,7 @@
       flex-direction: column;
       gap: 20px;
     }
+
     header {
       display: flex;
       justify-content: space-between;
@@ -49,6 +53,7 @@
       border-bottom: 2px solid var(--border-color);
       padding-bottom: 12px;
     }
+
     .title-group h1 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
@@ -60,10 +65,12 @@
       -webkit-text-fill-color: transparent;
       margin-bottom: 4px;
     }
+
     .title-group p {
       font-size: 0.9rem;
       color: var(--text-muted);
     }
+
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -74,6 +81,7 @@
       flex-direction: column;
       gap: 16px;
     }
+
     .card-title {
       font-family: 'Outfit', sans-serif;
       font-size: 1.15rem;
@@ -84,11 +92,13 @@
       color: var(--accent-gold);
       text-transform: uppercase;
     }
+
     .instruction-text {
       font-size: 0.95rem;
       line-height: 1.5;
       color: var(--text-main);
     }
+
     .banner {
       background: var(--accent-gold-glow);
       border-left: 4px solid var(--accent-gold);
@@ -97,6 +107,7 @@
       font-size: 0.9rem;
       line-height: 1.4;
     }
+
     pre {
       background: var(--code-bg);
       color: var(--code-text);
@@ -105,6 +116,7 @@
       font-family: 'Fira Code', Consolas, Monaco, monospace;
       font-size: 0.85rem;
       overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
   </style>
 </head>
@@ -119,20 +131,20 @@
 
     <div class="card">
       <div class="card-title">💡 Idea</div>
-      <p class="instruction-text">For loops are useful when we want to repeat a calculation. This level asks the user for a number and prints its times table.</p>
+      <p class="instruction-text">For loops are useful when the same calculation needs to happen several times. This puzzle asks for a number but prints the wrong value.</p>
     </div>
 
     <div class="card">
-      <div class="card-title">⚙️ Task</div>
-      <p class="instruction-text">Ask for a number and print its 1 to 5 times table.</p>
+      <div class="card-title">⚙️ Puzzle</div>
+      <p class="instruction-text">Fix the calculation so the program prints the first five multiples of the number entered.</p>
       <pre>number = int(input(&quot;Choose a number: &quot;))
 for i in range(1, 6):
-    print(number * i)</pre>
+    print(i)</pre>
     </div>
 
     <div class="card">
-      <div class="card-title">✅ Check</div>
-      <div class="banner">Run your code. If it passes the checks, move to the next level.</div>
+      <div class="card-title">💬 Hint</div>
+      <div class="banner">Use both the user&#x27;s number and the loop variable.</div>
     </div>
   </div>
 </body>

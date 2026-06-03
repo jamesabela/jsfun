@@ -1,13 +1,13 @@
 # Tutorial: https://jamesabela.github.io/jsfun/whileloops/07_running_total_until_zero.html
 
 # Level 7 - Total Until Zero
-# Keep adding numbers until the user enters 0.
+# Puzzle: fix the running total.
 
 total = 0
 number = int(input("Number: "))
 
 while number != 0:
-    total = total + number
+    total = total
     number = int(input("Number: "))
 
 print("Total:", total)

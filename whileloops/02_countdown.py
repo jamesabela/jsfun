@@ -1,13 +1,13 @@
 # Tutorial: https://jamesabela.github.io/jsfun/whileloops/02_countdown.html
 
 # Level 2 - Countdown
-# Count down from 5 to 1, then print Go!
+# Puzzle: fix the update so the number counts down.
 
 number = 5
 
 while number > 0:
     print(number)
-    number = number - 1
+    number = number + 1
 
 print("Go!")
 

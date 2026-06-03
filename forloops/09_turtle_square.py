@@ -1,13 +1,13 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/09_turtle_square.html
 
 # Level 9 - Turtle Square
-# Use a for loop to draw a square.
+# Puzzle: fix the number of repeats so the turtle draws a square.
 
 import turtle
 
 turtle.speed(0)
 
-for i in range(4):
+for i in range(3):
     turtle.forward(100)
     turtle.right(90)
 

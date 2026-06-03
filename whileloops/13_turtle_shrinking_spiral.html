@@ -15,11 +15,6 @@
       --text-muted: #64748b;
       --accent-gold: #d4af37;
       --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
-      --success: #10b981;
-      --success-glow: rgba(16, 185, 129, 0.15);
       --border-color: rgba(226, 201, 116, 0.25);
       --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
       --code-bg: #0f172a;
@@ -111,9 +106,6 @@
       border-radius: 8px;
       font-size: 0.9rem;
       line-height: 1.4;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     pre {
@@ -148,25 +140,21 @@
 
     <div class="card">
       <div class="card-title">💡 Idea</div>
-      <p class="instruction-text">A while loop can also stop when a size becomes too small. This makes it useful for shrinking patterns.</p>
+      <p class="instruction-text">A while loop can stop when a size becomes too small. This puzzle makes the length grow instead of shrink.</p>
       <div class="loop-box">
         A while loop needs three things: a starting value, a condition, and something that changes inside the loop.
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">⚙️ Task</div>
-      <p class="instruction-text">Use a while loop to draw a spiral that shrinks until the length reaches 0.</p>
-      <pre>length = 160
-while length &gt; 0:
-    turtle.forward(length)
-    turtle.right(90)
-    length = length - 10</pre>
+      <div class="card-title">⚙️ Puzzle</div>
+      <p class="instruction-text">Fix the update so the spiral gets smaller and stops.</p>
+      <pre>length = length + 10</pre>
     </div>
 
     <div class="card">
-      <div class="card-title">✅ Check</div>
-      <div class="banner">Run your code. If it passes the checks, move to the next level.</div>
+      <div class="card-title">💬 Hint</div>
+      <div class="banner">Length should decrease by 10 each time.</div>
     </div>
   </div>
 </body>

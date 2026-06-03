@@ -1,7 +1,7 @@
 # Tutorial: https://jamesabela.github.io/jsfun/whileloops/12_turtle_boundary_walk.html
 
 # Level 12 - Turtle Boundary Walk
-# Move the turtle until it reaches the right side.
+# Puzzle: fix the condition so the turtle reaches the right side.
 
 import turtle
 
@@ -10,16 +10,16 @@ turtle.penup()
 turtle.goto(-160, 0)
 turtle.pendown()
 
-while turtle.xcor() < 160:
+while turtle.xcor() < 60:
     turtle.forward(20)
     turtle.dot(8)
 
-print("Boundary reached")
+print("Final position:", int(turtle.xcor()))
 
 #Input
 # ""
 
 #output
-# Boundary reached
+# Final position: 160
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/whileloops/13_turtle_shrinking_spiral.py

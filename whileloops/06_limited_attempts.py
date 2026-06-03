@@ -1,13 +1,12 @@
 # Tutorial: https://jamesabela.github.io/jsfun/whileloops/06_limited_attempts.html
 
 # Level 6 - Limited Attempts
-# Give the user 3 attempts to type apple.
-# Stop early if they get it right.
+# Puzzle: give the user 3 attempts to type apple.
 
 attempts = 0
 word = ""
 
-while attempts < 3 and word != "apple":
+while attempts < 1 and word != "apple":
     word = input("Word: ")
     attempts = attempts + 1
 

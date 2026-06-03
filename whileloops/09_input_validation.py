@@ -1,11 +1,11 @@
 # Tutorial: https://jamesabela.github.io/jsfun/whileloops/09_input_validation.html
 
 # Level 9 - Input Validation
-# Keep asking until the age is between 1 and 120.
+# Puzzle: fix the validation condition.
 
 age = 0
 
-while age < 1 or age > 120:
+while age < 1 and age > 120:
     age = int(input("Age: "))
 
 print("Age accepted:", age)

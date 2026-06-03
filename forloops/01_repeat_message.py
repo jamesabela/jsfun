@@ -1,9 +1,9 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/01_repeat_message.html
 
 # Level 1 - Repeat Message
-# Complete the loop so Python is printed 5 times.
+# Puzzle: edit the loop so Python is printed 5 times.
 
-for i in range(5):
+for i in range(1):
     print("Python")
 
 #Input

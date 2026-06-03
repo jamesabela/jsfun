@@ -1,15 +1,17 @@
-# Python While Loops Course
+# Python While Loops Puzzle Course
 
 This course is designed for Python Code Lab.
 
-All Python files and tutorial HTML files are in the same folder:
+All Python files and tutorial HTML files are in one folder:
 
 `whileloops`
 
-The course focuses only on `while` loops and includes:
+Each Python file starts as a mini puzzle. The starter code is intentionally incomplete or incorrect, so students need to edit the code to pass the tests.
 
-- simple counters
-- countdowns
+## Includes
+
+- simple while loops
+- counting up and down
 - repeated input
 - guessing games
 - selection inside loops
@@ -17,8 +19,8 @@ The course focuses only on `while` loops and includes:
 - sentinel values
 - menu loops
 - input validation
-- turtle drawings
-- a final pet game challenge
+- turtle drawing
+- final pet game challenge
 
 ## Suggested upload location
 

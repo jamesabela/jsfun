@@ -1,7 +1,7 @@
 # Tutorial: https://jamesabela.github.io/jsfun/whileloops/05_guess_with_clues.html
 
 # Level 5 - Guess With Clues
-# Give the user clues until they guess the secret number.
+# Puzzle: fix the clues.
 
 secret = 7
 guess = 0
@@ -9,9 +9,9 @@ guess = 0
 while guess != secret:
     guess = int(input("Guess: "))
 
-    if guess < secret:
+    if guess > secret:
         print("Too low")
-    elif guess > secret:
+    elif guess < secret:
         print("Too high")
 
 print("Correct")

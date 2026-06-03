@@ -15,11 +15,6 @@
       --text-muted: #64748b;
       --accent-gold: #d4af37;
       --accent-gold-glow: rgba(212, 175, 55, 0.15);
-      --accent-dark: #0f172a;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.1);
-      --success: #10b981;
-      --success-glow: rgba(16, 185, 129, 0.15);
       --border-color: rgba(226, 201, 116, 0.25);
       --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
       --code-bg: #0f172a;
@@ -111,9 +106,6 @@
       border-radius: 8px;
       font-size: 0.9rem;
       line-height: 1.4;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     pre {
@@ -148,25 +140,21 @@
 
     <div class="card">
       <div class="card-title">💡 Idea</div>
-      <p class="instruction-text">Turtle can show a while loop visually. The x value changes until the turtle reaches the edge.</p>
+      <p class="instruction-text">Turtle can show a while loop visually. The x value changes until the turtle reaches the edge. This puzzle starts too close to the middle.</p>
       <div class="loop-box">
         A while loop needs three things: a starting value, a condition, and something that changes inside the loop.
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">⚙️ Task</div>
-      <p class="instruction-text">Use a while loop to draw dots from the left side to the right side.</p>
-      <pre>x = -180
-while x &lt;= 180:
-    turtle.goto(x, 0)
-    turtle.dot(10)
-    x = x + 30</pre>
+      <div class="card-title">⚙️ Puzzle</div>
+      <p class="instruction-text">Fix the starting x value so the line begins at -180 and reaches 180.</p>
+      <pre>x = 0</pre>
     </div>
 
     <div class="card">
-      <div class="card-title">✅ Check</div>
-      <div class="banner">Run your code. If it passes the checks, move to the next level.</div>
+      <div class="card-title">💬 Hint</div>
+      <div class="banner">Set x to -180 at the start.</div>
     </div>
   </div>
 </body>

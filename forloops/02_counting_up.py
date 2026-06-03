@@ -1,9 +1,9 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/02_counting_up.html
 
 # Level 2 - Counting Up
-# Print the numbers from 1 to 5.
+# Puzzle: edit the range so the program prints 1 to 5.
 
-for number in range(1, 6):
+for number in range(0, 5):
     print(number)
 
 #Input

@@ -1,11 +1,11 @@
 # Tutorial: https://jamesabela.github.io/jsfun/whileloops/03_password_gate.html
 
 # Level 3 - Password Gate
-# Keep asking until the user enters the correct password.
+# Puzzle: fix the condition so python is the correct password.
 
 password = ""
 
-while password != "python":
+while password != "hello":
     password = input("Password: ")
 
 print("Access granted")

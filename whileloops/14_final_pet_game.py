@@ -1,7 +1,7 @@
 # Tutorial: https://jamesabela.github.io/jsfun/whileloops/14_final_pet_game.html
 
 # Level 14 - Final Pet Game
-# Use a while loop to keep the game running while the pet has energy.
+# Puzzle: fix the play action so the game can end.
 
 energy = 3
 
@@ -11,7 +11,7 @@ while energy > 0:
 
     if action == "play":
         print("The pet runs around")
-        energy = energy - 1
+        energy = energy + 1
     elif action == "rest":
         print("The pet rests")
         energy = energy + 1

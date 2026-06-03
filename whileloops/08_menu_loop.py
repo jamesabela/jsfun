@@ -1,11 +1,11 @@
 # Tutorial: https://jamesabela.github.io/jsfun/whileloops/08_menu_loop.html
 
 # Level 8 - Menu Loop
-# Keep showing the menu until the user types q.
+# Puzzle: fix the quit option so q stops the menu.
 
 choice = ""
 
-while choice != "q":
+while choice != "x":
     print("1 - Hello")
     print("2 - Joke")
     print("q - Quit")

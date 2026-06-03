@@ -1,12 +1,12 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/12_nested_grid.html
 
 # Level 12 - Nested Grid
-# Use nested for loops to print a 4 by 4 grid.
+# Puzzle: fix the inner loop so each row has four symbols.
 
 for row in range(4):
     line = ""
 
-    for column in range(4):
+    for column in range(2):
         line = line + "#"
 
     print(line)

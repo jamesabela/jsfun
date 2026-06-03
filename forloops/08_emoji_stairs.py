@@ -1,13 +1,12 @@
 # Tutorial: https://jamesabela.github.io/jsfun/forloops/08_emoji_stairs.html
 
 # Level 8 - Emoji Stairs
-# Ask for an emoji.
-# Print a staircase that gets wider each time.
+# Puzzle: make the staircase grow each line.
 
-emoji = input("Emoji: ")
+symbol = input("Symbol: ")
 
 for i in range(1, 6):
-    print(emoji * i)
+    print(symbol)
 
 #Input
 # *
