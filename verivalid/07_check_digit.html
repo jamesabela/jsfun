@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorial: Check Digit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg-gradient:linear-gradient(135deg,#f8fafc,#eff6ff);--card-bg:#fff;--text-main:#1e293b;--text-muted:#64748b;--accent-gold:#d4af37;--accent-gold-glow:rgba(212,175,55,.15);--accent-dark:#0f172a;--accent-blue:#3b82f6;--accent-blue-glow:rgba(59,130,246,.1);--success:#10b981;--danger:#ef4444;--border-color:rgba(226,201,116,.25);--shadow:0 10px 25px -5px rgba(0,0,0,.05),0 8px 10px -6px rgba(0,0,0,.05);--code-bg:#0f172a;--code-text:#f8fafc}*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg-gradient);color:var(--text-main);font-family:Inter,system-ui,-apple-system,sans-serif;min-height:100vh;padding:24px;display:flex;justify-content:center;align-items:flex-start}.container{width:100%;max-width:760px;display:flex;flex-direction:column;gap:20px}header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--border-color);padding-bottom:12px;gap:16px}.title-group h1{font-family:Outfit,sans-serif;font-weight:800;font-size:1.65rem;letter-spacing:-.02em;background:linear-gradient(to right,var(--text-main),var(--accent-gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}.title-group p,.crumb{font-size:.9rem;color:var(--text-muted)}.crumb{background:var(--accent-gold-glow);border:1px solid var(--border-color);padding:8px 12px;border-radius:999px;white-space:nowrap}.progress{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--accent-gold),var(--accent-blue))}.card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:16px;padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px}.card-title{font-family:Outfit,sans-serif;font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:8px;color:var(--accent-gold);text-transform:uppercase}.instruction-text,li{font-size:.96rem;line-height:1.55;color:var(--text-main)}ul{padding-left:22px;display:flex;flex-direction:column;gap:8px}.banner{background:var(--accent-blue-glow);border-left:4px solid var(--accent-blue);padding:12px 16px;border-radius:8px;font-size:.92rem;line-height:1.4}pre{background:var(--code-bg);color:var(--code-text);padding:14px;border-radius:8px;font-family:'Fira Code',Consolas,monospace;font-size:.84rem;overflow-x:auto;border:1px solid rgba(255,255,255,.05)}.interactive{background:#f8fafc;border:1px solid #dbeafe;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}label{font-weight:600;font-size:.9rem}input,select,button{font:inherit;padding:10px 12px;border-radius:10px;border:1px solid #cbd5e1}button{background:var(--accent-dark);color:white;cursor:pointer;border:0;font-weight:700}.result{font-weight:700;padding:10px 12px;border-radius:10px;background:#f1f5f9}.ok{color:var(--success)}.bad{color:var(--danger)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:650px){header{flex-direction:column}.crumb{white-space:normal}.grid{grid-template-columns:1fr}body{padding:16px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<div class="title-group"><p>VALIDATION AND VERIFICATION</p><h1>Check Digit</h1></div>
+<div class="crumb">Level 7 of 10</div>
+</header>
+<div class="progress"><span style="width:70%"></span></div>
+<div class="card"><div class="card-title">💡 What this means</div><p class="instruction-text">A check digit is calculated from the other digits in a code. When the code is typed in later, the calculation is repeated. If the result does not match the final digit, the data is likely to have been copied incorrectly.</p></div>
+<div class="card"><div class="card-title">🌍 Real-life examples</div><ul><li>Barcodes use check digits to detect scanning or typing errors.</li><li>ISBNs use check digits to help detect mistakes in book numbers.</li><li>Banking and product systems use similar ideas to catch transposed or mistyped digits.</li><li>A check digit can detect many errors, but it does not prove the item itself is correct.</li></ul></div>
+<div class="card"><div class="card-title">🧪 Try it here</div><div class="interactive"><label>4 digit code</label><input id="cd" value="5724"><button onclick="digitCheck()">Run check digit</button><div id="cdr" class="result">5724 is valid because 5 + 7 + 2 = 14, so the check digit is 4.</div></div></div>
+<div class="card"><div class="card-title">⚙️ Python task</div><p class="instruction-text">Use a loop to total the first three digits, then compare the calculated check digit with the final digit.</p><pre>for i in range(3):
+    total = total + int(code[i])</pre><div class="banner">Open the Python file on the left, fix the TODO section, run the tests, then move to the next level.</div></div>
+</div>
+<script>function digitCheck(){let s=document.getElementById('cd').value;let ok=/^\d{4}$/.test(s);if(!ok){document.getElementById('cdr').innerHTML='<span class="bad">Use exactly 4 digits.</span>';return;}let total=Number(s[0])+Number(s[1])+Number(s[2]);let calc=total%10;document.getElementById('cdr').innerHTML=calc===Number(s[3])?'<span class="ok">Code validated</span> - calculated check digit is '+calc+'.':'<span class="bad">Code not valid</span> - calculated check digit is '+calc+'.';}</script>
+</body>
+</html>

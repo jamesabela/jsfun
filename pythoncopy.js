@@ -1101,8 +1101,8 @@ import sys, builtins
 
         teacherControlsRow.style.display = 'none';
         teachControlsRow.style.display = 'none';
-        callTracePanel.style.display = 'none';
-        variablePanel.style.display = 'none';
+        const dbgPanel = document.getElementById('displayDebuggerPanel');
+        if (dbgPanel) dbgPanel.style.display = 'none';
         if (blocksCodePreview) blocksCodePreview.style.display = 'block';
 
         // Show Blockly Area taking full height
@@ -1163,8 +1163,8 @@ import sys, builtins
 
           teacherControlsRow.style.display = 'none';
           teachControlsRow.style.display = 'flex';
-          callTracePanel.style.display = 'block';
-          variablePanel.style.display = 'block';
+          const dbgPanel = document.getElementById('displayDebuggerPanel');
+          if (dbgPanel) dbgPanel.style.display = 'block';
 
           // Show turtle canvas in display mode if turtle is imported
           const imports = extractImports(editor.value);
@@ -1186,8 +1186,8 @@ import sys, builtins
 
           teacherControlsRow.style.display = 'flex';
           teachControlsRow.style.display = 'none';
-          callTracePanel.style.display = 'none';
-          variablePanel.style.display = 'none';
+          const dbgPanel = document.getElementById('displayDebuggerPanel');
+          if (dbgPanel) dbgPanel.style.display = 'none';
 
           if (turtleContainer) {
             turtleContainer.style.display = 'flex';
@@ -1207,8 +1207,8 @@ import sys, builtins
 
           teacherControlsRow.style.display = 'flex';
           teachControlsRow.style.display = 'none';
-          callTracePanel.style.display = 'none';
-          variablePanel.style.display = 'none';
+          const dbgPanel = document.getElementById('displayDebuggerPanel');
+          if (dbgPanel) dbgPanel.style.display = 'none';
 
           if (turtleContainer) turtleContainer.style.display = 'none';
 
@@ -3147,6 +3147,14 @@ import sys, builtins
       document.getElementById('playPauseButton').textContent = 'Play';
       if (displayTimeout) clearTimeout(displayTimeout);
 
+      const traceTableContainer = document.getElementById('traceTableContainer');
+      if (traceTableContainer) traceTableContainer.innerHTML = '';
+      const showFullCheckbox = document.getElementById('showFullTraceTable');
+      if (showFullCheckbox) showFullCheckbox.checked = false;
+
+      // Reset display debugger tab to the first tab (Variables & Stack)
+      switchDisplayTab('state');
+
       resetTurtleCanvas();
 
       if (inputResolver) {
@@ -4607,8 +4615,11 @@ def _run_trace():
           if (lastOut) {
             outputEl.textContent += "\n--- Error ---\n" + lastOut;
           }
+          const traceTableContainer = document.getElementById('traceTableContainer');
+          if (traceTableContainer) traceTableContainer.innerHTML = '';
         } else {
           setRunnerStatus(displayTraceStatus === 'waiting_input' ? 'Ready (Input needed)' : 'Trace updated.');
+          buildTraceTable();
         }
 
         isTracing = false;
@@ -4671,6 +4682,18 @@ def _run_trace():
       if (out !== undefined) outputEl.textContent = out;
 
       syncLineNumberScroll();
+
+      // Show/hide trace table rows dynamically based on the current step
+      const showFull = document.getElementById('showFullTraceTable') && document.getElementById('showFullTraceTable').checked;
+      const tRows = document.querySelectorAll('.trace-table-row');
+      tRows.forEach((row, idx) => {
+        if (showFull || idx <= stepIndex) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+      highlightTraceTableRow(stepIndex);
     }
 
     function escapeHtml(value) {
@@ -4714,6 +4737,209 @@ def _run_trace():
 
       callTraceList.innerHTML = html;
     }
+
+    window.switchDisplayTab = function(tab) {
+      const btnState = document.getElementById('tabBtnState');
+      const btnTrace = document.getElementById('tabBtnTraceTable');
+      const contentState = document.getElementById('tabContentState');
+      const contentTrace = document.getElementById('tabContentTraceTable');
+
+      if (tab === 'state') {
+        if (btnState) btnState.classList.add('active');
+        if (btnTrace) btnTrace.classList.remove('active');
+        if (contentState) contentState.style.display = 'block';
+        if (contentTrace) contentTrace.style.display = 'none';
+      } else {
+        if (btnState) btnState.classList.remove('active');
+        if (btnTrace) btnTrace.classList.add('active');
+        if (contentState) contentState.style.display = 'none';
+        if (contentTrace) contentTrace.style.display = 'block';
+      }
+    };
+
+    window.toggleFullTraceTable = function() {
+      const showFull = document.getElementById('showFullTraceTable') && document.getElementById('showFullTraceTable').checked;
+      const rows = document.querySelectorAll('.trace-table-row');
+      rows.forEach((row, idx) => {
+        const currentActiveIdx = displayCurrentStep - 1;
+        if (showFull || idx <= currentActiveIdx) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    };
+
+    window.jumpToTraceStep = function(idx) {
+      if (idx < 0 || idx >= displayTraceLog.length) return;
+      displayCurrentStep = idx;
+      renderDisplayStep(displayCurrentStep);
+      displayCurrentStep++;
+      setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
+    };
+
+    function highlightTraceTableRow(idx) {
+      const rows = document.querySelectorAll('.trace-table-row');
+      rows.forEach(r => {
+        r.classList.remove('active-trace-row');
+      });
+      const currentRow = document.getElementById(`trace-row-${idx}`);
+      if (currentRow) {
+        currentRow.classList.add('active-trace-row');
+        currentRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+
+    function buildTraceTable() {
+      const container = document.getElementById('traceTableContainer');
+      if (!container) return;
+
+      if (!displayTraceLog || displayTraceLog.length === 0) {
+        container.innerHTML = '<div style="padding: 10px; color: #64748b; font-size: 13px; text-align: center;">No trace table generated. Click Play or Step to trace.</div>';
+        return;
+      }
+
+      // Gather variables in order of first appearance
+      const varColumns = [];
+      displayTraceLog.forEach(step => {
+        if (step.locals) {
+          Object.keys(step.locals).forEach(v => {
+            if (!varColumns.includes(v)) {
+              varColumns.push(v);
+            }
+          });
+        }
+      });
+
+      let html = `<table class="trace-table-grid">`;
+      html += `<thead><tr>`;
+      html += `<th style="text-align: center; min-width: 50px;">Line</th>`;
+      varColumns.forEach(v => {
+        html += `<th style="min-width: 80px;">${v}</th>`;
+      });
+      html += `<th style="min-width: 100px;">OUTPUT</th>`;
+      html += `</tr></thead><tbody>`;
+
+      let lastValues = {};
+      displayTraceLog.forEach((step, idx) => {
+        const lineNum = step.line || '';
+        const locs = step.locals || {};
+
+        html += `<tr id="trace-row-${idx}" class="trace-table-row" onclick="jumpToTraceStep(${idx})">`;
+        html += `<td>${lineNum}</td>`;
+
+        varColumns.forEach(v => {
+          const val = locs[v];
+          let displayVal = '';
+          if (val !== undefined) {
+            if (lastValues[v] === undefined || lastValues[v] !== val) {
+              displayVal = val;
+              lastValues[v] = val;
+            }
+          }
+          html += `<td>${escapeHtml(displayVal)}</td>`;
+        });
+
+        // Output printed in this step
+        let stepOutput = '';
+        const prevStep = idx > 0 ? displayTraceLog[idx - 1] : null;
+        const currentFullOut = step.full_output || '';
+        const prevFullOut = prevStep ? (prevStep.full_output || '') : '';
+        if (currentFullOut.length > prevFullOut.length) {
+          stepOutput = currentFullOut.slice(prevFullOut.length);
+        }
+        const displayOutput = stepOutput.replace(/\r?\n$/, '');
+
+        html += `<td>${escapeHtml(displayOutput)}</td>`;
+        html += `</tr>`;
+      });
+
+      html += `</tbody></table>`;
+      container.innerHTML = html;
+
+      // Initially update rows visibility
+      toggleFullTraceTable();
+    }
+
+    window.copyTraceTableToClipboard = function() {
+      if (!displayTraceLog || displayTraceLog.length === 0) return;
+
+      const varColumns = [];
+      displayTraceLog.forEach(step => {
+        if (step.locals) {
+          Object.keys(step.locals).forEach(v => {
+            if (!varColumns.includes(v)) varColumns.push(v);
+          });
+        }
+      });
+
+      // HTML Table for Clipboard
+      let html = `<table border="1" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:11pt;">`;
+      html += `<thead><tr style="background-color:#f2f2f2;">`;
+      html += `<th style="padding:6px 8px;border:1px solid #ccc;font-weight:bold;text-align:center;">Line</th>`;
+      varColumns.forEach(v => {
+        html += `<th style="padding:6px 8px;border:1px solid #ccc;font-weight:bold;text-align:left;">${v}</th>`;
+      });
+      html += `<th style="padding:6px 8px;border:1px solid #ccc;font-weight:bold;text-align:left;">OUTPUT</th>`;
+      html += `</tr></thead><tbody>`;
+
+      let text = `Line\t${varColumns.join('\t')}\tOUTPUT\n`;
+      let lastValues = {};
+
+      displayTraceLog.forEach((step, idx) => {
+        const lineNum = step.line || '';
+        const locs = step.locals || {};
+
+        let rowCellsHtml = `<td style="padding:6px 8px;border:1px solid #ccc;text-align:center;">${lineNum}</td>`;
+        let rowText = `${lineNum}`;
+
+        varColumns.forEach(v => {
+          const val = locs[v];
+          let displayVal = '';
+          if (val !== undefined) {
+            if (lastValues[v] === undefined || lastValues[v] !== val) {
+              displayVal = val;
+              lastValues[v] = val;
+            }
+          }
+          rowCellsHtml += `<td style="padding:6px 8px;border:1px solid #ccc;">${escapeHtml(displayVal)}</td>`;
+          rowText += `\t${displayVal}`;
+        });
+
+        let stepOutput = '';
+        const prevStep = idx > 0 ? displayTraceLog[idx - 1] : null;
+        const currentFullOut = step.full_output || '';
+        const prevFullOut = prevStep ? (prevStep.full_output || '') : '';
+        if (currentFullOut.length > prevFullOut.length) {
+          stepOutput = currentFullOut.slice(prevFullOut.length);
+        }
+        const cleanOutput = stepOutput.replace(/\r?\n$/, '');
+
+        rowCellsHtml += `<td style="padding:6px 8px;border:1px solid #ccc;">${escapeHtml(cleanOutput)}</td>`;
+        rowText += `\t${cleanOutput}\n`;
+
+        html += `<tr>${rowCellsHtml}</tr>`;
+      });
+      html += `</tbody></table>`;
+
+      const clipboardData = new DataTransfer();
+      const htmlBlob = new Blob([html], { type: 'text/html' });
+      const textBlob = new Blob([text], { type: 'text/plain' });
+
+      navigator.clipboard.write([
+        new ClipboardItem({
+          'text/html': htmlBlob,
+          'text/plain': textBlob
+        })
+      ]).then(() => {
+        alert('Trace table copied to clipboard! You can now paste it directly into Word, Google Docs, or Excel.');
+      }).catch(err => {
+        console.error('Failed to copy trace table:', err);
+        navigator.clipboard.writeText(text).then(() => {
+          alert('Trace table copied to clipboard as tab-separated values!');
+        });
+      });
+    };
 
 
 

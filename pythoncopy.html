@@ -409,19 +409,60 @@
           </div>
         </div>
 
-        <div id="callTracePanel"
-          style="display: none; background: #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1;">
-          <h4 style="margin: 0 0 8px; font-size: 14px; color: #1e293b;">Call Trace</h4>
-          <div id="callTraceList"
-            style="font-family: Consolas, Monaco, monospace; font-size: 13px; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 170px; overflow-y: auto;">
+        <div id="displayDebuggerPanel" style="display: none;">
+          <!-- Tab Headers -->
+          <div class="display-tab-headers"
+            style="display: flex; gap: 4px; margin-bottom: 12px; border-radius: 8px; padding: 4px;">
+            <button id="tabBtnState" class="display-tab-btn active" onclick="switchDisplayTab('state')" type="button">
+              Variables &amp; Call Stack
+            </button>
+            <button id="tabBtnTraceTable" class="display-tab-btn" onclick="switchDisplayTab('tracetable')"
+              type="button">
+              Trace Table
+            </button>
           </div>
-        </div>
 
-        <div id="variablePanel"
-          style="display: none; background: #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1;">
-          <h4 style="margin: 0 0 8px; font-size: 14px; color: #1e293b;">Variables</h4>
-          <div id="variableList"
-            style="font-family: Consolas, Monaco, monospace; font-size: 13px; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 150px; overflow-y: auto;">
+          <!-- Tab Content 1: State Tracker (Call Trace & Variables) -->
+          <div id="tabContentState">
+            <div id="callTracePanel"
+              style="background: #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1;">
+              <h4 style="margin: 0 0 8px; font-size: 14px; color: #1e293b;">Call Trace</h4>
+              <div id="callTraceList"
+                style="font-family: Consolas, Monaco, monospace; font-size: 13px; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 170px; overflow-y: auto;">
+              </div>
+            </div>
+
+            <div id="variablePanel"
+              style="background: #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1;">
+              <h4 style="margin: 0 0 8px; font-size: 14px; color: #1e293b;">Variables</h4>
+              <div id="variableList"
+                style="font-family: Consolas, Monaco, monospace; font-size: 13px; color: #334155; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 150px; overflow-y: auto;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Content 2: Trace Table -->
+          <div id="tabContentTraceTable" style="display: none;">
+            <div id="traceTablePanel"
+              style="background: #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h4 style="margin: 0; font-size: 14px; color: #1e293b;">Trace Table</h4>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label
+                    style="font-size: 12px; color: #475569; display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none;">
+                    <input type="checkbox" id="showFullTraceTable" onchange="toggleFullTraceTable()"
+                      style="margin: 0; cursor: pointer;"> Show Full
+                  </label>
+                  <button id="copyTraceTableBtn" onclick="copyTraceTableToClipboard()" class="primary-button"
+                    style="padding: 4px 8px; font-size: 11px; background: #8b5cf6; margin: 0; border-radius: 4px; font-weight: 600;">
+                    Copy Table
+                  </button>
+                </div>
+              </div>
+              <div id="traceTableContainer"
+                style="overflow-x: auto; max-height: 250px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff;">
+              </div>
+            </div>
           </div>
         </div>
 
