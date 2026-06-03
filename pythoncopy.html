@@ -17,7 +17,7 @@
   </style>
   <script>
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 11) {
+      if (window.pythonCopyVersion !== 12) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {

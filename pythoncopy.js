@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 11;
+    window.pythonCopyVersion = 12;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -4861,7 +4861,10 @@ def _run_trace():
     }
 
     window.copyTraceTableToClipboard = function() {
-      if (!displayTraceLog || displayTraceLog.length === 0) return;
+      if (!displayTraceLog || displayTraceLog.length === 0) {
+        alert('No trace table data available to copy. Please run the program first.');
+        return;
+      }
 
       const varColumns = [];
       displayTraceLog.forEach(step => {
@@ -4921,23 +4924,64 @@ def _run_trace():
       });
       html += `</tbody></table>`;
 
-      const clipboardData = new DataTransfer();
-      const htmlBlob = new Blob([html], { type: 'text/html' });
-      const textBlob = new Blob([text], { type: 'text/plain' });
-
-      navigator.clipboard.write([
-        new ClipboardItem({
-          'text/html': htmlBlob,
-          'text/plain': textBlob
-        })
-      ]).then(() => {
-        alert('Trace table copied to clipboard! You can now paste it directly into Word, Google Docs, or Excel.');
-      }).catch(err => {
-        console.error('Failed to copy trace table:', err);
-        navigator.clipboard.writeText(text).then(() => {
+      function fallbackTextCopy(textContent) {
+        copyTextToClipboard(textContent).then(() => {
           alert('Trace table copied to clipboard as tab-separated values!');
+        }).catch(err => {
+          console.error('Failed to copy text fallback:', err);
+          alert('Failed to copy trace table.');
         });
-      });
+      }
+
+      function fallbackHtmlCopy(htmlContent, textContent) {
+        try {
+          const div = document.createElement('div');
+          div.innerHTML = htmlContent;
+          div.style.position = 'fixed';
+          div.style.left = '-9999px';
+          document.body.appendChild(div);
+
+          const range = document.createRange();
+          range.selectNode(div);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          const success = document.execCommand('copy');
+          document.body.removeChild(div);
+          window.getSelection().removeAllRanges();
+
+          if (success) {
+            alert('Trace table copied to clipboard! You can now paste it directly into Word, Google Docs, or Excel.');
+          } else {
+            throw new Error('execCommand returned false');
+          }
+        } catch (err) {
+          console.error('execCommand HTML copy failed, trying plain text fallback:', err);
+          fallbackTextCopy(textContent);
+        }
+      }
+
+      // Copying logic
+      if (navigator.clipboard && window.ClipboardItem) {
+        const htmlBlob = new Blob([html], { type: 'text/html' });
+        const textBlob = new Blob([text], { type: 'text/plain' });
+        try {
+          const data = [new ClipboardItem({
+            'text/html': htmlBlob,
+            'text/plain': textBlob
+          })];
+          navigator.clipboard.write(data).then(() => {
+            alert('Trace table copied to clipboard! You can now paste it directly into Word, Google Docs, or Excel.');
+          }).catch(err => {
+            console.error('Failed to copy trace table via Clipboard write:', err);
+            fallbackTextCopy(text);
+          });
+        } catch (err) {
+          console.error('Synchronous ClipboardItem error, falling back:', err);
+          fallbackHtmlCopy(html, text);
+        }
+      } else {
+        fallbackHtmlCopy(html, text);
+      }
     };
 
 
