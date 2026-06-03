@@ -4775,7 +4775,14 @@ def _run_trace():
       const currentRow = document.getElementById(`trace-row-${idx}`);
       if (currentRow) {
         currentRow.classList.add('active-trace-row');
-        currentRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        const container = document.getElementById('traceTableContainer');
+        if (container) {
+          if (typeof btnPlayStatus !== 'undefined' && btnPlayStatus === 'playing') {
+            container.scrollTop = container.scrollHeight;
+          } else {
+            currentRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+        }
       }
     }
 
