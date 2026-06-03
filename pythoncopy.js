@@ -4107,6 +4107,21 @@ if not hasattr(builtins, '_original_run_input'):
 
 builtins.input = custom_run_input
 
+# Reset turtle module state if it exists
+if 'turtle' in sys.modules:
+    try:
+        import turtle
+        turtle._default_turtle.reset()
+        turtle._default_screen.reset()
+    except Exception:
+        pass
+
+# Ensure custom turtle module directory is prioritized and caches are invalidated
+import importlib
+if '/home/pyodide' not in sys.path:
+    sys.path.insert(0, '/home/pyodide')
+importlib.invalidate_caches()
+
 sys.settrace(_timeout_trace)
 try:
     exec(compile(user_code, '<user_code>', 'exec'), globals())
