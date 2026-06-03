@@ -17,7 +17,7 @@
   </style>
   <script>
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 10) {
+      if (window.pythonCopyVersion !== 11) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -64,7 +64,7 @@
         <path d="M4 12H2" />
         <path d="M2 9h2" />
       </svg>
-      Python Code Lab 4.8
+      Python Code Lab 4.9
       <span class="mode-badge edit-badge">Edit</span>
       <span class="mode-badge display-badge">Display</span>
       <span class="mode-badge turtle-badge">Turtle</span>
@@ -448,11 +448,6 @@
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <h4 style="margin: 0; font-size: 14px; color: #1e293b;">Trace Table</h4>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <label
-                    style="font-size: 12px; color: #475569; display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none;">
-                    <input type="checkbox" id="showFullTraceTable" onchange="toggleFullTraceTable()"
-                      style="margin: 0; cursor: pointer;"> Show Full
-                  </label>
                   <button id="copyTraceTableBtn" onclick="copyTraceTableToClipboard()" class="primary-button"
                     style="padding: 4px 8px; font-size: 11px; background: #8b5cf6; margin: 0; border-radius: 4px; font-weight: 600;">
                     Copy Table

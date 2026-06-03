@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 10;
+    window.pythonCopyVersion = 11;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -3149,8 +3149,6 @@ import sys, builtins
 
       const traceTableContainer = document.getElementById('traceTableContainer');
       if (traceTableContainer) traceTableContainer.innerHTML = '';
-      const showFullCheckbox = document.getElementById('showFullTraceTable');
-      if (showFullCheckbox) showFullCheckbox.checked = false;
 
       // Reset display debugger tab to the first tab (Variables & Stack)
       switchDisplayTab('state');
@@ -4684,15 +4682,7 @@ def _run_trace():
       syncLineNumberScroll();
 
       // Show/hide trace table rows dynamically based on the current step
-      const showFull = document.getElementById('showFullTraceTable') && document.getElementById('showFullTraceTable').checked;
-      const tRows = document.querySelectorAll('.trace-table-row');
-      tRows.forEach((row, idx) => {
-        if (showFull || idx <= stepIndex) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
+      updateTraceTableRowsVisibility();
       highlightTraceTableRow(stepIndex);
     }
 
@@ -4757,18 +4747,17 @@ def _run_trace():
       }
     };
 
-    window.toggleFullTraceTable = function() {
-      const showFull = document.getElementById('showFullTraceTable') && document.getElementById('showFullTraceTable').checked;
+    function updateTraceTableRowsVisibility() {
       const rows = document.querySelectorAll('.trace-table-row');
+      const currentActiveIdx = displayCurrentStep - 1;
       rows.forEach((row, idx) => {
-        const currentActiveIdx = displayCurrentStep - 1;
-        if (showFull || idx <= currentActiveIdx) {
+        if (idx <= currentActiveIdx) {
           row.style.display = '';
         } else {
           row.style.display = 'none';
         }
       });
-    };
+    }
 
     window.jumpToTraceStep = function(idx) {
       if (idx < 0 || idx >= displayTraceLog.length) return;
@@ -4858,7 +4847,7 @@ def _run_trace():
       container.innerHTML = html;
 
       // Initially update rows visibility
-      toggleFullTraceTable();
+      updateTraceTableRowsVisibility();
     }
 
     window.copyTraceTableToClipboard = function() {
