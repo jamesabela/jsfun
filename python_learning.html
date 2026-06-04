@@ -925,7 +925,7 @@
           <svg class="search-icon" viewBox="0 0 24 24">
             <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
           </svg>
-          <input type="text" id="searchInput" class="search-input" placeholder="Search courses, concepts, or levels...">
+          <input type="text" id="searchInput" class="search-input" placeholder="Search courses, concepts, or missions...">
         </div>
         <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle dark/light theme">
           <!-- Light Mode Icon (Sun) -->
@@ -981,7 +981,7 @@
       <svg class="empty-state-icon" viewBox="0 0 24 24">
         <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
       </svg>
-      <h3>No matching courses or levels found</h3>
+      <h3>No matching courses or missions found</h3>
       <p style="margin-top: 8px;">Try searching for different keywords or checking spelling.</p>
     </div>
 
@@ -1600,7 +1600,7 @@
               </td>
               <td class="level-desc-col">${lvl.description}</td>
               <td class="level-action-col">
-                <a href="${playUrl}" class="play-link-btn" title="Open Level ${idx + 1} in Code Lab">
+                <a href="${playUrl}" class="play-link-btn" title="Open Mission ${idx + 1} in Code Lab">
                   <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </a>
                 <a href="${bugUrl}" target="_blank" class="bug-report-btn" title="Report a bug for ${lvl.name}">🐛</a>
@@ -1629,7 +1629,7 @@
               </div>
             </div>
             <div class="course-header-right">
-              <span class="level-count-badge">${course.levels.length} Levels</span>
+              <span class="level-count-badge">${course.levels.length} Missions</span>
               <div class="accordion-indicator">
                 <svg viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
               </div>
@@ -1664,13 +1664,13 @@
               <div class="levels-box">
                 <div class="section-title">
                   <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0-2-.9-2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
-                  Level Directory
+                  Mission Directory
                 </div>
                 <div class="levels-table-container">
                   <table class="levels-table">
                     <thead>
                       <tr>
-                        <th>Lvl</th>
+                        <th>#</th>
                         <th>Name / File</th>
                         <th>Focus & Objectives</th>
                         <th>Launch</th>
