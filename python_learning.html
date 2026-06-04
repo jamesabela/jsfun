@@ -738,8 +738,9 @@
     }
 
     .level-action-col {
-      width: 100px;
+      width: 90px;
       text-align: right;
+      white-space: nowrap;
     }
 
     .play-link-btn {
@@ -766,6 +767,27 @@
       width: 14px;
       height: 14px;
       fill: currentColor;
+    }
+
+    .bug-report-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: var(--red-glow);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all var(--transition-speed) var(--easing);
+      opacity: 0.7;
+    }
+
+    .bug-report-btn:hover {
+      background: var(--red-accent);
+      opacity: 1;
+      transform: scale(1.15) rotate(8deg);
+      box-shadow: 0 4px 8px var(--red-glow);
     }
 
     /* Stats summary at the bottom of headers */
@@ -1565,16 +1587,23 @@
           
           const rowStyle = isLvlHighlighted ? `style="background-color: var(--theme-glow); font-weight: 600;"` : '';
           const playUrl = getOnlineURL(course.id, lvl.file);
+          const rawGitUrl = `https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/${course.id}/${lvl.file}`;
+          const absPlayUrl = `https://jamesabela.github.io/jsfun/pythoncopy.html?url=${encodeURIComponent(rawGitUrl)}`;
+          const bugUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfp15MltxxDgZ3Zz_P-SiwGi58V7s9wBAwCegUD_NiejMxK7A/viewform?entry.1610266455=${encodeURIComponent(absPlayUrl)}&entry.1302905622=${encodeURIComponent(course.title + ' - ' + lvl.name)}`;
 
           levelsRowsHTML += `
             <tr ${rowStyle}>
               <td class="level-num-col">${idx + 1}</td>
-              <td class="level-name-col">${lvl.name} <span style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-dim); display: block;">${lvl.file}</span></td>
+              <td class="level-name-col">
+                ${lvl.name}
+                <span style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-dim); display: block;">${lvl.file}</span>
+              </td>
               <td class="level-desc-col">${lvl.description}</td>
               <td class="level-action-col">
                 <a href="${playUrl}" class="play-link-btn" title="Open Level ${idx + 1} in Code Lab">
                   <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </a>
+                <a href="${bugUrl}" target="_blank" class="bug-report-btn" title="Report a bug for ${lvl.name}">🐛</a>
               </td>
             </tr>
           `;
