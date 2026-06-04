@@ -3088,11 +3088,26 @@ import sys, builtins
       }
     }
 
+    function isDataFile(url) {
+      try {
+        const parsed = new URL(url);
+        const pathname = parsed.pathname.toLowerCase();
+        return pathname.endsWith('.txt') || 
+               pathname.endsWith('.tsv') || 
+               pathname.endsWith('.csv') || 
+               pathname.endsWith('.json') || 
+               pathname.endsWith('.py');
+      } catch (e) {
+        return false;
+      }
+    }
+
     function autoPreviewFirstLink() {
       const code = editor.value;
       const links = extractLinksFromCode(code);
-      if (links.length > 0 && canPreviewUrl(links[0].url)) {
-        previewWebLink(links[0].url);
+      const firstPreviewable = links.find(link => canPreviewUrl(link.url) && !isDataFile(link.url));
+      if (firstPreviewable) {
+        previewWebLink(firstPreviewable.url);
       }
     }
 
