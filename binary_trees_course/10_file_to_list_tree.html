@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorial: File to list-based tree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root { --bg-gradient: linear-gradient(135deg,#f8fafc,#eff6ff); --card-bg:#ffffff; --text-main:#1e293b; --text-muted:#64748b; --accent-gold:#d4af37; --accent-blue:#2563eb; --success:#10b981; --warn:#f59e0b; --danger:#ef4444; --border-color:rgba(226,201,116,.28); --shadow:0 10px 25px -5px rgba(0,0,0,.06),0 8px 10px -6px rgba(0,0,0,.05); --code-bg:#0f172a; --code-text:#f8fafc; }
+*{box-sizing:border-box;margin:0;padding:0} body{background:var(--bg-gradient);color:var(--text-main);font-family:Inter,system-ui,-apple-system,sans-serif;min-height:100vh;padding:24px;display:flex;justify-content:center;align-items:flex-start}.container{width:100%;max-width:760px;display:flex;flex-direction:column;gap:20px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--border-color);padding-bottom:12px}.title-group h1{font-family:Outfit,sans-serif;font-weight:800;font-size:1.65rem;letter-spacing:-.02em;background:linear-gradient(to right,var(--text-main),var(--accent-gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}.title-group p{font-size:.9rem;color:var(--text-muted)}.breadcrumb{display:inline-block;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:700}.card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:16px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px}.card-title{font-family:Outfit,sans-serif;font-size:1.08rem;font-weight:800;display:flex;align-items:center;gap:8px;color:var(--accent-gold);text-transform:uppercase}.instruction-text, li{font-size:.95rem;line-height:1.55;color:var(--text-main)}ul,ol{padding-left:20px}.banner{background:rgba(59,130,246,.09);border-left:4px solid var(--accent-blue);padding:12px 16px;border-radius:8px;font-size:.92rem;line-height:1.45}pre{background:var(--code-bg);color:var(--code-text);padding:14px;border-radius:8px;font-family:'Fira Code',Consolas,monospace;font-size:.84rem;overflow-x:auto;border:1px solid rgba(255,255,255,.06)}code{font-family:'Fira Code',Consolas,monospace;background:#eef2ff;border-radius:4px;padding:1px 5px}.links{display:flex;flex-wrap:wrap;gap:8px}.links a,.button{display:inline-block;text-decoration:none;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:8px 11px;font-weight:700;font-size:.84rem}.mini{font-size:.82rem;color:var(--text-muted)}.treebox{border:1px solid #cbd5e1;border-radius:14px;background:#f8fafc;padding:14px;overflow:hidden}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.controls input{padding:8px;border:1px solid #cbd5e1;border-radius:8px;min-width:90px}.controls button{padding:8px 10px;border:0;border-radius:8px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer}.controls button.secondary{background:#64748b}.controls button.danger{background:#dc2626}.log{background:#0f172a;color:#e2e8f0;border-radius:8px;padding:10px;font-family:'Fira Code',monospace;font-size:.78rem;min-height:40px;white-space:pre-wrap}svg{width:100%;height:260px;background:#fff;border-radius:12px;border:1px solid #e2e8f0}.node circle{fill:#dbeafe;stroke:#2563eb;stroke-width:2}.node text{font-size:13px;font-weight:700;fill:#0f172a;text-anchor:middle;dominant-baseline:middle}.edge{stroke:#94a3b8;stroke-width:2}.highlight circle{fill:#fef3c7;stroke:#d97706;stroke-width:3}.table{width:100%;border-collapse:collapse;font-size:.9rem}.table th,.table td{border:1px solid #e2e8f0;padding:8px;text-align:left}.table th{background:#f8fafc}
+</style>
+</head>
+<body>
+<div class="container">
+<header><div class="title-group"><p>Level 10 of 12 - Binary Trees</p><h1>File to list-based tree</h1></div><span class="breadcrumb">10/12</span></header>
+<div class="card"><div class="card-title">Why this matters</div><p class="instruction-text">Binary trees are one of the trickiest 9618 topics because they combine data structures, recursion, OOP, list indexing and file handling. This page builds the idea one small step at a time.</p><div class="links">
+      <a href="vocabulary.html" target="_blank">Vocabulary</a>
+      <a href="skill_map.html" target="_blank">Skills needed</a>
+      <a href="exam_examples.html" target="_blank">Exam examples</a>
+      <a href="tree_visualiser.html" target="_blank">Tree visualiser</a>
+    </div></div>
+<div class="card"><div class="card-title">Step-by-step idea</div><p class="instruction-text">This is the difficult exam-style bridge: read each line from a file, clean the data, then call the insertion algorithm. The tree is stored using indexes and pointers.</p></div>
+<div class="card"><div class="card-title">Task</div><p class="instruction-text">Look for the TODO comments in the Python file. Complete only the missing part first, then run the tests.</p></div>
+<div class="card"><div class="card-title">Interactive tree</div><p class="instruction-text">Use this visual model to see why each value goes left or right. It is not a replacement for the Python code - it is a way to check your mental model.</p><div class="treebox">
+  <div class="controls">
+    <input id="treeInput" placeholder="Type a value">
+    <button onclick="addValue()">Insert</button>
+    <button onclick="searchValue()">Search</button>
+    <button class="secondary" onclick="loadDefault()">Reset demo</button>
+    <button class="danger" onclick="clearTree()">Clear</button>
+  </div>
+  <svg id="treeSvg" viewBox="0 0 720 260"></svg>
+  <div id="treeLog" class="log"></div>
+</div></div>
+</div>
+<script>
+let tree = null;
+let logLines = [];
+const startValues = "50,30,70,20,40,60,80".split(",").map(v => v.trim()).filter(Boolean);
+function node(v){return {v:v,left:null,right:null};}
+function insert(root, v){
+  if(root === null){logLines.push("Create root node " + v); return node(v);}
+  let cur = root;
+  while(true){
+    if(Number(v) < Number(cur.v)){
+      logLines.push(v + " is smaller than " + cur.v + " - go left");
+      if(cur.left === null){cur.left=node(v); logLines.push("Insert " + v + " on the left of " + cur.v); break;}
+      cur=cur.left;
+    } else {
+      logLines.push(v + " is greater than or equal to " + cur.v + " - go right");
+      if(cur.right === null){cur.right=node(v); logLines.push("Insert " + v + " on the right of " + cur.v); break;}
+      cur=cur.right;
+    }
+  }
+  return root;
+}
+function clearTree(){tree=null;logLines=["Tree cleared."]; draw();}
+function loadDefault(){clearTree(); startValues.forEach(v=>{tree=insert(tree,v)}); draw();}
+function addValue(){const el=document.getElementById('treeInput'); const v=el.value.trim(); if(!v) return; logLines=[]; tree=insert(tree,v); el.value=''; draw();}
+function searchValue(){const v=document.getElementById('treeInput').value.trim(); logLines=[]; let cur=tree; window.highlightValue=null; while(cur){ logLines.push("Visit " + cur.v); if(String(cur.v)===String(v)){logLines.push("Found " + v); window.highlightValue=v; break;} if(Number(v)<Number(cur.v)) cur=cur.left; else cur=cur.right; } if(!cur) logLines.push(v + " not found"); draw();}
+function layout(n, x, y, gap, arr){ if(!n) return; arr.push({n:n,x:x,y:y}); if(n.left){arr.push({edge:true,x1:x,y1:y,x2:x-gap,y2:y+58}); layout(n.left,x-gap,y+58,gap/1.75,arr);} if(n.right){arr.push({edge:true,x1:x,y1:y,x2:x+gap,y2:y+58}); layout(n.right,x+gap,y+58,gap/1.75,arr);} }
+function draw(){
+ const svg=document.getElementById('treeSvg'); if(!svg) return; svg.innerHTML=''; let items=[]; layout(tree,360,32,160,items);
+ items.filter(i=>i.edge).forEach(e=>{let line=document.createElementNS('http://www.w3.org/2000/svg','line'); line.setAttribute('class','edge'); line.setAttribute('x1',e.x1); line.setAttribute('y1',e.y1); line.setAttribute('x2',e.x2); line.setAttribute('y2',e.y2); svg.appendChild(line);});
+ items.filter(i=>i.n).forEach(it=>{let g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.setAttribute('class','node '+(String(it.n.v)===String(window.highlightValue)?'highlight':'')); let c=document.createElementNS('http://www.w3.org/2000/svg','circle'); c.setAttribute('cx',it.x); c.setAttribute('cy',it.y); c.setAttribute('r',18); let t=document.createElementNS('http://www.w3.org/2000/svg','text'); t.setAttribute('x',it.x); t.setAttribute('y',it.y+1); t.textContent=it.n.v; g.appendChild(c); g.appendChild(t); svg.appendChild(g);});
+ const log=document.getElementById('treeLog'); if(log) log.textContent=logLines.slice(-9).join('
+');
+}
+window.addEventListener('load',()=>{loadDefault();});
+</script></body></html>

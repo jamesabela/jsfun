@@ -322,16 +322,14 @@
       box-shadow: var(--shadow-md);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
-      margin-bottom: 48px;
+      margin-bottom: 32px;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       position: relative;
-      gap: 16px;
+      gap: 20px;
     }
-
-
 
     .journey-step {
       display: flex;
@@ -340,8 +338,8 @@
       z-index: 2;
       cursor: pointer;
       position: relative;
-      flex: 1;
-      min-width: 80px;
+      flex: 0 0 auto;
+      width: 100px;
       text-decoration: none;
     }
 
@@ -381,6 +379,35 @@
       overflow: hidden;
       text-overflow: ellipsis;
       transition: color var(--transition-speed) var(--easing);
+    }
+
+    .roadmap-category-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      text-align: left;
+      margin-bottom: 12px;
+      margin-top: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+
+
+    .section-group-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: var(--text-main);
+      text-align: left;
+      margin-top: 48px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
     }
 
     .journey-step:hover .journey-step-label {
@@ -902,13 +929,12 @@
       <h2 class="hero-title">Your <span>Python Learning Journey</span></h2>
       <p class="hero-subtitle">Step-by-step masterclasses designed to take you from a programming novice to a software verification specialist.</p>
       
-      <!-- Interactive Roadmap Step Ribbon -->
-      <div class="journey-map" id="journeyMap">
-        <div class="journey-line">
-          <div class="journey-line-progress" id="journeyProgress" style="width: 0%;"></div>
-        </div>
-        <!-- Steps rendered dynamically -->
-      </div>
+      <!-- Interactive Roadmap Step Ribbon (split between GCSE and AS/A2) -->
+      <div class="roadmap-category-title">iGCSE</div>
+      <div class="journey-map" id="journeyMapGcse"></div>
+
+      <div class="roadmap-category-title">A-LEVEL</div>
+      <div class="journey-map" id="journeyMapAsA2"></div>
     </section>
 
     <!-- Search Stats & Reset Option -->
@@ -917,9 +943,15 @@
       <button class="reset-search-btn" id="resetSearchBtn">Clear Search</button>
     </div>
 
-    <!-- Courses List Area -->
-    <div class="courses-list" id="coursesList">
-      <!-- Course Cards Rendered Dynamically -->
+    <!-- Courses List Area (split between GCSE and AS/A2) -->
+    <div id="gcseGroupSection">
+      <h3 class="section-group-title">iGCSE</h3>
+      <div class="courses-list" id="coursesListGcse"></div>
+    </div>
+    
+    <div id="asA2GroupSection">
+      <h3 class="section-group-title">A-LEVEL</h3>
+      <div class="courses-list" id="coursesListAsA2"></div>
     </div>
 
     <!-- Empty State -->
@@ -1225,7 +1257,7 @@
         order: 12,
         title: "Dictionaries & Frequencies",
         subtitle: "Dictionaries Course",
-        level: "GCSE / AS",
+        level: "A2 Level",
         theme: "teal",
         themeRgb: "13, 148, 136",
         firstLevel: "01_make_dictionary.py",
@@ -1298,13 +1330,71 @@
           { file: "11_objects_in_lists.py", name: "Objects in Lists", description: "Store and manage multiple object instances using a list structure." },
           { file: "12_final_rpg.py", name: "RPG Party Builder", description: "Design a complete character and party system in an open-ended project." }
         ]
+      },
+      {
+        id: "oop_adts_course",
+        order: 15,
+        title: "OOP Abstract Data Types",
+        subtitle: "OOP ADTs Course",
+        level: "A2 Level",
+        theme: "violet",
+        themeRgb: "124, 58, 237",
+        firstLevel: "01_adt_interface.py",
+        description: "Explore abstract data structures (ADTs) in Python using OOP. Learn how to implement stack, queue, circular queue, and linked list data structures as classes with encapsulation.",
+        teacherGuide: "oop_adts_course/teachers.md",
+        keyConcepts: ["Abstract Data Types (ADTs)", "Object-Oriented Programming (OOP)", "Stacks (LIFO)", "Queues (FIFO)", "Circular Queues", "Linked Lists", "Node Class", "Encapsulation (Private Attributes)"],
+        levels: [
+          { file: "01_adt_interface.py", name: "ADT as a Class Interface", description: "Understand abstract data types and complete a class interface defining public methods." },
+          { file: "02_stack_class.py", name: "Create a Stack Class", description: "Initialize a Stack class constructor and define private storage attributes." },
+          { file: "03_stack_push.py", name: "Push & Overflow", description: "Implement stack push operations while preventing overflow conditions." },
+          { file: "04_stack_pop_peek.py", name: "Pop, Peek & Underflow", description: "Retrieve stack items and prevent underflow errors during pop operations." },
+          { file: "05_queue_class.py", name: "Create a Queue Class", description: "Build a standard FIFO queue class using internal list storage." },
+          { file: "06_circular_queue.py", name: "Circular Queue Pointers", description: "Manage circular queue elements using front, rear, and count pointers with modulo wraparounds." },
+          { file: "07_queue_application.py", name: "Printer Queue Application", description: "Design an active printing queue simulation processing jobs sequentially." },
+          { file: "08_node_class.py", name: "Node Class Blueprint", description: "Construct a fundamental Node class to link elements in data structures." },
+          { file: "09_linked_list_insert_traverse.py", name: "Insert & Traverse", description: "Build a Linked List class to insert new nodes at the front and traverse them." },
+          { file: "10_linked_list_search_delete.py", name: "Search & Delete", description: "Implement searching algorithms to locate nodes within a linked list." },
+          { file: "11_adt_from_adt.py", name: "Queue from Two Stacks", description: "Build a composite queue structure utilizing two stacks for input and output operations." },
+          { file: "12_final_project.py", name: "RPG Control Desk", description: "Develop an advanced command desk project integrating stacks, queues, and lists." }
+        ]
+      },
+      {
+        id: "binary_trees_course",
+        order: 16,
+        title: "Binary Search Trees",
+        subtitle: "Binary Trees Course",
+        level: "A2 Level",
+        theme: "orange",
+        themeRgb: "249, 115, 22",
+        firstLevel: "01_tree_idea.py",
+        description: "Explore binary search trees in Python. This capstone course combines list-based pointer arrays, recursion, and object-oriented programming (OOP) to build, search, and traverse hierarchical data structures, loading real-world word databases.",
+        teacherGuide: "binary_trees_course/teachers.md",
+        keyConcepts: ["Binary Search Trees", "Root, Left & Right Nodes", "Pointer-Based Arrays", "Recursive Insertion", "Recursive Search", "In-Order Traversal", "Node Class", "File Parsing", "Turtle Graphics Visualization"],
+        levels: [
+          { file: "01_tree_idea.py", name: "The Binary Tree Idea", description: "Understand root, left, and right children node relationships in binary search trees." },
+          { file: "02_list_insert.py", name: "Insert into List Tree", description: "Implement binary search tree insertion using 2D pointer lists." },
+          { file: "03_list_search.py", name: "Search List Tree", description: "Build searching algorithms for list-based binary search trees." },
+          { file: "04_recursive_traversal.py", name: "Recursive Traversal", description: "Implement recursive in-order (Left, Root, Right) traversal to output elements." },
+          { file: "05_turtle_tree.py", name: "Turtle Tree Drawing", description: "Visualize recursive structures by rendering tree branches using Turtle vector paths." },
+          { file: "06_oop_node.py", name: "OOP Node Class", description: "Construct a node class with encapsulation properties referencing left and right child nodes." },
+          { file: "07_oop_insert.py", name: "Recursive OOP Insertion", description: "Code recursive class methods to insert nodes into object-oriented trees." },
+          { file: "08_oop_search.py", name: "Recursive OOP Search", description: "Query object-oriented binary search trees recursively for specific values." },
+          { file: "09_load_words.py", name: "Load Words from File", description: "Read external text files to parse and filter string data values." },
+          { file: "10_file_to_list_tree.py", name: "List Tree from File", description: "Construct list-based pointer binary search trees using file inputs." },
+          { file: "11_file_to_oop_tree.py", name: "OOP Tree from File", description: "Generate object-oriented binary search trees from data loaded from a text file." },
+          { file: "12_final_project.py", name: "Word Explorer Project", description: "Design a complete binary tree application checking spelling and traversing word collections." }
+        ]
       }
     ];
 
     // DOM Elements
     const searchInput = document.getElementById('searchInput');
-    const coursesList = document.getElementById('coursesList');
-    const journeyMap = document.getElementById('journeyMap');
+    const coursesListGcse = document.getElementById('coursesListGcse');
+    const coursesListAsA2 = document.getElementById('coursesListAsA2');
+    const gcseGroupSection = document.getElementById('gcseGroupSection');
+    const asA2GroupSection = document.getElementById('asA2GroupSection');
+    const journeyMapGcse = document.getElementById('journeyMapGcse');
+    const journeyMapAsA2 = document.getElementById('journeyMapAsA2');
     const searchStats = document.getElementById('searchStats');
     const statsText = document.getElementById('statsText');
     const resetSearchBtn = document.getElementById('resetSearchBtn');
@@ -1335,9 +1425,16 @@
       }
     }
 
+    // Helper to determine if a course belongs to GCSE
+    function isGcseCourse(course) {
+      return course.order < 11;
+    }
+
     // Render Journey Map Step Ribbon
     function renderJourneyMap() {
-      journeyMap.innerHTML = '';
+      journeyMapGcse.innerHTML = '';
+      journeyMapAsA2.innerHTML = '';
+      
       COURSES_DATA.forEach(course => {
         const step = document.createElement('a');
         step.href = `#course-${course.id}`;
@@ -1368,7 +1465,11 @@
           }
         });
 
-        journeyMap.appendChild(step);
+        if (isGcseCourse(course)) {
+          journeyMapGcse.appendChild(step);
+        } else {
+          journeyMapAsA2.appendChild(step);
+        }
       });
     }
 
@@ -1384,8 +1485,12 @@
 
     // Render Cards
     function renderCourses(filterText = '') {
-      coursesList.innerHTML = '';
-      let matchCount = 0;
+      coursesListGcse.innerHTML = '';
+      coursesListAsA2.innerHTML = '';
+      
+      let gcseMatchCount = 0;
+      let asA2MatchCount = 0;
+      let totalMatchCount = 0;
 
       const lowerFilter = filterText.toLowerCase().trim();
 
@@ -1407,7 +1512,7 @@
 
         if (!isMatch) return;
         
-        matchCount++;
+        totalMatchCount++;
 
         // Create Card DOM element
         const card = document.createElement('div');
@@ -1525,7 +1630,13 @@
           </div>
         `;
 
-        coursesList.appendChild(card);
+        if (isGcseCourse(course)) {
+          coursesListGcse.appendChild(card);
+          gcseMatchCount++;
+        } else {
+          coursesListAsA2.appendChild(card);
+          asA2MatchCount++;
+        }
         
         // Calculate max-height once opened to enable sliding effects
         if (card.classList.contains('is-open')) {
@@ -1534,11 +1645,15 @@
         }
       });
 
+      // Show/Hide group headers/sections based on matches
+      gcseGroupSection.style.display = gcseMatchCount > 0 ? 'block' : 'none';
+      asA2GroupSection.style.display = asA2MatchCount > 0 ? 'block' : 'none';
+
       // Show/Hide search results stats
       if (filterText !== '') {
         searchStats.style.display = 'flex';
-        statsText.innerText = `Found ${matchCount} course${matchCount === 1 ? '' : 's'} matching "${filterText}".`;
-        if (matchCount === 0) {
+        statsText.innerText = `Found ${totalMatchCount} course${totalMatchCount === 1 ? '' : 's'} matching "${filterText}".`;
+        if (totalMatchCount === 0) {
           emptyState.style.display = 'block';
         } else {
           emptyState.style.display = 'none';
