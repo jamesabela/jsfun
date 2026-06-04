@@ -10,8 +10,7 @@ def fib(n):
     if n == 1:
         return 1
 
-    # TODO: return fib(n - 1) + fib(n - 2)
-    return -1
+    #TODO: work out the returns & how it will call itself.
 
 number = int(input("Which Fibonacci position? "))
 print(fib(number))
