@@ -1,7 +1,5 @@
 # Level 3 of 12 - Python Recursion Course
-# Tutorial: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/03_factorial_math.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/vocabulary.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/exam_examples.html
+# Tutorial: https://jamesabela.github.io/jsfun/recursion_course/recursion_course/03_factorial_math.html
 
 # Complete the recursive factorial function.
 

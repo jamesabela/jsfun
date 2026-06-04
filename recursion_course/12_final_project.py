@@ -1,7 +1,5 @@
 # Level 12 of 12 - Python Recursion Course
-# Tutorial: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/12_final_project.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/vocabulary.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/exam_examples.html
+# Tutorial: https://jamesabela.github.io/jsfun/recursion_course/12_final_project.html
 
 # Final project: Fractal cinema.
 # Create a recursive turtle project.

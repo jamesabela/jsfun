@@ -1,7 +1,5 @@
 # Level 5 of 12 - Python Recursion Course
-# Tutorial: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/05_fibonacci_sequence.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/vocabulary.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/exam_examples.html
+# Tutorial: https://jamesabela.github.io/jsfun/recursion_course/05_fibonacci_sequence.html
 
 # Complete the recursive Fibonacci function.
 # fib(0) is 0 and fib(1) is 1.

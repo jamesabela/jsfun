@@ -1,7 +1,6 @@
 # Level 9 of 12 - Python Recursion Course
-# Tutorial: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/09_towers_of_hanoi.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/vocabulary.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/exam_examples.html
+# Tutorial: https://jamesabela.github.io/jsfun/recursion_course/09_towers_of_hanoi.html
+
 
 # Complete the recursive Towers of Hanoi procedure.
 

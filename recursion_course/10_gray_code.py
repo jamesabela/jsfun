@@ -1,7 +1,6 @@
 # Level 10 of 12 - Python Recursion Course
-# Tutorial: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/10_gray_code.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/vocabulary.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/exam_examples.html
+# Tutorial: https://jamesabela.github.io/jsfun/recursion_course/10_gray_code.html
+
 
 # Complete the recursive Gray code generator.
 

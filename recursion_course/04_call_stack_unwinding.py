@@ -1,7 +1,5 @@
 # Level 4 of 12 - Python Recursion Course
-# Tutorial: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/04_call_stack_unwinding.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/vocabulary.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/exam_examples.html
+# Tutorial: https://jamesabela.github.io/jsfun/recursion_course/04_call_stack_unwinding.html
 
 # Tutorial level: read the guide and run this trace.
 # There is a small output check, but the main learning is the stack explanation.

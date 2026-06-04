@@ -1,7 +1,5 @@
 # Level 2 of 12 - Python Recursion Course
-# Tutorial: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/02_base_case_turtle_circle.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/vocabulary.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/exam_examples.html
+# Tutorial: https://jamesabela.github.io/jsfun/recursion_course/02_base_case_turtle_circle.html
 
 # This level uses turtle to visualise recursion.
 # Complete the base case so the circles stop getting smaller.

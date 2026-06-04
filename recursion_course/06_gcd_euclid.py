@@ -1,8 +1,5 @@
 # Level 6 of 12 - Python Recursion Course
-# Tutorial: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/06_gcd_euclid.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/vocabulary.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/exam_examples.html
-
+# Tutorial: https://jamesabela.github.io/jsfun/recursion_course/06_gcd_euclid.html
 # Complete Euclid's recursive greatest common divisor algorithm.
 
 def gcd(a, b):
