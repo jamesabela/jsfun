@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Vocabulary: Data Structures</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet"><style>
+:root {
+  --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --accent-gold: #d4af37;
+  --accent-gold-glow: rgba(212, 175, 55, 0.15);
+  --accent-dark: #0f172a;
+  --accent-blue: #3b82f6;
+  --accent-blue-glow: rgba(59, 130, 246, 0.1);
+  --success: #10b981;
+  --success-glow: rgba(16, 185, 129, 0.15);
+  --border-color: rgba(226, 201, 116, 0.25);
+  --shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.05);
+  --code-bg: #0f172a;
+  --code-text: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg-gradient); color: var(--text-main); font-family: Inter, system-ui, -apple-system, sans-serif; min-height: 100vh; padding: 24px; display: flex; justify-content: center; align-items: flex-start; }
+.container { width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; gap: 16px; }
+.title-group h1 { font-family: Outfit, sans-serif; font-weight: 800; font-size: 1.6rem; letter-spacing: -0.02em; background: linear-gradient(to right, var(--text-main), var(--accent-gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
+.title-group p { font-size: 0.9rem; color: var(--text-muted); }
+.breadcrumb { font-size: 0.82rem; font-weight: 700; color: #78350f; background: var(--accent-gold-glow); padding: 8px 12px; border-radius: 999px; white-space: nowrap; }
+.card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 16px; }
+.card-title { font-family: Outfit, sans-serif; font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--accent-gold); text-transform: uppercase; }
+p, li { font-size: 0.95rem; line-height: 1.55; }
+ul, ol { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+pre { background: var(--code-bg); color: var(--code-text); padding: 14px; border-radius: 8px; font-family: 'Fira Code', Consolas, Monaco, monospace; font-size: 0.85rem; overflow-x: auto; border: 1px solid rgba(255,255,255,0.05); }
+code { background: #eef2ff; padding: 2px 5px; border-radius: 5px; font-family: 'Fira Code', Consolas, Monaco, monospace; }
+.banner { background: var(--accent-blue-glow); border-left: 4px solid var(--accent-blue); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; line-height: 1.45; }
+.navlink { display: inline-block; color: #1d4ed8; font-weight: 700; text-decoration: none; background: #dbeafe; padding: 8px 12px; border-radius: 10px; margin-right: 8px; }
+.visual { border: 2px solid #dbeafe; background: #f8fafc; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+button { border: 0; background: #1e293b; color: white; border-radius: 10px; padding: 9px 12px; font-weight: 700; cursor: pointer; }
+button:hover { background: #334155; }
+input { border: 1px solid #cbd5e1; border-radius: 10px; padding: 9px 10px; font: inherit; max-width: 150px; }
+.stage { min-height: 100px; display: flex; align-items: end; gap: 10px; padding: 12px; background: white; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; }
+.cell { min-width: 54px; min-height: 46px; border-radius: 10px; background: #dbeafe; border: 2px solid #93c5fd; display: flex; align-items: center; justify-content: center; font-weight: 800; position: relative; }
+.cell.highlight { background: #dcfce7; border-color: #22c55e; }
+.cell.warn { background: #fee2e2; border-color: #ef4444; }
+.stack-stage { flex-direction: column-reverse; align-items: center; justify-content: flex-start; min-height: 220px; }
+.stack-cell { width: 120px; }
+.queue-stage { align-items: center; min-height: 120px; }
+.pointer { font-size: 0.78rem; color: #475569; font-weight: 700; position: absolute; top: -22px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.link-stage { align-items: center; min-height: 140px; }
+.node { display: flex; align-items: center; gap: 6px; }
+.node-box { min-width: 60px; border: 2px solid #93c5fd; background: #dbeafe; border-radius: 10px; overflow: hidden; font-weight: 800; }
+.node-data { padding: 10px; text-align: center; border-bottom: 1px solid #93c5fd; }
+.node-next { padding: 6px; text-align: center; font-size: 0.75rem; background: #eff6ff; color: #475569; }
+.arrow { font-weight: 900; color: #64748b; }
+.log { background: #0f172a; color: #e2e8f0; padding: 10px; border-radius: 10px; font-family: 'Fira Code', monospace; min-height: 44px; font-size: 0.82rem; }
+.term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.term { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; }
+.term strong { color: #0f172a; }
+</style></head><body><div class="container"><header><div class="title-group"><p>VOCABULARY: 9618 DATA STRUCTURES</p><h1>Stacks, Queues and Linked Lists</h1></div><div class="breadcrumb">Reference</div></header><div class="card"><div class="card-title">📘 Key terms</div><p>Use this page when a lesson mentions a technical term. These definitions are written for A-level Computer Science revision and use list-based Python examples rather than OOP.</p></div><div class="term-grid"><div class="term"><strong>Abstract Data Type (ADT)</strong><p>A model of a data structure that describes the operations allowed, not the exact implementation.</p></div><div class="term"><strong>Stack</strong><p>A last in, first out structure. The last item pushed is the first item popped.</p></div><div class="term"><strong>Queue</strong><p>A first in, first out structure. The first item enqueued is the first item dequeued.</p></div><div class="term"><strong>Linked list</strong><p>A structure made from nodes. Each node stores data and a pointer to the next node.</p></div><div class="term"><strong>Push</strong><p>Add an item to the top of a stack.</p></div><div class="term"><strong>Pop</strong><p>Remove and return the item from the top of a stack.</p></div><div class="term"><strong>Peek</strong><p>Look at the next item to be removed without removing it.</p></div><div class="term"><strong>Enqueue</strong><p>Add an item to the rear of a queue.</p></div><div class="term"><strong>Dequeue</strong><p>Remove and return the item from the front of a queue.</p></div><div class="term"><strong>Front pointer</strong><p>A variable that identifies the front item in a queue.</p></div><div class="term"><strong>Rear pointer</strong><p>A variable that identifies the rear item in a queue.</p></div><div class="term"><strong>Stack pointer</strong><p>A variable that identifies the top position in a stack.</p></div><div class="term"><strong>Pointer</strong><p>A stored position or index that tells the algorithm where another item is located.</p></div><div class="term"><strong>Start pointer</strong><p>The pointer to the first node in a linked list.</p></div><div class="term"><strong>Null pointer</strong><p>A special value, often -1 in exam-style pseudocode, meaning no next node.</p></div><div class="term"><strong>Free list</strong><p>A list of unused node positions available for insertion.</p></div><div class="term"><strong>Overflow</strong><p>An error that happens when trying to add data to a full fixed-size structure.</p></div><div class="term"><strong>Underflow</strong><p>An error that happens when trying to remove data from an empty structure.</p></div><div class="term"><strong>LIFO</strong><p>Last in, first out. This describes a stack.</p></div><div class="term"><strong>FIFO</strong><p>First in, first out. This describes a queue.</p></div></div></div></body></html>

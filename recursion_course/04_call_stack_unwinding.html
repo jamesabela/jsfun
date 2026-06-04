@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Call stack and unwinding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --accent-gold: #d4af37;
+  --accent-gold-glow: rgba(212, 175, 55, 0.15);
+  --accent-dark: #0f172a;
+  --accent-blue: #3b82f6;
+  --accent-purple: #7c3aed;
+  --success: #10b981;
+  --danger: #ef4444;
+  --border-color: rgba(226, 201, 116, 0.28);
+  --shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.05);
+  --code-bg: #0f172a;
+  --code-text: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg-gradient); color: var(--text-main); font-family: 'Inter', system-ui, -apple-system, sans-serif; min-height: 100vh; padding: 24px; display: flex; justify-content: center; align-items: flex-start; }
+.container { width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }
+.title-group h1 { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.65rem; letter-spacing: -0.02em; background: linear-gradient(to right, var(--text-main), var(--accent-gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
+.title-group p { font-size: 0.9rem; color: var(--text-muted); }
+.badge { background: var(--accent-gold-glow); color: #8a6d0a; padding: 8px 12px; border-radius: 999px; font-weight: 700; font-size: 0.8rem; white-space: nowrap; border: 1px solid var(--border-color); }
+.card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 16px; }
+.card-title { font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--accent-gold); text-transform: uppercase; }
+.instruction-text, li { font-size: 0.95rem; line-height: 1.55; color: var(--text-main); }
+ul, ol { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+.banner { background: var(--accent-gold-glow); border-left: 4px solid var(--accent-gold); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; line-height: 1.45; }
+.info { background: rgba(59,130,246,0.1); border-left-color: var(--accent-blue); }
+.success { background: rgba(16,185,129,0.12); border-left-color: var(--success); }
+pre { background: var(--code-bg); color: var(--code-text); padding: 14px; border-radius: 8px; font-family: 'Fira Code', Consolas, Monaco, monospace; font-size: 0.85rem; overflow-x: auto; line-height: 1.45; }
+code { font-family: 'Fira Code', Consolas, Monaco, monospace; background: #eef2ff; padding: 2px 5px; border-radius: 5px; }
+a { color: #2563eb; font-weight: 700; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.demo { border: 1px solid #dbeafe; background: #f8fbff; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.controls { display: flex; gap: 10px; flex-wrap: wrap; }
+button { border: none; background: var(--accent-blue); color: white; padding: 9px 13px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+button.secondary { background: var(--accent-purple); }
+.output { min-height: 44px; background: white; border: 1px solid #dbeafe; border-radius: 10px; padding: 12px; font-family: 'Fira Code', Consolas, monospace; white-space: pre-wrap; }
+.stack { display: flex; flex-direction: column-reverse; gap: 6px; min-height: 160px; border: 2px dashed #cbd5e1; padding: 12px; border-radius: 12px; background: #fff; }
+.frame { padding: 10px; border-radius: 10px; background: #ede9fe; border: 1px solid #c4b5fd; font-family: 'Fira Code', Consolas, monospace; transition: 0.2s ease; }
+.row { display: flex; gap: 8px; justify-content: center; }
+.seat { width: 24px; height: 24px; border-radius: 7px; background: #c7d2fe; border: 1px solid #818cf8; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; }
+.peg-wrap { display: flex; justify-content: space-around; min-height: 140px; align-items: flex-end; background: #f8fafc; border: 1px solid #dbeafe; border-radius: 12px; padding: 12px; }
+.peg { width: 30%; display: flex; flex-direction: column-reverse; align-items: center; gap: 4px; min-height: 120px; border-bottom: 5px solid #92400e; position: relative; }
+.peg:before { content: ''; width: 8px; height: 110px; background: #78350f; position: absolute; bottom: 0; border-radius: 4px; z-index: 0; }
+.disk { height: 18px; border-radius: 9px; background: #93c5fd; border: 1px solid #2563eb; z-index: 1; text-align: center; font-size: 12px; line-height: 18px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 640px) { body { padding: 14px; } header { flex-direction: column; align-items: flex-start; gap: 10px; } .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>Level 4 of 12 - Compiler Awareness</p>
+        <h1>Call stack and unwinding</h1>
+      </div>
+      <div class="badge">Breadcrumb: 4/12</div>
+    </header>
+    <div class="banner info">Need the key terms? Open <a href="vocabulary.html" target="_blank">recursion vocabulary</a>. Want exam context? Open <a href="exam_examples.html" target="_blank">exam examples</a>.</div>
+    <div class="card "><div class="card-title">What the compiler and runtime must manage</div><p class="instruction-text">Each recursive call needs its own saved information. The computer uses a stack to store return addresses, parameter values and local variables. Each saved set of information is often called a stack frame.</p><p class="instruction-text">When the base case is reached, the stack unwinds. This means the most recent call returns first, then the one before it, and so on.</p></div><div class="card "><div class="card-title">Animated call stack</div><div class="demo"><p class="instruction-text">Click step to push stack frames for factorial(3), then unwind them.</p><div class="controls"><button onclick="stackStep()">Step</button><button class="secondary" onclick="stackReset()">Reset</button></div><div id="stack" class="stack"></div><div id="stackText" class="output"></div></div></div><div class="card "><div class="card-title">Exam link</div><p class="instruction-text">A common written question asks what problem can happen when recursion calls itself too many times. The answer is that too many stack frames can use up stack space, causing stack overflow.</p></div>
+  </div>
+  <script>let ss=0;let frames=[];const stackSteps=[{a:"push",v:"factorial(3)",t:"Call made: save n = 3"},{a:"push",v:"factorial(2)",t:"Recursive call: save n = 2"},{a:"push",v:"factorial(1)",t:"Base case reached: return 1"},{a:"pop",t:"Unwind: factorial(2) returns 2"},{a:"pop",t:"Unwind: factorial(3) returns 6"},{a:"pop",t:"Back to main program with answer 6"}];function renderStack(t){document.getElementById("stack").innerHTML=frames.map(f=>`<div class="frame">${f}</div>`).join("");document.getElementById("stackText").textContent=t;}function stackStep(){let s=stackSteps[Math.min(ss,stackSteps.length-1)];if(s.a==="push")frames.push(s.v);if(s.a==="pop")frames.pop();renderStack(s.t);if(ss<stackSteps.length-1)ss++;}function stackReset(){ss=0;frames=[];renderStack("Ready. The stack is empty.");}stackReset();</script>
+</body>
+</html>

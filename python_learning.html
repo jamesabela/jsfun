@@ -32,6 +32,12 @@
       --orange-glow: rgba(249, 115, 22, 0.15);
       --rose-accent: #f43f5e;
       --rose-glow: rgba(244, 63, 94, 0.15);
+      --red-accent: #ef4444;
+      --red-glow: rgba(239, 68, 68, 0.15);
+      --sky-accent: #0ea5e9;
+      --sky-glow: rgba(14, 165, 233, 0.15);
+      --violet-accent: #7c3aed;
+      --violet-glow: rgba(124, 58, 237, 0.15);
 
       /* Transition */
       --transition-speed: 0.3s;
@@ -325,25 +331,7 @@
       gap: 16px;
     }
 
-    .journey-line {
-      position: absolute;
-      top: 50px;
-      left: 60px;
-      right: 60px;
-      height: 4px;
-      background: var(--pill-bg);
-      z-index: 1;
-    }
 
-    .journey-line-progress {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to right, var(--emerald-accent), var(--indigo-accent), var(--rose-accent));
-      border-radius: 2px;
-    }
 
     .journey-step {
       display: flex;
@@ -468,8 +456,18 @@
       font-size: 1.35rem;
       color: var(--text-main);
     }
-
-
+    .level-badge {
+      display: inline-flex;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      background: var(--theme-glow);
+      color: var(--theme-color);
+      border: 1px solid rgba(var(--theme-rgb), 0.2);
+    }
 
     .course-desc-summary {
       font-size: 0.9rem;
@@ -915,7 +913,7 @@
 
     <!-- Search Stats & Reset Option -->
     <div class="search-stats" id="searchStats" style="display: none;">
-      <span id="statsText">Found 8 courses matching your search.</span>
+      <span id="statsText">Found 14 courses matching your search.</span>
       <button class="reset-search-btn" id="resetSearchBtn">Clear Search</button>
     </div>
 
@@ -950,7 +948,7 @@
         order: 1,
         title: "Variables, Input & Output",
         subtitle: "Beginners Course",
-        difficulty: "Beginner",
+        level: "KS3 / GCSE",
         theme: "emerald",
         themeRgb: "16, 185, 129",
         firstLevel: "speechless.py",
@@ -975,7 +973,7 @@
         order: 2,
         title: "Mathematical Operators",
         subtitle: "Operators Course",
-        difficulty: "Beginner-Intermediate",
+        level: "KS3 / GCSE",
         theme: "teal",
         themeRgb: "13, 148, 136",
         firstLevel: "start.py",
@@ -997,7 +995,7 @@
         order: 3,
         title: "Decision Statements",
         subtitle: "Selection Course",
-        difficulty: "Intermediate",
+        level: "KS3 / GCSE",
         theme: "blue",
         themeRgb: "59, 130, 246",
         firstLevel: "football.py",
@@ -1021,7 +1019,7 @@
         order: 4,
         title: "While Loops Puzzles",
         subtitle: "While Loops Course",
-        difficulty: "Intermediate-Advanced",
+        level: "KS3 / GCSE",
         theme: "indigo",
         themeRgb: "99, 102, 241",
         firstLevel: "01_count_to_five.py",
@@ -1050,7 +1048,7 @@
         order: 5,
         title: "For Loops Puzzles",
         subtitle: "For Loops Course",
-        difficulty: "Intermediate-Advanced",
+        level: "KS3 / GCSE",
         theme: "purple",
         themeRgb: "139, 92, 246",
         firstLevel: "01_repeat_message.py",
@@ -1079,7 +1077,7 @@
         order: 6,
         title: "List Structures & Statistics",
         subtitle: "Lists Course",
-        difficulty: "Advanced",
+        level: "GCSE",
         theme: "pink",
         themeRgb: "236, 72, 153",
         firstLevel: "01_create_list.py",
@@ -1102,6 +1100,7 @@
         order: 7,
         title: "2D Lists (Lists of Lists)",
         subtitle: "2D Lists Course",
+        level: "GCSE",
         theme: "fuchsia",
         themeRgb: "217, 70, 239",
         firstLevel: "level01_find_location.py",
@@ -1126,6 +1125,7 @@
         order: 8,
         title: "Procedures & Functions",
         subtitle: "Functions Course",
+        level: "AS Level",
         theme: "orange",
         themeRgb: "249, 115, 22",
         firstLevel: "01_first_procedure.py",
@@ -1150,6 +1150,7 @@
         order: 9,
         title: "Validation & Verification",
         subtitle: "Validation Course",
+        level: "AS Level",
         theme: "rose",
         themeRgb: "244, 63, 94",
         firstLevel: "01_validate_or_verify.py",
@@ -1168,6 +1169,135 @@
           { file: "09_double_entry.py", name: "Double Entry", description: "Validate data match by comparing duplicate entries." },
           { file: "10_combined_form.py", name: "Combined Form", description: "Aggregate presence, bounds, pattern, and entry matchers." }
         ]
+      },
+      {
+        id: "files_course",
+        order: 10,
+        title: "File Loading, Writing & Appending",
+        subtitle: "Files Course",
+        level: "GCSE / AS",
+        theme: "red",
+        themeRgb: "239, 68, 68",
+        firstLevel: "01_load_poem.py",
+        description: "This course teaches file handling in Python using Python Code Lab. It covers loading files with #load, reading text files, using filename variables, counting text, writing new files, appending to files, reading TSV data, searching records, saving filtered results, and a final creative monster project.",
+        teacherGuide: "files_course/teachers.md",
+        keyConcepts: ["File Handling", "Loading Files (#load)", "Reading Files", "Filename Variables", "Line & Word Counting", "Writing Files ('w' mode)", "Appending Files ('a' mode)", "Tab-Separated Values (TSV)", "Traversing TSV Records", "Saving Filtered Data"],
+        levels: [
+          { file: "01_load_poem.py", name: "Load a Text File", description: "Use #load to preload a text file and read its first line." },
+          { file: "02_filename_variable.py", name: "Filename Variables", description: "Store file names in variables to write more dynamic code." },
+          { file: "03_count_lines_words.py", name: "Count Lines & Words", description: "Loop over lines to count total lines and word matches." },
+          { file: "04_write_stats.py", name: "Write a New File", description: "Create and write to a new stats.txt output file in 'w' write mode." },
+          { file: "05_append_log.py", name: "Append to a File", description: "Use 'a' append mode to write logs without deleting existing contents." },
+          { file: "06_read_tsv.py", name: "Read TSV Data", description: "Load and split tab-separated value (TSV) column records." },
+          { file: "07_search_tsv.py", name: "Search File Data", description: "Filter columns of a TSV file to search for matching year records." },
+          { file: "08_save_timeline.py", name: "Save Filtered Data", description: "Output filtered TSV results directly into a new timeline.txt file." },
+          { file: "09_append_tsv.py", name: "Append Structured Data", description: "Write new structured columns to a TSV file using tab characters." },
+          { file: "10_monster_codex.py", name: "Creative Project", description: "Build a Monster Codex by reading and parsing an external RPG database." }
+        ]
+      },
+      {
+        id: "data_structures",
+        order: 11,
+        title: "Abstract Data Structures",
+        subtitle: "AS Level Data Structures",
+        level: "AS Level",
+        theme: "sky",
+        themeRgb: "14, 165, 233",
+        firstLevel: "01_adt_intro.py",
+        description: "Explore abstract data structures (ADTs) in Python. Learn how stacks, queues (basic, pointer-based, and circular), and linked lists work using standard Python lists. Note: This course covers the AS Level syllabus; Recursion is covered in the A2 syllabus.",
+        teacherGuide: "data_structures/teachers.md",
+        keyConcepts: ["Abstract Data Types (ADTs)", "Stacks (LIFO)", "Queues (FIFO)", "Circular Queues", "Linked Lists", "Cambridge AS Level", "A2 Recursion Note"],
+        levels: [
+          { file: "01_adt_intro.py", name: "Why ADTs Matter", description: "Complete labels for stack, queue, and linked list rules." },
+          { file: "02_stack_push.py", name: "Stack Push & Pop", description: "Push and pop items on a stack and print results." },
+          { file: "03_stack_limits.py", name: "Stack Limits", description: "Manage stack overflow and underflow conditions." },
+          { file: "04_queue_basic.py", name: "Queue Basics", description: "Add and remove items in FIFO queue order using lists." },
+          { file: "05_queue_pointers.py", name: "Queue Pointers", description: "Move front and rear pointers without shifting array elements." },
+          { file: "06_circular_queue.py", name: "Circular Queue", description: "Wrap rear pointers around limits using modulo calculations." },
+          { file: "07_linked_list_traverse.py", name: "Linked List Traversal", description: "Traverse nodes sequentially following next pointer elements." },
+          { file: "08_linked_list_insert.py", name: "Linked List Insertion", description: "Insert new items at the front of a linked list." },
+          { file: "09_linked_list_search.py", name: "Linked List Search", description: "Traverse and find target values matching search criteria." },
+          { file: "10_final_project.py", name: "Arcade Control Desk", description: "Build an arcade desk combining stacks, queues, and linked lists." }
+        ]
+      },
+      {
+        id: "dictionaries_course",
+        order: 12,
+        title: "Dictionaries & Frequencies",
+        subtitle: "Dictionaries Course",
+        level: "GCSE / AS",
+        theme: "teal",
+        themeRgb: "13, 148, 136",
+        firstLevel: "01_make_dictionary.py",
+        description: "Master Python dictionaries for storing key-value pairs. Learn about safe lookup using get(), looping, adding and updating elements, nested structures, and analyzing text file word frequencies.",
+        teacherGuide: "dictionaries_course/teachers.md",
+        keyConcepts: ["Dictionaries", "Key-Value Pairs", "Safe Access (get)", "Dictionary Loops", "Updating Entries", "Deleting & Popping", "Nested Dictionaries", "Word Frequency", "File Loading (#load)"],
+        levels: [
+          { file: "01_make_dictionary.py", name: "Make a Dictionary", description: "Initialize a dictionary and insert key-value pairs representing capitals." },
+          { file: "02_key_rules.py", name: "Keys and Values", description: "Complete a dictionary mapping category names to lists of examples." },
+          { file: "03_access_get.py", name: "Access Values Safely", description: "Retrieve values using the .get() method to prevent KeyError exceptions." },
+          { file: "04_loop_dictionary.py", name: "Looping Dictionaries", description: "Iterate over dictionary entries to print keys and their values." },
+          { file: "05_update_dictionary.py", name: "Add & Update Entries", description: "Modify values and add new records to an existing dictionary." },
+          { file: "06_delete_pop.py", name: "Delete & Pop Values", description: "Remove keys using del and retrieve popped values using .pop()." },
+          { file: "07_views_in.py", name: "Views and Membership", description: "Explore keys(), values(), items(), and test membership with the in operator." },
+          { file: "08_nested_dictionary.py", name: "Nested Dictionaries", description: "Access properties nested deep inside dictionary-valued keys." },
+          { file: "09_word_frequency.py", name: "Word Frequency Analysis", description: "Count words in a Romeo & Juliet text file using string formatting and checking loops." },
+          { file: "10_final_project.py", name: "Interactive Dictionary App", description: "Build a custom, user-interactive glossary lookup tool with menus." }
+        ]
+      },
+      {
+        id: "recursion_course",
+        order: 13,
+        title: "Recursion Puzzles",
+        subtitle: "Recursion Course",
+        level: "A2 Level",
+        theme: "violet",
+        themeRgb: "124, 58, 237",
+        firstLevel: "01_what_is_recursion.py",
+        description: "Master recursive algorithms for Cambridge International A-Level 9618. Understand base and general cases, the call stack, and unwinding. Includes visual turtle circles, GCD, Fibonacci, and Towers of Hanoi.",
+        teacherGuide: "recursion_course/teachers.md",
+        keyConcepts: ["Base case", "General case", "Recursive call", "Call stack", "Stack frame", "Return address", "Unwinding", "A2 Syllabus"],
+        levels: [
+          { file: "01_what_is_recursion.py", name: "What is Recursion?", description: "Build a basic countdown recursion routine." },
+          { file: "02_base_case_turtle_circle.py", name: "Base Case Circles", description: "Use turtle recursion to draw circles, checking base boundaries." },
+          { file: "03_factorial_math.py", name: "Factorial Patterns", description: "Compute mathematical factorial definitions recursively." },
+          { file: "04_call_stack_unwinding.py", name: "Stack Unwinding", description: "Trace stack frames and function calls recursively." },
+          { file: "05_fibonacci_sequence.py", name: "Fibonacci Sequence", description: "Generate Fibonacci positions using branching recursive calls." },
+          { file: "06_gcd_euclid.py", name: "Greatest Common Divisor", description: "Compute Euclid's GCD algorithms recursively using mod operations." },
+          { file: "07_recursive_cinema.py", name: "Recursive Cinema Rows", description: "Draw rows of cinema seats recursively with turtle." },
+          { file: "08_recursive_binary_search.py", name: "Recursive Binary Search", description: "Implement binary search routines matching 9618 Paper 4 formats." },
+          { file: "09_towers_of_hanoi.py", name: "Towers of Hanoi", description: "Solve the classic disk-moving puzzle recursively." },
+          { file: "10_gray_code.py", name: "Gray Code Patterns", description: "Generate binary code patterns recursively." },
+          { file: "11_turtle_tree.py", name: "Fractal Tree", description: "Create branching fractal structures using recursive turtle calls." },
+          { file: "12_final_project.py", name: "Fractal Cinema Project", description: "Build an interactive visual project combining circle effects." }
+        ]
+      },
+      {
+        id: "oop_course",
+        order: 14,
+        title: "Object Oriented Python",
+        subtitle: "OOP Course",
+        level: "A2 Level",
+        theme: "fuchsia",
+        themeRgb: "217, 70, 239",
+        firstLevel: "01_why_oop.py",
+        description: "This course introduces object oriented programming for Cambridge A-level Computer Science 9618 using Python and an RPG metaphor.",
+        teacherGuide: "oop_course/teachers.md",
+        keyConcepts: ["Classes", "Objects", "Constructor (__init__)", "Attributes", "Methods", "Getters & Setters", "Inheritance", "Polymorphism", "Abstraction", "Aggregation & Containment", "Lists of Objects"],
+        levels: [
+          { file: "01_why_oop.py", name: "Why OOP?", description: "Learn how object-oriented programming helps structure larger systems." },
+          { file: "02_class_blueprint.py", name: "Class Blueprint", description: "Define a basic blueprint class for characters." },
+          { file: "03_constructor_attributes.py", name: "Constructor & Attributes", description: "Learn self, constructor functions, and instantiating properties." },
+          { file: "04_methods.py", name: "Methods", description: "Write custom class methods to make objects perform actions." },
+          { file: "05_instances.py", name: "Many Instances", description: "Construct multiple independent instances from a single class blueprint." },
+          { file: "06_getters_setters.py", name: "Getters & Setters", description: "Use private attributes, getters, and setters to encapsulate data." },
+          { file: "07_inheritance.py", name: "Inheritance", description: "Create specialized subclasses that inherit from a parent class." },
+          { file: "08_polymorphism.py", name: "Polymorphism", description: "Override parent methods to define distinct behaviors in subclasses." },
+          { file: "09_abstraction.py", name: "Abstraction", description: "Focus on essential properties and ignore unnecessary implementation details." },
+          { file: "10_aggregation.py", name: "Aggregation & Containment", description: "Store references to other object instances inside class attributes." },
+          { file: "11_objects_in_lists.py", name: "Objects in Lists", description: "Store and manage multiple object instances using a list structure." },
+          { file: "12_final_rpg.py", name: "RPG Party Builder", description: "Design a complete character and party system in an open-ended project." }
+        ]
       }
     ];
 
@@ -1175,7 +1305,6 @@
     const searchInput = document.getElementById('searchInput');
     const coursesList = document.getElementById('coursesList');
     const journeyMap = document.getElementById('journeyMap');
-    const journeyProgress = document.getElementById('journeyProgress');
     const searchStats = document.getElementById('searchStats');
     const statsText = document.getElementById('statsText');
     const resetSearchBtn = document.getElementById('resetSearchBtn');
@@ -1208,7 +1337,7 @@
 
     // Render Journey Map Step Ribbon
     function renderJourneyMap() {
-      journeyMap.innerHTML = '<div class="journey-line"><div class="journey-line-progress" id="journeyProgress"></div></div>';
+      journeyMap.innerHTML = '';
       COURSES_DATA.forEach(course => {
         const step = document.createElement('a');
         step.href = `#course-${course.id}`;
@@ -1241,15 +1370,6 @@
 
         journeyMap.appendChild(step);
       });
-      updateJourneyProgressLine();
-    }
-
-    function updateJourneyProgressLine() {
-      // Calculate scroll/progression percentage of timeline step active nodes
-      const progressLine = document.getElementById('journeyProgress');
-      if (progressLine) {
-        progressLine.style.width = '100%';
-      }
     }
 
     // Build Loader URL Helpers
@@ -1342,6 +1462,7 @@
               <div class="course-meta">
                 <div class="course-title-row">
                   <h3 class="course-title">${course.title}</h3>
+                  ${course.level ? `<span class="level-badge">${course.level}</span>` : ''}
                 </div>
                 <p class="course-desc-summary">${course.subtitle} &bull; ${course.description.substring(0, 100)}...</p>
               </div>

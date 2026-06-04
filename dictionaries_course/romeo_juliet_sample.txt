@@ -1,0 +1,21 @@
+Romeo and Juliet - short public domain classroom sample
+Source: William Shakespeare, Romeo and Juliet, Project Gutenberg.
+
+PROLOGUE
+Two households, both alike in dignity,
+In fair Verona, where we lay our scene,
+From ancient grudge break to new mutiny,
+Where civil blood makes civil hands unclean.
+From forth the fatal loins of these two foes
+A pair of star-crossed lovers take their life;
+Whose misadventured piteous overthrows
+Do with their death bury their parents' strife.
+
+JULIET
+O Romeo, Romeo! wherefore art thou Romeo?
+Deny thy father and refuse thy name;
+Or, if thou wilt not, be but sworn my love,
+And I'll no longer be a Capulet.
+
+ROMEO
+Shall I hear more, or shall I speak at this?

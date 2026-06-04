@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Polymorphism: same method, different behaviour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
+  --card-bg: #ffffff;
+  --text-main: #172033;
+  --text-muted: #64748b;
+  --accent-gold: #d4af37;
+  --accent-purple: #7c3aed;
+  --accent-blue: #2563eb;
+  --accent-green: #059669;
+  --accent-red: #dc2626;
+  --border-color: rgba(124, 58, 237, 0.18);
+  --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+  --code-bg: #0f172a;
+  --code-text: #f8fafc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.container { width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; gap: 12px; }
+.title-group h1 { font-family: Outfit, Inter, sans-serif; font-weight: 800; font-size: 1.65rem; letter-spacing: -0.02em; color: #111827; margin-top: 4px; }
+.title-group p { font-size: 0.9rem; color: var(--text-muted); }
+.breadcrumb { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; padding: 8px 12px; border-radius: 999px; font-weight: 700; white-space: nowrap; }
+.card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; }
+.card-title { font-family: Outfit, Inter, sans-serif; font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 8px; color: var(--accent-purple); text-transform: uppercase; }
+.instruction-text, li { font-size: 0.96rem; line-height: 1.55; color: var(--text-main); }
+ul, ol { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+pre { background: var(--code-bg); color: var(--code-text); padding: 14px; border-radius: 10px; font-family: "Fira Code", Consolas, Monaco, monospace; font-size: 0.85rem; overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.08); }
+code { background: #eef2ff; color: #3730a3; padding: 2px 5px; border-radius: 5px; font-family: "Fira Code", Consolas, Monaco, monospace; font-size: 0.9em; }
+.banner { background: #fffbeb; border-left: 4px solid var(--accent-gold); padding: 12px 16px; border-radius: 10px; line-height: 1.45; }
+.links { display: flex; gap: 10px; flex-wrap: wrap; }
+.links a, button { border: 0; border-radius: 999px; padding: 9px 13px; background: #ede9fe; color: #5b21b6; font-weight: 700; text-decoration: none; cursor: pointer; }
+button:hover, .links a:hover { filter: brightness(0.97); }
+.anim { background: #f8fafc; border: 1px dashed #cbd5e1; min-height: 180px; border-radius: 14px; padding: 16px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; position: relative; overflow: hidden; }
+.box, .object, .classbox { border-radius: 14px; padding: 12px 14px; min-width: 120px; text-align: center; font-weight: 700; box-shadow: var(--shadow); transition: transform 0.35s ease, opacity 0.35s ease, background 0.35s ease; }
+.classbox { background: #ede9fe; border: 2px solid #7c3aed; }
+.object { background: #dcfce7; border: 2px solid #16a34a; }
+.box { background: #e0f2fe; border: 2px solid #0284c7; }
+.fade { opacity: 0.35; transform: scale(0.92); }
+.arrow { font-weight: 900; color: #475569; font-size: 1.5rem; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 8px; width: 100%; }
+.stat { background: white; border: 1px solid #cbd5e1; border-radius: 10px; padding: 8px; text-align: center; }
+.small { font-size: 0.85rem; color: var(--text-muted); }
+.quiz { display: grid; gap: 8px; }
+.quiz input { padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 0.95rem; }
+.result { font-weight: 700; color: var(--accent-green); min-height: 24px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <p>POLYMORPHISM</p>
+        <h1>Polymorphism: same method, different behaviour</h1>
+      </div>
+      <div class="breadcrumb">Level 8 of 12 - OOP</div>
+    </header>
+    <div class="links"><a href="vocabulary.html">Vocabulary</a><a href="exam_examples.html">Exam examples</a></div>
+    <div class="card">
+      <div class="card-title">💡 Big idea</div>
+      <div class="instruction-text"><p>Polymorphism means objects can respond to the same method call in different ways. A <code>Knight</code> and a <code>Wizard</code> can both have a method called <code>print_me()</code>, but each version can print different extra information.</p><p>In exams, look for parent and child classes that share a method name, where the child method overrides the parent method.</p></div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">🎬 Interactive model</div>
+      <div id="anim8" class="anim"></div>
+      <div class="links"><button onclick="animatePoly('anim8')">Show polymorphism</button></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚙️ Your task</div>
+      <div class="instruction-text"><p>Complete the missing method names so the loop can call <code>print_me()</code> on different object types.</p></div>
+      <pre># Level 8 of 12 - OOP
+# Same method name, different output.
+
+class Character:
+    def __init__(self, name):
+        self.name = name
+
+    def print_me(self):
+        print(self.name, &quot;is an adventurer&quot;)
+
+class Knight(Character):
+    def ___(self):
+        print(self.name, &quot;wears armour&quot;)
+
+class Wizard(Character):
+    def ___(self):
+        print(self.name, &quot;casts spells&quot;)
+
+party = [Knight(&quot;Arthur&quot;), Wizard(&quot;Merlin&quot;)]
+for hero in party:
+    hero.print_me()
+</pre>
+    </div>
+    
+  </div>
+  <script>
+function setResult(id, msg) { document.getElementById(id).textContent = msg; }
+function animateClassToObjects(id) {
+  const area = document.getElementById(id);
+  area.innerHTML = '<div class="classbox">Class<br><span class="small">Character blueprint</span></div><div class="arrow">-></div><div class="object fade">Arthur<br><span class="small">object</span></div><div class="object fade">Merlin<br><span class="small">object</span></div>';
+  setTimeout(() => area.querySelectorAll('.object').forEach(o => o.classList.remove('fade')), 300);
+}
+function animateConstructor(id) {
+  const area = document.getElementById(id);
+  area.innerHTML = '<div class="classbox">__init__(self)</div><div class="arrow">sets</div><div class="stats"><div class="stat">name = ""</div><div class="stat">attack = 0</div><div class="stat">defence = 0</div><div class="stat">health = 0</div></div>';
+}
+function animateInheritance(id, type) {
+  const area = document.getElementById(id);
+  let child = type === 'wizard' ? 'Wizard<br><span class="small">magic</span>' : 'Knight<br><span class="small">armour</span>';
+  area.innerHTML = '<div class="classbox">Character<br><span class="small">name, attack, defence, health</span></div><div class="arrow">inherits</div><div class="object">' + child + '</div>';
+}
+function animatePoly(id) {
+  const area = document.getElementById(id);
+  area.innerHTML = '<div class="box">for hero in party</div><div class="arrow">calls</div><div class="object">hero.print_me()</div><div class="stats"><div class="stat">Knight prints armour</div><div class="stat">Wizard prints magic</div><div class="stat">Archer prints arrows</div></div>';
+}
+function animateAggregation(id) {
+  const area = document.getElementById(id);
+  area.innerHTML = '<div class="object">Character</div><div class="arrow">has a</div><div class="box">Weapon</div><div class="arrow">and</div><div class="box">Inventory</div><p class="small" style="width:100%;text-align:center">The weapon and inventory can still exist as separate objects.</p>';
+}
+function reveal(id, text) { document.getElementById(id).innerHTML = text; }
+function checkTerm(inputId, resultId, answer) {
+  const val = document.getElementById(inputId).value.trim().toLowerCase();
+  if (val === answer.toLowerCase()) setResult(resultId, 'Correct.');
+  else setResult(resultId, 'Try again.');
+}
+</script>
+</body>
+</html>
