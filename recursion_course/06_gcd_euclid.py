@@ -6,8 +6,7 @@ def gcd(a, b):
     if b == 0:
         return a
 
-    # TODO: return gcd(b, a % b)
-    return 0
+    # TODO: return the GCD
 
 first = int(input("First number: "))
 second = int(input("Second number: "))

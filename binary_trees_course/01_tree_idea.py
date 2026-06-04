@@ -1,9 +1,5 @@
 # Level 1 of 12 - Binary Trees
-# Help: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/01_tree_idea.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/vocabulary.html
-# Skills needed: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/skill_map.html
-# Visualiser: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/tree_visualiser.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/exam_examples.html
+# Help: https://jamesabela.github.io/jsfun/binary_trees_course/01_tree_idea.html
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/02_list_insert.py
 
 # Binary trees start with a root.

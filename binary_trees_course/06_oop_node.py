@@ -1,9 +1,6 @@
 # Level 6 of 12 - Binary Trees
-# Help: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/06_oop_node.html
-# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/vocabulary.html
-# Skills needed: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/skill_map.html
-# Visualiser: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/tree_visualiser.html
-# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/exam_examples.html
+# Help: https://jamesabela.github.io/jsfun/binary_trees_course/06_oop_node.html
+
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/binary_trees_course/07_oop_insert.py
 
 class Node:
