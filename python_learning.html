@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Learning Journey Roadmap</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Premium Theme Variables */
+    :root {
+      /* Colors */
+      --emerald-accent: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.15);
+      --teal-accent: #0d9488;
+      --teal-glow: rgba(13, 148, 136, 0.15);
+      --blue-accent: #3b82f6;
+      --blue-glow: rgba(59, 130, 246, 0.15);
+      --indigo-accent: #6366f1;
+      --indigo-glow: rgba(99, 102, 241, 0.15);
+      --purple-accent: #8b5cf6;
+      --purple-glow: rgba(139, 92, 246, 0.15);
+      --pink-accent: #ec4899;
+      --pink-glow: rgba(236, 72, 153, 0.15);
+      --orange-accent: #f97316;
+      --orange-glow: rgba(249, 115, 22, 0.15);
+      --rose-accent: #f43f5e;
+      --rose-glow: rgba(244, 63, 94, 0.15);
+
+      /* Transition */
+      --transition-speed: 0.3s;
+      --easing: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Light Theme (Default) */
+    :root[data-theme="light"] {
+      --bg-gradient: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(226, 232, 240, 0.8);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #64748b;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --shadow-glow: 0 10px 30px -10px rgba(99, 102, 241, 0.15);
+      --pill-bg: #f1f5f9;
+      --pill-text: #334155;
+      --badge-bg: rgba(15, 23, 42, 0.05);
+      --badge-text: #0f172a;
+      --table-hover: #f8fafc;
+      --header-bg: rgba(255, 255, 255, 0.7);
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-blur: blur(12px);
+    }
+
+    /* Dark Theme */
+    :root[data-theme="dark"] {
+      --bg-gradient: linear-gradient(135deg, #090d16, #0e1726);
+      --card-bg: rgba(20, 30, 48, 0.6);
+      --card-border: rgba(255, 255, 255, 0.06);
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --text-dim: #94a3b8;
+      --input-bg: rgba(15, 23, 42, 0.6);
+      --input-border: rgba(255, 255, 255, 0.1);
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 10px 30px -10px rgba(99, 102, 241, 0.4);
+      --pill-bg: rgba(255, 255, 255, 0.06);
+      --pill-text: #e2e8f0;
+      --badge-bg: rgba(255, 255, 255, 0.08);
+      --badge-text: #f8fafc;
+      --table-hover: rgba(255, 255, 255, 0.02);
+      --header-bg: rgba(14, 23, 38, 0.7);
+      --glass-bg: rgba(14, 23, 38, 0.7);
+      --glass-blur: blur(12px);
+    }
+
+    /* Core Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color var(--transition-speed) var(--easing), border-color var(--transition-speed) var(--easing);
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 0 0 80px 0;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--input-border);
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-dim);
+    }
+
+    /* Layout Wrapper */
+    .app-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header Styling */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--header-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 0;
+      margin-bottom: 40px;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      background: linear-gradient(135deg, var(--indigo-accent), var(--purple-accent));
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .logo-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: #ffffff;
+    }
+
+    .title-group h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, var(--text-main), var(--indigo-accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .title-group p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .actions-area {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Search Input Wrapper */
+    .search-wrapper {
+      position: relative;
+      width: 280px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text-main);
+      padding: 10px 16px 10px 40px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: all var(--transition-speed) var(--easing);
+    }
+
+    .search-input:focus {
+      border-color: var(--indigo-accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      width: 320px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: var(--text-dim);
+      pointer-events: none;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      cursor: pointer;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-speed) var(--easing);
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--pill-bg);
+      border-color: var(--text-dim);
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-main);
+    }
+
+    /* Hero Roadmap Area */
+    .roadmap-section {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .roadmap-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--badge-bg);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid var(--card-border);
+      margin-bottom: 16px;
+    }
+
+    .roadmap-badge svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--indigo-accent);
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2.5rem;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--indigo-accent) 0%, var(--pink-accent) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      max-width: 600px;
+      margin: 0 auto 36px auto;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      font-weight: 400;
+    }
+
+    /* Learning Journey Timeline Component */
+    .journey-map {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      margin-bottom: 48px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      gap: 16px;
+    }
+
+    .journey-line {
+      position: absolute;
+      top: 50px;
+      left: 60px;
+      right: 60px;
+      height: 4px;
+      background: var(--pill-bg);
+      z-index: 1;
+    }
+
+    .journey-line-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, var(--emerald-accent), var(--indigo-accent), var(--rose-accent));
+      border-radius: 2px;
+    }
+
+    .journey-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+      cursor: pointer;
+      position: relative;
+      flex: 1;
+      min-width: 80px;
+      text-decoration: none;
+    }
+
+    .journey-step-node {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--input-bg);
+      border: 3px solid var(--input-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-speed) var(--easing);
+    }
+
+    .journey-step:hover .journey-step-node {
+      transform: scale(1.15);
+      border-color: var(--theme-color);
+      box-shadow: 0 0 15px var(--theme-glow);
+      color: var(--theme-color);
+      background: var(--card-bg);
+    }
+
+    .journey-step-label {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 100px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color var(--transition-speed) var(--easing);
+    }
+
+    .journey-step:hover .journey-step-label {
+      color: var(--text-main);
+    }
+
+    /* Course Cards (Accordions) */
+    .courses-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .course-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      transition: transform var(--transition-speed) var(--easing), box-shadow var(--transition-speed) var(--easing), border-color var(--transition-speed) var(--easing);
+    }
+
+    .course-card:hover {
+      box-shadow: var(--shadow-lg), 0 8px 30px var(--theme-glow);
+      border-color: var(--theme-color);
+    }
+
+    /* Accordion Header */
+    .course-header {
+      padding: 24px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      gap: 20px;
+    }
+
+    .course-header-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex: 1;
+    }
+
+    .course-index {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2.2rem;
+      color: var(--theme-color);
+      opacity: 0.9;
+      line-height: 1;
+      width: 50px;
+    }
+
+    .course-meta {
+      flex: 1;
+    }
+
+    .course-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .course-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: var(--text-main);
+    }
+
+    .difficulty-badge {
+      display: inline-flex;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      background: var(--theme-glow);
+      color: var(--theme-color);
+      border: 1px solid rgba(var(--theme-rgb), 0.2);
+    }
+
+    .course-desc-summary {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+
+    .course-header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .level-count-badge {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      background: var(--badge-bg);
+      padding: 6px 12px;
+      border-radius: 30px;
+      white-space: nowrap;
+    }
+
+    .accordion-indicator {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--pill-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s var(--easing), background-color var(--transition-speed) var(--easing);
+    }
+
+    .accordion-indicator svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--text-main);
+      transform: rotate(0deg);
+      transition: transform 0.4s var(--easing), fill var(--transition-speed) var(--easing);
+    }
+
+    .course-card.is-open .accordion-indicator {
+      background: var(--theme-color);
+    }
+
+    .course-card.is-open .accordion-indicator svg {
+      transform: rotate(180deg);
+      fill: #ffffff;
+    }
+
+    /* Accordion Body */
+    .course-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s var(--easing);
+      border-top: 1px solid transparent;
+    }
+
+    .course-card.is-open .course-body {
+      border-top-color: var(--card-border);
+    }
+
+    .course-body-inner {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .course-expanded-description {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Actions Panel */
+    .course-actions-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--transition-speed) var(--easing);
+    }
+
+    .action-btn-primary {
+      background: var(--theme-color);
+      color: #ffffff;
+      box-shadow: 0 4px 12px var(--theme-glow);
+    }
+
+    .action-btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--theme-glow);
+    }
+
+    .action-btn-secondary {
+      background: var(--input-bg);
+      border-color: var(--input-border);
+      color: var(--text-main);
+    }
+
+    .action-btn-secondary:hover {
+      background: var(--pill-bg);
+      transform: translateY(-2px);
+    }
+
+    .action-btn-outline {
+      background: transparent;
+      border-color: var(--theme-color);
+      color: var(--theme-color);
+    }
+
+    .action-btn-outline:hover {
+      background: var(--theme-glow);
+      transform: translateY(-2px);
+    }
+
+    .action-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* Concepts covered */
+    .concepts-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--theme-color);
+    }
+
+    .concepts-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .concept-tag {
+      background: var(--pill-bg);
+      color: var(--pill-text);
+      font-size: 0.8rem;
+      font-weight: 550;
+      padding: 6px 12px;
+      border-radius: 30px;
+      border: 1px solid var(--card-border);
+    }
+
+    /* Level Directory Table */
+    .levels-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .levels-table-container {
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--input-bg);
+    }
+
+    .levels-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .levels-table th,
+    .levels-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .levels-table th {
+      background: var(--pill-bg);
+      color: var(--text-dim);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .levels-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .levels-table tbody tr {
+      transition: background-color 0.2s var(--easing);
+    }
+
+    .levels-table tbody tr:hover {
+      background-color: var(--table-hover);
+    }
+
+    .level-num-col {
+      width: 60px;
+      font-weight: 700;
+      color: var(--theme-color);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .level-name-col {
+      font-weight: 600;
+      color: var(--text-main);
+      width: 220px;
+    }
+
+    .level-desc-col {
+      color: var(--text-muted);
+    }
+
+    .level-action-col {
+      width: 100px;
+      text-align: right;
+    }
+
+    .play-link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--theme-glow);
+      color: var(--theme-color);
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: all var(--transition-speed) var(--easing);
+    }
+
+    .play-link-btn:hover {
+      background: var(--theme-color);
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+
+    .play-link-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* Stats summary at the bottom of headers */
+    .search-stats {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Reset button for search */
+    .reset-search-btn {
+      background: none;
+      border: none;
+      color: var(--indigo-accent);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0;
+      text-decoration: underline;
+    }
+
+    /* Empty state */
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+      background: var(--card-bg);
+      border: 1px dashed var(--input-border);
+      border-radius: 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      width: 48px;
+      height: 48px;
+      fill: var(--text-dim);
+      margin: 0 auto 16px auto;
+    }
+
+    /* Footer Styling */
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 24px;
+    }
+
+    footer p {
+      margin-bottom: 8px;
+    }
+
+    footer a {
+      color: var(--indigo-accent);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .actions-area {
+        justify-content: space-between;
+      }
+      .search-wrapper {
+        width: 100%;
+      }
+      .search-input:focus {
+        width: 100%;
+      }
+      .journey-line {
+        display: none;
+      }
+      .journey-map {
+        flex-direction: row;
+        gap: 12px;
+      }
+      .journey-step {
+        flex: unset;
+        width: calc(25% - 9px);
+      }
+      .course-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .course-header-right {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .journey-step {
+        width: calc(50% - 6px);
+      }
+      .hero-title {
+        font-size: 2rem;
+      }
+      .levels-table th:nth-child(3),
+      .levels-table td:nth-child(3) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="app-container header-content">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <!-- Python Logo SVG -->
+          <svg viewBox="0 0 24 24">
+            <path d="M12.002 2C6.48 2 2.002 6.48 2.002 12s4.478 10 10 10 10-4.48 10-10S17.524 2 12.002 2zm1.61 14.886c-1.077.03-1.636-.554-1.636-1.328v-1.748h2.648v.574c0 .878-.474 1.474-1.012 1.502zm1.012-3.802h-4.65V11.23h4.65v1.854zm-2.022-2.732c-.538-.028-1.012-.624-1.012-1.502v-.574h2.648v1.748c0 .774-.56 1.358-1.636 1.328z"/>
+          </svg>
+        </div>
+        <div class="title-group">
+          <h1>Python Roadmap</h1>
+          <p>Python Code Lab Course Index</p>
+        </div>
+      </div>
+      <div class="actions-area">
+        <div class="search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search courses, concepts, or levels...">
+        </div>
+        <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle dark/light theme">
+          <!-- Light Mode Icon (Sun) -->
+          <svg id="themeSun" viewBox="0 0 24 24">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0c-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0c-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.01a.996.996 0 0 0 0-1.41l-1.06-1.06c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0z"/>
+          </svg>
+          <!-- Dark Mode Icon (Moon) -->
+          <svg id="themeMoon" viewBox="0 0 24 24" style="display: none;">
+            <path d="M12.3 22c5.02 0 9.1-4.08 9.1-9.1 0-1.55-.39-3.03-1.08-4.32-.35-.65-1.12-.83-1.69-.37-.44.36-.63.95-.47 1.5.21.72.33 1.47.33 2.26 0 4.19-3.41 7.6-7.6 7.6-2.1 0-4.01-.85-5.4-2.22-.39-.38-1.01-.35-1.37.07-.37.43-.37 1.07.03 1.47C6.01 20.75 8.99 22 12.3 22zM9.27 4.49c-.25.59.04 1.25.64 1.5.42.17.9-.01 1.13-.41.27-.47.62-.9 1.01-1.27.46-.42.48-1.14.04-1.59-.44-.45-1.16-.42-1.56.07-.5.62-.93 1.32-1.26 1.7z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-container">
+    
+    <section class="roadmap-section">
+      <div class="roadmap-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 4l7.53 13H4.47L12 6zm-1 6h2v2h-2zm0 4h2v2h-2z"/></svg>
+        Curriculum Roadmap
+      </div>
+      <h2 class="hero-title">Your <span>Python Learning Journey</span></h2>
+      <p class="hero-subtitle">Step-by-step masterclasses designed to take you from a programming novice to a software verification specialist.</p>
+      
+      <!-- Interactive Roadmap Step Ribbon -->
+      <div class="journey-map" id="journeyMap">
+        <div class="journey-line">
+          <div class="journey-line-progress" id="journeyProgress" style="width: 0%;"></div>
+        </div>
+        <!-- Steps rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- Search Stats & Reset Option -->
+    <div class="search-stats" id="searchStats" style="display: none;">
+      <span id="statsText">Found 8 courses matching your search.</span>
+      <button class="reset-search-btn" id="resetSearchBtn">Clear Search</button>
+    </div>
+
+    <!-- Courses List Area -->
+    <div class="courses-list" id="coursesList">
+      <!-- Course Cards Rendered Dynamically -->
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState">
+      <svg class="empty-state-icon" viewBox="0 0 24 24">
+        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+      <h3>No matching courses or levels found</h3>
+      <p style="margin-top: 8px;">Try searching for different keywords or checking spelling.</p>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="app-container">
+      <p>Python Code Lab Course Index &copy; 2026. Made with ❤️ for Computer Science students.</p>
+      <p><a href="pythoncopy.html">Open Code Editor</a> &bull; <a href="https://github.com/jamesabela/jsfun" target="_blank">GitHub Repository</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Core Course Database
+    const COURSES_DATA = [
+      {
+        id: "beginners",
+        order: 1,
+        title: "Variables, Input & Output",
+        subtitle: "Beginners Course",
+        difficulty: "Beginner",
+        theme: "emerald",
+        themeRgb: "16, 185, 129",
+        firstLevel: "speechless.py",
+        description: "An introduction to basic string printing, variable declarations, type casting, and capturing keyboard inputs. Perfect for absolute beginners starting their coding adventure.",
+        teacherGuide: "beginners/teachers.md",
+        keyConcepts: ["Print statements", "Variables", "String concatenation", "Variable reassignment", "Keyboard Input", "Type casting (int)"],
+        levels: [
+          { file: "speechless.py", name: "Speechless", description: "Print Aladdin quotes to master the basic print() statement." },
+          { file: "computerscience.py", name: "Computer Science", description: "Learn to output text strings containing punctuation and formatting." },
+          { file: "jokes.py", name: "Jokes", description: "Combine multiple print statements to output structured lines." },
+          { file: "variables.py", name: "Variables", description: "Declare string variables and arrange them in output statements." },
+          { file: "maths.py", name: "Maths", description: "Perform basic mathematical calculations directly in print statements." },
+          { file: "friends.py", name: "Friends", description: "Master variable copy assignments and re-assigning identifiers." },
+          { file: "assignment.py", name: "Variable Assignment", description: "Create multiple variables representing keys and values." },
+          { file: "hello.py", name: "Hello", description: "Prompt for user input and concatenate it into a welcome message." },
+          { file: "taylor.py", name: "Taylor Swift Born", description: "Use int() to cast text inputs into numbers for age differences." },
+          { file: "celebchat.py", name: "Celeb Chat", description: "Develop an interactive chatbot combining user inputs and variables." }
+        ]
+      },
+      {
+        id: "operators",
+        order: 2,
+        title: "Mathematical Operators",
+        subtitle: "Operators Course",
+        difficulty: "Beginner-Intermediate",
+        theme: "teal",
+        themeRgb: "13, 148, 136",
+        firstLevel: "start.py",
+        description: "Discover Python's mathematical capabilities. Learn addition, subtraction, multiplication, decimal division, floor division, remainder modulo, and exponents.",
+        teacherGuide: "operators/teachers.md",
+        keyConcepts: ["Addition (+)", "Subtraction (-)", "Multiplication (*)", "Float Division (/)", "Floor Division (//)", "Modulo remainder (%)", "Exponents (**)"],
+        levels: [
+          { file: "start.py", name: "Snack Shop Secret", description: "Sum two snack price inputs together (Addition)." },
+          { file: "02_robot_battery.py", name: "Robot Battery Rescue", description: "Subtract consumption from starting battery (Subtraction)." },
+          { file: "03_space_fuel.py", name: "Space Fuel Calculator", description: "Calculate fuel for multiple jump steps (Multiplication)." },
+          { file: "04_pizza_party.py", name: "Pizza Slice Share", description: "Split pizza slices equally yielding float decimals (Division)." },
+          { file: "05_pirate_treasure.py", name: "Pirate Treasure Split", description: "Divide whole gold coins to integers (Floor Division)." },
+          { file: "06_leftover_loot.py", name: "Leftover Loot", description: "Find leftover coins that cannot be shared (Modulo)." },
+          { file: "07_power_up.py", name: "Arcade Power-Up", description: "Raise a base score value to power levels (Exponentiation)." }
+        ]
+      },
+      {
+        id: "selection",
+        order: 3,
+        title: "Decision Statements",
+        subtitle: "Selection Course",
+        difficulty: "Intermediate",
+        theme: "blue",
+        themeRgb: "59, 130, 246",
+        firstLevel: "football.py",
+        description: "Control the execution flow of your code based on logical conditions. Master if/else branches, multi-conditional statements, and logical operators.",
+        teacherGuide: "selection/teachers.md",
+        keyConcepts: ["Conditional If-Else", "Comparison (>, <, ==)", "Logical Operators (and, or)", "Case adjustments (.lower())", "Boundary range checks"],
+        levels: [
+          { file: "football.py", name: "Rain Check", description: "Decide between umbrella or sunscreen based on condition." },
+          { file: "numbereat.py", name: "Number Ranges", description: "Check dynamic numbers against multiple separate boundaries." },
+          { file: "magician.py", name: "Magician Guess", description: "Create too high / too low / correct responses (If/Elif/Else)." },
+          { file: "letters.py", name: "Alphabet Letters", description: "Test if entered letter counts equal the full alphabet." },
+          { file: "nums.py", name: "Larger Number Picker", description: "Compare two numbers and output the largest value." },
+          { file: "bugs.py", name: "Compare Numbers", description: "Compare inputs to output bigger value or declare them equal." },
+          { file: "divides.py", name: "Divisibility by 3", description: "Use modulo check inside selection to test divisible state." },
+          { file: "clocktime.py", name: "12h to 24h Clock", description: "Convert times using combined string checks and addition." },
+          { file: "movies.py", name: "Movie Ticket Price", description: "Determine pricing using compound logical 'or' operators." }
+        ]
+      },
+      {
+        id: "whileloops",
+        order: 4,
+        title: "While Loops Puzzles",
+        subtitle: "While Loops Course",
+        difficulty: "Intermediate-Advanced",
+        theme: "indigo",
+        themeRgb: "99, 102, 241",
+        firstLevel: "01_count_to_five.py",
+        description: "Introduce indefinite iteration. Learn to write loops that repeat based on true conditions, control infinite loops, handle sentinels, and manage energy states.",
+        teacherGuide: "whileloops/teachers.md",
+        keyConcepts: ["Indefinite Iteration", "Loop termination conditions", "Sentinel values", "Limited attempts counter", "Input validation loops", "Turtle coordinates (xcor)"],
+        levels: [
+          { file: "01_count_to_five.py", name: "Count to Five", description: "Fix loop conditional bounds to print 1 to 5." },
+          { file: "02_countdown.py", name: "Countdown", description: "Prevent infinite loops by decrementing loop counters." },
+          { file: "03_password_gate.py", name: "Password Gate", description: "Iterate input request until matching correct password." },
+          { file: "04_guess_the_number.py", name: "Guess the Number", description: "Loop until user matches secret integer value." },
+          { file: "05_guess_with_clues.py", name: "Guess with Clues", description: "Provide feedback (too low/high) inside guessing loop." },
+          { file: "06_limited_attempts.py", name: "Limited Attempts", description: "Terminate loop when attempts exceed limit or word is correct." },
+          { file: "07_running_total_until_zero.py", name: "Total Until Zero", description: "Sum numbers until sentinel '0' is entered." },
+          { file: "08_menu_loop.py", name: "Menu Loop", description: "Display continuous choice screens until user quits." },
+          { file: "09_input_validation.py", name: "Input Validation", description: "Force inputs to stay within valid age bounds." },
+          { file: "10_turtle_dotted_line.py", name: "Turtle Dotted Line", description: "Position turtle dynamically in loop bounds." },
+          { file: "11_turtle_growing_steps.py", name: "Turtle Growing Steps", description: "Increment length parameter dynamically on each step." },
+          { file: "12_turtle_boundary_walk.py", name: "Turtle Boundary Walk", description: "Walk forward until xcor() reaches boundary limit." },
+          { file: "13_turtle_shrinking_spiral.py", name: "Turtle Shrinking Spiral", description: "Decrement line lengths to draw spiraling designs." },
+          { file: "14_final_pet_game.py", name: "Final Pet Game", description: "Manage hunger/energy loops with value constraints." }
+        ]
+      },
+      {
+        id: "forloops",
+        order: 5,
+        title: "For Loops Puzzles",
+        subtitle: "For Loops Course",
+        difficulty: "Intermediate-Advanced",
+        theme: "purple",
+        themeRgb: "139, 92, 246",
+        firstLevel: "01_repeat_message.py",
+        description: "Master definite iteration. Loop over ranges with start, stop, and step arguments, iterate over lists, build nested grid structures, and create beautiful algorithmic art.",
+        teacherGuide: "forloops/teachers.md",
+        keyConcepts: ["Definite Iteration", "range(start, stop, step)", "List traversal", "Accumulators in loops", "Nested loops (row/col)", "Algorithm visual design"],
+        levels: [
+          { file: "01_repeat_message.py", name: "Repeat Message", description: "Use range() to print strings fixed amount of times." },
+          { file: "02_counting_up.py", name: "Counting Up", description: "Specify custom starting and stopping bounds in range()." },
+          { file: "03_counting_down.py", name: "Counting Down", description: "Employ negative step values to decrement countdowns." },
+          { file: "04_times_table.py", name: "Times Table", description: "Multiply loop iteration index by input factors." },
+          { file: "05_total_score.py", name: "Total Score", description: "Accumulate user score values into a total sum." },
+          { file: "06_average_score.py", name: "Average Score", description: "Divide accumulated sum by total loops outside scope." },
+          { file: "07_loop_through_colours.py", name: "Loop Through Colours", description: "Iterate directly over elements of a string array." },
+          { file: "08_emoji_stairs.py", name: "Emoji Stairs", description: "Multiply symbols by loop index to build growing rows." },
+          { file: "09_turtle_square.py", name: "Turtle Square", description: "Draw square vectors repeating angles in a for loop." },
+          { file: "10_turtle_polygon.py", name: "Turtle Polygon", description: "Compute angles dynamically based on sides count." },
+          { file: "11_turtle_spiral.py", name: "Turtle Spiral", description: "Grow forward distance by dynamic index counter." },
+          { file: "12_nested_grid.py", name: "Nested Grid", description: "Double-loop rows and columns to output characters." },
+          { file: "13_turtle_dot_grid.py", name: "Turtle Dot Grid", description: "Position turtle columns and rows using nested loops." },
+          { file: "14_final_turtle_art.py", name: "Final Turtle Art", description: "Apply modulo operations to index colors in visual art." }
+        ]
+      },
+      {
+        id: "lists",
+        order: 6,
+        title: "List Structures & Statistics",
+        subtitle: "Lists Course",
+        difficulty: "Advanced",
+        theme: "pink",
+        themeRgb: "236, 72, 153",
+        firstLevel: "01_create_list.py",
+        description: "Organize data in lists. Learn elements indexing, list slicing, adding and removing values, computing lists statistics (sum, min, max), and parallel index matching.",
+        teacherGuide: "lists/teachers.md",
+        keyConcepts: ["List declaration", "Indices & slicing", "Unpacking (* operator)", "Appends & removes", "List sorting", "Related parallel lists", "random.choice()"],
+        levels: [
+          { file: "01_create_list.py", name: "Backpack Builder", description: "Declare string list values inside square brackets." },
+          { file: "02_list_stats.py", name: "Treasure Total", description: "Run sum(), min(), max(), len() and mean operations." },
+          { file: "03_city_slice.py", name: "City Tour Tickets", description: "Slice list boundaries and print using sep argument." },
+          { file: "04_character_list.py", name: "Character Roster", description: "Append input values to list and sort alphabetically." },
+          { file: "05_remove_item.py", name: "Inventory Cleaner", description: "Remove elements by string values and output remainders." },
+          { file: "06_bus_ticket.py", name: "KL Bus Ticket", description: "Track parallel buses, bookings, and financial incomes." },
+          { file: "07_roasting_machine.py", name: "The Roasting Machine", description: "Select random strings from lists using random.choice()." },
+          { file: "08_lazy_report_writer.py", name: "Lazy Report Writer", description: "Loop through students picking random commentary phrases." }
+        ]
+      },
+      {
+        id: "course_functions",
+        order: 7,
+        title: "Procedures & Functions",
+        subtitle: "Functions Course",
+        difficulty: "Advanced-Expert",
+        theme: "orange",
+        themeRgb: "249, 115, 22",
+        firstLevel: "01_first_procedure.py",
+        description: "Structure modular code. Understand procedures, parameters, return statements, local vs global variables scope, mutable pass-by-reference behaviors, and structural decomposition.",
+        teacherGuide: "course_functions/teachers.md",
+        keyConcepts: ["Subroutine structure", "Parameters & Arguments", "Function Return values", "Local vs Global scope", "Mutable reference parameters", "Functional Decomposition"],
+        levels: [
+          { file: "01_first_procedure.py", name: "First Procedure", description: "Define and execute parameterless code blocks." },
+          { file: "02_parameters.py", name: "Parameters & Arguments", description: "Pass variables as arguments to procedure scopes." },
+          { file: "03_turtle_square.py", name: "Turtle Square Procedure", description: "Create shape subroutines with sizing parameters." },
+          { file: "04_function_return.py", name: "First Function Return", description: "Calculate values and return results to calls." },
+          { file: "05_use_function_expression.py", name: "Function Expressions", description: "Embed function outputs directly inside algebra equations." },
+          { file: "06_scope.py", name: "Local Variables & Scope", description: "Observe variable isolation between local and global scopes." },
+          { file: "07_early_return.py", name: "Return Stops Function", description: "Exit execution early during selection boundary failures." },
+          { file: "08_value_reference.py", name: "By Value & By Reference", description: "Manipulate lists mutably in procedure arguments." },
+          { file: "09_decomposition.py", name: "Modular Decomposition", description: "Separate calculation subroutines from receipt print subroutines." },
+          { file: "10_final_project.py", name: "Final Mini Project", description: "Build RPG combat helpers separating maths and visuals." }
+        ]
+      },
+      {
+        id: "verivalid",
+        order: 8,
+        title: "Validation & Verification",
+        subtitle: "Validation Course",
+        difficulty: "Expert",
+        theme: "rose",
+        themeRgb: "244, 63, 94",
+        firstLevel: "01_validate_or_verify.py",
+        description: "Write bulletproof systems. Implement range checks, presence checks, type checks, length constraints, custom pattern formats, check digit mod 10 calculations, and double entry verifications.",
+        teacherGuide: "verivalid/teachers.md",
+        keyConcepts: ["Validation vs Verification", "Range Check", "Length Check", "Type Check (.isdigit())", "Presence Check", "Format Pattern Check", "Check Digit modulus 10", "Double Entry Comparison"],
+        levels: [
+          { file: "01_validate_or_verify.py", name: "Validate or Verify", description: "Set basic validations checking empty string states." },
+          { file: "02_range_check.py", name: "Range Check", description: "Perform numeric bounds verification for grading mark sheets." },
+          { file: "03_length_check.py", name: "Length Check", description: "Constrain input lengths to fixed ID dimensions." },
+          { file: "04_type_check.py", name: "Type Check", description: "Verify numeric inputs using .isdigit() before casting." },
+          { file: "05_presence_check.py", name: "Presence Check", description: "Re-query missing inputs using checking loops." },
+          { file: "06_format_check.py", name: "Format Check", description: "Verify codes combining letters and numbers slices." },
+          { file: "07_check_digit.py", name: "Check Digit", description: "Calculate modulus check digits from input numbers." },
+          { file: "08_visual_check.py", name: "Visual Verification", description: "Render double inputs requesting user verification inputs." },
+          { file: "09_double_entry.py", name: "Double Entry", description: "Validate data match by comparing duplicate entries." },
+          { file: "10_combined_form.py", name: "Combined Form", description: "Aggregate presence, bounds, pattern, and entry matchers." }
+        ]
+      }
+    ];
+
+    // DOM Elements
+    const searchInput = document.getElementById('searchInput');
+    const coursesList = document.getElementById('coursesList');
+    const journeyMap = document.getElementById('journeyMap');
+    const journeyProgress = document.getElementById('journeyProgress');
+    const searchStats = document.getElementById('searchStats');
+    const statsText = document.getElementById('statsText');
+    const resetSearchBtn = document.getElementById('resetSearchBtn');
+    const emptyState = document.getElementById('emptyState');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeSun = document.getElementById('themeSun');
+    const themeMoon = document.getElementById('themeMoon');
+
+    // Theme Management
+    let currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateThemeToggleIcons();
+
+    themeToggleBtn.addEventListener('click', () => {
+      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('theme', currentTheme);
+      updateThemeToggleIcons();
+    });
+
+    function updateThemeToggleIcons() {
+      if (currentTheme === 'light') {
+        themeSun.style.display = 'block';
+        themeMoon.style.display = 'none';
+      } else {
+        themeSun.style.display = 'none';
+        themeMoon.style.display = 'block';
+      }
+    }
+
+    // Render Journey Map Step Ribbon
+    function renderJourneyMap() {
+      journeyMap.innerHTML = '<div class="journey-line"><div class="journey-line-progress" id="journeyProgress"></div></div>';
+      COURSES_DATA.forEach(course => {
+        const step = document.createElement('a');
+        step.href = `#course-${course.id}`;
+        step.className = 'journey-step';
+        step.style.setProperty('--theme-color', `var(--${course.theme}-accent)`);
+        step.style.setProperty('--theme-glow', `var(--${course.theme}-glow)`);
+        
+        step.innerHTML = `
+          <div class="journey-step-node">${course.order}</div>
+          <div class="journey-step-label">${course.title.split(',')[0]}</div>
+        `;
+        
+        step.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.getElementById(`course-${course.id}`);
+          if (target) {
+            // Expand card if collapsed
+            if (!target.classList.contains('is-open')) {
+              toggleAccordion(target);
+            }
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Highlight temporarily
+            target.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+              target.style.transform = '';
+            }, 500);
+          }
+        });
+
+        journeyMap.appendChild(step);
+      });
+      updateJourneyProgressLine();
+    }
+
+    function updateJourneyProgressLine() {
+      // Calculate scroll/progression percentage of timeline step active nodes
+      const progressLine = document.getElementById('journeyProgress');
+      if (progressLine) {
+        progressLine.style.width = '100%';
+      }
+    }
+
+    // Build Loader URL Helpers
+    function getOnlineURL(courseDir, firstLevel) {
+      const rawGit = `https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/${courseDir}/${firstLevel}`;
+      return `pythoncopy.html?url=${encodeURIComponent(rawGit)}`;
+    }
+
+    function getGitHubPath(path) {
+      return `https://github.com/jamesabela/jsfun/blob/main/${path}`;
+    }
+
+    // Render Cards
+    function renderCourses(filterText = '') {
+      coursesList.innerHTML = '';
+      let matchCount = 0;
+
+      const lowerFilter = filterText.toLowerCase().trim();
+
+      COURSES_DATA.forEach(course => {
+        // Filter Matching Checks
+        const courseTitleMatch = course.title.toLowerCase().includes(lowerFilter);
+        const courseSubtitleMatch = course.subtitle.toLowerCase().includes(lowerFilter);
+        const courseDescMatch = course.description.toLowerCase().includes(lowerFilter);
+        const conceptMatch = course.keyConcepts.some(c => c.toLowerCase().includes(lowerFilter));
+        
+        // Check levels
+        const matchingLevels = course.levels.filter(l => 
+          l.name.toLowerCase().includes(lowerFilter) || 
+          l.file.toLowerCase().includes(lowerFilter) || 
+          l.description.toLowerCase().includes(lowerFilter)
+        );
+
+        const isMatch = courseTitleMatch || courseSubtitleMatch || courseDescMatch || conceptMatch || (matchingLevels.length > 0);
+
+        if (!isMatch) return;
+        
+        matchCount++;
+
+        // Create Card DOM element
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.id = `course-${course.id}`;
+        card.style.setProperty('--theme-color', `var(--${course.theme}-accent)`);
+        card.style.setProperty('--theme-glow', `var(--${course.theme}-glow)`);
+        card.style.setProperty('--theme-rgb', course.themeRgb);
+
+        // Pre-expand cards if a search query matches levels inside it
+        if (lowerFilter !== '' && (matchingLevels.length > 0 || conceptMatch)) {
+          card.classList.add('is-open');
+        }
+
+        // Render Levels Rows
+        let levelsRowsHTML = '';
+        course.levels.forEach((lvl, idx) => {
+          const isLvlHighlighted = lowerFilter !== '' && (
+            lvl.name.toLowerCase().includes(lowerFilter) || 
+            lvl.file.toLowerCase().includes(lowerFilter) || 
+            lvl.description.toLowerCase().includes(lowerFilter)
+          );
+          
+          const rowStyle = isLvlHighlighted ? `style="background-color: var(--theme-glow); font-weight: 600;"` : '';
+          const playUrl = getOnlineURL(course.id, lvl.file);
+
+          levelsRowsHTML += `
+            <tr ${rowStyle}>
+              <td class="level-num-col">${idx + 1}</td>
+              <td class="level-name-col">${lvl.name} <span style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-dim); display: block;">${lvl.file}</span></td>
+              <td class="level-desc-col">${lvl.description}</td>
+              <td class="level-action-col">
+                <a href="${playUrl}" class="play-link-btn" title="Open Level ${idx + 1} in Code Lab">
+                  <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </a>
+              </td>
+            </tr>
+          `;
+        });
+
+        // Concepts Tag Pill HTML
+        const conceptPillsHTML = course.keyConcepts.map(concept => {
+          const isConceptHighlighted = lowerFilter !== '' && concept.toLowerCase().includes(lowerFilter);
+          const tagStyle = isConceptHighlighted ? `style="border-color: var(--theme-color); background-color: var(--theme-glow); font-weight: 700;"` : '';
+          return `<span class="concept-tag" ${tagStyle}>${concept}</span>`;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="course-header" onclick="toggleAccordion(this.parentElement)">
+            <div class="course-header-left">
+              <div class="course-index">${String(course.order).padStart(2, '0')}</div>
+              <div class="course-meta">
+                <div class="course-title-row">
+                  <h3 class="course-title">${course.title}</h3>
+                  <span class="difficulty-badge">${course.difficulty}</span>
+                </div>
+                <p class="course-desc-summary">${course.subtitle} &bull; ${course.description.substring(0, 100)}...</p>
+              </div>
+            </div>
+            <div class="course-header-right">
+              <span class="level-count-badge">${course.levels.length} Levels</span>
+              <div class="accordion-indicator">
+                <svg viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
+              </div>
+            </div>
+          </div>
+          
+          <div class="course-body">
+            <div class="course-body-inner">
+              <p class="course-expanded-description">${course.description}</p>
+              
+              <div class="course-actions-bar">
+                <a href="${getOnlineURL(course.id, course.firstLevel)}" class="action-btn action-btn-primary">
+                  <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  Start Course
+                </a>
+                <a href="${getGitHubPath(course.teacherGuide)}" target="_blank" class="action-btn action-btn-secondary">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                  Teacher Guide
+                </a>
+              </div>
+
+              <div class="concepts-box">
+                <div class="section-title">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+                  Key Vocabulary & Concepts Covered
+                </div>
+                <div class="concepts-list">
+                  ${conceptPillsHTML}
+                </div>
+              </div>
+
+              <div class="levels-box">
+                <div class="section-title">
+                  <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0-2-.9-2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+                  Level Directory
+                </div>
+                <div class="levels-table-container">
+                  <table class="levels-table">
+                    <thead>
+                      <tr>
+                        <th>Lvl</th>
+                        <th>Name / File</th>
+                        <th>Focus & Objectives</th>
+                        <th>Launch</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${levelsRowsHTML}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        coursesList.appendChild(card);
+        
+        // Calculate max-height once opened to enable sliding effects
+        if (card.classList.contains('is-open')) {
+          const body = card.querySelector('.course-body');
+          body.style.maxHeight = body.scrollHeight + 'px';
+        }
+      });
+
+      // Show/Hide search results stats
+      if (filterText !== '') {
+        searchStats.style.display = 'flex';
+        statsText.innerText = `Found ${matchCount} course${matchCount === 1 ? '' : 's'} matching "${filterText}".`;
+        if (matchCount === 0) {
+          emptyState.style.display = 'block';
+        } else {
+          emptyState.style.display = 'none';
+        }
+      } else {
+        searchStats.style.display = 'none';
+        emptyState.style.display = 'none';
+      }
+    }
+
+    // Toggle Accordion Panel open/close
+    function toggleAccordion(card) {
+      const body = card.querySelector('.course-body');
+      const isOpen = card.classList.contains('is-open');
+      
+      // Close all other accordions if we want strict accordion (optional - here we keep it openable independently)
+      
+      if (isOpen) {
+        card.classList.remove('is-open');
+        body.style.maxHeight = '0';
+      } else {
+        card.classList.add('is-open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+    }
+
+    // Input Search Listener
+    searchInput.addEventListener('input', (e) => {
+      renderCourses(e.target.value);
+    });
+
+    // Reset Search
+    resetSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      renderCourses('');
+    });
+
+    // Init Page
+    renderJourneyMap();
+    renderCourses();
+
+    // Auto-adjust accordion size on window resize
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.course-card.is-open').forEach(card => {
+        const body = card.querySelector('.course-body');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      });
+    });
+  </script>
+</body>
+</html>
