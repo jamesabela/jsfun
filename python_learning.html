@@ -467,18 +467,7 @@
       color: var(--text-main);
     }
 
-    .difficulty-badge {
-      display: inline-flex;
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      background: var(--theme-glow);
-      color: var(--theme-color);
-      border: 1px solid rgba(var(--theme-rgb), 0.2);
-    }
+
 
     .course-desc-summary {
       font-size: 0.9rem;
@@ -1329,7 +1318,6 @@
               <div class="course-meta">
                 <div class="course-title-row">
                   <h3 class="course-title">${course.title}</h3>
-                  <span class="difficulty-badge">${course.difficulty}</span>
                 </div>
                 <p class="course-desc-summary">${course.subtitle} &bull; ${course.description.substring(0, 100)}...</p>
               </div>
