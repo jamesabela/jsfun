@@ -939,7 +939,7 @@
 
     <!-- Search Stats & Reset Option -->
     <div class="search-stats" id="searchStats" style="display: none;">
-      <span id="statsText">Found 14 courses matching your search.</span>
+      <span id="statsText">Found 17 courses matching your search.</span>
       <button class="reset-search-btn" id="resetSearchBtn">Clear Search</button>
     </div>
 
@@ -1228,8 +1228,35 @@
         ]
       },
       {
-        id: "data_structures",
+        id: "sorts_searches_course",
         order: 11,
+        title: "Sorts, Searches & Big O",
+        subtitle: "Sorts & Searches Course",
+        level: "AS / A2 Level",
+        theme: "blue",
+        themeRgb: "59, 130, 246",
+        firstLevel: "01_big_o_intro.py",
+        description: "Explore sorting algorithms, search algorithms, and Big O complexity notation for Cambridge International AS & A Level 9618. Understand linear search, binary search, bubble sort, insertion sort, and worst-case complexity analysis.",
+        teacherGuide: "sorts_searches_course/teachers.md",
+        keyConcepts: ["Linear Search", "Binary Search", "Bubble Sort", "Insertion Sort", "Big O Notation", "Growth Rates", "Worst-Case Analysis", "Algorithm Efficiency"],
+        levels: [
+          { file: "01_big_o_intro.py", name: "Why Big O Matters", description: "Understand algorithm efficiency and identify common growth patterns like O(1), O(n), and O(n^2)." },
+          { file: "02_linear_search.py", name: "Linear Search", description: "Write standard linear search algorithms to check elements sequentially." },
+          { file: "03_linear_turtle.py", name: "Turtle Linear Search", description: "Observe linear search steps visually using turtle graphics animations." },
+          { file: "04_binary_search_concept.py", name: "Check the Middle", description: "Calculate high, low, and middle pointers to locate values in sorted lists." },
+          { file: "05_binary_search_code.py", name: "Binary Search Code", description: "Implement binary search using pointer updates and termination loops." },
+          { file: "06_worst_case.py", name: "Why Worst Case Matters", description: "Discover why algorithm design analyzes worst-case efficiency limits." },
+          { file: "07_bubble_sort_concept.py", name: "Compare Neighbours", description: "Learn bubble sort basics by swapping adjacent array elements." },
+          { file: "08_bubble_sort_full.py", name: "Bubble Sort Algorithm", description: "Implement full bubble sort routines using nested comparisons loops." },
+          { file: "09_bubble_turtle.py", name: "Turtle Bubble Sort", description: "Visualize bubble sorting stages dynamically using turtle bar charts." },
+          { file: "10_insertion_sort.py", name: "Insertion Sort", description: "Code the insertion sort algorithm sorting lists in-place." },
+          { file: "11_compare_algorithms.py", name: "Compare Algorithms", description: "Contrast search and sort complexities, best-case states, and constraints." },
+          { file: "12_final_project.py", name: "Algorithm Arcade", description: "Build an algorithm explorer console containing search and sort functions." }
+        ]
+      },
+      {
+        id: "data_structures",
+        order: 12,
         title: "Abstract Data Structures",
         subtitle: "AS Level Data Structures",
         level: "AS Level",
@@ -1254,7 +1281,7 @@
       },
       {
         id: "dictionaries_course",
-        order: 12,
+        order: 13,
         title: "Dictionaries & Frequencies",
         subtitle: "Dictionaries Course",
         level: "A2 Level",
@@ -1279,7 +1306,7 @@
       },
       {
         id: "recursion_course",
-        order: 13,
+        order: 14,
         title: "Recursion Puzzles",
         subtitle: "Recursion Course",
         level: "A2 Level",
@@ -1306,7 +1333,7 @@
       },
       {
         id: "oop_course",
-        order: 14,
+        order: 15,
         title: "Object Oriented Python",
         subtitle: "OOP Course",
         level: "A2 Level",
@@ -1333,7 +1360,7 @@
       },
       {
         id: "oop_adts_course",
-        order: 15,
+        order: 16,
         title: "OOP Abstract Data Types",
         subtitle: "OOP ADTs Course",
         level: "A2 Level",
@@ -1360,7 +1387,7 @@
       },
       {
         id: "binary_trees_course",
-        order: 16,
+        order: 17,
         title: "Binary Search Trees",
         subtitle: "Binary Trees Course",
         level: "A2 Level",
