@@ -207,7 +207,26 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the loop so the menu stops when the user types q.</p>
-      <pre>while choice != &quot;x&quot;:</pre>
+      <pre># Tutorial: https://jamesabela.github.io/jsfun/whileloops/08_menu_loop.html
+
+# Level 8 - Menu Loop
+# Puzzle: fix the quit option so q stops the menu.
+
+choice = &quot;&quot;
+
+while choice != &quot;x&quot;:
+    print(&quot;1 - Hello&quot;)
+    print(&quot;2 - Joke&quot;)
+    print(&quot;q - Quit&quot;)
+
+    choice = input(&quot;Choice: &quot;)
+
+    if choice == &quot;1&quot;:
+        print(&quot;Hello&quot;)
+    elif choice == &quot;2&quot;:
+        print(&quot;Computer jokes are byte-sized&quot;)
+
+print(&quot;Goodbye&quot;)</pre>
     </div>
 
     <div class="card">

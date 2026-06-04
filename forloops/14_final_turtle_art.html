@@ -195,8 +195,19 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Improve the pattern by using the colour list and the loop variable.</p>
-      <pre>turtle.forward(20)
-turtle.right(90)</pre>
+      <pre>import turtle
+
+turtle.speed(0)
+turtle.bgcolor(&quot;black&quot;)
+
+colours = [&quot;red&quot;, &quot;yellow&quot;, &quot;lime&quot;, &quot;cyan&quot;, &quot;magenta&quot;, &quot;white&quot;]
+
+for i in range(60):
+    turtle.color(&quot;white&quot;)
+    turtle.forward(20)
+    turtle.right(90)
+
+print(&quot;Art complete&quot;)</pre>
     </div>
 
     <div class="card">

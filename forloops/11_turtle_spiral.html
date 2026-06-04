@@ -195,7 +195,17 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Use i inside turtle.forward() so the spiral grows.</p>
-      <pre>turtle.forward(20)</pre>
+      <pre>import turtle
+
+turtle.speed(0)
+turtle.bgcolor(&quot;black&quot;)
+turtle.color(&quot;cyan&quot;)
+
+for i in range(40):
+    turtle.forward(20)
+    turtle.right(90)
+
+print(&quot;Spiral complete&quot;)</pre>
     </div>
 
     <div class="card">

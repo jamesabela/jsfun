@@ -207,7 +207,24 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the starting x value so the line begins at -180 and reaches 180.</p>
-      <pre>x = 0</pre>
+      <pre># Tutorial: https://jamesabela.github.io/jsfun/whileloops/10_turtle_dotted_line.html
+
+# Level 10 - Turtle Dotted Line
+# Puzzle: fix the starting x value.
+
+import turtle
+
+turtle.speed(0)
+turtle.penup()
+
+x = 0
+
+while x &lt;= 180:
+    turtle.goto(x, 0)
+    turtle.dot(10)
+    x = x + 30
+
+print(&quot;Final x:&quot;, x)</pre>
     </div>
 
     <div class="card">

@@ -73,10 +73,16 @@ pre { background: var(--code-bg); color: var(--code-text); padding: 14px; border
       <div class="card-title">⚙️ Task</div>
       <p class="instruction-text">Complete the function so it returns Invalid for negative ages and Adult for ages 18 or above.</p>
       <div class="banner">Hint: Use if statements and return the correct string.</div>
-      <pre>def add_numbers(a, b):
-    return a + b
+      <pre>def age_group(age):
+    if age &lt; 0:
+        # TODO: return Invalid
+        pass
 
-answer = add_numbers(3, 4)</pre>
+    if age &gt;= 18:
+        # TODO: return Adult
+        pass
+
+    return &quot;Child&quot;</pre>
     </div>
 
     <div class="card">

@@ -14,7 +14,7 @@
 <header><span class="crumb">Level 2 of 10 - Files Course</span><div class="title-group"><h1>Filename Variables</h1><p>Make file code easier to edit.</p></div></header>
 <div class="card"><div class="card-title">What this is about</div><p class="instruction-text">A filename is just text. Storing it in a variable makes your program easier to adapt because you only change the filename in one place.</p><ul><li>A teacher tool can switch between class1.txt and class2.txt.</li><li>A game can load monsters.txt or items.txt depending on the level.</li><li>A data project can store the source filename at the top of the program.</li></ul></div>
 <div class="card"><div class="card-title">Mini idea</div><div class="mini"><label>Type a filename:</label><input id="fname" value="rudyard.txt"><button onclick="document.getElementById('fnameout').textContent='Python would use: with open(''+document.getElementById('fname').value+'', "r")'">Show code idea</button><div id="fnameout" class="output"></div></div></div>
-<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Change the filename variable so the program opens rudyard.txt.</p><pre>filename = &quot;rudyard.txt&quot;
+<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Change the filename variable so the program opens rudyard.txt.</p><pre>filename = &quot;CHANGE_ME.txt&quot;
 with open(filename, &quot;r&quot;) as poem_file:
     title = poem_file.readline()</pre></div>
 <div class="card"><div class="card-title">Remember</div><p class="instruction-text">Use the breadcrumb at the top to see how far through the course you are. Use the Python file first, then return here when you need hints.</p></div>

@@ -67,6 +67,8 @@ print(&quot;Next enemy:&quot;, enemy_turns.dequeue())
 print(&quot;Undo:&quot;, undo_actions.pop())
 print(&quot;Quests:&quot;)
 quest_log.show()
+
+#End OOP Abstract Data Types
 </pre></div></div><script>
 function byId(id){return document.getElementById(id)}
 function stackAnim(id, step){const a=byId(id);let items=['A','B','C'];let shown=items.slice(0,step);a.innerHTML='<div class="op">Stack<br><span class="small">LIFO</span></div>'+shown.map(x=>'<div class="cell">'+x+'</div>').join('')+'<div class="arrow">top -></div>'+(shown.length?'<div class="node">'+shown[shown.length-1]+'</div>':'<div class="slot">empty</div>')+'<p class="small" style="width:100%;text-align:center">Push adds to the top. Pop removes from the top.</p>'}

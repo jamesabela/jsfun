@@ -70,12 +70,24 @@ button.secondary { background: var(--accent-purple); }
       <div class="badge">Breadcrumb: 1/12</div>
     </header>
     <div class="banner info">Need the key terms? Open <a href="vocabulary.html" target="_blank">recursion vocabulary</a>. Want exam context? Open <a href="exam_examples.html" target="_blank">exam examples</a>.</div>
-    <div class="card "><div class="card-title">Idea</div><p class="instruction-text">Recursion means solving a problem by making a function call itself. It feels strange at first, but it is very natural in Mathematics because many definitions are built from smaller versions of the same idea.</p><ul><li>A <strong>base case</strong> stops the recursion.</li><li>A <strong>general case</strong> makes the problem smaller.</li><li>A <strong>recursive call</strong> is when the function calls itself.</li></ul></div><div class="card "><div class="card-title">Try the idea</div><div class="demo"><p class="instruction-text">Click step to watch a countdown shrink towards the base case.</p><div class="controls"><button onclick="stepDown()">Step</button><button class="secondary" onclick="resetDown()">Reset</button></div><div id="down" class="output"></div></div></div><div class="card "><div class="card-title">Task</div><p class="instruction-text">In the Python file, complete the recursive countdown so it prints down from the starting number to 1, then prints <code>Blast off!</code>.</p><pre>def countdown(n):
+    <div class="card "><div class="card-title">Idea</div><p class="instruction-text">Recursion means solving a problem by making a function call itself. It feels strange at first, but it is very natural in Mathematics because many definitions are built from smaller versions of the same idea.</p><ul><li>A <strong>base case</strong> stops the recursion.</li><li>A <strong>general case</strong> makes the problem smaller.</li><li>A <strong>recursive call</strong> is when the function calls itself.</li></ul></div><div class="card "><div class="card-title">Try the idea</div><div class="demo"><p class="instruction-text">Click step to watch a countdown shrink towards the base case.</p><div class="controls"><button onclick="stepDown()">Step</button><button class="secondary" onclick="resetDown()">Reset</button></div><div id="down" class="output"></div></div></div><div class="card "><div class="card-title">Task</div><p class="instruction-text">In the Python file, complete the recursive countdown so it prints down from the starting number to 1, then prints <code>Blast off!</code>.</p><pre># Level 1 of 12 - Python Recursion Course
+# Tutorial: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/01_what_is_recursion.html
+# Vocabulary: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/vocabulary.html
+# Exam examples: https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/recursion_course/exam_examples.html
+
+# Complete the recursive countdown.
+
+def countdown(n):
+    # Base case: stop when n is 0
     if n == 0:
         print("Blast off!")
     else:
         print(n)
-        countdown(n - 1)</pre></div>
+        # TODO: call countdown again with n - 1
+        pass
+
+start = int(input("Start number: "))
+countdown(start)</pre></div>
   </div>
   <script>let n=4;function draw(){document.getElementById("down").textContent=n>0?`countdown(${n}) -> not base case yet`:"countdown(0) -> base case: Blast off!";}function stepDown(){if(n>0)n--;draw();}function resetDown(){n=4;draw();}draw();</script>
 </body>

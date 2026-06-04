@@ -14,15 +14,14 @@
 <header><span class="crumb">Level 8 of 10 - Files Course</span><div class="title-group"><h1>Save Filtered Data</h1><p>Create a smaller output file from a larger file.</p></div></header>
 <div class="card"><div class="card-title">What this is about</div><p class="instruction-text">A program can read a large data file, filter it, and save just the useful records into a new file. This is common in data processing.</p><ul><li>Save only October events into a timeline.</li><li>Save only high scores above 100.</li><li>Save only overdue library books.</li></ul></div>
 <div class="card"><div class="card-title">Filter thinking</div><div class="mini"><p>What should a filter do?</p><select id="filter"><option>Keep every record</option><option>Keep only records that match a condition</option><option>Delete the input file</option></select><button onclick="document.getElementById('filterout').textContent = document.getElementById('filter').value.startsWith('Keep only') ? 'Correct - a filter keeps matching records.' : 'Not quite - filtering means selecting matching records.'">Check</button><div id="filterout" class="output"></div></div></div>
-<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Open month_timeline.txt in write mode before the loop, then write each matching event to it.</p><pre>with open(&quot;month_timeline.txt&quot;, &quot;w&quot;) as out_file:
-    with open(&quot;historical_events.tsv&quot;, &quot;r&quot;) as event_file:
-        header = event_file.readline()
-        for line in event_file:
-            parts = line.strip().split(&quot;\t&quot;)
-            event = parts[0]
-            month = parts[1]
-            year = parts[2]
-            if month == search_month:
-                out_file.write(year + &quot; - &quot; + event + &quot;\n&quot;)</pre></div>
+<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Open month_timeline.txt in write mode before the loop, then write each matching event to it.</p><pre>with open(&quot;historical_events.tsv&quot;, &quot;r&quot;) as event_file:
+    header = event_file.readline()
+    for line in event_file:
+        parts = line.strip().split(&quot;\t&quot;)
+        event = parts[0]
+        month = parts[1]
+        year = parts[2]
+        if month == search_month:
+            ___</pre></div>
 <div class="card"><div class="card-title">Remember</div><p class="instruction-text">Use the breadcrumb at the top to see how far through the course you are. Use the Python file first, then return here when you need hints.</p></div>
 </div></body></html>

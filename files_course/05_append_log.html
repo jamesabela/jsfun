@@ -15,7 +15,7 @@
 <div class="card"><div class="card-title">What this is about</div><p class="instruction-text">Append mode, "a", keeps the existing file and adds new text at the bottom. It is useful for logs because every run can add a new line.</p><ul><li>A login system appends sign-in records.</li><li>A game appends battle notes.</li><li>A reading tracker appends each reader.</li></ul></div>
 <div class="card"><div class="card-title">Append simulator</div><div class="mini"><input id="reader" placeholder="Reader name"><button onclick="let o=document.getElementById('appendout'); o.textContent += 'Reader: '+document.getElementById('reader').value+'
 ';">Append line</button><div id="appendout" class="output"></div></div></div>
-<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Ask for a name, append it to reading_log.txt, then read the file back.</p><pre>with open(&quot;reading_log.txt&quot;, &quot;a&quot;) as log_file:
-    log_file.write(&quot;Reader: &quot; + name + &quot;\n&quot;)</pre></div>
+<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Ask for a name, append it to reading_log.txt, then read the file back.</p><pre>with open(&quot;reading_log.txt&quot;, &quot;___&quot;) as log_file:
+    log_file.write(___)</pre></div>
 <div class="card"><div class="card-title">Remember</div><p class="instruction-text">Use the breadcrumb at the top to see how far through the course you are. Use the Python file first, then return here when you need hints.</p></div>
 </div></body></html>

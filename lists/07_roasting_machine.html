@@ -118,7 +118,19 @@
     <div class="card">
       <div class="card-title">⚙️ Task</div>
       <p class="instruction-text">Use random.choice to choose one roast from the list. The output must include the name typed by the user.</p>
-      <pre>roast = random.choice(roasts)
+      <pre>import random
+
+roasts = [
+    &quot;your code has more bugs than a jungle&quot;,
+    &quot;your indentation is doing parkour&quot;,
+    &quot;your variables need a holiday&quot;
+]
+
+name = input(&quot;Who should be roasted? &quot;)
+
+# Choose a random roast from the list
+roast = &quot;&quot;
+
 print(name, roast)</pre>
     </div>
     <div class="card"><div class="card-title">✅ Hints</div><ul><li>The tests are flexible because the roast is random.</li><li>The name must still appear in the output.</li><li>Try adding your own school-safe roasts.</li></ul></div>

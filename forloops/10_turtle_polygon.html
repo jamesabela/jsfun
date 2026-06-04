@@ -195,7 +195,17 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the turn so it works for any number of sides.</p>
-      <pre>turtle.right(90)</pre>
+      <pre>import turtle
+
+turtle.speed(0)
+
+sides = int(input(&quot;Sides: &quot;))
+
+for i in range(sides):
+    turtle.forward(70)
+    turtle.right(90)
+
+print(&quot;Polygon complete&quot;)</pre>
     </div>
 
     <div class="card">

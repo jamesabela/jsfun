@@ -207,8 +207,23 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the selection so it prints Too low when the guess is below 7 and Too high when the guess is above 7.</p>
-      <pre>if guess &gt; secret:
-    print(&quot;Too low&quot;)</pre>
+      <pre># Tutorial: https://jamesabela.github.io/jsfun/whileloops/05_guess_with_clues.html
+
+# Level 5 - Guess With Clues
+# Puzzle: fix the clues.
+
+secret = 7
+guess = 0
+
+while guess != secret:
+    guess = int(input(&quot;Guess: &quot;))
+
+    if guess &gt; secret:
+        print(&quot;Too low&quot;)
+    elif guess &lt; secret:
+        print(&quot;Too high&quot;)
+
+print(&quot;Correct&quot;)</pre>
     </div>
 
     <div class="card">

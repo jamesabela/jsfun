@@ -195,7 +195,13 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the inner loop so the program prints a 4 by 4 grid.</p>
-      <pre>for column in range(2):</pre>
+      <pre>for row in range(4):
+    line = &quot;&quot;
+
+    for column in range(2):
+        line = line + &quot;#&quot;
+
+    print(line)</pre>
     </div>
 
     <div class="card">

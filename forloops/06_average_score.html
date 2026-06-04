@@ -195,7 +195,14 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the program so it asks for four scores and prints the correct average.</p>
-      <pre>average = total / 2</pre>
+      <pre>total = 0
+
+for i in range(4):
+    score = int(input(&quot;Score: &quot;))
+    total = total + score
+
+average = total / 2
+print(&quot;Average:&quot;, average)</pre>
     </div>
 
     <div class="card">

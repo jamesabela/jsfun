@@ -207,7 +207,22 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the loop so the user has three attempts to type apple.</p>
-      <pre>while attempts &lt; 1 and word != &quot;apple&quot;:</pre>
+      <pre># Tutorial: https://jamesabela.github.io/jsfun/whileloops/06_limited_attempts.html
+
+# Level 6 - Limited Attempts
+# Puzzle: give the user 3 attempts to type apple.
+
+attempts = 0
+word = &quot;&quot;
+
+while attempts &lt; 1 and word != &quot;apple&quot;:
+    word = input(&quot;Word: &quot;)
+    attempts = attempts + 1
+
+if word == &quot;apple&quot;:
+    print(&quot;Unlocked&quot;)
+else:
+    print(&quot;Locked&quot;)</pre>
     </div>
 
     <div class="card">

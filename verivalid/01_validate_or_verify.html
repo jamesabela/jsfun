@@ -22,9 +22,9 @@
 <div class="card"><div class="card-title">🌍 Real-life examples</div><ul><li>A website checks that a password box is not empty before creating an account. This is validation.</li><li>A receptionist compares a typed name with a paper form to check it was copied correctly. This is verification.</li><li>A date such as 31/12/2026 may pass a format check, but it might still be the wrong date if the original form said 30/12/2026.</li></ul></div>
 <div class="card"><div class="card-title">🧪 Try it here</div><div class="interactive"><label>Choose a situation</label><select id="s1"><option value="v">A form rejects an empty email box</option><option value="x">A teacher compares typed grades with a paper mark sheet</option></select><button onclick="check1()">Check</button><div id="r1" class="result">Try it.</div></div></div>
 <div class="card"><div class="card-title">⚙️ Python task</div><p class="instruction-text">Fix the output messages so the program says whether the username passed validation.</p><pre>if username == &quot;&quot;:
-    print(&quot;Validation failed&quot;)
+    print(&quot;Fix this message&quot;)
 else:
-    print(&quot;Validation passed&quot;)</pre><div class="banner">Open the Python file on the left, fix the TODO section, run the tests, then move to the next level.</div></div>
+    print(&quot;Fix this message&quot;)</pre><div class="banner">Open the Python file on the left, fix the TODO section, run the tests, then move to the next level.</div></div>
 </div>
 <script>function check1(){const v=document.getElementById('s1').value;document.getElementById('r1').innerHTML=v==='v'?'<span class="ok">Validation</span> - the computer is checking whether the input is acceptable.':'<span class="ok">Verification</span> - the person is checking the typed copy against the original.';}</script>
 </body>

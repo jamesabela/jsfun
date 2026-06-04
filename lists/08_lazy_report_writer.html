@@ -118,9 +118,19 @@
     <div class="card">
       <div class="card-title">⚙️ Task</div>
       <p class="instruction-text">Use a loop to print one random comment for each student. The output should say Student 1, Student 2 and so on.</p>
-      <pre>for i in range(number_of_students):
-    comment = random.choice(comments)
-    print(&quot;Student&quot;, i + 1, comment)</pre>
+      <pre>import random
+
+comments = [
+    &quot;is making good progress.&quot;,
+    &quot;should check work carefully.&quot;,
+    &quot;has shown a positive attitude.&quot;,
+    &quot;needs to practise the key vocabulary.&quot;
+]
+
+number_of_students = int(input(&quot;How many students? &quot;))
+
+# Use a loop to print one report for each student.
+___</pre>
     </div>
     <div class="card"><div class="card-title">✅ Hints</div><ul><li>range(number_of_students) repeats the correct number of times.</li><li>i starts at 0, so use i + 1 for the student number.</li><li>Use random.choice(comments) inside the loop.</li></ul></div>
     <div class="banner">Run your code and use the tests. When all tests pass, move to the next level.</div>

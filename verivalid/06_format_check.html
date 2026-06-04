@@ -21,7 +21,7 @@
 <div class="card"><div class="card-title">💡 What this means</div><p class="instruction-text">A format check tests whether data follows a required pattern. It does not always prove the data is correct, but it can detect obvious input mistakes. Format checks often use string indexing, slicing, isalpha() and isdigit().</p></div>
 <div class="card"><div class="card-title">🌍 Real-life examples</div><ul><li>A date may need to be written as DD/MM/YYYY.</li><li>A challenge code may need two letters followed by two digits, such as AB12.</li><li>A car registration may need letters and numbers in a fixed order.</li><li>A username may need to start with a letter.</li></ul></div>
 <div class="card"><div class="card-title">🧪 Try it here</div><div class="interactive"><label>Challenge code</label><input id="fmt" value="AB12"><button onclick="formatCheck()">Run format check</button><div id="fr" class="result">Try AB12, A123 or ABCD.</div></div></div>
-<div class="card"><div class="card-title">⚙️ Python task</div><p class="instruction-text">Complete the format check so the code must be two letters followed by two digits.</p><pre>if len(code) == 4 and code[0:2].isalpha() and code[2:4].isdigit():
+<div class="card"><div class="card-title">⚙️ Python task</div><p class="instruction-text">Complete the format check so the code must be two letters followed by two digits.</p><pre>if len(code) == 4:
     print(&quot;Valid code&quot;)
 else:
     print(&quot;Invalid code&quot;)</pre><div class="banner">Open the Python file on the left, fix the TODO section, run the tests, then move to the next level.</div></div>

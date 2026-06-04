@@ -207,7 +207,28 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the play action so the pet loses 1 energy when it plays.</p>
-      <pre>energy = energy + 1</pre>
+      <pre># Tutorial: https://jamesabela.github.io/jsfun/whileloops/14_final_pet_game.html
+
+# Level 14 - Final Pet Game
+# Puzzle: fix the play action so the game can end.
+
+energy = 3
+
+while energy &gt; 0:
+    print(&quot;Energy:&quot;, energy)
+    action = input(&quot;Type play or rest: &quot;)
+
+    if action == &quot;play&quot;:
+        print(&quot;The pet runs around&quot;)
+        energy = energy + 1
+    elif action == &quot;rest&quot;:
+        print(&quot;The pet rests&quot;)
+        energy = energy + 1
+
+    if energy &gt; 5:
+        energy = 5
+
+print(&quot;Game over&quot;)</pre>
     </div>
 
     <div class="card">

@@ -207,7 +207,30 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the starting length so the steps are 20, 40, 60, 80 and 100.</p>
-      <pre>length = 60</pre>
+      <pre># Tutorial: https://jamesabela.github.io/jsfun/whileloops/11_turtle_growing_steps.html
+
+# Level 11 - Turtle Growing Steps
+# Puzzle: fix the starting length.
+
+import turtle
+
+turtle.speed(0)
+turtle.penup()
+turtle.goto(-180, -150)
+turtle.pendown()
+
+length = 60
+steps = 0
+
+while length &lt;= 100:
+    turtle.forward(length)
+    turtle.left(90)
+    turtle.forward(20)
+    turtle.right(90)
+    length = length + 20
+    steps = steps + 1
+
+print(&quot;Steps:&quot;, steps)</pre>
     </div>
 
     <div class="card">

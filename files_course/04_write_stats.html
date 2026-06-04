@@ -14,7 +14,7 @@
 <header><span class="crumb">Level 4 of 10 - Files Course</span><div class="title-group"><h1>Write a New File</h1><p>Use write mode to create a fresh output file.</p></div></header>
 <div class="card"><div class="card-title">What this is about</div><p class="instruction-text">Write mode, "w", creates a new file or replaces an old one. It is useful when the output should be fresh each time the program runs.</p><ul><li>A report generator writes a new summary file.</li><li>A quiz program writes final results.</li><li>A poem analyser writes statistics.</li></ul></div>
 <div class="card"><div class="card-title">Mode chooser</div><div class="mini"><p>Choose the mode that creates a fresh file:</p><select id="mode"><option>r</option><option>w</option><option>a</option></select><button onclick="document.getElementById('modeout').textContent = document.getElementById('mode').value=='w' ? 'Correct - w writes a fresh file.' : 'Not quite. r reads, a appends, w writes fresh.'">Check</button><div id="modeout" class="output"></div></div></div>
-<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Open stats.txt in write mode and write the line count into it. Then the program reads it back and prints it.</p><pre>with open(&quot;stats.txt&quot;, &quot;w&quot;) as stats_file:
-    stats_file.write(&quot;Lines: &quot; + str(line_count) + &quot;\n&quot;)</pre></div>
+<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Open stats.txt in write mode and write the line count into it. Then the program reads it back and prints it.</p><pre>with open(&quot;stats.txt&quot;, &quot;___&quot;) as stats_file:
+    stats_file.write(___)</pre></div>
 <div class="card"><div class="card-title">Remember</div><p class="instruction-text">Use the breadcrumb at the top to see how far through the course you are. Use the Python file first, then return here when you need hints.</p></div>
 </div></body></html>

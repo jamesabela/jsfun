@@ -195,7 +195,20 @@
     <div class="card">
       <div class="card-title">⚙️ Puzzle</div>
       <p class="instruction-text">Fix the inner loop so the grid has five dots in each row.</p>
-      <pre>for column in range(3):</pre>
+      <pre>import turtle
+
+turtle.speed(0)
+turtle.penup()
+turtle.goto(-100, 100)
+
+for row in range(5):
+    for column in range(3):
+        turtle.dot(10)
+        turtle.forward(40)
+
+    turtle.goto(-100, 100 - ((row + 1) * 40))
+
+print(&quot;Grid complete&quot;)</pre>
     </div>
 
     <div class="card">

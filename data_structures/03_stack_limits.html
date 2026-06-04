@@ -76,17 +76,13 @@ input { border: 1px solid #cbd5e1; border-radius: 10px; padding: 9px 10px; font:
 stack = []
 
 def push(item):
-    if len(stack) == MAX_SIZE:
-        print(&quot;Overflow&quot;)
-    else:
-        stack.append(item)
-        print(&quot;Pushed&quot;, item)
+    # Add an if statement for overflow.
+    stack.append(item)
+    print(&quot;Pushed&quot;, item)
 
 def pop_item():
-    if len(stack) == 0:
-        print(&quot;Underflow&quot;)
-    else:
-        print(&quot;Popped&quot;, stack.pop())</pre></div>
+    # Add an if statement for underflow.
+    print(&quot;Popped&quot;, stack.pop())</pre></div>
   </div>
   <script>
 function stackWidget(rootId) {

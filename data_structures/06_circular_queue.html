@@ -77,7 +77,8 @@ front = 1
 rear = 3
 size = 4
 
-rear = (rear + 1) % size
+# Use modulo to wrap the rear pointer back to 0.
+rear = (rear + 1) ___ size
 queue[rear] = &quot;E&quot;
 
 print(&quot;Rear pointer:&quot;, rear)

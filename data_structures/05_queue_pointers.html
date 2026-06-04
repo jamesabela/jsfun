@@ -76,9 +76,12 @@ input { border: 1px solid #cbd5e1; border-radius: 10px; padding: 9px 10px; font:
 front = 0
 rear = 2
 
-front = front + 1
-rear = rear + 1
-queue[rear] = &quot;yellow&quot;
+# Dequeue one item by moving the front pointer forward.
+front = front + ___
+
+# Enqueue yellow by moving the rear pointer forward and storing yellow there.
+rear = rear + ___
+queue[rear] = &quot;___&quot;
 
 print(&quot;Front item:&quot;, queue[front])
 print(&quot;Rear item:&quot;, queue[rear])

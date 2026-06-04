@@ -18,7 +18,18 @@ This line does not
 If again</textarea><button onclick="let t=document.getElementById('txt').value; document.getElementById('countout').textContent='Lines: '+t.split(/
 /).length+'
 If count: '+((t.match(/If/g)||[]).length);">Count</button><div id="countout" class="output"></div></div></div>
-<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Complete the loop so it counts every line and counts how many times If appears.</p><pre>line_count = line_count + 1
-if_count = if_count + line.count(&quot;If&quot;)</pre></div>
+<div class="card"><div class="card-title">Your task</div><p class="instruction-text">Complete the loop so it counts every line and counts how many times If appears.</p><pre>line_count = 0
+if_count = 0
+
+with open("rudyard.txt", "r") as poem_file:
+    for line in poem_file:
+        # Add 1 to line_count for every line in the file.
+        ___
+        # Count how many times If appears in this line.
+        # Remember: line.count("If") returns a number.
+        ___
+
+print("Lines:", line_count)
+print("If count:", if_count)</pre></div>
 <div class="card"><div class="card-title">Remember</div><p class="instruction-text">Use the breadcrumb at the top to see how far through the course you are. Use the Python file first, then return here when you need hints.</p></div>
 </div></body></html>
