@@ -26,6 +26,8 @@
       --purple-glow: rgba(139, 92, 246, 0.15);
       --pink-accent: #ec4899;
       --pink-glow: rgba(236, 72, 153, 0.15);
+      --fuchsia-accent: #d946ef;
+      --fuchsia-glow: rgba(217, 70, 239, 0.15);
       --orange-accent: #f97316;
       --orange-glow: rgba(249, 115, 22, 0.15);
       --rose-accent: #f43f5e;
@@ -1096,11 +1098,34 @@
         ]
       },
       {
-        id: "course_functions",
+        id: "2dlists",
         order: 7,
+        title: "2D Lists (Lists of Lists)",
+        subtitle: "2D Lists Course",
+        theme: "fuchsia",
+        themeRgb: "217, 70, 239",
+        firstLevel: "level01_find_location.py",
+        description: "Explore lists of lists, known as 2D lists. Learn about row/column cell indices, nested loop traversals, totaling grids, search algorithms, seat booking, and picture pixel grids.",
+        teacherGuide: "2dlists/teachers.md",
+        keyConcepts: ["2D Lists", "Nested Lists", "Row & Column Indices", "Traversals", "Nested Loop Visits", "Grid Totals", "Search Algorithms", "Pixel Grids"],
+        levels: [
+          { file: "level01_find_location.py", name: "Find Location", description: "Use array2d[row][column] syntax to access individual items in a grid." },
+          { file: "level02_create_grid.py", name: "Create a 2D List", description: "Structure and initialize a 2D list representing cinema seats." },
+          { file: "level03_access_cells.py", name: "Access Rows & Cells", description: "Select whole rows and print specific elements from a food menu." },
+          { file: "level04_update_cells.py", name: "Update a Cell", description: "Overwrite single values in a map grid using user row and column inputs." },
+          { file: "level05_nested_loops.py", name: "Use Nested Loops", description: "Traverse every cell in a 3x3 temperature grid using nested loops." },
+          { file: "level06_grid_totals.py", name: "Total a Grid", description: "Accumulate row totals and a grand total from a 2D sales grid." },
+          { file: "level07_search_grid.py", name: "Search a Grid", description: "Implement a search algorithm to locate matching values in a grid." },
+          { file: "level08_booking_grid.py", name: "Booking Grid", description: "Build a seat booking validator checking boundary limits and booking states." },
+          { file: "level09_picture_grid.py", name: "Picture Grid", description: "Render visual block symbols using character mapping inside grids." },
+          { file: "level10_final_project.py", name: "Final Project", description: "Develop an interactive grid-based treasure hunt game." }
+        ]
+      },
+      {
+        id: "course_functions",
+        order: 8,
         title: "Procedures & Functions",
         subtitle: "Functions Course",
-        difficulty: "Advanced-Expert",
         theme: "orange",
         themeRgb: "249, 115, 22",
         firstLevel: "01_first_procedure.py",
@@ -1122,10 +1147,9 @@
       },
       {
         id: "verivalid",
-        order: 8,
+        order: 9,
         title: "Validation & Verification",
         subtitle: "Validation Course",
-        difficulty: "Expert",
         theme: "rose",
         themeRgb: "244, 63, 94",
         firstLevel: "01_validate_or_verify.py",

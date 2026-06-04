@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Access Rows and Cells</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #f8fafc, #eef6ff);
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --accent-gold: #d4af37;
+      --accent-blue: #3b82f6;
+      --accent-green: #10b981;
+      --border-color: rgba(226, 201, 116, 0.35);
+      --shadow: 0 10px 25px -5px rgba(0,0,0,0.06), 0 8px 10px -6px rgba(0,0,0,0.06);
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-gradient); color: var(--text-main); font-family: 'Inter', system-ui, sans-serif; min-height: 100vh; padding: 24px; display: flex; justify-content: center; align-items: flex-start; }
+    .container { width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 20px; }
+    header { border-bottom: 2px solid var(--border-color); padding-bottom: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .breadcrumb { width: fit-content; background: #0f172a; color: white; border-radius: 999px; padding: 7px 13px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.02em; }
+    .progress { height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+    .progress span { display: block; height: 100%; width: 30%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-gold)); }
+    h1 { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.8rem; letter-spacing: -0.02em; background: linear-gradient(to right, var(--text-main), var(--accent-gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: var(--text-muted); font-size: 0.95rem; }
+    .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; }
+    .card-title { font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; }
+    p, li { font-size: 0.97rem; line-height: 1.55; }
+    ul { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+    pre { background: var(--code-bg); color: var(--code-text); padding: 14px; border-radius: 10px; font-family: 'Fira Code', Consolas, monospace; font-size: 0.86rem; overflow-x: auto; }
+    .trybox { background: #f8fafc; border: 1px solid #dbeafe; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    input, button, select { font: inherit; padding: 9px 11px; border-radius: 9px; border: 1px solid #cbd5e1; }
+    button { background: #0f172a; color: white; cursor: pointer; font-weight: 700; }
+    .result { font-weight: 700; color: #0f766e; min-height: 1.4em; }
+    table.grid { border-collapse: collapse; margin-top: 8px; }
+    table.grid td, table.grid th { border: 1px solid #cbd5e1; padding: 10px; text-align: center; min-width: 42px; }
+    table.grid th { background: #eff6ff; }
+    .note { background: rgba(212,175,55,0.13); border-left: 4px solid var(--accent-gold); padding: 12px 14px; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="breadcrumb">Level 3 of 10 - 2D Lists</div>
+      <div class="progress"><span></span></div>
+      <div>
+        <h1>Access Rows and Cells</h1>
+        <p class="subtitle">Read one row or one cell</p>
+      </div>
+    </header>
+    <div class="card">
+      <div class="card-title">What this means</div>
+      <p>You can print a whole row using one index, such as <code>menu[1]</code>. You can print one value using two indexes, such as <code>menu[1][2]</code>. This is a common exam skill because many algorithms need to directly access one part of a table.</p>
+      <div class="note">A 2D list is a list of lists. The first index usually chooses the row. The second index usually chooses the column.</div>
+      <pre>grid[row][column]</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Real-life examples</div>
+      <ul><li>Choosing one product from a menu</li><li>Looking up one student score from a mark table</li><li>Finding one item in a game map</li><li>Selecting one value from a timetable</li></ul>
+    </div>
+    <div class="card"><div class="card-title">Try it here</div><div class="trybox"><p>Predict the value of <code>map[row][column]</code>.</p><table class="grid"><tr><th></th><th>0</th><th>1</th><th>2</th></tr><tr><th>0</th><td>A</td><td>B</td><td>C</td></tr><tr><th>1</th><td>D</td><td>E</td><td>F</td></tr><tr><th>2</th><td>G</td><td>H</td><td>I</td></tr></table><input id="row" placeholder="row"><input id="col" placeholder="column"><button onclick="let a=[['A','B','C'],['D','E','F'],['G','H','I']]; let r=Number(row.value), c=Number(col.value); out.textContent = isNaN(r)||isNaN(c)||!a[r]||a[r][c]===undefined ? 'Try a row and column from 0 to 2.' : 'That gives: '+a[r][c];">Check</button><p id="out" class="result"></p></div></div>
+    <div class="card">
+      <div class="card-title">Your task</div>
+      <p>Fix the two print statements so the drinks row and the word water are printed.</p>
+      <pre>print(&quot;Drinks row:&quot;, menu[1])
+print(&quot;Chosen drink:&quot;, menu[1][2])</pre>
+    </div>
+  </div>
+</body>
+</html>
