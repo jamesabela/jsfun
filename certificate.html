@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Code Lab - Badge Achievement Certificate</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10 2 6 16'/%3E%3Cpath d='m14 2-6 16'/%3E%3Cpath d='M18 12h-4'/%3E%3Cpath d='M20 9h-4'/%3E%3Cpath d='M22 6h-4'/%3E%3Cpath d='M6 15H2'/%3E%3Cpath d='M4 12H2'/%3E%3Cpath d='M2 9h2'/%3E%3C/svg%3E">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap');
+
+    :root {
+      --primary-color: #3b82f6;
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --border-color: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      line-height: 1.6;
+    }
+
+    .certificate-container {
+      width: 100%;
+      max-width: 720px;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 3px solid #f59e0b;
+      border-radius: 24px;
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 158, 11, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glow-overlay {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .badge-display-container {
+      margin: 0 auto 24px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 4px solid #f59e0b;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.35);
+      background: rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+    }
+
+    .badge-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 12px;
+      border-radius: 50%;
+    }
+
+    .cert-rank {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #f59e0b;
+      text-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .cert-sub {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #3b82f6;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .cert-message {
+      font-size: 1.3rem;
+      color: #f1f5f9;
+      margin-bottom: 24px;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cert-message strong {
+      color: #10b981;
+    }
+
+    .progress-wrapper {
+      margin-bottom: 32px;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      max-width: 440px;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      margin: 0 auto 12px auto;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #10b981);
+      border-radius: 999px;
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cert-desc {
+      font-size: 1.05rem;
+      color: #cbd5e1;
+      max-width: 580px;
+      margin: 0 auto 36px auto;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    /* CTA Section */
+    .cta-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 12px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .cta-btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+    }
+
+    .cta-btn-primary:hover {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .cta-btn-secondary {
+      background: #334155;
+      color: #ffffff;
+      border: 1px solid #475569;
+    }
+
+    .cta-btn-secondary:hover {
+      background: #475569;
+      transform: translateY(-1px);
+    }
+
+    .cta-btn-accent {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+    }
+
+    .cta-btn-accent:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Small invite text below */
+    .invite-text {
+      margin-top: 32px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .invite-text a {
+      color: #f59e0b;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    /* Completed Challenges List Style */
+    .completed-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .completed-item-title {
+      font-weight: 600;
+      color: #f1f5f9;
+      text-align: left;
+    }
+
+    .completed-item-difficulty {
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 8px;
+      border-radius: 6px;
+      color: #cbd5e1;
+      flex-shrink: 0;
+    }
+
+    #completedList::-webkit-scrollbar {
+      width: 6px;
+    }
+    #completedList::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 99px;
+    }
+    #completedList::-webkit-scrollbar-thumb {
+      background: rgba(245, 158, 11, 0.3);
+      border-radius: 99px;
+    }
+    #completedList::-webkit-scrollbar-thumb:hover {
+      background: rgba(245, 158, 11, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="certificate-container">
+    <div class="glow-overlay"></div>
+    
+    <!-- Badge Image Display -->
+    <div class="badge-display-container">
+      <img id="badgeImage" class="badge-image" src="https://docs.google.com/drawings/d/15tMyggMNNo-KdYEfMMzKkCB8r4Zj3DvBA19vo4ETCTg/pub?w=150&h=150" alt="Python Badge">
+    </div>
+    
+    <div class="cert-sub">Python Code Lab Badge</div>
+    <h1 class="cert-rank" id="certRank">Python Egg</h1>
+    
+    <p class="cert-message" id="certMessage">
+      Loading achievement...
+    </p>
+
+    <div class="progress-wrapper">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+      <div style="font-size: 14px; font-weight: 700; color: #10b981;" id="progressText">0% Complete</div>
+    </div>
+
+    <p class="cert-desc" id="certDesc">
+      Begin a beautiful journey into Python programming with Python Code Lab.
+    </p>
+
+    <div class="cta-container">
+      <a href="challenge_list.html" class="cta-btn cta-btn-primary" id="btnChallenges">
+        Start My Own Coding Journey 🚀
+      </a>
+    </div>
+
+    <!-- Completed Challenges List Section -->
+    <div id="completedSection" style="display: none; margin-top: 32px; border-top: 1px dashed rgba(255, 255, 255, 0.15); padding-top: 24px;">
+      <h3 id="completedListTitle" style="font-size: 1.1rem; color: #f59e0b; margin-bottom: 16px; font-weight: 700; text-align: center;">Completed Quests List 🏆</h3>
+      <div id="completedList" style="max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 8px;">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <p class="invite-text">
+    Learn Python step-by-step using interactive editor and visual blocks. Created with ❤️ for computing learners.
+  </p>
+
+  <script>
+    const badges = [
+      {
+        check: count => count > 40,
+        title: "Grandmaster Coder 👑",
+        imageUrl: "https://docs.google.com/drawings/d/1PfxLV-COInD5XUmt5S0vfRdiCayu67lJixENtcVWUjw/pub?w=150&h=150",
+        comment: "Brilliant! You have completed a massive number of challenges and demonstrated true mastery of Python! Exceptional work!"
+      },
+      {
+        check: count => count > 30,
+        title: "Python Sage 🧙",
+        imageUrl: "https://docs.google.com/drawings/d/16H2_j4mPOZRS5PBVEqFTpmMLsmjM5G2CeFbV4j-D-uY/pub?w=150&h=150",
+        comment: "Amazing job! You are solving complex challenges and writing beautiful Python code. You have deep logic skills!"
+      },
+      {
+        check: count => count > 20,
+        title: "Script Master 📜",
+        imageUrl: "https://docs.google.com/drawings/d/1fPEcO6xUPAuIIep4uOlE5GclxFAGMZBNmKEIs3FNpaQ/pub?w=150&h=150",
+        comment: "Incredible! You've tackled some tough algorithms and proved your debugging skills. You make it look easy!"
+      },
+      {
+        check: count => count > 10,
+        title: "Algorithm Adept 🧠",
+        imageUrl: "https://docs.google.com/drawings/d/1SCxP_daYmNEIEln4N3eLrZvNf6jZtg5WcOuqeiwKrWg/pub?w=150&h=150",
+        comment: "Fantastic effort! Your understanding of variables, loops, lists, and conditions is getting very strong. Keep up the momentum!"
+      },
+      {
+        check: count => count > 5,
+        title: "Logic Builder 💻",
+        imageUrl: "https://docs.google.com/drawings/d/1uamnO9n45gAG1mIgUnOfAqcd0pNtnyE1xT8TskDVZCE/pub?w=150&h=150",
+        comment: "Superb! You are writing functional logic and solving challenges with ease. A true coder in the making!"
+      },
+      {
+        check: count => count > 2,
+        title: "Code Explorer 🚀",
+        imageUrl: "https://docs.google.com/drawings/d/1Xv8l4TznTM0coWCe80zVnmjUGU_Bn38lBT4emZ6nE6w/pub?w=150&h=150",
+        comment: "Nice work! You are building momentum and exploring more complex concepts. Keep going, you're doing great!"
+      },
+      {
+        check: count => count > 0,
+        title: "Python Hatchling 🐍",
+        imageUrl: "https://docs.google.com/drawings/d/15tMyggMNNo-KdYEfMMzKkCB8r4Zj3DvBA19vo4ETCTg/pub?w=150&h=150",
+        comment: "Welcome to the world of programming! You're taking your first steps and making great progress. Keep it up!"
+      },
+      {
+        check: count => count === 0,
+        title: "Python Egg 🥚",
+        imageUrl: "https://docs.google.com/drawings/d/15tMyggMNNo-KdYEfMMzKkCB8r4Zj3DvBA19vo4ETCTg/pub?w=150&h=150",
+        comment: "Just getting started on this coding journey. Let's write some code and hatch your python skills!"
+      }
+    ];
+
+    function getBadge(completedCount) {
+      return badges.find(b => b.check(completedCount)) || badges[badges.length - 1];
+    }
+
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    // Fetch challenges.json first to have the dynamic count, then process parameters
+    fetch('challenges.json')
+      .then(res => res.json())
+      .then(challenges => {
+        const total = challenges.length || 90;
+        initializeCertificate(challenges, total);
+      })
+      .catch(err => {
+        console.error("Error loading challenges.json:", err);
+        // Fallback to static 90 if fetch fails
+        initializeCertificate([], 90);
+      });
+
+    function initializeCertificate(challenges, total) {
+      // Process parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const encodedParam = urlParams.get('p');
+      let name = null;
+      let completedIds = [];
+      let completedStr = '';
+
+      if (encodedParam) {
+        try {
+          const binary = atob(decodeURIComponent(encodedParam));
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          const decodedText = new TextDecoder().decode(bytes);
+          const data = JSON.parse(decodedText);
+          name = data.n;
+          completedIds = data.c || [];
+          completedStr = completedIds.join(',');
+        } catch (e) {
+          console.error("Failed to decode parameters", e);
+        }
+      } else {
+        // Fallback to legacy plain query parameters
+        name = urlParams.get('name');
+        const rawCompleted = urlParams.get('completed');
+        if (name && rawCompleted !== null) {
+          completedStr = rawCompleted;
+          completedIds = rawCompleted ? rawCompleted.split(',').map(Number).filter(n => !isNaN(n)) : [];
+        }
+      }
+
+      if (name !== null) {
+        const count = completedIds.length;
+        const badge = getBadge(count);
+        const percentage = Math.round((count / total) * 100);
+
+        document.getElementById('badgeImage').src = badge.imageUrl;
+        document.getElementById('certRank').textContent = badge.title;
+        document.getElementById('certMessage').innerHTML = `This certifies that <strong>${escapeHtml(name)}</strong> has successfully completed <strong>${count} of ${total}</strong> Python Code Lab challenges!`;
+        document.getElementById('certDesc').textContent = badge.comment;
+        document.getElementById('progressText').textContent = `${percentage}% Completed (${count} / ${total})`;
+        
+        // Trigger progress bar animation
+        setTimeout(() => {
+          document.getElementById('progressBarFill').style.width = `${percentage}%`;
+        }, 200);
+
+        // Update challenges button link to include import parameters
+        const challengesBtn = document.getElementById('btnChallenges');
+        if (challengesBtn) {
+          let shareParam = encodedParam;
+          if (!shareParam) {
+            try {
+              const payload = JSON.stringify({ n: name, c: completedIds });
+              const utf8Bytes = new TextEncoder().encode(payload);
+              let binary = '';
+              for (let i = 0; i < utf8Bytes.length; i++) {
+                binary += String.fromCharCode(utf8Bytes[i]);
+              }
+              shareParam = btoa(binary);
+            } catch (e) {
+              shareParam = '';
+            }
+          }
+          challengesBtn.href = `challenge_list.html?import=${encodeURIComponent(shareParam)}`;
+          challengesBtn.textContent = `Start My Own Coding Journey 🚀`;
+        }
+
+        // List completed challenges
+        const completedSet = new Set(completedIds);
+        const completedChallenges = challenges.filter(c => completedSet.has(c.id));
+        
+        if (completedChallenges.length > 0) {
+          const section = document.getElementById('completedSection');
+          const listEl = document.getElementById('completedList');
+          const titleEl = document.getElementById('completedListTitle');
+          if (section && listEl) {
+            section.style.display = 'block';
+            if (titleEl) {
+              titleEl.textContent = `${name}'s Completed Challenges (${completedChallenges.length}) 🏆`;
+            }
+            listEl.innerHTML = '';
+            
+            completedChallenges.forEach(c => {
+              const item = document.createElement('div');
+              item.className = 'completed-item';
+              
+              const titleSpan = document.createElement('span');
+              titleSpan.className = 'completed-item-title';
+              titleSpan.textContent = `#${c.id} - ${c.title}`;
+              
+              const diffSpan = document.createElement('span');
+              diffSpan.className = 'completed-item-difficulty';
+              diffSpan.textContent = c.spice;
+              
+              item.appendChild(titleSpan);
+              item.appendChild(diffSpan);
+              listEl.appendChild(item);
+            });
+          }
+        }
+      } else {
+        document.getElementById('certMessage').innerHTML = `Take on ${total} programming quests, unlock certificates, and earn levels from Hatchling to Python Grandmaster!`;
+        document.getElementById('progressText').textContent = `0% Complete (0 / ${total})`;
+        
+        const challengesBtn = document.getElementById('btnChallenges');
+        if (challengesBtn) {
+          challengesBtn.href = 'challenge_list.html';
+          challengesBtn.textContent = 'Start My Own Coding Journey 🚀';
+        }
+      }
+    }
+  </script>
+</body>
+</html>

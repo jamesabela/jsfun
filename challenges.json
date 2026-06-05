@@ -1,0 +1,542 @@
+[
+  {
+    "id": 1,
+    "title": "Random Guessing Game",
+    "spice": "🌶️",
+    "comment": "# instructions: Create a game where the user guesses a number from 1 to 100. Tell the user if the answer is higher or lower, and check for invalid input."
+  },
+  {
+    "id": 2,
+    "title": "Mario Pyramid",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user to enter a number. Use that number to create a pyramid pattern of the correct size."
+  },
+  {
+    "id": 3,
+    "title": "Drunk Pirate",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Use turtle to draw the path of a drunk pirate. The pirate should turn randomly, move forward, then repeat several times."
+  },
+  {
+    "id": 4,
+    "title": "Vending Machine",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Simulate a vending machine. Let the user insert coins, choose a product, then output the product and any change left over."
+  },
+  {
+    "id": 5,
+    "title": "Fizzbuzz",
+    "spice": "🌶️",
+    "comment": "# instructions: Print the numbers from 1 to 20, but print Fizz for numbers divisible by 3, Buzz for numbers divisible by 5, and FizzBuzz for numbers divisible by both."
+  },
+  {
+    "id": 6,
+    "title": "Lazy Report Writer",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a random report writer using a list of generic comments. Ask for the number of students and generate one random comment for each student."
+  },
+  {
+    "id": 7,
+    "title": "The Prisoners Dilemma",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Simulate the prisoner's dilemma. Let the user choose to confess or stay silent, make the computer choose an outcome, then show the result and ask if they want to play again."
+  },
+  {
+    "id": 8,
+    "title": "Think You Know Each Other?",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a two-player quiz where each user writes questions about themselves. The other user answers them, and the program records and displays the scores."
+  },
+  {
+    "id": 9,
+    "title": "The Roasting Machine",
+    "spice": "🌶️",
+    "comment": "# instructions: Create a random roast generator. Ask for the student's name and include it in a randomly selected roast from a list."
+  },
+  {
+    "id": 10,
+    "title": "Primary Quiz Machine",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create an arithmetic quiz machine for addition, subtraction, multiplication and division. Let the user choose the time before the answer is shown and the maximum number size."
+  },
+  {
+    "id": 11,
+    "title": "Hangman",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a game of hangman using a word list."
+  },
+  {
+    "id": 12,
+    "title": "Rock Paper Scissors",
+    "spice": "🌶️",
+    "comment": "# instructions: Create a rock, paper, scissors game where the user plays against the computer."
+  },
+  {
+    "id": 13,
+    "title": "Pokemon Word Game",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create a word-chain game using a category list. Each new word must begin with the final letter of the previous word, and words cannot be repeated."
+  },
+  {
+    "id": 14,
+    "title": "Magic 8 Ball",
+    "spice": "🌶️",
+    "comment": "# instructions: Create a magic 8 ball using random choices from a list of possible answers."
+  },
+  {
+    "id": 15,
+    "title": "Turn Based Fighting Game",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create a turn-based fighting game where characters have health and individual moves. For extra challenge, allow the player to choose different characters."
+  },
+  {
+    "id": 16,
+    "title": "Turtle Starfield",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Use turtle to create a starfield based on a seed, so the same starfield can be regenerated later."
+  },
+  {
+    "id": 17,
+    "title": "Tic Tac Toe",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create a game of tic tac toe using a two-dimensional array."
+  },
+  {
+    "id": 18,
+    "title": "Top Trumps",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a two-player Top Trumps game. Each player gets five random cards, and the card with the higher score wins each round."
+  },
+  {
+    "id": 19,
+    "title": "Uno",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Recreate a text-based version of Uno where the user can play against the computer."
+  },
+  {
+    "id": 20,
+    "title": "Ultimate Caesar Cipher",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create a Caesar cipher program that can encode a file, decode a file and attempt to crack an encoded file."
+  },
+  {
+    "id": 21,
+    "title": "Blackjack",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create a text version of blackjack. Remember that the ace card can have more than one value."
+  },
+  {
+    "id": 22,
+    "title": "Substitution Cipher",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create a substitution cipher that uses a randomly generated alphabet sequence to encrypt a custom message."
+  },
+  {
+    "id": 23,
+    "title": "Tower Of Hanoi",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Use recursion to solve the Tower of Hanoi puzzle. Move all disks to another tower, moving only one disk at a time and never placing a larger disk on a smaller disk."
+  },
+  {
+    "id": 24,
+    "title": "Morse Code Converter",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a menu-driven converter that can convert text to Morse code and Morse code back to text."
+  },
+  {
+    "id": 25,
+    "title": "Any Shape",
+    "spice": "🌶️",
+    "comment": "# instructions: Use turtle so that when the user enters a number, the program creates a polygon with that many sides."
+  },
+  {
+    "id": 26,
+    "title": "House",
+    "spice": "🌶️",
+    "comment": "# instructions: Use turtle to draw a picture of a house."
+  },
+  {
+    "id": 27,
+    "title": "Bar Chart",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Use turtle to create a bar chart."
+  },
+  {
+    "id": 28,
+    "title": "Countdown",
+    "spice": "🌶️",
+    "comment": "# instructions: Create a countdown for NASA."
+  },
+  {
+    "id": 29,
+    "title": "Rugby Calculator",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a rugby scoring system. Ask for two team names and record tries, conversions and penalty kicks separately, then display the final scores and how the points were scored."
+  },
+  {
+    "id": 30,
+    "title": "Drunkometer",
+    "spice": "🌶️",
+    "comment": "# instructions: Check that someone is competent to operate machinery by making them type the same tricky phrase twice. Compare the two entries."
+  },
+  {
+    "id": 31,
+    "title": "Roman Numerals",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Print the first 100 numbers in Roman numerals."
+  },
+  {
+    "id": 32,
+    "title": "Multiplication Game",
+    "spice": "🌶️",
+    "comment": "# instructions: Create a multiplication game using numbers from 0 to 12."
+  },
+  {
+    "id": 33,
+    "title": "Physics Formula Code",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a physics formula application that allows the user to solve for one of the variables in each formula."
+  },
+  {
+    "id": 34,
+    "title": "Hex And Binary Quiz",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a hex and binary quiz machine."
+  },
+  {
+    "id": 35,
+    "title": "Parity Bit Checker Game",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a parity bit checker quiz that challenges students on odd and even parity. The computer should correct wrong answers."
+  },
+  {
+    "id": 36,
+    "title": "Help The CIA Find The Password",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Ask the user to input a large amount of text. Find and print the top three most common letters and the top three least common letters."
+  },
+  {
+    "id": 37,
+    "title": "Boxplot",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Use turtle to draw a box plot. Ask the user for the minimum, maximum, upper quartile, lower quartile and median."
+  },
+  {
+    "id": 38,
+    "title": "Randomly Generated Password",
+    "spice": "🌶️",
+    "comment": "# instructions: Create a randomly generated password based on the user's favourite colour, place and animal. Add special characters to the end."
+  },
+  {
+    "id": 39,
+    "title": "Logic Gates In Python",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create the AND, OR, NOR, XOR and NOT gates using only NAND gates in Python."
+  },
+  {
+    "id": 40,
+    "title": "Denary To BCD Converter",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Ask the user to input a denary number and output its Binary Coded Decimal conversion."
+  },
+  {
+    "id": 41,
+    "title": "Smile, Sad And Surprised",
+    "spice": "🌶️",
+    "comment": "# instructions: Create procedures to print ASCII art for a happy face, a sad face and a surprised face."
+  },
+  {
+    "id": 42,
+    "title": "Make It Laugh Procedure",
+    "spice": "🌶️",
+    "comment": "# instructions: Write a procedure called make_it_laugh that replaces all vowels in a string with \"haha\", then prints the modified string."
+  },
+  {
+    "id": 43,
+    "title": "Carpet Designer Function",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create a function that randomly designs a carpet pattern based on a polygon. The side length should be a parameter, and the shapes should touch but not overlap."
+  },
+  {
+    "id": 44,
+    "title": "Guess The Code",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Given a Caesar-ciphered string, create a function that tries to decipher it and output the most likely natural string."
+  },
+  {
+    "id": 45,
+    "title": "Roman Numerals Conversion",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create a program that converts numbers to Roman numerals and Roman numerals to numbers. It should work for values greater than 0 and less than 4000."
+  },
+  {
+    "id": 46,
+    "title": "IP Address Generator",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Generate private IPv4 and IPv6 addresses for between 1 and 100 network devices."
+  },
+  {
+    "id": 47,
+    "title": "Number From 1 To 111",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a program that guesses a number between 1 and 111 as efficiently as possible. After each guess, it should use higher or lower feedback to improve its next guess."
+  },
+  {
+    "id": 48,
+    "title": "Rocket Launch",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create an instance of a planet class. When the user enters the planet's mass and radius, output the escape velocity required for a rocket."
+  },
+  {
+    "id": 49,
+    "title": "Bullet Proof Binary Search",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a binary search program. If the item is not found, sort the list and search again before reporting that the item cannot be found."
+  },
+  {
+    "id": 50,
+    "title": "File Handler",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create file error handling that tells the user if a file does not exist, shows the current directory and lists the files that are available."
+  },
+  {
+    "id": 51,
+    "title": "Recursive Sum Digits",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Write a recursive program that calculates the sum of the digits in an integer. For example, sumDigits(345) should return 12."
+  },
+  {
+    "id": 52,
+    "title": "Underline Any Length",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Use turtle to create input text in a window and draw lines that match the length of the text."
+  },
+  {
+    "id": 53,
+    "title": "Random Number List",
+    "spice": "🌶️",
+    "comment": "# instructions: Use the random function to create a list of 50 random numbers, then calculate the minimum, maximum and mean average."
+  },
+  {
+    "id": 54,
+    "title": "Email Checker",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Validate an email address. Check that it has a valid personal part, an @ symbol and a valid domain part."
+  },
+  {
+    "id": 55,
+    "title": "Bubble Sort",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Write a Python bubble sort and test it using 9 randomly assigned numbers."
+  },
+  {
+    "id": 56,
+    "title": "Linear Search",
+    "spice": "🌶️",
+    "comment": "# instructions: Write the Python required to perform a linear search for an item in an array."
+  },
+  {
+    "id": 57,
+    "title": "Mirror Text",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user to enter text, then display the text backwards."
+  },
+  {
+    "id": 58,
+    "title": "Vowel Count",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user to enter a word, then count how many vowels it contains."
+  },
+  {
+    "id": 59,
+    "title": "Pass Phrase Generator",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a pass phrase generator to help students make secure passwords. For a bonus, use an external file."
+  },
+  {
+    "id": 60,
+    "title": "Python To Pseudocode",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Create a program that takes Python code from a file and exports a text file showing what it might look like in pseudocode."
+  },
+  {
+    "id": 61,
+    "title": "Brackets Checker",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a program that checks whether the number of opening and closing brackets is balanced."
+  },
+  {
+    "id": 62,
+    "title": "Project Timeline",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Ask the user for two dates and calculate the number of days in the project. The project may be from 1 day to more than 1 year long."
+  },
+  {
+    "id": 63,
+    "title": "Histograms",
+    "spice": "🌶️",
+    "comment": "# instructions: Define a procedure called histogram that takes a list of integers and prints a text histogram using asterisks."
+  },
+  {
+    "id": 64,
+    "title": "Word Length Calculator",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Read text from a file and calculate the average word length by dividing the total length of all words by the number of words."
+  },
+  {
+    "id": 65,
+    "title": "Improved Security",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Generate a random order for security guards to visit every floor exactly once. Let the building manager choose the number of floors."
+  },
+  {
+    "id": 66,
+    "title": "Beginning And End",
+    "spice": "🌶️",
+    "comment": "# instructions: Take a list of numbers and create a new list containing only the first and last elements."
+  },
+  {
+    "id": 67,
+    "title": "X-Factor",
+    "spice": "🌶️🌶️🌶️",
+    "comment": "# instructions: Given a list of 10 artists with 10 songs each, create a random song order where the same artist has a minimum distance of 2 songs between appearances."
+  },
+  {
+    "id": 68,
+    "title": "Validate A Byte",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a parity byte entry system generator that uses even parity."
+  },
+  {
+    "id": 69,
+    "title": "Minimum Difference",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Given a list of numbers, output the smallest difference between any two numbers in the list."
+  },
+  {
+    "id": 70,
+    "title": "Character Merge",
+    "spice": "🌶️",
+    "comment": "# instructions: Merge two strings by adding letters in alternating order, starting with the first string. If one string is longer, add the remaining letters to the end."
+  },
+  {
+    "id": 71,
+    "title": "Insertion Sort",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Write the Python required for an insertion sort and test it using 9 randomly assigned numbers."
+  },
+  {
+    "id": 72,
+    "title": "List Word Sort",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a program where the user can paste a list of words. Sort the words alphabetically and save them to a file for loading later."
+  },
+  {
+    "id": 73,
+    "title": "Operation Duplicates Removal",
+    "spice": "🌶️",
+    "comment": "# instructions: Write a function that takes a list and returns a new list containing the same elements but with duplicates removed."
+  },
+  {
+    "id": 74,
+    "title": "Prime Numbers",
+    "spice": "🌶️",
+    "comment": "# instructions: Write a program that checks whether a given number is prime using a for loop."
+  },
+  {
+    "id": 75,
+    "title": "Number Extraction",
+    "spice": "🌶️",
+    "comment": "# instructions: Write a program that finds the sum of all digits in a string containing both letters and numbers."
+  },
+  {
+    "id": 76,
+    "title": "Factorial Finder",
+    "spice": "🌶️",
+    "comment": "# instructions: Write a program that finds the factorial of a given number using a while loop."
+  },
+  {
+    "id": 77,
+    "title": "Bill Calculator",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user to enter the quantity and price of each item. Calculate the total for each item and the final bill amount."
+  },
+  {
+    "id": 78,
+    "title": "12 To 24 Hour Clock",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user to enter a 12-hour time and whether it is am or pm, then convert it to 24-hour time."
+  },
+  {
+    "id": 79,
+    "title": "Greetings",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask for somebody's name and age, then greet them."
+  },
+  {
+    "id": 80,
+    "title": "Brotherly Screentime",
+    "spice": "🌶️",
+    "comment": "# instructions: Create a timer that gives each sibling an equal amount of PS4 time."
+  },
+  {
+    "id": 81,
+    "title": "Body Mass Index",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user for their weight in kilograms and height in metres, then calculate and classify their BMI."
+  },
+  {
+    "id": 82,
+    "title": "99 Bottles Of Cola",
+    "spice": "🌶️",
+    "comment": "# instructions: Use a loop to print the 99 bottles of cola song, reducing the number of bottles each time."
+  },
+  {
+    "id": 83,
+    "title": "Times Tables",
+    "spice": "🌶️",
+    "comment": "# instructions: Create a times tables generator that primary teachers can copy and paste from."
+  },
+  {
+    "id": 84,
+    "title": "Qwerty Detector",
+    "spice": "🌶️",
+    "comment": "# instructions: Check whether the characters qwerty appear together in a piece of text."
+  },
+  {
+    "id": 85,
+    "title": "Rocket Build Up",
+    "spice": "🌶️",
+    "comment": "# instructions: The spaceship needs 51 hours to charge. The current time is 2pm. Calculate what time the alarm should go off."
+  },
+  {
+    "id": 86,
+    "title": "Are You Sure That’s A Number?",
+    "spice": "🌶️",
+    "comment": "# instructions: Write a small program that checks whether the user's input is a float and shows an error if it is not."
+  },
+  {
+    "id": 87,
+    "title": "Diet Calculator",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Ask the user for the food they consumed and the calories in it. Track the day's calories, reject invalid inputs and reset when the user types \"end day\"."
+  },
+  {
+    "id": 88,
+    "title": "Max Heart Rate",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user for their age, then calculate their training heart rate using 70 percent of 225 minus their age."
+  },
+  {
+    "id": 89,
+    "title": "Divide By 3",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user for a number and tell them whether it can be divided exactly by 3."
+  },
+  {
+    "id": 90,
+    "title": "Validate A Character",
+    "spice": "🌶️",
+    "comment": "# instructions: Check that the user has entered a single character."
+  }
+]

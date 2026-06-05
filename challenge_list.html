@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Code Lab - All Challenges Index</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10 2 6 16'/%3E%3Cpath d='m14 2-6 16'/%3E%3Cpath d='M18 12h-4'/%3E%3Cpath d='M20 9h-4'/%3E%3Cpath d='M22 6h-4'/%3E%3Cpath d='M6 15H2'/%3E%3Cpath d='M4 12H2'/%3E%3Cpath d='M2 9h2'/%3E%3C/svg%3E">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
+
+    :root {
+      --primary-color: #3b82f6;
+      --primary-hover: #2563eb;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 40px 24px;
+      line-height: 1.5;
+    }
+
+    header {
+      max-width: 1200px;
+      margin: 0 auto 32px auto;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #2563eb, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 120px;
+    }
+
+    .stat-val {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Search & Filters container */
+    .filter-panel {
+      max-width: 1200px;
+      margin: 0 auto 32px auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .filter-panel {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .search-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input, .share-name-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus, .share-name-input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      background: #f1f5f9;
+    }
+
+    .filter-btn.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .share-copy-btn {
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .share-copy-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Challenge Grid */
+    .challenge-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .challenge-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .challenge-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: #cbd5e1;
+    }
+
+    .challenge-id {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--text-muted);
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .challenge-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .spice-badge {
+      font-size: 15px;
+      padding: 2px 8px;
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .challenge-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      padding-right: 32px;
+    }
+
+    .challenge-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .card-footer {
+      margin-top: auto;
+    }
+
+    .launch-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+      transition: all 0.2s;
+    }
+
+    .launch-btn:hover {
+      box-shadow: 0 8px 12px -1px rgba(59, 130, 246, 0.35);
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      transform: scale(1.01);
+    }
+
+    /* Back to App Link */
+    .back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--primary-color);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+      transition: color 0.2s;
+    }
+
+    .back-home:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    /* Empty state */
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .challenge-card.today-highlight {
+      border: 2px solid #f59e0b;
+      background: linear-gradient(135deg, #ffffff, rgba(245, 158, 11, 0.02));
+      box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.15), 0 8px 10px -6px rgba(245, 158, 11, 0.1);
+    }
+    
+    .today-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #d97706;
+      background: #fef3c7;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid #fde68a;
+      display: inline-flex;
+      align-items: center;
+      margin-left: auto;
+      margin-right: 40px;
+    }
+
+    /* Completed Challenge Styles */
+    .challenge-completed-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border-color);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    
+    .challenge-completed-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #10b981;
+    }
+    
+    .challenge-card.completed {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: linear-gradient(135deg, #ffffff, rgba(16, 185, 129, 0.015));
+    }
+
+    /* Achievement Card Style */
+    .achievement-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      margin: 24px auto 32px auto;
+      max-width: 650px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .achievement-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #f59e0b, #3b82f6, #10b981);
+    }
+
+    @media (max-width: 600px) {
+      .achievement-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+        padding: 20px;
+      }
+    }
+
+    .achievement-badge-container {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #f59e0b;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+      background: rgba(245, 158, 11, 0.05);
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .achievement-badge-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8px;
+    }
+
+    .achievement-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .achievement-rank {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #f59e0b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .achievement-rank {
+        justify-content: center;
+      }
+    }
+
+    .achievement-comment {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .achievement-progress-wrapper {
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .achievement-progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #f1f5f9;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 6px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .achievement-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #10b981);
+      width: 0%;
+      border-radius: 999px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .achievement-progress-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #10b981;
+      display: block;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="pythoncopy.html" class="back-home">
+      ← Back to Python Code Lab
+    </a>
+    <h1 id="mainTitle">90 Python Challenges Index</h1>
+    <p class="subtitle" id="mainSubtitle">Quickly verify, preview, and load any of the 90 challenges directly in the editor</p>
+    
+    <div style="margin-top: 16px; margin-bottom: 8px;">
+      <a href="pythoncopy.html" class="launch-btn" style="width: auto; display: inline-flex; padding: 12px 24px; font-size: 14.5px;">
+        🚀 Open Main Python Code Editor
+      </a>
+    </div>
+    
+    <!-- Beautiful Achievement Status Card -->
+    <div class="achievement-card" id="achievementCard">
+      <div class="achievement-badge-container">
+        <img id="achievementBadgeImg" class="achievement-badge-img" src="https://docs.google.com/drawings/d/15tMyggMNNo-KdYEfMMzKkCB8r4Zj3DvBA19vo4ETCTg/pub?w=150&h=150" alt="Python Badge">
+      </div>
+      <div class="achievement-info">
+        <h2 class="achievement-rank" id="achievementRank">Python Egg</h2>
+        <p class="achievement-comment" id="achievementComment">Just getting started on this coding journey. Let's write some code and hatch your python skills!</p>
+        <div class="achievement-progress-wrapper">
+          <div class="achievement-progress-bar">
+            <div class="achievement-progress-fill" id="achievementProgressFill"></div>
+          </div>
+          <span class="achievement-progress-text" id="achievementProgressText">0% Completed (0 / 90)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Share Progress and Achievement Panel -->
+  <div class="filter-panel" style="margin-bottom: 24px; max-width: 1200px; margin-left: auto; margin-right: auto;">
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+      <h3 style="font-size: 15px; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 6px;">🏆 Share Your Achievement</h3>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin: 0;">Enter your name to copy a shareable link with your Python badges and completed counts!</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; align-items: center;">
+        <input type="text" id="shareNameInput" name="share_name" class="share-name-input" value="Padawan" placeholder="Your Name" autocomplete="off" style="width: auto; max-width: 250px; margin: 0; padding: 10px 14px;">
+        <button class="share-copy-btn" id="btnCopyShare" onclick="copyShareUrl()">Copy & Show Certificate 🏆</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-panel">
+    <div class="search-wrapper">
+      <input type="text" class="search-input" id="searchInput" name="search_challenges" placeholder="Search by challenge title or description..." autocomplete="off">
+    </div>
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">All Challenges</button>
+      <button class="filter-btn" data-filter="🌶️">Mild (🌶️)</button>
+      <button class="filter-btn" data-filter="🌶️🌶️">Medium (🌶️🌶️)</button>
+      <button class="filter-btn" data-filter="🌶️🌶️🌶️">Spicy (🌶️🌶️🌶️)</button>
+    </div>
+  </div>
+
+  <main class="challenge-grid" id="challengeGrid">
+    <!-- Loaded dynamically -->
+  </main>
+
+  <footer style="margin-top: 48px; text-align: center; font-size: 13.5px; color: var(--text-muted); border-top: 1px solid var(--border-color); padding: 24px 16px;">
+    <p>💾 Your challenge completion status is automatically saved in your browser's local storage.</p>
+    <p style="margin-top: 8px;">
+      <a href="pythoncopy.html" style="color: var(--primary-color); text-decoration: underline; font-weight: 600; margin-right: 16px;">Back to Python Code Lab</a>
+      <a href="#" onclick="resetProgress(event)" style="color: #ef4444; text-decoration: underline; font-weight: 600;">Reset All Progress 🔄</a>
+    </p>
+  </footer>
+
+  <script>
+    let challengeData = [];
+    let currentFilter = 'all';
+
+    const badges = [
+      {
+        check: count => count > 40,
+        title: "Grandmaster Coder 👑",
+        imageUrl: "https://docs.google.com/drawings/d/1PfxLV-COInD5XUmt5S0vfRdiCayu67lJixENtcVWUjw/pub?w=150&h=150",
+        comment: "Brilliant! You have completed a massive number of challenges and demonstrated true mastery of Python! Exceptional work!"
+      },
+      {
+        check: count => count > 30,
+        title: "Python Sage 🧙",
+        imageUrl: "https://docs.google.com/drawings/d/16H2_j4mPOZRS5PBVEqFTpmMLsmjM5G2CeFbV4j-D-uY/pub?w=150&h=150",
+        comment: "Amazing job! You are solving complex challenges and writing beautiful Python code. You have deep logic skills!"
+      },
+      {
+        check: count => count > 20,
+        title: "Script Master 📜",
+        imageUrl: "https://docs.google.com/drawings/d/1fPEcO6xUPAuIIep4uOlE5GclxFAGMZBNmKEIs3FNpaQ/pub?w=150&h=150",
+        comment: "Incredible! You've tackled some tough algorithms and proved your debugging skills. You make it look easy!"
+      },
+      {
+        check: count => count > 10,
+        title: "Algorithm Adept 🧠",
+        imageUrl: "https://docs.google.com/drawings/d/1SCxP_daYmNEIEln4N3eLrZvNf6jZtg5WcOuqeiwKrWg/pub?w=150&h=150",
+        comment: "Fantastic effort! Your understanding of variables, loops, lists, and conditions is getting very strong. Keep up the momentum!"
+      },
+      {
+        check: count => count > 5,
+        title: "Logic Builder 💻",
+        imageUrl: "https://docs.google.com/drawings/d/1uamnO9n45gAG1mIgUnOfAqcd0pNtnyE1xT8TskDVZCE/pub?w=150&h=150",
+        comment: "Superb! You are writing functional logic and solving challenges with ease. A true coder in the making!"
+      },
+      {
+        check: count => count > 2,
+        title: "Code Explorer 🚀",
+        imageUrl: "https://docs.google.com/drawings/d/1Xv8l4TznTM0coWCe80zVnmjUGU_Bn38lBT4emZ6nE6w/pub?w=150&h=150",
+        comment: "Nice work! You are building momentum and exploring more complex concepts. Keep going, you're doing great!"
+      },
+      {
+        check: count => count > 0,
+        title: "Python Hatchling 🐍",
+        imageUrl: "https://docs.google.com/drawings/d/15tMyggMNNo-KdYEfMMzKkCB8r4Zj3DvBA19vo4ETCTg/pub?w=150&h=150",
+        comment: "Welcome to the world of programming! You're taking your first steps and making great progress. Keep it up!"
+      },
+      {
+        check: count => count === 0,
+        title: "Python Egg 🥚",
+        imageUrl: "https://docs.google.com/drawings/d/15tMyggMNNo-KdYEfMMzKkCB8r4Zj3DvBA19vo4ETCTg/pub?w=150&h=150",
+        comment: "Just getting started on this coding journey. Let's write some code and hatch your python skills!"
+      }
+    ];
+
+    function getBadge(completedCount) {
+      return badges.find(b => b.check(completedCount)) || badges[badges.length - 1];
+    }
+
+    function getCompletedChallenges() {
+      try {
+        const saved = localStorage.getItem('pycodelab_completed_challenges');
+        return saved ? JSON.parse(saved) : [];
+      } catch (e) {
+        console.warn('LocalStorage not available', e);
+        return [];
+      }
+    }
+
+    function isChallengeCompleted(id) {
+      return getCompletedChallenges().includes(id);
+    }
+
+    function setChallengeCompleted(id, completed) {
+      try {
+        let current = getCompletedChallenges();
+        if (completed) {
+          if (!current.includes(id)) {
+            current.push(id);
+          }
+        } else {
+          current = current.filter(x => x !== id);
+        }
+        localStorage.setItem('pycodelab_completed_challenges', JSON.stringify(current));
+      } catch (e) {
+        console.warn('LocalStorage save failed', e);
+      }
+    }
+
+    // Fetch and populate challenges
+    fetch('challenges.json')
+      .then(response => response.json())
+      .then(data => {
+        challengeData = data;
+        updateStats();
+        checkImportProgress();
+        renderChallenges();
+      })
+      .catch(err => {
+        console.error('Error loading challenges.json:', err);
+        document.getElementById('challengeGrid').innerHTML = '<p class="no-results">Error loading challenges. Please ensure challenges.json is in the directory.</p>';
+      });
+
+    function getCodeUrl(challenge) {
+      const pythonCode = `# Challenge: ${challenge.title} (${challenge.spice})\n${challenge.comment}\n`;
+      const utf8Bytes = new TextEncoder().encode(pythonCode);
+      let binary = '';
+      for (let i = 0; i < utf8Bytes.length; i++) {
+        binary += String.fromCharCode(utf8Bytes[i]);
+      }
+      const base64 = btoa(binary);
+      return `pythoncopy.html?code=${encodeURIComponent(base64)}`;
+    }
+
+    function updateStats() {
+      const completed = getCompletedChallenges().length;
+      const total = challengeData.length || 90;
+      const percentage = Math.round((completed / total) * 100);
+      
+      const titleMain = document.getElementById('mainTitle');
+      if (titleMain) {
+        titleMain.textContent = `${total} Python Challenges Index`;
+      }
+      const subtitleMain = document.getElementById('mainSubtitle');
+      if (subtitleMain) {
+        subtitleMain.textContent = `Quickly verify, preview, and load any of the ${total} challenges directly in the editor`;
+      }
+
+      const badge = getBadge(completed);
+      
+      const badgeImg = document.getElementById('achievementBadgeImg');
+      if (badgeImg) {
+        badgeImg.src = badge.imageUrl;
+      }
+      
+      const rankEl = document.getElementById('achievementRank');
+      if (rankEl) {
+        rankEl.textContent = badge.title;
+      }
+      
+      const commentEl = document.getElementById('achievementComment');
+      if (commentEl) {
+        commentEl.textContent = badge.comment;
+      }
+      
+      const fillEl = document.getElementById('achievementProgressFill');
+      if (fillEl) {
+        fillEl.style.width = `${percentage}%`;
+      }
+      
+      const progressTextEl = document.getElementById('achievementProgressText');
+      if (progressTextEl) {
+        progressTextEl.textContent = `${percentage}% Completed (${completed} / ${total})`;
+      }
+    }
+
+    function renderChallenges() {
+      const grid = document.getElementById('challengeGrid');
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+      const filtered = challengeData.filter(c => {
+        const matchesFilter = currentFilter === 'all' || c.spice === currentFilter;
+        const matchesQuery = c.title.toLowerCase().includes(query) || 
+                             c.comment.toLowerCase().includes(query);
+        return matchesFilter && matchesQuery;
+      });
+
+      grid.innerHTML = '';
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p class="no-results">No challenges found matching the search criteria.</p>';
+        return;
+      }
+
+      // Calculate today's challenge index
+      function getDayOfYear(date) {
+        const startOfYear = new Date(date.getFullYear(), 0, 1);
+        const difference = date - startOfYear;
+        const oneDay = 1000 * 60 * 60 * 24;
+        return Math.round(difference / oneDay) + 1;
+      }
+      const today = new Date();
+      const dayOfYear = getDayOfYear(today);
+      const todayIndex = (dayOfYear - 1) % challengeData.length;
+      const todayChallengeId = challengeData[todayIndex] ? challengeData[todayIndex].id : -1;
+
+      filtered.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'challenge-card';
+        if (c.id === todayChallengeId) {
+          card.classList.add('today-highlight');
+        }
+        if (isChallengeCompleted(c.id)) {
+          card.classList.add('completed');
+        }
+
+        const idBadge = document.createElement('span');
+        idBadge.className = 'challenge-id';
+        idBadge.textContent = `#${c.id}`;
+
+        const header = document.createElement('div');
+        header.className = 'challenge-header';
+
+        const spice = document.createElement('span');
+        spice.className = 'spice-badge';
+        spice.textContent = c.spice;
+
+        const title = document.createElement('h3');
+        title.className = 'challenge-title';
+        title.textContent = c.title;
+
+        header.appendChild(spice);
+        header.appendChild(title);
+
+        if (c.id === todayChallengeId) {
+          const todayBadge = document.createElement('span');
+          todayBadge.className = 'today-badge';
+          todayBadge.textContent = '★ Today\'s Challenge';
+          header.appendChild(todayBadge);
+        }
+
+        const desc = document.createElement('p');
+        desc.className = 'challenge-desc';
+        // Clean description for better display
+        const cleanedDesc = c.comment.replace(/^#\s*instructions:\s*/i, '');
+        desc.textContent = cleanedDesc;
+
+        const footer = document.createElement('div');
+        footer.className = 'card-footer';
+
+        const link = document.createElement('a');
+        link.href = getCodeUrl(c);
+        link.target = '_blank';
+        link.className = 'launch-btn';
+        link.innerHTML = 'Launch Challenge 🚀';
+
+        footer.appendChild(link);
+
+        // Checkbox completed wrapper
+        const completedWrapper = document.createElement('div');
+        completedWrapper.className = 'challenge-completed-wrapper';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'challenge-completed-checkbox';
+        checkbox.checked = isChallengeCompleted(c.id);
+        checkbox.addEventListener('change', (e) => {
+          setChallengeCompleted(c.id, e.target.checked);
+          if (e.target.checked) {
+            card.classList.add('completed');
+          } else {
+            card.classList.remove('completed');
+          }
+          updateStats();
+        });
+
+        const label = document.createElement('label');
+        label.style.cursor = 'pointer';
+        label.style.display = 'flex';
+        label.style.alignItems = 'center';
+        label.style.gap = '8px';
+        label.textContent = 'Completed';
+        label.prepend(checkbox);
+
+        completedWrapper.appendChild(label);
+
+        card.appendChild(idBadge);
+        card.appendChild(header);
+        card.appendChild(desc);
+        card.appendChild(footer);
+        card.appendChild(completedWrapper);
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Share Progress Logic
+    async function copyShareUrl() {
+      const nameInput = document.getElementById('shareNameInput');
+      const name = nameInput.value.trim() || 'Padawan';
+      const completed = getCompletedChallenges();
+      
+      // Obfuscate parameters in Base64
+      let base64Payload = '';
+      try {
+        const payload = JSON.stringify({ n: name, c: completed });
+        const utf8Bytes = new TextEncoder().encode(payload);
+        let binary = '';
+        for (let i = 0; i < utf8Bytes.length; i++) {
+          binary += String.fromCharCode(utf8Bytes[i]);
+        }
+        base64Payload = btoa(binary);
+      } catch (e) {
+        console.error("Encoding failed", e);
+      }
+
+      const baseUrl = window.location.href.split('?')[0].replace('challenge_list.html', '') + 'certificate.html';
+      const shareUrl = `${baseUrl}?p=${encodeURIComponent(base64Payload)}`;
+      
+      let success = false;
+
+      // Try secure Clipboard API first
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          success = true;
+        } catch (err) {
+          console.warn('Clipboard API failed, using fallback:', err);
+        }
+      }
+
+      // Fallback: document.execCommand
+      if (!success) {
+        const textArea = document.createElement('textarea');
+        textArea.value = shareUrl;
+        textArea.setAttribute('readonly', '');
+        textArea.style.position = 'fixed';
+        textArea.style.top = '0';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          success = document.execCommand('copy');
+        } catch (err) {
+          console.error('Fallback copy failed:', err);
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      }
+
+      if (success) {
+        const btn = document.getElementById('btnCopyShare');
+        if (btn) {
+          btn.textContent = 'Copied! 📋';
+          setTimeout(() => {
+            btn.textContent = 'Copy & Show Certificate 🏆';
+          }, 2000);
+        }
+      } else {
+        alert('Failed to copy. Here is your link, please copy manually:\n' + shareUrl);
+      }
+      
+      // Open the certificate in a new tab
+      window.open(shareUrl, '_blank');
+    }
+
+    function checkImportProgress() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const encodedImport = urlParams.get('import');
+      let importName = null;
+      let sharedIds = [];
+
+      if (encodedImport) {
+        try {
+          const binary = atob(decodeURIComponent(encodedImport));
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          const decodedText = new TextDecoder().decode(bytes);
+          const data = JSON.parse(decodedText);
+          importName = data.n;
+          sharedIds = data.c || [];
+        } catch (e) {
+          console.error("Failed to decode import parameters", e);
+        }
+      } else {
+        // Fallback to legacy parameters
+        const legacyName = urlParams.get('import_name');
+        const legacyCompletedStr = urlParams.get('import_completed');
+        if (legacyName && legacyCompletedStr !== null) {
+          importName = legacyName;
+          sharedIds = legacyCompletedStr ? legacyCompletedStr.split(',').map(Number).filter(n => !isNaN(n)) : [];
+        }
+      }
+
+      if (importName !== null) {
+        const completedCount = sharedIds.length;
+        if (confirm(`Do you want to import ${importName}'s completed list (${completedCount} challenges) into your browser? This will merge with your current progress.`)) {
+          let myCompleted = getCompletedChallenges();
+          sharedIds.forEach(id => {
+            if (!myCompleted.includes(id)) {
+              myCompleted.push(id);
+            }
+          });
+          localStorage.setItem('pycodelab_completed_challenges', JSON.stringify(myCompleted));
+          alert('Progress imported successfully!');
+        }
+        // Clean query params
+        window.history.replaceState({}, '', window.location.pathname);
+        updateStats();
+        renderChallenges();
+      }
+    }
+
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    function resetProgress(e) {
+      if (e) e.preventDefault();
+      if (confirm("Are you sure you want to reset all of your challenge progress? This will clear all checked challenges in this browser.")) {
+        try {
+          localStorage.removeItem('pycodelab_completed_challenges');
+          updateStats();
+          renderChallenges();
+          alert("Progress has been reset successfully!");
+        } catch (err) {
+          console.error("Failed to reset progress", err);
+        }
+      }
+    }
+
+    // Event listeners
+    document.getElementById('searchInput').addEventListener('input', renderChallenges);
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilter = e.target.getAttribute('data-filter');
+        renderChallenges();
+      });
+    });
+  </script>
+</body>
+</html>

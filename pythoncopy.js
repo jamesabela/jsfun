@@ -2215,6 +2215,7 @@ import sys, builtins
       updateEditorActionButtons();
       updatePasteCounter();
       updatePuzzleButtonVisibility();
+      initializeDailyChallenge();
 
       // Record initial load state
       recordPlaybackSnapshot('Initial Load', true, 'save');
@@ -2520,6 +2521,59 @@ import sys, builtins
         console.error('Could not copy share link:', err);
         alert('Failed to copy link. Please manually copy the URL.');
       });
+    }
+
+    function initializeDailyChallenge() {
+      fetch('challenges.json')
+        .then(response => response.json())
+        .then(challenges => {
+          if (!challenges || challenges.length === 0) return;
+
+          function getDayOfYear(date) {
+            const startOfYear = new Date(date.getFullYear(), 0, 1);
+            const difference = date - startOfYear;
+            const oneDay = 1000 * 60 * 60 * 24;
+            return Math.round(difference / oneDay) + 1;
+          }
+
+          const today = new Date();
+          const dayOfYear = getDayOfYear(today);
+          const index = (dayOfYear - 1) % challenges.length;
+          const challenge = challenges[index];
+
+          const pythonCode = `# Challenge: ${challenge.title} (${challenge.spice})\n${challenge.comment}\n`;
+          const utf8Bytes = new TextEncoder().encode(pythonCode);
+          let binary = '';
+          for (let i = 0; i < utf8Bytes.length; i++) {
+            binary += String.fromCharCode(utf8Bytes[i]);
+          }
+          const base64 = btoa(binary);
+          const challengeUrl = `pythoncopy.html?code=${encodeURIComponent(base64)}`;
+
+          const titleEl = document.getElementById('dailyChallengeTitle');
+          const spiceEl = document.getElementById('dailyChallengeSpice');
+          const descEl = document.getElementById('dailyChallengeDesc');
+          const btnEl = document.getElementById('dailyChallengeBtn');
+
+          if (titleEl) titleEl.textContent = challenge.title;
+          if (spiceEl) spiceEl.textContent = challenge.spice;
+          if (descEl) {
+            const cleanedDesc = challenge.comment.replace(/^#\s*instructions:\s*/i, '');
+            descEl.textContent = cleanedDesc;
+          }
+          if (btnEl) {
+            btnEl.href = challengeUrl;
+          }
+        })
+        .catch(err => {
+          console.error('Failed to load daily challenge:', err);
+          const titleEl = document.getElementById('dailyChallengeTitle');
+          if (titleEl) titleEl.textContent = 'Daily Challenge Unavailable';
+          const descEl = document.getElementById('dailyChallengeDesc');
+          if (descEl) descEl.textContent = 'Could not load challenges. You can still use the blank editor or standard quick starts.';
+          const btnEl = document.getElementById('dailyChallengeBtn');
+          if (btnEl) btnEl.style.display = 'none';
+        });
     }
 
     function updateURL() {
