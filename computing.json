@@ -626,10 +626,10 @@
       {
         "title": "Python Challenges",
         "emoji": "🏆",
-        "url": "https://pythonchallenges.weebly.com/",
-        "desc": "A collection of Python programming challenges. Entries are for GIS students only but challenges are open to all.",
+        "url": "challenge_list.html",
+        "desc": "A collection of 90+ interactive Python programming challenges with progress tracking, achievement badges, and certificate generation.",
         "tag": "KS3 / iGCSE / A-Level",
-        "isExternal": true
+        "isExternal": false
       },
       {
         "title": "KS3 Python Practice",
