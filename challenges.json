@@ -981,5 +981,255 @@
       "selection",
       "strings"
     ]
+  },
+  {
+    "id": 91,
+    "title": "Project Euler 1: Multiples of 3 or 5",
+    "spice": "\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Find the sum of all the multiples of 3 or 5 below 1000. For example, the multiples of 3 or 5 below 10 are 3, 5, 6 and 9, and their sum is 23. To solve this in under 5000 steps, use a simple loop, or use the arithmetic progression sum formula: sum = n * (a1 + an) / 2 for 3, 5, and 15.",
+    "tags": [
+      "maths",
+      "totalling",
+      "repetition"
+    ]
+  },
+  {
+    "id": 92,
+    "title": "Project Euler 2: Even Fibonacci Numbers",
+    "spice": "\ud83c\udf36\ufe0f",
+    "comment": "# instructions: By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms. The sequence starts with 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ... Hint: Since every third Fibonacci number is even, you can generate only even Fibonacci numbers directly using the recurrence: E(n) = 4 * E(n-1) + E(n-2) starting with E(1) = 2 and E(2) = 8, or just loop through the standard sequence.",
+    "tags": [
+      "maths",
+      "totalling",
+      "repetition"
+    ]
+  },
+  {
+    "id": 93,
+    "title": "Project Euler 5: Smallest Multiple",
+    "spice": "\ud83c\udf36\ufe0f",
+    "comment": "# instructions: 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder. Find the smallest positive number that is evenly divisible by all of the numbers from 1 to 20. Hint: Calculate the Least Common Multiple (LCM) directly by multiplying the highest prime powers under 20: 2^4 * 3^2 * 5 * 7 * 11 * 13 * 17 * 19.",
+    "tags": [
+      "maths",
+      "counting"
+    ]
+  },
+  {
+    "id": 94,
+    "title": "Project Euler 6: Sum Square Difference",
+    "spice": "\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum. For example, for the first 10 numbers the difference is 3025 - 385 = 2640. Optimize using formulas: sum = n * (n + 1) / 2, and sum of squares = n * (n + 1) * (2n + 1) / 6.",
+    "tags": [
+      "maths",
+      "counting"
+    ]
+  },
+  {
+    "id": 95,
+    "title": "Project Euler 9: Special Pythagorean Triplet",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: A Pythagorean triplet is a set of three natural numbers, a < b < c, for which, a^2 + b^2 = c^2. There exists exactly one Pythagorean triplet for which a + b + c = 1000. Find the product a * b * c. Hint: Use Euclid's formula for generating primitive triplets (a = m^2 - n^2, b = 2mn, c = m^2 + n^2) where m * (m + n) = 500. Loop small values of m and n to find the solution in very few steps.",
+    "tags": [
+      "maths",
+      "selection"
+    ]
+  },
+  {
+    "id": 96,
+    "title": "Project Euler 15: Lattice Paths",
+    "spice": "\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Starting in the top left corner of a 2x2 grid, and only being able to move to the right and down, there are exactly 6 routes to the bottom right corner. How many such routes are there through a 20x20 grid? Hint: Moving through a 20x20 grid requires exactly 40 moves (20 right, 20 down). The number of paths is 40 choose 20, which is calculated as 40! / (20! * 20!).",
+    "tags": [
+      "maths",
+      "functions"
+    ]
+  },
+  {
+    "id": 97,
+    "title": "Project Euler 16: Power Digit Sum",
+    "spice": "\ud83c\udf36\ufe0f",
+    "comment": "# instructions: 2^15 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26. What is the sum of the digits of the number 2^1000? Hint: Calculate 2^1000 using Python's native BigInt support, convert the result to a string, and sum the digits in a loop.",
+    "tags": [
+      "maths",
+      "strings",
+      "totalling"
+    ]
+  },
+  {
+    "id": 98,
+    "title": "Project Euler 20: Factorial Digit Sum",
+    "spice": "\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Find the sum of the digits in the number 100!. For example, 10! = 3628800, and the sum of its digits is 3 + 6 + 2 + 8 + 8 + 0 + 0 = 27. Hint: Use an optimized native loop to calculate 100! or import math to use math.factorial(100), then convert to string and sum the digits.",
+    "tags": [
+      "maths",
+      "strings",
+      "totalling",
+      "repetition"
+    ]
+  },
+  {
+    "id": 99,
+    "title": "Project Euler 24: Lexicographic Permutations",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: The lexicographic permutations of 0, 1 and 2 are: 012, 021, 102, 120, 201, 210. What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9? Hint: Use the Factorial Number System (Factoradic). Divide 999,999 (0-indexed 1,000,000th term) by 9!, 8!, 7!, etc., to pinpoint the exact digits sequentially without generating all permutations.",
+    "tags": [
+      "maths",
+      "array",
+      "functions"
+    ]
+  },
+  {
+    "id": 100,
+    "title": "Project Euler 28: Number Spiral Diagonals",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Starting with the number 1 and moving to the right in a clockwise direction, a 5 by 5 spiral is formed. The sum of the numbers on the diagonals is 101. What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed in the same way? Hint: For each shell layer of odd size x from 3 to 1001, the sum of its four corners is 4 * x^2 - 6 * x + 6. Start with a total of 1 (for the center) and loop x from 3 to 1001 stepping by 2.",
+    "tags": [
+      "maths",
+      "repetition",
+      "totalling"
+    ]
+  },
+  {
+    "id": 101,
+    "title": "Project Euler 39: Integer Right Triangles",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: For a right triangle with integer side lengths {a, b, c} and perimeter p, if p = 120, there are exactly three solutions: {20,48,52}, {24,45,51}, {30,40,50}. For which value of p <= 1000 is the number of solutions maximized? Hint: To stay under 5000 steps, use Euclid's formula to generate Pythagorean perimeters: p = 2 * m * (m + n) * k, where m > n > 0, gcd(m, n) = 1, one of m, n is even, and k is a multiplier. Count the perimeters in an array.",
+    "tags": [
+      "maths",
+      "selection",
+      "repetition",
+      "array"
+    ]
+  },
+  {
+    "id": 102,
+    "title": "Project Euler 45: Tri, Pent, and Hex",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Triangle, pentagonal, and hexagonal numbers are generated by formulas: T(n) = n*(n+1)/2, P(n) = n*(3n-1)/2, H(n) = n*(2n-1). It is verified that T(285) = P(165) = H(143) = 40755. Find the next triangle number that is also pentagonal and hexagonal. Hint: Since all hexagonal numbers are also triangle numbers, loop through hexagonal numbers starting from n = 144 and check if (sqrt(24 * H(n) + 1) + 1) / 6 is an integer.",
+    "tags": [
+      "maths",
+      "repetition",
+      "selection"
+    ]
+  },
+  {
+    "id": 103,
+    "title": "Project Euler 53: Combinatoric Selections",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: How many, not necessarily distinct, values of n choose r (combinations of n elements taken r at a time) for 1 <= n <= 100 are greater than one million? Hint: For each n from 23 to 100, find the first r where n choose r > 1,000,000. Since combinations are symmetric and increase towards the middle, the number of valid r values for that n is n - 2*r + 1.",
+    "tags": [
+      "maths",
+      "repetition",
+      "counting"
+    ]
+  },
+  {
+    "id": 104,
+    "title": "Project Euler 56: Powerful Digit Sum",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Considering natural numbers of the form a^b, where a, b < 100, what is the maximum digital sum? Hint: The largest digit sums mathematically occur when a and b are very close to 100. Limit your search loop for a and b from 90 to 99, sum the digits of a^b, and find the maximum sum.",
+    "tags": [
+      "maths",
+      "repetition",
+      "strings",
+      "totalling"
+    ]
+  },
+  {
+    "id": 105,
+    "title": "Project Euler 57: Square Root Convergents",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: In the infinite continued fraction expansion of sqrt(2), the first four convergents are 3/2, 7/5, 17/12, and 41/29. In the first one thousand expansions, how many fractions contain a numerator with more digits than the denominator? Hint: Use the recurrence: N_next = N + 2 * D and D_next = N + D starting with N = 3, D = 2. Loop 1000 times, check length of string representation of N and D, and count.",
+    "tags": [
+      "maths",
+      "repetition",
+      "counting"
+    ]
+  },
+  {
+    "id": 106,
+    "title": "Project Euler 63: Powerful Digit Counts",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: The 5-digit number, 16807 = 7^5, is also a fifth power. Similarly, 134217728 = 8^9 is a ninth power. How many n-digit positive integers exist which are also an nth power? Hint: Loop bases b from 1 to 9 and powers n from 1 to 21. Count how many times b^n has exactly n digits (since b cannot be 10, and 9^22 has only 21 digits).",
+    "tags": [
+      "maths",
+      "repetition",
+      "counting"
+    ]
+  },
+  {
+    "id": 107,
+    "title": "Project Euler 65: Convergents of e",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Find the sum of digits in the numerator of the 100th convergent of the continued fraction for e. The sequence of coefficients for e is [2; 1, 2, 1, 1, 4, 1, 1, 6, 1, ...]. Hint: Use the recurrence: N(k) = a(k) * N(k-1) + N(k-2) starting with N(0) = 1, N(1) = 2. For k from 2 to 100, the coefficient a(k) is 2 * (k // 3) if k is divisible by 3, otherwise 1.",
+    "tags": [
+      "maths",
+      "repetition",
+      "strings",
+      "totalling"
+    ]
+  },
+  {
+    "id": 108,
+    "title": "Project Euler 69: Totient Maximum",
+    "spice": "\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Euler's totient function, phi(n), finds the count of numbers less than n that are relatively prime to n. Find the value of n <= 1,000,000 for which n / phi(n) is a maximum. Hint: To maximize n / phi(n), n must have the maximum number of distinct prime factors. Multiply the smallest primes together (2 * 3 * 5 * 7 * 11 * 13 * 17...) until the product barely stays under 1,000,000.",
+    "tags": [
+      "maths",
+      "repetition"
+    ]
+  },
+  {
+    "id": 109,
+    "title": "Project Euler 71: Ordered Fractions",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Consider the fraction n/d, where n and d are positive integers. If d <= 1,000,000 and n/d < 3/7, find the numerator of the fraction immediately to the left of 3/7. Hint: The closest fraction to 3/7 satisfies 3*d - 7*n = 1. Find the largest d <= 1,000,000 such that d leaves a remainder of 5 when divided by 7, then compute n = (3*d - 1) / 7.",
+    "tags": [
+      "maths"
+    ]
+  },
+  {
+    "id": 110,
+    "title": "Project Euler 73: Fractions in a Range",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: How many reduced proper fractions lie between 1/3 and 1/2 in the sorted set of reduced proper fractions for d <= 3000? Hint: To stay under 5000 steps, use a dynamic programming array of size 3001. Initialize dp[d] = (d - 1) // 2 - d // 3, then subtract dp[i] from all its multiples dp[2*i], dp[3*i]... up to 3000.",
+    "tags": [
+      "maths",
+      "repetition",
+      "counting",
+      "array"
+    ]
+  },
+  {
+    "id": 111,
+    "title": "Project Euler 76: Counting Summations",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: How many different ways can the number 100 be written as a sum of at least two positive integers? Hint: Use Euler's Pentagonal Number Theorem to compute integer partitions up to 100. This recurrence runs in under 300 steps and calculates the exact partition count.",
+    "tags": [
+      "maths",
+      "repetition",
+      "functions"
+    ]
+  },
+  {
+    "id": 112,
+    "title": "Project Euler 97: Large Non-Mersenne Prime",
+    "spice": "\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Find the last ten digits of the massive non-Mersenne prime: 28433 * 2^7830457 + 1. Hint: Use Python's native modular exponentiation via pow(2, 7830457, 10**10) to slice the calculation to only look at the last 10 digits at each step, making it run in under 10 steps.",
+    "tags": [
+      "maths",
+      "functions"
+    ]
+  },
+  {
+    "id": 113,
+    "title": "Project Euler 99: Largest Exponential",
+    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "comment": "# instructions: Using a list of base-exponent pairs (base^exponent), determine which index has the greatest numerical value. Hint: Do not compute the exponentials directly. Instead, apply the logarithm law: log(a^b) = b * log(a). Multiply the exponent by the log of the base for each pair, and find the index with the maximum value.",
+    "tags": [
+      "maths",
+      "repetition",
+      "selection"
+    ]
   }
 ]

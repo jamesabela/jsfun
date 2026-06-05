@@ -440,13 +440,13 @@
     fetch('challenges.json')
       .then(res => res.json())
       .then(challenges => {
-        const total = challenges.length || 90;
+        const total = challenges.length || 113;
         initializeCertificate(challenges, total);
       })
       .catch(err => {
         console.error("Error loading challenges.json:", err);
-        // Fallback to static 90 if fetch fails
-        initializeCertificate([], 90);
+        // Fallback to static 113 if fetch fails
+        initializeCertificate([], 113);
       });
 
     function initializeCertificate(challenges, total) {

@@ -48,6 +48,7 @@
       font-weight: 700;
       background: linear-gradient(135deg, #2563eb, #8b5cf6);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 12px;
     }
@@ -516,7 +517,7 @@
       ← Back to Python Code Lab
     </a>
     <h1 id="mainTitle">Python Challenges Index</h1>
-    <p class="subtitle" id="mainSubtitle">Quickly verify, preview, and load any of the 90 challenges directly in the
+    <p class="subtitle" id="mainSubtitle">Quickly verify, preview, and load any of the 113 challenges directly in the
       editor</p>
 
     <div style="margin-top: 16px; margin-bottom: 8px;">
@@ -541,7 +542,7 @@
           <div class="achievement-progress-bar">
             <div class="achievement-progress-fill" id="achievementProgressFill"></div>
           </div>
-          <span class="achievement-progress-text" id="achievementProgressText">0% Completed (0 / 90)</span>
+          <span class="achievement-progress-text" id="achievementProgressText">0% Completed (0 / 113)</span>
         </div>
       </div>
     </div>
@@ -564,16 +565,22 @@
     </div>
   </div>
 
-  <div class="filter-panel">
-    <div class="search-wrapper">
-      <input type="text" class="search-input" id="searchInput" name="search_challenges"
-        placeholder="Search by challenge title or description..." autocomplete="off">
+  <div class="filter-panel" style="flex-direction: column; align-items: stretch; gap: 16px;">
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center; width: 100%;">
+      <div class="search-wrapper">
+        <input type="text" class="search-input" id="searchInput" name="search_challenges"
+          placeholder="Search by title, description, tags, or difficulty..." autocomplete="off">
+      </div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All Challenges</button>
+        <button class="filter-btn" data-filter="🌶️">Mild (🌶️)</button>
+        <button class="filter-btn" data-filter="🌶️🌶️">Medium (🌶️🌶️)</button>
+        <button class="filter-btn" data-filter="🌶️🌶️🌶️">Spicy (🌶️🌶️🌶️)</button>
+      </div>
     </div>
-    <div class="filter-buttons">
-      <button class="filter-btn active" data-filter="all">All Challenges</button>
-      <button class="filter-btn" data-filter="🌶️">Mild (🌶️)</button>
-      <button class="filter-btn" data-filter="🌶️🌶️">Medium (🌶️🌶️)</button>
-      <button class="filter-btn" data-filter="🌶️🌶️🌶️">Spicy (🌶️🌶️🌶️)</button>
+    <div id="tagFilterContainer"
+      style="display: flex; gap: 8px; flex-wrap: wrap; padding-top: 12px; border-top: 1px dashed var(--border-color); align-items: center;">
+      <!-- Dynamic tag pills go here -->
     </div>
   </div>
 
@@ -709,7 +716,7 @@
 
     function updateStats() {
       const completed = getCompletedChallenges().length;
-      const total = challengeData.length || 90;
+      const total = challengeData.length || 113;
       const percentage = Math.round((completed / total) * 100);
 
       const titleMain = document.getElementById('mainTitle');
@@ -747,6 +754,60 @@
       if (progressTextEl) {
         progressTextEl.textContent = `${percentage}% Completed (${completed} / ${total})`;
       }
+    }
+
+    function renderTagFilters() {
+      const container = document.getElementById('tagFilterContainer');
+      if (!container) return;
+
+      const uniqueTags = new Set();
+      challengeData.forEach(c => {
+        if (c.tags) {
+          c.tags.forEach(t => uniqueTags.add(t));
+        }
+      });
+
+      const sortedTags = Array.from(uniqueTags).sort((a, b) => a.localeCompare(b));
+
+      container.innerHTML = '<span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">Filter by Tag:</span>';
+
+      const currentQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+
+      sortedTags.forEach(t => {
+        const pill = document.createElement('button');
+        pill.className = 'filter-btn';
+        pill.style.padding = '4px 10px';
+        pill.style.fontSize = '12px';
+        pill.style.borderRadius = '6px';
+        pill.textContent = t;
+
+        const isActive = currentQuery === t.toLowerCase();
+        if (isActive) {
+          pill.classList.add('active');
+        }
+
+        pill.style.cursor = 'pointer';
+        pill.addEventListener('click', () => {
+          const searchInput = document.getElementById('searchInput');
+          if (isActive) {
+            searchInput.value = '';
+          } else {
+            searchInput.value = t;
+            // Reset difficulty filter to 'all'
+            const allBtn = Array.from(document.querySelectorAll('.filter-btn'))
+              .find(btn => btn.getAttribute('data-filter') === 'all');
+            if (allBtn) {
+              document.querySelectorAll('.filter-btn').forEach(b => {
+                if (b === allBtn) b.classList.add('active');
+                else if (b.getAttribute('data-filter')) b.classList.remove('active');
+              });
+              currentFilter = 'all';
+            }
+          }
+          renderChallenges();
+        });
+        container.appendChild(pill);
+      });
     }
 
     function renderChallenges() {
@@ -921,6 +982,8 @@
 
         grid.appendChild(card);
       });
+
+      renderTagFilters();
     }
 
     // Share Progress Logic
