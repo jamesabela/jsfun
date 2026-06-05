@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/oop_adts_course/09_linked_list_insert_traverse.html
-# https://jamesabela.github.io/jsfun/oop_adts_course/vocabulary.html
 # https://jamesabela.github.io/jsfun/oop_adts_course/exam_examples.html
 
 # Level 9 of 12 - OOP ADTs

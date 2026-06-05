@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/oop_adts_course/11_adt_from_adt.html
-# https://jamesabela.github.io/jsfun/oop_adts_course/vocabulary.html
 # https://jamesabela.github.io/jsfun/oop_adts_course/exam_examples.html
 
 # Level 11 of 12 - OOP ADTs

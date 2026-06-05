@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/oop_adts_course/03_stack_push.html
-# https://jamesabela.github.io/jsfun/oop_adts_course/vocabulary.html
 # https://jamesabela.github.io/jsfun/oop_adts_course/exam_examples.html
 
 # Level 3 of 12 - OOP ADTs

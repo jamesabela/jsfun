@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/oop_adts_course/12_final_project.html
-# https://jamesabela.github.io/jsfun/oop_adts_course/vocabulary.html
 # https://jamesabela.github.io/jsfun/oop_adts_course/exam_examples.html
 
 # Level 12 of 12 - OOP ADTs

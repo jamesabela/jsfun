@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/oop_adts_course/07_queue_application.html
-# https://jamesabela.github.io/jsfun/oop_adts_course/vocabulary.html
 # https://jamesabela.github.io/jsfun/oop_adts_course/exam_examples.html
 
 # Level 7 of 12 - OOP ADTs

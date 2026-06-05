@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/oop_adts_course/02_stack_class.html
-# https://jamesabela.github.io/jsfun/oop_adts_course/vocabulary.html
 # https://jamesabela.github.io/jsfun/oop_adts_course/exam_examples.html
 
 # Level 2 of 12 - OOP ADTs

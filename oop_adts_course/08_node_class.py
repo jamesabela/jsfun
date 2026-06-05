@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/oop_adts_course/08_node_class.html
-# https://jamesabela.github.io/jsfun/oop_adts_course/vocabulary.html
 # https://jamesabela.github.io/jsfun/oop_adts_course/exam_examples.html
 
 # Level 8 of 12 - OOP ADTs

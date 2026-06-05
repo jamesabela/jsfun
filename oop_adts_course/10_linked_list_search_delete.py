@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/oop_adts_course/10_linked_list_search_delete.html
-# https://jamesabela.github.io/jsfun/oop_adts_course/vocabulary.html
 # https://jamesabela.github.io/jsfun/oop_adts_course/exam_examples.html
 
 # Level 10 of 12 - OOP ADTs
