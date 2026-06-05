@@ -1,6 +1,4 @@
 # Tutorial: https://jamesabela.github.io/jsfun/oop_course/03_constructor_attributes.html
-# Vocabulary: https://jamesabela.github.io/jsfun/oop_course/vocabulary.html
-# Exam examples: https://jamesabela.github.io/jsfun/oop_course/exam_examples.html
 # Breadcrumb: Level 3 of 12 - OOP
 
 # Level 3 of 12 - OOP

@@ -1,6 +1,4 @@
 # Tutorial: https://jamesabela.github.io/jsfun/oop_course/10_aggregation.html
-# Vocabulary: https://jamesabela.github.io/jsfun/oop_course/vocabulary.html
-# Exam examples: https://jamesabela.github.io/jsfun/oop_course/exam_examples.html
 # Breadcrumb: Level 10 of 12 - OOP
 
 # Level 10 of 12 - OOP

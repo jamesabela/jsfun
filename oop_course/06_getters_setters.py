@@ -1,6 +1,4 @@
 # Tutorial: https://jamesabela.github.io/jsfun/oop_course/06_getters_setters.html
-# Vocabulary: https://jamesabela.github.io/jsfun/oop_course/vocabulary.html
-# Exam examples: https://jamesabela.github.io/jsfun/oop_course/exam_examples.html
 # Breadcrumb: Level 6 of 12 - OOP
 
 # Level 6 of 12 - OOP

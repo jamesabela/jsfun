@@ -1,6 +1,4 @@
 # Tutorial: https://jamesabela.github.io/jsfun/oop_course/12_final_rpg.html
-# Vocabulary: https://jamesabela.github.io/jsfun/oop_course/vocabulary.html
-# Exam examples: https://jamesabela.github.io/jsfun/oop_course/exam_examples.html
 # Breadcrumb: Level 12 of 12 - OOP
 
 # Level 12 of 12 - OOP

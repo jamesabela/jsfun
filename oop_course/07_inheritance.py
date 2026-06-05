@@ -1,6 +1,4 @@
 # Tutorial: https://jamesabela.github.io/jsfun/oop_course/07_inheritance.html
-# Vocabulary: https://jamesabela.github.io/jsfun/oop_course/vocabulary.html
-# Exam examples: https://jamesabela.github.io/jsfun/oop_course/exam_examples.html
 # Breadcrumb: Level 7 of 12 - OOP
 
 # Level 7 of 12 - OOP
