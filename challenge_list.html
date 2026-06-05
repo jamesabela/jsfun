@@ -236,6 +236,13 @@
       border-radius: 6px;
       display: inline-flex;
       align-items: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .spice-badge:hover {
+      transform: scale(1.05);
+      background: #fef3c7;
     }
 
     .challenge-title {
@@ -349,6 +356,33 @@
     .challenge-card.completed {
       border-color: rgba(16, 185, 129, 0.4);
       background: linear-gradient(135deg, #ffffff, rgba(16, 185, 129, 0.015));
+    }
+
+    .challenge-tags-wrapper {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      margin-top: -8px; /* offset spacing */
+    }
+
+    .challenge-tag-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #4f46e5;
+      background: #eef2ff;
+      border: 1px solid #e0e7ff;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: capitalize;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .challenge-tag-badge:hover {
+      background: #4f46e5;
+      color: white;
+      border-color: #4f46e5;
     }
 
     /* Achievement Card Style */
@@ -700,10 +734,23 @@
       const grid = document.getElementById('challengeGrid');
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
 
+      const normalizeEmoji = str => str.replace(/\uFE0F/g, '');
+
       const filtered = challengeData.filter(c => {
         const matchesFilter = currentFilter === 'all' || c.spice === currentFilter;
-        const matchesQuery = c.title.toLowerCase().includes(query) || 
-                             c.comment.toLowerCase().includes(query);
+        
+        let spiceName = '';
+        if (c.spice === '🌶️') spiceName = 'mild';
+        else if (c.spice === '🌶️🌶️') spiceName = 'medium';
+        else if (c.spice === '🌶️🌶️🌶️') spiceName = 'spicy';
+
+        const matchesQuery = 
+          c.title.toLowerCase().includes(query) || 
+          c.comment.toLowerCase().includes(query) ||
+          (c.tags && c.tags.some(t => t.toLowerCase().includes(query))) ||
+          spiceName.includes(query) ||
+          normalizeEmoji(c.spice).includes(normalizeEmoji(query));
+
         return matchesFilter && matchesQuery;
       });
 
@@ -746,6 +793,16 @@
         const spice = document.createElement('span');
         spice.className = 'spice-badge';
         spice.textContent = c.spice;
+        spice.title = `Click to filter by ${c.spice === '🌶️' ? 'Mild' : c.spice === '🌶️🌶️' ? 'Medium' : 'Spicy'}`;
+        spice.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          const filterBtn = Array.from(document.querySelectorAll('.filter-btn'))
+            .find(btn => btn.getAttribute('data-filter') === c.spice);
+          if (filterBtn) {
+            filterBtn.click();
+          }
+        });
 
         const title = document.createElement('h3');
         title.className = 'challenge-title';
@@ -809,6 +866,37 @@
         card.appendChild(idBadge);
         card.appendChild(header);
         card.appendChild(desc);
+
+        // Render tags if they exist
+        if (c.tags && c.tags.length > 0) {
+          const tagsWrapper = document.createElement('div');
+          tagsWrapper.className = 'challenge-tags-wrapper';
+          c.tags.forEach(t => {
+            const tagSpan = document.createElement('span');
+            tagSpan.className = 'challenge-tag-badge';
+            tagSpan.textContent = t;
+            tagSpan.title = `Click to filter by tag "${t}"`;
+            tagSpan.addEventListener('click', (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              const searchInput = document.getElementById('searchInput');
+              if (searchInput) {
+                searchInput.value = t;
+                const allBtn = Array.from(document.querySelectorAll('.filter-btn'))
+                  .find(btn => btn.getAttribute('data-filter') === 'all');
+                if (allBtn) {
+                  allBtn.click();
+                } else {
+                  currentFilter = 'all';
+                  renderChallenges();
+                }
+              }
+            });
+            tagsWrapper.appendChild(tagSpan);
+          });
+          card.appendChild(tagsWrapper);
+        }
+
         card.appendChild(footer);
         card.appendChild(completedWrapper);
 

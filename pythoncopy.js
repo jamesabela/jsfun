@@ -21,6 +21,42 @@
       window.updateBlocksButtonState = function() {};
     }
 
+    function wrapPythonComment(comment, maxLength = 75) {
+      if (!comment) return '';
+      let text = comment;
+      let prefix = '# instructions: ';
+      
+      if (comment.toLowerCase().startsWith('# instructions:')) {
+        text = comment.slice(15).trim();
+      } else if (comment.startsWith('# ')) {
+        text = comment.slice(2).trim();
+        prefix = '# ';
+      }
+      
+      const words = text.split(/\s+/);
+      const lines = [];
+      let currentLine = prefix;
+      
+      for (const word of words) {
+        if (currentLine.length + word.length + 1 > maxLength && currentLine !== prefix && currentLine !== '# ') {
+          lines.push(currentLine);
+          currentLine = '# ' + word;
+        } else {
+          if (currentLine === prefix || currentLine === '# ') {
+            currentLine += word;
+          } else {
+            currentLine += ' ' + word;
+          }
+        }
+      }
+      
+      if (currentLine) {
+        lines.push(currentLine);
+      }
+      
+      return lines.join('\n');
+    }
+
     window.parseBlocklyXmlText = function(xmlText) {
       if (typeof Blockly === 'undefined') {
         throw new Error('Blockly is not loaded.');
@@ -1621,7 +1657,19 @@ import sys, builtins
           for (let i = 0; i < binary.length; i++) {
             bytes[i] = binary.charCodeAt(i);
           }
-          const decodedCode = new TextDecoder().decode(bytes);
+          let decodedCode = new TextDecoder().decode(bytes);
+
+          // Dynamically wrap challenge instructions comment on load to 35 characters for optimal readability
+          if (decodedCode.trim().startsWith('# Challenge:') && decodedCode.includes('# instructions:')) {
+            const maxLength = 35;
+            const lines = decodedCode.split('\n');
+            const instIndex = lines.findIndex(l => l.toLowerCase().startsWith('# instructions:'));
+            if (instIndex !== -1) {
+              const wrapped = wrapPythonComment(lines[instIndex], maxLength);
+              lines[instIndex] = wrapped;
+              decodedCode = lines.join('\n');
+            }
+          }
 
           if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
             exitPlaybackMode(true);
