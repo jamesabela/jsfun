@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/dictionaries_course/08_nested_dictionary.html
-# https://jamesabela.github.io/jsfun/dictionaries_course/glossary.html
 # Level 8 of 10 - Dictionaries
 
 students = {

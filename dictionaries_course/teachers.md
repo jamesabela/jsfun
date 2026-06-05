@@ -4,7 +4,7 @@
 
 This course breaks a long dictionary demonstration into manageable steps. It starts with key-value pairs, moves through safe access, looping, updating and deleting, then finishes with nested dictionaries and a word-frequency task.
 
-The glossary is available from every HTML guide using the interactive glossary button. The final project is intentionally open-ended and does not use direct automated tests.
+The glossary is available from every HTML guide using the Vocabulary page link, which opens in a new tab. The final project is intentionally open-ended and does not use direct automated tests.
 
 ## Solutions
 

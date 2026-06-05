@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/dictionaries_course/02_key_rules.html
-# https://jamesabela.github.io/jsfun/dictionaries_course/glossary.html
 # Level 2 of 10 - Dictionaries
 
 things = {

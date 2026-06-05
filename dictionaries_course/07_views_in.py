@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/dictionaries_course/07_views_in.html
-# https://jamesabela.github.io/jsfun/dictionaries_course/glossary.html
 # Level 7 of 10 - Dictionaries
 
 d1 = {'name': 'Steve', 'age': 21, 'marks': 60, 'course': 'Computer Engg'}

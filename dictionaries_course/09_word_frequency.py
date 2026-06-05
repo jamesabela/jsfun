@@ -1,6 +1,5 @@
 #load https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/dictionaries_course/romeo_juliet_sample.txt
 # https://jamesabela.github.io/jsfun/dictionaries_course/09_word_frequency.html
-# https://jamesabela.github.io/jsfun/dictionaries_course/glossary.html
 # Level 9 of 10 - Dictionaries
 
 import string

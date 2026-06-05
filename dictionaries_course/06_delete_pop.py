@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/dictionaries_course/06_delete_pop.html
-# https://jamesabela.github.io/jsfun/dictionaries_course/glossary.html
 # Level 6 of 10 - Dictionaries
 
 captains = {"England":"Root", "Australia":"Paine", "India":"Virat", "Srilanka":"Jayasurya"}

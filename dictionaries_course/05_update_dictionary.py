@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/dictionaries_course/05_update_dictionary.html
-# https://jamesabela.github.io/jsfun/dictionaries_course/glossary.html
 # Level 5 of 10 - Dictionaries
 
 captains = {"England":"Root", "Australia":"Smith", "India":"Dhoni", "Srilanka":"Jayasurya"}

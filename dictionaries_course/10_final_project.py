@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/dictionaries_course/10_final_project.html
-# https://jamesabela.github.io/jsfun/dictionaries_course/glossary.html
 # Level 10 of 10 - Dictionaries
 
 # Final project - Dictionary App

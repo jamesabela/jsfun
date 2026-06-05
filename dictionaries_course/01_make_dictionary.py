@@ -1,5 +1,4 @@
 # https://jamesabela.github.io/jsfun/dictionaries_course/01_make_dictionary.html
-# https://jamesabela.github.io/jsfun/dictionaries_course/glossary.html
 # Level 1 of 10 - Dictionaries
 
 capitals = {"USA":"Washington D.C.", "France":"Paris"}
