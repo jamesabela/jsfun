@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAIE Exam Guide: File Handling Pseudocode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-gradient: linear-gradient(135deg, #f8fafc, #ecfeff);
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --accent: #0f766e;
+    --accent2: #14b8a6;
+    --soft: #ccfbf1;
+    --border: rgba(20, 184, 166, 0.25);
+    --shadow: 0 10px 25px -8px rgba(15, 23, 42, 0.16);
+    --code-bg: #0f172a;
+    --code-text: #f8fafc;
+  }
+  
+  body.dark-theme {
+    --bg-gradient: linear-gradient(135deg, #0f172a, #022c22);
+    --card-bg: #1e293b;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --accent: #2dd4bf;
+    --accent2: #14b8a6;
+    --soft: rgba(20, 184, 166, 0.15);
+    --border: rgba(20, 184, 166, 0.3);
+    --shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.5);
+    --code-bg: #020617;
+    --code-text: #f8fafc;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background: var(--bg-gradient);
+    color: var(--text-main);
+    font-family: Inter, system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 780px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 14px;
+    gap: 12px;
+  }
+  
+  .title-group h1 {
+    font-family: Outfit, sans-serif;
+    font-weight: 800;
+    font-size: 1.7rem;
+    color: var(--text-main);
+  }
+  
+  .title-group p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  
+  .breadcrumb {
+    background: var(--soft);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+  
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+  
+  .card-title {
+    font-family: Outfit, sans-serif;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  
+  .instruction-text {
+    font-size: 0.96rem;
+    line-height: 1.55;
+    color: var(--text-main);
+  }
+  
+  .banner-info {
+    background: var(--soft);
+    border-left: 4px solid var(--accent2);
+    color: var(--accent);
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 0.94rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  
+  h3 {
+    font-family: Outfit, sans-serif;
+    font-weight: 800;
+    color: var(--accent);
+    font-size: 1.05rem;
+    margin-top: 6px;
+  }
+  
+  ul {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  li {
+    font-size: 0.96rem;
+    line-height: 1.55;
+    color: var(--text-main);
+  }
+  
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 14px;
+    border-radius: 10px;
+    font-family: "Fira Code", Consolas, Monaco, monospace;
+    font-size: 0.86rem;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  code {
+    background: #e2e8f0;
+    color: #1e293b;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: "Fira Code", Consolas, Monaco, monospace;
+    font-size: 0.9em;
+  }
+  
+  body.dark-theme code {
+    background: #334155;
+    color: #f1f5f9;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid var(--border);
+    text-align: left;
+    font-size: 0.9rem;
+  }
+  
+  th {
+    background: var(--soft);
+    color: var(--accent);
+    font-weight: 800;
+  }
+  
+  tr:nth-child(even) td {
+    background: rgba(0, 0, 0, 0.015);
+  }
+  
+  body.dark-theme tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.015);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="title-group">
+      <p>CAIE COMPUTER SCIENCE</p>
+      <h1>File Handling Exam Guide</h1>
+    </div>
+    <div class="breadcrumb">Exam Reference</div>
+  </header>
+
+  <div class="banner-info">
+    💡 <strong>Course Structure Note:</strong> Levels 1 to 5 in this course cover the core syllabus requirements for CAIE exams (Read, Write, Append, and filename variables). Levels 6 to 10 introduce TSV parsing, database search queries, and complex records, which are designed for further interest, practical projects, and advanced practice.
+  </div>
+
+  <div class="card">
+    <div class="card-title">1. The Core Pseudocode Command Set (Both Syllabuses)</div>
+    <p class="instruction-text">For both CAIE IGCSE (0478) and A-Level (9618), Cambridge expects you to use the standard capitalized pseudocode commands to manage files.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Operation</th>
+          <th>Syntax</th>
+          <th>What it actually does</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Open (Read)</strong></td>
+          <td><code>OPENFILE "data.txt" FOR READ</code></td>
+          <td>Prepares an existing file to load data into the program.</td>
+        </tr>
+        <tr>
+          <td><strong>Open (Write)</strong></td>
+          <td><code>OPENFILE "data.txt" FOR WRITE</code></td>
+          <td>Wipes the file clean (or creates it) to start saving fresh data.</td>
+        </tr>
+        <tr>
+          <td><strong>Open (Append)</strong></td>
+          <td><code>OPENFILE "data.txt" FOR APPEND</code></td>
+          <td>Prepares the file to add data onto the very end without deleting anything.</td>
+        </tr>
+        <tr>
+          <td><strong>Close</strong></td>
+          <td><code>CLOSEFILE "data.txt"</code></td>
+          <td>Finalizes changes and safely saves them to secondary storage.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">2. IGCSE (0478) Requirements: Line by Line</div>
+    <p class="instruction-text">At IGCSE level, file handling is kept simple. You are treated as if you are interacting with individual, sequenced data items or a fixed number of rows.</p>
+    <h3>The Key Commands</h3>
+    <ul>
+      <li><strong>Reading:</strong> <code>READFILE "data.txt", MyVariable</code></li>
+      <li><strong>Writing:</strong> <code>WRITEFILE "data.txt", MyVariable</code></li>
+    </ul>
+    <h3>Distinct IGCSE Characteristics</h3>
+    <ul>
+      <li><strong>Fixed Loops or Sequential Steps:</strong> IGCSE questions heavily rely on you knowing exactly how many lines are in the file or just reading a few specific lines sequentially.</li>
+      <li><strong>No EOF Function Required:</strong> The official 0478 pseudocode guide does not explicitly mandate the use of an End-of-File check (<code>EOF()</code>). You are usually reading a fixed count of items (e.g., using a <code>FOR</code> loop).</li>
+    </ul>
+    <h3>IGCSE Writing Example:</h3>
+    <pre>// Saving a user's name and high score
+DECLARE Name : STRING
+DECLARE Score : INTEGER
+OUTPUT "Enter name and score: "
+INPUT Name, Score
+
+OPENFILE "scores.txt" FOR WRITE
+WRITEFILE "scores.txt", Name
+WRITEFILE "scores.txt", Score
+CLOSEFILE "scores.txt"</pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3. A-Level (9618) Requirements: Dynamic & Complex</div>
+    <p class="instruction-text">Once you step up to 9618, files are no longer just simple storage boxes; they require active management.</p>
+    <h3>The Key Additions</h3>
+    <ul>
+      <li><strong><code>EOF(&lt;filename&gt;)</code> Function:</strong> This is mandatory knowledge for 9618. You must use it inside a conditional loop (typically <code>WHILE NOT EOF("filename")</code>) to process text files where the length or number of lines is unknown.</li>
+      <li><strong>File Records & Data Structures:</strong> You are often expected to read data out of a file and instantly map it into an Array of Records or user-defined data types.</li>
+      <li><strong>Sequential vs. Random Files (Paper 3 / A2):</strong> If you are doing the full A-Level, you must also master Random Files (<code>OPENFILE "data.txt" FOR RANDOM</code>), which use records, field lengths, and the <code>SEEK</code> command to edit specific lines without reading the entire file from the top.</li>
+    </ul>
+    <h3>A-Level Reading/Editing Example (Sequential Text File):</h3>
+    <pre>// Reading an unknown amount of text and looking for a specific value to edit/count
+DECLARE LineText : STRING
+
+OPENFILE "database.txt" FOR READ
+
+WHILE NOT EOF("database.txt") DO
+    READFILE "database.txt", LineText
+    IF LineText = "TargetValue" THEN
+        OUTPUT "Found target record."
+    ENDIF
+ENDWHILE
+
+CLOSEFILE "database.txt"</pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Summary of the Core Differences</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>IGCSE (047CAIE 0478)</th>
+          <th>A-Level (CAIE 9618)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>File Types</strong></td>
+          <td>Simple text files only.</td>
+          <td>Text files, CSV files, and Random/Binary files.</td>
+        </tr>
+        <tr>
+          <td><strong>Tracking File End</strong></td>
+          <td>Fixed <code>FOR</code> loops or static linear execution.</td>
+          <td>Must use the <code>WHILE NOT EOF("filename")</code> loop construct.</td>
+        </tr>
+        <tr>
+          <td><strong>Editing Data</strong></td>
+          <td>Rewrite the whole file from scratch using <code>FOR WRITE</code>.</td>
+          <td>Read into memory structures (Arrays/Records), alter data, and write back out (or use Random File <code>SEEK</code>).</td>
+        </tr>
+        <tr>
+          <td><strong>Data Mapping</strong></td>
+          <td>Variables or 1D arrays.</td>
+          <td>Composite Data Types (Records), 2D Arrays, or Object-Orientated classes (Paper 4).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // Automatically apply dark theme if the parent document has it
+  if (window.parent && window.parent.document.body.classList.contains('dark-theme')) {
+    document.body.classList.add('dark-theme');
+  }
+  // Also check local storage or system preference
+  if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.classList.add('dark-theme');
+  }
+</script>
+</body>
+</html>

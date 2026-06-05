@@ -2,7 +2,7 @@
 # Tutorial: https://jamesabela.github.io/jsfun/files_course/06_read_tsv.html
 #load https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/files_course/historical_events.tsv
 
-# Task: read historical_events.tsv and print the first 5 event names.
+# Task: read historical_events.tsv and print the first 5 events in the format: Event (Year)
 # TSV means tab-separated values. Use split("\t").
 
 count = 0
@@ -12,7 +12,8 @@ with open("historical_events.tsv", "r") as event_file:
     for line in event_file:
         parts = line.strip().split(",")
         event_name = parts[0]
-        print(event_name)
+        year = parts[2]
+        print(event_name + " (" + year + ")")
         count = count + 1
         if count == 5:
             break
@@ -21,6 +22,6 @@ with open("historical_events.tsv", "r") as event_file:
 # ""
 
 #output
-# Queen Victoria's Funeral, Wright Brothers, Emily Davison, Battle Of The Somme, Abdication Of Tsar Nicholas
+# Queen Victoria's Funeral (1901), Wright Brothers, 1903, Emily Davison, 1913, Battle Of The Somme (1916), Abdication Of Tsar Nicholas (1917)
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/files_course/07_search_tsv.py
