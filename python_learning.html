@@ -976,6 +976,11 @@
       <div class="courses-list" id="coursesListAsA2"></div>
     </div>
 
+    <div id="adventureGroupSection">
+      <h3 class="section-group-title">Coding Challenge Adventures</h3>
+      <div class="courses-list" id="coursesListAdventure"></div>
+    </div>
+
     <!-- Empty State -->
     <div class="empty-state" id="emptyState">
       <svg class="empty-state-icon" viewBox="0 0 24 24">
@@ -1433,6 +1438,53 @@
           { file: "11_file_to_oop_tree.py", name: "OOP Tree from File", description: "Generate object-oriented binary search trees from data loaded from a text file." },
           { file: "12_final_project.py", name: "Word Explorer Project", description: "Design a complete binary tree application checking spelling and traversing word collections." }
         ]
+      },
+      {
+        id: "spy_missions_course",
+        category: "adventure",
+        title: "Spy Missions: Python Codebreakers",
+        subtitle: "Coding Challenge Adventures",
+        level: "Adventures",
+        theme: "rose",
+        themeRgb: "244, 63, 94",
+        firstLevel: "mission_01.py",
+        description: "Embark on a connected, spy-themed Python coding adventure. Break codes, decode hidden pathways, calculate factor ciphers, and scan for traitor activity in 20 intense missions.",
+        teacherGuide: "spy_missions_course/teachers.md",
+        keyConcepts: [
+          "Lists and Slicing",
+          "Factors & Loops",
+          "Arithmetic Sequences",
+          "String Manipulation",
+          "GCD & LCM",
+          "Duplicates & Unique Sets",
+          "Contiguous Subarrays",
+          "Caesar Cipher",
+          "Dynamic Programming",
+          "Sliding Window Algorithm",
+          "Recurrence Relations"
+        ],
+        levels: [
+          { file: "mission_01.py", name: "The Steel Door", description: "Read space-separated integers and sum every third number." },
+          { file: "mission_02.py", name: "The Factor Lock", description: "Find and output the highest proper factor of a given number." },
+          { file: "mission_03.py", name: "The Identity Console", description: "Analyze space-separated sequence values for arithmetic rules." },
+          { file: "mission_04.py", name: "Mainframe Countdown", description: "Compute the sum of the next 100 terms in a valid arithmetic sequence." },
+          { file: "mission_05.py", name: "Encrypted Symbols", description: "Parse specific symbol counts from pipe-delimited text feeds." },
+          { file: "mission_06.py", name: "The LCM Cipher", description: "Find the lowest common multiple of two integers." },
+          { file: "mission_07.py", name: "Escape Route Cleanup", description: "Filter duplicates from list paths while preserving original order." },
+          { file: "mission_08.py", name: "Factorial File", description: "Calculate factorials for incoming console values." },
+          { file: "mission_09.py", name: "Reverse Factorial", description: "Derive the seed value for a given factorial result." },
+          { file: "mission_10.py", name: "Longest Word Warning", description: "Locate and print the longest word inside standard messages." },
+          { file: "mission_11.py", name: "Find The Mole", description: "Merge lists and calculate sorted unique-value medians." },
+          { file: "mission_12.py", name: "Whale Number Door", description: "Determine numbers with digit products divisible by their sums." },
+          { file: "mission_13.py", name: "Increasing Trail", description: "Identify the longest contiguous increasing subarray." },
+          { file: "mission_14.py", name: "Bomb Password Words", description: "Deconstruct numeric keycodes into lowercase words without 'and'." },
+          { file: "mission_15.py", name: "Largest Running Sum", description: "Locate the maximum contiguous subarray sum using Kadane's algorithm." },
+          { file: "mission_16.py", name: "Palindrome Maker ID", description: "Extract the longest palindromic substring using double-pointer checks." },
+          { file: "mission_17.py", name: "Numopolis Artefact", description: "Count combination methods for target values modulo 250." },
+          { file: "mission_18.py", name: "Ledger Caesar Trail", description: "Decrypt Caesar-ciphered streams using dynamic shift keys." },
+          { file: "mission_19.py", name: "Traitor Damage Scan", description: "Count subarrays sum-constrained below limits using sliding windows." },
+          { file: "mission_20.py", name: "The Hidden Passage", description: "Calculate recurrence relation elements under large modulo bounds." }
+        ]
       }
     ];
 
@@ -1440,8 +1492,10 @@
     const searchInput = document.getElementById('searchInput');
     const coursesListGcse = document.getElementById('coursesListGcse');
     const coursesListAsA2 = document.getElementById('coursesListAsA2');
+    const coursesListAdventure = document.getElementById('coursesListAdventure');
     const gcseGroupSection = document.getElementById('gcseGroupSection');
     const asA2GroupSection = document.getElementById('asA2GroupSection');
+    const adventureGroupSection = document.getElementById('adventureGroupSection');
     const journeyMapGcse = document.getElementById('journeyMapGcse');
     const journeyMapAsA2 = document.getElementById('journeyMapAsA2');
     const searchStats = document.getElementById('searchStats');
@@ -1476,7 +1530,7 @@
 
     // Helper to determine if a course belongs to GCSE
     function isGcseCourse(course) {
-      return course.order < 11;
+      return course.category !== 'adventure' && course.order < 11;
     }
 
     // Render Journey Map Step Ribbon
@@ -1485,6 +1539,10 @@
       journeyMapAsA2.innerHTML = '';
       
       COURSES_DATA.forEach(course => {
+        if (course.category === 'adventure') {
+          return;
+        }
+
         const step = document.createElement('a');
         step.href = `#course-${course.id}`;
         step.className = 'journey-step';
@@ -1536,9 +1594,11 @@
     function renderCourses(filterText = '') {
       coursesListGcse.innerHTML = '';
       coursesListAsA2.innerHTML = '';
+      coursesListAdventure.innerHTML = '';
       
       let gcseMatchCount = 0;
       let asA2MatchCount = 0;
+      let adventureMatchCount = 0;
       let totalMatchCount = 0;
 
       const lowerFilter = filterText.toLowerCase().trim();
@@ -1591,16 +1651,24 @@
           const absPlayUrl = `https://jamesabela.github.io/jsfun/pythoncopy.html?url=${encodeURIComponent(rawGitUrl)}`;
           const bugUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfp15MltxxDgZ3Zz_P-SiwGi58V7s9wBAwCegUD_NiejMxK7A/viewform?entry.1610266455=${encodeURIComponent(absPlayUrl)}&entry.1302905622=${encodeURIComponent(course.title + ' - ' + lvl.name)}`;
 
+          const levelNumDisplay = course.category === 'adventure'
+            ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; opacity: 0.75; display: inline-block; vertical-align: middle; color: var(--theme-color);"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>`
+            : (idx + 1);
+
+          const playTooltip = course.category === 'adventure'
+            ? `Open ${lvl.name} in Code Lab`
+            : `Open Mission ${idx + 1} in Code Lab`;
+
           levelsRowsHTML += `
             <tr ${rowStyle}>
-              <td class="level-num-col">${idx + 1}</td>
+              <td class="level-num-col">${levelNumDisplay}</td>
               <td class="level-name-col">
                 ${lvl.name}
                 <span style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-dim); display: block;">${lvl.file}</span>
               </td>
               <td class="level-desc-col">${lvl.description}</td>
               <td class="level-action-col">
-                <a href="${playUrl}" target="_blank" class="play-link-btn" title="Open Mission ${idx + 1} in Code Lab">
+                <a href="${playUrl}" target="_blank" class="play-link-btn" title="${playTooltip}">
                   <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </a>
                 <a href="${bugUrl}" target="_blank" class="bug-report-btn" title="Report a bug for ${lvl.name}">🐛</a>
@@ -1616,10 +1684,19 @@
           return `<span class="concept-tag" ${tagStyle}>${concept}</span>`;
         }).join('');
 
+        const indexHTML = course.category === 'adventure'
+          ? `<div class="course-index" style="display: flex; align-items: center; justify-content: center; width: 50px; flex-shrink: 0;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 38px; height: 38px; color: var(--theme-color);">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+              </svg>
+             </div>`
+          : `<div class="course-index">${String(course.order).padStart(2, '0')}</div>`;
+
         card.innerHTML = `
           <div class="course-header" onclick="toggleAccordion(this.parentElement)">
             <div class="course-header-left">
-              <div class="course-index">${String(course.order).padStart(2, '0')}</div>
+              ${indexHTML}
               <div class="course-meta">
                 <div class="course-title-row">
                   <h3 class="course-title">${course.title}</h3>
@@ -1670,7 +1747,7 @@
                   <table class="levels-table">
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th>${course.category === 'adventure' ? 'Mission' : '#'}</th>
                         <th>Name / File</th>
                         <th>Focus & Objectives</th>
                         <th>Launch</th>
@@ -1686,7 +1763,10 @@
           </div>
         `;
 
-        if (isGcseCourse(course)) {
+        if (course.category === 'adventure') {
+          coursesListAdventure.appendChild(card);
+          adventureMatchCount++;
+        } else if (isGcseCourse(course)) {
           coursesListGcse.appendChild(card);
           gcseMatchCount++;
         } else {
@@ -1704,6 +1784,7 @@
       // Show/Hide group headers/sections based on matches
       gcseGroupSection.style.display = gcseMatchCount > 0 ? 'block' : 'none';
       asA2GroupSection.style.display = asA2MatchCount > 0 ? 'block' : 'none';
+      adventureGroupSection.style.display = adventureMatchCount > 0 ? 'block' : 'none';
 
       // Show/Hide search results stats
       if (filterText !== '') {
