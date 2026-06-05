@@ -2752,6 +2752,23 @@ import sys, builtins
       if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
         exitPlaybackMode(true);
       }
+      
+      // Normalize raw GitHub URLs to relative local paths if running locally or matching our repo structure
+      const githubPrefixes = [
+        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
+        "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
+        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
+        "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
+      ];
+      if (url) {
+        for (const prefix of githubPrefixes) {
+          if (url.startsWith(prefix)) {
+            url = url.substring(prefix.length);
+            break;
+          }
+        }
+      }
+
       currentURL = url;
       updatePuzzleButtonVisibility();
       const fetchURL = /pastebin\.com/i.test(url)
@@ -4360,8 +4377,24 @@ json.dumps(_test_result)
       const loadRegex = /^\s*#\s*load\s+(https?:\/\/\S+|[^\s#]+)/gim;
       let loadMatch;
       const loadPromises = [];
+      const preLoadWarnings = [];
       while ((loadMatch = loadRegex.exec(source)) !== null) {
-        const fileUrl = loadMatch[1];
+        let fileUrl = loadMatch[1];
+        
+        // Normalize raw GitHub URLs to relative local paths if running locally or matching our repo structure
+        const githubPrefixes = [
+          "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
+          "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
+          "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
+          "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
+        ];
+        for (const prefix of githubPrefixes) {
+          if (fileUrl.startsWith(prefix)) {
+            fileUrl = fileUrl.substring(prefix.length);
+            break;
+          }
+        }
+
         try {
           const resolvedUrl = new URL(fileUrl, window.location.href).href;
           const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
@@ -4381,11 +4414,11 @@ json.dumps(_test_result)
                 } catch (e) {}
               })
               .catch(err => {
-                outputEl.textContent += `Warning: Failed to load ${fileUrl} (${err.message})\n`;
+                preLoadWarnings.push(`Failed to load ${fileUrl} (${err.message})`);
               })
           );
         } catch (e) {
-          outputEl.textContent += `Warning: Invalid load URL: ${fileUrl}\n`;
+          preLoadWarnings.push(`Invalid load URL: ${fileUrl}`);
         }
       }
       if (loadPromises.length > 0) {
@@ -4418,14 +4451,25 @@ json.dumps(_test_result)
         
         // Show banner for files loaded/uploaded during this session
         const loadedFiles = Object.keys(loadedFilesSnapshot);
-        if (loadedFiles.length > 0) {
+        if (loadedFiles.length > 0 || (typeof preLoadWarnings !== 'undefined' && preLoadWarnings.length > 0)) {
           const banner = document.createElement('div');
           banner.className = 'loaded-files-banner';
-          banner.style.cssText = 'margin-bottom: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #166534; display: flex; flex-direction: column; gap: 8px;';
-          if (document.body.classList.contains('dark-theme')) {
-            banner.style.backgroundColor = '#064e3b';
-            banner.style.borderColor = '#047857';
-            banner.style.color = '#d1fae5';
+          
+          const hasWarnings = typeof preLoadWarnings !== 'undefined' && preLoadWarnings.length > 0;
+          if (hasWarnings) {
+            banner.style.cssText = 'margin-bottom: 12px; padding: 12px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #991b1b; display: flex; flex-direction: column; gap: 8px;';
+            if (document.body.classList.contains('dark-theme')) {
+              banner.style.backgroundColor = '#7f1d1d';
+              banner.style.borderColor = '#b91c1c';
+              banner.style.color = '#fecaca';
+            }
+          } else {
+            banner.style.cssText = 'margin-bottom: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #166534; display: flex; flex-direction: column; gap: 8px;';
+            if (document.body.classList.contains('dark-theme')) {
+              banner.style.backgroundColor = '#064e3b';
+              banner.style.borderColor = '#047857';
+              banner.style.color = '#d1fae5';
+            }
           }
           
           for (let i = 0; i < loadedFiles.length; i++) {
@@ -4436,16 +4480,28 @@ json.dumps(_test_result)
             const rowId = `btn-prev-${i}`;
             const preId = `pre-prev-${i}`;
             
+            const btnBg = hasWarnings ? '#ef4444' : '#10b981';
+            
             item.innerHTML = `
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <span style="display: flex; align-items: center; gap: 6px;">
                   📄 File <strong>${escapeHtml(filename)}</strong> is loaded and available to use.
                 </span>
-                <button id="${rowId}" onclick="window.toggleFilePreview('${escapeHtml(filename)}', '${rowId}', '${preId}')" style="background: #10b981; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; height: 22px;">Show Preview</button>
+                <button id="${rowId}" onclick="window.toggleFilePreview('${escapeHtml(filename)}', '${rowId}', '${preId}')" style="background: ${btnBg}; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; height: 22px;">Show Preview</button>
               </div>
               <pre id="${preId}" style="display: none; margin: 4px 0 0; padding: 8px; background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 6px; font-family: 'JetBrains Mono', Consolas, Monaco, monospace; font-size: 11px; white-space: pre-wrap; max-height: 120px; overflow-y: auto; color: inherit; width: 100%; box-sizing: border-box;"></pre>
             `;
             banner.appendChild(item);
+          }
+          
+          if (hasWarnings) {
+            for (let i = 0; i < preLoadWarnings.length; i++) {
+              const warningText = preLoadWarnings[i];
+              const item = document.createElement('div');
+              item.style.cssText = 'display: flex; align-items: center; gap: 6px; font-weight: 500;';
+              item.innerHTML = `⚠️ ${escapeHtml(warningText)}`;
+              banner.appendChild(item);
+            }
           }
           outputEl.appendChild(banner);
         }
