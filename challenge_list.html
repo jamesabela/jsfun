@@ -390,6 +390,67 @@
       border-color: #4f46e5;
     }
 
+    /* Share Actions Styles */
+    .share-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+
+    .share-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 4px;
+    }
+
+    .share-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      flex: 1;
+    }
+
+    .share-action-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .share-action-btn.teams-btn {
+      background: #f3f2fc;
+      color: #464eb8;
+      border: 1px solid #e1dff7;
+    }
+
+    .share-action-btn.teams-btn:hover {
+      background: #464eb8;
+      color: white;
+      border-color: #464eb8;
+    }
+
+    .share-action-btn.classroom-btn {
+      background: #e6f7ed;
+      color: #1e8e3e;
+      border: 1px solid #c2ebd1;
+    }
+
+    .share-action-btn.classroom-btn:hover {
+      background: #1e8e3e;
+      color: white;
+      border-color: #1e8e3e;
+    }
+
     /* Achievement Card Style */
     .achievement-card {
       background: var(--card-bg);
@@ -906,6 +967,53 @@
         link.innerHTML = 'Launch Challenge 🚀';
 
         footer.appendChild(link);
+
+        // Share actions row
+        const baseUrl = window.location.href.split('?')[0].replace('challenge_list.html', '');
+        const challengeUrl = baseUrl + getCodeUrl(c);
+        
+        const shareRow = document.createElement('div');
+        shareRow.className = 'share-actions-row';
+        
+        const shareLabel = document.createElement('span');
+        shareLabel.className = 'share-label';
+        shareLabel.textContent = 'Share:';
+        shareRow.appendChild(shareLabel);
+        
+        // Teams button
+        const teamsBtn = document.createElement('a');
+        teamsBtn.className = 'share-action-btn teams-btn';
+        teamsBtn.target = '_blank';
+        teamsBtn.title = 'Share to Microsoft Teams';
+        const teamsText = `Try this Python Coding Challenge: ${c.title}`;
+        teamsBtn.href = `https://teams.microsoft.com/share?href=${encodeURIComponent(challengeUrl)}&msgText=${encodeURIComponent(teamsText)}`;
+        teamsBtn.innerHTML = `
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M9.186 4.797a2.42 2.42 0 1 0-2.86-2.448h1.178c.929 0 1.682.753 1.682 1.682zm-4.295 7.738h2.613c.929 0 1.682-.753 1.682-1.682V5.58h2.783a.7.7 0 0 1 .682.716v4.294a4.197 4.197 0 0 1-4.093 4.293c-1.618-.04-3-.99-3.667-2.35Zm10.737-9.372a1.674 1.674 0 1 1-3.349 0 1.674 1.674 0 0 1 3.349 0m-2.238 9.488-.12-.002a5.2 5.2 0 0 0 .381-2.07V6.306a1.7 1.7 0 0 0-.15-.725h1.792c.39 0 .707.317.707.707v3.765a2.6 2.6 0 0 1-2.598 2.598z"/>
+            <path d="M.682 3.349h6.822c.377 0 .682.305.682.682v6.822a.68.68 0 0 1-.682.682H.682A.68.68 0 0 1 0 10.853V4.03c0-.377.305-.682.682-.682Zm5.206 2.596v-.72h-3.59v.72h1.357V9.66h.87V5.945z"/>
+          </svg>
+          Teams
+        `;
+        shareRow.appendChild(teamsBtn);
+        
+        // Classroom button
+        const classroomBtn = document.createElement('a');
+        classroomBtn.className = 'share-action-btn classroom-btn';
+        classroomBtn.target = '_blank';
+        classroomBtn.title = 'Share to Google Classroom';
+        classroomBtn.href = `https://classroom.google.com/share?url=${encodeURIComponent(challengeUrl)}`;
+        classroomBtn.innerHTML = `
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2z"/>
+            <path d="M2.5 3a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V3zm1 4.5h8v-4h-8v4z"/>
+            <path d="M5 13.5v1h6v-1H5z"/>
+            <path d="M3.5 12.5v3h1v-3h-1zm8 0v3h1v-3h-1z"/>
+          </svg>
+          Classroom
+        `;
+        shareRow.appendChild(classroomBtn);
+        
+        footer.appendChild(shareRow);
 
         // Checkbox completed wrapper
         const completedWrapper = document.createElement('div');
