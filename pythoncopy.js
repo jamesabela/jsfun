@@ -824,6 +824,17 @@ import sys, builtins
       if (revertEditorButton) {
         revertEditorButton.disabled = editor.value === savedEditorCode;
       }
+      if (currentAppMode === 'blocks' && window.blocklyWorkspace) {
+        if (undoEditorButton) {
+          undoEditorButton.disabled = !window.blocklyWorkspace.undoStack_ || window.blocklyWorkspace.undoStack_.length === 0;
+        }
+        if (redoEditorButton) {
+          redoEditorButton.disabled = !window.blocklyWorkspace.redoStack_ || window.blocklyWorkspace.redoStack_.length === 0;
+        }
+      } else {
+        if (undoEditorButton) undoEditorButton.disabled = false;
+        if (redoEditorButton) redoEditorButton.disabled = false;
+      }
     }
 
     function updatePasteCounter() {
@@ -838,6 +849,25 @@ import sys, builtins
     }
 
     function runEditorHistoryCommand(command) {
+      if (currentAppMode === 'blocks') {
+        if (window.blocklyWorkspace) {
+          const before = editor.value;
+          if (command === 'undo') {
+            window.blocklyWorkspace.undo(false);
+          } else if (command === 'redo') {
+            window.blocklyWorkspace.undo(true);
+          }
+          window.setTimeout(() => {
+            if (editor.value !== before) {
+              hasUnsavedChanges = editor.value !== savedEditorCode;
+              refreshEditorAfterProgrammaticChange(command === 'undo' ? 'Undo applied.' : 'Redo applied.');
+            } else {
+              updateEditorActionButtons();
+            }
+          }, 0);
+        }
+        return;
+      }
       if (!editor) return;
       const before = editor.value;
       editor.focus();
@@ -871,6 +901,7 @@ import sys, builtins
 
       if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
         isUpdatingBlocklyFromText = true;
+        if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
         try {
           blocklyWorkspace.clear();
           convertPythonToWorkspace(editor.value, blocklyWorkspace);
@@ -879,6 +910,7 @@ import sys, builtins
         } catch (err) {
           console.warn('Could not sync reverted code to Blocks:', err);
         } finally {
+          if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
           isUpdatingBlocklyFromText = false;
         }
       }
@@ -1033,6 +1065,9 @@ import sys, builtins
     }
 
     function setAppMode(mode) {
+      if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+        exitPlaybackMode(true);
+      }
       if (mode === 'blocks' && currentAppMode !== 'blocks') {
         if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(editor.value)) {
           const proceed = confirm("This program contains lines of code that cannot be fully converted to blocks. Switching to Blocks Mode may lose some code. Do you want to proceed?");
@@ -1094,6 +1129,9 @@ import sys, builtins
 
       if (blocklyWorkspace && typeof Blockly !== 'undefined') {
         blocklyWorkspace.clear();
+        if (typeof blocklyWorkspace.clearUndo === 'function') {
+          blocklyWorkspace.clearUndo();
+        }
         lastGeneratedBlocklyPython = '';
       }
 
@@ -1155,13 +1193,16 @@ import sys, builtins
 
           if (editor.value !== lastGeneratedBlocklyPython) {
             isUpdatingBlocklyFromText = true;
+            if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
             try {
               convertPythonToWorkspace(editor.value, blocklyWorkspace);
               lastGeneratedBlocklyPython = getWorkspacePythonCode();
             } catch (e) {
               console.error("Error parsing python code to blocks:", e);
+            } finally {
+              if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
+              isUpdatingBlocklyFromText = false;
             }
-            isUpdatingBlocklyFromText = false;
           }
 
           resizeBlocklyWorkspaceSoon();
@@ -1255,6 +1296,7 @@ import sys, builtins
         }
       }
       applyTheme();
+      updateEditorActionButtons();
     }
 
     function applyTheme() {
@@ -1422,6 +1464,14 @@ import sys, builtins
       editor.readOnly = true;
       editor.classList.add('playback-readonly');
 
+      if (currentAppMode === 'blocks' && window.blocklyWorkspace) {
+        const blocklyDiv = document.getElementById('blocklyDiv');
+        if (blocklyDiv) {
+          blocklyDiv.style.pointerEvents = 'none';
+          blocklyDiv.style.opacity = '0.8';
+        }
+      }
+
       renderTimelineMarkers();
 
       const timeline = document.getElementById('playbackTimeline');
@@ -1477,12 +1527,14 @@ import sys, builtins
 
       if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
         isUpdatingBlocklyFromText = true;
+        if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
         try {
           blocklyWorkspace.clear();
           convertPythonToWorkspace(state.code, blocklyWorkspace);
         } catch (err) {
           console.warn('Could not sync playback code to blocks:', err);
         } finally {
+          if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
           isUpdatingBlocklyFromText = false;
         }
       }
@@ -1568,6 +1620,14 @@ import sys, builtins
 
       editor.readOnly = false;
       editor.classList.remove('playback-readonly');
+
+      if (window.blocklyWorkspace) {
+        const blocklyDiv = document.getElementById('blocklyDiv');
+        if (blocklyDiv) {
+          blocklyDiv.style.pointerEvents = 'auto';
+          blocklyDiv.style.opacity = '1';
+        }
+      }
 
       if (keepChanges) {
         const finalCode = codeToKeep !== null ? codeToKeep : editor.value;
@@ -1700,6 +1760,9 @@ import sys, builtins
           setRunnerStatus('Code loaded from manual.');
           updateBlocksButtonState();
           playbackHistory = [];
+          if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
+            window.blocklyWorkspace.clearUndo();
+          }
           recordPlaybackSnapshot('Code Loaded', true, 'save');
           editor.focus();
         } catch (err) {
@@ -1968,6 +2031,7 @@ import sys, builtins
           const previousCode = editor.value;
           const previousBlocksDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
           isUpdatingBlocklyFromText = true;
+          if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
           try {
             const converted = convertPythonToWorkspace(code, blocklyWorkspace);
             const hasCodeLines = code.split('\n').some(line => {
@@ -1996,6 +2060,7 @@ import sys, builtins
             alert('This file could not be converted into Blocks. Your current Blocks file was left unchanged.');
             return;
           } finally {
+            if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
             isUpdatingBlocklyFromText = false;
           }
         } else {
@@ -2010,6 +2075,9 @@ import sys, builtins
         autoPreviewFirstLink();
         updateBlocksButtonState();
         playbackHistory = [];
+        if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
+          window.blocklyWorkspace.clearUndo();
+        }
         recordPlaybackSnapshot('Load File', true, 'save');
       }
 
@@ -2042,6 +2110,7 @@ import sys, builtins
         updatePuzzleButtonVisibility();
 
         const previousDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
         try {
           const xmlDom = parseBlocklyXmlText(xmlText);
           blocklyWorkspace.clear();
@@ -2054,6 +2123,9 @@ import sys, builtins
           clearRunner();
           setRunnerStatus('Blocks file loaded successfully.');
           playbackHistory = [];
+          if (blocklyWorkspace && typeof blocklyWorkspace.clearUndo === 'function') {
+            blocklyWorkspace.clearUndo();
+          }
           recordPlaybackSnapshot('Load Blocks', true, 'save');
         } catch (err) {
           console.error('Error loading Blocks file:', err);
@@ -2062,6 +2134,8 @@ import sys, builtins
           resizeBlocklyWorkspaceSoon();
           alert('This Blocks file could not be loaded. Please choose a valid .blocks or .xml file.');
           setRunnerStatus('Blocks upload failed.');
+        } finally {
+          if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
         }
       }
 
@@ -2210,6 +2284,7 @@ import sys, builtins
         updateBlocksButtonState();
         updateEditorActionButtons();
         recordPlaybackSnapshot('Typing', false);
+        scheduleRecordHistoryDebounced('Typing');
       });
 
       editor.addEventListener('paste', () => {
@@ -2759,6 +2834,9 @@ import sys, builtins
           autoPreviewFirstLink();
           updateBlocksButtonState();
           playbackHistory = [];
+          if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
+            window.blocklyWorkspace.clearUndo();
+          }
           recordPlaybackSnapshot('Load Gist', true, 'save');
 
           if (currentAppMode === 'blocks') {
@@ -2767,13 +2845,16 @@ import sys, builtins
               setAppMode('edit');
             } else if (window.blocklyWorkspace) {
               isUpdatingBlocklyFromText = true;
+              if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
               try {
                 convertPythonToWorkspace(editor.value, window.blocklyWorkspace);
                 lastGeneratedBlocklyPython = getWorkspacePythonCode();
               } catch (ex) {
                 console.error("Error parsing python code to blocks:", ex);
+              } finally {
+                if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
+                isUpdatingBlocklyFromText = false;
               }
-              isUpdatingBlocklyFromText = false;
             }
           }
         })

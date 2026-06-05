@@ -191,7 +191,7 @@
     }
 
     body.blocks-mode-active .toggle-row {
-      display: none !important;
+      display: flex;
     }
 
     html.dark-theme {
