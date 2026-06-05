@@ -603,6 +603,7 @@
   <script>
     let challengeData = [];
     let currentFilter = 'all';
+    let selectedTags = [];
 
     const badges = [
       {
@@ -771,8 +772,6 @@
 
       container.innerHTML = '<span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">Filter by Tag:</span>';
 
-      const currentQuery = document.getElementById('searchInput').value.toLowerCase().trim();
-
       sortedTags.forEach(t => {
         const pill = document.createElement('button');
         pill.className = 'filter-btn';
@@ -781,28 +780,17 @@
         pill.style.borderRadius = '6px';
         pill.textContent = t;
 
-        const isActive = currentQuery === t.toLowerCase();
+        const isActive = selectedTags.some(selTag => selTag.toLowerCase() === t.toLowerCase());
         if (isActive) {
           pill.classList.add('active');
         }
 
         pill.style.cursor = 'pointer';
         pill.addEventListener('click', () => {
-          const searchInput = document.getElementById('searchInput');
           if (isActive) {
-            searchInput.value = '';
+            selectedTags = selectedTags.filter(selTag => selTag.toLowerCase() !== t.toLowerCase());
           } else {
-            searchInput.value = t;
-            // Reset difficulty filter to 'all'
-            const allBtn = Array.from(document.querySelectorAll('.filter-btn'))
-              .find(btn => btn.getAttribute('data-filter') === 'all');
-            if (allBtn) {
-              document.querySelectorAll('.filter-btn').forEach(b => {
-                if (b === allBtn) b.classList.add('active');
-                else if (b.getAttribute('data-filter')) b.classList.remove('active');
-              });
-              currentFilter = 'all';
-            }
+            selectedTags.push(t);
           }
           renderChallenges();
         });
@@ -819,6 +807,10 @@
       const filtered = challengeData.filter(c => {
         const matchesFilter = currentFilter === 'all' || c.spice === currentFilter;
 
+        // Check if all selected tags are present on the challenge
+        const matchesTags = selectedTags.length === 0 || 
+          selectedTags.every(selTag => c.tags && c.tags.some(t => t.toLowerCase() === selTag.toLowerCase()));
+
         let spiceName = '';
         if (c.spice === '🌶️') spiceName = 'mild';
         else if (c.spice === '🌶️🌶️') spiceName = 'medium';
@@ -831,7 +823,7 @@
           spiceName.includes(query) ||
           normalizeEmoji(c.spice).includes(normalizeEmoji(query));
 
-        return matchesFilter && matchesQuery;
+        return matchesFilter && matchesTags && matchesQuery;
       });
 
       grid.innerHTML = '';
@@ -877,7 +869,7 @@
         spice.addEventListener('click', (e) => {
           e.stopPropagation();
           e.preventDefault();
-          const filterBtn = Array.from(document.querySelectorAll('.filter-btn'))
+          const filterBtn = Array.from(document.querySelectorAll('.filter-buttons .filter-btn'))
             .find(btn => btn.getAttribute('data-filter') === c.spice);
           if (filterBtn) {
             filterBtn.click();
@@ -959,18 +951,10 @@
             tagSpan.addEventListener('click', (e) => {
               e.stopPropagation();
               e.preventDefault();
-              const searchInput = document.getElementById('searchInput');
-              if (searchInput) {
-                searchInput.value = t;
-                const allBtn = Array.from(document.querySelectorAll('.filter-btn'))
-                  .find(btn => btn.getAttribute('data-filter') === 'all');
-                if (allBtn) {
-                  allBtn.click();
-                } else {
-                  currentFilter = 'all';
-                  renderChallenges();
-                }
+              if (!selectedTags.some(selTag => selTag.toLowerCase() === t.toLowerCase())) {
+                selectedTags.push(t);
               }
+              renderChallenges();
             });
             tagsWrapper.appendChild(tagSpan);
           });
@@ -1135,11 +1119,18 @@
     // Event listeners
     document.getElementById('searchInput').addEventListener('input', renderChallenges);
 
-    document.querySelectorAll('.filter-btn').forEach(btn => {
+    document.querySelectorAll('.filter-buttons .filter-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.filter-buttons .filter-btn').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
         currentFilter = e.target.getAttribute('data-filter');
+        
+        if (currentFilter === 'all') {
+          selectedTags = [];
+          const searchInput = document.getElementById('searchInput');
+          if (searchInput) searchInput.value = '';
+        }
+        
         renderChallenges();
       });
     });
