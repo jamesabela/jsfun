@@ -1676,6 +1676,17 @@ import sys, builtins
       const urlParams = new URLSearchParams(window.location.search);
       const isBlocksTab = urlParams.has('blocks');
 
+      // Set initial theme based on URL query parameter if present
+      const themeParam = urlParams.get('theme');
+      if (themeParam === 'dark') {
+        document.getElementById('dark-mode').checked = true;
+        document.getElementById('light-mode').checked = false;
+      } else if (themeParam === 'light') {
+        document.getElementById('dark-mode').checked = false;
+        document.getElementById('light-mode').checked = true;
+      }
+      applyTheme();
+
       function getInitialBlocksCode(params) {
         if (params.has('blank')) return '';
 
@@ -2630,7 +2641,9 @@ import sys, builtins
       }
       
       const baseUrl = window.location.href.split('?')[0];
-      const shareUrl = `${baseUrl}?code=${encodeURIComponent(base64)}`;
+      const isDark = document.getElementById('dark-mode').checked;
+      const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
+      const shareUrl = `${baseUrl}?code=${encodeURIComponent(base64)}${themeSuffix}`;
       
       copyTextToClipboard(shareUrl).then(() => {
         shareBtn.textContent = 'Link Copied';
