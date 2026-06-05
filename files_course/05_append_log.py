@@ -6,8 +6,12 @@
 
 name = input("Who read the poem? ")
 
-# Open reading_log.txt in append mode and save this format:
+# Open reading_log.txt in append mode ("a") and save this format:
 # Reader: name
+# Remember to include a newline ("\n") at the end of your string!
+#
+# with open("reading_log.txt", "___") as log_file:
+#     log_file.write(___)
 
 with open("reading_log.txt", "r") as log_file:
     log_text = log_file.read()
