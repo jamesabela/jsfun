@@ -3882,6 +3882,78 @@ json.dumps(_test_result)
         await pyodideReadyPromise;
       }
 
+      // 1. Clean up transient files in /home/pyodide from previous runs
+      if (pyodideInstance) {
+        try {
+          const files = pyodideInstance.FS.readdir('/home/pyodide');
+          for (const file of files) {
+            if (file !== '.' && file !== '..' && file !== 'turtle.py') {
+              try {
+                pyodideInstance.FS.unlink(`/home/pyodide/${file}`);
+              } catch (e) {
+                try { pyodideInstance.FS.rmdir(`/home/pyodide/${file}`); } catch (e2) {}
+              }
+            }
+          }
+        } catch (e) {
+          console.error("Error clearing VFS:", e);
+        }
+      }
+
+      // 2. Scan and pre-load '#load <url>' directives
+      const loadedFilesSnapshot = {};
+      const loadRegex = /^\s*#\s*load\s+(https?:\/\/\S+|[^\s#]+)/gim;
+      let loadMatch;
+      const loadPromises = [];
+      const preLoadWarnings = [];
+      while ((loadMatch = loadRegex.exec(code)) !== null) {
+        let fileUrl = loadMatch[1];
+        
+        // Normalize raw GitHub URLs to relative local paths if running locally or matching our repo structure
+        const githubPrefixes = [
+          "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
+          "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
+          "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
+          "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
+        ];
+        for (const prefix of githubPrefixes) {
+          if (fileUrl.startsWith(prefix)) {
+            fileUrl = fileUrl.substring(prefix.length);
+            break;
+          }
+        }
+
+        try {
+          const resolvedUrl = new URL(fileUrl, window.location.href).href;
+          const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+          setRunnerStatus(`Loading remote file: ${filename}...`);
+          loadPromises.push(
+            fetch(resolvedUrl)
+              .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.arrayBuffer();
+              })
+              .then(buf => {
+                const data = new Uint8Array(buf);
+                pyodideInstance.FS.writeFile(`/home/pyodide/${filename}`, data);
+                try {
+                  const stat = pyodideInstance.FS.stat(`/home/pyodide/${filename}`);
+                  loadedFilesSnapshot[filename] = stat.mtime.getTime();
+                } catch (e) {}
+              })
+              .catch(err => {
+                preLoadWarnings.push(`Failed to load ${fileUrl} (${err.message})`);
+              })
+          );
+        } catch (e) {
+          preLoadWarnings.push(`Invalid load URL: ${fileUrl}`);
+        }
+      }
+      if (loadPromises.length > 0) {
+        await Promise.all(loadPromises);
+        setRunnerStatus('Running quiz tests...');
+      }
+
       const results = [];
       let passedCount = 0;
 
@@ -3967,10 +4039,10 @@ json.dumps(_test_result)
         }
       }
 
-      renderQuizResults(results, passedCount, testCases.length, currentQuizMetadata.nextUrl, currentQuizMetadata.isEnd, currentQuizMetadata.courseTitle);
+      renderQuizResults(results, passedCount, testCases.length, currentQuizMetadata.nextUrl, currentQuizMetadata.isEnd, currentQuizMetadata.courseTitle, loadedFilesSnapshot, preLoadWarnings);
     }
 
-    function renderQuizResults(results, passedCount, totalCount, nextUrl = null, isEnd = false, courseTitle = "") {
+    function renderQuizResults(results, passedCount, totalCount, nextUrl = null, isEnd = false, courseTitle = "", loadedFilesSnapshot = {}, preLoadWarnings = []) {
       const isCreative = (totalCount === 0);
       const isAllPassed = isCreative || (passedCount === totalCount);
       const isNonePassed = !isCreative && (passedCount === 0);
@@ -3995,8 +4067,61 @@ json.dumps(_test_result)
         };
       }
 
+      let bannerHtml = '';
+      const loadedFiles = Object.keys(loadedFilesSnapshot || {});
+      const hasWarnings = (preLoadWarnings && preLoadWarnings.length > 0);
+      const isDark = document.body.classList.contains('dark-theme');
+      if (loadedFiles.length > 0 || hasWarnings) {
+        let bannerStyle = '';
+        if (hasWarnings) {
+          if (isDark) {
+            bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #7f1d1d; border: 1px solid #b91c1c; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #fecaca; display: flex; flex-direction: column; gap: 8px;';
+          } else {
+            bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #991b1b; display: flex; flex-direction: column; gap: 8px;';
+          }
+        } else {
+          if (isDark) {
+            bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #064e3b; border: 1px solid #047857; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #d1fae5; display: flex; flex-direction: column; gap: 8px;';
+          } else {
+            bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #166534; display: flex; flex-direction: column; gap: 8px;';
+          }
+        }
+        
+        bannerHtml = `<div class="loaded-files-banner" style="${bannerStyle}">`;
+        for (let i = 0; i < loadedFiles.length; i++) {
+          const filename = loadedFiles[i];
+          const rowId = `btn-prev-quiz-${i}`;
+          const preId = `pre-prev-quiz-${i}`;
+          const btnBg = hasWarnings ? '#ef4444' : '#10b981';
+          
+          bannerHtml += `
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                  📄 File <strong>${escapeHtml(filename)}</strong> is loaded and available to use.
+                </span>
+                <button id="${rowId}" onclick="window.toggleFilePreview('${escapeHtml(filename)}', '${rowId}', '${preId}')" style="background: ${btnBg}; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; height: 22px;">Show Preview</button>
+              </div>
+              <pre id="${preId}" style="display: none; margin: 4px 0 0; padding: 8px; background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 6px; font-family: 'JetBrains Mono', Consolas, Monaco, monospace; font-size: 11px; white-space: pre-wrap; max-height: 120px; overflow-y: auto; color: inherit; width: 100%; box-sizing: border-box;"></pre>
+            </div>
+          `;
+        }
+        if (hasWarnings) {
+          for (let i = 0; i < preLoadWarnings.length; i++) {
+            const warningText = preLoadWarnings[i];
+            bannerHtml += `
+              <div style="display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                ⚠️ ${escapeHtml(warningText)}
+              </div>
+            `;
+          }
+        }
+        bannerHtml += `</div>`;
+      }
+
       let html = `
         <div class="test-results-container">
+          ${bannerHtml}
           <div class="test-results-header">
             <span class="test-results-title">Quiz Test Results</span>
             <span class="test-results-badge ${badgeClass}">${badgeText}</span>
