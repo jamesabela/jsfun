@@ -12,7 +12,7 @@ with open("rudyard.txt", "r") as poem_file:
         line_count = line_count + 1
 
 # Open stats.txt in write mode and write this exact text:
-# Lines: 33
+# Lines: 36
 # Include the newline character at the end.
 
 with open("stats.txt", "r") as stats_file:
@@ -24,6 +24,6 @@ print(saved_text)
 # ""
 
 #output
-# Lines: 33
+# Lines: 36
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/files_course/05_append_log.py

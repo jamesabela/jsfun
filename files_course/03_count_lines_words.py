@@ -22,6 +22,6 @@ print("If count:", if_count)
 # ""
 
 #output
-# Lines: 33, If count: 14
+# Lines: 36, If count: 13
 
 #Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/files_course/04_write_stats.py
