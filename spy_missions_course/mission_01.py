@@ -1,5 +1,6 @@
 # Bronze 1: The Steel Door
 # Tutorial: https://jamesabela.github.io/jsfun/spy_missions_course/mission_01.html
+# Created by Carmella & Kkabir. These challenges were initially designed for the KL Coding Cup.
 # Source adapted from: Bronze Stage 1 Part 1
 # Mission: Read a line of space-separated integers. Output the sum of every third number: positions 0, 3, 6 and so on.
 
