@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Typing Tutor: Save Latest WPM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #eff6ff, #f8fafc);
+      --card-bg: #ffffff;
+      --text-main: #172033;
+      --text-muted: #64748b;
+      --accent: #2563eb;
+      --accent-2: #16a34a;
+      --accent-glow: rgba(37, 99, 235, 0.12);
+      --border: rgba(37, 99, 235, 0.18);
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-gradient); color: var(--text-main); font-family: Inter, system-ui, -apple-system, sans-serif; min-height: 100vh; padding: 24px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 720px; display: flex; flex-direction: column; gap: 18px; }
+    header { border-bottom: 2px solid var(--border); padding-bottom: 12px; }
+    h1 { font-family: Outfit, Inter, sans-serif; font-size: 1.75rem; line-height: 1.1; margin-top: 4px; }
+    .crumb { color: var(--text-muted); font-size: 0.9rem; font-weight: 700; letter-spacing: 0.04em; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; }
+    .card-title { color: var(--accent); font-family: Outfit, Inter, sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; }
+    p, li { font-size: 0.96rem; line-height: 1.55; }
+    ul { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+    .banner { background: var(--accent-glow); border-left: 4px solid var(--accent); border-radius: 10px; padding: 12px 14px; }
+    pre { background: var(--code-bg); color: var(--code-text); padding: 14px; border-radius: 10px; overflow-x: auto; font-family: 'Fira Code', Consolas, monospace; font-size: 0.86rem; }
+    .mini { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .pill { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 999px; padding: 8px 12px; font-weight: 700; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="crumb">LEVEL 5 OF 6 - WRITE</div>
+      <h1>Typing Tutor: Save Latest WPM</h1>
+    </header>
+    <div class="card">
+      <div class="card-title">Why files matter</div>
+      <p>A typing tutor can measure how fast the user typed. This version keeps it simple: the user types one whole line and the program saves the latest WPM.</p>
+      <div class="mini"><div class="pill">Before: memory disappears</div><div class="pill">After: file keeps data</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Your task</div>
+      <p>Store the latest WPM in latest_wpm.txt. wpm is a number, so convert it to a string before writing.</p>
+      <pre>file = open(&quot;latest_wpm.txt&quot;, &quot;w&quot;)
+file.write(str(wpm))
+file.close()</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Helpful hint</div>
+      <div class="banner">Files store text. Convert numbers using str() before writing them.</div>
+    </div>
+  </div>
+</body>
+</html>

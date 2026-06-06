@@ -1180,8 +1180,30 @@
         ]
       },
       {
-        id: "course_functions",
+        id: "files_basics_course",
         order: 8,
+        title: "Files Basics",
+        subtitle: "Files Basics Course",
+        level: "iGCSE",
+        theme: "rose",
+        themeRgb: "244, 63, 94",
+        firstLevel: "01_write_name.py",
+        description: "A short, friendly introduction to simple file handling. Learn the essential patterns for writing a single line of text to a file and reading it back. Perfect for core GCSE programming projects.",
+        teacherGuide: "files_basics_course/teachers.md",
+        keyConcepts: ["File Writing ('w')", "File Reading ('r')", "file.write()", "file.readline()", "file.close()", "Typing tutor project"],
+        levels: [
+          { file: "01_write_name.py", name: "Save a Player Name", description: "Write a player name to a text file using 'w' mode." },
+          { file: "02_read_name.py", name: "Read a Player Name", description: "Read one saved player name from a text file using 'r' mode." },
+          { file: "03_write_highscore.py", name: "Save a High Score", description: "Write a numeric high score to a text file." },
+          { file: "04_read_highscore.py", name: "Read and Compare a High Score", description: "Read a saved score and compare it with new user input." },
+          { file: "05_typing_tutor_write.py", name: "Typing Tutor: Save WPM", description: "Measure typing speed and write the WPM score to a file." },
+          { file: "06_typing_tutor_read.py", name: "Typing Tutor: Read WPM", description: "Read the saved WPM score from a file to display it." },
+          { file: "07_final_project_typing_champion.py", name: "Final Project: Typing Champion", description: "Build a complete typing test game that reads and writes high scores." }
+        ]
+      },
+      {
+        id: "course_functions",
+        order: 9,
         title: "Procedures & Functions",
         subtitle: "Functions Course",
         level: "AS Level",
@@ -1206,7 +1228,7 @@
       },
       {
         id: "verivalid",
-        order: 9,
+        order: 10,
         title: "Validation & Verification",
         subtitle: "Validation Course",
         level: "AS Level",
@@ -1227,31 +1249,6 @@
           { file: "08_visual_check.py", name: "Visual Verification", description: "Render double inputs requesting user verification inputs." },
           { file: "09_double_entry.py", name: "Double Entry", description: "Validate data match by comparing duplicate entries." },
           { file: "10_combined_form.py", name: "Combined Form", description: "Aggregate presence, bounds, pattern, and entry matchers." }
-        ]
-      },
-      {
-        id: "files_course",
-        order: 10,
-        title: "File Loading, Writing & Appending",
-        subtitle: "Files Course",
-        level: "GCSE / AS",
-        theme: "red",
-        themeRgb: "239, 68, 68",
-        firstLevel: "01_load_poem.py",
-        description: "This course teaches file handling in Python using Python Code Lab. It covers loading files with #load, reading text files, using filename variables, counting text, writing new files, appending to files, reading TSV data, searching records, saving filtered results, and a final creative monster project.",
-        teacherGuide: "files_course/teachers.md",
-        keyConcepts: ["File Handling", "Loading Files (#load)", "Reading Files", "Filename Variables", "Line & Word Counting", "Writing Files ('w' mode)", "Appending Files ('a' mode)", "Tab-Separated Values (TSV)", "Traversing TSV Records", "Saving Filtered Data"],
-        levels: [
-          { file: "01_load_poem.py", name: "Load a Text File", description: "Use #load to preload a text file and read its first line." },
-          { file: "02_filename_variable.py", name: "Filename Variables", description: "Store file names in variables to write more dynamic code." },
-          { file: "03_count_lines_words.py", name: "Count Lines & Words", description: "Loop over lines to count total lines and word matches." },
-          { file: "04_write_stats.py", name: "Write a New File", description: "Create and write to a new stats.txt output file in 'w' write mode." },
-          { file: "05_append_log.py", name: "Append to a File", description: "Use 'a' append mode to write logs without deleting existing contents." },
-          { file: "06_read_tsv.py", name: "Read TSV Data", description: "Load and split tab-separated value (TSV) column records." },
-          { file: "07_search_tsv.py", name: "Search File Data", description: "Filter columns of a TSV file to search for matching year records." },
-          { file: "08_save_timeline.py", name: "Save Filtered Data", description: "Output filtered TSV results directly into a new timeline.txt file." },
-          { file: "09_append_tsv.py", name: "Append Structured Data", description: "Write new structured columns to a TSV file using tab characters." },
-          { file: "10_monster_codex.py", name: "Creative Project", description: "Build a Monster Codex by reading and parsing an external RPG database." }
         ]
       },
       {
@@ -1307,8 +1304,33 @@
         ]
       },
       {
-        id: "dictionaries_course",
+        id: "files_course",
         order: 13,
+        title: "A-level Files",
+        subtitle: "Files Course",
+        level: "AS / A2 Level",
+        theme: "red",
+        themeRgb: "239, 68, 68",
+        firstLevel: "01_load_poem.py",
+        description: "This course teaches file handling in Python using Python Code Lab. It covers loading files with #load, reading text files, using filename variables, counting text, writing new files, appending to files, reading TSV data, searching records, saving filtered results, and a final creative monster project.",
+        teacherGuide: "files_course/teachers.md",
+        keyConcepts: ["File Handling", "Loading Files (#load)", "Reading Files", "Filename Variables", "Line & Word Counting", "Writing Files ('w' mode)", "Appending Files ('a' mode)", "Tab-Separated Values (TSV)", "Traversing TSV Records", "Saving Filtered Data"],
+        levels: [
+          { file: "01_load_poem.py", name: "Load a Text File", description: "Use #load to preload a text file and read its first line." },
+          { file: "02_filename_variable.py", name: "Filename Variables", description: "Store file names in variables to write more dynamic code." },
+          { file: "03_count_lines_words.py", name: "Count Lines & Words", description: "Loop over lines to count total lines and word matches." },
+          { file: "04_write_stats.py", name: "Write a New File", description: "Create and write to a new stats.txt output file in 'w' write mode." },
+          { file: "05_append_log.py", name: "Append to a File", description: "Use 'a' append mode to write logs without deleting existing contents." },
+          { file: "06_read_tsv.py", name: "Read TSV Data", description: "Load and split tab-separated value (TSV) column records." },
+          { file: "07_search_tsv.py", name: "Search File Data", description: "Filter columns of a TSV file to search for matching year records." },
+          { file: "08_save_timeline.py", name: "Save Filtered Data", description: "Output filtered TSV results directly into a new timeline.txt file." },
+          { file: "09_append_tsv.py", name: "Append Structured Data", description: "Write new structured columns to a TSV file using tab characters." },
+          { file: "10_monster_codex.py", name: "Creative Project", description: "Build a Monster Codex by reading and parsing an external RPG database." }
+        ]
+      },
+      {
+        id: "dictionaries_course",
+        order: 14,
         title: "Dictionaries & Frequencies",
         subtitle: "Dictionaries Course",
         level: "A2 Level",
@@ -1333,7 +1355,7 @@
       },
       {
         id: "recursion_course",
-        order: 14,
+        order: 15,
         title: "Recursion Puzzles",
         subtitle: "Recursion Course",
         level: "A2 Level",
@@ -1360,7 +1382,7 @@
       },
       {
         id: "oop_course",
-        order: 15,
+        order: 16,
         title: "Object Oriented Python",
         subtitle: "OOP Course",
         level: "A2 Level",
@@ -1387,7 +1409,7 @@
       },
       {
         id: "oop_adts_course",
-        order: 16,
+        order: 17,
         title: "OOP Abstract Data Types",
         subtitle: "OOP ADTs Course",
         level: "A2 Level",
@@ -1414,7 +1436,7 @@
       },
       {
         id: "binary_trees_course",
-        order: 17,
+        order: 18,
         title: "Binary Search Trees",
         subtitle: "Binary Trees Course",
         level: "A2 Level",
@@ -1567,7 +1589,7 @@
 
     // Helper to determine if a course belongs to GCSE
     function isGcseCourse(course) {
-      return course.category !== 'adventure' && course.order < 11;
+      return course.category !== 'adventure' && course.order < 9;
     }
 
     // Render Journey Map Step Ribbon
