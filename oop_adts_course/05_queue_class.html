@@ -30,4 +30,6 @@ function circularAnim(id, step){const a=byId(id);let labels=['0','1','2','3','4'
 function linkedAnim(id, step){const a=byId(id);let vals=step===0?['A']:step===1?['A','C']:['A','B','C'];a.innerHTML='<div class="op">start</div>'+vals.map((v,i)=>'<div class="node">data '+v+'<br><span class="small">next '+(i<vals.length-1?'->':'None')+'</span></div>'+ (i<vals.length-1?'<div class="arrow">-></div>':'')).join('')+'<p class="small" style="width:100%;text-align:center">A linked list stores a reference to the next node instead of using neighbouring array indexes.</p>'}
 function twoStacks(id, step){const a=byId(id);let left=step<2?['A','B']:[];let right=step<1?[]:step===1?['B','A']:['B'];a.innerHTML='<div class="op">input stack</div>'+left.map(x=>'<div class="cell">'+x+'</div>').join('')+'<div class="arrow">move</div><div class="op">output stack</div>'+right.map(x=>'<div class="node">'+x+'</div>').join('')+'<p class="small" style="width:100%;text-align:center">A queue can be implemented using two stacks. This shows an ADT built from another ADT.</p>'}
 function check(input,result,answer){let v=byId(input).value.trim().toLowerCase();byId(result).textContent=v===answer.toLowerCase()?'Correct.':'Try again.'}
-</script></body></html>
+</script><script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+</body></html>

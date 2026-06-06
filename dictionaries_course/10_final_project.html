@@ -83,4 +83,6 @@ function countWordsDemo(){
   const rows=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([w,c])=>`<tr><td>${w}</td><td>${c}</td></tr>`).join('');
   document.getElementById('wordResult').innerHTML='<p><strong>'+Object.keys(counts).length+'</strong> different words found.</p><table><tr><th>Word</th><th>Count</th></tr>'+rows+'</table>';
 }
-</script></body></html>
+</script><script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+</body></html>

@@ -77,5 +77,7 @@ button.secondary { background: var(--accent-purple); }
 1! = 1</pre></div><div class="card "><div class="card-title">Interactive trace</div><div class="demo"><p class="instruction-text">Step through factorial(4). First the calls go down to the base case, then the answers come back up.</p><div class="controls"><button onclick="factStep()">Step</button><button class="secondary" onclick="factReset()">Reset</button></div><div id="fact" class="output"></div></div></div><div class="card "><div class="card-title">Task</div><p class="instruction-text">Complete the function so <code>factorial(5)</code> returns 120.</p></div>
   </div>
   <script>let fs=0;const steps=["factorial(4) needs 4 * factorial(3)","factorial(3) needs 3 * factorial(2)","factorial(2) needs 2 * factorial(1)","factorial(1) is the base case -> 1","return 2 * 1 = 2","return 3 * 2 = 6","return 4 * 6 = 24"];function factStep(){document.getElementById("fact").textContent=steps[Math.min(fs,steps.length-1)]; if(fs<steps.length-1)fs++;}function factReset(){fs=0;document.getElementById("fact").textContent="Ready to trace factorial(4).";}factReset();</script>
+<script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 </body>
 </html>

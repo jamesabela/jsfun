@@ -74,5 +74,7 @@ button.secondary { background: var(--accent-purple); }
 gcd(a, b) = gcd(b, a % b) otherwise</pre><p class="instruction-text">This is elegant because the rule is short, but it solves very large number problems.</p></div><div class="card "><div class="card-title">Interactive trace</div><div class="demo"><div class="controls"><button onclick="gcdStep()">Step gcd(48, 18)</button><button class="secondary" onclick="gcdReset()">Reset</button></div><div id="gcd" class="output"></div></div></div><div class="card "><div class="card-title">Task</div><p class="instruction-text">Complete the recursive <code>gcd</code> function.</p></div>
   </div>
   <script>let gs=0;const g=["gcd(48, 18) -> gcd(18, 48 % 18)","gcd(18, 12) -> gcd(12, 18 % 12)","gcd(12, 6) -> gcd(6, 12 % 6)","gcd(6, 0) -> base case answer is 6"];function gcdStep(){document.getElementById("gcd").textContent=g[Math.min(gs,g.length-1)];if(gs<g.length-1)gs++;}function gcdReset(){gs=0;document.getElementById("gcd").textContent="Ready to trace gcd(48, 18).";}gcdReset();</script>
+<script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 </body>
 </html>

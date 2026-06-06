@@ -30,5 +30,7 @@ if len(code) != 4:
     valid = False</pre><div class="banner">Open the Python file on the left, fix the TODO section, run the tests, then move to the next level.</div></div>
 </div>
 <script>function bookingCheck(){let n=document.getElementById('bn').value;let a=Number(document.getElementById('ba').value);let c=document.getElementById('bc').value;let e1=document.getElementById('be1').value;let e2=document.getElementById('be2').value;let errors=[];if(n==='')errors.push('name missing');if(a<0||a>120||Number.isNaN(a))errors.push('age invalid');if(!/^[A-Za-z]{2}\d{2}$/.test(c))errors.push('code invalid');if(e1!==e2)errors.push('emails do not match');document.getElementById('br').innerHTML=errors.length===0?'<span class="ok">Booking accepted</span> - all checks passed.':'<span class="bad">Booking rejected:</span> '+errors.join(', ')+'.';}</script>
+<script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 </body>
 </html>
