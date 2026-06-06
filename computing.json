@@ -284,6 +284,14 @@
         "desc": "Binary addition simulator by Matt King. Suitable for GCSE and A-level.",
         "tag": "iGCSE / A-Level",
         "isExternal": true
+      },
+      {
+        "title": "Logic.ly Gate Simulator",
+        "emoji": "⚡",
+        "url": "https://logic.ly/demo/samples",
+        "desc": "Interactive logic gate simulator. Design and test digital circuits in your browser with AND, OR, NOT, and other gates.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": true
       }
     ]
   },

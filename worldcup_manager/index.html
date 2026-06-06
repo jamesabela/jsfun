@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Cup Dream Manager - Teacher Portal & Student Lessons</title>
+
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* Custom CSS Variables - Emerald/Gold Football Theme */
+    :root {
+      --primary-base: 145;
+      --primary: hsl(var(--primary-base), 70%, 28%);
+      --primary-light: hsl(var(--primary-base), 60%, 40%);
+      --primary-glow: hsla(var(--primary-base), 70%, 28%, 0.15);
+
+      --accent-base: 45;
+      --accent: hsl(var(--accent-base), 95%, 45%);
+      --accent-glow: hsla(var(--accent-base), 95%, 45%, 0.15);
+
+      --bg-gradient: linear-gradient(135deg, hsl(var(--primary-base), 30%, 97%), hsl(210, 20%, 95%));
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(16, 185, 129, 0.15);
+      --text-main: hsl(210, 40%, 12%);
+      --text-muted: hsl(210, 15%, 35%);
+      --text-dim: hsl(210, 10%, 55%);
+      --input-bg: #ffffff;
+      --shadow: 0 10px 30px -10px hsla(var(--primary-base), 50%, 20%, 0.1);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(135deg, hsl(var(--primary-base), 40%, 4%), hsl(210, 30%, 6%));
+      --card-bg: rgba(20, 25, 35, 0.92);
+      --card-border: rgba(16, 185, 129, 0.22);
+      --text-main: hsl(210, 20%, 95%);
+      --text-muted: hsl(210, 15%, 75%);
+      --text-dim: hsl(210, 10%, 55%);
+      --input-bg: hsl(210, 30%, 10%);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+      padding-bottom: 60px;
+      transition: var(--transition);
+    }
+
+    /* Core container */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header Styling */
+    header {
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      color: white;
+      padding: 40px 0;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      margin-bottom: 40px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .header-info {
+      flex: 1;
+    }
+
+    .crumb-trail {
+      display: inline-block;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .header-info h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      line-height: 1.15;
+      font-weight: 800;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-info p {
+      font-size: 1.05rem;
+      opacity: 0.9;
+      max-width: 650px;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: white;
+      padding: 8px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .theme-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .theme-toggle-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* Sharing Actions */
+    .share-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .share-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .share-classroom {
+      background-color: #fbbc04;
+      color: #0f172a;
+    }
+
+    .share-classroom:hover {
+      background-color: #fcc934;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(251, 188, 4, 0.3);
+    }
+
+    .share-teams {
+      background-color: #464eb8;
+      color: white;
+    }
+
+    .share-teams:hover {
+      background-color: #5b62ca;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(70, 78, 184, 0.3);
+    }
+
+    .share-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* Main Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: 30px;
+      align-items: start;
+    }
+
+    .dashboard-grid>* {
+      min-width: 0;
+    }
+
+    /* Student Roadmap Column */
+    .roadmap-section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .roadmap-section-title svg {
+      width: 24px;
+      height: 24px;
+      color: var(--primary);
+    }
+
+    .student-roadmap {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .level-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 20px;
+      position: relative;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .level-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      border-color: var(--primary-light);
+      box-shadow: 0 15px 35px -10px hsla(var(--primary-base), 70%, 20%, 0.15);
+    }
+
+    .level-illustration {
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-glow);
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(16, 185, 129, 0.25);
+      padding: 10px;
+    }
+
+    .level-illustration img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .level-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .level-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .level-num {
+      background: var(--accent);
+      color: #0f172a;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+
+    .concept-badge {
+      background: var(--primary-glow);
+      color: var(--primary-light);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .level-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .level-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 15px;
+    }
+
+    .level-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .launch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .launch-btn:hover {
+      background: var(--primary-light);
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .launch-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .bug-report-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: var(--transition);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .bug-report-btn:hover {
+      background: #ef4444;
+      color: white;
+      transform: scale(1.1) rotate(8deg);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .copy-code-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-glow);
+      color: var(--primary-light);
+      border: 1px solid var(--card-border);
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .copy-code-btn:hover {
+      background: var(--primary-light);
+      color: white;
+      border-color: var(--primary-light);
+    }
+
+    .copy-code-btn.copied {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: #10b981;
+    }
+
+    .copy-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Teacher Sidebar Column */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .sidebar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .sidebar-card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      border-bottom: 2px solid var(--primary-glow);
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-card-title svg {
+      width: 20px;
+      height: 20px;
+      color: var(--primary-light);
+    }
+
+    .sidebar-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Resources Links */
+    .resource-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .resource-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.88rem;
+      padding: 8px 12px;
+      background: var(--primary-glow);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .resource-link:hover {
+      background: hsla(var(--primary-base), 70%, 28%, 0.25);
+      transform: translateX(4px);
+    }
+
+    .resource-link svg {
+      width: 18px;
+      height: 18px;
+      color: var(--primary);
+    }
+
+    /* Accordion Style teacher guides */
+    .solution-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .accordion-item {
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--input-bg);
+      transition: var(--transition);
+    }
+
+    .accordion-header {
+      background: var(--primary-glow);
+      padding: 12px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    .accordion-header-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .accordion-icon {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.3s ease;
+      color: var(--text-muted);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background: var(--input-bg);
+    }
+
+    .accordion-inner {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.88rem;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .accordion-inner p strong {
+      color: var(--primary-light);
+    }
+
+    .accordion-inner pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* Open State */
+    .accordion-item.is-open .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-item.is-open .accordion-content {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 30px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    footer a {
+      color: var(--primary-light);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .header-actions {
+        width: 100%;
+        align-items: center;
+      }
+
+      .share-container {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .level-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .level-illustration {
+        margin: 0 auto;
+      }
+
+      .level-badge-row {
+        justify-content: center;
+      }
+
+      .level-actions {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Hidden Theme sun/moon assets inside toggle button -->
+  <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle theme mode">
+    <svg id="themeSun" viewBox="0 0 24 24">
+      <path
+        d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0c-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0c-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.01a.996.996 0 0 0 0-1.41l-1.06-1.06c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0z" />
+    </svg>
+    <svg id="themeMoon" viewBox="0 0 24 24" style="display: none;">
+      <path
+        d="M12.3 22c5.02 0 9.1-4.08 9.1-9.1 0-1.55-.39-3.03-1.08-4.32-.35-.65-1.12-.83-1.69-.37-.44.36-.63.95-.47 1.5.21.72.33 1.47.33 2.26 0 4.19-3.41 7.6-7.6 7.6-2.1 0-4.01-.85-5.4-2.22-.39-.38-1.01-.35-1.37.07-.37.43-.37 1.07.03 1.47C6.01 20.75 8.99 22 12.3 22zM9.27 4.49c-.25.59.04 1.25.64 1.5.42.17.9-.01 1.13-.41.27-.47.62-.9 1.01-1.27.46-.42.48-1.14.04-1.59-.44-.45-1.16-.42-1.56.07-.5.62-.93 1.32-1.26 1.7z" />
+    </svg>
+  </button>
+
+  <header>
+    <div class="container header-content">
+      <div class="header-info">
+        <span class="crumb-trail">iGCSE Unit Package</span>
+        <h1>World Cup Dream Manager</h1>
+        <p>Build a fully featured tournament simulation! Empower your students to practice sequence, selection, lists,
+          loops, file loading, and vector graphics through the engaging lens of soccer analytics.</p>
+      </div>
+      <div class="header-actions">
+        <span
+          style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent);">Quick-Share
+          Student Course</span>
+        <div class="share-container">
+          <a id="classroomShareBtn" href="#" target="_blank" class="share-btn share-classroom">
+            <svg class="share-icon" viewBox="0 0 24 24">
+              <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
+              <path
+                d="M22 12c.31-.17.65-.28 1-.32V9l-11-6-11 6 11 6 4-2.18c0-.28.05-.55.15-.81L12 15 3.4 10.3 12 5.6l8.6 4.7-2.6 1.42c.8.3 1.5.8 2 1.48L22 12z" />
+              <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+            Google Classroom
+          </a>
+          <a id="teamsShareBtn" href="#" target="_blank" class="share-btn share-teams">
+            <svg class="share-icon" viewBox="0 0 24 24">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" />
+            </svg>
+            Microsoft Teams
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="dashboard-grid">
+
+      <!-- Left Column: Student Course Directory -->
+      <section>
+        <h2 class="roadmap-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polygon points="12 2 2 22 22 22 12 2"></polygon>
+            <circle cx="12" cy="13" r="3"></circle>
+          </svg>
+          12-Step Python Student Map
+        </h2>
+        <div class="student-roadmap" id="studentRoadmap">
+          <!-- Dynamically populated level cards -->
+        </div>
+      </section>
+
+      <!-- Right Column: Teacher Resources -->
+      <aside class="sidebar">
+
+        <!-- Resources & Datasets -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Unit Materials & Data
+          </h3>
+          <p>This course features external data parsing challenges. Students will load CSV squads and visualize stadium
+            outputs. Share these resources with your students.</p>
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div>
+              <span
+                style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 5px;">Advanced
+                Student Challenges</span>
+              <ul class="resource-list">
+                <li><a class="resource-link" href="project_sheet.html"
+                    style="border: 1px solid var(--accent); background: var(--accent-glow); font-weight: 700;"><span
+                      style="font-size: 1.1rem; vertical-align: middle;">🏆</span> Advanced Project Sheet</a></li>
+              </ul>
+            </div>
+            <div>
+              <span
+                style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 5px;">CSV
+                Dataset Databases</span>
+              <ul class="resource-list">
+                <li><a class="resource-link" href="countries.csv" target="_blank">📄 countries.csv</a></li>
+                <li><a class="resource-link" href="players.csv" target="_blank">📄 players.csv</a></li>
+                <li><a class="resource-link" href="fixtures.csv" target="_blank">📄 fixtures.csv</a></li>
+                <li><a class="resource-link" href="malaysia.csv" target="_blank">🇲🇾 malaysia.csv</a></li>
+                <li><a class="resource-link" href="england.csv" target="_blank">🏴󠁧󠁢󠁥󠁮󠁧󠁿 england.csv</a></li>
+                <li><a class="resource-link" href="malta.csv" target="_blank">🇲🇹 malta.csv</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- iGCSE Penalty Shootouts -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
+              <path d="M2 12h20"></path>
+            </svg>
+            iGCSE Penalty Revision
+          </h3>
+          <p>Football-themed games covering core iGCSE syllabus topics to consolidate computing concepts alongside this
+            coding unit.</p>
+          <ul class="resource-list">
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-representation.json"
+                target="_blank">⚽ Data Representation</a></li>
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-transmission.json"
+                target="_blank">⚽ Data Transmission</a></li>
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-hardware.json"
+                target="_blank">⚽ Hardware Systems</a></li>
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-software.json"
+                target="_blank">⚽ Operating Systems</a></li>
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-internet.json"
+                target="_blank">⚽ Internet & Cybersecurity</a></li>
+          </ul>
+        </div>
+
+        <!-- Teacher Reference Guides & Solutions -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              <line x1="12" y1="11" x2="12" y2="17"></line>
+              <line x1="9" y1="14" x2="15" y2="14"></line>
+            </svg>
+            Teacher Solutions & focus
+          </h3>
+          <p>Click any lesson step below to reveal the teaching focus and curriculum-aligned model Python solution.</p>
+
+          <div class="solution-accordion" id="solutionAccordion">
+            <!-- Accordion items populated dynamically -->
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <footer class="container">
+    <p>World Cup Dream Manager unit portal &copy; 2026. Part of the Python Code Lab curriculum index. <a
+        href="../python_learning.html">Back to Main Roadmap</a></p>
+  </footer>
+
+  <script>
+    // Configuration details
+    const rawGithubBase = "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/worldcup_manager/";
+    const editorPrefix = "../pythoncopy.html?url=";
+    const absoluteEditorPrefix = "https://jamesabela.github.io/jsfun/pythoncopy.html?url=";
+
+    // 12 Levels Data (Mapping to Illustrations & Metadata)
+    const levels = [
+      {
+        num: 1,
+        file: "01_choose_your_dream.py",
+        title: "Choose Your Dream Country",
+        concept: "Input & Output",
+        desc: "Take the first step and print a customized welcome message for your country's journey.",
+        img: "choose_team.svg",
+        focus: "Capturing simple input and printing output.",
+        code: `country = input("Choose your country: ")
+print(country, "World Cup Dream starts now")`
+      },
+      {
+        num: 2,
+        file: "02_team_type.py",
+        title: "Choose Women or Men",
+        concept: "Selection",
+        desc: "Determine selection rules to control the path of your football manager game.",
+        img: "choose_team.svg",
+        focus: "Branching selection rules using lower() case-folding validation.",
+        code: `team = input("Choose women or men: ").lower()
+if team == "women":
+    print("Women's World Cup Dream")
+elif team == "men":
+    print("Men's World Cup Dream")
+else:
+    print("Choose women or men")`
+      },
+      {
+        num: 3,
+        file: "03_country_rating.py",
+        title: "Build a Country Rating",
+        concept: "Arithmetic",
+        desc: "Compute defensive and offensive scores to judge if you're a true contender.",
+        img: "choose_team.svg",
+        focus: "Parsing string inputs into integers to check range thresholds.",
+        code: `attack = int(input("Attack rating: "))
+defence = int(input("Defence rating: "))
+stamina = int(input("Stamina rating: "))
+rating = attack + defence + stamina
+print("Rating:", rating)
+if rating >= 210:
+    print("World Cup contender")
+else:
+    print("Underdog dream")`
+      },
+      {
+        num: 4,
+        file: "04_pick_a_squad.py",
+        title: "Pick a Starting Squad",
+        concept: "Lists & Arrays",
+        desc: "Learn to instantiate lists and append names to organize your dream starting lineup.",
+        img: "training_camp.svg",
+        focus: "Declaring lists and appending elements.",
+        code: `squad = []
+squad.append("Aina Rahman")
+squad.append("Siti Noor")
+squad.append("Maya Lim")
+squad.append("Nadia Tan")
+print("Starting squad")
+print(squad)`
+      },
+      {
+        num: 5,
+        file: "05_training_points.py",
+        title: "Training Points",
+        concept: "Floor Division",
+        desc: "Calculate ratings boost using integer floor division on training points.",
+        img: "training_camp.svg",
+        focus: "Implementing integer division (//) to calculate boosts.",
+        code: `name = input("Player name: ")
+base_rating = int(input("Base rating: "))
+training_points = int(input("Training points: "))
+boost = training_points // 2
+final_rating = base_rating + boost
+print(name, "final rating", final_rating)`
+      },
+      {
+        num: 6,
+        file: "06_random_match.py",
+        title: "Play a Friendly Match",
+        concept: "Random Simulation",
+        desc: "Simulate random match score outcomes and calculate win/loss logic.",
+        img: "training_camp.svg",
+        focus: "Using random.randint() and logic validation blocks.",
+        code: `import random
+home = input("Home team: ")
+away = input("Away team: ")
+home_goals = random.randint(0, 5)
+away_goals = random.randint(0, 5)
+print(home, home_goals, "-", away_goals, away)
+if home_goals > away_goals:
+    print("Home win")
+elif away_goals > home_goals:
+    print("Away win")
+else:
+    print("Draw")`
+      },
+      {
+        num: 7,
+        file: "07_goal_difference.py",
+        title: "Goal Difference Matters",
+        concept: "Accumulators",
+        desc: "Perform mathematical checks to track group points and goal differences.",
+        img: "penalty_pressure.svg",
+        focus: "Complex comparison checks and setting point modifiers.",
+        code: `team = input("Team: ")
+scored = int(input("Goals scored: "))
+conceded = int(input("Goals conceded: "))
+goal_difference = scored - conceded
+if scored > conceded:
+    points = 3
+elif scored == conceded:
+    points = 1
+else:
+    points = 0
+print(team, "points", points)
+print(team, "goal difference", goal_difference)`
+      },
+      {
+        num: 8,
+        file: "08_group_table.py",
+        title: "Build a Group Table",
+        concept: "2D Lists",
+        desc: "Implement simple 2D list structures to manage standings data dynamically.",
+        img: "penalty_pressure.svg",
+        focus: "Updating inner grid values within nested array tables.",
+        code: `group = [["Malaysia",0,0],["Malta",0,0],["Brazil",0,0],["New Zealand",0,0]]
+winner = input("Winning country: ")
+margin = int(input("Goal difference margin: "))
+for team in group:
+    if team[0] == winner:
+        team[1] = team[1] + 3
+        team[2] = team[2] + margin
+print(group)`
+      },
+      {
+        num: 9,
+        file: "09_penalty_shootout.py",
+        title: "Penalty Shootout",
+        concept: "For Loops",
+        desc: "Control loops to simulate a five-shot penalty pressure environment.",
+        img: "penalty_pressure.svg",
+        focus: "Repeating definite iterations and summing totals inside loops.",
+        code: `import random
+team = input("Your team: ")
+opponent = input("Opponent: ")
+team_score = 0
+opponent_score = 0
+for i in range(5):
+    team_score = team_score + random.randint(0, 1)
+    opponent_score = opponent_score + random.randint(0, 1)
+print(team, team_score, "-", opponent_score, opponent)`
+      },
+      {
+        num: 10,
+        file: "10_turtle_stadium.py",
+        title: "Draw the Dream Stadium",
+        concept: "Turtle Graphics",
+        desc: "Combine vector graphic turtle paths to draw your football pitch and stadium.",
+        img: "turtle_stadium.svg",
+        focus: "Positioning vector markers and drawing circles recursively/iteratively.",
+        code: `import turtle
+turtle.bgcolor("dark green")
+turtle.color("white")
+turtle.speed(0)
+turtle.penup()
+turtle.goto(-160, 100)
+turtle.pendown()
+for i in range(2):
+    turtle.forward(320)
+    turtle.right(90)
+    turtle.forward(200)
+    turtle.right(90)
+turtle.penup()
+turtle.goto(0, 100)
+turtle.pendown()
+turtle.right(90)
+turtle.forward(200)
+turtle.penup()
+turtle.goto(0, -20)
+turtle.pendown()
+turtle.circle(20)
+turtle.penup()
+turtle.goto(-145, 130)
+turtle.write("World Cup Dream Stadium", font=("Arial", 14, "bold"))
+print("Stadium complete")
+turtle.done()`
+      },
+      {
+        num: 11,
+        file: "11_load_country_data.py",
+        title: "Load Country Data",
+        concept: "CSV File Parsing",
+        desc: "Open a chosen country squad CSV file (Malaysia, Malta, or England) to search and parse specific player ratings.",
+        img: "worldcup_final.svg",
+        focus: "Opening, reading lines, parsing values, and slicing CSV arrays.",
+        code: `filename = input("Choose country file (malaysia.csv, malta.csv, england.csv): ")
+search_player = input("Player to search for: ")
+found = False
+with open(filename, "r") as file:
+    headings = file.readline()
+    for line in file:
+        parts = line.strip().split(",")
+        name = parts[0]
+        team_type = parts[1]
+        position = parts[2]
+        pace = parts[3]
+        shooting = parts[4]
+        passing = parts[5]
+        defence = parts[6]
+        stamina = parts[7]
+        
+        if name.lower() == search_player.lower():
+            found = True
+            print(name, "-", team_type, position + ":", "Pace", pace + ",", "Shooting", shooting + ",", "Passing", passing + ",", "Defence", defence + ",", "Stamina", stamina)
+if found == False:
+    print("Player not found")`
+      },
+      {
+        num: 12,
+        file: "12_build_your_world_cup.py",
+        title: "Build Your World Cup",
+        concept: "Scenario Integration",
+        desc: "Bring all elements together into a fully functional text-based manager simulation!",
+        img: "worldcup_final.svg",
+        focus: "Combining inputs, looping groups, checking matches, and nesting pen shootouts.",
+        code: `import random
+print("World Cup Dream Manager")
+country = input("Choose your country: ")
+team_type = input("women or men: ").lower()
+points = 0
+goal_difference = 0
+opponents = ["Malta", "Brazil", "New Zealand"]
+for opponent in opponents:
+    my_goals = random.randint(0, 4)
+    their_goals = random.randint(0, 4)
+    print(country, my_goals, "-", their_goals, opponent)
+    goal_difference = goal_difference + my_goals - their_goals
+    if my_goals > their_goals:
+        points = points + 3
+    elif my_goals == their_goals:
+        points = points + 1
+print("Points", points)
+print("Goal difference", goal_difference)
+if points >= 4:
+    print("The dream continues to penalties")
+    our_pens = 0
+    their_pens = 0
+    for i in range(5):
+        our_pens = our_pens + random.randint(0, 1)
+        their_pens = their_pens + random.randint(0, 1)
+    print(country, our_pens, "-", their_pens, "Opponent")
+else:
+    print("The dream ends, but the country believes again")
+print("Dream complete")`
+      }
+    ];
+
+    // Populate Student Cards
+    const roadmapContainer = document.getElementById("studentRoadmap");
+    levels.forEach(lvl => {
+      const card = document.createElement("div");
+      card.className = "level-card";
+
+      const fileUrl = editorPrefix + encodeURIComponent(rawGithubBase + lvl.file);
+      const fileRawGit = rawGithubBase + lvl.file;
+      const absPlayUrl = absoluteEditorPrefix + encodeURIComponent(fileRawGit);
+      const bugUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfp15MltxxDgZ3Zz_P-SiwGi58V7s9wBAwCegUD_NiejMxK7A/viewform?entry.1610266455=${encodeURIComponent(absPlayUrl)}&entry.1302905622=${encodeURIComponent("World Cup Dream Manager - " + lvl.title)}`;
+
+      card.innerHTML = `
+        <div class="level-illustration">
+          <img src="${lvl.img}" alt="${lvl.title} icon">
+        </div>
+        <div class="level-info">
+          <div>
+            <div class="level-badge-row">
+              <span class="level-num">STEP ${String(lvl.num).padStart(2, '0')}</span>
+              <span class="concept-badge">${lvl.concept}</span>
+            </div>
+            <h3 class="level-title">${lvl.title}</h3>
+            <p class="level-desc">${lvl.desc}</p>
+          </div>
+          <div class="level-actions">
+            <a href="${fileUrl}" target="_blank" class="launch-btn">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              Launch in Lab
+            </a>
+            <a href="${bugUrl}" target="_blank" class="bug-report-btn" title="Report a bug for Step ${lvl.num}">🐛</a>
+            <span style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-dim); margin-left: auto;">${lvl.file}</span>
+          </div>
+        </div>
+      `;
+      roadmapContainer.appendChild(card);
+    });
+
+    // Populate Teacher Accordion
+    const accordionContainer = document.getElementById("solutionAccordion");
+    levels.forEach(lvl => {
+      const item = document.createElement("div");
+      item.className = "accordion-item";
+
+      const fileRawGit = rawGithubBase + lvl.file;
+      const absPlayUrl = absoluteEditorPrefix + encodeURIComponent(fileRawGit);
+      const bugUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfp15MltxxDgZ3Zz_P-SiwGi58V7s9wBAwCegUD_NiejMxK7A/viewform?entry.1610266455=${encodeURIComponent(absPlayUrl)}&entry.1302905622=${encodeURIComponent("World Cup Dream Manager - " + lvl.title)}`;
+
+      item.innerHTML = `
+        <div class="accordion-header" onclick="toggleAccordion(this.parentElement)">
+          <span class="accordion-header-title">Step ${lvl.num}: ${lvl.title}</span>
+          <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <p style="margin: 0;"><strong>Syllabus Focus:</strong> ${lvl.focus}</p>
+              <a href="${bugUrl}" target="_blank" class="bug-report-btn" title="Report a bug for Step ${lvl.num}">🐛</a>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <p style="margin: 0;"><strong>Correct Solution Code:</strong></p>
+              <button class="copy-code-btn" onclick="event.stopPropagation(); copySolutionCode(this, ${lvl.num - 1})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy Code
+              </button>
+            </div>
+            <pre><code>${escapeHTML(lvl.code)}</code></pre>
+          </div>
+        </div>
+      `;
+      accordionContainer.appendChild(item);
+    });
+
+    // HTML Escaper helper
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g,
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+
+    // Copy Solution Code functionality
+    function copySolutionCode(btn, index) {
+      const rawCode = levels[index].code;
+      
+      // Fallback copy logic to support all browsers and execution environments
+      function fallbackCopy(text) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.top = "0";
+        textarea.style.left = "0";
+        textarea.style.position = "fixed";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          showSuccess();
+        } catch (err) {
+          console.error('Fallback copy failed', err);
+        }
+        document.body.removeChild(textarea);
+      }
+
+      function showSuccess() {
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="copy-icon" style="color: #10b981;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span style="color: #10b981;">Copied!</span>
+        `;
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove("copied");
+        }, 2000);
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(rawCode)
+          .then(showSuccess)
+          .catch(() => fallbackCopy(rawCode));
+      } else {
+        fallbackCopy(rawCode);
+      }
+    }
+
+    // Toggle Accordion functionality
+    function toggleAccordion(item) {
+      const isOpen = item.classList.contains("is-open");
+
+      // Close all other accordions
+      document.querySelectorAll(".accordion-item").forEach(acc => {
+        acc.classList.remove("is-open");
+        acc.querySelector(".accordion-content").style.maxHeight = null;
+      });
+
+      if (!isOpen) {
+        item.classList.add("is-open");
+        const content = item.querySelector(".accordion-content");
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    }
+
+    // Dynamically set Social Share Links targeting Step 1
+    const firstStepRaw = rawGithubBase + "01_choose_your_dream.py";
+    const absoluteFirstStepCodeLab = absoluteEditorPrefix + encodeURIComponent(firstStepRaw);
+
+    document.getElementById("classroomShareBtn").href = `https://classroom.google.com/share?url=${encodeURIComponent(absoluteFirstStepCodeLab)}`;
+    document.getElementById("teamsShareBtn").href = `https://teams.microsoft.com/share?href=${encodeURIComponent(absoluteFirstStepCodeLab)}`;
+
+    // Theme Management
+    const themeBtn = document.getElementById("themeToggleBtn");
+    const sunIcon = document.getElementById("themeSun");
+    const moonIcon = document.getElementById("themeMoon");
+
+    let activeTheme = localStorage.getItem("worldcup-theme") || "light";
+    document.documentElement.setAttribute("data-theme", activeTheme);
+    updateThemeIcons();
+
+    themeBtn.addEventListener("click", () => {
+      activeTheme = activeTheme === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", activeTheme);
+      localStorage.setItem("worldcup-theme", activeTheme);
+      updateThemeIcons();
+    });
+
+    function updateThemeIcons() {
+      if (activeTheme === "light") {
+        sunIcon.style.display = "block";
+        moonIcon.style.display = "none";
+      } else {
+        sunIcon.style.display = "none";
+        moonIcon.style.display = "block";
+      }
+    }
+  </script>
+</body>
+
+</html>
