@@ -175,26 +175,30 @@ turtle.done()
 Focus: files in a football manager context.
 
 ```python
-search_country = input("Country to search for: ")
-team_type = input("women or men: ").lower()
+filename = input("Choose country file (malaysia.csv, malta.csv, england.csv): ")
+search_player = input("Player to search for: ")
+
 found = False
-with open("countries.csv") as file:
+
+with open(filename, "r") as file:
     headings = file.readline()
     for line in file:
         parts = line.strip().split(",")
-        country = parts[0]
-        region = parts[1]
-        mens_rating = parts[2]
-        womens_rating = parts[3]
-        story = parts[4]
-        if country.lower() == search_country.lower():
+        name = parts[0]
+        team_type = parts[1]
+        position = parts[2]
+        pace = parts[3]
+        shooting = parts[4]
+        passing = parts[5]
+        defence = parts[6]
+        stamina = parts[7]
+        
+        if name.lower() == search_player.lower():
             found = True
-            if team_type == "women":
-                print(country, region, womens_rating)
-            else:
-                print(country, region, mens_rating)
+            print(name, "-", team_type, position + ":", "Pace", pace + ",", "Shooting", shooting + ",", "Passing", passing + ",", "Defence", defence + ",", "Stamina", stamina)
+
 if found == False:
-    print("Country not found")
+    print("Player not found")
 ```
 
 ## Level 12: Build Your World Cup

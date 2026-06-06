@@ -23,21 +23,22 @@
     </section>
     <section class="card">
       <h2>Match Briefing</h2>
-      <p>The country ratings are stored in <code>countries.csv</code>. Your program must load and search the file.</p>
+      <p>Analyze real squad ratings by choosing a country file: <code>malaysia.csv</code>, <code>malta.csv</code>, or <code>england.csv</code>. Your program loads the chosen file to find and display detailed player attributes.</p>
     </section>
     <section class="card challenge">
       <h2>Manager Challenge</h2>
-      <p>Read each line, split it by commas, find the country and print the correct men's or women's rating.</p>
+      <p>Read each line of the chosen file, split it by commas, find the player, and print their team type, position, and stats (Pace, Shooting, Passing, Defence, and Stamina).</p>
     </section>
     <section class="card tactics">
       <h2>Tactics Board</h2>
       <pre>parts = line.strip().split(",")
-country = parts[0]
-womens_rating = parts[3]</pre>
+name = parts[0]
+position = parts[2]
+pace = parts[3]</pre>
     </section>
     <section class="card var">
       <h2>VAR Check</h2>
-      <p>Set <code>found = True</code> when the country is found, otherwise the program will still print Country not found.</p>
+      <p>Set <code>found = True</code> when the player is found, otherwise the program will print <code>Player not found</code>.</p>
     </section>
     
   </main>
