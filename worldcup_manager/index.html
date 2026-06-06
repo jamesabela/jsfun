@@ -465,6 +465,27 @@
       margin-bottom: 12px;
     }
 
+    /* Responsive Iframe Container */
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--card-border);
+      margin-bottom: 15px;
+    }
+
+    .iframe-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
     /* Resources Links */
     .resource-list {
       list-style: none;
@@ -716,79 +737,51 @@
       <!-- Right Column: Teacher Resources -->
       <aside class="sidebar">
 
-        <!-- Resources & Datasets -->
+        <!-- Teacher Training & Guide -->
         <div class="sidebar-card">
           <h3 class="sidebar-card-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
             </svg>
-            Unit Materials & Data
+            Teacher Training & Guide
           </h3>
-          <p>This course features external data parsing challenges. Students will load CSV squads and visualize stadium
-            outputs. Share these resources with your students.</p>
-          <div style="display: flex; flex-direction: column; gap: 15px;">
+          <p>Explore the teacher briefing slideshow below for lesson overview, pedagogy, and curriculum integration tips.</p>
+          
+          <div class="iframe-container">
+            <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTuTvORvQupQUd94h49R_l6VEZmNVHt5d98vBiTQTMncdMNgDDVHpI6BSaj7OplnVVu27LTKqdchuv7/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="1280" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+            <a class="resource-link" href="https://docs.google.com/presentation/d/1Z1fjaaatXpK52uattCu7nQWIFKIv0uHQPM0seq1aTps/template/preview" target="_blank" style="flex: 1; justify-content: center; min-width: 130px; font-size: 0.8rem;">
+              <span>🌐</span> Use in Slides
+            </a>
+            <a class="resource-link" href="https://docs.google.com/presentation/d/1Z1fjaaatXpK52uattCu7nQWIFKIv0uHQPM0seq1aTps/export/pptx" target="_blank" style="flex: 1; justify-content: center; min-width: 130px; font-size: 0.8rem;">
+              <span>📥</span> Use in PPTX
+            </a>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 15px; border-top: 1px dashed var(--card-border); padding-top: 15px; font-size: 0.88rem;">
             <div>
-              <span
-                style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 5px;">Advanced
-                Student Challenges</span>
-              <ul class="resource-list">
-                <li><a class="resource-link" href="project_sheet.html"
-                    style="border: 1px solid var(--accent); background: var(--accent-glow); font-weight: 700;"><span
-                      style="font-size: 1.1rem; vertical-align: middle;">🏆</span> Advanced Project Sheet</a></li>
-              </ul>
+              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 5px;">🚀 Gifted & Talented Extension</span>
+              <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted);">
+                Highly capable students can proceed to the <a href="project_sheet.html" style="color: var(--primary-light); font-weight: 600; text-decoration: none;">🏆 Advanced Project Sheet</a>. This challenges them to parse external databases and design a self-directed, customized World Cup manager simulation.
+              </p>
             </div>
             <div>
-              <span
-                style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 5px;">CSV
-                Dataset Databases</span>
-              <ul class="resource-list">
-                <li><a class="resource-link" href="countries.csv" target="_blank">📄 countries.csv</a></li>
-                <li><a class="resource-link" href="players.csv" target="_blank">📄 players.csv</a></li>
-                <li><a class="resource-link" href="fixtures.csv" target="_blank">📄 fixtures.csv</a></li>
-                <li><a class="resource-link" href="malaysia.csv" target="_blank">🇲🇾 malaysia.csv</a></li>
-                <li><a class="resource-link" href="england.csv" target="_blank">🏴󠁧󠁢󠁥󠁮󠁧󠁿 england.csv</a></li>
-                <li><a class="resource-link" href="malta.csv" target="_blank">🇲🇹 malta.csv</a></li>
+              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 5px;">🧩 Scaffolding & Support</span>
+              <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted);">
+                For students requiring additional support:
+              </p>
+              <ul style="margin-left: 18px; margin-top: 5px; color: var(--text-muted); display: flex; flex-direction: column; gap: 5px;">
+                <li>The curriculum is broken down into a <strong>12-step progressive roadmap</strong>.</li>
+                <li>Each step in the code editor contains tailored <strong>hints, tips, and explanations</strong>.</li>
+                <li>Teachers can click on any step in the <strong>Solutions accordion below</strong> to quickly inspect curriculum-aligned model Python code to help debug.</li>
               </ul>
             </div>
           </div>
-        </div>
-
-        <!-- iGCSE Penalty Shootouts -->
-        <div class="sidebar-card">
-          <h3 class="sidebar-card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-              </path>
-              <path d="M2 12h20"></path>
-            </svg>
-            iGCSE Penalty Revision
-          </h3>
-          <p>Football-themed games covering core iGCSE syllabus topics to consolidate computing concepts alongside this
-            coding unit.</p>
-          <ul class="resource-list">
-            <li><a class="resource-link"
-                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-representation.json"
-                target="_blank">⚽ Data Representation</a></li>
-            <li><a class="resource-link"
-                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-transmission.json"
-                target="_blank">⚽ Data Transmission</a></li>
-            <li><a class="resource-link"
-                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-hardware.json"
-                target="_blank">⚽ Hardware Systems</a></li>
-            <li><a class="resource-link"
-                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-software.json"
-                target="_blank">⚽ Operating Systems</a></li>
-            <li><a class="resource-link"
-                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-internet.json"
-                target="_blank">⚽ Internet & Cybersecurity</a></li>
-          </ul>
         </div>
 
         <!-- Teacher Reference Guides & Solutions -->
@@ -809,6 +802,68 @@
           </div>
         </div>
 
+        <!-- CSV Dataset Databases -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            CSV Dataset Databases
+          </h3>
+          <p>These external databases are used by students in the file parsing challenges (Steps 11 & 12).</p>
+          <ul class="resource-list">
+            <li><a class="resource-link" href="countries.csv" target="_blank">📄 countries.csv</a></li>
+            <li><a class="resource-link" href="players.csv" target="_blank">📄 players.csv</a></li>
+            <li><a class="resource-link" href="fixtures.csv" target="_blank">📄 fixtures.csv</a></li>
+            <li><a class="resource-link" href="malaysia.csv" target="_blank">🇲🇾 malaysia.csv</a></li>
+            <li><a class="resource-link" href="england.csv" target="_blank">🏴󠁧󠁢󠁥󠁮󠁧󠁿 england.csv</a></li>
+            <li><a class="resource-link" href="malta.csv" target="_blank">🇲🇹 malta.csv</a></li>
+          </ul>
+        </div>
+
+        <!-- Retrieval Practice -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
+              <path d="M2 12h20"></path>
+            </svg>
+            Retrieval Practice
+          </h3>
+          <p>Football-themed games covering core iGCSE syllabus topics to consolidate computing concepts alongside this
+            coding unit.</p>
+          <ul class="resource-list">
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-representation.json"
+                target="_blank">⚽ Data Representation</a></li>
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-transmission.json"
+                target="_blank">⚽ Data Transmission</a></li>
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-hardware.json"
+                target="_blank">⚽ Hardware Systems</a></li>
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-software.json"
+                target="_blank">⚽ Operating Systems</a></li>
+            <li><a class="resource-link"
+                href="https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-internet.json"
+                target="_blank">⚽ Internet & Cybersecurity</a></li>
+          </ul>
+          <div style="margin-top: 15px; border-top: 1px dashed var(--card-border); padding-top: 15px;">
+            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 8px;">Python Reference</span>
+            <ul class="resource-list">
+              <li><a class="resource-link" href="../pythonmanual.html" target="_blank">📘 Python Code Guide</a></li>
+            </ul>
+          </div>
+        </div>
       </aside>
 
     </div>
