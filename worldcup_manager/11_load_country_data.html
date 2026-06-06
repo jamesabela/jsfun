@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load Country Data</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root{--dark:#07111f;--navy:#102a4c;--pitch:#15803d;--grass:#22c55e;--gold:#facc15;--card:#ffffff;--text:#172033;--muted:#64748b;--line:#dbeafe;--code:#0f172a;}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#07111f,#0b3b2e);color:var(--text);min-height:100vh;padding:24px}.container{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:18px}.hero{border-radius:22px;overflow:hidden;background:#07111f;color:white;box-shadow:0 18px 35px rgba(0,0,0,.25)}.hero img{width:100%;display:block}.hero-text{padding:22px;background:linear-gradient(90deg,#07111f,#123b63)}.badge{display:inline-block;background:rgba(250,204,21,.18);border:1px solid rgba(250,204,21,.45);color:#fde68a;border-radius:999px;padding:6px 12px;font-size:.82rem;font-weight:700;letter-spacing:.03em;margin-bottom:10px}.hero h1{font-size:2rem;line-height:1.05;margin-bottom:8px}.hero p{color:#e2e8f0;line-height:1.45}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 12px 26px rgba(15,23,42,.12)}.card h2{font-size:1.12rem;margin-bottom:10px;color:#0f172a;display:flex;align-items:center;gap:8px}.card p,.card li{line-height:1.55;color:#243044}.card ul{padding-left:20px;display:grid;gap:8px}.tactics{border-left:6px solid var(--pitch)}.challenge{border-left:6px solid var(--gold)}.var{border-left:6px solid #38bdf8}.extra{border-left:6px solid #f472b6}pre{background:var(--code);color:#f8fafc;padding:14px;border-radius:12px;overflow-x:auto;font-family:"Fira Code",Consolas,monospace;font-size:.88rem}.scoreboard{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;background:#0f172a;color:white;border-radius:14px;padding:12px;text-align:center}.scoreboard div{background:#1e293b;border-radius:10px;padding:10px}.scoreboard strong{display:block;color:var(--gold);font-size:1.2rem}code{background:#e2e8f0;padding:2px 5px;border-radius:5px}</style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <img src="manager_dashboard.svg" alt="Football course illustration">
+      <div class="hero-text">
+        <span class="badge">ROAD TO THE WORLD CUP: 11 / 12 - FILES</span>
+        <h1>Load Country Data</h1>
+        <p>A real manager needs data. Files let the program grow beyond a few variables.</p>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Match Briefing</h2>
+      <p>The country ratings are stored in <code>countries.csv</code>. Your program must load and search the file.</p>
+    </section>
+    <section class="card challenge">
+      <h2>Manager Challenge</h2>
+      <p>Read each line, split it by commas, find the country and print the correct men's or women's rating.</p>
+    </section>
+    <section class="card tactics">
+      <h2>Tactics Board</h2>
+      <pre>parts = line.strip().split(",")
+country = parts[0]
+womens_rating = parts[3]</pre>
+    </section>
+    <section class="card var">
+      <h2>VAR Check</h2>
+      <p>Set <code>found = True</code> when the country is found, otherwise the program will still print Country not found.</p>
+    </section>
+    
+  </main>
+</body>
+</html>

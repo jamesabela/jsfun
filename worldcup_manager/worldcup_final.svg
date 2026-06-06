@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#06101f"/>
+      <stop offset="0.55" stop-color="#102a4c"/>
+      <stop offset="1" stop-color="#0b3b2e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="28%" r="55%">
+      <stop offset="0" stop-color="#facc15" stop-opacity="0.75"/>
+      <stop offset="0.45" stop-color="#38bdf8" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#06101f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#sky)"/>
+  <rect width="1200" height="675" fill="url(#glow)"/>
+  <ellipse cx="600" cy="610" rx="500" ry="130" fill="#15803d"/>
+  <ellipse cx="600" cy="610" rx="390" ry="85" fill="none" stroke="#f8fafc" stroke-width="6" opacity="0.65"/>
+  <line x1="600" y1="530" x2="600" y2="670" stroke="#f8fafc" stroke-width="5" opacity="0.55"/>
+  <circle cx="600" cy="600" r="48" fill="none" stroke="#f8fafc" stroke-width="5" opacity="0.55"/>
+  <g opacity="0.9">
+    <rect x="90" y="230" width="1020" height="110" rx="18" fill="#0f172a" opacity="0.75"/>
+    <text x="600" y="285" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#facc15" text-anchor="middle">Final Project</text>
+    <text x="600" y="325" font-family="Arial, sans-serif" font-size="24" fill="#e2e8f0" text-anchor="middle">Take an underdog nation from group stage to glory.</text>
+  </g>
+  <polygon points="560,420 640,420 625,535 575,535" fill="#facc15"/><rect x="535" y="535" width="130" height="25" fill="#facc15"/><text x="600" y="610" font-family="Arial" font-size="30" fill="#fff" text-anchor="middle">Dream Champions</text>
+</svg>
