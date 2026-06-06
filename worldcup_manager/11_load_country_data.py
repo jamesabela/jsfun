@@ -32,14 +32,10 @@ if found == False:
     print("Player not found")
 
 #Input
-# malaysia.csv
-# Arif Aiman
-# england.csv
-# Harry Kane
-# malta.csv
-# Haley Bugeja
-# england.csv
-# Unknown Player
+# malaysia.csv, Arif Aiman
+# england.csv, Harry Kane
+# malta.csv, Haley Bugeja
+# england.csv, Unknown Player
 
 #output
 # Arif Aiman - men Forward: Pace 84, Shooting 70, Passing 68, Defence 35, Stamina 72

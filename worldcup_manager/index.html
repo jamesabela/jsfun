@@ -370,28 +370,6 @@
       fill: currentColor;
     }
 
-    .bug-report-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: var(--radius-sm);
-      background: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
-      text-decoration: none;
-      font-size: 1.1rem;
-      transition: var(--transition);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-    }
-
-    .bug-report-btn:hover {
-      background: #ef4444;
-      color: white;
-      transform: scale(1.1) rotate(8deg);
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-    }
-
     .copy-code-btn {
       display: inline-flex;
       align-items: center;
@@ -1156,9 +1134,6 @@ print("Dream complete")`
       card.className = "level-card";
 
       const fileUrl = editorPrefix + encodeURIComponent(rawGithubBase + lvl.file);
-      const fileRawGit = rawGithubBase + lvl.file;
-      const absPlayUrl = absoluteEditorPrefix + encodeURIComponent(fileRawGit);
-      const bugUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfp15MltxxDgZ3Zz_P-SiwGi58V7s9wBAwCegUD_NiejMxK7A/viewform?entry.1610266455=${encodeURIComponent(absPlayUrl)}&entry.1302905622=${encodeURIComponent("World Cup Dream Manager - " + lvl.title)}`;
 
       card.innerHTML = `
         <div class="level-illustration">
@@ -1178,7 +1153,6 @@ print("Dream complete")`
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               Launch in Lab
             </a>
-            <a href="${bugUrl}" target="_blank" class="bug-report-btn" title="Report a bug for Step ${lvl.num}">🐛</a>
             <span style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-dim); margin-left: auto;">${lvl.file}</span>
           </div>
         </div>
@@ -1192,10 +1166,6 @@ print("Dream complete")`
       const item = document.createElement("div");
       item.className = "accordion-item";
 
-      const fileRawGit = rawGithubBase + lvl.file;
-      const absPlayUrl = absoluteEditorPrefix + encodeURIComponent(fileRawGit);
-      const bugUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfp15MltxxDgZ3Zz_P-SiwGi58V7s9wBAwCegUD_NiejMxK7A/viewform?entry.1610266455=${encodeURIComponent(absPlayUrl)}&entry.1302905622=${encodeURIComponent("World Cup Dream Manager - " + lvl.title)}`;
-
       item.innerHTML = `
         <div class="accordion-header" onclick="toggleAccordion(this.parentElement)">
           <span class="accordion-header-title">Step ${lvl.num}: ${lvl.title}</span>
@@ -1207,7 +1177,6 @@ print("Dream complete")`
           <div class="accordion-inner">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
               <p style="margin: 0;"><strong>Syllabus Focus:</strong> ${lvl.focus}</p>
-              <a href="${bugUrl}" target="_blank" class="bug-report-btn" title="Report a bug for Step ${lvl.num}">🐛</a>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
               <p style="margin: 0;"><strong>Correct Solution Code:</strong></p>
