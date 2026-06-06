@@ -18,6 +18,8 @@ typed = input("Type the line: ")
 end = time.time()
 
 seconds = end - start
+if seconds == 0:
+    seconds = 0.1
 minutes = seconds / 60
 
 if typed == sentence:

@@ -99,6 +99,8 @@ typed = input("Type the line: ")
 end = time.time()
 
 seconds = end - start
+if seconds == 0:
+    seconds = 0.1
 minutes = seconds / 60
 
 if typed == sentence:
@@ -190,6 +192,8 @@ typed_line = input("Type here: ")
 end_time = time.time()
 
 time_taken = end_time - start_time
+if time_taken == 0:
+    time_taken = 0.1
 minutes = time_taken / 60
 words = len(phrase.split())
 wpm = round(words / minutes)
