@@ -285,6 +285,414 @@
       color: var(--text-main);
     }
 
+    .manual-interactive {
+      background: var(--turtle-playground-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .manual-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .manual-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .manual-field label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .manual-result,
+    .manual-log {
+      background: var(--code-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 10px 12px;
+      min-height: 42px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .manual-log {
+      color: #e2e8f0;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+
+    html.light-theme .manual-result {
+      background: #f8fafc;
+      color: var(--text-main);
+    }
+
+    html.light-theme .manual-log {
+      background: #f8fafc;
+      color: #0f172a;
+      border-color: #dbe3ef;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .manual-ok {
+      color: var(--success);
+      font-weight: 800;
+    }
+
+    .manual-bad {
+      color: #ef4444;
+      font-weight: 800;
+    }
+
+    .viz-stage {
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    html.light-theme .viz-stage {
+      background: #ffffff;
+    }
+
+    .sort-stage {
+      min-height: 180px;
+      align-items: end;
+    }
+
+    .sort-bar {
+      width: 44px;
+      min-width: 38px;
+      background: #dbeafe;
+      border: 2px solid #93c5fd;
+      border-radius: 8px 8px 0 0;
+      color: #0f172a;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+      font-weight: 800;
+      transition: height 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .sort-bar.active {
+      background: #fef3c7;
+      border-color: #f59e0b;
+    }
+
+    .sort-bar.sorted {
+      background: #dcfce7;
+      border-color: #22c55e;
+    }
+
+    .sort-bar.key {
+      background: #ede9fe;
+      border-color: #8b5cf6;
+    }
+
+    .big-o-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.8fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .big-o-chart {
+      min-height: 330px;
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: stretch;
+    }
+
+    html.light-theme .big-o-chart {
+      background: #ffffff;
+    }
+
+    .big-o-chart svg {
+      width: 100%;
+      min-height: 300px;
+      overflow: visible;
+    }
+
+    .big-o-axis {
+      stroke: var(--text-muted);
+      stroke-width: 1.5;
+    }
+
+    .big-o-gridline {
+      stroke: rgba(148, 163, 184, 0.22);
+      stroke-width: 1;
+    }
+
+    .big-o-line {
+      fill: none;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .big-o-label {
+      fill: var(--text-main);
+      font-size: 11px;
+      font-family: var(--font-body);
+      font-weight: 700;
+    }
+
+    .big-o-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .big-o-toggle-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .big-o-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .big-o-toggle input {
+      accent-color: var(--primary);
+    }
+
+    .big-o-chip {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .big-o-readout {
+      display: grid;
+      gap: 8px;
+      max-height: 210px;
+      overflow-y: auto;
+    }
+
+    .big-o-readout-row {
+      display: grid;
+      grid-template-columns: 74px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .big-o-meter {
+      height: 8px;
+      background: rgba(148, 163, 184, 0.2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .big-o-meter span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .big-o-examples {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .big-o-example {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .big-o-example h3 {
+      color: var(--text-main);
+      font-family: var(--font-display);
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    @media (max-width: 860px) {
+      .big-o-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .adt-node,
+    .adt-op,
+    .adt-slot {
+      border-radius: 12px;
+      padding: 12px 14px;
+      min-width: 78px;
+      text-align: center;
+      font-weight: 800;
+      color: #0f172a;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .adt-node {
+      background: #e0f2fe;
+      border: 2px solid #0284c7;
+    }
+
+    .adt-node.highlight {
+      background: #dcfce7;
+      border-color: #22c55e;
+    }
+
+    .adt-node.warn {
+      background: #fee2e2;
+      border-color: #ef4444;
+    }
+
+    .adt-op {
+      background: #ede9fe;
+      border: 2px solid #7c3aed;
+    }
+
+    .adt-slot {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+    }
+
+    .adt-arrow {
+      color: var(--text-muted);
+      font-weight: 900;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .adt-pointer {
+      display: block;
+      font-size: 0.7rem;
+      color: #475569;
+      margin-top: 4px;
+    }
+
+    .tree-visualiser-box {
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--turtle-playground-bg);
+      padding: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tree-visualiser-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .tree-visualiser-svg {
+      width: 100%;
+      height: 360px;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .tree-visualiser-svg .tree-edge {
+      stroke: #94a3b8;
+      stroke-width: 2;
+    }
+
+    .tree-visualiser-svg .tree-node circle {
+      fill: #dbeafe;
+      stroke: #2563eb;
+      stroke-width: 2;
+    }
+
+    .tree-visualiser-svg .tree-node text {
+      font-size: 13px;
+      font-weight: 700;
+      fill: #0f172a;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .tree-visualiser-svg .tree-node.highlight circle {
+      fill: #fef3c7;
+      stroke: #d97706;
+      stroke-width: 3;
+    }
+
+    @media (max-width: 640px) {
+      .tree-visualiser-svg {
+        height: 300px;
+      }
+    }
+
+    .grid-picker-table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 620px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .grid-picker-table th,
+    .grid-picker-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: center;
+      min-width: 48px;
+    }
+
+    .grid-picker-table th {
+      background: var(--primary-glow);
+      color: var(--text-main);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .grid-picker-table td {
+      color: var(--text-main);
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .grid-picker-table td:hover,
+    .grid-picker-table td.active {
+      background: var(--primary);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
     /* Code Blocks */
     .code-wrapper {
       position: relative;
@@ -863,20 +1271,42 @@
   <div class="app-container">
     <aside class="sidebar">
       <div class="sidebar-title">Getting Started</div>
-      <button class="nav-btn active" onclick="showTab('print-var')">📢 Print & Variables</button>
+      <button class="nav-btn active" onclick="showTab('print')">📢 Print</button>
+      <button class="nav-btn" onclick="showTab('variables')">📦 Variables</button>
       <button class="nav-btn" onclick="showTab('operators')">➗ Operators</button>
 
       <div class="sidebar-title">User Interaction</div>
-      <button class="nav-btn" onclick="showTab('inputs')">📥 Inputs & Delays</button>
+      <button class="nav-btn" onclick="showTab('inputs')">📥 Inputs</button>
+      <button class="nav-btn" onclick="showTab('delays')">⏰ Delays</button>
       <button class="nav-btn" onclick="showTab('selection')">🔀 Selection (If/Else)</button>
+      <button class="nav-btn" onclick="showTab('validation')">✅ Validation</button>
 
       <div class="sidebar-title">Loops & Logic</div>
-      <button class="nav-btn" onclick="showTab('loops')">🔁 Loops & Break</button>
-      <button class="nav-btn" onclick="showTab('strings')">📏 String Helpers (len/or)</button>
+      <button class="nav-btn" onclick="showTab('while-loops')">🔁 While Loops</button>
+      <button class="nav-btn" onclick="showTab('break')">🛑 Break</button>
+      <button class="nav-btn" onclick="showTab('for-loops')">🔂 For Loops</button>
+      <button class="nav-btn" onclick="showTab('string-length')">📏 String Length</button>
+      <button class="nav-btn" onclick="showTab('logical-or')">🔍 Logical OR</button>
 
       <div class="sidebar-title">Data & Graphics</div>
       <button class="nav-btn" onclick="showTab('lists')">🗂️ Lists Guide</button>
+      <button class="nav-btn" onclick="showTab('2d-lists')">▦ 2D Lists</button>
+      <button class="nav-btn" onclick="showTab('files')">💾 Files</button>
+      <button class="nav-btn" onclick="showTab('dictionaries')">📖 Dictionaries</button>
       <button class="nav-btn" onclick="showTab('turtle')">🐢 Turtle Commands</button>
+
+      <div class="sidebar-title">AS & A-Level</div>
+      <button class="nav-btn" onclick="showTab('functions')">🧩 Functions</button>
+      <button class="nav-btn" onclick="showTab('searching')">🔎 Searching</button>
+      <button class="nav-btn" onclick="showTab('big-o')">📈 Big O</button>
+      <button class="nav-btn" onclick="showTab('bubble-sort')">🫧 Bubble Sort</button>
+      <button class="nav-btn" onclick="showTab('insertion-sort')">📥 Insertion Sort</button>
+      <button class="nav-btn" onclick="showTab('stacks')">📚 Stacks</button>
+      <button class="nav-btn" onclick="showTab('queues')">🚶 Queues</button>
+      <button class="nav-btn" onclick="showTab('linked-lists')">🔗 Linked Lists</button>
+      <button class="nav-btn" onclick="showTab('recursion')">🌀 Recursion</button>
+      <button class="nav-btn" onclick="showTab('oop')">🏛️ OOP</button>
+      <button class="nav-btn" onclick="showTab('trees')">🌳 Binary Trees</button>
 
       <div class="sidebar-title">Resources</div>
       <button class="nav-btn" onclick="showTab('resources')">📚 Further Learning</button>
@@ -884,8 +1314,8 @@
 
     <main class="content-area">
 
-      <!-- TAB 1: Print & Variables -->
-      <div id="tab-print-var" class="tab-content active">
+      <!-- TAB: Print -->
+      <div id="tab-print" class="tab-content active">
         <div class="card">
           <h2>📢 The print() Function</h2>
           <p>The <code>print()</code> function is used to output text, numbers, or variables to the screen.</p>
@@ -901,7 +1331,10 @@
             spaces automatically.
           </p>
         </div>
+      </div>
 
+      <!-- TAB: Variables -->
+      <div id="tab-variables" class="tab-content">
         <div class="card">
           <h2>📦 Variable Assignment</h2>
           <p>Variables are like boxes that store values. You assign a value to a variable using a single equals sign
@@ -980,7 +1413,7 @@ a = "hello"</code></pre>
         </div>
       </div>
 
-      <!-- TAB 3: Inputs & Delays -->
+      <!-- TAB: Inputs -->
       <div id="tab-inputs" class="tab-content">
         <div class="card">
           <h2>📥 Read User Inputs</h2>
@@ -1000,7 +1433,10 @@ MyAge = int(input("When were you born? "))</code></pre>
           <p>By wrapping <code>input()</code> inside <code>int()</code>, the text input is converted into an **Integer
             (a whole number)**, allowing you to calculate values with it.</p>
         </div>
+      </div>
 
+      <!-- TAB: Delays -->
+      <div id="tab-delays" class="tab-content">
         <div class="card">
           <h2>⏰ Time Delays (time.sleep)</h2>
           <p>You can create pauses or delays in your code using the <code>time</code> module.</p>
@@ -1076,8 +1512,8 @@ else:
         </div>
       </div>
 
-      <!-- TAB 5: Loops & Break -->
-      <div id="tab-loops" class="tab-content">
+      <!-- TAB: While Loops -->
+      <div id="tab-while-loops" class="tab-content">
         <div class="card">
           <h2>🔁 Iteration: While Loops</h2>
           <p>Loops allow computers to repeat instructions quickly. A <code>while</code> loop repeats as long as a
@@ -1088,7 +1524,10 @@ while love_status == "y":
     love_status = input('Do you love iteration? y/n ')</code></pre>
           </div>
         </div>
+      </div>
 
+      <!-- TAB: Break -->
+      <div id="tab-break" class="tab-content">
         <div class="card">
           <h2>🛑 The Break Statement</h2>
           <p>You can end a loop instantly using the <code>break</code> statement, even if the loop condition is still
@@ -1100,7 +1539,10 @@ while love_status == "y":
     break</code></pre>
           </div>
         </div>
+      </div>
 
+      <!-- TAB: For Loops -->
+      <div id="tab-for-loops" class="tab-content">
         <div class="card">
           <h2>🔁 For Loops & range()</h2>
           <p>A <code>for</code> loop repeats a set number of times. You can use <code>range()</code> to customize the
@@ -1118,8 +1560,8 @@ for i in range(1, 100, 2):
         </div>
       </div>
 
-      <!-- TAB 6: String Helpers -->
-      <div id="tab-strings" class="tab-content">
+      <!-- TAB: String Length -->
+      <div id="tab-string-length" class="tab-content">
         <div class="card">
           <h2>📏 String Length: len()</h2>
           <p>The <code>len()</code> function returns the number of characters in a string.</p>
@@ -1133,7 +1575,10 @@ print(len(greeting)) # Outputs: 9</code></pre>
               length of a number, convert it to a string first: <br><code>print(len(str(mynum)))</code></span>
           </div>
         </div>
+      </div>
 
+      <!-- TAB: Logical OR -->
+      <div id="tab-logical-or" class="tab-content">
         <div class="card">
           <h2>🔍 Logical Operator: or</h2>
           <p>Use the <code>or</code> operator to check if at least one of multiple statements is true.</p>
@@ -1234,6 +1679,703 @@ MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
         </div>
       </div>
 
+      <!-- TAB: 2D Lists -->
+      <div id="tab-2d-lists" class="tab-content">
+        <div class="card">
+          <h2>▦ 2D Lists: Rows and Columns</h2>
+          <p>A 2D list is a list containing other lists. Use <code>grid[row][column]</code> to access one cell. Rows and columns both start at index <code>0</code>.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">seats = [
+    ["A", "A", "B"],
+    ["A", "B", "A"],
+    ["A", "A", "A"]
+]
+
+print(seats[0][2])   # B
+seats[1][1] = "A"    # update row 1, column 1</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🎯 Pick a Cell, Build the Code</h2>
+          <p>Choose a sample grid, then click a cell. The Python code updates to show the exact <code>grid[row][column]</code> access and a short example of using that value effectively.</p>
+          <div class="manual-interactive">
+            <div class="manual-grid">
+              <div class="manual-field">
+                <label for="gridPickerDataset">Sample grid</label>
+                <select class="list-input" id="gridPickerDataset" onchange="setGridPickerDataset()">
+                  <option value="numbers">Number grid</option>
+                  <option value="seats">Cinema seats</option>
+                  <option value="marks">Student marks</option>
+                </select>
+              </div>
+              <div class="manual-field">
+                <label>Selected location</label>
+                <div class="manual-result" id="gridPickerResult">Click a cell to see its row and column.</div>
+              </div>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="grid-picker-table" id="gridPickerTable"></table>
+            </div>
+          </div>
+          <div class="code-wrapper">
+            <pre><code class="language-python" id="gridPickerCode"></code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔍 Traversing a Grid</h2>
+          <p>Nested loops visit every cell. The outer loop usually controls the row; the inner loop controls each column in that row.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">total = 0
+sales = [
+    [10, 12, 9],
+    [7, 11, 15]
+]
+
+for row in sales:
+    for value in row:
+        total = total + value
+
+print(total)</code></pre>
+          </div>
+          <div class="banner info">
+            <span>ℹ️</span>
+            <span><strong>Vocabulary:</strong> nested list, row index, column index, traversal, grid total, search algorithm, pixel grid.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Files -->
+      <div id="tab-files" class="tab-content">
+        <div class="card">
+          <h2>💾 Reading and Writing Files</h2>
+          <p>File handling lets programs save data after the program stops. Use <code>"r"</code> to read, <code>"w"</code> to overwrite, and <code>"a"</code> to append to the end.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">file = open("score.txt", "w")
+file.write("120")
+file.close()
+
+file = open("score.txt", "r")
+score = int(file.readline())
+file.close()
+
+print(score)</code></pre>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Common Bug:</strong> <code>"w"</code> deletes the old contents first. Use <code>"a"</code> when you need to keep the existing file contents.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📄 Looping Through Lines</h2>
+          <p>Many A-level file tasks load text, split records, count words, or filter rows. <code>strip()</code> removes the newline at the end of each line.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">file = open("players.tsv", "r")
+
+for line in file:
+    fields = line.strip().split("\t")
+    name = fields[0]
+    rating = int(fields[1])
+    if rating >= 80:
+        print(name)
+
+file.close()</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Dictionaries -->
+      <div id="tab-dictionaries" class="tab-content">
+        <div class="card">
+          <h2>📖 Dictionaries: Key-Value Pairs</h2>
+          <p>A dictionary stores values under named keys. It is useful when a list index is not meaningful enough.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">capitals = {
+    "Malaysia": "Kuala Lumpur",
+    "Malta": "Valletta",
+    "England": "London"
+}
+
+print(capitals["Malaysia"])
+print(capitals.get("Japan", "Unknown"))</code></pre>
+          </div>
+          <p><strong>Safe access:</strong> <code>.get()</code> avoids a <code>KeyError</code> if the key is missing.</p>
+        </div>
+
+        <div class="card">
+          <h2>🔁 Dictionary Loops and Frequencies</h2>
+          <p>Dictionaries are excellent for counting frequencies because each word can become a key and its count can become the value.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">counts = {}
+words = ["to", "be", "or", "not", "to", "be"]
+
+for word in words:
+    counts[word] = counts.get(word, 0) + 1
+
+for word, count in counts.items():
+    print(word, count)</code></pre>
+          </div>
+          <div class="banner info">
+            <span>ℹ️</span>
+            <span><strong>Vocabulary:</strong> key, value, item, safe lookup, membership, nested dictionary, word frequency.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Functions -->
+      <div id="tab-functions" class="tab-content">
+        <div class="card">
+          <h2>🧩 Procedures, Functions and Parameters</h2>
+          <p>A procedure performs a named block of steps. A function returns a value. Parameters are variable names in the definition; arguments are the values passed in the call.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def print_receipt(name, price):
+    print(name, "costs", price)
+
+def add_tax(price):
+    return price * 1.06
+
+total = add_tax(100)
+print_receipt("Keyboard", total)</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🎯 Scope, Return and Decomposition</h2>
+          <p>Local variables exist inside a function. Global variables exist outside. Good programs decompose a large problem into smaller subroutines with clear jobs.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def is_valid_mark(mark):
+    if mark < 0 or mark > 100:
+        return False
+    return True
+
+mark = int(input("Mark: "))
+if is_valid_mark(mark):
+    print("Accepted")
+else:
+    print("Rejected")</code></pre>
+          </div>
+          <div class="banner info">
+            <span>ℹ️</span>
+            <span><strong>Vocabulary:</strong> subroutine, parameter, argument, return value, local scope, global scope, decomposition, mutable reference parameter.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Validation -->
+      <div id="tab-validation" class="tab-content">
+        <div class="card">
+          <h2>✅ Validation vs Verification</h2>
+          <p><strong>Validation</strong> checks whether data is sensible before processing. <strong>Verification</strong> checks whether data has been copied or entered accurately.</p>
+          <div class="op-grid" style="grid-template-columns: 180px 1fr;">
+            <div class="op-header">Check</div>
+            <div class="op-header">Purpose</div>
+            <div class="op-cell"><code>presence</code></div>
+            <div class="op-cell">Rejects an empty value.</div>
+            <div class="op-cell"><code>range</code></div>
+            <div class="op-cell">Checks a number is between limits.</div>
+            <div class="op-cell"><code>length</code></div>
+            <div class="op-cell">Checks text has the required number of characters.</div>
+            <div class="op-cell"><code>type</code></div>
+            <div class="op-cell">Checks the value can be treated as a particular data type.</div>
+            <div class="op-cell"><code>format</code></div>
+            <div class="op-cell">Checks the pattern, such as letters followed by digits.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧪 Try Common Checks</h2>
+          <p>These are the same kinds of checks used in the validation and verification course: range, length, type, presence, format, visual check and double entry.</p>
+          <div class="manual-interactive">
+            <div class="manual-grid">
+              <div class="manual-field">
+                <label for="validationType">Check type</label>
+                <select class="list-input" id="validationType" onchange="setValidationExample()">
+                  <option value="range">Range check</option>
+                  <option value="length">Length check</option>
+                  <option value="type">Type check</option>
+                  <option value="presence">Presence check</option>
+                  <option value="format">Format check</option>
+                  <option value="visual">Visual check</option>
+                  <option value="double">Double entry</option>
+                </select>
+              </div>
+              <div class="manual-field">
+                <label for="validationValueA">Value A</label>
+                <input class="list-input" id="validationValueA" value="101">
+              </div>
+              <div class="manual-field" id="validationValueBWrap">
+                <label for="validationValueB">Value B</label>
+                <input class="list-input" id="validationValueB" value="">
+              </div>
+            </div>
+            <div class="list-controls">
+              <button class="list-btn" onclick="runValidationDemo()">Run check</button>
+              <button class="list-btn secondary" onclick="setValidationExample()">Reset example</button>
+            </div>
+            <div class="manual-result" id="validationDemoResult">Try 85, 101 or -4 for the range check.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔒 Input Validation Loop</h2>
+          <p>A validation loop keeps asking until the data passes the required check.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">mark_text = input("Enter mark 0-100: ")
+
+while not mark_text.isdigit() or int(mark_text) < 0 or int(mark_text) > 100:
+    print("Invalid mark")
+    mark_text = input("Enter mark 0-100: ")
+
+mark = int(mark_text)
+print("Accepted:", mark)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Searching -->
+      <div id="tab-searching" class="tab-content">
+        <div class="card">
+          <h2>📊 Searching Algorithms</h2>
+          <p><strong>Linear search</strong> checks items one by one. <strong>Binary search</strong> needs sorted data and repeatedly discards half of the search space.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">items = [3, 8, 12, 20, 31]
+target = 20
+low = 0
+high = len(items) - 1
+found = False
+
+while low <= high and not found:
+    mid = (low + high) // 2
+    if items[mid] == target:
+        found = True
+    elif target < items[mid]:
+        high = mid - 1
+    else:
+        low = mid + 1
+
+print(found)</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Big O -->
+      <div id="tab-big-o" class="tab-content">
+        <div class="card">
+          <h2>🔃 Sorting and Big O</h2>
+          <p>Sorting algorithms arrange data into order. Complexity describes how work grows as the input size <code>n</code> grows.</p>
+          <div class="op-grid" style="grid-template-columns: 160px 1fr;">
+            <div class="op-header">Term</div>
+            <div class="op-header">Meaning</div>
+            <div class="op-cell"><code>O(1)</code></div>
+            <div class="op-cell">Constant time: work does not grow with the input size.</div>
+            <div class="op-cell"><code>O(log n)</code></div>
+            <div class="op-cell">Logarithmic time: the problem is repeatedly divided.</div>
+            <div class="op-cell"><code>O(n)</code></div>
+            <div class="op-cell">Linear time: one pass through the data.</div>
+            <div class="op-cell"><code>O(n^2)</code></div>
+            <div class="op-cell">Quadratic time: nested passes over the data.</div>
+          </div>
+          <div class="banner info">
+            <span>ℹ️</span>
+            <span><strong>Vocabulary:</strong> algorithm, comparison, swap, pass, best case, average case, worst case, bubble sort, insertion sort.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📈 Big O Growth Visualizer</h2>
+          <p>Move <code>n</code> to see how the common complexity classes grow. The numbers are simplified operation counts so the shape is clear; this is about comparing growth, not timing real hardware.</p>
+          <div class="manual-interactive">
+            <div class="big-o-layout">
+              <div class="big-o-chart" id="bigOChart"></div>
+              <div class="big-o-controls">
+                <div class="manual-field">
+                  <label for="bigONRange">Input size n: <span id="bigONValue">20</span></label>
+                  <input id="bigONRange" type="range" min="2" max="50" value="20" oninput="renderBigOChart()">
+                </div>
+                <div class="big-o-toggle-list" id="bigOToggles"></div>
+                <div class="big-o-readout" id="bigOReadout"></div>
+              </div>
+            </div>
+            <div class="manual-log" id="bigOLog"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🐍 Python Examples to Try</h2>
+          <p>These are static code examples in this manual, not an embedded editor. Use the Edit button on a snippet to open it in the Python editor and try it there.</p>
+          <div class="big-o-examples">
+            <div class="big-o-example">
+              <h3>O(1) Constant</h3>
+              <p>One direct lookup.</p>
+              <div class="code-wrapper">
+                <pre><code class="language-python">scores = [82, 91, 77, 88]
+first = scores[0]
+print(first)</code></pre>
+              </div>
+            </div>
+            <div class="big-o-example">
+              <h3>O(log n) Binary Search</h3>
+              <p>The search space halves each step.</p>
+              <div class="code-wrapper">
+                <pre><code class="language-python">items = [3, 8, 12, 20, 31, 44, 50, 72]
+target = 44
+low = 0
+high = len(items) - 1
+found = False
+
+while low <= high:
+    mid = (low + high) // 2
+    if items[mid] == target:
+        found = True
+        break
+    elif target < items[mid]:
+        high = mid - 1
+    else:
+        low = mid + 1
+
+print(found)</code></pre>
+              </div>
+            </div>
+            <div class="big-o-example">
+              <h3>O(n) Linear Search</h3>
+              <p>One pass through the list.</p>
+              <div class="code-wrapper">
+                <pre><code class="language-python">items = [3, 8, 12, 20, 31, 44, 50, 72]
+target = 44
+found = False
+
+for item in items:
+    if item == target:
+        found = True
+
+print(found)</code></pre>
+              </div>
+            </div>
+            <div class="big-o-example">
+              <h3>O(n log n) Merge Sort</h3>
+              <p>Split into halves, then merge each level.</p>
+              <div class="code-wrapper">
+                <pre><code class="language-python">def merge(left, right):
+    result = []
+    while len(left) > 0 and len(right) > 0:
+        if left[0] < right[0]:
+            result.append(left.pop(0))
+        else:
+            result.append(right.pop(0))
+    return result + left + right
+
+def merge_sort(items):
+    if len(items) <= 1:
+        return items
+    mid = len(items) // 2
+    left = merge_sort(items[:mid])
+    right = merge_sort(items[mid:])
+    return merge(left, right)
+
+print(merge_sort([7, 3, 9, 2, 6]))</code></pre>
+              </div>
+            </div>
+            <div class="big-o-example">
+              <h3>O(n²) Bubble / Insertion Sort</h3>
+              <p>Nested comparisons over the data.</p>
+              <div class="code-wrapper">
+                <pre><code class="language-python">values = [7, 3, 9, 2, 6]
+n = len(values)
+
+for pass_num in range(n):
+    for i in range(n - 1):
+        if values[i] > values[i + 1]:
+            values[i], values[i + 1] = values[i + 1], values[i]
+
+print(values)</code></pre>
+              </div>
+            </div>
+            <div class="big-o-example">
+              <h3>O(2ⁿ) Naive Fibonacci</h3>
+              <p>Each call branches into two more calls.</p>
+              <div class="code-wrapper">
+                <pre><code class="language-python">def fib(n):
+    if n <= 1:
+        return n
+    return fib(n - 1) + fib(n - 2)
+
+print(fib(8))</code></pre>
+              </div>
+            </div>
+            <div class="big-o-example">
+              <h3>O(n!) Permutations</h3>
+              <p>Try every possible ordering.</p>
+              <div class="code-wrapper">
+                <pre><code class="language-python">from itertools import permutations
+
+items = ["A", "B", "C"]
+
+for ordering in permutations(items):
+    print(ordering)</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Bubble Sort -->
+      <div id="tab-bubble-sort" class="tab-content">
+        <div class="card">
+          <h2>🫧 Interactive Bubble Sort</h2>
+          <p>Bubble sort repeatedly compares neighbouring items and swaps them when they are in the wrong order. Step through the comparisons one at a time.</p>
+          <div class="manual-interactive">
+            <div class="viz-stage sort-stage" id="bubbleSortStage"></div>
+            <div class="list-controls">
+              <button class="list-btn" onclick="stepBubbleSort()">Next comparison</button>
+              <button class="list-btn secondary" onclick="resetBubbleSort()">Reset</button>
+            </div>
+            <div class="manual-log" id="bubbleSortLog"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Insertion Sort -->
+      <div id="tab-insertion-sort" class="tab-content">
+        <div class="card">
+          <h2>📥 Interactive Insertion Sort</h2>
+          <p>Insertion sort builds a sorted section on the left. Each new key moves left until it reaches its correct position.</p>
+          <div class="manual-interactive">
+            <div class="viz-stage sort-stage" id="insertionSortStage"></div>
+            <div class="list-controls">
+              <button class="list-btn" onclick="stepInsertionSort()">Next step</button>
+              <button class="list-btn secondary" onclick="resetInsertionSort()">Reset</button>
+            </div>
+            <div class="manual-log" id="insertionSortLog"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Stacks -->
+      <div id="tab-stacks" class="tab-content">
+        <div class="card">
+          <h2>📚 Stacks</h2>
+          <p>A stack is a Last In, First Out structure. The newest item is always the next item removed.</p>
+          <div class="op-grid" style="grid-template-columns: 160px 1fr;">
+            <div class="op-header">Operation</div>
+            <div class="op-header">Meaning</div>
+            <div class="op-cell"><code>push</code></div>
+            <div class="op-cell">Add an item to the top.</div>
+            <div class="op-cell"><code>pop</code></div>
+            <div class="op-cell">Remove and return the top item.</div>
+            <div class="op-cell"><code>peek</code></div>
+            <div class="op-cell">Look at the top item without removing it.</div>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Exam Bug:</strong> stack overflow means pushing onto a full fixed-size stack. Stack underflow means popping from an empty stack.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🎛️ Stack Visual</h2>
+          <p>Watch how every operation happens at the top of the stack.</p>
+          <div class="manual-interactive">
+            <div class="viz-stage" id="stackConceptStage"></div>
+            <div class="list-controls">
+              <button class="list-btn" onclick="showStructureConcept('stack', 'push')">Push</button>
+              <button class="list-btn secondary" onclick="showStructureConcept('stack', 'pop')">Pop</button>
+              <button class="list-btn secondary" onclick="showStructureConcept('stack', 'reset')">Reset</button>
+            </div>
+            <div class="manual-log" id="stackConceptLog"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Queues -->
+      <div id="tab-queues" class="tab-content">
+        <div class="card">
+          <h2>🚶 Queues</h2>
+          <p>A queue is a First In, First Out structure. New items join at the rear, and old items leave from the front.</p>
+          <div class="op-grid" style="grid-template-columns: 160px 1fr;">
+            <div class="op-header">Operation</div>
+            <div class="op-header">Meaning</div>
+            <div class="op-cell"><code>enqueue</code></div>
+            <div class="op-cell">Add an item to the rear of the queue.</div>
+            <div class="op-cell"><code>dequeue</code></div>
+            <div class="op-cell">Remove and return the item at the front.</div>
+            <div class="op-cell"><code>front/rear</code></div>
+            <div class="op-cell">Pointers or indexes used to track the next item out and newest item in.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🎛️ Queue Visual</h2>
+          <p>See the difference between the front and rear of the queue.</p>
+          <div class="manual-interactive">
+            <div class="viz-stage" id="queueConceptStage"></div>
+            <div class="list-controls">
+              <button class="list-btn" onclick="showStructureConcept('queue', 'enqueue')">Enqueue</button>
+              <button class="list-btn secondary" onclick="showStructureConcept('queue', 'dequeue')">Dequeue</button>
+              <button class="list-btn secondary" onclick="showStructureConcept('queue', 'reset')">Reset</button>
+            </div>
+            <div class="manual-log" id="queueConceptLog"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Linked Lists -->
+      <div id="tab-linked-lists" class="tab-content">
+        <div class="card">
+          <h2>🔗 Linked Lists</h2>
+          <p>A linked list is made from nodes. Each node stores data and a pointer to the next node. A null pointer marks the end.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+start = Node("A")
+start.next = Node("B")
+
+current = start
+while current is not None:
+    print(current.data)
+    current = current.next</code></pre>
+          </div>
+          <p><strong>Vocabulary:</strong> node, pointer, start pointer, null pointer, free list, traversal.</p>
+        </div>
+
+        <div class="card">
+          <h2>🎛️ Linked List Visual</h2>
+          <p>Nodes do not need to sit next to each other in memory. Each node points to the next node.</p>
+          <div class="manual-interactive">
+            <div class="viz-stage" id="linkedConceptStage"></div>
+            <div class="list-controls">
+              <button class="list-btn" onclick="showStructureConcept('linked', 'append')">Append</button>
+              <button class="list-btn secondary" onclick="showStructureConcept('linked', 'remove')">Remove Front</button>
+              <button class="list-btn secondary" onclick="showStructureConcept('linked', 'reset')">Reset</button>
+            </div>
+            <div class="manual-log" id="linkedConceptLog"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Recursion -->
+      <div id="tab-recursion" class="tab-content">
+        <div class="card">
+          <h2>🌀 Recursion</h2>
+          <p>Recursion is when a function solves a problem by calling itself. Every recursive algorithm needs a <strong>base case</strong> to stop and a <strong>general case</strong> that moves closer to the base case.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def factorial(n):
+    if n == 0:
+        return 1          # base case
+    return n * factorial(n - 1)  # general case
+
+print(factorial(5))</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📚 Call Stack and Unwinding</h2>
+          <p>Each recursive call creates a stack frame storing parameters, local variables and a return address. When the base case is reached, the calls return in reverse order. This is called unwinding.</p>
+          <div class="banner info">
+            <span>ℹ️</span>
+            <span><strong>Vocabulary:</strong> recursive call, trace, call stack, stack frame, return address, unwinding, stack overflow, memoisation.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: OOP -->
+      <div id="tab-oop" class="tab-content">
+        <div class="card">
+          <h2>🏛️ Classes, Objects and Constructors</h2>
+          <p>A class is a blueprint. An object is an instance created from that class. The constructor <code>__init__</code> sets up the object's attributes.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class Character:
+    def __init__(self, name, health):
+        self.name = name
+        self.health = health
+
+    def take_damage(self, amount):
+        self.health = self.health - amount
+
+hero = Character("Ada", 100)
+hero.take_damage(25)
+print(hero.health)</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧱 Encapsulation, Inheritance and Polymorphism</h2>
+          <p>Encapsulation keeps data and methods together. Inheritance lets a subclass reuse a superclass. Polymorphism allows different classes to respond to the same method name in different ways.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class Enemy:
+    def attack(self):
+        print("Basic attack")
+
+class Dragon(Enemy):
+    def attack(self):
+        print("Fire attack")
+
+creature = Dragon()
+creature.attack()</code></pre>
+          </div>
+          <div class="banner info">
+            <span>ℹ️</span>
+            <span><strong>Vocabulary:</strong> class, object, instance, self, attribute, method, getter, setter, private attribute, superclass, subclass, override, abstraction, aggregation.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Binary Trees -->
+      <div id="tab-trees" class="tab-content">
+        <div class="card">
+          <h2>🌳 Binary Search Trees</h2>
+          <p>A binary tree node can have up to two children. In a binary search tree, smaller values go left and larger values go right.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+root = Node("mango")
+root.left = Node("apple")
+root.right = Node("pear")</code></pre>
+          </div>
+          <p>The local word data used in the tree course includes examples such as <code>mango</code>, <code>apple</code>, <code>banana</code>, <code>pear</code>, <code>kiwi</code> and <code>orange</code>.</p>
+        </div>
+
+        <div class="card">
+          <h2>🔎 Traversal and Tree Search</h2>
+          <p><strong>In-order traversal</strong> visits left subtree, current node, then right subtree. In a binary search tree this outputs values in sorted order.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def inorder(node):
+    if node is not None:
+        inorder(node.left)
+        print(node.data)
+        inorder(node.right)</code></pre>
+          </div>
+          <div class="banner info">
+            <span>ℹ️</span>
+            <span><strong>Vocabulary:</strong> root, node, parent, child, leaf, left subtree, right subtree, null pointer, recursive insertion, recursive search, pre-order, post-order.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🌳 Binary Tree Visualiser</h2>
+          <p>Insert and search values to see the exact path through a binary search tree. Smaller values move left; larger or equal values move right.</p>
+          <div class="tree-visualiser-box">
+            <div class="tree-visualiser-controls">
+              <input class="list-input" id="manualTreeInput" placeholder="Type a value">
+              <button class="list-btn" onclick="manualTreeAddValue()">Insert</button>
+              <button class="list-btn" onclick="manualTreeSearchValue()">Search</button>
+              <button class="list-btn secondary" onclick="manualTreeLoadDefault()">Reset demo</button>
+              <button class="list-btn secondary" onclick="manualTreeClear()">Clear</button>
+            </div>
+            <svg class="tree-visualiser-svg" id="manualTreeSvg" viewBox="0 0 720 300" role="img" aria-label="Binary search tree visualisation"></svg>
+            <div class="manual-log" id="manualTreeLog"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- TAB 9: Further Learning & Reference -->
       <div id="tab-resources" class="tab-content">
         <div class="card">
@@ -1320,7 +2462,7 @@ MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
   <script>
     // Tab switching logic
-    let lastActiveTab = 'print-var';
+    let lastActiveTab = 'print';
     function showTab(tabId) {
       if (tabId !== 'search-results') {
         lastActiveTab = tabId;
@@ -1604,6 +2746,794 @@ MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
       document.getElementById('list-feedback').textContent = "List reset to initial values.";
     }
 
+    const gridPickerDatasets = {
+      numbers: {
+        variable: 'grid',
+        data: [
+          [10, 11, 12, 13, 14],
+          [15, 16, 17, 18, 19],
+          [20, 21, 22, 23, 24],
+          [25, 26, 27, 28, 29],
+          [30, 31, 32, 33, 34]
+        ],
+        makeCode: (variable, row, col, value, dataText) => `${variable} = ${dataText}
+
+row = ${row}
+column = ${col}
+value = ${variable}[row][column]
+
+print("The value at row", row, "column", column, "is", value)`
+      },
+      seats: {
+        variable: 'seats',
+        data: [
+          ['A', 'A', 'B', 'A'],
+          ['A', 'B', 'B', 'A'],
+          ['A', 'A', 'A', 'B']
+        ],
+        makeCode: (variable, row, col, value, dataText) => `${variable} = ${dataText}
+
+row = ${row}
+column = ${col}
+
+if ${variable}[row][column] == "A":
+    print("Seat is available")
+    ${variable}[row][column] = "B"
+else:
+    print("Seat is already booked")
+
+print(${variable})`
+      },
+      marks: {
+        variable: 'marks',
+        data: [
+          [78, 82, 90],
+          [65, 71, 69],
+          [91, 88, 95],
+          [54, 62, 58]
+        ],
+        makeCode: (variable, row, col, value, dataText) => `${variable} = ${dataText}
+
+student = ${row}
+test = ${col}
+score = ${variable}[student][test]
+
+if score >= 70:
+    print("Strong result:", score)
+else:
+    print("Needs support:", score)`
+      }
+    };
+
+    let gridPickerSelection = { dataset: 'numbers', row: 2, col: 3 };
+
+    function pythonLiteral(value) {
+      return JSON.stringify(value);
+    }
+
+    function renderPython2DList(data) {
+      return '[\n' + data.map(row => '    ' + pythonLiteral(row)).join(',\n') + '\n]';
+    }
+
+    function setGridPickerDataset() {
+      const select = document.getElementById('gridPickerDataset');
+      if (!select) return;
+      gridPickerSelection.dataset = select.value;
+      gridPickerSelection.row = 0;
+      gridPickerSelection.col = 0;
+      renderGridPicker();
+    }
+
+    function selectGridPickerCell(row, col) {
+      gridPickerSelection.row = row;
+      gridPickerSelection.col = col;
+      renderGridPicker();
+    }
+
+    function renderGridPicker() {
+      const table = document.getElementById('gridPickerTable');
+      const result = document.getElementById('gridPickerResult');
+      const code = document.getElementById('gridPickerCode');
+      if (!table || !result || !code) return;
+
+      const dataset = gridPickerDatasets[gridPickerSelection.dataset];
+      const data = dataset.data;
+      const row = Math.min(gridPickerSelection.row, data.length - 1);
+      const col = Math.min(gridPickerSelection.col, data[row].length - 1);
+      const value = data[row][col];
+      gridPickerSelection.row = row;
+      gridPickerSelection.col = col;
+
+      const maxCols = Math.max(...data.map(item => item.length));
+      const header = '<tr><th></th>' + Array.from({ length: maxCols }, (_, index) => `<th>col ${index}</th>`).join('') + '</tr>';
+      const body = data.map((rowData, rowIndex) => {
+        const cells = Array.from({ length: maxCols }, (_, colIndex) => {
+          if (colIndex >= rowData.length) return '<td></td>';
+          const active = rowIndex === row && colIndex === col ? ' class="active"' : '';
+          return `<td${active} onclick="selectGridPickerCell(${rowIndex}, ${colIndex})">${escapeHtml(String(rowData[colIndex]))}</td>`;
+        }).join('');
+        return `<tr><th>row ${rowIndex}</th>${cells}</tr>`;
+      }).join('');
+      table.innerHTML = header + body;
+
+      result.innerHTML = `<strong>${escapeHtml(String(value))}</strong> is <code>${dataset.variable}[${row}][${col}]</code>`;
+      code.textContent = dataset.makeCode(dataset.variable, row, col, value, renderPython2DList(data));
+      if (window.Prism) Prism.highlightElement(code);
+    }
+
+    const validationExamples = {
+      range: { a: '101', b: '', hint: 'Try 85, 101 or -4. Valid marks are 0 to 100.' },
+      length: { a: 'AB1234', b: '', hint: 'Try AB1234 or A123. The school ID must be exactly 6 characters.' },
+      type: { a: '12a', b: '', hint: 'Try 42 or 12a. Type checks often use isdigit() before int().' },
+      presence: { a: '', b: '', hint: 'Leave it blank, then type any answer.' },
+      format: { a: 'CS42', b: '', hint: 'Try CS42 or C742. The pattern is two letters followed by two digits.' },
+      visual: { a: 'Maya Patel', b: 'Maya Pate1', hint: 'Compare the original and entered values carefully.' },
+      double: { a: 'sam@example.com', b: 'san@example.com', hint: 'Make both emails identical to pass double entry.' }
+    };
+
+    function setValidationExample() {
+      const type = document.getElementById('validationType');
+      const a = document.getElementById('validationValueA');
+      const b = document.getElementById('validationValueB');
+      const bWrap = document.getElementById('validationValueBWrap');
+      const result = document.getElementById('validationDemoResult');
+      if (!type || !a || !b || !bWrap || !result) return;
+
+      const example = validationExamples[type.value];
+      a.value = example.a;
+      b.value = example.b;
+      bWrap.style.display = (type.value === 'visual' || type.value === 'double') ? 'flex' : 'none';
+      result.textContent = example.hint;
+    }
+
+    function runValidationDemo() {
+      const type = document.getElementById('validationType').value;
+      const a = document.getElementById('validationValueA').value;
+      const b = document.getElementById('validationValueB').value;
+      const result = document.getElementById('validationDemoResult');
+      let ok = false;
+      let message = '';
+
+      if (type === 'range') {
+        const mark = Number(a);
+        ok = a.trim() !== '' && !Number.isNaN(mark) && mark >= 0 && mark <= 100;
+        message = ok ? 'Valid mark - within 0 to 100.' : 'Invalid mark - outside 0 to 100 or not a number.';
+      } else if (type === 'length') {
+        ok = a.length === 6;
+        message = ok ? 'Valid ID - length is exactly 6.' : `Invalid ID - length is ${a.length}, not 6.`;
+      } else if (type === 'type') {
+        ok = /^\d+$/.test(a);
+        message = ok ? 'Valid number text - int() can safely convert it.' : 'Invalid number text - isdigit() would reject it.';
+      } else if (type === 'presence') {
+        ok = a.trim() !== '';
+        message = ok ? 'Present - something has been entered.' : 'Missing data - this would be rejected.';
+      } else if (type === 'format') {
+        ok = /^[A-Za-z]{2}\d{2}$/.test(a);
+        message = ok ? 'Valid format - two letters followed by two digits.' : 'Invalid format - expected two letters then two digits.';
+      } else if (type === 'visual') {
+        ok = a === b;
+        message = ok ? 'They match exactly. A person would confirm this in a visual check.' : 'They do not match. A careful visual check should spot the difference.';
+      } else if (type === 'double') {
+        ok = a === b;
+        message = ok ? 'Entries match - verification passed.' : 'Entries do not match - verification failed.';
+      }
+
+      result.innerHTML = `<span class="${ok ? 'manual-ok' : 'manual-bad'}">${ok ? 'Pass' : 'Fail'}</span> - ${escapeHtml(message)}`;
+    }
+
+    let bubbleState;
+    let insertionState;
+
+    const bigOComplexities = [
+      {
+        key: 'constant',
+        label: 'O(1)',
+        algorithm: 'List index access',
+        color: '#10b981',
+        enabled: true,
+        value: () => 1
+      },
+      {
+        key: 'log',
+        label: 'O(log n)',
+        algorithm: 'Binary search',
+        color: '#3b82f6',
+        enabled: true,
+        value: n => Math.max(1, Math.ceil(Math.log2(n)))
+      },
+      {
+        key: 'linear',
+        label: 'O(n)',
+        algorithm: 'Linear search',
+        color: '#8b5cf6',
+        enabled: true,
+        value: n => n
+      },
+      {
+        key: 'linearithmic',
+        label: 'O(n log n)',
+        algorithm: 'Merge sort',
+        color: '#f59e0b',
+        enabled: true,
+        value: n => Math.ceil(n * Math.log2(n))
+      },
+      {
+        key: 'quadratic',
+        label: 'O(n²)',
+        algorithm: 'Bubble / insertion sort',
+        color: '#ef4444',
+        enabled: true,
+        value: n => n * n
+      },
+      {
+        key: 'exponential',
+        label: 'O(2ⁿ)',
+        algorithm: 'Naive Fibonacci',
+        color: '#ec4899',
+        enabled: false,
+        value: n => Math.pow(2, Math.min(n, 30))
+      },
+      {
+        key: 'factorial',
+        label: 'O(n!)',
+        algorithm: 'Permutations',
+        color: '#64748b',
+        enabled: false,
+        value: n => {
+          let total = 1;
+          for (let i = 2; i <= Math.min(n, 18); i++) total *= i;
+          return total;
+        }
+      }
+    ];
+
+    const bigOEnabled = {};
+    bigOComplexities.forEach(item => {
+      bigOEnabled[item.key] = item.enabled;
+    });
+
+    function formatBigONumber(value) {
+      if (value >= 1000000000) return value.toExponential(2);
+      return Math.round(value).toLocaleString();
+    }
+
+    function setupBigOToggles() {
+      const toggles = document.getElementById('bigOToggles');
+      if (!toggles) return;
+      toggles.innerHTML = '';
+      bigOComplexities.forEach(item => {
+        const label = document.createElement('label');
+        label.className = 'big-o-toggle';
+        label.innerHTML = `
+          <input type="checkbox" ${bigOEnabled[item.key] ? 'checked' : ''} onchange="toggleBigO('${item.key}', this.checked)">
+          <span class="big-o-chip" style="background:${item.color}"></span>
+          <span>${item.label} - ${item.algorithm}</span>
+        `;
+        toggles.appendChild(label);
+      });
+    }
+
+    function toggleBigO(key, checked) {
+      bigOEnabled[key] = checked;
+      renderBigOChart();
+    }
+
+    function renderBigOChart() {
+      const chart = document.getElementById('bigOChart');
+      const range = document.getElementById('bigONRange');
+      const nValue = document.getElementById('bigONValue');
+      const readout = document.getElementById('bigOReadout');
+      const log = document.getElementById('bigOLog');
+      if (!chart || !range || !nValue || !readout || !log) return;
+
+      const selectedN = Number(range.value);
+      nValue.textContent = selectedN;
+      const width = 620;
+      const height = 300;
+      const pad = { left: 44, right: 28, top: 18, bottom: 34 };
+      const enabledItems = bigOComplexities.filter(item => bigOEnabled[item.key]);
+      const allValues = [];
+
+      enabledItems.forEach(item => {
+        for (let n = 1; n <= selectedN; n++) {
+          allValues.push(item.value(n));
+        }
+      });
+
+      const maxValue = Math.max(1, ...allValues);
+      const logMax = Math.log10(maxValue + 1);
+      const plotW = width - pad.left - pad.right;
+      const plotH = height - pad.top - pad.bottom;
+      const xFor = n => pad.left + ((n - 1) / Math.max(1, selectedN - 1)) * plotW;
+      const yFor = value => pad.top + plotH - (Math.log10(value + 1) / logMax) * plotH;
+
+      const grid = [0, 0.25, 0.5, 0.75, 1].map(t => {
+        const y = pad.top + plotH - t * plotH;
+        return `<line class="big-o-gridline" x1="${pad.left}" y1="${y}" x2="${width - pad.right}" y2="${y}"></line>`;
+      }).join('');
+
+      const lines = enabledItems.map(item => {
+        const points = [];
+        for (let n = 1; n <= selectedN; n++) {
+          points.push(`${xFor(n).toFixed(1)},${yFor(item.value(n)).toFixed(1)}`);
+        }
+        const endY = yFor(item.value(selectedN));
+        const labelX = width - pad.right + 6;
+        return `
+          <polyline class="big-o-line" points="${points.join(' ')}" style="stroke:${item.color}"></polyline>
+          <text class="big-o-label" x="${labelX}" y="${endY + 4}" style="fill:${item.color}">${item.label}</text>
+        `;
+      }).join('');
+
+      chart.innerHTML = `
+        <svg viewBox="0 0 ${width + 82} ${height}" role="img" aria-label="Big O growth comparison chart">
+          ${grid}
+          <line class="big-o-axis" x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${height - pad.bottom}"></line>
+          <line class="big-o-axis" x1="${pad.left}" y1="${height - pad.bottom}" x2="${width - pad.right}" y2="${height - pad.bottom}"></line>
+          <text class="big-o-label" x="${pad.left}" y="${height - 8}">n</text>
+          <text class="big-o-label" x="6" y="${pad.top + 8}">operations</text>
+          ${lines}
+        </svg>
+      `;
+
+      const valuesAtN = enabledItems
+        .map(item => ({ ...item, count: item.value(selectedN) }))
+        .sort((a, b) => a.count - b.count);
+      const readoutMax = Math.max(1, ...valuesAtN.map(item => item.count));
+
+      readout.innerHTML = valuesAtN.map(item => `
+        <div class="big-o-readout-row">
+          <strong style="color:${item.color}">${item.label}</strong>
+          <div class="big-o-meter"><span style="width:${Math.max(4, (Math.log10(item.count + 1) / Math.log10(readoutMax + 1)) * 100)}%; background:${item.color}"></span></div>
+          <span>${formatBigONumber(item.count)}</span>
+        </div>
+      `).join('');
+
+      if (valuesAtN.length) {
+        const fastest = valuesAtN[0];
+        const slowest = valuesAtN[valuesAtN.length - 1];
+        log.textContent = `At n = ${selectedN}, ${fastest.label} (${fastest.algorithm}) is about ${formatBigONumber(fastest.count)} operation(s), while ${slowest.label} (${slowest.algorithm}) is about ${formatBigONumber(slowest.count)}. Notice the shape, not the exact count.`;
+      } else {
+        log.textContent = 'Select at least one complexity class to compare growth.';
+      }
+    }
+
+    function makeBars(stageId, values, active = [], sortedFrom = values.length, keyIndex = null) {
+      const stage = document.getElementById(stageId);
+      if (!stage) return;
+      const max = Math.max(...values);
+      stage.innerHTML = '';
+      values.forEach((value, index) => {
+        const bar = document.createElement('div');
+        bar.className = 'sort-bar';
+        if (active.includes(index)) bar.classList.add('active');
+        if (index >= sortedFrom) bar.classList.add('sorted');
+        if (index === keyIndex) bar.classList.add('key');
+        bar.style.height = `${55 + (value / max) * 100}px`;
+        bar.textContent = value;
+        stage.appendChild(bar);
+      });
+    }
+
+    function resetBubbleSort() {
+      bubbleState = { values: [7, 3, 9, 2, 6], i: 0, pass: 0, sorted: false };
+      makeBars('bubbleSortStage', bubbleState.values, [0, 1], bubbleState.values.length);
+      const log = document.getElementById('bubbleSortLog');
+      if (log) log.textContent = 'Bubble sort starts by comparing neighbouring values 7 and 3.';
+    }
+
+    function stepBubbleSort() {
+      if (!bubbleState || bubbleState.sorted) resetBubbleSort();
+      const state = bubbleState;
+      const lastCompare = state.values.length - 1 - state.pass;
+      const log = document.getElementById('bubbleSortLog');
+
+      if (state.pass >= state.values.length - 1) {
+        state.sorted = true;
+        makeBars('bubbleSortStage', state.values, [], 0);
+        if (log) log.textContent = 'Sorted. Bubble sort finishes when no more passes are needed.';
+        return;
+      }
+
+      const left = state.i;
+      const right = state.i + 1;
+      let message = `Compare ${state.values[left]} and ${state.values[right]}.`;
+      if (state.values[left] > state.values[right]) {
+        [state.values[left], state.values[right]] = [state.values[right], state.values[left]];
+        message += ' Swap because the left value is larger.';
+      } else {
+        message += ' No swap needed.';
+      }
+
+      state.i += 1;
+      if (state.i >= lastCompare) {
+        state.pass += 1;
+        state.i = 0;
+        message += ` Pass ${state.pass} complete; the largest unsorted value has bubbled right.`;
+      }
+
+      if (state.pass >= state.values.length - 1) {
+        state.sorted = true;
+        makeBars('bubbleSortStage', state.values, [], 0);
+        message += ' The list is now sorted.';
+      } else {
+        makeBars('bubbleSortStage', state.values, [state.i, state.i + 1], state.values.length - state.pass);
+      }
+      if (log) log.textContent = message;
+    }
+
+    function resetInsertionSort() {
+      insertionState = { values: [7, 3, 9, 2, 6], i: 1, j: 1, key: 3, holding: true, sorted: false };
+      makeBars('insertionSortStage', insertionState.values, [0], insertionState.values.length, 1);
+      const log = document.getElementById('insertionSortLog');
+      if (log) log.textContent = 'Insertion sort treats the first item as sorted, then selects 3 as the first key.';
+    }
+
+    function stepInsertionSort() {
+      if (!insertionState || insertionState.sorted) resetInsertionSort();
+      const state = insertionState;
+      const log = document.getElementById('insertionSortLog');
+
+      if (state.i >= state.values.length) {
+        state.sorted = true;
+        makeBars('insertionSortStage', state.values, [], 0);
+        if (log) log.textContent = 'Sorted. Each key has been inserted into the left sorted section.';
+        return;
+      }
+
+      if (state.holding) {
+        state.key = state.values[state.i];
+        state.j = state.i - 1;
+        state.holding = false;
+        makeBars('insertionSortStage', state.values, [state.j], state.i, state.i);
+        if (log) log.textContent = `Take ${state.key} as the key. Compare it with the sorted section on the left.`;
+        return;
+      }
+
+      if (state.j >= 0 && state.values[state.j] > state.key) {
+        const moved = state.values[state.j];
+        state.values[state.j + 1] = state.values[state.j];
+        state.j -= 1;
+        makeBars('insertionSortStage', state.values, state.j >= 0 ? [state.j] : [], state.i + 1, state.j + 1);
+        if (log) log.textContent = `${moved} is bigger than ${state.key}, so shift ${moved} one place right.`;
+        return;
+      }
+
+      state.values[state.j + 1] = state.key;
+      const placedAt = state.j + 1;
+      state.i += 1;
+      state.holding = true;
+      if (state.i >= state.values.length) {
+        state.sorted = true;
+        makeBars('insertionSortStage', state.values, [], 0);
+        if (log) log.textContent = `Place ${state.key} at index ${placedAt}. The list is sorted.`;
+      } else {
+        makeBars('insertionSortStage', state.values, [], state.i, state.i);
+        if (log) log.textContent = `Place ${state.key} at index ${placedAt}. Next key is ${state.values[state.i]}.`;
+      }
+    }
+
+    let adtState = { mode: 'stack', values: [] };
+
+    function resetAdtPlayground() {
+      const modeEl = document.getElementById('adtMode');
+      const valueEl = document.getElementById('adtValue');
+      if (!modeEl) return;
+      adtState.mode = modeEl.value;
+      adtState.values = adtState.mode === 'linked' ? ['cat', 'dog', 'fox'] : ['A', 'B', 'C'];
+      if (valueEl) valueEl.value = adtState.mode === 'linked' ? 'owl' : 'D';
+      renderAdtPlayground('Reset structure.');
+    }
+
+    function renderAdtPlayground(message) {
+      const stage = document.getElementById('adtPlaygroundStage');
+      const log = document.getElementById('adtPlaygroundLog');
+      if (!stage) return;
+      stage.innerHTML = '';
+
+      if (adtState.mode === 'stack') {
+        adtState.values.forEach((value, index) => {
+          const node = document.createElement('div');
+          node.className = 'adt-node' + (index === adtState.values.length - 1 ? ' highlight' : '');
+          node.innerHTML = `${escapeHtml(value)}${index === adtState.values.length - 1 ? '<span class="adt-pointer">top</span>' : ''}`;
+          stage.appendChild(node);
+        });
+      } else if (adtState.mode === 'queue') {
+        adtState.values.forEach((value, index) => {
+          const node = document.createElement('div');
+          node.className = 'adt-node' + (index === 0 ? ' highlight' : '') + (index === adtState.values.length - 1 ? ' warn' : '');
+          let label = '';
+          if (index === 0) label += '<span class="adt-pointer">front</span>';
+          if (index === adtState.values.length - 1) label += '<span class="adt-pointer">rear</span>';
+          node.innerHTML = `${escapeHtml(value)}${label}`;
+          stage.appendChild(node);
+        });
+      } else {
+        stage.appendChild(makeAdtOp('start'));
+        adtState.values.forEach((value, index) => {
+          stage.appendChild(makeAdtNode(`data ${escapeHtml(value)}<span class="adt-pointer">next ${index < adtState.values.length - 1 ? '->' : 'None'}</span>`));
+          if (index < adtState.values.length - 1) stage.appendChild(makeAdtArrow());
+        });
+      }
+
+      if (adtState.values.length === 0) {
+        stage.innerHTML = '<div class="adt-slot">empty</div>';
+      }
+      if (log) log.textContent = message;
+    }
+
+    function adtAdd() {
+      const valueEl = document.getElementById('adtValue');
+      const value = valueEl && valueEl.value.trim() ? valueEl.value.trim() : String.fromCharCode(65 + adtState.values.length);
+      adtState.values.push(value);
+      const verb = adtState.mode === 'stack' ? 'push' : adtState.mode === 'queue' ? 'enqueue' : 'append';
+      renderAdtPlayground(`${verb}(${value}) adds the item ${adtState.mode === 'stack' ? 'to the top' : adtState.mode === 'queue' ? 'at the rear' : 'after the final node'}.`);
+    }
+
+    function adtRemove() {
+      if (adtState.values.length === 0) {
+        renderAdtPlayground('Underflow: there is nothing to remove.');
+        return;
+      }
+      let removed;
+      let message;
+      if (adtState.mode === 'stack') {
+        removed = adtState.values.pop();
+        message = `pop() removes ${removed} from the top.`;
+      } else if (adtState.mode === 'queue') {
+        removed = adtState.values.shift();
+        message = `dequeue() removes ${removed} from the front.`;
+      } else {
+        removed = adtState.values.shift();
+        message = `Remove front node ${removed}; the start pointer moves to the next node.`;
+      }
+      renderAdtPlayground(message);
+    }
+
+    function makeAdtNode(html, className = 'adt-node') {
+      const node = document.createElement('div');
+      node.className = className;
+      node.innerHTML = html;
+      return node;
+    }
+
+    function makeAdtOp(text) {
+      const op = document.createElement('div');
+      op.className = 'adt-op';
+      op.textContent = text;
+      return op;
+    }
+
+    function makeAdtSlot(html) {
+      const slot = document.createElement('div');
+      slot.className = 'adt-slot';
+      slot.innerHTML = html;
+      return slot;
+    }
+
+    function makeAdtArrow() {
+      const arrow = document.createElement('div');
+      arrow.className = 'adt-arrow';
+      arrow.textContent = '->';
+      return arrow;
+    }
+
+    const structureConceptState = {
+      stack: ['A', 'B', 'C'],
+      queue: ['Ali', 'Ben', 'Chen'],
+      linked: ['cat', 'dog', 'fox']
+    };
+
+    function resetStructureConcept(kind) {
+      if (kind === 'stack') structureConceptState.stack = ['A', 'B', 'C'];
+      if (kind === 'queue') structureConceptState.queue = ['Ali', 'Ben', 'Chen'];
+      if (kind === 'linked') structureConceptState.linked = ['cat', 'dog', 'fox'];
+    }
+
+    function showStructureConcept(kind, action = 'reset') {
+      const stage = document.getElementById(`${kind}ConceptStage`);
+      const log = document.getElementById(`${kind}ConceptLog`);
+      if (!stage || !log) return;
+
+      if (action === 'reset') {
+        resetStructureConcept(kind);
+      } else if (kind === 'stack') {
+        if (action === 'push') structureConceptState.stack.push(String.fromCharCode(65 + structureConceptState.stack.length));
+        if (action === 'pop' && structureConceptState.stack.length > 0) structureConceptState.stack.pop();
+      } else if (kind === 'queue') {
+        if (action === 'enqueue') structureConceptState.queue.push(['Dee', 'Eli', 'Finn', 'Gita'][structureConceptState.queue.length % 4]);
+        if (action === 'dequeue' && structureConceptState.queue.length > 0) structureConceptState.queue.shift();
+      } else if (kind === 'linked') {
+        if (action === 'append') structureConceptState.linked.push(['owl', 'yak', 'bee', 'cod'][structureConceptState.linked.length % 4]);
+        if (action === 'remove' && structureConceptState.linked.length > 0) structureConceptState.linked.shift();
+      }
+
+      stage.innerHTML = '';
+      const values = structureConceptState[kind];
+
+      if (values.length === 0) {
+        stage.appendChild(makeAdtSlot('empty'));
+      } else if (kind === 'stack') {
+        values.forEach((value, index) => {
+          stage.appendChild(makeAdtNode(`${escapeHtml(value)}${index === values.length - 1 ? '<span class="adt-pointer">top</span>' : ''}`, index === values.length - 1 ? 'adt-node highlight' : 'adt-node'));
+        });
+      } else if (kind === 'queue') {
+        values.forEach((value, index) => {
+          let pointer = '';
+          if (index === 0) pointer += '<span class="adt-pointer">front</span>';
+          if (index === values.length - 1) pointer += '<span class="adt-pointer">rear</span>';
+          stage.appendChild(makeAdtNode(`${escapeHtml(value)}${pointer}`, index === 0 ? 'adt-node highlight' : index === values.length - 1 ? 'adt-node warn' : 'adt-node'));
+        });
+      } else if (kind === 'linked') {
+        stage.appendChild(makeAdtOp('start'));
+        values.forEach((value, index) => {
+          stage.appendChild(makeAdtNode(`data ${escapeHtml(value)}<span class="adt-pointer">next ${index < values.length - 1 ? '->' : 'None'}</span>`));
+          if (index < values.length - 1) stage.appendChild(makeAdtArrow());
+        });
+      }
+
+      const messages = {
+        stack: {
+          reset: 'Reset stack. The top is the only place where push and pop happen.',
+          push: 'push() adds a new item to the top of the stack.',
+          pop: 'pop() removes the most recently added item from the top.'
+        },
+        queue: {
+          reset: 'Reset queue. The front leaves first and the rear receives new items.',
+          enqueue: 'enqueue() adds a new item to the rear of the queue.',
+          dequeue: 'dequeue() removes the item at the front of the queue.'
+        },
+        linked: {
+          reset: 'Reset linked list. Follow each next pointer to traverse the list.',
+          append: 'append adds a new node after the current final node.',
+          remove: 'Removing the front moves the start pointer to the next node.'
+        }
+      };
+      log.textContent = messages[kind][action] || messages[kind].reset;
+    }
+
+    let manualTree = null;
+    let manualTreeLogLines = [];
+    let manualTreeHighlightValue = null;
+    const manualTreeStartValues = "50,25,75,10,30,60,90,5,12".split(",").map(v => v.trim()).filter(Boolean);
+
+    function manualTreeNode(value) {
+      return { value: value, left: null, right: null };
+    }
+
+    function manualTreeInsert(root, value) {
+      if (root === null) {
+        manualTreeLogLines.push("Create root node " + value);
+        return manualTreeNode(value);
+      }
+
+      let current = root;
+      while (true) {
+        if (Number(value) < Number(current.value)) {
+          manualTreeLogLines.push(value + " is smaller than " + current.value + " - go left");
+          if (current.left === null) {
+            current.left = manualTreeNode(value);
+            manualTreeLogLines.push("Insert " + value + " on the left of " + current.value);
+            break;
+          }
+          current = current.left;
+        } else {
+          manualTreeLogLines.push(value + " is greater than or equal to " + current.value + " - go right");
+          if (current.right === null) {
+            current.right = manualTreeNode(value);
+            manualTreeLogLines.push("Insert " + value + " on the right of " + current.value);
+            break;
+          }
+          current = current.right;
+        }
+      }
+      return root;
+    }
+
+    function manualTreeClear() {
+      manualTree = null;
+      manualTreeHighlightValue = null;
+      manualTreeLogLines = ["Tree cleared."];
+      manualTreeDraw();
+    }
+
+    function manualTreeLoadDefault() {
+      manualTree = null;
+      manualTreeHighlightValue = null;
+      manualTreeLogLines = [];
+      manualTreeStartValues.forEach(value => {
+        manualTree = manualTreeInsert(manualTree, value);
+      });
+      manualTreeDraw();
+    }
+
+    function manualTreeAddValue() {
+      const input = document.getElementById('manualTreeInput');
+      if (!input) return;
+      const value = input.value.trim();
+      if (!value) return;
+      manualTreeHighlightValue = null;
+      manualTreeLogLines = [];
+      manualTree = manualTreeInsert(manualTree, value);
+      input.value = '';
+      manualTreeDraw();
+    }
+
+    function manualTreeSearchValue() {
+      const input = document.getElementById('manualTreeInput');
+      if (!input) return;
+      const value = input.value.trim();
+      if (!value) return;
+
+      manualTreeLogLines = [];
+      manualTreeHighlightValue = null;
+      let current = manualTree;
+      while (current) {
+        manualTreeLogLines.push("Visit " + current.value);
+        if (String(current.value) === String(value)) {
+          manualTreeLogLines.push("Found " + value);
+          manualTreeHighlightValue = value;
+          break;
+        }
+        if (Number(value) < Number(current.value)) {
+          current = current.left;
+        } else {
+          current = current.right;
+        }
+      }
+      if (!current) manualTreeLogLines.push(value + " not found");
+      manualTreeDraw();
+    }
+
+    function manualTreeLayout(node, x, y, gap, items) {
+      if (!node) return;
+      items.push({ node: node, x: x, y: y });
+      if (node.left) {
+        items.push({ edge: true, x1: x, y1: y, x2: x - gap, y2: y + 64 });
+        manualTreeLayout(node.left, x - gap, y + 64, gap / 1.75, items);
+      }
+      if (node.right) {
+        items.push({ edge: true, x1: x, y1: y, x2: x + gap, y2: y + 64 });
+        manualTreeLayout(node.right, x + gap, y + 64, gap / 1.75, items);
+      }
+    }
+
+    function manualTreeDraw() {
+      const svg = document.getElementById('manualTreeSvg');
+      if (!svg) return;
+      svg.innerHTML = '';
+      const items = [];
+      manualTreeLayout(manualTree, 360, 34, 160, items);
+
+      items.filter(item => item.edge).forEach(edge => {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('class', 'tree-edge');
+        line.setAttribute('x1', edge.x1);
+        line.setAttribute('y1', edge.y1);
+        line.setAttribute('x2', edge.x2);
+        line.setAttribute('y2', edge.y2);
+        svg.appendChild(line);
+      });
+
+      items.filter(item => item.node).forEach(item => {
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        group.setAttribute('class', 'tree-node ' + (String(item.node.value) === String(manualTreeHighlightValue) ? 'highlight' : ''));
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', item.x);
+        circle.setAttribute('cy', item.y);
+        circle.setAttribute('r', 18);
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', item.x);
+        text.setAttribute('y', item.y + 1);
+        text.textContent = item.node.value;
+        group.appendChild(circle);
+        group.appendChild(text);
+        svg.appendChild(group);
+      });
+
+      const log = document.getElementById('manualTreeLog');
+      if (log) log.textContent = manualTreeLogLines.slice(-9).join('\n');
+    }
 
     // Theme toggling system (with mutate support to match parent theme)
     function toggleThemeManual() {
@@ -1647,6 +3577,17 @@ MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
 
     window.addEventListener('DOMContentLoaded', () => {
       renderVisualList();
+      renderGridPicker();
+      setValidationExample();
+      setupBigOToggles();
+      renderBigOChart();
+      resetBubbleSort();
+      resetInsertionSort();
+      resetAdtPlayground();
+      showStructureConcept('stack', 'reset');
+      showStructureConcept('queue', 'reset');
+      showStructureConcept('linked', 'reset');
+      manualTreeLoadDefault();
       
       // Determine initial theme
       let isDark = true;
