@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python to Blocks Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #dbe3ef;
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --warn-bg: #fff7ed;
+      --warn-line: #fed7aa;
+      --warn-ink: #9a3412;
+      --ok-bg: #ecfdf5;
+      --ok-line: #bbf7d0;
+      --ok-ink: #166534;
+      --bad-bg: #fef2f2;
+      --bad-line: #fecaca;
+      --bad-ink: #991b1b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+    }
+
+    .primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .primary:hover {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+    }
+
+    main {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(320px, 40%) 1fr;
+    }
+
+    .pane {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+    }
+
+    .input-pane {
+      border-right: 1px solid var(--line);
+    }
+
+    .pane-head {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    textarea {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      resize: none;
+      border: 0;
+      outline: 0;
+      padding: 16px;
+      background: #0f172a;
+      color: #e5edf8;
+      font-family: "Fira Code", Consolas, monospace;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      tab-size: 4;
+    }
+
+    #blocklyDiv {
+      flex: 1;
+      min-height: 420px;
+      height: 100%;
+    }
+
+    .status {
+      border-top: 1px solid var(--line);
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: #f8fafc;
+    }
+
+    .status.ok {
+      background: var(--ok-bg);
+      border-color: var(--ok-line);
+      color: var(--ok-ink);
+    }
+
+    .status.warn {
+      background: var(--warn-bg);
+      border-color: var(--warn-line);
+      color: var(--warn-ink);
+    }
+
+    .status.bad {
+      background: var(--bad-bg);
+      border-color: var(--bad-line);
+      color: var(--bad-ink);
+    }
+
+    .hidden-control {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (max-width: 820px) {
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .actions {
+        justify-content: flex-start;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(300px, 42vh) 1fr;
+      }
+
+      .input-pane {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Python to Blocks Test</h1>
+      <div class="subtitle">Standalone test page. It is intentionally not linked from the main site.</div>
+    </div>
+    <div class="actions">
+      <button id="sampleButton" type="button">Sample</button>
+      <button id="clearButton" type="button">Clear</button>
+      <button id="openBlocksButton" class="primary" type="button">Open in Blocks</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="pane input-pane">
+      <div class="pane-head">
+        <span>Python</span>
+        <span id="lineCount">0 lines</span>
+      </div>
+      <textarea id="pythonInput" spellcheck="false"></textarea>
+      <div id="status" class="status">Loading Blockly...</div>
+    </section>
+
+    <section class="pane">
+      <div class="pane-head">
+        <span>Blocks</span>
+        <span>Conversion preview</span>
+      </div>
+      <div id="blocklyDiv"></div>
+    </section>
+  </main>
+
+  <input id="dark-mode" class="hidden-control" type="radio" name="mode" value="dark">
+  <input id="light-mode" class="hidden-control" type="radio" name="mode" value="light" checked>
+  <input id="font-size" class="hidden-control" type="number" value="16">
+
+  <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/python_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/msg/en.js"></script>
+  <script src="https://unpkg.com/@blockly/field-colour@6.0.6/dist/index.js"></script>
+  <script src="https://unpkg.com/@blockly/toolbox-search@3.1.0/dist/index.js"></script>
+  <script src="https://unpkg.com/@blockly/plugin-workspace-search@10.1.1/dist/index.js"></script>
+  <script src="pythoncopyblocks.js"></script>
+  <script>
+    window.currentAppMode = 'blocks';
+
+    const sampleCode = `score = 0
+country = input("Country: ")
+
+for i in range(5):
+    score = score + 1
+    print(country, score)
+
+if score > 3:
+    print("Qualified")
+else:
+    print("Try again")`;
+
+    const pythonInput = document.getElementById('pythonInput');
+    const lineCount = document.getElementById('lineCount');
+    const statusBox = document.getElementById('status');
+    const sampleButton = document.getElementById('sampleButton');
+    const clearButton = document.getElementById('clearButton');
+    const openBlocksButton = document.getElementById('openBlocksButton');
+
+    function setStatus(message, type) {
+      statusBox.textContent = message;
+      statusBox.className = 'status' + (type ? ' ' + type : '');
+    }
+
+    function updateLineCount() {
+      const lines = pythonInput.value ? pythonInput.value.split('\n').length : 0;
+      lineCount.textContent = lines + (lines === 1 ? ' line' : ' lines');
+    }
+
+    function convertToBlocks() {
+      updateLineCount();
+
+      if (!window.blocklyWorkspace || typeof convertPythonToWorkspace !== 'function') {
+        setStatus('Blockly is still loading. Try again in a moment.', 'warn');
+        return;
+      }
+
+      window.isUpdatingBlocklyFromText = true;
+      if (typeof Blockly !== 'undefined' && Blockly.Events) {
+        Blockly.Events.disable();
+      }
+
+      try {
+        const converted = convertPythonToWorkspace(pythonInput.value, window.blocklyWorkspace);
+        window.lastGeneratedBlocklyPython = typeof getWorkspacePythonCode === 'function'
+          ? getWorkspacePythonCode()
+          : pythonInput.value;
+        if (typeof Blockly !== 'undefined') {
+          Blockly.svgResize(window.blocklyWorkspace);
+        }
+        setStatus(
+          converted ? 'Converted to blocks. Check the workspace for unsupported lines.' : 'No convertible blocks were created.',
+          converted ? 'ok' : 'warn'
+        );
+      } catch (error) {
+        console.error(error);
+        setStatus('Conversion failed: ' + error.message, 'bad');
+      } finally {
+        if (typeof Blockly !== 'undefined' && Blockly.Events) {
+          Blockly.Events.enable();
+        }
+        window.isUpdatingBlocklyFromText = false;
+      }
+    }
+
+    function getWorkspacePythonForCodeLab() {
+      if (typeof getWorkspacePythonCode === 'function') {
+        const generatedCode = getWorkspacePythonCode();
+        if (generatedCode && generatedCode.trim()) return generatedCode;
+      }
+      return pythonInput.value;
+    }
+
+    function openInBlocks() {
+      const code = getWorkspacePythonForCodeLab();
+      const key = 'python2blocks_sync_' + Date.now();
+
+      try {
+        localStorage.setItem(key, code);
+      } catch (error) {
+        console.error(error);
+        setStatus('Could not open in Blocks because localStorage is unavailable.', 'bad');
+        return;
+      }
+
+      window.open('pythoncopy.html?blocks=true&blocksKey=' + encodeURIComponent(key), '_blank');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      pythonInput.value = sampleCode;
+      updateLineCount();
+
+      if (typeof Blockly === 'undefined' || typeof initBlockly !== 'function') {
+        setStatus('Blockly did not load. Check your connection to unpkg.com.', 'bad');
+        return;
+      }
+
+      initBlockly();
+      convertToBlocks();
+
+      pythonInput.addEventListener('input', convertToBlocks);
+      sampleButton.addEventListener('click', () => {
+        pythonInput.value = sampleCode;
+        convertToBlocks();
+      });
+      clearButton.addEventListener('click', () => {
+        pythonInput.value = '';
+        convertToBlocks();
+        pythonInput.focus();
+      });
+      openBlocksButton.addEventListener('click', openInBlocks);
+
+      window.addEventListener('resize', () => {
+        if (window.blocklyWorkspace && typeof Blockly !== 'undefined') {
+          Blockly.svgResize(window.blocklyWorkspace);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
