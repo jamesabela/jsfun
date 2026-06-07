@@ -1539,12 +1539,12 @@
                     y: startY,
                     w: 140,
                     h: 50,
-                    text: 'START',
+                    text: 'def ' + (node.name ? node.name.split('(')[0].trim() + '()' : 'function()'),
                     lineIdx: node.lineIdx
                 });
 
                 // Collect function body nodes
-                node.body.forEach(collectVisualElements);
+                collectSequences(node.body);
 
                 // Connect function Start to Body / End
                 const firstNode = node.body[0];
@@ -1585,7 +1585,7 @@
                     y: endY,
                     w: 140,
                     h: 50,
-                    text: 'END',
+                    text: 'RETURN',
                     lineIdx: node.lineIdx
                 });
                 return;
@@ -1605,7 +1605,7 @@
 
                 // Render branches
                 node.branches.forEach((branch, idx) => {
-                    branch.body.forEach(collectVisualElements);
+                    collectSequences(branch.body);
 
                     if (idx === 0) {
                         // Primary True path (straight down)
@@ -1674,7 +1674,7 @@
                     lineIdx: node.lineIdx
                 });
 
-                node.body.forEach(collectVisualElements);
+                collectSequences(node.body);
 
                 // True loop body connection
                 const firstNode = node.body[0];
@@ -1946,26 +1946,54 @@
                 return;
             }
 
-            // 3. Prepend/append Start & End terminators
-            const finalTree = prepareTree(rawTree);
+            // 3. Separate function definitions from the main script flow
+            const functions = rawTree.filter(node => node.type === 'function');
+            const mainNodes = rawTree.filter(node => node.type !== 'function');
 
-            // 4. Measure node geometries
-            const size = measureBlock(finalTree);
-
-            // 5. Layout positions on grid center
+            // 4. Position and layout nodes on grid center
             const canvasRect = canvasContainer.getBoundingClientRect();
             const initialCX = canvasRect.width > 0 ? canvasRect.width / 2 : 400;
             const initialTopY = 60;
 
-            assignCoordsBlock(finalTree, initialCX, initialTopY);
+            let mainTree = [];
+            let mainSize = { width: 0, height: 0, leftOffset: 0, rightOffset: 0 };
 
-            // 6. Traverse tree and gather shape/path definitions
-            collectSequences(finalTree);
+            if (mainNodes.length > 0) {
+                mainTree = prepareTree(mainNodes);
+                mainSize = measureBlock(mainTree);
+                assignCoordsBlock(mainTree, initialCX, initialTopY);
+            }
 
-            // 7. Inject tags inside SVG
+            // Position functions to the right of the main tree
+            let currentFuncCX = initialCX;
+            if (mainNodes.length > 0) {
+                currentFuncCX = initialCX + mainSize.rightOffset + 100;
+            }
+
+            functions.forEach((func, idx) => {
+                measureNode(func);
+                let funcCX;
+                if (mainNodes.length === 0 && idx === 0) {
+                    funcCX = initialCX;
+                } else {
+                    funcCX = currentFuncCX + func.leftOffset;
+                }
+                assignCoordsNode(func, funcCX, initialTopY + func.h / 2);
+                currentFuncCX = funcCX + func.rightOffset + 100;
+            });
+
+            // 5. Traverse tree and gather shape/path definitions
+            if (mainTree.length > 0) {
+                collectSequences(mainTree);
+            }
+            functions.forEach(func => {
+                collectVisualElements(func);
+            });
+
+            // 6. Inject tags inside SVG
             renderVisuals();
 
-            // 8. Adjust view bounds
+            // 7. Adjust view bounds
             setTimeout(resetView, 10);
         }
 

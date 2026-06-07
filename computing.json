@@ -20,6 +20,14 @@
         "isExternal": false
       },
       {
+        "title": "Python to Flowchart",
+        "emoji": "🔀",
+        "url": "https://jamesabela.github.io/jsfun/python2flow.html",
+        "desc": "Convert Python code into a visual flowchart. Step through loops and conditions, customize theme layouts, and print or export diagrams as SVG/PNG.",
+        "tag": "KS3 / iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
         "title": "Parsons Puzzle (Reorder)",
         "emoji": "🧩",
         "url": "https://jamesabela.github.io/jsfun/reorder.html",
