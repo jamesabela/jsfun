@@ -10,7 +10,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" id="prism-theme">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    id="prism-theme">
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
@@ -744,6 +745,18 @@
       color: #ffffff;
     }
 
+    .flowchart-btn {
+      background: var(--success);
+      border-color: var(--success);
+      color: #ffffff;
+    }
+
+    .flowchart-btn:hover {
+      background: #059669;
+      border-color: #059669;
+      color: #ffffff;
+    }
+
     /* Interactive Grids / Tables */
     .op-grid {
       display: grid;
@@ -1229,10 +1242,12 @@
         box-shadow: var(--shadow);
         border-color: var(--border-color);
       }
+
       25% {
         box-shadow: 0 0 25px var(--primary), var(--shadow);
         border-color: var(--primary);
       }
+
       100% {
         box-shadow: var(--shadow);
         border-color: var(--border-color);
@@ -1250,7 +1265,8 @@
       <div class="search-container">
         <span class="search-icon">🔍</span>
         <input type="text" id="searchInput" placeholder="Search manual..." oninput="handleSearch()" autocomplete="off">
-        <button id="clearSearchBtn" class="clear-search-btn" onclick="clearSearch()" style="display: none;" title="Clear search">✕</button>
+        <button id="clearSearchBtn" class="clear-search-btn" onclick="clearSearch()" style="display: none;"
+          title="Clear search">✕</button>
       </div>
       <button class="theme-btn" id="themeToggleBtn" onclick="toggleThemeManual()">
         <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Dark Mode</span>
@@ -1395,6 +1411,31 @@ a = "hello"</code></pre>
             <div class="op-cell"><code>77</code></div>
           </div>
         </div>
+
+        <div class="card">
+          <h2>💻 Calculations in Python</h2>
+          <p>This program demonstrates how you can combine different operators to perform calculations.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python"># Assigning values to variables
+width = 10
+height = 3
+
+# Basic arithmetic
+perimeter = (width + height) * 2
+area = width * height
+
+# Division, floor division, and modulus
+items = 10
+people = 3
+share = items / people       # 3.333... (float division)
+even_share = items // people # 3 (integer division)
+leftover = items % people    # 1 (remainder)
+
+print("Area:", area)
+print("Share:", share)
+print("Remainder:", leftover)</code></pre>
+          </div>
+        </div>
       </div>
 
       <!-- TAB: Inputs -->
@@ -1423,7 +1464,9 @@ MyAge = int(input("When were you born? "))</code></pre>
       <div id="tab-delays" class="tab-content">
         <div class="card">
           <h2>⏰ Time Delays (time.sleep)</h2>
-          <p>You can create pauses or delays in your code using the <code>time</code> module.</p>
+          <p>You can create pauses or delays in your code using the <code>time</code> module.
+            Please note in run mode the entire program runs at once and so you will only see the completed code.
+            Display mode will not wait for the sleep function.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">import time
 
@@ -1661,13 +1704,38 @@ MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
             <div class="op-cell">Fastest speed. Normal speeds are 1 (slow) to 9 (fast).</div>
           </div>
         </div>
+
+        <div class="card">
+          <h2>🎨 Drawing Shapes with Turtle</h2>
+          <p>This program demonstrates how to import the turtle module and use loops to draw a filled square.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">import turtle
+
+# Configure drawing colors and speed
+turtle.pencolor("Red")
+turtle.fillcolor("Gold")
+turtle.speed(3)
+
+# Start tracking lines to fill
+turtle.begin_fill()
+
+# Draw four sides of the square
+for i in range(4):
+    turtle.forward(100)
+    turtle.right(90)
+
+# Fill the drawn shape
+turtle.end_fill()</code></pre>
+          </div>
+        </div>
       </div>
 
       <!-- TAB: 2D Lists -->
       <div id="tab-2d-lists" class="tab-content">
         <div class="card">
           <h2>▦ 2D Lists: Rows and Columns</h2>
-          <p>A 2D list is a list containing other lists. Use <code>grid[row][column]</code> to access one cell. Rows and columns both start at index <code>0</code>.</p>
+          <p>A 2D list is a list containing other lists. Use <code>grid[row][column]</code> to access one cell. Rows and
+            columns both start at index <code>0</code>.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">seats = [
     ["A", "A", "B"],
@@ -1682,7 +1750,9 @@ seats[1][1] = "A"    # update row 1, column 1</code></pre>
 
         <div class="card">
           <h2>🎯 Pick a Cell, Build the Code</h2>
-          <p>Choose a sample grid, then click a cell. The Python code updates to show the exact <code>grid[row][column]</code> access and a short example of using that value effectively.</p>
+          <p>Choose a sample grid, then click a cell. The Python code updates to show the exact
+            <code>grid[row][column]</code> access and a short example of using that value effectively.
+          </p>
           <div class="manual-interactive">
             <div class="manual-grid">
               <div class="manual-field">
@@ -1709,7 +1779,8 @@ seats[1][1] = "A"    # update row 1, column 1</code></pre>
 
         <div class="card">
           <h2>🔍 Traversing a Grid</h2>
-          <p>Nested loops visit every cell. The outer loop usually controls the row; the inner loop controls each column in that row.</p>
+          <p>Nested loops visit every cell. The outer loop usually controls the row; the inner loop controls each column
+            in that row.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">total = 0
 sales = [
@@ -1725,7 +1796,8 @@ print(total)</code></pre>
           </div>
           <div class="banner info">
             <span>ℹ️</span>
-            <span><strong>Vocabulary:</strong> nested list, row index, column index, traversal, grid total, search algorithm, pixel grid.</span>
+            <span><strong>Vocabulary:</strong> nested list, row index, column index, traversal, grid total, search
+              algorithm, pixel grid.</span>
           </div>
         </div>
       </div>
@@ -1734,7 +1806,9 @@ print(total)</code></pre>
       <div id="tab-files" class="tab-content">
         <div class="card">
           <h2>💾 Reading and Writing Files</h2>
-          <p>File handling lets programs save data after the program stops. Use <code>"r"</code> to read, <code>"w"</code> to overwrite, and <code>"a"</code> to append to the end.</p>
+          <p>File handling lets programs save data after the program stops. Use <code>"r"</code> to read,
+            <code>"w"</code> to overwrite, and <code>"a"</code> to append to the end.
+          </p>
           <div class="code-wrapper">
             <pre><code class="language-python">file = open("score.txt", "w")
 file.write("120")
@@ -1748,13 +1822,15 @@ print(score)</code></pre>
           </div>
           <div class="banner bug">
             <span>🐛</span>
-            <span><strong>Common Bug:</strong> <code>"w"</code> deletes the old contents first. Use <code>"a"</code> when you need to keep the existing file contents.</span>
+            <span><strong>Common Bug:</strong> <code>"w"</code> deletes the old contents first. Use <code>"a"</code>
+              when you need to keep the existing file contents.</span>
           </div>
         </div>
 
         <div class="card">
           <h2>📄 Looping Through Lines</h2>
-          <p>Many A-level file tasks load text, split records, count words, or filter rows. <code>strip()</code> removes the newline at the end of each line.</p>
+          <p>Many A-level file tasks load text, split records, count words, or filter rows. <code>strip()</code> removes
+            the newline at the end of each line.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">file = open("players.tsv", "r")
 
@@ -1790,7 +1866,8 @@ print(capitals.get("Japan", "Unknown"))</code></pre>
 
         <div class="card">
           <h2>🔁 Dictionary Loops and Frequencies</h2>
-          <p>Dictionaries are excellent for counting frequencies because each word can become a key and its count can become the value.</p>
+          <p>Dictionaries are excellent for counting frequencies because each word can become a key and its count can
+            become the value.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">counts = {}
 words = ["to", "be", "or", "not", "to", "be"]
@@ -1803,7 +1880,8 @@ for word, count in counts.items():
           </div>
           <div class="banner info">
             <span>ℹ️</span>
-            <span><strong>Vocabulary:</strong> key, value, item, safe lookup, membership, nested dictionary, word frequency.</span>
+            <span><strong>Vocabulary:</strong> key, value, item, safe lookup, membership, nested dictionary, word
+              frequency.</span>
           </div>
         </div>
       </div>
@@ -1812,7 +1890,8 @@ for word, count in counts.items():
       <div id="tab-functions" class="tab-content">
         <div class="card">
           <h2>🧩 Procedures, Functions and Parameters</h2>
-          <p>A procedure performs a named block of steps. A function returns a value. Parameters are variable names in the definition; arguments are the values passed in the call.</p>
+          <p>A procedure performs a named block of steps. A function returns a value. Parameters are variable names in
+            the definition; arguments are the values passed in the call.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">def print_receipt(name, price):
     print(name, "costs", price)
@@ -1827,7 +1906,8 @@ print_receipt("Keyboard", total)</code></pre>
 
         <div class="card">
           <h2>🎯 Scope, Return and Decomposition</h2>
-          <p>Local variables exist inside a function. Global variables exist outside. Good programs decompose a large problem into smaller subroutines with clear jobs.</p>
+          <p>Local variables exist inside a function. Global variables exist outside. Good programs decompose a large
+            problem into smaller subroutines with clear jobs.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">def is_valid_mark(mark):
     if mark < 0 or mark > 100:
@@ -1842,7 +1922,8 @@ else:
           </div>
           <div class="banner info">
             <span>ℹ️</span>
-            <span><strong>Vocabulary:</strong> subroutine, parameter, argument, return value, local scope, global scope, decomposition, mutable reference parameter.</span>
+            <span><strong>Vocabulary:</strong> subroutine, parameter, argument, return value, local scope, global scope,
+              decomposition, mutable reference parameter.</span>
           </div>
         </div>
       </div>
@@ -1851,7 +1932,9 @@ else:
       <div id="tab-validation" class="tab-content">
         <div class="card">
           <h2>✅ Validation vs Verification</h2>
-          <p><strong>Validation</strong> checks whether data is sensible before processing. <strong>Verification</strong> checks whether data has been copied or entered accurately.</p>
+          <p><strong>Validation</strong> checks whether data is sensible before processing.
+            <strong>Verification</strong> checks whether data has been copied or entered accurately.
+          </p>
           <div class="op-grid" style="grid-template-columns: 180px 1fr;">
             <div class="op-header">Check</div>
             <div class="op-header">Purpose</div>
@@ -1870,7 +1953,8 @@ else:
 
         <div class="card">
           <h2>🧪 Try Common Checks</h2>
-          <p>These are the same kinds of checks used in the validation and verification course: range, length, type, presence, format, visual check and double entry.</p>
+          <p>These are the same kinds of checks used in the validation and verification course: range, length, type,
+            presence, format, visual check and double entry.</p>
           <div class="manual-interactive">
             <div class="manual-grid">
               <div class="manual-field">
@@ -1922,7 +2006,8 @@ print("Accepted:", mark)</code></pre>
       <div id="tab-searching" class="tab-content">
         <div class="card">
           <h2>📊 Searching Algorithms</h2>
-          <p><strong>Linear search</strong> checks items one by one. <strong>Binary search</strong> needs sorted data and repeatedly discards half of the search space.</p>
+          <p><strong>Linear search</strong> checks items one by one. <strong>Binary search</strong> needs sorted data
+            and repeatedly discards half of the search space.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">items = [3, 8, 12, 20, 31]
 target = 20
@@ -1948,7 +2033,9 @@ print(found)</code></pre>
       <div id="tab-big-o" class="tab-content">
         <div class="card">
           <h2>🔃 Sorting and Big O</h2>
-          <p>Sorting algorithms arrange data into order. Complexity describes how work grows as the input size <code>n</code> grows.</p>
+          <p>Sorting algorithms arrange data into order. Complexity describes how work grows as the input size
+            <code>n</code> grows.
+          </p>
           <div class="op-grid" style="grid-template-columns: 160px 1fr;">
             <div class="op-header">Term</div>
             <div class="op-header">Meaning</div>
@@ -1963,13 +2050,15 @@ print(found)</code></pre>
           </div>
           <div class="banner info">
             <span>ℹ️</span>
-            <span><strong>Vocabulary:</strong> algorithm, comparison, swap, pass, best case, average case, worst case, bubble sort, insertion sort.</span>
+            <span><strong>Vocabulary:</strong> algorithm, comparison, swap, pass, best case, average case, worst case,
+              bubble sort, insertion sort.</span>
           </div>
         </div>
 
         <div class="card">
           <h2>📈 Big O Growth Visualizer</h2>
-          <p>Move <code>n</code> to see how the common complexity classes grow. The numbers are simplified operation counts so the shape is clear; this is about comparing growth, not timing real hardware.</p>
+          <p>Move <code>n</code> to see how the common complexity classes grow. The numbers are simplified operation
+            counts so the shape is clear; this is about comparing growth, not timing real hardware.</p>
           <div class="manual-interactive">
             <div class="big-o-layout">
               <div class="big-o-chart" id="bigOChart"></div>
@@ -1988,7 +2077,8 @@ print(found)</code></pre>
 
         <div class="card">
           <h2>🐍 Python Examples to Try</h2>
-          <p>These are static code examples in this manual, not an embedded editor. Use the Edit button on a snippet to open it in the Python editor and try it there.</p>
+          <p>These are static code examples in this manual, not an embedded editor. Use the Edit button on a snippet to
+            open it in the Python editor and try it there.</p>
           <div class="big-o-examples">
             <div class="big-o-example">
               <h3>O(1) Constant</h3>
@@ -2039,7 +2129,8 @@ print(found)</code></pre>
             </div>
             <div class="big-o-example">
               <h3>O(n log n) Merge Sort</h3>
-              <p>Split into halves, then merge each level.</p>
+              <p>Split into halves, then merge each level.
+                (Not in A-level)</p>
               <div class="code-wrapper">
                 <pre><code class="language-python">def merge(left, right):
     result = []
@@ -2062,8 +2153,8 @@ print(merge_sort([7, 3, 9, 2, 6]))</code></pre>
               </div>
             </div>
             <div class="big-o-example">
-              <h3>O(n²) Bubble / Insertion Sort</h3>
-              <p>Nested comparisons over the data.</p>
+              <h3>O(n²) Bubble Sort</h3>
+              <p>Nested comparisons over the data. Note that Big O represents the worst-case scenario, so both Bubble Sort and Insertion Sort share this same O(n²) time complexity.</p>
               <div class="code-wrapper">
                 <pre><code class="language-python">values = [7, 3, 9, 2, 6]
 n = len(values)
@@ -2108,7 +2199,8 @@ for ordering in permutations(items):
       <div id="tab-bubble-sort" class="tab-content">
         <div class="card">
           <h2>🫧 Interactive Bubble Sort</h2>
-          <p>Bubble sort repeatedly compares neighbouring items and swaps them when they are in the wrong order. Step through the comparisons one at a time.</p>
+          <p>Bubble sort repeatedly compares neighbouring items and swaps them when they are in the wrong order. Step
+            through the comparisons one at a time.</p>
           <div class="manual-interactive">
             <div class="viz-stage sort-stage" id="bubbleSortStage"></div>
             <div class="list-controls">
@@ -2118,13 +2210,33 @@ for ordering in permutations(items):
             <div class="manual-log" id="bubbleSortLog"></div>
           </div>
         </div>
+
+        <div class="card">
+          <h2>💻 Bubble Sort Implementation</h2>
+          <p>Here is a complete Python implementation of the bubble sort algorithm to sort a list of numbers.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        # Last i elements are already in place
+        for j in range(0, n - i - 1):
+            # Swap if the element found is greater than the next element
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+
+numbers = [7, 3, 9, 2, 6]
+bubble_sort(numbers)
+print("Sorted list:", numbers)</code></pre>
+          </div>
+        </div>
       </div>
 
       <!-- TAB: Insertion Sort -->
       <div id="tab-insertion-sort" class="tab-content">
         <div class="card">
           <h2>📥 Interactive Insertion Sort</h2>
-          <p>Insertion sort builds a sorted section on the left. Each new key moves left until it reaches its correct position.</p>
+          <p>Insertion sort builds a sorted section on the left. Each new key moves left until it reaches its correct
+            position.</p>
           <div class="manual-interactive">
             <div class="viz-stage sort-stage" id="insertionSortStage"></div>
             <div class="list-controls">
@@ -2132,6 +2244,28 @@ for ordering in permutations(items):
               <button class="list-btn secondary" onclick="resetInsertionSort()">Reset</button>
             </div>
             <div class="manual-log" id="insertionSortLog"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>💻 Insertion Sort Implementation</h2>
+          <p>Here is a complete Python implementation of the insertion sort algorithm to sort a list of numbers.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def insertion_sort(arr):
+    # Traverse from 1 to len(arr)
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        # Move elements of arr[0..i-1], that are greater than key,
+        # to one position ahead of their current position
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+
+numbers = [7, 3, 9, 2, 6]
+insertion_sort(numbers)
+print("Sorted list:", numbers)</code></pre>
           </div>
         </div>
       </div>
@@ -2153,7 +2287,8 @@ for ordering in permutations(items):
           </div>
           <div class="banner bug">
             <span>🐛</span>
-            <span><strong>Exam Bug:</strong> stack overflow means pushing onto a full fixed-size stack. Stack underflow means popping from an empty stack.</span>
+            <span><strong>Exam Bug:</strong> stack overflow means pushing onto a full fixed-size stack. Stack underflow
+              means popping from an empty stack.</span>
           </div>
         </div>
 
@@ -2170,13 +2305,38 @@ for ordering in permutations(items):
             <div class="manual-log" id="stackConceptLog"></div>
           </div>
         </div>
+
+        <div class="card">
+          <h2>💻 Stack Implementation (using Lists)</h2>
+          <p>In Python, you can easily implement a stack structure using a list, with <code>append()</code> to push and <code>pop()</code> to pop.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python"># Initialize an empty stack
+stack = []
+
+# Push items onto the stack
+stack.append("A")
+stack.append("B")
+stack.append("C")
+print("Stack after pushes:", stack)
+
+# Pop an item from the stack
+removed = stack.pop()
+print("Popped item:", removed)
+print("Stack after pop:", stack)
+
+# Peek at the top item
+top_item = stack[-1]
+print("Top item (peek):", top_item)</code></pre>
+          </div>
+        </div>
       </div>
 
       <!-- TAB: Queues -->
       <div id="tab-queues" class="tab-content">
         <div class="card">
           <h2>🚶 Queues</h2>
-          <p>A queue is a First In, First Out structure. New items join at the rear, and old items leave from the front.</p>
+          <p>A queue is a First In, First Out structure. New items join at the rear, and old items leave from the front.
+          </p>
           <div class="op-grid" style="grid-template-columns: 160px 1fr;">
             <div class="op-header">Operation</div>
             <div class="op-header">Meaning</div>
@@ -2202,13 +2362,38 @@ for ordering in permutations(items):
             <div class="manual-log" id="queueConceptLog"></div>
           </div>
         </div>
+
+        <div class="card">
+          <h2>💻 Queue Implementation (using Lists)</h2>
+          <p>In Python, you can implement a queue structure using a list, with <code>append()</code> to enqueue and <code>pop(0)</code> to dequeue.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python"># Initialize an empty queue
+queue = []
+
+# Enqueue items at the rear
+queue.append("A")
+queue.append("B")
+queue.append("C")
+print("Queue after enqueues:", queue)
+
+# Dequeue an item from the front
+removed = queue.pop(0)
+print("Dequeued item:", removed)
+print("Queue after dequeue:", queue)
+
+# Peek at the front item
+front_item = queue[0]
+print("Front item:", front_item)</code></pre>
+          </div>
+        </div>
       </div>
 
       <!-- TAB: Linked Lists -->
       <div id="tab-linked-lists" class="tab-content">
         <div class="card">
           <h2>🔗 Linked Lists</h2>
-          <p>A linked list is made from nodes. Each node stores data and a pointer to the next node. A null pointer marks the end.</p>
+          <p>A linked list is made from nodes. Each node stores data and a pointer to the next node. A null pointer
+            marks the end.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">class Node:
     def __init__(self, data):
@@ -2233,7 +2418,8 @@ while current is not None:
             <div class="viz-stage" id="linkedConceptStage"></div>
             <div class="list-controls">
               <button class="list-btn" onclick="showStructureConcept('linked', 'append')">Append</button>
-              <button class="list-btn secondary" onclick="showStructureConcept('linked', 'remove')">Remove Front</button>
+              <button class="list-btn secondary" onclick="showStructureConcept('linked', 'remove')">Remove
+                Front</button>
               <button class="list-btn secondary" onclick="showStructureConcept('linked', 'reset')">Reset</button>
             </div>
             <div class="manual-log" id="linkedConceptLog"></div>
@@ -2245,7 +2431,9 @@ while current is not None:
       <div id="tab-recursion" class="tab-content">
         <div class="card">
           <h2>🌀 Recursion</h2>
-          <p>Recursion is when a function solves a problem by calling itself. Every recursive algorithm needs a <strong>base case</strong> to stop and a <strong>general case</strong> that moves closer to the base case.</p>
+          <p>Recursion is when a function solves a problem by calling itself. Every recursive algorithm needs a
+            <strong>base case</strong> to stop and a <strong>general case</strong> that moves closer to the base case.
+          </p>
           <div class="code-wrapper">
             <pre><code class="language-python">def factorial(n):
     if n == 0:
@@ -2258,10 +2446,12 @@ print(factorial(5))</code></pre>
 
         <div class="card">
           <h2>📚 Call Stack and Unwinding</h2>
-          <p>Each recursive call creates a stack frame storing parameters, local variables and a return address. When the base case is reached, the calls return in reverse order. This is called unwinding.</p>
+          <p>Each recursive call creates a stack frame storing parameters, local variables and a return address. When
+            the base case is reached, the calls return in reverse order. This is called unwinding.</p>
           <div class="banner info">
             <span>ℹ️</span>
-            <span><strong>Vocabulary:</strong> recursive call, trace, call stack, stack frame, return address, unwinding, stack overflow, memoisation.</span>
+            <span><strong>Vocabulary:</strong> recursive call, trace, call stack, stack frame, return address,
+              unwinding, stack overflow, memoisation.</span>
           </div>
         </div>
       </div>
@@ -2270,7 +2460,9 @@ print(factorial(5))</code></pre>
       <div id="tab-oop" class="tab-content">
         <div class="card">
           <h2>🏛️ Classes, Objects and Constructors</h2>
-          <p>A class is a blueprint. An object is an instance created from that class. The constructor <code>__init__</code> sets up the object's attributes.</p>
+          <p>A class is a blueprint. An object is an instance created from that class. The constructor
+            <code>__init__</code> sets up the object's attributes.
+          </p>
           <div class="code-wrapper">
             <pre><code class="language-python">class Character:
     def __init__(self, name, health):
@@ -2288,7 +2480,8 @@ print(hero.health)</code></pre>
 
         <div class="card">
           <h2>🧱 Encapsulation, Inheritance and Polymorphism</h2>
-          <p>Encapsulation keeps data and methods together. Inheritance lets a subclass reuse a superclass. Polymorphism allows different classes to respond to the same method name in different ways.</p>
+          <p>Encapsulation keeps data and methods together. Inheritance lets a subclass reuse a superclass. Polymorphism
+            allows different classes to respond to the same method name in different ways.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">class Enemy:
     def attack(self):
@@ -2303,7 +2496,8 @@ creature.attack()</code></pre>
           </div>
           <div class="banner info">
             <span>ℹ️</span>
-            <span><strong>Vocabulary:</strong> class, object, instance, self, attribute, method, getter, setter, private attribute, superclass, subclass, override, abstraction, aggregation.</span>
+            <span><strong>Vocabulary:</strong> class, object, instance, self, attribute, method, getter, setter, private
+              attribute, superclass, subclass, override, abstraction, aggregation.</span>
           </div>
         </div>
       </div>
@@ -2312,7 +2506,8 @@ creature.attack()</code></pre>
       <div id="tab-trees" class="tab-content">
         <div class="card">
           <h2>🌳 Binary Search Trees</h2>
-          <p>A binary tree node can have up to two children. In a binary search tree, smaller values go left and larger values go right.</p>
+          <p>A binary tree node can have up to two children. In a binary search tree, smaller values go left and larger
+            values go right.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">class Node:
     def __init__(self, data):
@@ -2324,12 +2519,15 @@ root = Node("mango")
 root.left = Node("apple")
 root.right = Node("pear")</code></pre>
           </div>
-          <p>The local word data used in the tree course includes examples such as <code>mango</code>, <code>apple</code>, <code>banana</code>, <code>pear</code>, <code>kiwi</code> and <code>orange</code>.</p>
+          <p>The local word data used in the tree course includes examples such as <code>mango</code>,
+            <code>apple</code>, <code>banana</code>, <code>pear</code>, <code>kiwi</code> and <code>orange</code>.
+          </p>
         </div>
 
         <div class="card">
           <h2>🔎 Traversal and Tree Search</h2>
-          <p><strong>In-order traversal</strong> visits left subtree, current node, then right subtree. In a binary search tree this outputs values in sorted order.</p>
+          <p><strong>In-order traversal</strong> visits left subtree, current node, then right subtree. In a binary
+            search tree this outputs values in sorted order.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">def inorder(node):
     if node is not None:
@@ -2339,13 +2537,15 @@ root.right = Node("pear")</code></pre>
           </div>
           <div class="banner info">
             <span>ℹ️</span>
-            <span><strong>Vocabulary:</strong> root, node, parent, child, leaf, left subtree, right subtree, null pointer, recursive insertion, recursive search, pre-order, post-order.</span>
+            <span><strong>Vocabulary:</strong> root, node, parent, child, leaf, left subtree, right subtree, null
+              pointer, recursive insertion, recursive search, pre-order, post-order.</span>
           </div>
         </div>
 
         <div class="card">
           <h2>🌳 Binary Tree Visualiser</h2>
-          <p>Insert and search values to see the exact path through a binary search tree. Smaller values move left; larger or equal values move right.</p>
+          <p>Insert and search values to see the exact path through a binary search tree. Smaller values move left;
+            larger or equal values move right.</p>
           <div class="tree-visualiser-box">
             <div class="tree-visualiser-controls">
               <input class="list-input" id="manualTreeInput" placeholder="Type a value">
@@ -2354,7 +2554,8 @@ root.right = Node("pear")</code></pre>
               <button class="list-btn secondary" onclick="manualTreeLoadDefault()">Reset demo</button>
               <button class="list-btn secondary" onclick="manualTreeClear()">Clear</button>
             </div>
-            <svg class="tree-visualiser-svg" id="manualTreeSvg" viewBox="0 0 720 300" role="img" aria-label="Binary search tree visualisation"></svg>
+            <svg class="tree-visualiser-svg" id="manualTreeSvg" viewBox="0 0 720 300" role="img"
+              aria-label="Binary search tree visualisation"></svg>
             <div class="manual-log" id="manualTreeLog"></div>
           </div>
         </div>
@@ -2364,50 +2565,76 @@ root.right = Node("pear")</code></pre>
       <div id="tab-resources" class="tab-content">
         <div class="card">
           <h2>🔗 Further Learning & Reference</h2>
-          <p>If you want to dive deeper into Python programming, these highly recommended tutorials and documentations are excellent places to expand your knowledge:</p>
+          <p>If you want to dive deeper into Python programming, these highly recommended tutorials and documentations
+            are excellent places to expand your knowledge:</p>
           <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 8px;">
-            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
-              <h3 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                📚 <a href="https://www.w3schools.com/python/" target="_blank" style="color: inherit; text-decoration: none;">W3Schools Python Tutorial</a>
+            <div
+              style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
+              <h3
+                style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                📚 <a href="https://www.w3schools.com/python/" target="_blank"
+                  style="color: inherit; text-decoration: none;">W3Schools Python Tutorial</a>
               </h3>
-              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">An exceptionally beginner-friendly, structured guide with simple explanations and lots of small interactive code examples.</p>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">An exceptionally beginner-friendly,
+                structured guide with simple explanations and lots of small interactive code examples.</p>
             </div>
 
-            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
-              <h3 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                🐍 <a href="https://docs.python.org/3/" target="_blank" style="color: inherit; text-decoration: none;">Official Python Documentation</a>
+            <div
+              style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
+              <h3
+                style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                🐍 <a href="https://docs.python.org/3/" target="_blank"
+                  style="color: inherit; text-decoration: none;">Official Python Documentation</a>
               </h3>
-              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">The definitive source for Python standard libraries, syntax rules, and official explanations. Great for looking up specific modules or features.</p>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">The definitive source for Python
+                standard libraries, syntax rules, and official explanations. Great for looking up specific modules or
+                features.</p>
             </div>
 
-            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
-              <h3 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                👑 <a href="https://realpython.com/" target="_blank" style="color: inherit; text-decoration: none;">Real Python Tutorials</a>
+            <div
+              style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
+              <h3
+                style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                👑 <a href="https://realpython.com/" target="_blank" style="color: inherit; text-decoration: none;">Real
+                  Python Tutorials</a>
               </h3>
-              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">A collection of high-quality, practical articles and step-by-step guides covering core concepts and real-world Python applications.</p>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">A collection of high-quality, practical
+                articles and step-by-step guides covering core concepts and real-world Python applications.</p>
             </div>
           </div>
         </div>
 
         <div class="card">
           <h2>🔍 Python Search Engines</h2>
-          <p>Looking for a specific function, library, or error solution? Use these specialized search portals to search directly within trusted python documentation:</p>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 8px;">
-            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 12px;">
-              <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin: 0; color: var(--text-main);">Python Official Search</h3>
-              <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1;">Search official guides, modules, and built-in function references.</p>
-              <form action="https://docs.python.org/3/search.html" method="GET" target="_blank" style="display: flex; gap: 8px; margin-top: 8px;">
-                <input type="text" name="q" placeholder="e.g. lists, dict..." class="list-input" style="flex: 1; padding: 6px 10px; font-size: 0.85rem;" required>
+          <p>Looking for a specific function, library, or error solution? Use these specialized search portals to search
+            directly within trusted python documentation:</p>
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 8px;">
+            <div
+              style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 12px;">
+              <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin: 0; color: var(--text-main);">
+                Python Official Search</h3>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1;">Search official guides,
+                modules, and built-in function references.</p>
+              <form action="https://docs.python.org/3/search.html" method="GET" target="_blank"
+                style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="text" name="q" placeholder="e.g. lists, dict..." class="list-input"
+                  style="flex: 1; padding: 6px 10px; font-size: 0.85rem;" required>
                 <button type="submit" class="list-btn" style="padding: 6px 12px; font-size: 0.85rem;">Go</button>
               </form>
             </div>
 
-            <div style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 12px;">
-              <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin: 0; color: var(--text-main);">W3Schools Python Search</h3>
-              <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1;">Search user-friendly tutorials and code examples on W3Schools.</p>
-              <form action="https://www.google.com/search" method="GET" target="_blank" style="display: flex; gap: 8px; margin-top: 8px;">
+            <div
+              style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 12px;">
+              <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin: 0; color: var(--text-main);">
+                W3Schools Python Search</h3>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1;">Search user-friendly
+                tutorials and code examples on W3Schools.</p>
+              <form action="https://www.google.com/search" method="GET" target="_blank"
+                style="display: flex; gap: 8px; margin-top: 8px;">
                 <input type="hidden" name="as_sitesearch" value="w3schools.com/python">
-                <input type="text" name="q" placeholder="e.g. loops, arrays..." class="list-input" style="flex: 1; padding: 6px 10px; font-size: 0.85rem;" required>
+                <input type="text" name="q" placeholder="e.g. loops, arrays..." class="list-input"
+                  style="flex: 1; padding: 6px 10px; font-size: 0.85rem;" required>
                 <button type="submit" class="list-btn" style="padding: 6px 12px; font-size: 0.85rem;">Go</button>
               </form>
             </div>
@@ -2435,7 +2662,8 @@ root.right = Node("pear")</code></pre>
           <a href="computing.html" class="computing-link">More Computing Tools</a>
         </p>
         <p style="margin-top:0.5rem;font-size:0.85rem;">
-          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA
+            4.0</a> ©
           James Abela 2024
         </p>
       </footer>
@@ -2447,7 +2675,11 @@ root.right = Node("pear")</code></pre>
   <script>
     // Tab switching logic
     let lastActiveTab = 'print';
-    function showTab(tabId) {
+
+    function showTab(tabId, updateHash = true) {
+      const targetTab = document.getElementById('tab-' + tabId);
+      if (!targetTab) return;
+
       if (tabId !== 'search-results') {
         lastActiveTab = tabId;
         // Also clear the search bar if they click a tab button directly
@@ -2459,33 +2691,89 @@ root.right = Node("pear")</code></pre>
         }
       }
 
+      // If tab is already active, just handle hash update if requested
+      const isAlreadyActive = targetTab.classList.contains('active');
+      if (isAlreadyActive) {
+        if (updateHash && tabId !== 'search-results') {
+          if (window.location.hash !== '#' + tabId) {
+            window.location.hash = tabId;
+          }
+        }
+        return;
+      }
+
       document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
       });
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      
-      const targetTab = document.getElementById('tab-' + tabId);
-      if (targetTab) {
-        targetTab.classList.add('active');
-      }
+
+      targetTab.classList.add('active');
 
       // Highlight sidebar button
       const buttons = document.querySelectorAll('.nav-btn');
       buttons.forEach(btn => {
         btn.classList.remove('active');
       });
-      buttons.forEach(btn => {
-        if (tabId === 'search-results') {
-          // Deselect all buttons when search results are showing
-          return;
+      if (tabId !== 'search-results') {
+        const targetBtn = Array.from(buttons).find(btn => {
+          const onclickAttr = btn.getAttribute('onclick') || '';
+          return onclickAttr.includes(`'${tabId}'`) || onclickAttr.includes(`"${tabId}"`);
+        });
+        if (targetBtn) {
+          targetBtn.classList.add('active');
         }
-        if (btn.textContent.toLowerCase().includes(tabId.split('-')[0])) {
-          btn.classList.add('active');
+      }
+
+      if (updateHash && tabId !== 'search-results') {
+        if (window.location.hash !== '#' + tabId) {
+          window.location.hash = tabId;
         }
-      });
+      }
     }
+
+    function handleHashChange() {
+      const hash = window.location.hash.substring(1);
+      if (!hash) {
+        // Default to first tab (print) if hash is empty
+        showTab('print', false);
+        return;
+      }
+
+      // Check if hash matches a tab ID directly
+      const tabElement = document.getElementById('tab-' + hash);
+      if (tabElement) {
+        showTab(hash, false);
+        return;
+      }
+
+      // Check if hash matches an element ID (e.g. a card ID)
+      const element = document.getElementById(hash);
+      if (element) {
+        // Find which tab content is parent of this element
+        const parentTab = element.closest('.tab-content');
+        if (parentTab) {
+          const tabId = parentTab.id.replace('tab-', '');
+          showTab(tabId, false);
+
+          // Allow DOM update and scroll to the element
+          setTimeout(() => {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Add pulse highlight animation if it's a card
+            if (element.classList.contains('card')) {
+              element.classList.remove('card-highlight-pulse');
+              void element.offsetWidth; // trigger reflow
+              element.classList.add('card-highlight-pulse');
+              setTimeout(() => {
+                element.classList.remove('card-highlight-pulse');
+              }, 1500);
+            }
+          }, 100);
+        }
+      }
+    }
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
 
     // Search implementation
     function handleSearch() {
@@ -2535,7 +2823,7 @@ root.right = Node("pear")</code></pre>
           const h2 = card.querySelector('h2');
           const h2Text = h2 ? h2.textContent : '';
           const cardText = card.textContent || '';
-          
+
           if (cardText.toLowerCase().includes(query)) {
             matches.push({
               tabId: tabId,
@@ -2550,7 +2838,7 @@ root.right = Node("pear")</code></pre>
 
       if (matches.length > 0) {
         resultsInfo.innerHTML = `Found <strong>${matches.length}</strong> matching section${matches.length === 1 ? '' : 's'} for "<strong>${escapeHtml(searchInput.value)}</strong>":`;
-        
+
         matches.forEach(match => {
           const resultItem = document.createElement('div');
           resultItem.className = 'search-result-item';
@@ -2568,7 +2856,7 @@ root.right = Node("pear")</code></pre>
             snippet = match.fullText.substring(start, end).trim();
             if (start > 0) snippet = '...' + snippet;
             if (end < match.fullText.length) snippet = snippet + '...';
-            
+
             // Highlight the query inside snippet using regex for case-insensitive replacement
             const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
             const regex = new RegExp(`(${escapedQuery})`, 'gi');
@@ -2586,7 +2874,7 @@ root.right = Node("pear")</code></pre>
         });
       } else {
         resultsInfo.textContent = '';
-        
+
         const noResults = document.createElement('div');
         noResults.className = 'no-results-card';
         noResults.innerHTML = `
@@ -2612,7 +2900,7 @@ root.right = Node("pear")</code></pre>
     function clearSearch() {
       const searchInput = document.getElementById('searchInput');
       if (searchInput) searchInput.value = '';
-      
+
       const clearBtn = document.getElementById('clearSearchBtn');
       if (clearBtn) clearBtn.style.display = 'none';
 
@@ -2621,26 +2909,7 @@ root.right = Node("pear")</code></pre>
     }
 
     function selectSearchResult(tabId, cardId) {
-      showTab(tabId);
-      
-      // Allow DOM update and scroll to card
-      setTimeout(() => {
-        const card = document.getElementById(cardId);
-        if (card) {
-          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          
-          // Add pulse highlight animation
-          card.classList.remove('card-highlight-pulse');
-          // Trigger reflow to restart animation
-          void card.offsetWidth;
-          card.classList.add('card-highlight-pulse');
-          
-          // Remove class after animation finishes
-          setTimeout(() => {
-            card.classList.remove('card-highlight-pulse');
-          }, 1500);
-        }
-      }, 100);
+      window.location.hash = cardId;
     }
 
     function escapeHtml(text) {
@@ -2651,7 +2920,7 @@ root.right = Node("pear")</code></pre>
         '"': '&quot;',
         "'": '&#039;'
       };
-      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+      return text.replace(/[&<>"']/g, function (m) { return map[m]; });
     }
 
     // Copy code snippet
@@ -3107,7 +3376,15 @@ else:
     }
 
     function stepBubbleSort() {
-      if (!bubbleState || bubbleState.sorted) resetBubbleSort();
+      if (!bubbleState) {
+        resetBubbleSort();
+        return;
+      }
+      if (bubbleState.sorted) {
+        const log = document.getElementById('bubbleSortLog');
+        if (log) log.textContent = 'Already sorted! Click "Reset" to start a new simulation.';
+        return;
+      }
       const state = bubbleState;
       const lastCompare = state.values.length - 1 - state.pass;
       const log = document.getElementById('bubbleSortLog');
@@ -3154,7 +3431,15 @@ else:
     }
 
     function stepInsertionSort() {
-      if (!insertionState || insertionState.sorted) resetInsertionSort();
+      if (!insertionState) {
+        resetInsertionSort();
+        return;
+      }
+      if (insertionState.sorted) {
+        const log = document.getElementById('insertionSortLog');
+        if (log) log.textContent = 'Already sorted! Click "Reset" to start a new simulation.';
+        return;
+      }
       const state = insertionState;
       const log = document.getElementById('insertionSortLog');
 
@@ -3572,7 +3857,7 @@ else:
       showStructureConcept('queue', 'reset');
       showStructureConcept('linked', 'reset');
       manualTreeLoadDefault();
-      
+
       // Determine initial theme
       let isDark = true;
       if (parent && parent !== window) {
@@ -3592,23 +3877,23 @@ else:
           isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         }
       }
-      
+
       setTheme(isDark);
 
       // Dynamic code action button builder for all code samples
       document.querySelectorAll('.code-wrapper').forEach(wrapper => {
         const codeEl = wrapper.querySelector('code');
         if (!codeEl) return;
-        
-        // Remove existing copy button if present to prevent duplicates
-        const existingBtn = wrapper.querySelector('.copy-code-btn');
-        if (existingBtn) {
-          existingBtn.remove();
+
+        // Remove existing actions container if present to prevent duplicates
+        const existingActions = wrapper.querySelector('.code-actions');
+        if (existingActions) {
+          existingActions.remove();
         }
-        
+
         const actionsContainer = document.createElement('div');
         actionsContainer.className = 'code-actions';
-        
+
         // Copy Button
         const copyBtn = document.createElement('button');
         copyBtn.className = 'copy-code-btn';
@@ -3619,7 +3904,24 @@ else:
             setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
           });
         };
-        
+
+        // See Flowchart Button
+        const flowBtn = document.createElement('button');
+        flowBtn.className = 'open-editor-btn flowchart-btn';
+        flowBtn.textContent = 'Flowchart 📊';
+        flowBtn.onclick = () => {
+          const codeText = codeEl.textContent;
+          // Unicode-safe Base64 encode
+          const utf8Bytes = new TextEncoder().encode(codeText);
+          let binary = '';
+          for (let i = 0; i < utf8Bytes.length; i++) {
+            binary += String.fromCharCode(utf8Bytes[i]);
+          }
+          const base64 = btoa(binary);
+          const flowchartUrl = `python2flow.html?code=${encodeURIComponent(base64)}`;
+          window.open(flowchartUrl, '_blank');
+        };
+
         // Open/Edit in Editor Button
         const openBtn = document.createElement('button');
         openBtn.className = 'open-editor-btn';
@@ -3636,8 +3938,9 @@ else:
           const editorUrl = `pythoncopy.html?code=${encodeURIComponent(base64)}`;
           window.open(editorUrl, '_blank');
         };
-        
+
         actionsContainer.appendChild(copyBtn);
+        actionsContainer.appendChild(flowBtn);
         actionsContainer.appendChild(openBtn);
         wrapper.appendChild(actionsContainer);
       });
@@ -3650,6 +3953,9 @@ else:
       } catch (e) {
         // Ignored if sandboxed
       }
+
+      // Initialize active tab from URL hash on load
+      handleHashChange();
     });
   </script>
   <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
