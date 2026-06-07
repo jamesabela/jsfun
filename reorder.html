@@ -286,12 +286,12 @@
                 const el = document.createElement('div');
                 el.className = "line-item p-4 md:px-6 bg-white border-2 border-slate-200 rounded-2xl cursor-grab font-mono text-sm shadow-sm flex items-center gap-4 group";
                 el.innerHTML = `
-                    <div class="flex flex-col gap-1 opacity-20 group-hover:opacity-100 transition-opacity">
+                    <div class="flex flex-col gap-1 opacity-20 group-hover:opacity-100 transition-opacity flex-shrink-0">
                         <div class="w-4 h-0.5 bg-slate-400"></div>
                         <div class="w-4 h-0.5 bg-slate-400"></div>
                         <div class="w-4 h-0.5 bg-slate-400"></div>
                     </div>
-                    <span class="whitespace-pre overflow-x-auto">${item.text}</span>
+                    <span class="whitespace-pre-wrap break-words flex-grow">${item.text}</span>
                 `;
                 el.dataset.id = item.id;
                 el.dataset.index = index;
@@ -418,7 +418,7 @@
         }
 
         document.getElementById('fontSizeRange').oninput = (e) => {
-            document.querySelectorAll('.line-item span').forEach(s => s.style.fontSize = e.target.value + 'px');
+            document.querySelectorAll('.line-item').forEach(el => el.style.fontSize = e.target.value + 'px');
         };
 
         function updateUrl(raw) {
