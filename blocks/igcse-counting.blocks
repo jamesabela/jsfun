@@ -1,0 +1,10 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="passVar">pass_count</variable><variable id="valueVar">value</variable></variables>
+  <block type="when_run_clicked" id="countStart" x="20" y="20">
+    <next><block type="comment_line" id="countComment"><field name="TEXT">Ask for ten values and count how many are greater than 5.</field>
+    <next><block type="variables_set" id="countSetPass"><field name="VAR" id="passVar">pass_count</field><value name="VALUE"><block type="math_number" id="countZero"><field name="NUM">0</field></block></value>
+    <next><block type="python_for_repeat" id="countRepeat"><value name="TIMES"><block type="math_number" id="countTen"><field name="NUM">10</field></block></value><statement name="DO"><block type="variables_set" id="countInput"><field name="VAR" id="valueVar">value</field><value name="VALUE"><block type="simple_input_number" id="countAsk"><field name="PROMPT">Enter a value: </field></block></value><next><block type="controls_if" id="countIf"><value name="IF0"><block type="logic_compare" id="countGt"><field name="OP">GT</field><value name="A"><block type="variables_get" id="countGetValue"><field name="VAR" id="valueVar">value</field></block></value><value name="B"><block type="math_number" id="countFive"><field name="NUM">5</field></block></value></block></value><statement name="DO0"><block type="math_change" id="countIncrease"><field name="VAR" id="passVar">pass_count</field><value name="DELTA"><shadow type="math_number" id="countStep"><field name="NUM">1</field></shadow></value></block></statement></block></next></block></statement>
+    <next><block type="text_print" id="countPrint"><value name="TEXT"><block type="simple_text_join" id="countJoin"><value name="LEFT"><block type="text" id="countLabel"><field name="TEXT">Pass count: </field></block></value><value name="RIGHT"><block type="variables_get" id="countGetPass"><field name="VAR" id="passVar">pass_count</field></block></value></block></value></block></next>
+    </block></next></block></next></block></next>
+  </block>
+</xml>

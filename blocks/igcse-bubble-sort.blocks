@@ -1,0 +1,373 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="arrayVar">array</variable>
+    <variable id="nVar">n</variable>
+    <variable id="iVar">i</variable>
+    <variable id="jVar">j</variable>
+    <variable id="tempVar">temp</variable>
+    <variable id="swapVar">swap</variable>
+  </variables>
+  <block type="procedures_defnoreturn" id="defineBubbleSort" x="20" y="20">
+    <mutation>
+      <arg name="array" varid="arrayVar"></arg>
+    </mutation>
+    <field name="NAME">bubble_sort</field>
+    <statement name="STACK">
+      <block type="comment_line" id="bubbleComment">
+        <field name="TEXT">Bubble sort repeatedly compares neighbouring items and swaps them when they are in the wrong order.</field>
+        <next>
+          <block type="variables_set" id="setN">
+            <field name="VAR" id="nVar">n</field>
+            <value name="VALUE">
+              <block type="lists_length" id="arrayLength">
+                <value name="VALUE">
+                  <block type="variables_get" id="getArrayForLength">
+                    <field name="VAR" id="arrayVar">array</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="controls_for" id="outerLoop">
+                <field name="VAR" id="iVar">i</field>
+                <value name="FROM">
+                  <block type="math_number" id="outerStart">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="TO">
+                  <block type="math_arithmetic" id="outerEnd">
+                    <field name="OP">MINUS</field>
+                    <value name="A">
+                      <block type="variables_get" id="getNForOuter">
+                        <field name="VAR" id="nVar">n</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="math_number" id="outerMinusOne">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="BY">
+                  <block type="math_number" id="outerStep">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+                <statement name="DO">
+                  <block type="variables_set" id="setSwapFalse">
+                    <field name="VAR" id="swapVar">swap</field>
+                    <value name="VALUE">
+                      <block type="logic_boolean" id="swapFalse">
+                        <field name="BOOL">FALSE</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="controls_for" id="innerLoop">
+                        <field name="VAR" id="jVar">j</field>
+                        <value name="FROM">
+                          <block type="math_number" id="innerStart">
+                            <field name="NUM">0</field>
+                          </block>
+                        </value>
+                        <value name="TO">
+                          <block type="math_arithmetic" id="innerEndMinusOneMore">
+                            <field name="OP">MINUS</field>
+                            <value name="A">
+                              <block type="math_arithmetic" id="innerEndMinusI">
+                                <field name="OP">MINUS</field>
+                                <value name="A">
+                                  <block type="variables_get" id="getNForInner">
+                                    <field name="VAR" id="nVar">n</field>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="variables_get" id="getIForInner">
+                                    <field name="VAR" id="iVar">i</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number" id="innerMinusTwo">
+                                <field name="NUM">2</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="BY">
+                          <block type="math_number" id="innerStep">
+                            <field name="NUM">1</field>
+                          </block>
+                        </value>
+                        <statement name="DO">
+                          <block type="controls_if" id="compareNeighbours">
+                            <value name="IF0">
+                              <block type="logic_compare" id="leftGreaterThanRight">
+                                <field name="OP">GT</field>
+                                <value name="A">
+                                  <block type="lists_getIndex" id="getLeftItem">
+                                    <mutation statement="false" at="true"></mutation>
+                                    <field name="MODE">GET</field>
+                                    <field name="WHERE">FROM_START</field>
+                                    <value name="VALUE">
+                                      <block type="variables_get" id="getArrayLeft">
+                                        <field name="VAR" id="arrayVar">array</field>
+                                      </block>
+                                    </value>
+                                    <value name="AT">
+                                      <block type="math_arithmetic" id="leftIndex">
+                                        <field name="OP">ADD</field>
+                                        <value name="A">
+                                          <block type="variables_get" id="getJLeft">
+                                            <field name="VAR" id="jVar">j</field>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="math_number" id="leftOne">
+                                            <field name="NUM">1</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="lists_getIndex" id="getRightItem">
+                                    <mutation statement="false" at="true"></mutation>
+                                    <field name="MODE">GET</field>
+                                    <field name="WHERE">FROM_START</field>
+                                    <value name="VALUE">
+                                      <block type="variables_get" id="getArrayRight">
+                                        <field name="VAR" id="arrayVar">array</field>
+                                      </block>
+                                    </value>
+                                    <value name="AT">
+                                      <block type="math_arithmetic" id="rightIndex">
+                                        <field name="OP">ADD</field>
+                                        <value name="A">
+                                          <block type="variables_get" id="getJRight">
+                                            <field name="VAR" id="jVar">j</field>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="math_number" id="rightTwo">
+                                            <field name="NUM">2</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <statement name="DO0">
+                              <block type="variables_set" id="storeTemp">
+                                <field name="VAR" id="tempVar">temp</field>
+                                <value name="VALUE">
+                                  <block type="lists_getIndex" id="getLeftForTemp">
+                                    <mutation statement="false" at="true"></mutation>
+                                    <field name="MODE">GET</field>
+                                    <field name="WHERE">FROM_START</field>
+                                    <value name="VALUE">
+                                      <block type="variables_get" id="getArrayTemp">
+                                        <field name="VAR" id="arrayVar">array</field>
+                                      </block>
+                                    </value>
+                                    <value name="AT">
+                                      <block type="math_arithmetic" id="tempIndex">
+                                        <field name="OP">ADD</field>
+                                        <value name="A">
+                                          <block type="variables_get" id="getJTemp">
+                                            <field name="VAR" id="jVar">j</field>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="math_number" id="tempOne">
+                                            <field name="NUM">1</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="lists_setIndex" id="moveRightToLeft">
+                                    <mutation at="true"></mutation>
+                                    <field name="MODE">SET</field>
+                                    <field name="WHERE">FROM_START</field>
+                                    <value name="LIST">
+                                      <block type="variables_get" id="getArraySetLeft">
+                                        <field name="VAR" id="arrayVar">array</field>
+                                      </block>
+                                    </value>
+                                    <value name="AT">
+                                      <block type="math_arithmetic" id="setLeftIndex">
+                                        <field name="OP">ADD</field>
+                                        <value name="A">
+                                          <block type="variables_get" id="getJSetLeft">
+                                            <field name="VAR" id="jVar">j</field>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="math_number" id="setLeftOne">
+                                            <field name="NUM">1</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="TO">
+                                      <block type="lists_getIndex" id="getRightForLeft">
+                                        <mutation statement="false" at="true"></mutation>
+                                        <field name="MODE">GET</field>
+                                        <field name="WHERE">FROM_START</field>
+                                        <value name="VALUE">
+                                          <block type="variables_get" id="getArrayRightForLeft">
+                                            <field name="VAR" id="arrayVar">array</field>
+                                          </block>
+                                        </value>
+                                        <value name="AT">
+                                          <block type="math_arithmetic" id="rightForLeftIndex">
+                                            <field name="OP">ADD</field>
+                                            <value name="A">
+                                              <block type="variables_get" id="getJRightForLeft">
+                                                <field name="VAR" id="jVar">j</field>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <block type="math_number" id="rightForLeftTwo">
+                                                <field name="NUM">2</field>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="lists_setIndex" id="moveTempToRight">
+                                        <mutation at="true"></mutation>
+                                        <field name="MODE">SET</field>
+                                        <field name="WHERE">FROM_START</field>
+                                        <value name="LIST">
+                                          <block type="variables_get" id="getArraySetRight">
+                                            <field name="VAR" id="arrayVar">array</field>
+                                          </block>
+                                        </value>
+                                        <value name="AT">
+                                          <block type="math_arithmetic" id="setRightIndex">
+                                            <field name="OP">ADD</field>
+                                            <value name="A">
+                                              <block type="variables_get" id="getJSetRight">
+                                                <field name="VAR" id="jVar">j</field>
+                                              </block>
+                                            </value>
+                                            <value name="B">
+                                              <block type="math_number" id="setRightTwo">
+                                                <field name="NUM">2</field>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <value name="TO">
+                                          <block type="variables_get" id="getTempForRight">
+                                            <field name="VAR" id="tempVar">temp</field>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" id="setSwapTrue">
+                                            <field name="VAR" id="swapVar">swap</field>
+                                            <value name="VALUE">
+                                              <block type="logic_boolean" id="swapTrue">
+                                                <field name="BOOL">TRUE</field>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                          </block>
+                        </statement>
+                        <next>
+                          <block type="controls_if" id="stopIfNoSwap">
+                            <value name="IF0">
+                              <block type="logic_negate" id="notSwap">
+                                <value name="BOOL">
+                                  <block type="variables_get" id="getSwap">
+                                    <field name="VAR" id="swapVar">swap</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <statement name="DO0">
+                              <block type="controls_flow_statements" id="breakWhenSorted">
+                                <field name="FLOW">BREAK</field>
+                              </block>
+                            </statement>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="when_run_clicked" id="bubbleStart" x="20" y="900">
+    <next>
+      <block type="variables_set" id="setExampleArray">
+        <field name="VAR" id="arrayVar">array</field>
+        <value name="VALUE">
+          <block type="lists_create_with" id="exampleArray">
+            <mutation items="7"></mutation>
+            <value name="ADD0"><block type="math_number" id="v64"><field name="NUM">64</field></block></value>
+            <value name="ADD1"><block type="math_number" id="v34"><field name="NUM">34</field></block></value>
+            <value name="ADD2"><block type="math_number" id="v25"><field name="NUM">25</field></block></value>
+            <value name="ADD3"><block type="math_number" id="v12"><field name="NUM">12</field></block></value>
+            <value name="ADD4"><block type="math_number" id="v22"><field name="NUM">22</field></block></value>
+            <value name="ADD5"><block type="math_number" id="v11"><field name="NUM">11</field></block></value>
+            <value name="ADD6"><block type="math_number" id="v90"><field name="NUM">90</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="procedures_callnoreturn" id="callBubbleSort">
+            <mutation name="bubble_sort">
+              <arg name="array"></arg>
+            </mutation>
+            <value name="ARG0">
+              <block type="variables_get" id="getArrayForCall">
+                <field name="VAR" id="arrayVar">array</field>
+              </block>
+            </value>
+            <next>
+              <block type="text_print" id="printSortedArray">
+                <value name="TEXT">
+                  <block type="simple_text_join" id="joinSortedText">
+                    <value name="LEFT">
+                      <block type="text" id="sortedLabel">
+                        <field name="TEXT">Sorted array: </field>
+                      </block>
+                    </value>
+                    <value name="RIGHT">
+                      <block type="variables_get" id="getArrayForPrint">
+                        <field name="VAR" id="arrayVar">array</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

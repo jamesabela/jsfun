@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 13;
+    window.pythonCopyVersion = 14;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -1842,14 +1842,22 @@ import sys, builtins
           }
           if (button.dataset.action === 'flowchart') {
             const isDark = document.getElementById('dark-mode').checked;
-            const themeSuffix = isDark ? '?theme=dark' : '?theme=light';
-            window.location.href = `python2flow.html${themeSuffix}`;
+            const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
+            const starterUrl = button.dataset.url;
+            const query = starterUrl
+              ? `?url=${encodeURIComponent(starterUrl)}&${themeSuffix}`
+              : `?${themeSuffix}`;
+            window.location.href = `python2flow.html${query}`;
             return;
           }
           if (button.dataset.action === 'parsons') {
             const isDark = document.getElementById('dark-mode').checked;
-            const themeSuffix = isDark ? '?theme=dark' : '?theme=light';
-            window.location.href = `reorder.html${themeSuffix}`;
+            const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
+            const starterUrl = button.dataset.url;
+            const query = starterUrl
+              ? `?url=${encodeURIComponent(starterUrl)}&${themeSuffix}`
+              : `?${themeSuffix}`;
+            window.location.href = `reorder.html${query}`;
             return;
           }
 

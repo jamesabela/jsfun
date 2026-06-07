@@ -19,7 +19,7 @@
   </style>
   <script>
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 13) {
+      if (window.pythonCopyVersion !== 14) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -66,7 +66,7 @@
         <path d="M4 12H2" />
         <path d="M2 9h2" />
       </svg>
-      Python Code Lab 4.11
+      Python Code Lab 4.12
       <span class="mode-badge edit-badge">Edit</span>
       <span class="mode-badge display-badge">Display</span>
       <span class="mode-badge turtle-badge">Turtle</span>
@@ -141,17 +141,18 @@
   </div>
 
   <div class="starter-panel" id="starterPanel">
-    <h3>Quick start</h3>
-    <div style="margin-bottom: 14px;">
-      <button class="starter-button" data-action="blank"
-        style="background-color: var(--primary-color); color: white; border: none; font-weight: bold;">Blank
-        File</button>
-      <button class="starter-button" data-action="blocks"
-        style="background-color: #8b5cf6; color: white; border: none; font-weight: bold;">Use Blocks 🧩</button>
-      <button class="starter-button" data-action="flowchart"
-        style="background-color: #f59e0b; color: white; border: none; font-weight: bold;">Create Flowchart</button>
-      <button class="starter-button" data-action="parsons"
-        style="background-color: #10b981; color: white; border: none; font-weight: bold;">Create Parsons Problem</button>
+    <div class="starter-hero">
+      <div>
+        <p class="starter-kicker">Python Code Lab 4.12</p>
+        <h3>Start coding</h3>
+        <p>Choose a blank workspace, a challenge, a course, or one of the algorithm practice sections below.</p>
+      </div>
+      <div class="quick-action-row">
+        <button class="starter-button action-primary" data-action="blank">Blank File</button>
+        <button class="starter-button action-blocks" data-action="blocks">Use Blocks</button>
+        <button class="starter-button action-flowchart" data-action="flowchart">Create Flowchart</button>
+        <button class="starter-button action-parsons" data-action="parsons">Create Parsons</button>
+      </div>
     </div>
 
     <!-- Daily Challenge of the Day -->
@@ -181,7 +182,7 @@
     </div>
 
     <!-- Featured Courses Section -->
-    <p style="margin: 16px 0 6px; font-weight: 600; font-size: 15px;">Featured Courses:</p>
+    <p class="starter-section-title">Featured Courses</p>
     <div class="courses-area" style="margin-bottom: 20px;">
       <a href="worldcup_manager/index.html" class="course-button">
         <img src="worldcup_manager/worldcupheroimage.jpg" alt="World Cup Dream Manager" class="course-button-image">
@@ -192,116 +193,147 @@
       </a>
     </div>
 
-    <p style="margin: 12px 0 6px; font-weight: 600; font-size: 15px;">iGCSE Algorithms:</p>
-    <div class="starter-grid" style="margin-bottom: 16px;">
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py">Average</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble">Bubble</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py">Counting</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/540f258d395da98ce979a8a328a55ae1659c3de7/forloop.py">For
-        Loop</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py">If
-        Else</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py">Linear</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py">Max
-        and Min</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py">Repeat</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py">Totalling</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py">While
-        Loop</button>
-    </div>
+    <details class="starter-section" open>
+      <summary>iGCSE Algorithms</summary>
+      <section class="igcse-lab" aria-label="iGCSE algorithm choices">
+        <div class="igcse-grid">
+          <div class="igcse-card">
+            <h5>Average</h5>
+            <div class="igcse-actions">
+              <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py">Text</button>
+              <button class="starter-button" data-url="blocks/igcse-average.blocks">Blocks</button>
+              <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py">Flowchart</button>
+              <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py">Parsons</button>
+            </div>
+          </div>
+        <div class="igcse-card">
+          <h5>Bubble Sort</h5>
+          <div class="igcse-actions">
+            <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble">Text</button>
+            <button class="starter-button" data-url="blocks/igcse-bubble-sort.blocks">Blocks</button>
+            <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble">Flowchart</button>
+            <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble">Parsons</button>
+          </div>
+        </div>
+        <div class="igcse-card">
+          <h5>Counting</h5>
+          <div class="igcse-actions">
+            <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py">Text</button>
+            <button class="starter-button" data-url="blocks/igcse-counting.blocks">Blocks</button>
+            <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py">Flowchart</button>
+            <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py">Parsons</button>
+          </div>
+        </div>
+        <div class="igcse-card">
+          <h5>For Loop</h5>
+          <div class="igcse-actions">
+            <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/540f258d395da98ce979a8a328a55ae1659c3de7/forloop.py">Text</button>
+            <button class="starter-button" data-url="blocks/igcse-for-loop.blocks">Blocks</button>
+            <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/540f258d395da98ce979a8a328a55ae1659c3de7/forloop.py">Flowchart</button>
+            <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/540f258d395da98ce979a8a328a55ae1659c3de7/forloop.py">Parsons</button>
+          </div>
+        </div>
+        <div class="igcse-card">
+          <h5>If Else</h5>
+          <div class="igcse-actions">
+            <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py">Text</button>
+            <button class="starter-button" data-url="blocks/igcse-if-else.blocks">Blocks</button>
+            <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py">Flowchart</button>
+            <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py">Parsons</button>
+          </div>
+        </div>
+        <div class="igcse-card">
+          <h5>Linear Search</h5>
+          <div class="igcse-actions">
+            <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py">Text</button>
+            <button class="starter-button" data-url="blocks/igcse-linear-search.blocks">Blocks</button>
+            <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py">Flowchart</button>
+            <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py">Parsons</button>
+          </div>
+        </div>
+        <div class="igcse-card">
+          <h5>Maximum and Minimum</h5>
+          <div class="igcse-actions">
+            <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py">Text</button>
+            <button class="starter-button" data-url="blocks/igcse-maximum-minimum.blocks">Blocks</button>
+            <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py">Flowchart</button>
+            <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py">Parsons</button>
+          </div>
+        </div>
+        <div class="igcse-card">
+          <h5>Repeat Until</h5>
+          <div class="igcse-actions">
+            <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py">Text</button>
+            <button class="starter-button" data-url="blocks/igcse-repeat-until.blocks">Blocks</button>
+            <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py">Flowchart</button>
+            <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py">Parsons</button>
+          </div>
+        </div>
+        <div class="igcse-card">
+          <h5>Totalling</h5>
+          <div class="igcse-actions">
+            <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py">Text</button>
+            <button class="starter-button" data-url="blocks/igcse-totalling.blocks">Blocks</button>
+            <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py">Flowchart</button>
+            <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py">Parsons</button>
+          </div>
+        </div>
+        <div class="igcse-card">
+          <h5>While Loop</h5>
+          <div class="igcse-actions">
+            <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py">Text</button>
+            <button class="starter-button" data-url="blocks/igcse-while-loop.blocks">Blocks</button>
+            <button class="starter-button" data-action="flowchart" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py">Flowchart</button>
+            <button class="starter-button" data-action="parsons" data-url="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py">Parsons</button>
+          </div>
+        </div>
+      </div>
+      </section>
+    </details>
 
-    <p style="margin: 12px 0 6px; font-weight: 600; font-size: 15px;">Turtle Graphics:</p>
-    <div class="starter-grid" style="margin-bottom: 16px;">
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/6b44d12f117fc4081f9de784b85a4882a631d65c/bubbleturtle.py">Bubble
-        Turtle</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/confetti.py">Confetti</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/fills.py">Fills</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/grid.py">Grid</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/669f0f2f5c67b4cf992667c40c6d24f281821829/hypno.py">Hypno</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/maze.py">Maze</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/nightcity.py">Night
-        City</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/9bedd81f6f94c6b94119e5a1422eaad88fb27c9c/spsquare.py">Spiral
-        Square</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/9df6cf58b3e46082f2b27dc3bbf7b0f301b8dfc2/squaredfunc.py">Squared
-        Func</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/squarepuzzle.py">Square
-        Puzzle</button>
-      <button class="starter-button"
-        data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/steve.py">Steve</button>
-    </div>
+    <details class="starter-section">
+      <summary>Turtle Graphics</summary>
+      <div class="starter-grid" style="margin-bottom: 16px;">
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/6b44d12f117fc4081f9de784b85a4882a631d65c/bubbleturtle.py">Bubble Turtle</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/confetti.py">Confetti</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/fills.py">Fills</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/grid.py">Grid</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/669f0f2f5c67b4cf992667c40c6d24f281821829/hypno.py">Hypno</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/maze.py">Maze</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/nightcity.py">Night City</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/9bedd81f6f94c6b94119e5a1422eaad88fb27c9c/spsquare.py">Spiral Square</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/9df6cf58b3e46082f2b27dc3bbf7b0f301b8dfc2/squaredfunc.py">Squared Func</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/squarepuzzle.py">Square Puzzle</button>
+        <button class="starter-button" data-url="https://gist.githubusercontent.com/jamesabela/47b5a7307f549765afddc3ea046d05bc/raw/d58dbb7164039c481ac8490c045e26093436d4f4/steve.py">Steve</button>
+      </div>
+    </details>
 
-    <p style="margin: 12px 0 6px; font-weight: 600; font-size: 15px;">Python Examples:</p>
-    <div class="starter-grid" style="margin-bottom: 16px;">
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/caesar.py">Caesar
-        Cipher</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/maze.py">Maze
-        Solver</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/pet.py">Virtual
-        Pet</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/rock.py">Rock Paper
-        Scissors</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/wordle.py">Wordle
-      </button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/primes.py">Primes
-      </button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/file_load.py">File
-        Handling</button>
-    </div>
+    <details class="starter-section">
+      <summary>Python Examples</summary>
+      <div class="starter-grid" style="margin-bottom: 16px;">
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/caesar.py">Caesar Cipher</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/maze.py">Maze Solver</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/pet.py">Virtual Pet</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/rock.py">Rock Paper Scissors</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/wordle.py">Wordle</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/primes.py">Primes</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/examples/file_load.py">File Handling</button>
+      </div>
+    </details>
 
-    <p style="margin: 12px 0 6px; font-weight: 600; font-size: 15px;">Blocks Examples:</p>
-    <div class="starter-grid">
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-count-occurrences.blocks">Count
-        Occurrences</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-find-largest.blocks">Find
-        Largest</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-linear-search.blocks">Linear
-        Search</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-random-guess.blocks">Random
-        Guess</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-turtle-filled-square.blocks">Turtle
-        Filled Square</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/greeting.blocks">Greeting</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/recursive-tree.blocks">Recursive
-        Tree</button>
-      <button class="starter-button"
-        data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/sierpinski.blocks">Sierpinski
-        Triangle</button>
-    </div>
+    <details class="starter-section">
+      <summary>Blocks Examples</summary>
+      <div class="starter-grid">
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-count-occurrences.blocks">Count Occurrences</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-find-largest.blocks">Find Largest</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-linear-search.blocks">Linear Search</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-random-guess.blocks">Random Guess</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/gcse-turtle-filled-square.blocks">Turtle Filled Square</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/greeting.blocks">Greeting</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/recursive-tree.blocks">Recursive Tree</button>
+        <button class="starter-button" data-url="https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/blocks/sierpinski.blocks">Sierpinski Triangle</button>
+      </div>
+    </details>
   </div>
 
 

@@ -303,6 +303,37 @@
       color: #d4d4d8;
     }
 
+    body.dark-theme .starter-hero,
+    body.dark-theme .starter-section {
+      border-color: #3f3f46;
+    }
+
+    body.dark-theme .starter-kicker,
+    body.dark-theme .starter-section summary {
+      color: #60a5fa;
+    }
+
+    body.dark-theme .igcse-lab {
+      background: #1f1f1f;
+      border-color: #3f3f46;
+    }
+
+    body.dark-theme .starter-section {
+      background: #202020;
+    }
+
+    body.dark-theme .starter-section summary {
+      background: #2a2a2a;
+    }
+
+    body.dark-theme .igcse-card {
+      border-bottom-color: #3f3f46;
+    }
+
+    body.dark-theme .igcse-card h5 {
+      color: #f4f4f5;
+    }
+
     body.dark-theme .blocks-code-preview {
       background: #202020;
       border-color: #3f3f46;
@@ -397,6 +428,47 @@
 
     body.dark-theme .starter-button:hover {
       background: #334155;
+    }
+
+    body.dark-theme .action-primary,
+    body.dark-theme .action-blocks,
+    body.dark-theme .action-flowchart,
+    body.dark-theme .action-parsons {
+      color: #ffffff;
+    }
+
+    body.dark-theme .action-primary {
+      background: #2563eb;
+    }
+
+    body.dark-theme .action-blocks {
+      background: #6d28d9;
+    }
+
+    body.dark-theme .action-flowchart {
+      background: #b45309;
+    }
+
+    body.dark-theme .action-parsons {
+      background: #047857;
+    }
+
+    body.dark-theme .igcse-actions .starter-button:nth-child(2) {
+      background: #3b246b;
+      border-color: #6d28d9;
+      color: #ddd6fe;
+    }
+
+    body.dark-theme .igcse-actions .starter-button:nth-child(3) {
+      background: #3f2c0b;
+      border-color: #b45309;
+      color: #fde68a;
+    }
+
+    body.dark-theme .igcse-actions .starter-button:nth-child(4) {
+      background: #12382b;
+      border-color: #047857;
+      color: #a7f3d0;
     }
 
     body.dark-theme .editor-shell {
@@ -630,22 +702,51 @@
     }
 
     .starter-panel {
-      margin-bottom: 18px;
-      padding: 14px;
+      margin: 0 auto 18px;
+      max-width: 1200px;
+      padding: 18px;
       background: #f8fafc;
       border: 1px solid #dbe3ef;
       border-radius: 10px;
     }
 
+    .starter-hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #dbe3ef;
+    }
+
+    .starter-kicker {
+      margin: 0 0 4px;
+      color: var(--primary-color);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
     .starter-panel h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
+      margin: 0 0 6px;
+      font-size: 24px;
+      line-height: 1.15;
     }
 
     .starter-panel p {
       margin: 0 0 12px;
       color: #475569;
       font-size: 14px;
+    }
+
+    .quick-action-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      min-width: 310px;
     }
 
     .starter-grid {
@@ -669,6 +770,136 @@
     .starter-button:hover {
       background: #dbeafe;
     }
+
+    .quick-action-row .starter-button,
+    .igcse-actions .starter-button {
+      text-align: center;
+    }
+
+    .action-primary,
+    .action-blocks,
+    .action-flowchart,
+    .action-parsons {
+      color: white;
+      border: 0;
+      font-weight: 800;
+    }
+
+    .action-primary {
+      background: var(--primary-color);
+    }
+
+    .action-blocks {
+      background: #7c3aed;
+    }
+
+    .action-flowchart {
+      background: #d97706;
+    }
+
+    .action-parsons {
+      background: #059669;
+    }
+
+    .igcse-lab {
+      margin-bottom: 18px;
+      background: #ffffff;
+      border: 1px solid #dbe3ef;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .igcse-grid {
+      display: grid;
+      gap: 0;
+    }
+
+    .igcse-card {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(360px, 2.3fr);
+      gap: 16px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .igcse-card:last-child {
+      border-bottom: 0;
+    }
+
+    .igcse-card h5 {
+      margin: 0;
+      color: #1e293b;
+      font-size: 15px;
+    }
+
+    .igcse-actions {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(72px, 1fr));
+      gap: 6px;
+    }
+
+    .igcse-actions .starter-button {
+      padding: 8px 10px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .igcse-actions .starter-button:nth-child(2) {
+      background: #ede9fe;
+      border-color: #c4b5fd;
+      color: #5b21b6;
+    }
+
+    .igcse-actions .starter-button:nth-child(3) {
+      background: #fef3c7;
+      border-color: #fbbf24;
+      color: #92400e;
+    }
+
+    .igcse-actions .starter-button:nth-child(4) {
+      background: #d1fae5;
+      border-color: #6ee7b7;
+      color: #065f46;
+    }
+
+    .starter-section-title {
+      margin: 16px 0 6px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .starter-section {
+      margin-top: 16px;
+      border: 1px solid #dbe3ef;
+      border-radius: 8px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .starter-section summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 800;
+      border-bottom: 1px solid #dbe3ef;
+    }
+
+    .starter-section:not([open]) summary {
+      border-bottom: 0;
+    }
+
+    .starter-section .starter-grid {
+      padding: 14px;
+    }
+
+    .starter-section .igcse-lab {
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+    }
+
 
     .workspace {
       display: none;
@@ -1397,6 +1628,25 @@
 
       .starter-panel {
         margin: 12px;
+      }
+
+      .starter-hero {
+        display: block;
+      }
+
+      .quick-action-row {
+        justify-content: flex-start;
+        min-width: 0;
+        margin-top: 12px;
+      }
+
+      .igcse-card {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .igcse-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .starter-grid {

@@ -1,0 +1,9 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="counterVar">counter</variable></variables>
+  <block type="when_run_clicked" id="repeatStart" x="20" y="20">
+    <next><block type="comment_line" id="repeatComment"><field name="TEXT">Repeat until the counter is greater than 10.</field>
+    <next><block type="variables_set" id="repeatSetCounter"><field name="VAR" id="counterVar">counter</field><value name="VALUE"><block type="math_number" id="repeatOne"><field name="NUM">1</field></block></value>
+    <next><block type="controls_whileUntil" id="repeatWhile"><field name="MODE">WHILE</field><value name="BOOL"><block type="logic_compare" id="repeatCompare"><field name="OP">LTE</field><value name="A"><block type="variables_get" id="repeatGetCounter"><field name="VAR" id="counterVar">counter</field></block></value><value name="B"><block type="math_number" id="repeatTen"><field name="NUM">10</field></block></value></block></value><statement name="DO"><block type="text_print" id="repeatPrint"><value name="TEXT"><block type="variables_get" id="repeatGetPrint"><field name="VAR" id="counterVar">counter</field></block></value><next><block type="math_change" id="repeatInc"><field name="VAR" id="counterVar">counter</field><value name="DELTA"><shadow type="math_number" id="repeatStep"><field name="NUM">1</field></shadow></value></block></next></block></statement></block></next>
+    </block></next></block></next>
+  </block>
+</xml>

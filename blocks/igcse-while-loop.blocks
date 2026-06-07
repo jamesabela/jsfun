@@ -1,0 +1,9 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="counterVar">counter</variable></variables>
+  <block type="when_run_clicked" id="whileStart" x="20" y="20">
+    <next><block type="comment_line" id="whileComment"><field name="TEXT">Count from 1 to 10 using a while loop.</field>
+    <next><block type="variables_set" id="whileSetCounter"><field name="VAR" id="counterVar">counter</field><value name="VALUE"><block type="math_number" id="whileOne"><field name="NUM">1</field></block></value>
+    <next><block type="controls_whileUntil" id="whileLoop"><field name="MODE">WHILE</field><value name="BOOL"><block type="logic_compare" id="whileCompare"><field name="OP">LTE</field><value name="A"><block type="variables_get" id="whileGetCompare"><field name="VAR" id="counterVar">counter</field></block></value><value name="B"><block type="math_number" id="whileTen"><field name="NUM">10</field></block></value></block></value><statement name="DO"><block type="text_print" id="whilePrint"><value name="TEXT"><block type="variables_get" id="whileGetPrint"><field name="VAR" id="counterVar">counter</field></block></value><next><block type="math_change" id="whileInc"><field name="VAR" id="counterVar">counter</field><value name="DELTA"><shadow type="math_number" id="whileStep"><field name="NUM">1</field></shadow></value></block></next></block></statement></block></next>
+    </block></next></block></next>
+  </block>
+</xml>

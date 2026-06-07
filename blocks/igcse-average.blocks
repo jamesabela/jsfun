@@ -1,0 +1,19 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="marksVar">student_marks</variable>
+    <variable id="markVar">mark</variable>
+    <variable id="totalVar">total</variable>
+    <variable id="countVar">number_of_values</variable>
+    <variable id="averageVar">average</variable>
+  </variables>
+  <block type="when_run_clicked" id="avgStart" x="20" y="20">
+    <next><block type="comment_line" id="avgComment"><field name="TEXT">Calculate the average by totalling the marks, then dividing by how many values there are.</field>
+    <next><block type="variables_set" id="avgSetMarks"><field name="VAR" id="marksVar">student_marks</field><value name="VALUE"><block type="lists_create_with" id="avgMarksList"><mutation items="5"></mutation><value name="ADD0"><block type="math_number" id="avg85"><field name="NUM">85</field></block></value><value name="ADD1"><block type="math_number" id="avg90"><field name="NUM">90</field></block></value><value name="ADD2"><block type="math_number" id="avg78"><field name="NUM">78</field></block></value><value name="ADD3"><block type="math_number" id="avg92"><field name="NUM">92</field></block></value><value name="ADD4"><block type="math_number" id="avg88"><field name="NUM">88</field></block></value></block></value>
+    <next><block type="variables_set" id="avgSetTotal"><field name="VAR" id="totalVar">total</field><value name="VALUE"><block type="math_number" id="avgZero"><field name="NUM">0</field></block></value>
+    <next><block type="python_for_each" id="avgEach"><field name="ITEM" id="markVar">mark</field><field name="LIST" id="marksVar">student_marks</field><statement name="DO"><block type="variables_set" id="avgAddTotal"><field name="VAR" id="totalVar">total</field><value name="VALUE"><block type="math_arithmetic" id="avgTotalPlusMark"><field name="OP">ADD</field><value name="A"><block type="variables_get" id="avgGetTotal1"><field name="VAR" id="totalVar">total</field></block></value><value name="B"><block type="variables_get" id="avgGetMark"><field name="VAR" id="markVar">mark</field></block></value></block></value></block></statement>
+    <next><block type="variables_set" id="avgSetCount"><field name="VAR" id="countVar">number_of_values</field><value name="VALUE"><block type="lists_length" id="avgLen"><value name="VALUE"><block type="variables_get" id="avgGetMarks"><field name="VAR" id="marksVar">student_marks</field></block></value></block></value>
+    <next><block type="variables_set" id="avgSetAverage"><field name="VAR" id="averageVar">average</field><value name="VALUE"><block type="math_arithmetic" id="avgDivide"><field name="OP">DIVIDE</field><value name="A"><block type="variables_get" id="avgGetTotal2"><field name="VAR" id="totalVar">total</field></block></value><value name="B"><block type="variables_get" id="avgGetCount"><field name="VAR" id="countVar">number_of_values</field></block></value></block></value>
+    <next><block type="text_print" id="avgPrint"><value name="TEXT"><block type="simple_text_join" id="avgJoin"><value name="LEFT"><block type="text" id="avgLabel"><field name="TEXT">Average: </field></block></value><value name="RIGHT"><block type="variables_get" id="avgGetAverage"><field name="VAR" id="averageVar">average</field></block></value></block></value></block></next>
+    </block></next></block></next></block></next></block></next></block></next></block></next>
+  </block>
+</xml>

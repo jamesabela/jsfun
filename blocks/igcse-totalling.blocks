@@ -1,0 +1,10 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="totalVar">total</variable><variable id="counterVar">counter</variable></variables>
+  <block type="when_run_clicked" id="totalStart" x="20" y="20">
+    <next><block type="comment_line" id="totalComment"><field name="TEXT">Add each value from 1 to 10 into a running total.</field>
+    <next><block type="variables_set" id="totalSetZero"><field name="VAR" id="totalVar">total</field><value name="VALUE"><block type="math_number" id="totalZero"><field name="NUM">0</field></block></value>
+    <next><block type="controls_for" id="totalFor"><field name="VAR" id="counterVar">counter</field><value name="FROM"><block type="math_number" id="totalOne"><field name="NUM">1</field></block></value><value name="TO"><block type="math_number" id="totalTen"><field name="NUM">10</field></block></value><value name="BY"><block type="math_number" id="totalStep"><field name="NUM">1</field></block></value><statement name="DO"><block type="variables_set" id="totalAdd"><field name="VAR" id="totalVar">total</field><value name="VALUE"><block type="math_arithmetic" id="totalPlus"><field name="OP">ADD</field><value name="A"><block type="variables_get" id="totalGetCurrent"><field name="VAR" id="totalVar">total</field></block></value><value name="B"><block type="variables_get" id="totalGetCounter"><field name="VAR" id="counterVar">counter</field></block></value></block></value></block></statement>
+    <next><block type="text_print" id="totalPrint"><value name="TEXT"><block type="simple_text_join" id="totalJoin"><value name="LEFT"><block type="text" id="totalLabel"><field name="TEXT">Total: </field></block></value><value name="RIGHT"><block type="variables_get" id="totalGetPrint"><field name="VAR" id="totalVar">total</field></block></value></block></value></block></next>
+    </block></next></block></next></block></next>
+  </block>
+</xml>

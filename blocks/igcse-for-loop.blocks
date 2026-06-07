@@ -1,0 +1,8 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="counterVar">counter</variable></variables>
+  <block type="when_run_clicked" id="forStart" x="20" y="20">
+    <next><block type="comment_line" id="forComment"><field name="TEXT">Count from 1 to 10 using a for loop.</field>
+    <next><block type="controls_for" id="forCounter"><field name="VAR" id="counterVar">counter</field><value name="FROM"><block type="math_number" id="forOne"><field name="NUM">1</field></block></value><value name="TO"><block type="math_number" id="forTen"><field name="NUM">10</field></block></value><value name="BY"><block type="math_number" id="forStep"><field name="NUM">1</field></block></value><statement name="DO"><block type="text_print" id="forPrint"><value name="TEXT"><block type="variables_get" id="forGetCounter"><field name="VAR" id="counterVar">counter</field></block></value></block></statement></block></next>
+    </block></next>
+  </block>
+</xml>
