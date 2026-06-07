@@ -1098,6 +1098,7 @@ import sys, builtins
       btnTurtleMode.classList.toggle('active', mode === 'turtle');
       if (btnBlocksMode) btnBlocksMode.classList.toggle('active', mode === 'blocks');
       updateAppMode();
+      updatePuzzleButtonVisibility();
     }
 
     function restoreTextEditorToolbar() {
@@ -1835,6 +1836,12 @@ import sys, builtins
             window.location.href = `python2flow.html${themeSuffix}`;
             return;
           }
+          if (button.dataset.action === 'parsons') {
+            const isDark = document.getElementById('dark-mode').checked;
+            const themeSuffix = isDark ? '?theme=dark' : '?theme=light';
+            window.location.href = `reorder.html${themeSuffix}`;
+            return;
+          }
 
           const starterUrl = button.dataset.url;
           document.getElementById('urlInput').value = starterUrl;
@@ -2276,11 +2283,19 @@ import sys, builtins
       });
 
       document.getElementById('makePuzzleButton').addEventListener('click', function () {
-        if (currentURL) {
-          const puzzleURL = `https://jamesabela.github.io/jsfun/reorder.html?url=${encodeURIComponent(currentURL)}`;
+        const codeText = editor.value;
+        if (codeText.trim()) {
+          let base64 = '';
+          try {
+            base64 = btoa(unescape(encodeURIComponent(codeText)));
+          } catch (err) {
+            console.error('Failed to encode code for puzzle:', err);
+            return;
+          }
+          const puzzleURL = `reorder.html?data=${encodeURIComponent(base64)}`;
           window.open(puzzleURL, '_blank');
         } else {
-          alert('No valid URL available to create a puzzle.');
+          alert('Please enter some code to create a puzzle.');
         }
       });
 
@@ -2334,6 +2349,7 @@ import sys, builtins
         analyseCodeAndUpdateMessage(true);
         updateBlocksButtonState();
         updateEditorActionButtons();
+        updatePuzzleButtonVisibility();
         recordPlaybackSnapshot('Typing', false);
         scheduleRecordHistoryDebounced('Typing');
       });
@@ -5929,7 +5945,10 @@ def _run_trace():
     function updatePuzzleButtonVisibility() {
       const makePuzzleBtn = document.getElementById('makePuzzleButton');
       if (makePuzzleBtn) {
-        if (currentURL) {
+        const codeText = typeof editor !== 'undefined' ? editor.value : '';
+        const lines = codeText.split('\n');
+        const hasContent = codeText.trim().length > 0;
+        if (hasContent && lines.length <= 20) {
           makePuzzleBtn.style.display = '';
         } else {
           makePuzzleBtn.style.display = 'none';

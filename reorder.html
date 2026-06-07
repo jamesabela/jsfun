@@ -5,32 +5,177 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reorder Tool (Parsons Problem) — jsfun by James Abela</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Outfit', sans-serif; }
-        .line-item { transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s; touch-action: none; }
-        .line-item.dragging { z-index: 50; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); transform: scale(1.02); }
-        .line-item.correct { border-color: #10b981; background-color: #ecfdf5; color: #065f46; }
-        .line-item.incorrect { border-color: #ef4444; background-color: #fef2f2; color: #991b1b; }
-        .line-item.highlight { background-color: #f0f9ff; border-color: #bae6fd; color: #0369a1; }
+        :root {
+            --primary-color: #3b82f6;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Line Items */
+        .line-item {
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s, background-color 0.2s, border-color 0.2s, color 0.2s;
+            touch-action: none;
+            font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+        }
+        .line-item.dragging {
+            z-index: 50;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.15), 0 8px 10px -6px rgb(0 0 0 / 0.15);
+            transform: scale(1.02);
+        }
+
+        /* Feedback States - Light Mode */
+        .line-item.correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
+        .line-item.incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .line-item.highlight { background-color: #f0f9ff !important; border-color: #bae6fd !important; color: #0369a1 !important; }
+
+        /* Feedback States - Dark Mode */
+        body.dark-theme .line-item.correct { border-color: #059669 !important; background-color: #064e3b !important; color: #a7f3d0 !important; }
+        body.dark-theme .line-item.incorrect { border-color: #dc2626 !important; background-color: #7f1d1d !important; color: #fca5a5 !important; }
+        body.dark-theme .line-item.highlight { background-color: #0c4a6e !important; border-color: #0284c7 !important; color: #bae6fd !important; }
+
+        /* Dark Theme overrides */
+        body.dark-theme {
+            background-color: #151515 !important;
+            color: #f4f4f5 !important;
+        }
+        body.dark-theme #modeHeader {
+            background-color: #1f1f1f !important;
+            border-bottom-color: #3f3f46 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+        }
+        body.dark-theme .brand-title {
+            color: #ffffff !important;
+        }
+        body.dark-theme .theme-toggle,
+        body.dark-theme .font-size-control {
+            color: #a1a1aa !important;
+        }
+        body.dark-theme #editor-section {
+            background-color: #202020 !important;
+            border-color: #3f3f46 !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3) !important;
+        }
+        body.dark-theme #code-input {
+            background-color: #151515 !important;
+            border-color: #3f3f46 !important;
+            color: #e7e5e4 !important;
+        }
+        body.dark-theme #code-input:focus {
+            --tw-ring-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        body.dark-theme .line-item {
+            background-color: #202020 !important;
+            border-color: #3f3f46 !important;
+            color: #e7e5e4 !important;
+        }
+        body.dark-theme .line-item-placeholder {
+            background-color: #1e1e1e !important;
+            border-color: #3f3f46 !important;
+        }
+        body.dark-theme #edit-btn {
+            background-color: #2a2a2a !important;
+            color: #d4d4d8 !important;
+        }
+        body.dark-theme #edit-btn:hover {
+            background-color: #3f3f46 !important;
+        }
+        body.dark-theme .bg-white {
+            background-color: #202020 !important;
+        }
+        body.dark-theme .border-slate-100 {
+            border-color: #3f3f46 !important;
+        }
+        body.dark-theme .text-slate-700 {
+            color: #d4d4d8 !important;
+        }
+        body.dark-theme .text-slate-500 {
+            color: #a1a1aa !important;
+        }
+        body.dark-theme .text-slate-300 {
+            color: #52525b !important;
+        }
+        body.dark-theme .bg-slate-50 {
+            background-color: #151515 !important;
+        }
+        
+        /* Algorithm Grid Buttons */
+        .algo-btn {
+            background-color: #e0ecff;
+            color: #1e3a8a;
+            border: 1px solid #bfdbfe;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .algo-btn:hover {
+            background-color: #dbeafe;
+        }
+        body.dark-theme .algo-btn {
+            background-color: #263238 !important;
+            border-color: #475569 !important;
+            color: #e0f2fe !important;
+        }
+        body.dark-theme .algo-btn:hover {
+            background-color: #334155 !important;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900 pb-20">
 
     <!-- Header -->
-    <header class="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-4xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">🔀</span>
-                <h1 class="text-xl font-800 tracking-tight text-slate-800">Reorder Tool</h1>
+    <header id="modeHeader" class="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto flex items-center justify-between flex-wrap gap-4">
+            <div class="brand flex items-center gap-3">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color)">
+                    <path d="m10 2 6 16" />
+                    <path d="m14 2-6 16" />
+                    <path d="M18 12h-4" />
+                    <path d="M20 9h-4" />
+                    <path d="M22 6h-4" />
+                    <path d="M6 15H2" />
+                    <path d="M4 12H2" />
+                    <path d="M2 9h2" />
+                </svg>
+                <h1 class="text-xl font-800 tracking-tight text-slate-800 brand-title flex items-center gap-2">
+                    Python Code Lab
+                    <span class="text-xs font-semibold px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full dark-badge">Reorder</span>
+                </h1>
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="toggleEditor()" class="px-4 py-2 text-sm font-600 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-all flex items-center gap-2">
-                    <span id="edit-icon">✏️</span> <span id="edit-text">Edit Content</span>
-                </button>
-                <button onclick="copyShareLink()" id="share-btn" class="hidden px-4 py-2 text-sm font-600 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all">
-                    Copy Student Link
-                </button>
+            
+            <div class="visual-controls flex items-center gap-6 flex-wrap">
+                <div class="theme-toggle flex items-center gap-2 text-sm font-semibold text-slate-500">
+                    <label class="cursor-pointer flex items-center gap-1"><input type="radio" id="light-mode" name="mode" value="light" checked> Light</label>
+                    <label class="cursor-pointer flex items-center gap-1"><input type="radio" id="dark-mode" name="mode" value="dark"> Dark</label>
+                </div>
+                
+                <div class="font-size-control flex items-center gap-2 text-sm font-semibold text-slate-500">
+                    <span>A</span>
+                    <input type="range" id="fontSizeRange" min="12" max="24" value="16" class="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    <span class="text-base">A</span>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleEditor()" id="edit-btn" class="px-4 py-2 text-sm font-600 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-all flex items-center gap-2">
+                        <span id="edit-icon">✏️</span> <span id="edit-text">Edit Content</span>
+                    </button>
+                    <button onclick="editInPythonCodeLab()" id="edit-lab-btn" class="hidden px-4 py-2 text-sm font-600 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-md transition-all">
+                        Edit in Python Code Lab
+                    </button>
+                    <button onclick="copyShareLink()" id="share-btn" class="hidden px-4 py-2 text-sm font-600 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all">
+                        Copy Student Link
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -46,12 +191,13 @@
             
             <textarea id="code-input" rows="8" class="w-full p-6 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono text-sm leading-relaxed mb-6" placeholder="Paste your code or correctly ordered sentences here..."></textarea>
             
-            <div class="flex items-center justify-between pt-6 border-t border-slate-100">
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2">Quick Start:</span>
-                    <button onclick="loadExample('python')" class="px-3 py-1.5 text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200 rounded-full hover:bg-blue-200 transition-all text-xs">Python Algorithm</button>
-                    <button onclick="loadExample('french')" class="px-3 py-1.5 text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200 rounded-full hover:bg-rose-200 transition-all text-xs">Language Learning</button>
-                </div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">iGCSE Algorithms:</p>
+            <div id="algo-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
+                <!-- Populated dynamically -->
+            </div>
+            
+            <div class="flex items-center justify-between pt-6 border-t border-slate-100 flex-wrap gap-4">
+                <div></div>
                 <button onclick="generatePuzzle()" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 transition-all transform active:scale-95">
                     Generate Puzzle
                 </button>
@@ -62,12 +208,6 @@
         <div id="puzzle-wrap" class="hidden space-y-8">
             <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div class="text-sm text-slate-500 font-600 italic">Drag blocks into the correct logical order:</div>
-                <div class="flex items-center gap-4">
-                    <label class="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase cursor-pointer">
-                        Size:
-                        <input type="range" id="fontSizeRange" min="12" max="24" value="16" class="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer">
-                    </label>
-                </div>
             </div>
 
             <div id="item-list" class="relative space-y-2 select-none">
@@ -91,11 +231,6 @@
     </main>
 
     <script>
-        const EXAMPLES = {
-            python: "def calculate_average(numbers):\n    count = len(numbers)\n    if count == 0:\n        return 0\n    total = sum(numbers)\n    return total / count",
-            french: "Je m'appelle James.\nJ'ai quarante ans.\nJ'habite à Bangkok.\nJe suis professeur de technologie.\nJ'adore la programmation."
-        };
-
         let state = {
             originalOrder: [],
             currentOrder: [],
@@ -122,10 +257,6 @@
             }
         }
 
-        function loadExample(key) {
-            document.getElementById('code-input').value = EXAMPLES[key];
-        }
-
         function generatePuzzle(data = null) {
             const raw = data || document.getElementById('code-input').value.trim();
             if (!raw) return;
@@ -141,6 +272,7 @@
             document.getElementById('empty-state').classList.add('hidden');
             document.getElementById('puzzle-wrap').classList.remove('hidden');
             document.getElementById('share-btn').classList.remove('hidden');
+            document.getElementById('edit-lab-btn').classList.remove('hidden');
             
             if (state.isEditing) toggleEditor();
             updateUrl(raw);
@@ -296,25 +428,153 @@
         }
 
         function copyShareLink() {
-            const url = window.location.href;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(url).then(() => {
-                    const btn = document.getElementById('share-btn');
-                    const old = btn.innerText;
-                    btn.innerText = "Link Copied!";
-                    btn.classList.replace('bg-indigo-600', 'bg-emerald-600');
-                    setTimeout(() => {
-                        btn.innerText = old;
-                        btn.classList.replace('bg-emerald-600', 'bg-indigo-600');
-                    }, 2000);
-                });
+            const urlObj = new URL(window.location.href);
+            urlObj.searchParams.delete('edit');
+            const url = urlObj.toString();
+            
+            function performVisualFeedback() {
+                const btn = document.getElementById('share-btn');
+                const old = btn.innerText;
+                btn.innerText = "Link Copied!";
+                btn.classList.replace('bg-indigo-600', 'bg-emerald-600');
+                setTimeout(() => {
+                    btn.innerText = old;
+                    btn.classList.replace('bg-emerald-600', 'bg-indigo-600');
+                }, 2000);
             }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(url)
+                    .then(performVisualFeedback)
+                    .catch(err => {
+                        console.error('Failed to copy via navigator.clipboard:', err);
+                        copyFallback(url);
+                    });
+            } else {
+                copyFallback(url);
+            }
+
+            function copyFallback(text) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.setAttribute('readonly', '');
+                textArea.style.position = 'fixed';
+                textArea.style.top = '0';
+                textArea.style.left = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                textArea.setSelectionRange(0, textArea.value.length);
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        performVisualFeedback();
+                    } else {
+                        alert('Could not copy link automatically. Please copy the URL from the browser address bar.');
+                    }
+                } catch (err) {
+                    console.error('Fallback copy failed:', err);
+                    alert('Could not copy link automatically. Please copy the URL from the browser address bar.');
+                } finally {
+                    document.body.removeChild(textArea);
+                }
+            }
+        }
+
+        function editInPythonCodeLab() {
+            const codeText = state.currentOrder.map(item => item.text).join('\n');
+            if (!codeText.trim()) return;
+
+            let base64 = '';
+            try {
+                const utf8Bytes = new TextEncoder().encode(codeText);
+                let binary = '';
+                for (let i = 0; i < utf8Bytes.length; i++) {
+                    binary += String.fromCharCode(utf8Bytes[i]);
+                }
+                base64 = btoa(binary);
+            } catch (err) {
+                console.error('Failed to encode code for Python Code Lab:', err);
+                return;
+            }
+
+            const targetUrl = `pythoncopy.html?code=${encodeURIComponent(base64)}`;
+            window.open(targetUrl, '_blank');
+        }
+
+        let igcseAlgorithms = {};
+
+        function formatAlgoName(url) {
+            const filename = url.substring(url.lastIndexOf('/') + 1);
+            let base = filename.endsWith('.py') ? filename.slice(0, -3) : filename;
+            
+            const customNames = {
+                'average': 'Average',
+                'bubble': 'Bubble Sort',
+                'Counting': 'Counting',
+                'forloop': 'For Loop',
+                'ifelse': 'If Else',
+                'linear': 'Linear Search',
+                'MaximumandMinimum': 'Maximum & Minimum',
+                'repeat': 'Repeat Until',
+                'Totalling': 'Totalling',
+                'whileloop': 'While Loop'
+            };
+            
+            return customNames[base] || base.charAt(0).toUpperCase() + base.slice(1);
+        }
+
+
+
+        function applyTheme() {
+            const isDark = document.getElementById('dark-mode').checked;
+            document.documentElement.classList.toggle('dark-theme', isDark);
+            document.body.classList.toggle('dark-theme', isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
 
         window.onload = () => {
             const params = new URLSearchParams(window.location.search);
             const data = params.get('data');
             const legacyUrl = params.get('url');
+
+            // Apply theme on load
+            const savedTheme = localStorage.getItem('theme');
+            const urlTheme = params.get('theme');
+            const isDark = (urlTheme === 'dark') || (savedTheme === 'dark');
+            if (isDark) {
+                document.getElementById('dark-mode').checked = true;
+                document.getElementById('light-mode').checked = false;
+            } else {
+                document.getElementById('dark-mode').checked = false;
+                document.getElementById('light-mode').checked = true;
+            }
+            applyTheme();
+
+            // Setup theme listeners
+            document.getElementById('light-mode').addEventListener('change', applyTheme);
+            document.getElementById('dark-mode').addEventListener('change', applyTheme);
+
+            // Fetch and populate iGCSE algorithms grid
+            fetch('igcse_algorithms.json')
+                .then(res => res.json())
+                .then(data => {
+                    igcseAlgorithms = data;
+                    const grid = document.getElementById('algo-grid');
+                    if (grid) {
+                        grid.innerHTML = '';
+                        Object.keys(data).forEach(url => {
+                            const btn = document.createElement('button');
+                            btn.className = 'algo-btn';
+                            btn.textContent = formatAlgoName(url);
+                            btn.onclick = () => {
+                                document.getElementById('code-input').value = data[url];
+                            };
+                            grid.appendChild(btn);
+                        });
+                    }
+                })
+                .catch(err => console.error('Error loading iGCSE algorithms:', err));
 
             if (data) {
                 generatePuzzle(decode(data));
@@ -336,7 +596,7 @@
             if (isStudent) {
                 const editorSection = document.getElementById('editor-section');
                 if (editorSection) editorSection.remove();
-                const editBtn = document.querySelector('button[onclick="toggleEditor()"]');
+                const editBtn = document.getElementById('edit-btn');
                 if (editBtn) editBtn.remove();
             }
         }
