@@ -57,6 +57,13 @@
       return lines.join('\n');
     }
 
+    function getChallengeDescription(comment) {
+      return String(comment || '')
+        .split(/\n#\s*(?:input|output|end)\b/i)[0]
+        .replace(/^#\s*instructions:\s*/i, '')
+        .trim();
+    }
+
     window.parseBlocklyXmlText = function(xmlText) {
       if (typeof Blockly === 'undefined') {
         throw new Error('Blockly is not loaded.');
@@ -1765,11 +1772,14 @@ import sys, builtins
             courseTitle: "Python Algorithms",
             links: []
           };
-          loadedMetadataLinks = [];
+          const parsedRes = parseAndStripMetadata(decodedCode);
+          currentQuizMetadata = parsedRes.metadata;
+          loadedMetadataLinks = currentQuizMetadata.links || [];
+          const strippedDecodedCode = parsedRes.strippedCode;
           updatePuzzleButtonVisibility();
 
-          editor.value = decodedCode;
-          markCurrentEditorCodeSaved(decodedCode);
+          editor.value = strippedDecodedCode;
+          markCurrentEditorCodeSaved(strippedDecodedCode);
           displayCode.textContent = '';
           document.getElementById('urlInput').value = '';
           document.getElementById('workspace').style.display = 'grid';
@@ -2750,8 +2760,7 @@ import sys, builtins
           if (titleEl) titleEl.textContent = challenge.title;
           if (spiceEl) spiceEl.textContent = challenge.spice;
           if (descEl) {
-            const cleanedDesc = challenge.comment.replace(/^#\s*instructions:\s*/i, '');
-            descEl.textContent = cleanedDesc;
+            descEl.textContent = getChallengeDescription(challenge.comment);
           }
           if (btnEl) {
             btnEl.href = challengeUrl;

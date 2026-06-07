@@ -776,6 +776,13 @@
       return `pythoncopy.html?code=${encodeURIComponent(base64)}`;
     }
 
+    function getChallengeDescription(challenge) {
+      return challenge.comment
+        .split(/\n#\s*(?:input|output|end)\b/i)[0]
+        .replace(/^#\s*instructions:\s*/i, '')
+        .trim();
+    }
+
     function updateStats() {
       const completed = getCompletedChallenges().length;
       const total = challengeData.length || 113;
@@ -879,7 +886,7 @@
 
         const matchesQuery =
           c.title.toLowerCase().includes(query) ||
-          c.comment.toLowerCase().includes(query) ||
+          getChallengeDescription(c).toLowerCase().includes(query) ||
           (c.tags && c.tags.some(t => t.toLowerCase().includes(query))) ||
           spiceName.includes(query) ||
           normalizeEmoji(c.spice).includes(normalizeEmoji(query));
@@ -953,9 +960,7 @@
 
         const desc = document.createElement('p');
         desc.className = 'challenge-desc';
-        // Clean description for better display
-        const cleanedDesc = c.comment.replace(/^#\s*instructions:\s*/i, '');
-        desc.textContent = cleanedDesc;
+        desc.textContent = getChallengeDescription(c);
 
         const footer = document.createElement('div');
         footer.className = 'card-footer';
