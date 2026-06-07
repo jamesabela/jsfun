@@ -1,0 +1,2231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyFlow - Python to Flowchart Visualizer</title>
+    <!-- Modern Fonts matching pythoncopy.html -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Base Variables & Themes matching pythoncopy.html */
+        :root {
+            --primary-color: #3b82f6;
+            --header-height: 64px;
+
+            --bg-body: #ffffff;
+            --bg-editor: #f8fafc;
+            --border-color: #dbe3ef;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent: #2563eb;
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.08);
+
+            /* Flowchart Colors (High legibility on white background) */
+            --flow-bg: #ffffff;
+            --flow-line: #475569;
+            --flow-line-active: #2563eb;
+            --flow-text: #1e293b;
+
+            --terminator-fill: #e0e7ff;
+            --terminator-border: #4f46e5;
+            --process-fill: #e0f2fe;
+            --process-border: #0284c7;
+            --decision-fill: #fffbeb;
+            --decision-border: #d97706;
+            --io-fill: #ecfdf4;
+            --io-border: #059669;
+            --subroutine-fill: #ffe4e6;
+            --subroutine-border: #e11d48;
+        }
+
+        /* Dark Theme Variables matching pythoncopy.css */
+        html.dark-theme,
+        body.dark-theme {
+            --bg-body: #151515;
+            --bg-editor: #202020;
+            --border-color: #3f3f46;
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --accent: #3b82f6;
+            --danger-bg: rgba(239, 68, 68, 0.15);
+
+            /* Dark Theme Flowchart Colors */
+            --flow-bg: #151515;
+            --flow-line: #94a3b8;
+            --flow-line-active: #3b82f6;
+            --flow-text: #f4f4f5;
+
+            --terminator-fill: #1e1b4b;
+            --terminator-border: #818cf8;
+            --process-fill: #0c4a6e;
+            --process-border: #38bdf8;
+            --decision-fill: #451a03;
+            --decision-border: #fb923c;
+            --io-fill: #064e3b;
+            --io-border: #34d399;
+            --subroutine-fill: #4c0519;
+            --subroutine-border: #fda4af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Header Layout matching modeHeader */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--header-height);
+            padding: 0 24px;
+            background-color: var(--bg-body);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.dark-theme header {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .visual-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .theme-toggle label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .limit-counter-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: rgba(100, 116, 139, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dropdown-select {
+            padding: 0.4rem 1.5rem 0.4rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.6rem center;
+            background-size: 1em;
+        }
+
+        .dropdown-select:hover {
+            border-color: var(--primary-color);
+        }
+
+        .dropdown-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .dropdown-select option {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+        }
+
+        body.dark-theme .limit-counter-container {
+            background-color: #2a2a2a;
+        }
+
+        .counter-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .counter-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .counter-value.exceeded {
+            color: var(--danger);
+            animation: pulse-danger 1.5s infinite;
+        }
+
+        /* Main Workspace Layout */
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Left Panel - Code Editor */
+        .editor-panel {
+            width: 40%;
+            min-width: 320px;
+            max-width: 600px;
+            background-color: var(--bg-editor);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .panel-header {
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(100, 116, 139, 0.04);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.dark-theme .panel-header {
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .panel-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-title::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        /* Normal Monospace Text Editor */
+        .editor-workspace {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            background-color: var(--bg-editor);
+        }
+
+        .code-input {
+            width: 100%;
+            height: 100%;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6rem;
+            padding: 1.5rem;
+            border: none;
+            outline: none;
+            background-color: var(--bg-editor);
+            color: var(--text-primary);
+            caret-color: var(--text-primary);
+            resize: none;
+            overflow: auto;
+            white-space: pre;
+            word-wrap: normal;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-theme .code-input {
+            background-color: #151515;
+        }
+
+        /* Warning Banner */
+        .warning-banner {
+            background-color: var(--danger-bg);
+            border-top: 1px solid var(--danger);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.8rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .warning-banner svg {
+            color: var(--danger);
+            flex-shrink: 0;
+        }
+
+        /* Right Panel - Flowchart Canvas */
+        .canvas-panel {
+            flex: 1;
+            background-color: #f1f5f9;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-theme .canvas-panel {
+            background-color: #111111;
+        }
+
+        .canvas-container {
+            flex: 1;
+            background-color: var(--flow-bg);
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+            user-select: none;
+        }
+
+        /* Floating Toolbar */
+        .canvas-controls {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 5;
+        }
+
+        .btn {
+            background-color: #475569;
+            /* Slate 600 default */
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.15s ease;
+        }
+
+        .btn:hover {
+            background-color: #334155;
+            border-color: #334155;
+        }
+
+        #btn-edit-code-lab {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        #btn-edit-code-lab:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+
+        #btn-upload-py {
+            background-color: #8b5cf6;
+            border-color: #8b5cf6;
+        }
+
+        #btn-upload-py:hover {
+            background-color: #7c3aed;
+            border-color: #7c3aed;
+        }
+
+        #btn-load-algorithm {
+            background-color: #f97316;
+            border-color: #f97316;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            font-size: 14px;
+        }
+
+        #btn-load-algorithm:hover {
+            background-color: #ea580c;
+            border-color: #ea580c;
+        }
+
+        #btn-print {
+            background-color: #10b981;
+            /* Green */
+            border-color: #10b981;
+        }
+
+        #btn-print:hover {
+            background-color: #059669;
+            border-color: #059669;
+        }
+
+        body.dark-theme .btn {
+            color: #f4f4f5;
+            border-color: #52525b;
+        }
+
+        .btn-circle {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        /* SVG Layout and Styles */
+        svg#flowchart-svg {
+            width: 100%;
+            height: 100%;
+            background-color: var(--flow-bg);
+        }
+
+        /* Node Visual Styling */
+        .node {
+            cursor: pointer;
+            transition: filter 0.25s, stroke-width 0.25s, stroke 0.25s;
+        }
+
+        .node rect,
+        .node polygon {
+            stroke-width: 2px;
+            transition: fill 0.25s, stroke 0.25s;
+        }
+
+        .node-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 11.5px;
+            font-weight: 500;
+            fill: var(--flow-text);
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+        }
+
+        /* Node Subtypes Styles */
+        .node.terminator rect {
+            fill: var(--terminator-fill);
+            stroke: var(--terminator-border);
+        }
+
+        .node.process rect {
+            fill: var(--process-fill);
+            stroke: var(--process-border);
+        }
+
+        .node.decision polygon {
+            fill: var(--decision-fill);
+            stroke: var(--decision-border);
+        }
+
+        .node.io polygon {
+            fill: var(--io-fill);
+            stroke: var(--io-border);
+        }
+
+        .node.subroutine rect {
+            fill: var(--subroutine-fill);
+            stroke: var(--subroutine-border);
+        }
+
+        .node.subroutine line {
+            stroke: var(--subroutine-border);
+            stroke-width: 1.5px;
+        }
+
+        /* Node Highlight State */
+        .node:hover rect,
+        .node:hover polygon,
+        .node.active-highlight rect,
+        .node.active-highlight polygon {
+            stroke-width: 3px !important;
+            filter: url(#hover-glow);
+        }
+
+        /* Connector Lines and Labels */
+        .flow-line {
+            fill: none;
+            stroke: var(--flow-line);
+            stroke-width: 2px;
+            stroke-linejoin: round;
+            transition: stroke 0.2s, stroke-width 0.2s;
+        }
+
+        .flow-line.active-highlight {
+            stroke: var(--flow-line-active) !important;
+            stroke-width: 3px !important;
+        }
+
+        .line-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            fill: #64748b;
+            background-color: white;
+            text-anchor: middle;
+        }
+
+        /* Printing Layout System (@media print) */
+        @media print {
+            body {
+                /* Force light mode variables for high-contrast legible print */
+                --flow-bg: #ffffff;
+                --flow-line: #475569;
+                --flow-line-active: #2563eb;
+                --flow-text: #1e293b;
+
+                --terminator-fill: #e0e7ff;
+                --terminator-border: #4f46e5;
+                --process-fill: #e0f2fe;
+                --process-border: #0284c7;
+                --decision-fill: #fffbeb;
+                --decision-border: #d97706;
+                --io-fill: #ecfdf4;
+                --io-border: #059669;
+                --subroutine-fill: #ffe4e6;
+                --subroutine-border: #e11d48;
+
+                background: white !important;
+                color: black !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            header,
+            .editor-panel,
+            .canvas-controls,
+            .warning-banner {
+                display: none !important;
+            }
+
+            .main-layout {
+                display: block !important;
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            .canvas-panel {
+                width: 100% !important;
+                height: 100vh !important;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: visible !important;
+            }
+
+            svg#flowchart-svg {
+                width: 100% !important;
+                height: 100vh !important;
+                background: white !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse-danger {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Panel matching modeHeader in pythoncopy -->
+    <header>
+        <div class="brand">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color)">
+                <path d="m10 2 6 16" />
+                <path d="m14 2-6 16" />
+                <path d="M18 12h-4" />
+                <path d="M20 9h-4" />
+                <path d="M22 6h-4" />
+                <path d="M6 15H2" />
+                <path d="M4 12H2" />
+                <path d="M2 9h2" />
+            </svg>
+            PyFlow
+            <span
+                style="font-size: 0.8rem; font-weight: 600; color: #2563eb; background: rgba(59, 130, 246, 0.1); padding: 2px 8px; border-radius: 99px;">Flowchart</span>
+        </div>
+
+        <div class="visual-controls">
+            <!-- Dropdown to choose iGCSE Algorithm -->
+            <div class="algorithm-load-group" style="display: flex; gap: 6px; align-items: center;">
+                <select id="algorithm-select" class="dropdown-select" title="Choose an iGCSE Algorithm to load">
+                    <option value="">-- Load iGCSE Algorithm --</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py">Average</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble">Bubble Sort</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py">Counting</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/540f258d395da98ce979a8a328a55ae1659c3de7/forloop.py">For Loop</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py">If Else</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py">Linear Search</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py">Max and Min</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py">Repeat Loop</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py">Totalling</option>
+                    <option value="https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py">While Loop</option>
+                </select>
+                <button class="btn" id="btn-load-algorithm" title="Load selected algorithm (will overwrite current code)">Load</button>
+            </div>
+
+            <div class="theme-toggle" aria-label="Theme">
+                <label><input type="radio" id="light-mode" name="mode" value="light" checked> Light</label>
+                <label><input type="radio" id="dark-mode" name="mode" value="dark"> Dark</label>
+            </div>
+
+            <div class="limit-counter-container" style="margin-left: 12px;">
+                <span class="counter-label">Code Length:</span>
+                <span id="line-counter" class="counter-value">0 / 30 lines</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="main-layout">
+
+        <!-- Left: Code Editor -->
+        <div class="editor-panel">
+            <div class="panel-header">
+                <div class="panel-title">Python Code Editor</div>
+                <div class="header-actions" style="display: flex; gap: 8px;">
+                    <input type="file" id="upload-py-input" accept=".py,.txt" style="display: none;">
+                    <button class="btn" id="btn-upload-py" title="Upload local Python file">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg>
+                        Upload .py
+                    </button>
+                    <button class="btn" id="btn-edit-code-lab" title="Edit in Python Code Lab">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m18 2 4 4-12 12H6v-4L18 2Z" />
+                        </svg>
+                        Edit in Python Code Lab
+                    </button>
+                </div>
+            </div>
+
+            <div class="editor-workspace">
+                <textarea id="code-input" class="code-input" spellcheck="false"
+                    placeholder="Type or paste your Python code here..."></textarea>
+            </div>
+
+            <!-- Warning Banner -->
+            <div id="warning-banner" class="warning-banner">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                <span id="warning-text">Code is limited to 30 lines. Truncating visualization.</span>
+            </div>
+        </div>
+
+        <!-- Right: Flowchart Canvas -->
+        <div class="canvas-panel">
+
+            <!-- Floating controls on canvas -->
+            <div class="canvas-controls">
+                <button class="btn btn-circle" id="btn-zoom-in" title="Zoom In">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+                <button class="btn btn-circle" id="btn-zoom-out" title="Zoom Out">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+                <button class="btn btn-circle" id="btn-zoom-reset" title="Reset View">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                    </svg>
+                </button>
+                <button class="btn" id="btn-print" title="Print Flowchart">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Print
+                </button>
+                <button class="btn" id="btn-export-svg" title="Export as SVG">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    SVG
+                </button>
+                <button class="btn" id="btn-export-png" title="Export as PNG">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    PNG
+                </button>
+            </div>
+
+            <!-- Canvas Container for Flowchart -->
+            <div class="canvas-container" id="canvas-container">
+                <svg id="flowchart-svg">
+                    <defs>
+                        <!-- Arrow Head -->
+                        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6"
+                            orient="auto-start-reverse">
+                            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--flow-line)" />
+                        </marker>
+                        <!-- Glow highlight shadow filter -->
+                        <filter id="hover-glow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#6366f1" flood-opacity="0.45" />
+                        </filter>
+                        <!-- Subtle card shadow filter -->
+                        <filter id="card-shadow" x="-10%" y="-10%" width="125%" height="125%">
+                            <feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.06" />
+                        </filter>
+                    </defs>
+                    <g id="viewport">
+                        <!-- Content gets rendered here -->
+                        <g id="lines-group"></g>
+                        <g id="shapes-group"></g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Section -->
+    <script>
+        // Default Starter Python Code
+        const initialCode = `def check_even_odd(n):
+    for i in range(1, n + 1):
+        if i % 2 == 0:
+            print(i, "is Even")
+        else:
+            print(i, "is Odd")`;
+
+        // UI Selectors
+        const codeInput = document.getElementById('code-input');
+        const lineCounter = document.getElementById('line-counter');
+        const warningBanner = document.getElementById('warning-banner');
+        const warningText = document.getElementById('warning-text');
+
+        const svgElement = document.getElementById('flowchart-svg');
+        const viewportGroup = document.getElementById('viewport');
+        const linesGroup = document.getElementById('lines-group');
+        const shapesGroup = document.getElementById('shapes-group');
+
+        const btnZoomIn = document.getElementById('btn-zoom-in');
+        const btnZoomOut = document.getElementById('btn-zoom-out');
+        const btnZoomReset = document.getElementById('btn-zoom-reset');
+        const btnPrint = document.getElementById('btn-print');
+        const btnExportSvg = document.getElementById('btn-export-svg');
+        const btnExportPng = document.getElementById('btn-export-png');
+        const canvasContainer = document.getElementById('canvas-container');
+
+        // Zoom / Pan State
+        let zoom = 1;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let startDragX = 0;
+        let startDragY = 0;
+
+        let preloadedAlgorithms = {};
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            // URL Params Check
+            const urlParams = new URLSearchParams(window.location.search);
+            const codeParam = urlParams.get('code');
+            const urlParam = urlParams.get('url');
+
+            const algorithmSelect = document.getElementById('algorithm-select');
+            let initialCodeLoaded = false;
+
+            if (codeParam) {
+                try {
+                    const binary = atob(codeParam);
+                    const bytes = new Uint8Array(binary.length);
+                    for (let i = 0; i < binary.length; i++) {
+                        bytes[i] = binary.charCodeAt(i);
+                    }
+                    const decodedCode = new TextDecoder().decode(bytes);
+                    codeInput.value = decodedCode;
+                    initialCodeLoaded = true;
+                } catch (err) {
+                    console.error('Failed to parse URL code parameter:', err);
+                    codeInput.value = initialCode;
+                }
+            } else if (urlParam) {
+                // Pre-select in dropdown if it matches
+                if (algorithmSelect) {
+                    for (let option of algorithmSelect.options) {
+                        if (option.value === urlParam) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                }
+                codeInput.value = '# Loading...';
+            } else {
+                codeInput.value = initialCode;
+                initialCodeLoaded = true;
+            }
+
+            // Fetch local preloaded algorithms
+            fetch('igcse_algorithms.json')
+                .then(res => res.json())
+                .then(data => {
+                    preloadedAlgorithms = data || {};
+                    if (urlParam && !initialCodeLoaded) {
+                        if (preloadedAlgorithms[urlParam]) {
+                            codeInput.value = preloadedAlgorithms[urlParam];
+                            syncEditor();
+                            parseAndRenderFlowchart();
+                        } else {
+                            fetchExternalUrl(urlParam);
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.warn('Failed to load local algorithms JSON:', err);
+                    if (urlParam && !initialCodeLoaded) {
+                        fetchExternalUrl(urlParam);
+                    }
+                });
+
+            function fetchExternalUrl(url) {
+                let fetchUrl = url;
+                const githubPrefixes = [
+                    "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
+                    "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
+                    "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
+                    "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
+                ];
+                for (const prefix of githubPrefixes) {
+                    if (fetchUrl.startsWith(prefix)) {
+                        fetchUrl = fetchUrl.substring(prefix.length);
+                        break;
+                    }
+                }
+                
+                const finalFetchUrl = /pastebin\.com/i.test(fetchUrl)
+                    ? `https://corsproxy.io/?${encodeURIComponent(fetchUrl)}`
+                    : fetchUrl;
+
+                fetch(finalFetchUrl)
+                    .then(res => res.text())
+                    .then(text => {
+                        codeInput.value = text;
+                        syncEditor();
+                        parseAndRenderFlowchart();
+                    })
+                    .catch(err => {
+                        console.error('Failed to fetch raw python file from URL:', err);
+                        codeInput.value = initialCode;
+                        syncEditor();
+                        parseAndRenderFlowchart();
+                    });
+            }
+
+            // Theme check in URL
+            const themeParam = urlParams.get('theme');
+            if (themeParam === 'dark') {
+                document.getElementById('dark-mode').checked = true;
+                document.getElementById('light-mode').checked = false;
+            } else if (themeParam === 'light') {
+                document.getElementById('dark-mode').checked = false;
+                document.getElementById('light-mode').checked = true;
+            }
+            applyTheme();
+
+            syncEditor();
+            parseAndRenderFlowchart();
+
+            // Set up event listeners
+            codeInput.addEventListener('input', () => {
+                if (algorithmSelect) algorithmSelect.value = '';
+                syncEditor();
+                parseAndRenderFlowchart();
+            });
+
+            const btnEditCodeLab = document.getElementById('btn-edit-code-lab');
+            if (btnEditCodeLab) {
+                btnEditCodeLab.addEventListener('click', openInCodeLab);
+            }
+
+            // File upload logic matching Code Lab
+            const btnUploadPy = document.getElementById('btn-upload-py');
+            const uploadPyInput = document.getElementById('upload-py-input');
+            if (btnUploadPy && uploadPyInput) {
+                btnUploadPy.addEventListener('click', () => {
+                    uploadPyInput.click();
+                });
+                
+                uploadPyInput.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    if (algorithmSelect) algorithmSelect.value = '';
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        codeInput.value = event.target.result;
+                        syncEditor();
+                        parseAndRenderFlowchart();
+                    };
+                    reader.readAsText(file);
+                    e.target.value = '';
+                });
+            }
+
+            // Algorithm select and load listener
+            const btnLoadAlgorithm = document.getElementById('btn-load-algorithm');
+            if (btnLoadAlgorithm && algorithmSelect) {
+                btnLoadAlgorithm.addEventListener('click', function () {
+                    const selectedUrl = algorithmSelect.value;
+                    if (!selectedUrl) {
+                        alert('Please select an iGCSE algorithm from the dropdown first.');
+                        return;
+                    }
+                    
+                    // Show confirmation warning before overwriting
+                    const confirmLoad = confirm('Are you sure you want to load this algorithm? This will overwrite all of your current code in the editor.');
+                    if (!confirmLoad) return;
+                    
+                    // Instant load from local JSON cache if available
+                    if (preloadedAlgorithms && preloadedAlgorithms[selectedUrl]) {
+                        codeInput.value = preloadedAlgorithms[selectedUrl];
+                        syncEditor();
+                        parseAndRenderFlowchart();
+                        
+                        // Update history pushState to include url parameter
+                        const isDark = document.getElementById('dark-mode').checked;
+                        const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
+                        const newURL = `${window.location.pathname}?url=${encodeURIComponent(selectedUrl)}${themeSuffix}`;
+                        window.history.pushState({}, '', newURL);
+                        return;
+                    }
+                    
+                    // Fallback to fetch from web
+                    codeInput.value = '# Loading algorithm...';
+                    let fetchUrl = selectedUrl;
+                    const githubPrefixes = [
+                        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
+                        "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
+                        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
+                        "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
+                    ];
+                    for (const prefix of githubPrefixes) {
+                        if (fetchUrl.startsWith(prefix)) {
+                            fetchUrl = fetchUrl.substring(prefix.length);
+                            break;
+                        }
+                    }
+                    
+                    const finalFetchUrl = /pastebin\.com/i.test(fetchUrl)
+                        ? `https://corsproxy.io/?${encodeURIComponent(fetchUrl)}`
+                        : fetchUrl;
+
+                    fetch(finalFetchUrl)
+                        .then(res => res.text())
+                        .then(text => {
+                            codeInput.value = text;
+                            syncEditor();
+                            parseAndRenderFlowchart();
+                            
+                            // Update history pushState to include url parameter
+                            const isDark = document.getElementById('dark-mode').checked;
+                            const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
+                            const newURL = `${window.location.pathname}?url=${encodeURIComponent(selectedUrl)}${themeSuffix}`;
+                            window.history.pushState({}, '', newURL);
+                        })
+                        .catch(err => {
+                            console.error('Failed to load algorithm:', err);
+                            alert('Failed to load algorithm. Please check your network or try again.');
+                            codeInput.value = '';
+                            syncEditor();
+                            parseAndRenderFlowchart();
+                        });
+                });
+            }
+
+            document.getElementById('light-mode').addEventListener('change', applyTheme);
+            document.getElementById('dark-mode').addEventListener('change', applyTheme);
+
+            setupZoomAndPan();
+            setupWindowResize();
+        });
+
+        function applyTheme() {
+            const isDark = document.getElementById('dark-mode').checked;
+            document.documentElement.classList.toggle('dark-theme', isDark);
+            document.body.classList.toggle('dark-theme', isDark);
+        }
+
+        function openInCodeLab() {
+            const codeText = codeInput.value;
+            let base64 = '';
+            try {
+                const utf8Bytes = new TextEncoder().encode(codeText);
+                let binary = '';
+                for (let i = 0; i < utf8Bytes.length; i++) {
+                    binary += String.fromCharCode(utf8Bytes[i]);
+                }
+                base64 = btoa(binary);
+            } catch (err) {
+                console.error('Failed to encode code for Code Lab:', err);
+                return;
+            }
+            const isDark = document.getElementById('dark-mode').checked;
+            const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
+            const targetUrl = `pythoncopy.html?code=${encodeURIComponent(base64)}${themeSuffix}`;
+            window.open(targetUrl, '_blank');
+        }
+
+        // -------------------------------------------------------------
+        // EDITOR COMPONENT
+        // -------------------------------------------------------------
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function syncEditor() {
+            const rawText = codeInput.value;
+            const lines = rawText.split('\n');
+            const totalLines = lines.length;
+
+            // Update Line Counter
+            lineCounter.textContent = `${totalLines} / 30 lines`;
+            if (totalLines > 30) {
+                lineCounter.classList.add('exceeded');
+                warningText.textContent = "Code exceeds the maximum limit of 30 lines. Only the first 30 lines are processed.";
+                warningBanner.style.display = 'flex';
+            } else {
+                lineCounter.classList.remove('exceeded');
+                warningBanner.style.display = 'none';
+            }
+        }
+
+        function highlightCodeLine(lineIdx, isActive) {
+            // Decoupled in normal text box mode to prevent caret alignment issues
+        }
+
+        // -------------------------------------------------------------
+        // PARSER COMPONENT
+        // -------------------------------------------------------------
+
+        function parsePython(code) {
+            const lines = code.split('\n').slice(0, 30); // strictly enforce max 30 lines
+            const cleanLines = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                const raw = lines[i];
+                const trimmed = raw.trim();
+
+                // Skip empty lines or purely comment lines in flowchart parsing
+                if (trimmed === '' || trimmed.startsWith('#')) {
+                    continue;
+                }
+
+                // Calculate space/tab indentation
+                let indent = 0;
+                for (let j = 0; j < raw.length; j++) {
+                    if (raw[j] === ' ') indent++;
+                    else if (raw[j] === '\t') indent += 4;
+                    else break;
+                }
+
+                // Strip inline comment
+                let inlineText = trimmed;
+                const commentIdx = trimmed.indexOf('#');
+                if (commentIdx !== -1) {
+                    inlineText = trimmed.substring(0, commentIdx).trim();
+                }
+
+                cleanLines.push({
+                    text: inlineText,
+                    indent: indent,
+                    lineIdx: i
+                });
+            }
+
+            if (cleanLines.length === 0) return [];
+
+            let index = 0;
+
+            function isSubroutineCall(text) {
+                // Matches standard function/method calls: name(...) but not loops/decisions/io
+                const standardCall = /^[a-zA-Z_][a-zA-Z0-9_.]*\([^]*\)$/.test(text);
+                const startsWithReturn = text.startsWith('return ') || text === 'return';
+                return standardCall && !text.startsWith('print(') && !text.startsWith('input(') && !startsWithReturn;
+            }
+
+            function parseBlock(parentIndent) {
+                const block = [];
+
+                while (index < cleanLines.length) {
+                    const line = cleanLines[index];
+
+                    if (line.indent < parentIndent) {
+                        break;
+                    }
+
+                    if (line.indent > parentIndent) {
+                        index++;
+                        continue;
+                    }
+
+                    const text = line.text;
+                    const lineIdx = line.lineIdx;
+
+                    if (text.startsWith('def ')) {
+                        index++;
+                        // Extract function name/signature
+                        const colonIdx = text.indexOf(':');
+                        const funcSig = colonIdx !== -1 ? text.substring(4, colonIdx).trim() : text.substring(4).trim();
+
+                        // Parse body
+                        let nextIndent = parentIndent + 4;
+                        if (index < cleanLines.length) {
+                            nextIndent = cleanLines[index].indent;
+                        }
+                        const body = parseBlock(nextIndent);
+                        block.push({
+                            type: 'function',
+                            name: funcSig,
+                            body: body,
+                            lineIdx: lineIdx
+                        });
+                    } else if (text.startsWith('if ') || text.startsWith('elif ') || text.startsWith('else:') || text.startsWith('else :')) {
+                        let cond = '';
+                        let nodeType = 'if';
+
+                        if (text.startsWith('if ')) {
+                            const colonIdx = text.lastIndexOf(':');
+                            cond = colonIdx !== -1 ? text.substring(3, colonIdx).trim() : text.substring(3).trim();
+                            nodeType = 'if';
+                        } else if (text.startsWith('elif ')) {
+                            const colonIdx = text.lastIndexOf(':');
+                            cond = colonIdx !== -1 ? text.substring(5, colonIdx).trim() : text.substring(5).trim();
+                            nodeType = 'elif';
+                        } else {
+                            cond = 'else';
+                            nodeType = 'else';
+                        }
+
+                        index++;
+                        let nextIndent = parentIndent + 4;
+                        if (index < cleanLines.length) {
+                            nextIndent = cleanLines[index].indent;
+                        }
+                        const body = parseBlock(nextIndent);
+                        block.push({
+                            type: nodeType,
+                            condition: cond,
+                            body: body,
+                            lineIdx: lineIdx
+                        });
+                    } else if (text.startsWith('while ') || text.startsWith('for ')) {
+                        let cond = '';
+                        const isWhile = text.startsWith('while ');
+                        const colonIdx = text.lastIndexOf(':');
+
+                        if (isWhile) {
+                            cond = colonIdx !== -1 ? text.substring(6, colonIdx).trim() : text.substring(6).trim();
+                        } else {
+                            cond = colonIdx !== -1 ? text.substring(4, colonIdx).trim() : text.substring(4).trim();
+                        }
+
+                        index++;
+                        let nextIndent = parentIndent + 4;
+                        if (index < cleanLines.length) {
+                            nextIndent = cleanLines[index].indent;
+                        }
+                        const body = parseBlock(nextIndent);
+                        block.push({
+                            type: isWhile ? 'while' : 'for',
+                            condition: cond,
+                            body: body,
+                            lineIdx: lineIdx
+                        });
+                    } else {
+                        // Leaf statements
+                        let type = 'process';
+                        if (text.includes('print(') || text.includes('input(') || text.startsWith('print ') || text.startsWith('input ')) {
+                            type = 'io';
+                        } else if (isSubroutineCall(text)) {
+                            type = 'subroutine';
+                        }
+
+                        block.push({
+                            type: type,
+                            text: text,
+                            lineIdx: lineIdx
+                        });
+                        index++;
+                    }
+                }
+
+                return block;
+            }
+
+            const baseIndent = cleanLines[0].indent;
+            const rawTree = parseBlock(baseIndent);
+            return groupConditionals(rawTree);
+        }
+
+        // Collapse adjacent if-elif-else into a single 'conditional' block
+        function groupConditionals(nodes) {
+            const grouped = [];
+            let i = 0;
+            while (i < nodes.length) {
+                const node = nodes[i];
+                if (node.type === 'if') {
+                    const condNode = {
+                        type: 'conditional',
+                        branches: [
+                            { condition: node.condition, body: groupConditionals(node.body), lineIdx: node.lineIdx }
+                        ]
+                    };
+                    i++;
+                    while (i < nodes.length && (nodes[i].type === 'elif' || nodes[i].type === 'else')) {
+                        condNode.branches.push({
+                            condition: nodes[i].condition,
+                            body: groupConditionals(nodes[i].body),
+                            lineIdx: nodes[i].lineIdx
+                        });
+                        i++;
+                    }
+                    grouped.push(condNode);
+                } else if (node.type === 'while' || node.type === 'for') {
+                    grouped.push({
+                        type: node.type,
+                        condition: node.condition,
+                        body: groupConditionals(node.body),
+                        lineIdx: node.lineIdx
+                    });
+                    i++;
+                } else if (node.type === 'function') {
+                    grouped.push({
+                        type: 'function',
+                        name: node.name,
+                        body: groupConditionals(node.body),
+                        lineIdx: node.lineIdx
+                    });
+                    i++;
+                } else {
+                    grouped.push(node);
+                    i++;
+                }
+            }
+            return grouped;
+        }
+
+        // Pre-process raw tree to always include top-level Start and End terminators
+        function prepareTree(tree) {
+            if (tree.length === 0) return [];
+
+            // If the only top-level item is a function definition, let it handle its own Start/End
+            if (tree.length === 1 && tree[0].type === 'function') {
+                return tree;
+            }
+
+            // Otherwise wrap raw top-level script
+            const wrapped = [
+                { type: 'start', text: 'START', lineIdx: 0 }
+            ];
+
+            tree.forEach(node => {
+                wrapped.push(node);
+            });
+
+            // Grab last line index if possible, otherwise default to 0
+            const lastLineIdx = tree[tree.length - 1]?.lineIdx || 0;
+            wrapped.push({ type: 'end', text: 'END', lineIdx: lastLineIdx });
+            return wrapped;
+        }
+
+        // -------------------------------------------------------------
+        // MEASUREMENT & LAYOUT SYSTEM
+        // -------------------------------------------------------------
+
+        function measureNode(node) {
+            if (!node) return { width: 0, height: 0, leftOffset: 0, rightOffset: 0 };
+
+            if (node.type === 'process' || node.type === 'subroutine' || node.type === 'io') {
+                node.w = 160;
+                node.h = 60;
+                node.leftOffset = 80;
+                node.rightOffset = 80;
+                return { width: 160, height: 60, leftOffset: 80, rightOffset: 80 };
+            }
+
+            if (node.type === 'start' || node.type === 'end') {
+                node.w = 140;
+                node.h = 50;
+                node.leftOffset = 70;
+                node.rightOffset = 70;
+                return { width: 140, height: 50, leftOffset: 70, rightOffset: 70 };
+            }
+
+            if (node.type === 'conditional') {
+                let maxHeight = 0;
+                node.branches.forEach((branch) => {
+                    const size = measureBlock(branch.body);
+                    branch.w = size.width;
+                    branch.h = size.height;
+                    branch.leftOffset = size.leftOffset;
+                    branch.rightOffset = size.rightOffset;
+                    maxHeight = Math.max(maxHeight, size.height);
+                });
+
+                const colSpacing = 60;
+                // Branch 0 left boundary is its left offset or half of min width
+                const leftOffset = Math.max(Math.max(node.branches[0].w, 160) / 2, node.branches[0].leftOffset);
+
+                let rightOffset = 0;
+                node.branches.forEach((branch, idx) => {
+                    if (idx === 0) {
+                        branch.relX = 0;
+                    } else {
+                        const prev = node.branches[idx - 1];
+                        const prevW = Math.max(prev.w, 160);
+                        const currW = Math.max(branch.w, 160);
+                        branch.relX = prev.relX + prevW / 2 + colSpacing + currW / 2;
+                    }
+                    if (idx === node.branches.length - 1) {
+                        rightOffset = branch.relX + Math.max(Math.max(branch.w, 160) / 2, branch.rightOffset);
+                    }
+                });
+
+                node.w = leftOffset + rightOffset;
+                node.leftOffset = leftOffset;
+                node.rightOffset = rightOffset;
+                node.h = 80 + maxHeight + 80; // Diamond (80) + Branches + Join buffer (80)
+                return { width: node.w, height: node.h, leftOffset, rightOffset };
+            }
+
+            if (node.type === 'while' || node.type === 'for') {
+                const bodySize = measureBlock(node.body);
+                node.bodyW = bodySize.width;
+                node.bodyH = bodySize.height;
+
+                // Clearance paths around body for loopback (left) and exit (right)
+                const leftOffset = Math.max(bodySize.leftOffset, 80) + 40;
+                const rightOffset = Math.max(bodySize.rightOffset, 80) + 40;
+
+                node.w = leftOffset + rightOffset;
+                node.leftOffset = leftOffset;
+                node.rightOffset = rightOffset;
+                node.h = 80 + bodySize.height + 80; // Diamond (80) + Body + Exit buffer (80)
+                return { width: node.w, height: node.h, leftOffset, rightOffset };
+            }
+
+            if (node.type === 'function') {
+                const bodySize = measureBlock(node.body);
+                node.leftOffset = Math.max(bodySize.leftOffset, 70);
+                node.rightOffset = Math.max(bodySize.rightOffset, 70);
+                node.w = node.leftOffset + node.rightOffset;
+                node.h = 50 + 40 + bodySize.height + 40 + 50; // Start (50) + spacing (40) + body + spacing (40) + End (50)
+                return { width: node.w, height: node.h, leftOffset: node.leftOffset, rightOffset: node.rightOffset };
+            }
+
+            return { width: 0, height: 0, leftOffset: 0, rightOffset: 0 };
+        }
+
+        function measureBlock(block) {
+            if (!block || block.length === 0) return { width: 0, height: 0, leftOffset: 0, rightOffset: 0 };
+
+            let maxLeft = 0;
+            let maxRight = 0;
+            let totalHeight = 0;
+            const spacing = 40;
+
+            block.forEach((node, idx) => {
+                const size = measureNode(node);
+                maxLeft = Math.max(maxLeft, size.leftOffset);
+                maxRight = Math.max(maxRight, size.rightOffset);
+                totalHeight += size.height;
+                if (idx < block.length - 1) {
+                    totalHeight += spacing;
+                }
+            });
+
+            return { width: maxLeft + maxRight, height: totalHeight, leftOffset: maxLeft, rightOffset: maxRight };
+        }
+
+        // Assign Coordinate positions recursively
+        function assignCoordsBlock(block, cx, topY) {
+            if (!block || block.length === 0) return topY;
+
+            let currentY = topY;
+            const spacing = 40;
+
+            block.forEach((node, idx) => {
+                const nodeCY = currentY + node.h / 2;
+                assignCoordsNode(node, cx, nodeCY);
+                currentY += node.h;
+                if (idx < block.length - 1) {
+                    currentY += spacing;
+                }
+            });
+
+            return currentY;
+        }
+
+        function assignCoordsNode(node, cx, cy) {
+            node.x = cx;
+            node.y = cy;
+
+            if (node.type === 'process' || node.type === 'subroutine' || node.type === 'io' || node.type === 'start' || node.type === 'end') {
+                return;
+            }
+
+            if (node.type === 'function') {
+                const startY = cy - node.h / 2 + 25;
+                const bodyTopY = startY + 25 + 40;
+                assignCoordsBlock(node.body, cx, bodyTopY);
+                return;
+            }
+
+            if (node.type === 'conditional') {
+                const colSpacing = 60;
+                const decisionBottomY = cy - node.h / 2 + 80;
+
+                node.branches.forEach((branch, idx) => {
+                    let branchCX;
+                    if (idx === 0) {
+                        branchCX = cx;
+                    } else {
+                        const prevBranch = node.branches[idx - 1];
+                        const prevColW = Math.max(prevBranch.w, 160);
+                        const currColW = Math.max(branch.w, 160);
+                        branchCX = prevBranch.cx + prevColW / 2 + colSpacing + currColW / 2;
+                    }
+
+                    branch.cx = branchCX;
+                    const branchTopY = decisionBottomY + 40;
+                    assignCoordsBlock(branch.body, branchCX, branchTopY);
+                });
+
+                // Join point at bottom center
+                node.joinX = cx;
+                node.joinY = cy + node.h / 2 - 10;
+                return;
+            }
+
+            if (node.type === 'while' || node.type === 'for') {
+                const decisionBottomY = cy - node.h / 2 + 80;
+                const bodyTopY = decisionBottomY + 40;
+                assignCoordsBlock(node.body, cx, bodyTopY);
+
+                // Exit point at bottom center
+                node.exitX = cx;
+                node.exitY = cy + node.h / 2 - 10;
+            }
+        }
+
+        // -------------------------------------------------------------
+        // SVG GENERATOR / RENDERER
+        // -------------------------------------------------------------
+
+        let shapes = [];
+        let lines = [];
+
+        function collectVisualElements(node) {
+            if (!node) return;
+
+            if (node.type === 'process' || node.type === 'subroutine' || node.type === 'io' || node.type === 'start' || node.type === 'end') {
+                shapes.push({
+                    type: node.type,
+                    x: node.x,
+                    y: node.y,
+                    w: node.w,
+                    h: node.h,
+                    text: node.text || node.type.toUpperCase(),
+                    lineIdx: node.lineIdx
+                });
+                return;
+            }
+
+            if (node.type === 'function') {
+                const startY = node.y - node.h / 2 + 25;
+                shapes.push({
+                    type: 'start',
+                    x: node.x,
+                    y: startY,
+                    w: 140,
+                    h: 50,
+                    text: 'START',
+                    lineIdx: node.lineIdx
+                });
+
+                // Collect function body nodes
+                node.body.forEach(collectVisualElements);
+
+                // Connect function Start to Body / End
+                const firstNode = node.body[0];
+                const startBottom = { x: node.x, y: startY + 25 };
+                if (firstNode) {
+                    lines.push({
+                        from: startBottom,
+                        to: { x: firstNode.x, y: firstNode.y - firstNode.h / 2 },
+                        type: 'straight'
+                    });
+
+                    const lastNode = node.body[node.body.length - 1];
+                    let lastBottomY = lastNode.y + lastNode.h / 2;
+                    if (lastNode.type === 'conditional') lastBottomY = lastNode.joinY;
+                    else if (lastNode.type === 'while' || lastNode.type === 'for') lastBottomY = lastNode.exitY;
+
+                    const lastBottomX = lastNode.type === 'conditional' ? lastNode.joinX : (lastNode.type === 'while' || lastNode.type === 'for' ? lastNode.exitX : lastNode.x);
+
+                    const endTop = { x: node.x, y: node.y + node.h / 2 - 50 };
+                    lines.push({
+                        from: { x: lastBottomX, y: lastBottomY },
+                        to: endTop,
+                        type: 'straight'
+                    });
+                } else {
+                    const endTop = { x: node.x, y: node.y + node.h / 2 - 50 };
+                    lines.push({
+                        from: startBottom,
+                        to: endTop,
+                        type: 'straight'
+                    });
+                }
+
+                const endY = node.y + node.h / 2 - 25;
+                shapes.push({
+                    type: 'end',
+                    x: node.x,
+                    y: endY,
+                    w: 140,
+                    h: 50,
+                    text: 'END',
+                    lineIdx: node.lineIdx
+                });
+                return;
+            }
+
+            if (node.type === 'conditional') {
+                const cy_decision = node.y - node.h / 2 + 40;
+                shapes.push({
+                    type: 'decision',
+                    x: node.x,
+                    y: cy_decision,
+                    w: 140,
+                    h: 80,
+                    text: node.branches[0].condition,
+                    lineIdx: node.branches[0].lineIdx
+                });
+
+                // Render branches
+                node.branches.forEach((branch, idx) => {
+                    branch.body.forEach(collectVisualElements);
+
+                    if (idx === 0) {
+                        // Primary True path (straight down)
+                        const firstNode = branch.body[0];
+                        const fromPt = { x: node.x, y: cy_decision + 40 };
+                        const toPt = firstNode ? { x: firstNode.x, y: firstNode.y - firstNode.h / 2 } : { x: branch.cx, y: node.joinY - 20 };
+                        lines.push({
+                            from: fromPt,
+                            to: toPt,
+                            type: 'straight',
+                            label: 'True'
+                        });
+                    } else {
+                        // Elif / Else paths (orthogonal curves)
+                        const firstNode = branch.body[0];
+                        const fromPt = { x: node.x + 70, y: cy_decision };
+                        const toPt = firstNode ? { x: firstNode.x, y: firstNode.y - firstNode.h / 2 } : { x: branch.cx, y: node.joinY - 20 };
+
+                        lines.push({
+                            from: fromPt,
+                            to: toPt,
+                            type: 'orthogonal_branch',
+                            label: branch.condition,
+                            branchCX: branch.cx,
+                            decisionY: cy_decision
+                        });
+                    }
+
+                    // Route branch back to join point
+                    const lastNode = branch.body[branch.body.length - 1];
+                    if (lastNode) {
+                        let lastBottomY = lastNode.y + lastNode.h / 2;
+                        if (lastNode.type === 'conditional') lastBottomY = lastNode.joinY;
+                        else if (lastNode.type === 'while' || lastNode.type === 'for') lastBottomY = lastNode.exitY;
+
+                        const lastBottomX = lastNode.type === 'conditional' ? lastNode.joinX : (lastNode.type === 'while' || lastNode.type === 'for' ? lastNode.exitX : lastNode.x);
+
+                        lines.push({
+                            from: { x: lastBottomX, y: lastBottomY },
+                            to: { x: node.joinX, y: node.joinY },
+                            type: 'orthogonal_join',
+                            joinY: node.joinY - 20
+                        });
+                    } else if (idx > 0) {
+                        // Empty branch
+                        lines.push({
+                            from: { x: branch.cx, y: cy_decision },
+                            to: { x: node.joinX, y: node.joinY },
+                            type: 'orthogonal_join',
+                            joinY: node.joinY - 20
+                        });
+                    }
+                });
+                return;
+            }
+
+            if (node.type === 'while' || node.type === 'for') {
+                const cy_decision = node.y - node.h / 2 + 40;
+                shapes.push({
+                    type: 'decision',
+                    x: node.x,
+                    y: cy_decision,
+                    w: 140,
+                    h: 80,
+                    text: `${node.type} ${node.condition}`,
+                    lineIdx: node.lineIdx
+                });
+
+                node.body.forEach(collectVisualElements);
+
+                // True loop body connection
+                const firstNode = node.body[0];
+                const bodyTopPt = firstNode ? { x: firstNode.x, y: firstNode.y - firstNode.h / 2 } : { x: node.x, y: node.exitY - 40 };
+                lines.push({
+                    from: { x: node.x, y: cy_decision + 40 },
+                    to: bodyTopPt,
+                    type: 'straight',
+                    label: 'True'
+                });
+
+                // Loopback path
+                const lastNode = node.body[node.body.length - 1];
+                let bodyBottomY = cy_decision + 80;
+                let bodyBottomX = node.x;
+                if (lastNode) {
+                    bodyBottomY = lastNode.y + lastNode.h / 2;
+                    if (lastNode.type === 'conditional') bodyBottomY = lastNode.joinY;
+                    else if (lastNode.type === 'while' || lastNode.type === 'for') bodyBottomY = lastNode.exitY;
+
+                    bodyBottomX = lastNode.type === 'conditional' ? lastNode.joinX : (lastNode.type === 'while' || lastNode.type === 'for' ? lastNode.exitX : lastNode.x);
+                }
+
+                const maxBodyW = node.bodyW || 160;
+                const loopbackX = node.x - Math.max(maxBodyW / 2, 80) - 30;
+                lines.push({
+                    from: { x: bodyBottomX, y: bodyBottomY },
+                    to: { x: node.x - 70, y: cy_decision },
+                    type: 'loopback',
+                    loopbackX: loopbackX,
+                    decisionY: cy_decision,
+                    bottomY: bodyBottomY + 20
+                });
+
+                // False exit path
+                const exitX = node.x + Math.max(maxBodyW / 2, 80) + 30;
+                lines.push({
+                    from: { x: node.x + 70, y: cy_decision },
+                    to: { x: node.exitX, y: node.exitY },
+                    type: 'exit_loop',
+                    exitX: exitX,
+                    decisionY: cy_decision,
+                    exitY: node.exitY - 20,
+                    label: 'False'
+                });
+            }
+        }
+
+        function collectSequences(block) {
+            if (!block || block.length === 0) return;
+
+            block.forEach(collectVisualElements);
+
+            // Draw sequential links between block children
+            for (let i = 0; i < block.length - 1; i++) {
+                const curr = block[i];
+                const next = block[i + 1];
+
+                let fromPt = { x: curr.x, y: curr.y + curr.h / 2 };
+                if (curr.type === 'conditional') fromPt = { x: curr.joinX, y: curr.joinY };
+                else if (curr.type === 'while' || curr.type === 'for') fromPt = { x: curr.exitX, y: curr.exitY };
+
+                const toPt = { x: next.x, y: next.y - next.h / 2 };
+                lines.push({
+                    from: fromPt,
+                    to: toPt,
+                    type: 'straight'
+                });
+            }
+        }
+
+        // Renders visual shapes/lines into SVG DOM
+        function renderVisuals() {
+            shapesGroup.innerHTML = '';
+            linesGroup.innerHTML = '';
+
+            // Draw connector lines
+            lines.forEach((line, idx) => {
+                const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                let d = '';
+
+                if (line.type === 'straight') {
+                    d = `M ${line.from.x} ${line.from.y} L ${line.to.x} ${line.to.y}`;
+                } else if (line.type === 'orthogonal_branch') {
+                    d = `M ${line.from.x} ${line.decisionY} L ${line.branchCX} ${line.decisionY} L ${line.branchCX} ${line.to.y}`;
+                } else if (line.type === 'orthogonal_join') {
+                    d = `M ${line.from.x} ${line.from.y} L ${line.from.x} ${line.joinY} L ${line.to.x} ${line.joinY} L ${line.to.x} ${line.to.y}`;
+                } else if (line.type === 'loopback') {
+                    d = `M ${line.from.x} ${line.from.y} L ${line.from.x} ${line.bottomY} L ${line.loopbackX} ${line.bottomY} L ${line.loopbackX} ${line.decisionY} L ${line.to.x} ${line.decisionY}`;
+                } else if (line.type === 'exit_loop') {
+                    d = `M ${line.from.x} ${line.decisionY} L ${line.exitX} ${line.decisionY} L ${line.exitX} ${line.exitY} L ${line.to.x} ${line.exitY} L ${line.to.x} ${line.to.y}`;
+                }
+
+                pathEl.setAttribute('d', d);
+                pathEl.setAttribute('class', 'flow-line');
+                pathEl.setAttribute('marker-end', 'url(#arrow)');
+
+                // Highlight reference
+                if (line.lineIdx !== undefined) {
+                    pathEl.setAttribute('data-line-idx', line.lineIdx);
+                }
+                linesGroup.appendChild(pathEl);
+
+                // Text Labels on arrows (Yes / No / conditions)
+                if (line.label) {
+                    const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    let tx = 0, ty = 0;
+
+                    if (line.type === 'straight') {
+                        tx = line.from.x + 12;
+                        ty = line.from.y + 16;
+                    } else if (line.type === 'orthogonal_branch') {
+                        tx = line.from.x + 22;
+                        ty = line.decisionY - 5;
+                    } else if (line.type === 'exit_loop') {
+                        tx = line.from.x + 22;
+                        ty = line.decisionY - 5;
+                    }
+
+                    textEl.setAttribute('x', tx);
+                    textEl.setAttribute('y', ty);
+                    textEl.setAttribute('class', 'line-label');
+                    textEl.textContent = truncateText(line.label, 15);
+
+                    // Hover tooltips for conditions
+                    const titleEl = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+                    titleEl.textContent = line.label;
+                    textEl.appendChild(titleEl);
+
+                    linesGroup.appendChild(textEl);
+                }
+            });
+
+            // Draw shapes
+            shapes.forEach((shape) => {
+                const groupEl = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                let classList = `node ${shape.type}`;
+                if (shape.type === 'start' || shape.type === 'end') {
+                    classList += ' terminator';
+                }
+                groupEl.setAttribute('class', classList);
+                groupEl.setAttribute('data-line-idx', shape.lineIdx);
+
+                // Filter dropdown shadow
+                groupEl.setAttribute('filter', 'url(#card-shadow)');
+
+                let textYOffset = 0;
+
+                if (shape.type === 'start' || shape.type === 'end') {
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('x', shape.x - shape.w / 2);
+                    rect.setAttribute('y', shape.y - shape.h / 2);
+                    rect.setAttribute('width', shape.w);
+                    rect.setAttribute('height', shape.h);
+                    rect.setAttribute('rx', 25);
+                    rect.setAttribute('ry', 25);
+                    groupEl.appendChild(rect);
+                } else if (shape.type === 'process') {
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('x', shape.x - shape.w / 2);
+                    rect.setAttribute('y', shape.y - shape.h / 2);
+                    rect.setAttribute('width', shape.w);
+                    rect.setAttribute('height', shape.h);
+                    groupEl.appendChild(rect);
+                } else if (shape.type === 'subroutine') {
+                    // Outer box
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('x', shape.x - shape.w / 2);
+                    rect.setAttribute('y', shape.y - shape.h / 2);
+                    rect.setAttribute('width', shape.w);
+                    rect.setAttribute('height', shape.h);
+                    groupEl.appendChild(rect);
+
+                    // Left double line
+                    const lineL = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    lineL.setAttribute('x1', shape.x - shape.w / 2 + 12);
+                    lineL.setAttribute('y1', shape.y - shape.h / 2);
+                    lineL.setAttribute('x2', shape.x - shape.w / 2 + 12);
+                    lineL.setAttribute('y2', shape.y + shape.h / 2);
+                    groupEl.appendChild(lineL);
+
+                    // Right double line
+                    const lineR = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    lineR.setAttribute('x1', shape.x + shape.w / 2 - 12);
+                    lineR.setAttribute('y1', shape.y - shape.h / 2);
+                    lineR.setAttribute('x2', shape.x + shape.w / 2 - 12);
+                    lineR.setAttribute('y2', shape.y + shape.h / 2);
+                    groupEl.appendChild(lineR);
+                } else if (shape.type === 'decision') {
+                    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    const x = shape.x;
+                    const y = shape.y;
+                    const w2 = shape.w / 2;
+                    const h2 = shape.h / 2;
+                    poly.setAttribute('points', `${x},${y - h2} ${x + w2},${y} ${x},${y + h2} ${x - w2},${y}`);
+                    groupEl.appendChild(poly);
+                } else if (shape.type === 'io') {
+                    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    const x = shape.x;
+                    const y = shape.y;
+                    const w2 = shape.w / 2;
+                    const h2 = shape.h / 2;
+                    // Skew factor 15px
+                    poly.setAttribute('points', `${x - w2 + 15},${y - h2} ${x + w2},${y - h2} ${x + w2 - 15},${y + h2} ${x - w2},${y + h2}`);
+                    groupEl.appendChild(poly);
+                }
+
+                // Add centered Text Label
+                const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                textEl.setAttribute('x', shape.x);
+                textEl.setAttribute('y', shape.y + textYOffset);
+                textEl.setAttribute('class', 'node-text');
+                textEl.textContent = truncateText(shape.text, 22);
+
+                // Browser native tooltip
+                const titleEl = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+                titleEl.textContent = shape.text;
+                groupEl.appendChild(titleEl);
+                groupEl.appendChild(textEl);
+
+                // Handle node hover events
+                groupEl.addEventListener('mouseenter', () => {
+                    highlightCodeLine(shape.lineIdx, true);
+                    groupEl.classList.add('active-highlight');
+                });
+
+                groupEl.addEventListener('mouseleave', () => {
+                    highlightCodeLine(shape.lineIdx, false);
+                    groupEl.classList.remove('active-highlight');
+                });
+
+                shapesGroup.appendChild(groupEl);
+            });
+        }
+
+        function truncateText(str, maxLen) {
+            if (str.length <= maxLen) return str;
+            return str.substring(0, maxLen - 3) + '...';
+        }
+
+        function highlightFlowchartNode(lineIdx, isActive) {
+            const svgNodes = shapesGroup.querySelectorAll('.node');
+            svgNodes.forEach(node => {
+                const idx = parseInt(node.getAttribute('data-line-idx'));
+                if (idx === lineIdx) {
+                    if (isActive) {
+                        node.classList.add('active-highlight');
+                    } else {
+                        node.classList.remove('active-highlight');
+                    }
+                }
+            });
+        }
+
+        // Main parser/layout pipeline trigger
+        function parseAndRenderFlowchart() {
+            const code = codeInput.value;
+
+            // 1. Reset state
+            shapes = [];
+            lines = [];
+
+            // 2. Parse code block levels
+            const rawTree = parsePython(code);
+
+            if (rawTree.length === 0) {
+                shapesGroup.innerHTML = '';
+                linesGroup.innerHTML = '';
+                return;
+            }
+
+            // 3. Prepend/append Start & End terminators
+            const finalTree = prepareTree(rawTree);
+
+            // 4. Measure node geometries
+            const size = measureBlock(finalTree);
+
+            // 5. Layout positions on grid center
+            const canvasRect = canvasContainer.getBoundingClientRect();
+            const initialCX = canvasRect.width > 0 ? canvasRect.width / 2 : 400;
+            const initialTopY = 60;
+
+            assignCoordsBlock(finalTree, initialCX, initialTopY);
+
+            // 6. Traverse tree and gather shape/path definitions
+            collectSequences(finalTree);
+
+            // 7. Inject tags inside SVG
+            renderVisuals();
+
+            // 8. Adjust view bounds
+            setTimeout(resetView, 10);
+        }
+
+        // -------------------------------------------------------------
+        // ZOOM / PAN COMPONENT
+        // -------------------------------------------------------------
+
+        function setupZoomAndPan() {
+            canvasContainer.addEventListener('mousedown', (e) => {
+                if (e.button !== 0) return; // left click only
+                isDragging = true;
+                startDragX = e.clientX - panX;
+                startDragY = e.clientY - panY;
+                canvasContainer.style.cursor = 'grabbing';
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                panX = e.clientX - startDragX;
+                panY = e.clientY - startDragY;
+                updateSVGTransform();
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    canvasContainer.style.cursor = 'grab';
+                }
+            });
+
+            canvasContainer.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const scaleFactor = 0.05;
+                const oldZoom = zoom;
+
+                const rect = canvasContainer.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+
+                const contentX = (mouseX - panX) / oldZoom;
+                const contentY = (mouseY - panY) / oldZoom;
+
+                if (e.deltaY < 0) {
+                    zoom = Math.min(zoom + scaleFactor, 3.0);
+                } else {
+                    zoom = Math.max(zoom - scaleFactor, 0.2);
+                }
+
+                panX = mouseX - contentX * zoom;
+                panY = mouseY - contentY * zoom;
+
+                updateSVGTransform();
+            }, { passive: false });
+
+            // Controls triggers
+            btnZoomIn.addEventListener('click', () => {
+                zoom = Math.min(zoom + 0.1, 3.0);
+                updateSVGTransform();
+            });
+
+            btnZoomOut.addEventListener('click', () => {
+                zoom = Math.max(zoom - 0.1, 0.2);
+                updateSVGTransform();
+            });
+
+            btnZoomReset.addEventListener('click', resetView);
+
+            btnPrint.addEventListener('click', () => {
+                window.print();
+            });
+
+            btnExportSvg.addEventListener('click', exportToSVG);
+            btnExportPng.addEventListener('click', exportToPNG);
+        }
+
+        function updateSVGTransform() {
+            viewportGroup.setAttribute('transform', `translate(${panX}, ${panY}) scale(${zoom})`);
+        }
+
+        function resetView() {
+            const bbox = viewportGroup.getBBox();
+            const containerRect = canvasContainer.getBoundingClientRect();
+
+            if (bbox.width === 0 || bbox.height === 0) return;
+
+            // Calculate scale limits
+            const scaleX = (containerRect.width - 60) / bbox.width;
+            const scaleY = (containerRect.height - 60) / bbox.height;
+            zoom = Math.min(scaleX, scaleY, 1.0); // max scale zoom level is 1
+
+            // Re-center on canvas
+            panX = (containerRect.width - bbox.width * zoom) / 2 - bbox.x * zoom;
+            panY = (containerRect.height - bbox.height * zoom) / 2 - bbox.y * zoom;
+
+            updateSVGTransform();
+        }
+
+        function setupWindowResize() {
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    // Update canvas coordinates when layout resizing happens
+                    parseAndRenderFlowchart();
+                }, 100);
+            });
+        }
+
+        // -------------------------------------------------------------
+        // PRINTING & EXPORTS
+        // -------------------------------------------------------------
+
+        let savedZoom, savedPanX, savedPanY;
+
+        // Print screen listeners to reset scaling so flowchart is visible
+        window.addEventListener('beforeprint', () => {
+            savedZoom = zoom;
+            savedPanX = panX;
+            savedPanY = panY;
+            resetView();
+        });
+
+        window.addEventListener('afterprint', () => {
+            zoom = savedZoom;
+            panX = savedPanX;
+            panY = savedPanY;
+            updateSVGTransform();
+        });
+
+        // Export SVG Utility
+        function exportToSVG() {
+            // Clone the SVG DOM
+            const svgClone = svgElement.cloneNode(true);
+
+            // Embed styling into the output SVG file so it looks correct outside browser
+            const isDark = document.getElementById('dark-mode').checked;
+            const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleEl.textContent = `
+                svg { background-color: transparent; }
+                .flow-line { fill: none; stroke: ${isDark ? '#94a3b8' : '#475569'}; stroke-width: 2px; stroke-linejoin: round; }
+                .line-label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; fill: ${isDark ? '#a1a1aa' : '#64748b'}; text-anchor: middle; }
+                .node-text { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 500; fill: ${isDark ? '#f4f4f5' : '#1e293b'}; text-anchor: middle; dominant-baseline: middle; }
+                .node rect, .node polygon { stroke-width: 2px; }
+                .node.terminator rect { fill: ${isDark ? '#1e1b4b' : '#e0e7ff'}; stroke: ${isDark ? '#818cf8' : '#4f46e5'}; }
+                .node.process rect { fill: ${isDark ? '#0c4a6e' : '#e0f2fe'}; stroke: ${isDark ? '#38bdf8' : '#0284c7'}; }
+                .node.decision polygon { fill: ${isDark ? '#451a03' : '#fffbeb'}; stroke: ${isDark ? '#fb923c' : '#d97706'}; }
+                .node.io polygon { fill: ${isDark ? '#064e3b' : '#ecfdf4'}; stroke: ${isDark ? '#34d399' : '#059669'}; }
+                .node.subroutine rect { fill: ${isDark ? '#4c0519' : '#ffe4e6'}; stroke: ${isDark ? '#fda4af' : '#e11d48'}; }
+                .node.subroutine line { stroke: ${isDark ? '#fda4af' : '#e11d48'}; stroke-width: 1.5px; }
+            `;
+            svgClone.insertBefore(styleEl, svgClone.firstChild);
+
+            // Adjust bounds to tightly wrap the flowchart bounding box
+            const bbox = viewportGroup.getBBox();
+            const padding = 20;
+            const viewBoxVal = `${bbox.x - padding} ${bbox.y - padding} ${bbox.width + padding * 2} ${bbox.height + padding * 2}`;
+            svgClone.setAttribute('viewBox', viewBoxVal);
+
+            // Remove transform on viewport inside SVG file
+            svgClone.querySelector('#viewport').removeAttribute('transform');
+
+            // Remove interactive components
+            svgClone.querySelector('defs').innerHTML = `
+                <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="${isDark ? '#94a3b8' : '#475569'}" />
+                </marker>
+            `;
+
+            const serializer = new XMLSerializer();
+            const svgString = serializer.serializeToString(svgClone);
+
+            const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'flowchart.svg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Export PNG Utility
+        function exportToPNG() {
+            // First calculate bounding box to render the PNG properly
+            const bbox = viewportGroup.getBBox();
+            const padding = 30;
+
+            const width = bbox.width + padding * 2;
+            const height = bbox.height + padding * 2;
+
+            // Clone the SVG DOM
+            const svgClone = svgElement.cloneNode(true);
+            const isDark = document.getElementById('dark-mode').checked;
+            const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleEl.textContent = `
+                svg { background-color: transparent; }
+                .flow-line { fill: none; stroke: ${isDark ? '#94a3b8' : '#475569'}; stroke-width: 2px; stroke-linejoin: round; }
+                .line-label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; fill: ${isDark ? '#a1a1aa' : '#64748b'}; text-anchor: middle; }
+                .node-text { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 500; fill: ${isDark ? '#f4f4f5' : '#1e293b'}; text-anchor: middle; dominant-baseline: middle; }
+                .node rect, .node polygon { stroke-width: 2px; }
+                .node.terminator rect { fill: ${isDark ? '#1e1b4b' : '#e0e7ff'}; stroke: ${isDark ? '#818cf8' : '#4f46e5'}; }
+                .node.process rect { fill: ${isDark ? '#0c4a6e' : '#e0f2fe'}; stroke: ${isDark ? '#38bdf8' : '#0284c7'}; }
+                .node.decision polygon { fill: ${isDark ? '#451a03' : '#fffbeb'}; stroke: ${isDark ? '#fb923c' : '#d97706'}; }
+                .node.io polygon { fill: ${isDark ? '#064e3b' : '#ecfdf4'}; stroke: ${isDark ? '#34d399' : '#059669'}; }
+                .node.subroutine rect { fill: ${isDark ? '#4c0519' : '#ffe4e6'}; stroke: ${isDark ? '#fda4af' : '#e11d48'}; }
+                .node.subroutine line { stroke: ${isDark ? '#fda4af' : '#e11d48'}; stroke-width: 1.5px; }
+            `;
+            svgClone.insertBefore(styleEl, svgClone.firstChild);
+            svgClone.setAttribute('width', width);
+            svgClone.setAttribute('height', height);
+            svgClone.setAttribute('viewBox', `${bbox.x - padding} ${bbox.y - padding} ${width} ${height}`);
+            svgClone.querySelector('#viewport').removeAttribute('transform');
+
+            // Set concrete color on arrow head marker inside defs
+            svgClone.querySelector('defs').innerHTML = `
+                <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="${isDark ? '#94a3b8' : '#475569'}" />
+                </marker>
+            `;
+
+            const serializer = new XMLSerializer();
+            const svgString = serializer.serializeToString(svgClone);
+
+            const img = new Image();
+            const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                img.src = e.target.result;
+            };
+
+            img.onload = function () {
+                // High resolution scaling (2x)
+                const canvas = document.createElement('canvas');
+                canvas.width = width * 2;
+                canvas.height = height * 2;
+
+                const ctx = canvas.getContext('2d');
+                ctx.scale(2, 2);
+
+                // Transparent canvas background (no white fill rect)
+                ctx.drawImage(img, 0, 0);
+
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'flowchart.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }, 'image/png');
+            };
+
+            reader.readAsDataURL(svgBlob);
+        }
+    </script>
+</body>
+
+</html>

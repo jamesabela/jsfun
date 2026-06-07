@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 12;
+    window.pythonCopyVersion = 13;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -834,6 +834,17 @@ import sys, builtins
       } else {
         if (undoEditorButton) undoEditorButton.disabled = false;
         if (redoEditorButton) redoEditorButton.disabled = false;
+      }
+
+      const flowchartBtn = document.getElementById('createFlowchartButton');
+      if (flowchartBtn) {
+        const codeText = editor.value || '';
+        const lineCount = codeText.split('\n').length;
+        if (codeText.trim() !== '' && lineCount <= 30) {
+          flowchartBtn.style.display = 'inline-block';
+        } else {
+          flowchartBtn.style.display = 'none';
+        }
       }
     }
 
@@ -1818,6 +1829,12 @@ import sys, builtins
             startBlankBlocksFile();
             return;
           }
+          if (button.dataset.action === 'flowchart') {
+            const isDark = document.getElementById('dark-mode').checked;
+            const themeSuffix = isDark ? '?theme=dark' : '?theme=light';
+            window.location.href = `python2flow.html${themeSuffix}`;
+            return;
+          }
 
           const starterUrl = button.dataset.url;
           document.getElementById('urlInput').value = starterUrl;
@@ -1859,6 +1876,29 @@ import sys, builtins
       const shareLinkBtn = document.getElementById('shareLinkButton');
       if (shareLinkBtn) {
         shareLinkBtn.addEventListener('click', copyShareLink);
+      }
+
+      const flowchartBtn = document.getElementById('createFlowchartButton');
+      if (flowchartBtn) {
+        flowchartBtn.addEventListener('click', function () {
+          const codeText = editor.value;
+          let base64 = '';
+          try {
+            const utf8Bytes = new TextEncoder().encode(codeText);
+            let binary = '';
+            for (let i = 0; i < utf8Bytes.length; i++) {
+              binary += String.fromCharCode(utf8Bytes[i]);
+            }
+            base64 = btoa(binary);
+          } catch (err) {
+            console.error('Failed to encode code for flowchart:', err);
+            return;
+          }
+          const isDark = document.getElementById('dark-mode').checked;
+          const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
+          const targetUrl = `python2flow.html?code=${encodeURIComponent(base64)}${themeSuffix}`;
+          window.open(targetUrl, '_blank');
+        });
       }
 
       [undoEditorButton, redoEditorButton, revertEditorButton].forEach(button => {

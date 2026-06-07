@@ -19,7 +19,7 @@
   </style>
   <script>
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 12) {
+      if (window.pythonCopyVersion !== 13) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -148,6 +148,8 @@
         File</button>
       <button class="starter-button" data-action="blocks"
         style="background-color: #8b5cf6; color: white; border: none; font-weight: bold;">Use Blocks 🧩</button>
+      <button class="starter-button" data-action="flowchart"
+        style="background-color: #f59e0b; color: white; border: none; font-weight: bold;">Create Flowchart</button>
     </div>
 
     <!-- Daily Challenge of the Day -->
@@ -310,6 +312,8 @@
           title="Copy with formatting and line numbers for Word/Google Docs">Copy for Docs</button>
         <button class="primary-button" id="shareLinkButton" style="background: #10b981;"
           title="Copy a shareable link that loads this code directly in Python Code Lab">Copy Link</button>
+        <button class="primary-button" id="createFlowchartButton" style="background: #f59e0b; display: none;"
+          title="Create a visual flowchart from this code (limited to 30 lines)">Create Flowchart</button>
         <input type="file" id="uploadPyInput" accept=".py,.txt" style="display: none;">
         <button class="primary-button" id="uploadPyButton">Upload .py</button>
         <button class="primary-button" id="downloadPyButton">Download .py</button>
