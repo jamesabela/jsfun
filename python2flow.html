@@ -124,6 +124,34 @@
             gap: 16px;
         }
 
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-nav-link {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 20px;
+            line-height: 1;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        .header-nav-link:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        body.dark-theme .header-nav-link:hover {
+            background-color: rgba(59, 130, 246, 0.18);
+        }
+
         .theme-toggle {
             display: flex;
             align-items: center;
@@ -624,10 +652,6 @@
             PyFlow
             <span
                 style="font-size: 0.8rem; font-weight: 600; color: #2563eb; background: rgba(59, 130, 246, 0.1); padding: 2px 8px; border-radius: 99px;">Flowchart</span>
-        </div>
-
-        <div class="visual-controls">
-            <!-- Dropdown to choose iGCSE Algorithm -->
             <div class="algorithm-load-group" style="display: flex; gap: 6px; align-items: center;">
                 <select id="algorithm-select" class="dropdown-select" title="Choose an iGCSE Algorithm to load">
                     <option value="">-- Load iGCSE Algorithm --</option>
@@ -644,7 +668,9 @@
                 </select>
                 <button class="btn" id="btn-load-algorithm" title="Load selected algorithm (will overwrite current code)">Load</button>
             </div>
+        </div>
 
+        <div class="visual-controls">
             <div class="theme-toggle" aria-label="Theme">
                 <label><input type="radio" id="light-mode" name="mode" value="light" checked> Light</label>
                 <label><input type="radio" id="dark-mode" name="mode" value="dark"> Dark</label>
@@ -654,6 +680,15 @@
                 <span class="counter-label">Code Length:</span>
                 <span id="line-counter" class="counter-value">0 / 30 lines</span>
             </div>
+
+            <nav class="header-nav" aria-label="Code Lab links">
+                <a href="pythoncopy.html?blank" target="_blank" class="header-nav-link" title="New Blank File"
+                    aria-label="New Blank File">📄</a>
+                <a href="pythoncopy.html" target="_blank" class="header-nav-link" title="Clean Home Screen"
+                    aria-label="Clean Home Screen">🏠</a>
+                <a href="pythonmanual.html" target="_blank" class="header-nav-link" title="Python Manual"
+                    aria-label="Python Manual">ℹ️</a>
+            </nav>
         </div>
     </header>
 

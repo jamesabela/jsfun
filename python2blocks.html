@@ -71,6 +71,27 @@
       gap: 8px;
     }
 
+    .nav-link {
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      font-size: 20px;
+      line-height: 1;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .nav-link:hover {
+      border-color: var(--accent);
+      background: #eff6ff;
+    }
+
     button {
       border: 1px solid var(--line);
       background: var(--panel);
@@ -153,6 +174,12 @@
       height: 100%;
     }
 
+    #blocklyDiv .blocklyToolboxDiv,
+    #blocklyDiv .blocklyFlyout,
+    #blocklyDiv .blocklyTrash {
+      display: none !important;
+    }
+
     .status {
       border-top: 1px solid var(--line);
       padding: 10px 14px;
@@ -217,9 +244,16 @@
       <div class="subtitle">Standalone test page. It is intentionally not linked from the main site.</div>
     </div>
     <div class="actions">
+      <button id="pasteButton" type="button">Paste Code</button>
       <button id="sampleButton" type="button">Sample</button>
       <button id="clearButton" type="button">Clear</button>
       <button id="openBlocksButton" class="primary" type="button">Open in Blocks</button>
+      <a href="pythoncopy.html?blank" target="_blank" rel="noopener" class="nav-link" title="New Blank File"
+        aria-label="New Blank File">📄</a>
+      <a href="pythoncopy.html" target="_blank" rel="noopener" class="nav-link" title="Clean Home Screen"
+        aria-label="Clean Home Screen">🏠</a>
+      <a href="pythonmanual.html" target="_blank" rel="noopener" class="nav-link" title="Python Manual"
+        aria-label="Python Manual">ℹ️</a>
     </div>
   </header>
 
@@ -236,7 +270,7 @@
     <section class="pane">
       <div class="pane-head">
         <span>Blocks</span>
-        <span>Conversion preview</span>
+        <span>Read-only preview</span>
       </div>
       <div id="blocklyDiv"></div>
     </section>
@@ -272,6 +306,7 @@ else:
     const pythonInput = document.getElementById('pythonInput');
     const lineCount = document.getElementById('lineCount');
     const statusBox = document.getElementById('status');
+    const pasteButton = document.getElementById('pasteButton');
     const sampleButton = document.getElementById('sampleButton');
     const clearButton = document.getElementById('clearButton');
     const openBlocksButton = document.getElementById('openBlocksButton');
@@ -284,6 +319,24 @@ else:
     function updateLineCount() {
       const lines = pythonInput.value ? pythonInput.value.split('\n').length : 0;
       lineCount.textContent = lines + (lines === 1 ? ' line' : ' lines');
+    }
+
+    function lockPreviewBlocks() {
+      if (!window.blocklyWorkspace) return;
+
+      const toolbox = typeof window.blocklyWorkspace.getToolbox === 'function'
+        ? window.blocklyWorkspace.getToolbox()
+        : null;
+      if (toolbox && typeof toolbox.setVisible === 'function') {
+        toolbox.setVisible(false);
+      }
+
+      for (const block of window.blocklyWorkspace.getAllBlocks(false)) {
+        block.setMovable(false);
+        block.setDeletable(false);
+        block.setEditable(false);
+        block.contextMenu = false;
+      }
     }
 
     function convertToBlocks() {
@@ -307,8 +360,9 @@ else:
         if (typeof Blockly !== 'undefined') {
           Blockly.svgResize(window.blocklyWorkspace);
         }
+        lockPreviewBlocks();
         setStatus(
-          converted ? 'Converted to blocks. Check the workspace for unsupported lines.' : 'No convertible blocks were created.',
+          converted ? 'Converted to a read-only blocks preview. Open in Blocks to edit.' : 'No convertible blocks were created.',
           converted ? 'ok' : 'warn'
         );
       } catch (error) {
@@ -328,6 +382,37 @@ else:
         if (generatedCode && generatedCode.trim()) return generatedCode;
       }
       return pythonInput.value;
+    }
+
+    function getPasteShortcut() {
+      return /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? 'Cmd+V' : 'Ctrl+V';
+    }
+
+    function prepareManualPaste() {
+      pythonInput.focus();
+      pythonInput.setSelectionRange(0, pythonInput.value.length);
+      setStatus('Ready to paste. Press ' + getPasteShortcut() + ' to replace the editor contents.', 'warn');
+    }
+
+    async function pasteCodeFromClipboard() {
+      if (!navigator.clipboard || typeof navigator.clipboard.readText !== 'function') {
+        prepareManualPaste();
+        return;
+      }
+
+      try {
+        const text = await navigator.clipboard.readText();
+        if (!text.trim()) {
+          setStatus('Clipboard is empty.', 'warn');
+          return;
+        }
+        pythonInput.value = text;
+        convertToBlocks();
+        pythonInput.focus();
+      } catch (error) {
+        console.error(error);
+        prepareManualPaste();
+      }
     }
 
     function openInBlocks() {
@@ -355,9 +440,11 @@ else:
       }
 
       initBlockly();
+      lockPreviewBlocks();
       convertToBlocks();
 
       pythonInput.addEventListener('input', convertToBlocks);
+      pasteButton.addEventListener('click', pasteCodeFromClipboard);
       sampleButton.addEventListener('click', () => {
         pythonInput.value = sampleCode;
         convertToBlocks();
