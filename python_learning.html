@@ -1206,7 +1206,7 @@
         order: 9,
         title: "Procedures & Functions",
         subtitle: "Functions Course",
-        level: "AS Level",
+        level: "iGCSE",
         theme: "orange",
         themeRgb: "249, 115, 22",
         firstLevel: "01_first_procedure.py",
@@ -1231,7 +1231,7 @@
         order: 10,
         title: "Validation & Verification",
         subtitle: "Validation Course",
-        level: "AS Level",
+        level: "iGCSE",
         theme: "rose",
         themeRgb: "244, 63, 94",
         firstLevel: "01_validate_or_verify.py",
@@ -1587,9 +1587,9 @@
       }
     }
 
-    // Helper to determine if a course belongs to GCSE
+    // Helper to determine if a course belongs to iGCSE
     function isGcseCourse(course) {
-      return course.category !== 'adventure' && course.order < 9;
+      return course.category !== 'adventure' && course.order < 11;
     }
 
     // Render Journey Map Step Ribbon
