@@ -345,6 +345,25 @@ function registerCustomBlocks() {
     return 'turtle.circle(' + radius + ')\n';
   });
 
+  defineBlock('turtle_goto', function() {
+    this.appendValueInput("X")
+        .setCheck("Number")
+        .appendField("turtle goto x");
+    this.appendValueInput("Y")
+        .setCheck("Number")
+        .appendField("y");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#4c97ff');
+    this.setTooltip("Moves turtle to the specified x and y coordinates.");
+  }, function(block) {
+    const x = gen.valueToCode(block, 'X', orderAtomic) || '0';
+    const y = gen.valueToCode(block, 'Y', orderAtomic) || '0';
+    return 'turtle.goto(' + x + ', ' + y + ')\n';
+  });
+
+
   defineBlock('turtle_penup', function() {
     this.appendDummyInput().appendField("pen up");
     this.setPreviousStatement(true, null);
@@ -668,6 +687,18 @@ window.toolboxXml = `
         </shadow>
       </value>
     </block>
+    <block type="turtle_goto">
+      <value name="X">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+      <value name="Y">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
     <block type="turtle_penup"></block>
     <block type="turtle_pendown"></block>
     <block type="turtle_begin_fill"></block>
@@ -882,7 +913,7 @@ function checkCodeConvertibility(code) {
       line.startsWith('print(') ||
       line.match(/^[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*/) ||
       line.match(/^[a-zA-Z_][a-zA-Z0-9_]*\.append\(/) ||
-      line.match(/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|fillcolor|begin_fill|end_fill|penup|up|pu|pendown|down|pd)\(/) ||
+      line.match(/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|fillcolor|begin_fill|end_fill|penup|up|pu|pendown|down|pd|goto|setpos|setposition)\(/) ||
       line.match(/^(?:time\.)?sleep\(/) ||
       line === 'pass';
 
@@ -1315,6 +1346,23 @@ function parseNodeToBlock(node, workspace) {
         if (argBlock) {
           block.getInput(inputName).connection.connect(argBlock.outputConnection);
         }
+      }
+      return block;
+    }
+  }
+
+  const gotoMatch = node.text.match(/^(?:turtle\.)?(goto|setpos|setposition)\((.*)\)$/);
+  if (gotoMatch) {
+    const args = splitTopLevelArguments(gotoMatch[2]);
+    if (args.length === 2) {
+      const block = workspace.newBlock('turtle_goto');
+      const xBlock = parseExpression(args[0], workspace);
+      const yBlock = parseExpression(args[1], workspace);
+      if (xBlock) {
+        block.getInput('X').connection.connect(xBlock.outputConnection);
+      }
+      if (yBlock) {
+        block.getInput('Y').connection.connect(yBlock.outputConnection);
       }
       return block;
     }
