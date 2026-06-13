@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 14;
+    window.pythonCopyVersion = 15;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
