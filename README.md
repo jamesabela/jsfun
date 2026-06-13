@@ -7,4 +7,4 @@ This started as just a place to put a few JS tricks, but now has an entire IDE i
 
 It also includes resources from various teachers and friends.
 
-You can also get straight to the biggest tool: [Python Code Lab](https://jamesabela.github.io/jsfun/ide.html)
+You can also get straight to the biggest tool: [Python Code Lab](https://jamesabela.github.io/jsfun/pythoncopy.html)
