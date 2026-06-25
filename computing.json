@@ -678,6 +678,14 @@
         "desc": "Master memory addresses and pointers by correctly linking nodes in a chain. Visualise RAM and traversal.",
         "tag": "A-Level",
         "isExternal": false
+      },
+      {
+        "title": "Gandalf AI Challenge",
+        "emoji": "🧙‍♂️",
+        "url": "https://gandalf.lakera.ai/baseline",
+        "desc": "Learn about AI safety and prompt injection by trying to trick the AI into revealing its secret password across levels of increasing difficulty.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": true
       }
     ]
   },
