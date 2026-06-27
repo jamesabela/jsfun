@@ -1809,39 +1809,58 @@ print(total)</code></pre>
           <p>File handling lets programs save data after the program stops. Use <code>"r"</code> to read,
             <code>"w"</code> to overwrite, and <code>"a"</code> to append to the end.
           </p>
+          <p>The standard, recommended practice in Python is to use the <code>with</code> statement (context manager). This ensures that files are automatically and properly closed when the block is exited, even if an error/exception occurs during execution.</p>
+
+          <h3>1. Writing to a File (Overwrite Mode)</h3>
+          <p>Opening a file with <code>"w"</code> writes new data to it. <strong style="color: var(--accent, #e06c75);">WARNING: This completely overwrites the file. Any old contents will be lost!</strong></p>
           <div class="code-wrapper">
-            <pre><code class="language-python">file = open("score.txt", "w")
-file.write("120")
-file.close()
+            <pre><code class="language-python"># Overwrites the file completely
+with open("score.txt", "w") as file:
+    file.write("120\n")</code></pre>
+          </div>
 
-file = open("score.txt", "r")
-score = int(file.readline())
-file.close()
+          <h3>2. Appending to a File (Append Mode)</h3>
+          <p>Opening a file with <code>"a"</code> preserves the existing file contents and adds new data at the end.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python"># Appends data to the end of the file
+with open("score.txt", "a") as file:
+    file.write("150\n")</code></pre>
+          </div>
 
-print(score)</code></pre>
+          <h3>3. Reading from a File (Read Mode)</h3>
+          <p>Opening a file with <code>"r"</code> allows you to read from it.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python"># Reads contents from the file
+with open("score.txt", "r") as file:
+    first_score = int(file.readline())
+    second_score = int(file.readline())
+
+print(first_score)   # 120
+print(second_score)  # 150</code></pre>
+          </div>
+
+          <div class="banner info" style="margin-top: 15px; margin-bottom: 15px;">
+            <span>ℹ️</span>
+            <span><strong>Best Practice:</strong> Always prefer using the <code>with</code> block. If you use the older <code>file = open(...)</code> method, you must remember to explicitly call <code>file.close()</code> at the end, or risk locking the file, leaving resources open, or losing data.</span>
           </div>
           <div class="banner bug">
             <span>🐛</span>
-            <span><strong>Common Bug:</strong> <code>"w"</code> deletes the old contents first. Use <code>"a"</code>
-              when you need to keep the existing file contents.</span>
+            <span><strong>Common Bug:</strong> Forgetting that <code>"w"</code> deletes the old contents first. If you need to keep existing data and add to it, use <code>"a"</code>.</span>
           </div>
         </div>
 
         <div class="card">
           <h2>📄 Looping Through Lines</h2>
           <p>Many A-level file tasks load text, split records, count words, or filter rows. <code>strip()</code> removes
-            the newline at the end of each line.</p>
+            the newline at the end of each line. We use the <code>with</code> statement here as well to guarantee proper closing.</p>
           <div class="code-wrapper">
-            <pre><code class="language-python">file = open("players.tsv", "r")
-
-for line in file:
-    fields = line.strip().split("\t")
-    name = fields[0]
-    rating = int(fields[1])
-    if rating >= 80:
-        print(name)
-
-file.close()</code></pre>
+            <pre><code class="language-python">with open("players.tsv", "r") as file:
+    for line in file:
+        fields = line.strip().split("\t")
+        name = fields[0]
+        rating = int(fields[1])
+        if rating >= 80:
+            print(name)</code></pre>
           </div>
         </div>
       </div>

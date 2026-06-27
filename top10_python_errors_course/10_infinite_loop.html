@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level 10: Escape the Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#f6f8fc; --card:#fff; --ink:#172033; --muted:#5e6b82; --navy:#13213c; --gold:#d8a928; --red:#d94a4a; --green:#168a5b; --line:#dfe5ef; --code:#101827; }
+* { box-sizing:border-box; }
+body { margin:0; padding:24px; background:linear-gradient(145deg,#f8fafc,#eef3fb); color:var(--ink); font-family:Inter,Arial,sans-serif; }
+.container { max-width:720px; margin:auto; display:flex; flex-direction:column; gap:18px; }
+header { background:var(--navy); color:white; border-radius:18px; padding:22px 24px; box-shadow:0 12px 28px rgba(19,33,60,.16); }
+.eyebrow { color:#f0cb63; font-weight:800; font-size:.78rem; letter-spacing:.12em; }
+h1 { margin:7px 0 4px; font-size:1.75rem; }
+header p { margin:0; color:#dce5f5; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 22px; box-shadow:0 8px 20px rgba(25,40,70,.06); }
+.card h2 { margin:0 0 10px; font-size:1.05rem; color:var(--navy); }
+p, li { line-height:1.55; }
+pre { margin:12px 0 0; background:var(--code); color:#f7f8fb; padding:16px; border-radius:10px; overflow:auto; font:0.9rem/1.55 'Fira Code',Consolas,monospace; }
+.error { border-left:5px solid var(--red); }
+.clue { border-left:5px solid var(--gold); background:#fffbef; }
+.success { border-left:5px solid var(--green); background:#f1fbf6; }
+.badge { display:inline-block; padding:5px 9px; border-radius:999px; background:#feecec; color:#a42f2f; font-weight:700; font-size:.8rem; }
+.steps { margin:8px 0 0 20px; padding:0; }
+code { font-family:'Fira Code',Consolas,monospace; }
+</style>
+</head>
+<body><main class="container">
+<header><div class="eyebrow">PYTHON ERROR DETECTIVES - LEVEL 10 OF 10</div><h1>Escape the Loop</h1><p>Infinite Loops</p></header>
+<section class="card error"><h2>🔎 What went wrong?</h2><span class="badge">Logic error</span><p>A while loop must make progress towards its stopping condition. Otherwise, it can continue forever.</p><pre>count = 1
+
+while count &lt;= 5:
+    print(count)</pre></section>
+<section class="card"><h2>🛠 Your repair task</h2><p>Add one line inside the loop so that it displays the numbers 1 to 5 and then stops.</p><ol class="steps"><li>Run the broken program and read the error.</li><li>Change only what is needed.</li><li>Run the program again.</li><li>Press <strong>Run Tests</strong> when it works.</li></ol></section>
+<section class="card clue"><h2>💡 Detective clue</h2><p>After printing count, increase it by 1. Keep the new line indented inside the loop.</p></section>
+<section class="card success"><h2>✅ Remember</h2><p>Errors are useful clues. Read the message, inspect the highlighted line and make one careful change at a time.</p></section>
+</main></body></html>
