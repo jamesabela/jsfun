@@ -11,4 +11,4 @@ Print("Welcome, detective!")
 #output
 # Welcome, detective!
 
-#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/02_speech_marks.py
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10_python_errors_course/02_speech_marks.py

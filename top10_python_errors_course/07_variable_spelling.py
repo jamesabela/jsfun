@@ -12,4 +12,4 @@ print(highscore)
 #output
 # 250
 
-#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/08_strings_numbers.py
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10_python_errors_course/08_strings_numbers.py

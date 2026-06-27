@@ -14,4 +14,4 @@ if key == "gold"
 #output
 # Door unlocked
 
-#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/06_variable_order.py
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10_python_errors_course/06_variable_order.py

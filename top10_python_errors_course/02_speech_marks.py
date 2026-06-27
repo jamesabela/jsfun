@@ -11,4 +11,4 @@ print(Evidence found)
 #output
 # Evidence found
 
-#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/03_brackets.py
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10_python_errors_course/03_brackets.py

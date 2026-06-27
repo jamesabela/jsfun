@@ -13,4 +13,4 @@ print("Next year you will be", next_age)
 #output
 # Next year you will be 13
 
-#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/09_equals.py
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10_python_errors_course/09_equals.py

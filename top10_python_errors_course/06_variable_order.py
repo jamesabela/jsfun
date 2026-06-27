@@ -12,4 +12,4 @@ detective = "Riley"
 #output
 # Riley
 
-#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/07_variable_spelling.py
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10_python_errors_course/07_variable_spelling.py

@@ -19,17 +19,17 @@ A 10-level Python Code Lab course for absolute beginners. Students repair one co
 
 Upload this folder to:
 
-`jsfun/top10errors/`
+`jsfun/top10_python_errors_course/`
 
 ## Start URLs
 
 Raw first file:
 
-`https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/01_capitalisation.py`
+`https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10_python_errors_course/01_capitalisation.py`
 
 Python Code Lab loader:
 
-`https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/01_capitalisation.py`
+`https://jamesabela.github.io/jsfun/pythoncopy.html?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjamesabela%2Fjsfun%2Frefs%2Fheads%2Fmain%2Ftop10_python_errors_course%2F01_capitalisation.py`
 
 ## Files
 

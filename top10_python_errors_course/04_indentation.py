@@ -14,4 +14,4 @@ print("Secret message unlocked")
 #output
 # Secret message unlocked
 
-#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/05_colon.py
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10_python_errors_course/05_colon.py

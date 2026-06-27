@@ -14,4 +14,4 @@ if password = "python":
 #output
 # Access granted
 
-#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10errors/10_infinite_loop.py
+#Next https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/top10_python_errors_course/10_infinite_loop.py
