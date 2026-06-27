@@ -1,4 +1,4 @@
-# Tutorial: https://jamesabela.github.io/jsfun/top10errors/03_brackets.html
+# Tutorial: https://jamesabela.github.io/jsfun/top10_python_errors_course/03_brackets.html
 # Level 3 of 10 - Close the Case
 # Repair the broken program below.
 # Run it, read the error and make the smallest possible change.

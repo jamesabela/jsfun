@@ -1,4 +1,4 @@
-# Tutorial: https://jamesabela.github.io/jsfun/top10errors/01_capitalisation.html
+# Tutorial: https://jamesabela.github.io/jsfun/top10_python_errors_course/01_capitalisation.html
 # Level 1 of 10 - Case Closed?
 # Repair the broken program below.
 # Run it, read the error and make the smallest possible change.

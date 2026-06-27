@@ -1,4 +1,4 @@
-# Tutorial: https://jamesabela.github.io/jsfun/top10errors/08_strings_numbers.html
+# Tutorial: https://jamesabela.github.io/jsfun/top10_python_errors_course/08_strings_numbers.html
 # Level 8 of 10 - Text or Number?
 # Repair the broken program below.
 # Run it, read the error and make the smallest possible change.

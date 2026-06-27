@@ -1,4 +1,4 @@
-# Tutorial: https://jamesabela.github.io/jsfun/top10errors/09_equals.html
+# Tutorial: https://jamesabela.github.io/jsfun/top10_python_errors_course/09_equals.html
 # Level 9 of 10 - Assign or Compare?
 # Repair the broken program below.
 # Run it, read the error and make the smallest possible change.

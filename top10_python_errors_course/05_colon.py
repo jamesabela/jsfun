@@ -1,4 +1,4 @@
-# Tutorial: https://jamesabela.github.io/jsfun/top10errors/05_colon.html
+# Tutorial: https://jamesabela.github.io/jsfun/top10_python_errors_course/05_colon.html
 # Level 5 of 10 - The Missing Signal
 # Repair the broken program below.
 # Run it, read the error and make the smallest possible change.

@@ -1,4 +1,4 @@
-# Tutorial: https://jamesabela.github.io/jsfun/top10errors/06_variable_order.html
+# Tutorial: https://jamesabela.github.io/jsfun/top10_python_errors_course/06_variable_order.html
 # Level 6 of 10 - Create Before Use
 # Repair the broken program below.
 # Run it, read the error and make the smallest possible change.

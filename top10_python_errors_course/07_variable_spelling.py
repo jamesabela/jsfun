@@ -1,4 +1,4 @@
-# Tutorial: https://jamesabela.github.io/jsfun/top10errors/07_variable_spelling.html
+# Tutorial: https://jamesabela.github.io/jsfun/top10_python_errors_course/07_variable_spelling.html
 # Level 7 of 10 - A Suspicious Spelling
 # Repair the broken program below.
 # Run it, read the error and make the smallest possible change.

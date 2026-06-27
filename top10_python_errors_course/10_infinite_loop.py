@@ -1,4 +1,4 @@
-# Tutorial: https://jamesabela.github.io/jsfun/top10errors/10_infinite_loop.html
+# Tutorial: https://jamesabela.github.io/jsfun/top10_python_errors_course/10_infinite_loop.html
 # Level 10 of 10 - Escape the Loop
 # Repair the broken program below.
 # Run it, read the error and make the smallest possible change.
