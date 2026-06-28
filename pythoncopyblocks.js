@@ -21,6 +21,40 @@ function getBlocklyPythonVariableName(gen, block, fieldName) {
   return variable ? variable.name : variableId;
 }
 
+function getOrCreateBlocklyVariable(workspace, variableName) {
+  let variable = null;
+  const variableMap = typeof workspace.getVariableMap === 'function'
+    ? workspace.getVariableMap()
+    : null;
+
+  if (variableMap) {
+    if (typeof variableMap.getVariable === 'function') {
+      variable = variableMap.getVariable(variableName);
+    }
+    if (!variable && typeof variableMap.getVariableByName === 'function') {
+      variable = variableMap.getVariableByName(variableName);
+    }
+  }
+
+  if (!variable && typeof workspace.getVariable === 'function') {
+    variable = workspace.getVariable(variableName);
+  }
+  if (!variable && typeof workspace.getVariableByName === 'function') {
+    variable = workspace.getVariableByName(variableName);
+  }
+  if (!variable && typeof workspace.createVariable === 'function') {
+    variable = workspace.createVariable(variableName);
+  }
+  if (!variable && variableMap && typeof variableMap.createVariable === 'function') {
+    variable = variableMap.createVariable(variableName);
+  }
+  if (!variable) {
+    throw new Error('Blockly variables are not available in this workspace.');
+  }
+
+  return variable;
+}
+
 function createBlocklyColourField(defaultColor) {
   if (typeof FieldColour === 'function') {
     return new FieldColour(defaultColor);
@@ -1153,10 +1187,7 @@ function parseExpression(exprString, workspace) {
   }
   if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(exprString)) {
     const block = workspace.newBlock('variables_get');
-    let variable = workspace.getVariable(exprString);
-    if (!variable) {
-      variable = workspace.createVariable(exprString);
-    }
+    const variable = getOrCreateBlocklyVariable(workspace, exprString);
     block.setFieldValue(variable.getId(), 'VAR');
     return block;
   }
@@ -1208,10 +1239,7 @@ function parseNodeToBlock(node, workspace) {
     const listName = appendMatch[1];
     const expr = appendMatch[2].trim();
     const block = workspace.newBlock('list_append');
-    let variable = workspace.getVariable(listName);
-    if (!variable) {
-      variable = workspace.createVariable(listName);
-    }
+    const variable = getOrCreateBlocklyVariable(workspace, listName);
     block.setFieldValue(variable.getId(), 'LIST');
     if (expr) {
       const exprBlock = parseExpression(expr, workspace);
@@ -1227,10 +1255,7 @@ function parseNodeToBlock(node, workspace) {
     const varName = assignMatch[1];
     const expr = assignMatch[2].trim();
     const block = workspace.newBlock('variables_set');
-    let variable = workspace.getVariable(varName);
-    if (!variable) {
-      variable = workspace.createVariable(varName);
-    }
+    const variable = getOrCreateBlocklyVariable(workspace, varName);
     block.setFieldValue(variable.getId(), 'VAR');
     const exprBlock = parseExpression(expr, workspace);
     if (exprBlock) {
@@ -1297,14 +1322,8 @@ function parseNodeToBlock(node, workspace) {
     const itemName = forEachMatch[1];
     const listName = forEachMatch[2];
     const block = workspace.newBlock('python_for_each');
-    let itemVariable = workspace.getVariable(itemName);
-    if (!itemVariable) {
-      itemVariable = workspace.createVariable(itemName);
-    }
-    let listVariable = workspace.getVariable(listName);
-    if (!listVariable) {
-      listVariable = workspace.createVariable(listName);
-    }
+    const itemVariable = getOrCreateBlocklyVariable(workspace, itemName);
+    const listVariable = getOrCreateBlocklyVariable(workspace, listName);
     block.setFieldValue(itemVariable.getId(), 'ITEM');
     block.setFieldValue(listVariable.getId(), 'LIST');
     if (node.children.length > 0) {
