@@ -393,6 +393,21 @@
     footer a.tea {
       color: #e73c7e;
     }
+
+    #randomMin:focus,
+    #randomMax:focus,
+    #randomCount:focus {
+      border-color: var(--primary-color) !important;
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .refresh-icon.spin-anim {
+      animation: spin 0.6s ease-in-out;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 
@@ -418,9 +433,8 @@
         <label for="font-size" style="font-size: 16px;">A</label>
       </div>
 
-      <a href="pythoncopy.html" target="_blank" title="Python Code Lab" class="header-link">🐍</a>
-      <a href="computing.html" title="Computing Tools" class="header-link">🏠</a>
-      <a href="pythonmanual.html" target="_blank" title="Python Manual" class="header-link">ℹ️</a>
+      <a href="pythoncopy.html" target="_blank" title="Python Code Lab" class="header-link">🏠</a>
+      <a href="pythonmanual.html#lists" target="_blank" title="Python Manual" class="header-link">ℹ️</a>
     </div>
   </header>
 
@@ -433,6 +447,8 @@
         <select id="exampleSelector"
           style="font-size: 0.85rem; font-family: inherit; padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color); cursor: pointer; outline: none; font-weight: 500;">
           <option value="">-- Choose Example --</option>
+          <option value="random_ints">Random Integers</option>
+          <option value="random_floats">Random Floats</option>
           <option value="game_events">Unexpected Game Events</option>
           <option value="superpowers">Ridiculous Superpowers</option>
           <option value="bosses">Boss Battle Names</option>
@@ -459,6 +475,28 @@
           <option value="cs_circular_linked_list">Circular Linked List</option>
         </select>
       </h2>
+
+      <div id="randomRangeControls" style="display: none; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; padding: 10px 14px; background: rgba(59, 130, 246, 0.06); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-sm); transition: all 0.3s ease;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; width: 100%;">
+          <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-color); white-space: nowrap;">🎲 Range:</span>
+          <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-weight: 500;">
+            Min: <input type="number" id="randomMin" value="1" step="any" style="width: 70px; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text-color); font-family: 'JetBrains Mono', monospace; outline: none;">
+          </label>
+          <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-weight: 500;">
+            Max: <input type="number" id="randomMax" value="100" step="any" style="width: 70px; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text-color); font-family: 'JetBrains Mono', monospace; outline: none;">
+          </label>
+          <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-weight: 500;">
+            Count: <input type="number" id="randomCount" value="20" min="1" max="1000" style="width: 60px; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text-color); font-family: 'JetBrains Mono', monospace; outline: none;">
+          </label>
+          <button id="regenerateRandomBtn" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem; border-radius: 20px; box-shadow: none; margin-left: auto; display: flex; align-items: center; gap: 4px;">
+            <svg class="refresh-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            <span>Regenerate</span>
+          </button>
+        </div>
+      </div>
+
       <textarea id="itemsInput" placeholder="apple&#10;banana&#10;123&#10;3.14&#10;True&#10;cherry"
         spellcheck="false"></textarea>
 
@@ -578,7 +616,8 @@
         <button class="btn btn-primary" id="copyBtn">
           <span>📋 Copy Code</span>
         </button>
-        <button class="btn" id="copyForDocsBtn" style="background-color: #8b5cf6; color: white;" title="Copy with formatting and line numbers for Google Docs / Word">
+        <button class="btn" id="copyForDocsBtn" style="background-color: #8b5cf6; color: white;"
+          title="Copy with formatting and line numbers for Google Docs / Word">
           <span>📄 Copy for Docs</span>
         </button>
         <button class="btn btn-success" id="openCodeLabBtn">
@@ -638,7 +677,12 @@
       darkModeRadio: document.getElementById('dark-mode'),
       fontSizeSlider: document.getElementById('font-size'),
       codeTemplate: document.getElementById('codeTemplate'),
-      exampleSelector: document.getElementById('exampleSelector')
+      exampleSelector: document.getElementById('exampleSelector'),
+      randomRangeControls: document.getElementById('randomRangeControls'),
+      randomMin: document.getElementById('randomMin'),
+      randomMax: document.getElementById('randomMax'),
+      randomCount: document.getElementById('randomCount'),
+      regenerateRandomBtn: document.getElementById('regenerateRandomBtn')
     };
 
     // --- Theme & Font Settings ---
@@ -712,16 +756,15 @@
       const useDoubleQuotes = elements.doubleQuotes.checked;
       const quoteChar = useDoubleQuotes ? '"' : "'";
 
+      if (selectedDataType === 'number') {
+        items = items.filter(item => item.trim() !== '' && !isNaN(Number(item)));
+      }
+
       let parsedItems = items.map(item => {
         if (selectedDataType === 'string') {
           return formatString(item, quoteChar);
         } else if (selectedDataType === 'number') {
-          const num = Number(item);
-          if (isNaN(num)) {
-            // Fallback to string representation if it's not a valid number
-            return formatString(item, quoteChar);
-          }
-          return num;
+          return Number(item);
         } else {
           // Auto-detect mode
           // Booleans and None
@@ -1350,6 +1393,38 @@
       }
     };
 
+    // Generate random numbers and populate itemsInput
+    function generateAndPopulateRandom(type) {
+      let min = parseFloat(elements.randomMin.value);
+      let max = parseFloat(elements.randomMax.value);
+      if (isNaN(min)) min = type === 'int' ? 1 : 0.0;
+      if (isNaN(max)) max = type === 'int' ? 100 : 1.0;
+      if (min > max) {
+        const temp = min;
+        min = max;
+        max = temp;
+      }
+
+      const items = [];
+      let count = parseInt(elements.randomCount.value, 10);
+      if (isNaN(count) || count < 1) count = 20;
+      if (count > 2000) count = 2000; // safety ceiling
+      for (let i = 0; i < count; i++) {
+        if (type === 'int') {
+          const minCeil = Math.ceil(min);
+          const maxFloor = Math.floor(max);
+          const val = Math.floor(Math.random() * (maxFloor - minCeil + 1)) + minCeil;
+          items.push(val);
+        } else {
+          const val = Math.random() * (max - min) + min;
+          items.push(parseFloat(val.toFixed(4)));
+        }
+      }
+
+      elements.itemsInput.value = items.join('\n');
+      convert();
+    }
+
     // --- Event Listeners & Actions ---
     function setupEventListeners() {
       // Input textarea
@@ -1390,26 +1465,76 @@
       // Example preset loader
       elements.exampleSelector.addEventListener('change', () => {
         const val = elements.exampleSelector.value;
-        if (val && EXAMPLES[val]) {
-          const ex = EXAMPLES[val];
-          elements.itemsInput.value = ex.items.join('\n');
-          elements.variableName.value = ex.varName;
-          
-          // Auto-select template if it matches a data structure
-          if (val === 'cs_stack') {
-            elements.codeTemplate.value = 'stack_lifo';
-          } else if (val === 'cs_queue') {
-            elements.codeTemplate.value = 'queue_fifo';
-          } else if (val === 'cs_singly_linked_list') {
-            elements.codeTemplate.value = 'singly_linked_list';
-          } else if (val === 'cs_doubly_linked_list') {
-            elements.codeTemplate.value = 'doubly_linked_list';
-          } else if (val === 'cs_circular_linked_list') {
-            elements.codeTemplate.value = 'circular_linked_list';
+        if (val === 'random_ints') {
+          elements.randomRangeControls.style.display = 'flex';
+          elements.randomMin.value = '1';
+          elements.randomMax.value = '100';
+          elements.randomCount.value = '20';
+          elements.variableName.value = 'random_integers';
+          generateAndPopulateRandom('int');
+        } else if (val === 'random_floats') {
+          elements.randomRangeControls.style.display = 'flex';
+          elements.randomMin.value = '0.0';
+          elements.randomMax.value = '1.0';
+          elements.randomCount.value = '20';
+          elements.variableName.value = 'random_floats';
+          generateAndPopulateRandom('float');
+        } else {
+          elements.randomRangeControls.style.display = 'none';
+          if (val && EXAMPLES[val]) {
+            const ex = EXAMPLES[val];
+            elements.itemsInput.value = ex.items.join('\n');
+            elements.variableName.value = ex.varName;
+
+            // Auto-select template if it matches a data structure
+            if (val === 'cs_stack') {
+              elements.codeTemplate.value = 'stack_lifo';
+            } else if (val === 'cs_queue') {
+              elements.codeTemplate.value = 'queue_fifo';
+            } else if (val === 'cs_singly_linked_list') {
+              elements.codeTemplate.value = 'singly_linked_list';
+            } else if (val === 'cs_doubly_linked_list') {
+              elements.codeTemplate.value = 'doubly_linked_list';
+            } else if (val === 'cs_circular_linked_list') {
+              elements.codeTemplate.value = 'circular_linked_list';
+            }
+
+            convert();
           }
-          
-          convert();
         }
+      });
+
+      // Random range inputs live-update
+      elements.randomMin.addEventListener('input', () => {
+        const val = elements.exampleSelector.value;
+        if (val === 'random_ints') generateAndPopulateRandom('int');
+        else if (val === 'random_floats') generateAndPopulateRandom('float');
+      });
+
+      elements.randomMax.addEventListener('input', () => {
+        const val = elements.exampleSelector.value;
+        if (val === 'random_ints') generateAndPopulateRandom('int');
+        else if (val === 'random_floats') generateAndPopulateRandom('float');
+      });
+
+      elements.randomCount.addEventListener('input', () => {
+        const val = elements.exampleSelector.value;
+        if (val === 'random_ints') generateAndPopulateRandom('int');
+        else if (val === 'random_floats') generateAndPopulateRandom('float');
+      });
+
+      // Regenerate button event listener with icon animation
+      elements.regenerateRandomBtn.addEventListener('click', () => {
+        const icon = elements.regenerateRandomBtn.querySelector('.refresh-icon');
+        if (icon) {
+          icon.classList.remove('spin-anim');
+          void icon.offsetWidth; // Trigger reflow to restart animation
+          icon.classList.add('spin-anim');
+        }
+
+        const val = elements.exampleSelector.value;
+        if (val === 'random_ints') generateAndPopulateRandom('int');
+        else if (val === 'random_floats') generateAndPopulateRandom('float');
       });
 
       // Theme toggle listeners
@@ -1425,7 +1550,7 @@
       // Copy Action
       elements.copyBtn.addEventListener('click', () => {
         const text = elements.outputCode.textContent;
-        
+
         if (navigator.clipboard && window.isSecureContext) {
           navigator.clipboard.writeText(text).then(() => {
             showPlainCopied();
@@ -1503,6 +1628,7 @@
         elements.variableName.value = 'my_list';
         elements.codeTemplate.value = 'list_only';
         elements.exampleSelector.value = '';
+        elements.randomRangeControls.style.display = 'none';
         convert();
         elements.itemsInput.focus();
       });
