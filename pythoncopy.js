@@ -1860,6 +1860,12 @@ import sys, builtins
             window.location.href = `reorder.html${query}`;
             return;
           }
+          if (button.dataset.action === 'create-list') {
+            const isDark = document.getElementById('dark-mode').checked;
+            const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
+            window.location.href = `to_list.html?${themeSuffix}`;
+            return;
+          }
 
           const starterUrl = button.dataset.url;
           document.getElementById('urlInput').value = starterUrl;

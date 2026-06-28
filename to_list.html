@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python List Maker — jsfun</title>
+  <meta name="description" content="A simple tool to convert items on separate lines into a formatted Python list." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <!-- Prism.js for code highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    id="prism-theme">
+
+  <!-- Icon SVG -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-light: rgba(59, 130, 246, 0.1);
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --header-bg: #ffffff;
+      --header-height: 64px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 12px;
+      --radius-sm: 6px;
+      --font-size-base: 16px;
+    }
+
+    body.dark-theme {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --header-bg: #1e1e1e;
+      --primary-light: rgba(59, 130, 246, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: var(--header-height);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Header styling */
+    #modeHeader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background-color: var(--header-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--text-color);
+    }
+
+    .brand svg {
+      color: var(--primary-color);
+      transition: transform 0.3s ease;
+    }
+
+    .brand:hover svg {
+      transform: rotate(90deg);
+    }
+
+    .visual-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .theme-toggle,
+    .font-size-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .theme-toggle label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .theme-toggle input[type="radio"] {
+      cursor: pointer;
+    }
+
+    .font-size-control input[type="range"] {
+      width: 80px;
+      cursor: pointer;
+      accent-color: var(--primary-color);
+    }
+
+    .header-link {
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      padding: 4px 8px;
+      font-size: 20px;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .header-link:hover {
+      transform: scale(1.1);
+      opacity: 0.9;
+    }
+
+    /* Main Container layout */
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 850px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Panels & Cards */
+    .panel {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Inputs */
+    textarea {
+      width: 100%;
+      height: 220px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: var(--font-size-base);
+      line-height: 1.5;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    textarea:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    /* Controls Grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 500px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .option-group-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .control-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .control-label input[type="checkbox"],
+    .control-label input[type="radio"] {
+      cursor: pointer;
+      accent-color: var(--primary-color);
+    }
+
+    .text-input {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: inherit;
+      outline: none;
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .text-input:focus {
+      border-color: var(--primary-color);
+    }
+
+    /* Buttons */
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-success {
+      background-color: #10b981;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #059669;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--border-color);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    /* Output Pre / Code */
+    .output-container {
+      position: relative;
+      flex: 1;
+      min-height: 250px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Overwrite prism default backgrounds */
+    pre[class*="language-"] {
+      margin: 0;
+      border-radius: 0;
+      flex: 1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: var(--font-size-base);
+      overflow: auto;
+      padding: 16px;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px;
+      background-color: var(--bg-color);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Footer styling */
+    footer {
+      text-align: center;
+      padding: 24px 16px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: auto;
+      background-color: var(--header-bg);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    footer a {
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    footer a.tea {
+      color: #e73c7e;
+    }
+  </style>
+</head>
+
+<body>
+  <header id="modeHeader">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+      Python List Maker
+    </div>
+
+    <div class="visual-controls">
+      <div class="theme-toggle" aria-label="Theme">
+        <label><input type="radio" id="light-mode" name="mode" value="light" checked> Light</label>
+        <label><input type="radio" id="dark-mode" name="mode" value="dark"> Dark</label>
+      </div>
+
+      <div class="font-size-control">
+        <label for="font-size" style="font-size: 12px;">A</label>
+        <input type="range" id="font-size" min="12" max="32" value="16">
+        <label for="font-size" style="font-size: 16px;">A</label>
+      </div>
+
+      <a href="pythoncopy.html" target="_blank" title="Python Code Lab" class="header-link">🐍</a>
+      <a href="computing.html" title="Computing Tools" class="header-link">🏠</a>
+      <a href="pythonmanual.html" target="_blank" title="Python Manual" class="header-link">ℹ️</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Left Panel: Input & Options -->
+    <section class="panel">
+      <h2 class="panel-title"
+        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <span>📥 Raw Items (One per line)</span>
+        <select id="exampleSelector"
+          style="font-size: 0.85rem; font-family: inherit; padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color); cursor: pointer; outline: none; font-weight: 500;">
+          <option value="">-- Choose Example --</option>
+          <option value="game_events">Unexpected Game Events</option>
+          <option value="superpowers">Ridiculous Superpowers</option>
+          <option value="bosses">Boss Battle Names</option>
+          <option value="treasure_items">Strange Treasure Items</option>
+          <option value="adventure_locations">Adventure Locations</option>
+          <option value="character_secrets">Character Secrets</option>
+          <option value="disney_princesses">Disney Princesses</option>
+          <option value="capital_cities">Capital Cities</option>
+          <option value="days_shook_world">Days That Shook the World</option>
+          <option value="pizza_toppings">Pizza Toppings</option>
+          <option value="funny_names">Funny Student Names</option>
+          <option value="cs_keywords">Computer Science Keywords</option>
+          <option value="homework_excuses">Funny Homework Excuses</option>
+          <option value="potion_ingredients">Magic Potion Ingredients</option>
+          <option value="future_jobs">Future Jobs (Year 2100)</option>
+          <option value="cuisines">Types of Cuisine</option>
+          <option value="hobbies">Hobbies & Free Time</option>
+          <option value="conversation_starters">Conversation Starters</option>
+          <option value="feelings">Feelings & Emotions (EAL)</option>
+          <option value="cs_stack">Stack (CS LIFO)</option>
+          <option value="cs_queue">Queue (CS FIFO)</option>
+          <option value="cs_singly_linked_list">Singly Linked List</option>
+          <option value="cs_doubly_linked_list">Doubly Linked List</option>
+          <option value="cs_circular_linked_list">Circular Linked List</option>
+        </select>
+      </h2>
+      <textarea id="itemsInput" placeholder="apple&#10;banana&#10;123&#10;3.14&#10;True&#10;cherry"
+        spellcheck="false"></textarea>
+
+      <div class="options-grid">
+        <!-- Option Group: Data Types -->
+        <div class="option-group">
+          <span class="option-group-title">Data Types</span>
+          <label class="control-label">
+            <input type="radio" name="dataType" value="auto" checked>
+            <span>Auto-detect types</span>
+          </label>
+          <label class="control-label">
+            <input type="radio" name="dataType" value="string">
+            <span>Force Strings</span>
+          </label>
+          <label class="control-label">
+            <input type="radio" name="dataType" value="number">
+            <span>Force Numbers</span>
+          </label>
+        </div>
+
+        <!-- Option Group: Formatting -->
+        <div class="option-group">
+          <span class="option-group-title">Formatting</span>
+          <label class="control-label">
+            <input type="radio" name="layout" value="multiline" checked>
+            <span>Multi-line (indented)</span>
+          </label>
+          <label class="control-label">
+            <input type="radio" name="layout" value="singleline">
+            <span>Single line</span>
+          </label>
+          <label class="control-label" id="quoteOptionLabel">
+            <input type="checkbox" id="doubleQuotes" checked>
+            <span>Use Double Quotes</span>
+          </label>
+        </div>
+
+        <!-- Option Group: Cleanup -->
+        <div class="option-group">
+          <span class="option-group-title">Clean & Filter</span>
+          <label class="control-label">
+            <input type="checkbox" id="trimSpaces" checked>
+            <span>Trim whitespace</span>
+          </label>
+          <label class="control-label">
+            <input type="checkbox" id="skipEmpty" checked>
+            <span>Ignore empty lines</span>
+          </label>
+          <label class="control-label">
+            <input type="checkbox" id="removeDuplicates">
+            <span>Remove duplicates</span>
+          </label>
+        </div>
+
+        <!-- Option Group: Sorting -->
+        <div class="option-group">
+          <span class="option-group-title">Sorting</span>
+          <label class="control-label">
+            <input type="radio" name="sortOrder" value="none" checked>
+            <span>No sorting</span>
+          </label>
+          <label class="control-label">
+            <input type="radio" name="sortOrder" value="asc">
+            <span>Sort Ascending</span>
+          </label>
+          <label class="control-label">
+            <input type="radio" name="sortOrder" value="desc">
+            <span>Sort Descending</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="option-group" style="margin-top: 8px;">
+        <label for="variableName" style="font-size: 0.9rem; font-weight: 600; color: var(--text-color);">List
+          Name</label>
+        <input type="text" id="variableName" class="text-input" value="my_list"
+          placeholder="e.g. my_list (leave blank for raw list)">
+      </div>
+
+      <div class="option-group" style="margin-top: 8px;">
+        <label for="codeTemplate" style="font-size: 0.9rem; font-weight: 600; color: var(--text-color);">Python Code
+          Template</label>
+        <select id="codeTemplate" class="text-input"
+          style="cursor: pointer; padding: 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color); outline: none;">
+          <option value="list_only">Create list only (my_list = [...])</option>
+          <option value="print_list">Print whole list</option>
+          <option value="print_each">Print each item (for loop)</option>
+          <option value="pick_random">Pick a random item (requires random)</option>
+          <option value="numbered_menu">Create a numbered menu</option>
+          <option value="check_exists">Search / Check if item is in list</option>
+          <option value="list_length">Print list size / length</option>
+          <option value="stack_lifo">Stack operations (LIFO)</option>
+          <option value="queue_fifo">Queue operations (FIFO)</option>
+          <option value="singly_linked_list">Singly Linked List Traversal</option>
+          <option value="doubly_linked_list">Doubly Linked List Traversal</option>
+          <option value="circular_linked_list">Circular Linked List Traversal</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Right Panel: Output & Actions -->
+    <section class="panel">
+      <h2 class="panel-title">
+        <span>📤 Formatted Python Code</span>
+      </h2>
+
+      <div class="output-container">
+        <div class="stats-bar">
+          <span id="itemCountLabel">Items: 0</span>
+          <span id="statusMessage">Live Preview</span>
+        </div>
+        <pre><code id="outputCode" class="language-python"># Output list will appear here...</code></pre>
+      </div>
+
+      <div class="button-row">
+        <button class="btn btn-primary" id="copyBtn">
+          <span>📋 Copy Code</span>
+        </button>
+        <button class="btn" id="copyForDocsBtn" style="background-color: #8b5cf6; color: white;" title="Copy with formatting and line numbers for Google Docs / Word">
+          <span>📄 Copy for Docs</span>
+        </button>
+        <button class="btn btn-success" id="openCodeLabBtn">
+          <span>🚀 Open in Python Code Lab</span>
+        </button>
+        <button class="btn btn-secondary" id="clearBtn">
+          <span>🗑️ Clear</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Made with ❤️ for better thinking. If it helped you, support the project.
+      <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+      <br>
+      <a href="computing.html" class="computing-link">More Computing Tools</a>
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.85rem;">
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
+      James Abela 2026
+    </p>
+  </footer>
+
+  <!-- Script Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+  <script>
+    // State management variables
+    const state = {
+      theme: 'light',
+      fontSize: 16
+    };
+
+    // Cache elements
+    const elements = {
+      itemsInput: document.getElementById('itemsInput'),
+      dataTypeRadios: document.getElementsByName('dataType'),
+      layoutRadios: document.getElementsByName('layout'),
+      doubleQuotes: document.getElementById('doubleQuotes'),
+      quoteOptionLabel: document.getElementById('quoteOptionLabel'),
+      trimSpaces: document.getElementById('trimSpaces'),
+      skipEmpty: document.getElementById('skipEmpty'),
+      removeDuplicates: document.getElementById('removeDuplicates'),
+      sortRadios: document.getElementsByName('sortOrder'),
+      variableName: document.getElementById('variableName'),
+      outputCode: document.getElementById('outputCode'),
+      itemCountLabel: document.getElementById('itemCountLabel'),
+      statusMessage: document.getElementById('statusMessage'),
+      copyBtn: document.getElementById('copyBtn'),
+      copyForDocsBtn: document.getElementById('copyForDocsBtn'),
+      openCodeLabBtn: document.getElementById('openCodeLabBtn'),
+      clearBtn: document.getElementById('clearBtn'),
+      lightModeRadio: document.getElementById('light-mode'),
+      darkModeRadio: document.getElementById('dark-mode'),
+      fontSizeSlider: document.getElementById('font-size'),
+      codeTemplate: document.getElementById('codeTemplate'),
+      exampleSelector: document.getElementById('exampleSelector')
+    };
+
+    // --- Theme & Font Settings ---
+    function initTheme() {
+      // Check query param theme first
+      const params = new URLSearchParams(window.location.search);
+      let activeTheme = params.get('theme');
+
+      // Fallback to localStorage
+      if (!activeTheme) {
+        activeTheme = localStorage.getItem('to_list_theme');
+      }
+
+      // Default to light
+      if (!activeTheme || (activeTheme !== 'light' && activeTheme !== 'dark')) {
+        activeTheme = 'light';
+      }
+
+      setTheme(activeTheme);
+    }
+
+    function setTheme(theme) {
+      state.theme = theme;
+      if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+        elements.darkModeRadio.checked = true;
+        elements.lightModeRadio.checked = false;
+        document.getElementById('prism-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css';
+      } else {
+        document.body.classList.remove('dark-theme');
+        elements.darkModeRadio.checked = false;
+        elements.lightModeRadio.checked = true;
+        document.getElementById('prism-theme').href = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css';
+      }
+      localStorage.setItem('to_list_theme', theme);
+    }
+
+    function initFontSize() {
+      const savedSize = localStorage.getItem('to_list_font_size');
+      if (savedSize) {
+        const sz = parseInt(savedSize, 10);
+        if (sz >= 12 && sz <= 32) {
+          state.fontSize = sz;
+          elements.fontSizeSlider.value = sz;
+        }
+      }
+      applyFontSize();
+    }
+
+    function applyFontSize() {
+      document.documentElement.style.setProperty('--font-size-base', `${state.fontSize}px`);
+      localStorage.setItem('to_list_font_size', state.fontSize);
+    }
+
+    // --- Converter Business Logic ---
+    function convert() {
+      const rawText = elements.itemsInput.value;
+      const lines = rawText.split('\n');
+
+      // 1. Text cleanups
+      let items = lines.map(line => {
+        return elements.trimSpaces.checked ? line.trim() : line;
+      });
+
+      if (elements.skipEmpty.checked) {
+        items = items.filter(item => item !== '');
+      }
+
+      // 2. Type parsing
+      const selectedDataType = Array.from(elements.dataTypeRadios).find(r => r.checked).value;
+      const useDoubleQuotes = elements.doubleQuotes.checked;
+      const quoteChar = useDoubleQuotes ? '"' : "'";
+
+      let parsedItems = items.map(item => {
+        if (selectedDataType === 'string') {
+          return formatString(item, quoteChar);
+        } else if (selectedDataType === 'number') {
+          const num = Number(item);
+          if (isNaN(num)) {
+            // Fallback to string representation if it's not a valid number
+            return formatString(item, quoteChar);
+          }
+          return num;
+        } else {
+          // Auto-detect mode
+          // Booleans and None
+          const lower = item.toLowerCase();
+          if (lower === 'true') return 'True';
+          if (lower === 'false') return 'False';
+          if (lower === 'none' || lower === 'null') return 'None';
+
+          // Numeric check
+          if (item !== '' && !isNaN(Number(item))) {
+            return Number(item);
+          }
+
+          // Default is string
+          return formatString(item, quoteChar);
+        }
+      });
+
+      // 3. Deduplication
+      if (elements.removeDuplicates.checked) {
+        // We preserve type differences and clean duplicates
+        const seen = new Set();
+        parsedItems = parsedItems.filter(item => {
+          const key = typeof item + '|' + item;
+          if (seen.has(key)) {
+            return false;
+          }
+          seen.add(key);
+          return true;
+        });
+      }
+
+      // 4. Sorting
+      const selectedSort = Array.from(elements.sortRadios).find(r => r.checked).value;
+      if (selectedSort !== 'none') {
+        parsedItems.sort((a, b) => {
+          // Coerce to comparable forms
+          const valA = String(a).toLowerCase();
+          const valB = String(b).toLowerCase();
+
+          if (!isNaN(a) && !isNaN(b)) {
+            return Number(a) - Number(b);
+          }
+
+          return valA.localeCompare(valB);
+        });
+
+        if (selectedSort === 'desc') {
+          parsedItems.reverse();
+        }
+      }
+
+      // 5. Output Formatting
+      const selectedLayout = Array.from(elements.layoutRadios).find(r => r.checked).value;
+      const rawVarName = elements.variableName.value.trim();
+      const varName = rawVarName !== '' ? rawVarName.replace(/[^a-zA-Z0-9_]/g, '_') : 'my_list';
+
+      let listStr = '';
+      if (parsedItems.length === 0) {
+        listStr = '[]';
+      } else if (selectedLayout === 'singleline') {
+        listStr = '[' + parsedItems.join(', ') + ']';
+      } else {
+        // Multi-line
+        const indented = parsedItems.map(item => `    ${item}`).join(',\n');
+        listStr = `[\n${indented}\n]`;
+      }
+
+      const template = elements.codeTemplate.value;
+      let finalCode = '';
+
+      if (template === 'list_only') {
+        if (rawVarName !== '') {
+          finalCode = `${varName} = ${listStr}`;
+        } else {
+          finalCode = listStr;
+        }
+      } else if (template === 'print_list') {
+        finalCode = `${varName} = ${listStr}\n\nprint(${varName})`;
+      } else if (template === 'print_each') {
+        finalCode = `${varName} = ${listStr}\n\nfor item in ${varName}:\n    print(item)`;
+      } else if (template === 'pick_random') {
+        finalCode = `import random\n\n${varName} = ${listStr}\n\nrandom_item = random.choice(${varName})\nprint("Random item:", random_item)`;
+      } else if (template === 'numbered_menu') {
+        finalCode = `${varName} = ${listStr}\n\nfor i in range(len(${varName})):\n    print(f"{i + 1}. {${varName}[i]}")`;
+      } else if (template === 'check_exists') {
+        finalCode = `${varName} = ${listStr}\n\nuser_search = input("Enter an item to search for: ")\nif user_search in ${varName}:\n    print(f"Yes, '{user_search}' is in the list!")\nelse:\n    print(f"No, '{user_search}' is not in the list.")`;
+      } else if (template === 'list_length') {
+        finalCode = `${varName} = ${listStr}\n\nprint(f"The list has {len(${varName})} items.")`;
+      } else if (template === 'stack_lifo') {
+        finalCode = `# Initialize stack\n${varName} = ${listStr}\n\ndef push(stack, item):\n    stack.append(item)\n    print(f"Pushed: {item}")\n\ndef pop(stack):\n    if not stack:\n        print("Stack is empty!")\n        return None\n    item = stack.pop()\n    print(f"Popped: {item}")\n    return item\n\n# Example usage:\npush(${varName}, "New Item")\npop(${varName})\nprint("Remaining stack:", ${varName})`;
+      } else if (template === 'queue_fifo') {
+        finalCode = `# Initialize queue\n${varName} = ${listStr}\n\ndef enqueue(queue, item):\n    queue.append(item)\n    print(f"Enqueued: {item}")\n\ndef dequeue(queue):\n    if not queue:\n        print("Queue is empty!")\n        return None\n    item = queue.pop(0)\n    print(f"Dequeued: {item}")\n    return item\n\n# Example usage:\nenqueue(${varName}, "New Item")\ndequeue(${varName})\nprint("Remaining queue:", ${varName})`;
+      } else if (template === 'singly_linked_list') {
+        finalCode = `# Initialize singly linked list items\nitems = ${listStr}\n\nclass Node:\n    def __init__(self, data):\n        self.data = data\n        self.next = None\n\ndef create_singly_linked_list(items):\n    if not items:\n        return None\n    nodes = [Node(item) for item in items]\n    for i in range(len(nodes) - 1):\n        nodes[i].next = nodes[i + 1]\n    return nodes[0]\n\ndef print_singly_linked_list(head):\n    current = head\n    while current:\n        print(current.data, end=" -> ")\n        current = current.next\n    print("None")\n\nhead = create_singly_linked_list(items)\n\n# Traverse and print list\nprint_singly_linked_list(head)`;
+      } else if (template === 'doubly_linked_list') {
+        finalCode = `# Initialize doubly linked list items\nitems = ${listStr}\n\nclass DoublyNode:\n    def __init__(self, data):\n        self.data = data\n        self.next = None\n        self.prev = None\n\ndef create_doubly_linked_list(items):\n    if not items:\n        return None\n    nodes = [DoublyNode(item) for item in items]\n    for i in range(len(nodes) - 1):\n        nodes[i].next = nodes[i + 1]\n        nodes[i + 1].prev = nodes[i]\n    return nodes[0]\n\ndef print_doubly_linked_list(head):\n    print("Forward traversal:")\n    current = head\n    tail = None\n    while current:\n        print(current.data, end=" <-> ")\n        if not current.next:\n            tail = current\n        current = current.next\n    print("None")\n    \n    print("Backward traversal:")\n    current = tail\n    while current:\n        print(current.data, end=" <-> ")\n        current = current.prev\n    print("None")\n\nhead = create_doubly_linked_list(items)\n\n# Traverse forward and backward\nprint_doubly_linked_list(head)`;
+      } else if (template === 'circular_linked_list') {
+        finalCode = `# Initialize circular linked list items\nitems = ${listStr}\n\nclass Node:\n    def __init__(self, data):\n        self.data = data\n        self.next = None\n\ndef create_circular_linked_list(items):\n    if not items:\n        return None\n    nodes = [Node(item) for item in items]\n    for i in range(len(nodes) - 1):\n        nodes[i].next = nodes[i + 1]\n    nodes[-1].next = nodes[0]\n    return nodes[0]\n\ndef print_circular_linked_list(head, max_steps):\n    if not head:\n        print("Empty circular list")\n        return\n    current = head\n    count = 0\n    while current and count < max_steps:\n        print(current.data, end=" -> ")\n        current = current.next\n        count += 1\n    print("...")\n\nhead = create_circular_linked_list(items)\n\n# Traverse circular list (show 2 cycles to demonstrate loop)\nprint_circular_linked_list(head, max_steps=len(items) * 2)`;
+      }
+
+      // Update UI
+      elements.outputCode.textContent = finalCode;
+      Prism.highlightElement(elements.outputCode);
+
+      elements.itemCountLabel.textContent = `Items: ${parsedItems.length}`;
+    }
+
+    // Escape and format strings
+    function formatString(str, quoteChar) {
+      // Escape characters according to quote choice
+      let escaped = str;
+      if (quoteChar === '"') {
+        escaped = escaped.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+      } else {
+        escaped = escaped.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      }
+      return `${quoteChar}${escaped}${quoteChar}`;
+    }
+
+    // Copy with syntax coloring and line numbers for word processors (Google Docs, Word, etc.)
+    async function copyForDocs() {
+      const code = elements.outputCode.textContent;
+      const isDarkMode = state.theme === 'dark';
+
+      // Define theme colors for the pasted document
+      const theme = isDarkMode ? {
+        bg: '#1e1e1e',
+        text: '#d4d4d4',
+        gutterBg: '#2d2d2d',
+        gutterText: '#858585',
+        comment: '#6a9955',
+        keyword: '#569cd6',
+        string: '#ce9178',
+        number: '#b5cea8',
+        operator: '#d4d4d4'
+      } : {
+        bg: '#ffffff',
+        text: '#333333',
+        gutterBg: '#f0f0f0',
+        gutterText: '#999999',
+        comment: '#008000',
+        keyword: '#0000ff',
+        string: '#a31515',
+        number: '#098658',
+        operator: '#333333'
+      };
+
+      const lines = code.split('\n');
+      let tableHtml = `<div style="background-color: ${theme.bg}; padding: 15px; border-radius: 10px; border: 1px solid #ccc; display: inline-block; min-width: 100%;">`;
+      tableHtml += `<table cellspacing="0" cellpadding="0" style="border-collapse: collapse; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 11pt; background: ${theme.bg}; color: ${theme.text};">`;
+
+      for (let i = 0; i < lines.length; i++) {
+        const lineNum = i + 1;
+        const lineCode = lines[i] || ' ';
+
+        let highlighted = lineCode;
+        try {
+          highlighted = Prism.highlight(lineCode, Prism.languages.python, 'python');
+        } catch (e) {
+          highlighted = lineCode.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        const styledCode = highlighted
+          .replace(/class="token comment"/g, `style="color: ${theme.comment}; font-style: italic;"`)
+          .replace(/class="token keyword"/g, `style="color: ${theme.keyword}; font-weight: bold;"`)
+          .replace(/class="token string"/g, `style="color: ${theme.string};"`)
+          .replace(/class="token number"/g, `style="color: ${theme.number};"`)
+          .replace(/class="token (punctuation|operator)"/g, `style="color: ${theme.operator};"`);
+
+        tableHtml += `<tr style="padding:0; margin:0; line-height:1.2;"><td width="60" style="width:60px; padding:0 10px 0 0; margin:0; background-color:${theme.gutterBg}; color:${theme.gutterText}; text-align:right; border-right:3px solid #3b82f6; vertical-align:top; font-size:10pt; font-weight:bold; white-space:nowrap; line-height:1.2;">${lineNum}</td><td style="padding:0 0 0 15px; margin:0; white-space:pre; vertical-align:top; line-height:1.2; font-family:'Consolas', 'Monaco', 'Courier New', monospace;">${styledCode}</td></tr>`;
+      }
+      tableHtml += '</table></div>';
+
+      let success = false;
+
+      // Only attempt modern Clipboard API in secure contexts and if supported
+      if (navigator.clipboard && window.ClipboardItem && window.isSecureContext) {
+        try {
+          const blob = new Blob([tableHtml], { type: 'text/html' });
+          const plainBlob = new Blob([code], { type: 'text/plain' });
+
+          // Wrap blobs in Promises to avoid Safari's strict security restrictions
+          const data = [new ClipboardItem({
+            'text/html': Promise.resolve(blob),
+            'text/plain': Promise.resolve(plainBlob)
+          })];
+          await navigator.clipboard.write(data);
+          success = true;
+        } catch (err) {
+          console.warn('Modern Clipboard API failed, attempting fallback...', err);
+        }
+      }
+
+      // Fallback: Use selection range + execCommand('copy') which works in non-secure (e.g. file://) contexts
+      if (!success) {
+        try {
+          const div = document.createElement('div');
+          div.innerHTML = tableHtml;
+          div.style.position = 'fixed';
+          div.style.left = '-9999px';
+          document.body.appendChild(div);
+
+          const range = document.createRange();
+          range.selectNode(div);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+          document.body.removeChild(div);
+          success = true;
+        } catch (err) {
+          console.error('Copy fallback failed:', err);
+        }
+      }
+
+      if (success) {
+        const originalBtnText = elements.copyForDocsBtn.innerHTML;
+        elements.copyForDocsBtn.innerHTML = '<span>Copied! ✅</span>';
+        elements.statusMessage.textContent = 'Copied for Docs! 📄';
+        elements.statusMessage.style.color = '#8b5cf6';
+        setTimeout(() => {
+          elements.copyForDocsBtn.innerHTML = originalBtnText;
+          elements.statusMessage.textContent = 'Live Preview';
+          elements.statusMessage.style.color = '';
+        }, 3000);
+      } else {
+        elements.statusMessage.textContent = 'Copy failed ❌';
+        elements.statusMessage.style.color = '#ef4444';
+      }
+    }
+
+    // --- Example Presets Data ---
+    const EXAMPLES = {
+      game_events: {
+        varName: "game_events",
+        items: [
+          "A mysterious portal opens behind you.",
+          "Your weapon suddenly starts talking.",
+          "A tiny dragon decides to follow you.",
+          "The floor disappears.",
+          "You find a map with your name written on it.",
+          "Every enemy freezes for ten seconds.",
+          "A stranger offers you a suspicious deal.",
+          "Your backpack begins glowing.",
+          "The lights go out and something starts moving.",
+          "You discover a room that should not exist.",
+          "A robot mistakes you for its commander.",
+          "Your health doubles, but your speed is halved.",
+          "A hidden door opens in the wall.",
+          "The final boss asks for your help.",
+          "You wake up at the beginning of the level."
+        ]
+      },
+      superpowers: {
+        varName: "superpowers",
+        items: [
+          "turning homework into pizza",
+          "pausing time for five seconds",
+          "talking to vending machines",
+          "summoning an army of ducks",
+          "becoming invisible when nobody is looking",
+          "running at super speed, but only backwards",
+          "controlling Wi-Fi signals",
+          "hearing people's thoughts during tests",
+          "opening portals to random places",
+          "turning any object into jelly",
+          "controlling the weather with dance moves",
+          "speaking every language except your own",
+          "teleporting exactly one metre",
+          "bringing drawings to life",
+          "changing size whenever you sneeze"
+        ]
+      },
+      bosses: {
+        varName: "bosses",
+        items: [
+          "The Homework Devourer",
+          "Captain Blue Screen",
+          "The Infinite Loading Circle",
+          "Professor Syntax",
+          "The Wi-Fi Phantom",
+          "The Queen of Missing Semicolons",
+          "The Giant Mutant Pigeon",
+          "Lord Lag",
+          "The Keeper of the Last Save File",
+          "The Spreadsheet Sorcerer",
+          "The Headteacher from Dimension X",
+          "The Unskippable Tutorial",
+          "The Password Goblin",
+          "The Final Exam",
+          "The Printer That Never Works"
+        ]
+      },
+      treasure_items: {
+        varName: "treasure_items",
+        items: [
+          "a golden key labelled DO NOT USE",
+          "a sandwich that is still warm",
+          "a sword made entirely from glass",
+          "a map showing a secret tunnel under the school",
+          "a phone with one message from the future",
+          "a tiny crown made for a hamster",
+          "a potion that changes flavour every second",
+          "a pair of socks that make you invisible",
+          "a broken robot eye",
+          "a coin that always lands on its edge",
+          "a notebook containing tomorrow's homework answers",
+          "a button that says ABSOLUTELY DO NOT PRESS",
+          "a jar containing a miniature thunderstorm",
+          "a compass that points towards danger",
+          "a ticket for a train that does not exist"
+        ]
+      },
+      adventure_locations: {
+        varName: "adventure_locations",
+        items: [
+          "an abandoned theme park that switches itself on at midnight",
+          "a city floating above the clouds",
+          "a secret laboratory underneath the school",
+          "a jungle filled with robot dinosaurs",
+          "a shopping centre after every human has disappeared",
+          "a castle trapped inside a computer game",
+          "a moon base with one missing astronaut",
+          "a haunted gaming arcade",
+          "a submarine at the bottom of an unknown ocean",
+          "a village where everyone has stopped moving",
+          "a space station controlled by a confused AI",
+          "a library where the books rewrite themselves",
+          "a desert filled with buried machines",
+          "an island that appears for only one hour each year",
+          "a school where every classroom leads to a different world"
+        ]
+      },
+      character_secrets: {
+        varName: "character_secrets",
+        items: [
+          "They are secretly an escaped robot.",
+          "They can see ten seconds into the future.",
+          "They stole something from the main villain.",
+          "They have no memory of the past year.",
+          "They are being followed by a mysterious drone.",
+          "They are actually the lost ruler of another world.",
+          "They know the location of a hidden treasure.",
+          "They accidentally caused the disaster.",
+          "They can understand what animals are saying.",
+          "They are slowly turning invisible.",
+          "They have received messages from their future self.",
+          "They are pretending to be less powerful than they really are.",
+          "They are carrying an object everyone else is searching for.",
+          "They are the only person who remembers the old world.",
+          "They have been given one day to save their city."
+        ]
+      },
+      disney_princesses: {
+        varName: "disney_princesses",
+        items: [
+          "Snow White",
+          "Cinderella",
+          "Aurora",
+          "Ariel",
+          "Belle",
+          "Jasmine",
+          "Pocahontas",
+          "Mulan",
+          "Tiana",
+          "Rapunzel",
+          "Merida",
+          "Moana",
+          "Raya"
+        ]
+      },
+      cuisines: {
+        varName: "cuisines",
+        items: [
+          "Italian",
+          "Chinese",
+          "Indian",
+          "Mexican",
+          "Japanese",
+          "Thai",
+          "French",
+          "Spanish",
+          "Greek",
+          "Turkish",
+          "Vietnamese",
+          "Lebanese"
+        ]
+      },
+      hobbies: {
+        varName: "hobbies",
+        items: [
+          "Reading books",
+          "Playing video games",
+          "Drawing and painting",
+          "Playing football",
+          "Swimming",
+          "Cooking and baking",
+          "Listening to music",
+          "Photography",
+          "Playing the guitar",
+          "Gardening",
+          "Dancing",
+          "Travelling"
+        ]
+      },
+      conversation_starters: {
+        varName: "conversation_starters",
+        items: [
+          "What is your favourite movie and why?",
+          "If you could travel anywhere, where would you go?",
+          "What is the best book you have ever read?",
+          "Do you have any pets?",
+          "What hobbies do you enjoy on the weekend?",
+          "What is your favourite season of the year?",
+          "If you could meet any famous person, who would it be?",
+          "What is your favourite school subject?",
+          "What makes you laugh the most?"
+        ]
+      },
+      feelings: {
+        varName: "feelings",
+        items: [
+          "Happy",
+          "Sad",
+          "Excited",
+          "Tired",
+          "Angry",
+          "Nervous",
+          "Proud",
+          "Surprised",
+          "Confused",
+          "Bored",
+          "Calm",
+          "Scared"
+        ]
+      },
+      capital_cities: {
+        varName: "capital_cities",
+        items: [
+          "London",
+          "Paris",
+          "Tokyo",
+          "Canberra",
+          "Kuala Lumpur",
+          "Wellington",
+          "Ottawa",
+          "Brasilia",
+          "Cairo",
+          "Nairobi",
+          "Bangkok",
+          "Seoul",
+          "Madrid",
+          "Rome",
+          "Athens",
+          "Buenos Aires",
+          "Mexico City",
+          "New Delhi",
+          "Hanoi",
+          "Reykjavik"
+        ]
+      },
+      days_shook_world: {
+        varName: "days_that_shook_the_world",
+        items: [
+          "The assassination of Julius Caesar",
+          "The signing of the Magna Carta",
+          "Christopher Columbus reaches the Americas",
+          "The Gunpowder Plot",
+          "The Great Fire of London",
+          "The signing of the American Declaration of Independence",
+          "The storming of the Bastille",
+          "The Battle of Waterloo",
+          "The first powered flight by the Wright brothers",
+          "The sinking of the Titanic",
+          "The outbreak of the First World War",
+          "The Wall Street Crash",
+          "The outbreak of the Second World War",
+          "The attack on Pearl Harbor",
+          "D-Day",
+          "The dropping of the atomic bomb on Hiroshima",
+          "The first human in space",
+          "The assassination of John F. Kennedy",
+          "The Apollo 11 Moon landing",
+          "The fall of the Berlin Wall",
+          "The release of Nelson Mandela",
+          "The September 11 attacks",
+          "The Indian Ocean tsunami",
+          "The declaration of the COVID-19 pandemic"
+        ]
+      },
+      pizza_toppings: {
+        varName: "pizza_toppings",
+        items: [
+          "Pepperoni",
+          "Mushrooms",
+          "Onions",
+          "Pineapple",
+          "Black Olives",
+          "Green Peppers",
+          "Extra Cheese",
+          "Ham",
+          "Sweetcorn",
+          "Jalapenos"
+        ]
+      },
+      funny_names: {
+        varName: "student_names",
+        items: [
+          "Barnaby Bubblewrap",
+          "Penelope Pancake",
+          "Professor Wigglebottom",
+          "Sir Fluffington",
+          "Duchess Jellybean",
+          "Commander Custard",
+          "Baron Von Popcorn",
+          "Mildred Mustard",
+          "Archie Avocado"
+        ]
+      },
+      cs_keywords: {
+        varName: "computer_science_keywords",
+        items: [
+          "Variable",
+          "Constant",
+          "Selection",
+          "Iteration",
+          "Function",
+          "Procedure",
+          "Parameter",
+          "Array",
+          "Boolean",
+          "String",
+          "Integer",
+          "Float",
+          "Recursion",
+          "Algorithm"
+        ]
+      },
+      homework_excuses: {
+        varName: "homework_excuses",
+        items: [
+          "My dog ate it.",
+          "It blew away in a sudden gust of wind.",
+          "I accidentally dropped it in a portal.",
+          "My robot butler cleaned it up.",
+          "It got wet in a sudden rainstorm inside my room.",
+          "I wrote it in invisible ink and forgot where I put it.",
+          "A tiny dragon set it on fire.",
+          "It was stolen by code goblins.",
+          "I left it in a dream I had last night."
+        ]
+      },
+      potion_ingredients: {
+        varName: "potion_ingredients",
+        items: [
+          "Eye of newt",
+          "Bat wing dust",
+          "Frosted starlight",
+          "Dragon scale powder",
+          "Crushed moonlight",
+          "Drop of morning dew",
+          "Bubbling magma syrup",
+          "Whispering grass seed",
+          "Liquid shadow"
+        ]
+      },
+      future_jobs: {
+        varName: "future_jobs",
+        items: [
+          "Robot psychologist",
+          "Space tour guide",
+          "Asteroid miner",
+          "AI trainer",
+          "Cloud sculptor",
+          "Time travel agent",
+          "Quantum computer programmer",
+          "Cybersecurity agent for smart homes",
+          "Virtual reality architect"
+        ]
+      },
+      cs_stack: {
+        varName: "stack",
+        items: [
+          "Bottom Book",
+          "Middle Book",
+          "Top Book",
+          "New Book"
+        ]
+      },
+      cs_queue: {
+        varName: "queue",
+        items: [
+          "Customer 1",
+          "Customer 2",
+          "Customer 3",
+          "Customer 4"
+        ]
+      },
+      cs_singly_linked_list: {
+        varName: "singly_linked_list",
+        items: [
+          "Head Node",
+          "Second Node",
+          "Third Node",
+          "Tail Node"
+        ]
+      },
+      cs_doubly_linked_list: {
+        varName: "doubly_linked_list",
+        items: [
+          "First Node",
+          "Second Node",
+          "Third Node",
+          "Last Node"
+        ]
+      },
+      cs_circular_linked_list: {
+        varName: "circular_linked_list",
+        items: [
+          "Node 1",
+          "Node 2",
+          "Node 3",
+          "Node 4"
+        ]
+      }
+    };
+
+    // --- Event Listeners & Actions ---
+    function setupEventListeners() {
+      // Input textarea
+      elements.itemsInput.addEventListener('input', convert);
+
+      // Radios and Checkboxes
+      const inputs = [
+        ...Array.from(elements.dataTypeRadios),
+        ...Array.from(elements.layoutRadios),
+        elements.doubleQuotes,
+        elements.trimSpaces,
+        elements.skipEmpty,
+        elements.removeDuplicates,
+        ...Array.from(elements.sortRadios)
+      ];
+
+      inputs.forEach(input => {
+        input.addEventListener('change', () => {
+          // Disable quote option if force number is checked and check isn't auto
+          const dataType = Array.from(elements.dataTypeRadios).find(r => r.checked).value;
+          if (dataType === 'number') {
+            elements.doubleQuotes.disabled = true;
+            elements.quoteOptionLabel.style.opacity = 0.5;
+          } else {
+            elements.doubleQuotes.disabled = false;
+            elements.quoteOptionLabel.style.opacity = 1;
+          }
+          convert();
+        });
+      });
+
+      // Variable name
+      elements.variableName.addEventListener('input', convert);
+
+      // Code template
+      elements.codeTemplate.addEventListener('change', convert);
+
+      // Example preset loader
+      elements.exampleSelector.addEventListener('change', () => {
+        const val = elements.exampleSelector.value;
+        if (val && EXAMPLES[val]) {
+          const ex = EXAMPLES[val];
+          elements.itemsInput.value = ex.items.join('\n');
+          elements.variableName.value = ex.varName;
+          
+          // Auto-select template if it matches a data structure
+          if (val === 'cs_stack') {
+            elements.codeTemplate.value = 'stack_lifo';
+          } else if (val === 'cs_queue') {
+            elements.codeTemplate.value = 'queue_fifo';
+          } else if (val === 'cs_singly_linked_list') {
+            elements.codeTemplate.value = 'singly_linked_list';
+          } else if (val === 'cs_doubly_linked_list') {
+            elements.codeTemplate.value = 'doubly_linked_list';
+          } else if (val === 'cs_circular_linked_list') {
+            elements.codeTemplate.value = 'circular_linked_list';
+          }
+          
+          convert();
+        }
+      });
+
+      // Theme toggle listeners
+      elements.lightModeRadio.addEventListener('change', () => setTheme('light'));
+      elements.darkModeRadio.addEventListener('change', () => setTheme('dark'));
+
+      // Font size slider
+      elements.fontSizeSlider.addEventListener('input', (e) => {
+        state.fontSize = parseInt(e.target.value, 10);
+        applyFontSize();
+      });
+
+      // Copy Action
+      elements.copyBtn.addEventListener('click', () => {
+        const text = elements.outputCode.textContent;
+        
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(() => {
+            showPlainCopied();
+          }).catch(err => {
+            console.warn('writeText failed, using fallback:', err);
+            fallbackPlainCopy(text);
+          });
+        } else {
+          fallbackPlainCopy(text);
+        }
+      });
+
+      function fallbackPlainCopy(text) {
+        try {
+          const textArea = document.createElement('textarea');
+          textArea.value = text;
+          textArea.style.position = 'fixed';
+          textArea.style.top = '0';
+          textArea.style.left = '-9999px';
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          showPlainCopied();
+        } catch (err) {
+          console.error('Fallback plain copy failed:', err);
+          elements.statusMessage.textContent = 'Copy failed ❌';
+          elements.statusMessage.style.color = '#ef4444';
+        }
+      }
+
+      function showPlainCopied() {
+        const originalBtnText = elements.copyBtn.innerHTML;
+        elements.copyBtn.innerHTML = '<span>Copied! ✅</span>';
+        elements.statusMessage.textContent = 'Copied! ✅';
+        elements.statusMessage.style.color = '#10b981';
+        setTimeout(() => {
+          elements.copyBtn.innerHTML = originalBtnText;
+          elements.statusMessage.textContent = 'Live Preview';
+          elements.statusMessage.style.color = '';
+        }, 3000);
+      }
+
+      // Copy For Docs Action
+      elements.copyForDocsBtn.addEventListener('click', copyForDocs);
+
+      // Open in Python Code Lab action
+      elements.openCodeLabBtn.addEventListener('click', () => {
+        const text = elements.outputCode.textContent;
+        if (!text.trim()) return;
+
+        let base64 = '';
+        try {
+          const utf8Bytes = new TextEncoder().encode(text);
+          let binary = '';
+          for (let i = 0; i < utf8Bytes.length; i++) {
+            binary += String.fromCharCode(utf8Bytes[i]);
+          }
+          base64 = btoa(binary);
+        } catch (err) {
+          console.error('Failed to encode code:', err);
+          alert('Could not encode the list for Python Code Lab.');
+          return;
+        }
+
+        const themeSuffix = state.theme === 'dark' ? '&theme=dark' : '&theme=light';
+        const url = `pythoncopy.html?code=${encodeURIComponent(base64)}${themeSuffix}`;
+        window.open(url, '_blank');
+      });
+
+      // Clear action
+      elements.clearBtn.addEventListener('click', () => {
+        elements.itemsInput.value = '';
+        elements.variableName.value = 'my_list';
+        elements.codeTemplate.value = 'list_only';
+        elements.exampleSelector.value = '';
+        convert();
+        elements.itemsInput.focus();
+      });
+    }
+
+    // --- Initialize ---
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initFontSize();
+      setupEventListeners();
+      convert(); // Initial run
+    });
+  </script>
+</body>
+
+</html>

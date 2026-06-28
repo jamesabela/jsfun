@@ -36,6 +36,14 @@
         "isExternal": false
       },
       {
+        "title": "Python List Maker",
+        "emoji": "📋",
+        "url": "to_list.html",
+        "desc": "Convert lists of items from separate lines into formatted Python lists with custom options like data type parsing, sorting, and deduplication. Open directly in Python Code Lab.",
+        "tag": "KS3 / iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
         "title": "Pseudocode.pro",
         "emoji": "📝",
         "url": "https://pseudocode.pro/",

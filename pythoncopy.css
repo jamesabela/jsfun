@@ -742,11 +742,20 @@
     }
 
     .quick-action-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1.2fr;
+      grid-template-rows: 1fr 1fr;
       gap: 8px;
-      min-width: 310px;
+      width: 400px;
+      max-width: 100%;
+    }
+
+    .quick-action-row .action-primary {
+      grid-row: span 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
     .starter-grid {
@@ -779,7 +788,8 @@
     .action-primary,
     .action-blocks,
     .action-flowchart,
-    .action-parsons {
+    .action-parsons,
+    .action-list {
       color: white;
       border: 0;
       font-weight: 800;
@@ -799,6 +809,10 @@
 
     .action-parsons {
       background: #059669;
+    }
+
+    .action-list {
+      background: #e11d48;
     }
 
     .igcse-lab {
