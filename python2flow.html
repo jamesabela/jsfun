@@ -11,6 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 
     <style>
         /* Base Variables & Themes matching pythoncopy.html */
@@ -794,6 +795,14 @@
                     </svg>
                     PNG
                 </button>
+                <button class="btn" id="btn-export-pptx" title="Export as PowerPoint .pptx">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16v16H4z"></path>
+                        <path d="M8 16V8h4a2 2 0 0 1 0 4H8"></path>
+                    </svg>
+                    PPTX
+                </button>
             </div>
 
             <!-- Canvas Container for Flowchart -->
@@ -852,6 +861,7 @@
         const btnPrint = document.getElementById('btn-print');
         const btnExportSvg = document.getElementById('btn-export-svg');
         const btnExportPng = document.getElementById('btn-export-png');
+        const btnExportPptx = document.getElementById('btn-export-pptx');
         const canvasContainer = document.getElementById('canvas-container');
 
         // Zoom / Pan State
@@ -2161,6 +2171,7 @@
 
             btnExportSvg.addEventListener('click', exportToSVG);
             btnExportPng.addEventListener('click', exportToPNG);
+            btnExportPptx.addEventListener('click', exportToPPTX);
         }
 
         function updateSVGTransform() {
@@ -2217,72 +2228,17 @@
             updateSVGTransform();
         });
 
-        // Export SVG Utility
-        function exportToSVG() {
-            // Clone the SVG DOM
-            const svgClone = svgElement.cloneNode(true);
-
-            // Embed styling into the output SVG file so it looks correct outside browser
-            const isDark = document.getElementById('dark-mode').checked;
-            const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-            styleEl.textContent = `
-                svg { background-color: transparent; }
-                .flow-line { fill: none; stroke: ${isDark ? '#94a3b8' : '#475569'}; stroke-width: 2px; stroke-linejoin: round; }
-                .line-label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600; fill: ${isDark ? '#a1a1aa' : '#64748b'}; text-anchor: middle; }
-                .node-text { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 500; fill: ${isDark ? '#f4f4f5' : '#1e293b'}; text-anchor: middle; dominant-baseline: middle; }
-                .node rect, .node polygon { stroke-width: 2px; }
-                .node.terminator rect { fill: ${isDark ? '#1e1b4b' : '#e0e7ff'}; stroke: ${isDark ? '#818cf8' : '#4f46e5'}; }
-                .node.process rect { fill: ${isDark ? '#0c4a6e' : '#e0f2fe'}; stroke: ${isDark ? '#38bdf8' : '#0284c7'}; }
-                .node.decision polygon { fill: ${isDark ? '#451a03' : '#fffbeb'}; stroke: ${isDark ? '#fb923c' : '#d97706'}; }
-                .node.io polygon { fill: ${isDark ? '#064e3b' : '#ecfdf4'}; stroke: ${isDark ? '#34d399' : '#059669'}; }
-                .node.subroutine rect { fill: ${isDark ? '#4c0519' : '#ffe4e6'}; stroke: ${isDark ? '#fda4af' : '#e11d48'}; }
-                .node.subroutine line { stroke: ${isDark ? '#fda4af' : '#e11d48'}; stroke-width: 1.5px; }
-            `;
-            svgClone.insertBefore(styleEl, svgClone.firstChild);
-
-            // Adjust bounds to tightly wrap the flowchart bounding box
+        function buildFlowchartExportSvg(padding = 30) {
             const bbox = viewportGroup.getBBox();
-            const padding = 20;
-            const viewBoxVal = `${bbox.x - padding} ${bbox.y - padding} ${bbox.width + padding * 2} ${bbox.height + padding * 2}`;
-            svgClone.setAttribute('viewBox', viewBoxVal);
-
-            // Remove transform on viewport inside SVG file
-            svgClone.querySelector('#viewport').removeAttribute('transform');
-
-            // Remove interactive components
-            svgClone.querySelector('defs').innerHTML = `
-                <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                    <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="${isDark ? '#94a3b8' : '#475569'}" />
-                </marker>
-            `;
-
-            const serializer = new XMLSerializer();
-            const svgString = serializer.serializeToString(svgClone);
-
-            const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'flowchart.svg';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        }
-
-        // Export PNG Utility
-        function exportToPNG() {
-            // First calculate bounding box to render the PNG properly
-            const bbox = viewportGroup.getBBox();
-            const padding = 30;
+            if (bbox.width === 0 || bbox.height === 0) {
+                alert('There is no flowchart to export yet.');
+                return null;
+            }
 
             const width = bbox.width + padding * 2;
             const height = bbox.height + padding * 2;
-
-            // Clone the SVG DOM
-            const svgClone = svgElement.cloneNode(true);
             const isDark = document.getElementById('dark-mode').checked;
+            const svgClone = svgElement.cloneNode(true);
             const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
             styleEl.textContent = `
                 svg { background-color: transparent; }
@@ -2301,51 +2257,144 @@
             svgClone.setAttribute('width', width);
             svgClone.setAttribute('height', height);
             svgClone.setAttribute('viewBox', `${bbox.x - padding} ${bbox.y - padding} ${width} ${height}`);
-            svgClone.querySelector('#viewport').removeAttribute('transform');
 
-            // Set concrete color on arrow head marker inside defs
-            svgClone.querySelector('defs').innerHTML = `
+            const viewportClone = svgClone.querySelector('#viewport');
+            if (viewportClone) viewportClone.removeAttribute('transform');
+
+            const defsClone = svgClone.querySelector('defs');
+            if (defsClone) {
+                defsClone.innerHTML = `
                 <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                     <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="${isDark ? '#94a3b8' : '#475569'}" />
                 </marker>
             `;
+            }
 
             const serializer = new XMLSerializer();
             const svgString = serializer.serializeToString(svgClone);
 
-            const img = new Image();
-            const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-            const reader = new FileReader();
+            return { svgString, width, height };
+        }
 
-            reader.onload = function (e) {
-                img.src = e.target.result;
-            };
+        function rasterizeSvgToPngDataUrl(svgString, width, height, scale = 2) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                const reader = new FileReader();
 
-            img.onload = function () {
-                // High resolution scaling (2x)
-                const canvas = document.createElement('canvas');
-                canvas.width = width * 2;
-                canvas.height = height * 2;
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => reject(reader.error || new Error('Could not read SVG data.'));
 
-                const ctx = canvas.getContext('2d');
-                ctx.scale(2, 2);
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width * scale;
+                    canvas.height = height * scale;
 
-                // Transparent canvas background (no white fill rect)
-                ctx.drawImage(img, 0, 0);
+                    const ctx = canvas.getContext('2d');
+                    ctx.scale(scale, scale);
+                    ctx.drawImage(img, 0, 0);
 
-                canvas.toBlob((blob) => {
-                    const url = URL.createObjectURL(blob);
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                img.onerror = () => reject(new Error('Could not render SVG image.'));
+
+                reader.readAsDataURL(svgBlob);
+            });
+        }
+
+        // Export SVG Utility
+        function exportToSVG() {
+            const exportData = buildFlowchartExportSvg(20);
+            if (!exportData) return;
+
+            const { svgString } = exportData;
+            const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'flowchart.svg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Export PNG Utility
+        function exportToPNG() {
+            const exportData = buildFlowchartExportSvg(30);
+            if (!exportData) return;
+
+            rasterizeSvgToPngDataUrl(exportData.svgString, exportData.width, exportData.height, 2)
+                .then(dataUrl => {
                     const link = document.createElement('a');
-                    link.href = url;
+                    link.href = dataUrl;
                     link.download = 'flowchart.png';
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
-                }, 'image/png');
-            };
+                })
+                .catch(err => {
+                    console.error('PNG export failed:', err);
+                    alert('The PNG could not be created.');
+                });
+        }
 
-            reader.readAsDataURL(svgBlob);
+        function exportToPPTX() {
+            if (typeof PptxGenJS === 'undefined') {
+                alert('The PPTX generator could not load. Please check your internet connection and try again.');
+                return;
+            }
+
+            const exportData = buildFlowchartExportSvg(40);
+            if (!exportData) return;
+
+            rasterizeSvgToPngDataUrl(exportData.svgString, exportData.width, exportData.height, 3)
+                .then(dataUrl => {
+                    const pptx = new PptxGenJS();
+                    pptx.layout = 'LAYOUT_WIDE';
+                    pptx.author = 'Python Code Lab';
+                    pptx.subject = 'Python flowchart';
+                    pptx.title = 'Python Flowchart';
+                    pptx.company = 'jsfun by James Abela';
+
+                    const slideW = 13.333;
+                    const slideH = 7.5;
+                    const margin = 0.35;
+                    const maxW = slideW - margin * 2;
+                    const maxH = slideH - margin * 2;
+                    const imageRatio = exportData.width / exportData.height;
+                    const slideRatio = maxW / maxH;
+                    let w = maxW;
+                    let h = maxH;
+
+                    if (imageRatio > slideRatio) {
+                        h = w / imageRatio;
+                    } else {
+                        w = h * imageRatio;
+                    }
+
+                    const slide = pptx.addSlide();
+                    slide.background = { color: document.getElementById('dark-mode').checked ? '151515' : 'FFFFFF' };
+                    slide.addImage({
+                        data: dataUrl,
+                        x: (slideW - w) / 2,
+                        y: (slideH - h) / 2,
+                        w,
+                        h
+                    });
+
+                    pptx.writeFile({ fileName: 'flowchart.pptx' }).catch(err => {
+                        console.error('PPTX export failed:', err);
+                        alert('The PPTX file could not be created.');
+                    });
+                })
+                .catch(err => {
+                    console.error('PPTX export failed:', err);
+                    alert('The PPTX file could not be created.');
+                });
         }
     </script>
 </body>
