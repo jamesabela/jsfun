@@ -128,6 +128,158 @@
         body.dark-theme .algo-btn:hover {
             background-color: #334155 !important;
         }
+
+        .print-title {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                margin: 14mm;
+            }
+
+            body {
+                background: #ffffff !important;
+                color: #111827 !important;
+                padding-bottom: 0 !important;
+            }
+
+            #modeHeader,
+            #editor-section,
+            #empty-state,
+            #feedback,
+            #puzzle-wrap button,
+            #puzzle-wrap .border-b {
+                display: none !important;
+            }
+
+            main {
+                max-width: none !important;
+                padding: 0 !important;
+            }
+
+            #puzzle-wrap {
+                display: block !important;
+            }
+
+            .print-title {
+                display: block;
+                margin-bottom: 18px;
+            }
+
+            .print-title h1 {
+                font-size: 20px;
+                font-weight: 800;
+                margin: 0 0 6px;
+            }
+
+            .print-title p {
+                font-size: 12px;
+                margin: 0 0 14px;
+                color: #475569;
+            }
+
+            .print-order {
+                display: block;
+                margin: 0 0 16px;
+                font-family: Inter, system-ui, -apple-system, sans-serif;
+            }
+
+            .print-order-row {
+                display: block;
+                margin-bottom: 12px;
+                font-size: 12px;
+                color: #334155;
+            }
+
+            .print-write-line {
+                display: inline-block;
+                width: 70%;
+                border-bottom: 1px solid #94a3b8;
+                min-height: 20px;
+                vertical-align: bottom;
+            }
+
+            #print-order-boxes {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 6px;
+            }
+
+            #print-order-boxes span {
+                width: 42px;
+                height: 42px;
+                border: 1px solid #94a3b8;
+                display: inline-grid;
+                grid-template-rows: 14px 1fr;
+                align-items: stretch;
+                justify-content: center;
+                text-align: center;
+                font-family: Inter, system-ui, -apple-system, sans-serif;
+            }
+
+            #print-order-boxes small {
+                display: block;
+                font-size: 9px;
+                line-height: 14px;
+                color: #64748b;
+                border-bottom: 1px solid #cbd5e1;
+            }
+
+            #print-order-boxes b {
+                display: block;
+            }
+
+            #item-list {
+                counter-reset: puzzle-line;
+                display: block !important;
+            }
+
+            .line-item {
+                counter-increment: puzzle-line;
+                display: grid !important;
+                grid-template-columns: 38px 1fr;
+                gap: 12px !important;
+                align-items: start !important;
+                height: 72px !important;
+                min-height: 72px !important;
+                border: 1.5px dashed #64748b !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                background: #ffffff !important;
+                color: #111827 !important;
+                margin-bottom: 0 !important;
+                padding: 12px !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                overflow: hidden;
+            }
+
+            .line-item::before {
+                content: counter(puzzle-line, upper-alpha);
+                font-family: Inter, system-ui, -apple-system, sans-serif;
+                font-weight: 700;
+                color: #111827;
+                border: 1px solid #94a3b8;
+                width: 26px;
+                height: 26px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .line-item > div {
+                display: none !important;
+            }
+
+            .line-item span {
+                white-space: pre-wrap !important;
+                overflow-wrap: anywhere !important;
+                font-size: 12px !important;
+                line-height: 1.25 !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900 pb-20">
@@ -172,6 +324,9 @@
                     <button onclick="editInPythonCodeLab()" id="edit-lab-btn" class="hidden px-4 py-2 text-sm font-600 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-md transition-all">
                         Edit in Python Code Lab
                     </button>
+                    <button onclick="printPuzzle()" id="print-btn" class="hidden px-4 py-2 text-sm font-600 bg-slate-800 hover:bg-slate-900 text-white rounded-lg shadow-md transition-all">
+                        Print
+                    </button>
                     <button onclick="copyShareLink()" id="share-btn" class="hidden px-4 py-2 text-sm font-600 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all">
                         Copy Student Link
                     </button>
@@ -206,6 +361,18 @@
 
         <!-- Puzzle Container -->
         <div id="puzzle-wrap" class="hidden space-y-8">
+            <div class="print-title">
+                <h1>Mixed-Up Python Puzzle</h1>
+                <p>Cut out the mixed-up boxes, rearrange them, or write the correct letter order below.</p>
+                <div class="print-order">
+                    <div class="print-order-row">
+                        Name: <span class="print-write-line"></span>
+                    </div>
+                    <div class="text-xs font-bold text-slate-500">Write the strip letters in the correct order:</div>
+                    <div id="print-order-boxes"></div>
+                </div>
+            </div>
+
             <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div class="text-sm text-slate-500 font-600 italic">Drag blocks into the correct logical order:</div>
             </div>
@@ -273,6 +440,7 @@
             document.getElementById('puzzle-wrap').classList.remove('hidden');
             document.getElementById('share-btn').classList.remove('hidden');
             document.getElementById('edit-lab-btn').classList.remove('hidden');
+            document.getElementById('print-btn').classList.remove('hidden');
             
             if (state.isEditing) toggleEditor();
             updateUrl(raw);
@@ -299,6 +467,19 @@
                 
                 setupDrag(el);
                 container.appendChild(el);
+            });
+
+            renderPrintOrderBoxes();
+        }
+
+        function renderPrintOrderBoxes() {
+            const orderBoxes = document.getElementById('print-order-boxes');
+            if (!orderBoxes) return;
+            orderBoxes.innerHTML = '';
+            state.currentOrder.forEach((_, index) => {
+                const box = document.createElement('span');
+                box.innerHTML = `<small>${index + 1}</small><b></b>`;
+                orderBoxes.appendChild(box);
             });
         }
 
@@ -479,6 +660,10 @@
                     document.body.removeChild(textArea);
                 }
             }
+        }
+
+        function printPuzzle() {
+            window.print();
         }
 
         function editInPythonCodeLab() {
