@@ -178,6 +178,58 @@
       gap: 6px;
     }
 
+    .nav-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-section-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+    }
+
+    .nav-section-toggle:hover {
+      background: var(--primary-glow);
+      border-color: var(--primary);
+    }
+
+    .nav-section-arrow {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-section.collapsed .nav-section-arrow {
+      transform: rotate(-90deg);
+    }
+
+    .nav-section-items {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 2px 0 8px 8px;
+    }
+
+    .nav-section.collapsed .nav-section-items {
+      display: none;
+    }
+
     .nav-btn {
       display: flex;
       align-items: center;
@@ -832,6 +884,100 @@
       color: #3b82f6;
     }
 
+    .debug-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .debug-mini-card {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .debug-mini-card h3 {
+      font-family: var(--font-display);
+      color: var(--text-main);
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .manual-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      padding-left: 20px;
+    }
+
+    .manual-list li::marker {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .debug-flowchart {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .debug-step {
+      position: relative;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 14px;
+      min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .debug-step:not(:last-child)::after {
+      content: "v";
+      position: absolute;
+      right: auto;
+      top: auto;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--primary);
+      font-weight: 900;
+      font-size: 1.1rem;
+      z-index: 1;
+    }
+
+    .debug-step-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    .debug-step strong {
+      color: var(--text-main);
+      font-family: var(--font-display);
+      font-size: 1rem;
+    }
+
+    .debug-step span:last-child {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
 
 
     /* Lists Visualizer Section */
@@ -1274,43 +1420,83 @@
     </div>
   </header>
 
-  <div class="app-container">
-    <aside class="sidebar">
-      <button class="nav-btn active" onclick="showTab('print')">📢 Print</button>
-      <button class="nav-btn" onclick="showTab('variables')">📦 Variables</button>
-      <button class="nav-btn" onclick="showTab('operators')">➗ Operators</button>
+	  <div class="app-container">
+	    <aside class="sidebar">
+	      <div class="nav-section" data-nav-section>
+	        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="true">
+	          <span>Getting Started</span>
+	          <span class="nav-section-arrow">▾</span>
+	        </button>
+	        <div class="nav-section-items">
+	          <button class="nav-btn active" onclick="showTab('print')">📢 Print</button>
+	          <button class="nav-btn" onclick="showTab('variables')">📦 Variables</button>
+	          <button class="nav-btn" onclick="showTab('operators')">➗ Operators</button>
+	          <button class="nav-btn" onclick="showTab('inputs')">📥 Inputs</button>
+	          <button class="nav-btn" onclick="showTab('delays')">⏰ Delays</button>
+	        </div>
+	      </div>
 
-      <button class="nav-btn" onclick="showTab('inputs')">📥 Inputs</button>
-      <button class="nav-btn" onclick="showTab('delays')">⏰ Delays</button>
-      <button class="nav-btn" onclick="showTab('selection')">🔀 Selection (If/Else)</button>
-      <button class="nav-btn" onclick="showTab('validation')">✅ Validation</button>
+	      <div class="nav-section collapsed" data-nav-section>
+	        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
+	          <span>Control Flow</span>
+	          <span class="nav-section-arrow">▾</span>
+	        </button>
+	        <div class="nav-section-items">
+	          <button class="nav-btn" onclick="showTab('selection')">🔀 Selection (If/Else)</button>
+	          <button class="nav-btn" onclick="showTab('validation')">✅ Validation</button>
+	          <button class="nav-btn" onclick="showTab('while-loops')">🔁 While Loops</button>
+	          <button class="nav-btn" onclick="showTab('break')">🛑 Break</button>
+	          <button class="nav-btn" onclick="showTab('for-loops')">🔂 For Loops</button>
+	          <button class="nav-btn" onclick="showTab('logical-or')">🔍 Logical OR</button>
+	        </div>
+	      </div>
 
-      <button class="nav-btn" onclick="showTab('while-loops')">🔁 While Loops</button>
-      <button class="nav-btn" onclick="showTab('break')">🛑 Break</button>
-      <button class="nav-btn" onclick="showTab('for-loops')">🔂 For Loops</button>
-      <button class="nav-btn" onclick="showTab('string-length')">📏 String Length</button>
-      <button class="nav-btn" onclick="showTab('logical-or')">🔍 Logical OR</button>
+	      <div class="nav-section collapsed" data-nav-section>
+	        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
+	          <span>Data and Tools</span>
+	          <span class="nav-section-arrow">▾</span>
+	        </button>
+	        <div class="nav-section-items">
+	          <button class="nav-btn" onclick="showTab('string-length')">📏 String Length</button>
+	          <button class="nav-btn" onclick="showTab('lists')">🗂️ Lists Guide</button>
+	          <button class="nav-btn" onclick="showTab('2d-lists')">▦ 2D Lists</button>
+	          <button class="nav-btn" onclick="showTab('files')">💾 Files</button>
+	          <button class="nav-btn" onclick="showTab('dictionaries')">📖 Dictionaries</button>
+	          <button class="nav-btn" onclick="showTab('turtle')">🐢 Turtle Commands</button>
+	          <button class="nav-btn" onclick="showTab('functions')">🧩 Functions</button>
+	        </div>
+	      </div>
 
-      <button class="nav-btn" onclick="showTab('lists')">🗂️ Lists Guide</button>
-      <button class="nav-btn" onclick="showTab('2d-lists')">▦ 2D Lists</button>
-      <button class="nav-btn" onclick="showTab('files')">💾 Files</button>
-      <button class="nav-btn" onclick="showTab('dictionaries')">📖 Dictionaries</button>
-      <button class="nav-btn" onclick="showTab('turtle')">🐢 Turtle Commands</button>
+	      <div class="nav-section collapsed" data-nav-section>
+	        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
+	          <span>Computer Science</span>
+	          <span class="nav-section-arrow">▾</span>
+	        </button>
+	        <div class="nav-section-items">
+	          <button class="nav-btn" onclick="showTab('searching')">🔎 Searching</button>
+	          <button class="nav-btn" onclick="showTab('big-o')">📈 Big O</button>
+	          <button class="nav-btn" onclick="showTab('bubble-sort')">🫧 Bubble Sort</button>
+	          <button class="nav-btn" onclick="showTab('insertion-sort')">📥 Insertion Sort</button>
+	          <button class="nav-btn" onclick="showTab('stacks')">📚 Stacks</button>
+	          <button class="nav-btn" onclick="showTab('queues')">🚶 Queues</button>
+	          <button class="nav-btn" onclick="showTab('linked-lists')">🔗 Linked Lists</button>
+	          <button class="nav-btn" onclick="showTab('recursion')">🌀 Recursion</button>
+	          <button class="nav-btn" onclick="showTab('oop')">🏛️ OOP</button>
+	          <button class="nav-btn" onclick="showTab('trees')">🌳 Binary Trees</button>
+	        </div>
+	      </div>
 
-      <button class="nav-btn" onclick="showTab('functions')">🧩 Functions</button>
-      <button class="nav-btn" onclick="showTab('searching')">🔎 Searching</button>
-      <button class="nav-btn" onclick="showTab('big-o')">📈 Big O</button>
-      <button class="nav-btn" onclick="showTab('bubble-sort')">🫧 Bubble Sort</button>
-      <button class="nav-btn" onclick="showTab('insertion-sort')">📥 Insertion Sort</button>
-      <button class="nav-btn" onclick="showTab('stacks')">📚 Stacks</button>
-      <button class="nav-btn" onclick="showTab('queues')">🚶 Queues</button>
-      <button class="nav-btn" onclick="showTab('linked-lists')">🔗 Linked Lists</button>
-      <button class="nav-btn" onclick="showTab('recursion')">🌀 Recursion</button>
-      <button class="nav-btn" onclick="showTab('oop')">🏛️ OOP</button>
-      <button class="nav-btn" onclick="showTab('trees')">🌳 Binary Trees</button>
-
-      <button class="nav-btn" onclick="showTab('resources')">📚 Further Learning</button>
-    </aside>
+	      <div class="nav-section collapsed" data-nav-section>
+	        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
+	          <span>Help and Reference</span>
+	          <span class="nav-section-arrow">▾</span>
+	        </button>
+	        <div class="nav-section-items">
+	          <button class="nav-btn" onclick="showTab('debugging')">🐛 Debugging</button>
+	          <button class="nav-btn" onclick="showTab('resources')">📚 Further Learning</button>
+	        </div>
+	      </div>
+	    </aside>
 
     <main class="content-area">
 
@@ -2592,6 +2778,217 @@ root.right = Node("pear")</code></pre>
         </div>
       </div>
 
+      <!-- TAB: Debugging -->
+      <div id="tab-debugging" class="tab-content">
+        <div class="card">
+          <h2>🐛 A Student's Guide to Debugging Python</h2>
+          <p>Debugging means finding and fixing problems in your code. Bugs are normal. Every programmer creates them.
+            The important skill is learning how to find them calmly and carefully.</p>
+          <div class="banner info">
+            <span>ℹ️</span>
+            <span><strong>First rule:</strong> do not start changing random lines. Read what happened, find one clue,
+              test one idea, then run the program again.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧭 Debugging Flowchart</h2>
+          <p>Use this routine whenever a program crashes, gives the wrong answer, repeats forever, or appears to do
+            nothing.</p>
+          <div class="debug-flowchart" aria-label="Debugging routine flowchart">
+            <div class="debug-step">
+              <span class="debug-step-number">1</span>
+              <strong>Stop and read</strong>
+              <span>What actually happened? Error, wrong answer, early stop, endless loop, or nothing?</span>
+            </div>
+            <div class="debug-step">
+              <span class="debug-step-number">2</span>
+              <strong>Find the clue</strong>
+              <span>Read the error type, line number, variable name, or the first wrong output.</span>
+            </div>
+            <div class="debug-step">
+              <span class="debug-step-number">3</span>
+              <strong>Check simple things</strong>
+              <span>Look for spelling, brackets, speech marks, colons, capital letters, and indentation.</span>
+            </div>
+            <div class="debug-step">
+              <span class="debug-step-number">4</span>
+              <strong>Trace the code</strong>
+              <span>Say what each line does. Add temporary <code>print()</code> statements if needed.</span>
+            </div>
+            <div class="debug-step">
+              <span class="debug-step-number">5</span>
+              <strong>Test one idea</strong>
+              <span>Change one thing, use simple test values, then run the program again.</span>
+            </div>
+            <div class="debug-step">
+              <span class="debug-step-number">6</span>
+              <strong>Repeat or ask</strong>
+              <span>If you are still stuck after five focused minutes, ask with the code, error, and expected result.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔎 Read the Error Message</h2>
+          <p>Python error messages are clues. The most useful information is often near the bottom: the error type, the
+            line number, and the name of the variable or command mentioned.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-text">NameError: name 'scroe' is not defined</code></pre>
+          </div>
+          <p>This suggests that a variable name has been typed incorrectly. Check the line Python mentions and also the
+            line just before it.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">if score > 10
+    print("You win!")</code></pre>
+          </div>
+          <p>Python may point at the <code>print()</code> line, but the real problem is the missing colon:</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">if score > 10:
+    print("You win!")</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>✅ Check the Simple Things First</h2>
+          <div class="debug-grid">
+            <div class="debug-mini-card">
+              <h3>Typing</h3>
+              <ul class="manual-list">
+                <li>Are all brackets closed?</li>
+                <li>Are all speech marks closed?</li>
+                <li>Are variable names spelt correctly?</li>
+              </ul>
+            </div>
+            <div class="debug-mini-card">
+              <h3>Python syntax</h3>
+              <ul class="manual-list">
+                <li>Is there a colon after <code>if</code>, <code>for</code>, <code>while</code> or <code>def</code>?</li>
+                <li>Is the indentation correct?</li>
+                <li>Have you used the correct capital letters?</li>
+              </ul>
+            </div>
+            <div class="debug-mini-card">
+              <h3>Logic</h3>
+              <ul class="manual-list">
+                <li>What answer did you expect?</li>
+                <li>What answer did you actually get?</li>
+                <li>Where does the value first become wrong?</li>
+              </ul>
+            </div>
+          </div>
+          <p>Python is case-sensitive. <code>score</code>, <code>Score</code> and <code>SCORE</code> are three different
+            variable names.</p>
+        </div>
+
+        <div class="card">
+          <h2>🖨️ Use print() as a Clue</h2>
+          <p>Add temporary <code>print()</code> statements to check what values are stored and which parts of the program
+            are running.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">score = 10
+bonus = 5
+
+print("Score is", score)
+print("Bonus is", bonus)
+
+total = score + bonus
+
+print("Total is", total)</code></pre>
+          </div>
+          <p>Remove the extra print statements after fixing the bug.</p>
+        </div>
+
+        <div class="card">
+          <h2>🧪 Test One Small Part</h2>
+          <p>Large programs are easier to debug when you test one small section at a time. Use simple values where you
+            already know the correct answer.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">price = 5
+quantity = 3
+
+total = price * quantity
+print(total)  # Should be 15</code></pre>
+          </div>
+          <ul class="manual-list">
+            <li>For an average calculator, try <code>10</code>, <code>10</code>, <code>10</code>. The average should be
+              <code>10</code>.</li>
+            <li>For a multiplication program, try <code>2</code> and <code>5</code>. The answer should be
+              <code>10</code>.</li>
+            <li>For an age checker, test the edge cases: <code>17</code>, <code>18</code>, and <code>19</code>.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>🧠 Common Debugging Situations</h2>
+          <div class="debug-grid">
+            <div class="debug-mini-card">
+              <h3>Wrong answer</h3>
+              <p>This is a logic error. Work out the correct answer yourself, then follow the values through the
+                program.</p>
+            </div>
+            <div class="debug-mini-card">
+              <h3>Loop will not stop</h3>
+              <p>Check whether the loop variable changes, whether the condition can become false, and whether the update
+                is inside the loop.</p>
+            </div>
+            <div class="debug-mini-card">
+              <h3>List error</h3>
+              <p>Remember that list positions begin at <code>0</code>. The last item in a three-item list is at position
+                <code>2</code>.</p>
+            </div>
+          </div>
+          <div class="code-wrapper">
+            <pre><code class="language-python">animals = ["tiger", "panda", "otter"]
+
+print(animals[2])  # otter
+print(len(animals))  # 3</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🙋 How to Ask for Help</h2>
+          <p>Do not just say:</p>
+          <div class="code-wrapper">
+            <pre><code class="language-text">It does not work.</code></pre>
+          </div>
+          <p>Give useful information instead:</p>
+          <div class="code-wrapper">
+            <pre><code class="language-text">I expected the program to print 15, but it prints 8.
+There is no error message.
+I think the problem is in the total calculation.</code></pre>
+          </div>
+          <ul class="manual-list">
+            <li>Include the code.</li>
+            <li>Include the full error message.</li>
+            <li>Explain what you expected.</li>
+            <li>Explain what actually happened.</li>
+            <li>Say what you already tried.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>📋 Debugging Checklist</h2>
+          <ul class="manual-list">
+            <li>What did I expect to happen?</li>
+            <li>What actually happened?</li>
+            <li>Is there an error message?</li>
+            <li>Which line is mentioned? Did I check the line before it?</li>
+            <li>Are spelling, brackets, speech marks, colons and indentation correct?</li>
+            <li>Are my variables the correct type?</li>
+            <li>Does my loop eventually stop?</li>
+            <li>Are my list positions valid?</li>
+            <li>Can I print the values?</li>
+            <li>Have I changed only one thing at a time?</li>
+          </ul>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Remember:</strong> debugging is not guessing. Look carefully, find a clue, test one idea, run
+              the code again, and repeat until it works.</span>
+          </div>
+        </div>
+      </div>
+
       <!-- TAB 9: Further Learning & Reference -->
       <div id="tab-resources" class="tab-content">
         <div class="card">
@@ -2704,16 +3101,43 @@ root.right = Node("pear")</code></pre>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
   <script>
-    // Tab switching logic
-    let lastActiveTab = 'print';
+	    // Tab switching logic
+	    let lastActiveTab = 'print';
 
-    function showTab(tabId, updateHash = true) {
-      const targetTab = document.getElementById('tab-' + tabId);
-      if (!targetTab) return;
+	    function toggleNavSection(toggleButton) {
+	      const section = toggleButton.closest('[data-nav-section]');
+	      if (!section) return;
 
-      if (tabId !== 'search-results') {
-        lastActiveTab = tabId;
-        // Also clear the search bar if they click a tab button directly
+	      const isCollapsed = section.classList.toggle('collapsed');
+	      toggleButton.setAttribute('aria-expanded', String(!isCollapsed));
+	    }
+
+	    function expandNavSectionForButton(button) {
+	      const section = button && button.closest('[data-nav-section]');
+	      if (!section) return;
+
+	      section.classList.remove('collapsed');
+	      const toggleButton = section.querySelector('.nav-section-toggle');
+	      if (toggleButton) {
+	        toggleButton.setAttribute('aria-expanded', 'true');
+	      }
+	    }
+	
+	    function showTab(tabId, updateHash = true) {
+	      const targetTab = document.getElementById('tab-' + tabId);
+	      if (!targetTab) return;
+
+	      const buttons = document.querySelectorAll('.nav-btn');
+	      const targetBtn = tabId !== 'search-results'
+	        ? Array.from(buttons).find(btn => {
+	          const onclickAttr = btn.getAttribute('onclick') || '';
+	          return onclickAttr.includes(`'${tabId}'`) || onclickAttr.includes(`"${tabId}"`);
+	        })
+	        : null;
+	
+	      if (tabId !== 'search-results') {
+	        lastActiveTab = tabId;
+	        // Also clear the search bar if they click a tab button directly
         const searchInput = document.getElementById('searchInput');
         if (searchInput && searchInput.value && tabId !== 'search-results') {
           searchInput.value = '';
@@ -2724,10 +3148,17 @@ root.right = Node("pear")</code></pre>
 
       // If tab is already active, just handle hash update if requested
       const isAlreadyActive = targetTab.classList.contains('active');
-      if (isAlreadyActive) {
-        if (updateHash && tabId !== 'search-results') {
-          if (window.location.hash !== '#' + tabId) {
-            window.location.hash = tabId;
+	      if (isAlreadyActive) {
+	        if (targetBtn) {
+	          expandNavSectionForButton(targetBtn);
+	          buttons.forEach(btn => {
+	            btn.classList.remove('active');
+	          });
+	          targetBtn.classList.add('active');
+	        }
+	        if (updateHash && tabId !== 'search-results') {
+	          if (window.location.hash !== '#' + tabId) {
+	            window.location.hash = tabId;
           }
         }
         return;
@@ -2737,22 +3168,16 @@ root.right = Node("pear")</code></pre>
         tab.classList.remove('active');
       });
 
-      targetTab.classList.add('active');
-
-      // Highlight sidebar button
-      const buttons = document.querySelectorAll('.nav-btn');
-      buttons.forEach(btn => {
-        btn.classList.remove('active');
-      });
-      if (tabId !== 'search-results') {
-        const targetBtn = Array.from(buttons).find(btn => {
-          const onclickAttr = btn.getAttribute('onclick') || '';
-          return onclickAttr.includes(`'${tabId}'`) || onclickAttr.includes(`"${tabId}"`);
-        });
-        if (targetBtn) {
-          targetBtn.classList.add('active');
-        }
-      }
+	      targetTab.classList.add('active');
+	
+	      // Highlight sidebar button
+	      buttons.forEach(btn => {
+	        btn.classList.remove('active');
+	      });
+	      if (targetBtn) {
+	        expandNavSectionForButton(targetBtn);
+	        targetBtn.classList.add('active');
+	      }
 
       if (updateHash && tabId !== 'search-results') {
         if (window.location.hash !== '#' + tabId) {
