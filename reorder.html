@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reorder Tool (Parsons Problem) — jsfun by James Abela</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -327,6 +328,9 @@
                     <button onclick="printPuzzle()" id="print-btn" class="hidden px-4 py-2 text-sm font-600 bg-slate-800 hover:bg-slate-900 text-white rounded-lg shadow-md transition-all">
                         Print
                     </button>
+                    <button onclick="downloadPowerPoint()" id="ppt-btn" class="hidden px-4 py-2 text-sm font-600 bg-orange-600 hover:bg-orange-700 text-white rounded-lg shadow-md transition-all">
+                        PowerPoint
+                    </button>
                     <button onclick="copyShareLink()" id="share-btn" class="hidden px-4 py-2 text-sm font-600 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all">
                         Copy Student Link
                     </button>
@@ -441,6 +445,7 @@
             document.getElementById('share-btn').classList.remove('hidden');
             document.getElementById('edit-lab-btn').classList.remove('hidden');
             document.getElementById('print-btn').classList.remove('hidden');
+            document.getElementById('ppt-btn').classList.remove('hidden');
             
             if (state.isEditing) toggleEditor();
             updateUrl(raw);
@@ -664,6 +669,129 @@
 
         function printPuzzle() {
             window.print();
+        }
+
+        function getPuzzleLetter(index) {
+            let n = index + 1;
+            let label = '';
+            while (n > 0) {
+                n--;
+                label = String.fromCharCode(65 + (n % 26)) + label;
+                n = Math.floor(n / 26);
+            }
+            return label;
+        }
+
+        function getSafeFilename(name) {
+            return name
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .slice(0, 48) || 'mixed-up-python-puzzle';
+        }
+
+        function downloadPowerPoint() {
+            if (!state.currentOrder.length) {
+                alert('Generate a puzzle first.');
+                return;
+            }
+
+            if (typeof PptxGenJS === 'undefined') {
+                alert('The PowerPoint generator could not load. Please check your internet connection and try again.');
+                return;
+            }
+
+            const pptx = new PptxGenJS();
+            pptx.layout = 'LAYOUT_WIDE';
+            pptx.author = 'Python Code Lab';
+            pptx.subject = 'Mixed-Up Python Puzzle';
+            pptx.title = 'Mixed-Up Python Puzzle';
+            pptx.company = 'jsfun by James Abela';
+            pptx.lang = 'en-GB';
+            pptx.theme = {
+                headFontFace: 'Inter',
+                bodyFontFace: 'Inter',
+                lang: 'en-GB'
+            };
+
+            const slideW = 13.333;
+            const slideH = 7.5;
+            const marginX = 0.48;
+            const bottomMargin = 0.26;
+            const gap = 0.2;
+            const itemCount = state.currentOrder.length;
+            const cols = itemCount <= 7 ? 1 : itemCount <= 16 ? 2 : 3;
+            const rows = Math.ceil(itemCount / cols);
+            const boxW = (slideW - (marginX * 2) - (gap * (cols - 1))) / cols;
+            const startY = 0.82;
+            const boxH = Math.max(0.24, (slideH - startY - bottomMargin - (gap * (rows - 1))) / rows);
+            const fontSize = Math.max(7, Math.min(22, Math.floor(boxH * 22), cols === 1 ? 20 : cols === 2 ? 16 : 12));
+            const stripColours = [
+                { fill: 'E0F2FE', line: '0284C7' },
+                { fill: 'DCFCE7', line: '16A34A' },
+                { fill: 'FEF3C7', line: 'D97706' },
+                { fill: 'FCE7F3', line: 'DB2777' },
+                { fill: 'EDE9FE', line: '7C3AED' },
+                { fill: 'F1F5F9', line: '475569' }
+            ];
+
+            const slide = pptx.addSlide();
+            slide.background = { color: 'FFFFFF' };
+
+            slide.addText('Mixed-Up Python Puzzle', {
+                x: marginX,
+                y: 0.14,
+                w: 6.4,
+                h: 0.24,
+                fontFace: 'Inter',
+                fontSize: 16,
+                bold: true,
+                color: '111827',
+                margin: 0
+            });
+            slide.addText('Move the rectangles into the correct logical order, or write the correct letter order.', {
+                x: marginX,
+                y: 0.48,
+                w: 8.8,
+                h: 0.18,
+                fontFace: 'Inter',
+                fontSize: 8,
+                color: '475569',
+                margin: 0
+            });
+
+            state.currentOrder.forEach((item, index) => {
+                const col = Math.floor(index / rows);
+                const row = index % rows;
+                const x = marginX + col * (boxW + gap);
+                const y = startY + row * (boxH + gap);
+                const label = getPuzzleLetter(index);
+                const colour = stripColours[index % stripColours.length];
+
+                slide.addText(`${label}    ${item.text}`, {
+                    shape: pptx.ShapeType.rect,
+                    x,
+                    y,
+                    w: boxW,
+                    h: boxH,
+                    fontFace: 'Courier New',
+                    fontSize,
+                    bold: true,
+                    color: '111827',
+                    fill: { color: colour.fill },
+                    line: { color: colour.line, width: 1.2, dash: 'dash' },
+                    fit: 'shrink',
+                    margin: Math.min(0.14, Math.max(0.04, boxH * 0.12)),
+                    valign: 'mid'
+                });
+            });
+
+            const firstLine = state.originalOrder[0] ? state.originalOrder[0].text : '';
+            const fileName = getSafeFilename(firstLine || 'mixed-up-python-puzzle') + '.pptx';
+            pptx.writeFile({ fileName }).catch(err => {
+                console.error('PowerPoint download failed:', err);
+                alert('The PowerPoint file could not be created.');
+            });
         }
 
         function editInPythonCodeLab() {
