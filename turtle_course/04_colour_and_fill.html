@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turtle Course 4: Colour and Fill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: linear-gradient(135deg, #ecfeff, #eff6ff 55%, #f0fdf4);
+  --card: #ffffff;
+  --text: #172033;
+  --muted: #5f6b7a;
+  --accent: #087f5b;
+  --accent-soft: #d3f9d8;
+  --blue: #2563eb;
+  --border: #c7e8df;
+  --code: #111827;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 22px; min-height: 100vh;
+  background: var(--bg); color: var(--text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.container { width: 100%; max-width: 720px; margin: 0 auto; }
+header {
+  padding: 8px 2px 16px; border-bottom: 3px solid var(--border);
+  margin-bottom: 18px;
+}
+.eyebrow {
+  color: var(--accent); font-weight: 800; letter-spacing: .08em;
+  font-size: .78rem; text-transform: uppercase;
+}
+h1 { margin: 5px 0 4px; font-size: 2rem; line-height: 1.08; }
+.subtitle { color: var(--muted); margin: 0; }
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 18px; padding: 22px; margin: 16px 0;
+  box-shadow: 0 10px 25px rgba(23,32,51,.07);
+}
+.card h2 {
+  margin: 0 0 10px; color: var(--accent); font-size: 1.1rem;
+}
+p, li { line-height: 1.55; }
+pre {
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  background: var(--code); color: #f8fafc;
+  border-radius: 12px; padding: 16px; line-height: 1.5;
+  font-family: "Fira Code", Consolas, monospace; font-size: .9rem;
+}
+.tip {
+  border-left: 5px solid var(--blue); background: #eff6ff;
+  padding: 13px 15px; border-radius: 10px; line-height: 1.5;
+}
+.checklist { padding-left: 1.2rem; }
+code {
+  font-family: "Fira Code", Consolas, monospace;
+  background: #eef2f7; padding: 1px 5px; border-radius: 5px;
+}
+
+.reference-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+.reference-note {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: .9rem;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="eyebrow">Turtle Course - Level 4 of 10</div>
+  <h1>Colour and Fill</h1>
+  <p class="subtitle">Create a bright badge</p>
+</header>
+
+<section class="card">
+  <h2>What you are learning</h2>
+  <p>pencolor() changes the outline. fillcolor() chooses the inside colour. Drawing between begin_fill() and end_fill() fills the completed shape.</p>
+</section>
+
+<section class="card">
+  <h2>Your mission</h2>
+  <p>Complete the program to draw a filled five-sided badge. Use any supported colour names you like.</p>
+  <div class="tip"><strong>Helpful hint:</strong> Call begin_fill() before the loop and end_fill() after the loop.</div>
+</section>
+
+
+<section class="card">
+  <h2>Visual check</h2>
+  <img class="reference-image"
+       src="images/04_colour_and_fill.png"
+       alt="Example result for this Turtle drawing task">
+  <p class="reference-note">Your drawing should have the same main structure. Small differences in position or colour are fine unless the mission gives exact values.</p>
+</section>
+
+<section class="card">
+  <h2>Useful pattern</h2>
+  <pre>turtle.pencolor(&quot;navy&quot;)
+turtle.fillcolor(&quot;gold&quot;)</pre>
+  <p>Use the pattern to help you, but complete the starter code in the editor.</p>
+</section>
+
+<section class="card">
+  <h2>Before moving on</h2>
+  <ul class="checklist">
+    <li>Run the program and inspect the Turtle canvas.</li>
+    <li>Check that your drawing matches the mission.</li>
+    <li>Run the automated test to unlock the next level.</li>
+  </ul>
+</section>
+</div>
+</body>
+</html>
