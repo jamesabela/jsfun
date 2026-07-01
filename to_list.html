@@ -157,6 +157,13 @@
       opacity: 0.9;
     }
 
+    .header-link-icon {
+      display: block;
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
     /* Main Container layout */
     .container {
       max-width: 1200px;
@@ -433,8 +440,12 @@
         <label for="font-size" style="font-size: 16px;">A</label>
       </div>
 
-      <a href="pythoncopy.html" target="_blank" title="Python Code Lab" class="header-link">🏠</a>
-      <a href="pythonmanual.html#lists" target="_blank" title="Python Manual" class="header-link">ℹ️</a>
+      <a href="pythoncopy.html" target="_blank" title="Python Code Lab" class="header-link">
+        <img class="header-link-icon" src="images/home.png" alt="Python Code Lab">
+      </a>
+      <a href="pythonmanual.html#lists" target="_blank" title="Python Manual" class="header-link">
+        <img class="header-link-icon" src="images/manual.png" alt="Python Manual">
+      </a>
     </div>
   </header>
 

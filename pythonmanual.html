@@ -136,6 +136,31 @@
       gap: 16px;
     }
 
+    .header-icon-link {
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      box-shadow: var(--shadow);
+      display: inline-flex;
+      height: 40px;
+      justify-content: center;
+      transition: transform 0.2s ease, background 0.2s ease;
+      width: 40px;
+    }
+
+    .header-icon-link:hover {
+      background: var(--primary-glow);
+      transform: translateY(-1px);
+    }
+
+    .header-icon-link img {
+      display: block;
+      height: 24px;
+      object-fit: contain;
+      width: 24px;
+    }
+
     .theme-btn {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -1399,6 +1424,244 @@
         border-color: var(--border-color);
       }
     }
+
+    /* Coding Cards Carousel styling in manual */
+    .carousel-slide {
+      min-width: 100%;
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #ffffff;
+    }
+    .carousel-arrow {
+      transition: all 0.3s ease;
+    }
+    .carousel-arrow:hover {
+      background: var(--primary) !important;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    #tab-turtle .turtle-sub-content {
+      scroll-margin-top: 88px;
+    }
+
+    #tab-turtle .turtle-section {
+      display: none;
+    }
+
+    #tab-turtle .turtle-section.active {
+      display: block;
+    }
+
+    #tab-turtle .turtle-import-note {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-top: 12px;
+      padding: 12px 16px;
+    }
+
+    #tab-turtle .turtle-import-note strong {
+      color: var(--primary);
+    }
+
+    #tab-turtle .turtle-command-list {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      margin-bottom: 20px;
+    }
+
+    #tab-turtle .turtle-command {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+      padding: 16px;
+    }
+
+    html.light-theme #tab-turtle .turtle-command {
+      background: #ffffff;
+    }
+
+    #tab-turtle .turtle-command code {
+      color: var(--accent-pink);
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    #tab-turtle .turtle-command p {
+      color: var(--text-main);
+      font-size: 0.92rem;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    #tab-turtle .turtle-alias {
+      color: var(--text-muted);
+      display: block;
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    #tab-turtle .turtle-alias code {
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    #tab-turtle .turtle-example-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    #tab-turtle .turtle-example-card {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+      min-width: 0;
+    }
+
+    html.light-theme #tab-turtle .turtle-example-card {
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    #tab-turtle .turtle-example-card h3 {
+      color: var(--text-main);
+      font-family: var(--font-display);
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    #tab-turtle .turtle-example-card p {
+      font-size: 0.86rem;
+      margin: 0;
+    }
+
+    #tab-turtle .turtle-example-intro {
+      background: var(--primary-glow);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      padding: 12px 14px;
+    }
+
+    #tab-turtle .turtle-card-viewer {
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+      padding-top: 20px;
+    }
+
+    #tab-turtle .turtle-card-viewer h3 {
+      color: var(--primary);
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    #tab-turtle .carousel-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 20px auto;
+      max-width: 600px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #tab-turtle .carousel-track {
+      display: flex;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+    }
+
+    #tab-turtle .carousel-arrow {
+      align-items: center;
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      font-size: 1.2rem;
+      font-weight: bold;
+      height: 40px;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      z-index: 2;
+    }
+
+    #tab-turtle .carousel-arrow.prev-btn {
+      left: 12px;
+    }
+
+    #tab-turtle .carousel-arrow.next-btn {
+      right: 12px;
+    }
+
+    #tab-turtle .carousel-label {
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 20px;
+      bottom: 12px;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      left: 50%;
+      max-width: calc(100% - 32px);
+      overflow: hidden;
+      padding: 4px 14px;
+      position: absolute;
+      text-overflow: ellipsis;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    #tab-turtle .turtle-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    #tab-turtle .turtle-outline-link {
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+    }
+
+    @media (max-width: 700px) {
+      #tab-turtle .carousel-slide {
+        height: 300px;
+      }
+    }
   </style>
 </head>
 
@@ -1414,6 +1677,9 @@
         <button id="clearSearchBtn" class="clear-search-btn" onclick="clearSearch()" style="display: none;"
           title="Clear search">✕</button>
       </div>
+      <a class="header-icon-link" href="pythoncopy.html" target="_blank" rel="noopener" title="Open Python Code Lab">
+        <img src="images/home.png" alt="Open Python Code Lab">
+      </a>
       <button class="theme-btn" id="themeToggleBtn" onclick="toggleThemeManual()">
         <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Dark Mode</span>
       </button>
@@ -1433,6 +1699,21 @@
 	          <button class="nav-btn" onclick="showTab('operators')">➗ Operators</button>
 	          <button class="nav-btn" onclick="showTab('inputs')">📥 Inputs</button>
 	          <button class="nav-btn" onclick="showTab('delays')">⏰ Delays</button>
+	        </div>
+	      </div>
+
+	      <div class="nav-section collapsed" data-nav-section>
+	        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
+	          <span>🐢 Turtle Graphics</span>
+	          <span class="nav-section-arrow">▾</span>
+	        </button>
+	        <div class="nav-section-items">
+	          <button class="nav-btn" onclick="showTab('turtle'); showTurtleSubTab('intro');">🐢 Intro</button>
+	          <button class="nav-btn" onclick="showTab('turtle'); showTurtleSubTab('movement');">🏃 Movement</button>
+	          <button class="nav-btn" onclick="showTab('turtle'); showTurtleSubTab('pen-fill');">✍️ Pen & Fill</button>
+	          <button class="nav-btn" onclick="showTab('turtle'); showTurtleSubTab('styling');">🎨 Styling</button>
+	          <button class="nav-btn" onclick="showTab('turtle'); showTurtleSubTab('canvas');">▦ Canvas</button>
+	          <button class="nav-btn" onclick="showTab('turtle'); showTurtleSubTab('examples');">📐 Examples</button>
 	        </div>
 	      </div>
 
@@ -1462,7 +1743,6 @@
 	          <button class="nav-btn" onclick="showTab('2d-lists')">▦ 2D Lists</button>
 	          <button class="nav-btn" onclick="showTab('files')">💾 Files</button>
 	          <button class="nav-btn" onclick="showTab('dictionaries')">📖 Dictionaries</button>
-	          <button class="nav-btn" onclick="showTab('turtle')">🐢 Turtle Commands</button>
 	          <button class="nav-btn" onclick="showTab('functions')">🧩 Functions</button>
 	        </div>
 	      </div>
@@ -1675,7 +1955,7 @@ print("Worth waiting for!")</code></pre>
             <pre><code class="language-python">test = input("Is it raining? y/n ")
 if test == "y":
     print("Oh dear, no football today!")
-else: 
+else:
     print("Great, let's go and play football!")</code></pre>
           </div>
           <div class="banner bug">
@@ -1857,73 +2137,780 @@ MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
         </div>
       </div>
 
-      <!-- TAB 8: Turtle Commands -->
       <div id="tab-turtle" class="tab-content">
-        <div class="card">
-          <h2>🐢 Basic Turtle Graphics</h2>
-          <p>Turtle allows you to draw shapes and lines in Python. Below are the basic movements and configuration
-            options.</p>
+        <!-- SECTION 0: Intro -->
+        <div id="turtle-intro" class="turtle-section turtle-sub-content active">
+          <div class="card">
+            <h2>🐢 Turtle Graphics Module</h2>
+            <p>The <code>turtle</code> module is a built-in Python library used to introduce programming concepts through drawing shapes, lines, and patterns on a cartesian canvas.
+            By controlling an on-screen cursor (the "turtle") using commands like <code>forward()</code> and <code>right()</code>, you can create custom graphics, explore geometry, and practice core concepts like loops, variables, and custom procedures.</p>
+            <div class="turtle-import-note">
+              # Start your Python script by importing the turtle module:<br>
+              <strong>import</strong> turtle
+            </div>
+            <div class="turtle-example-intro">
+              This complete first example draws a simple zigzag path. It shows that turtle drawings are made from small movement commands: move forward, turn, then move again.
+            </div>
+            <div class="code-wrapper">
+              <pre><code class="language-python">import turtle
 
-          <div class="op-grid" style="grid-template-columns: 200px 1fr;">
-            <div class="op-header">Turtle Command</div>
-            <div class="op-header">What it does</div>
+turtle.speed(3)
+turtle.pensize(8)
+turtle.pencolor("black")
 
-            <div class="op-cell"><code>turtle.forward(50)</code></div>
-            <div class="op-cell">Go forward 50 steps</div>
+turtle.penup()
+turtle.goto(-160, 0)
+turtle.setheading(45)
+turtle.pendown()
 
-            <div class="op-cell"><code>turtle.backward(50)</code></div>
-            <div class="op-cell">Go backward 50 steps</div>
+for step in range(5):
+    turtle.forward(45)
+    turtle.right(90)
+    turtle.forward(45)
+    turtle.left(90)
 
-            <div class="op-cell"><code>turtle.right(90)</code></div>
-            <div class="op-cell">Turn right 90 degrees</div>
-
-            <div class="op-cell"><code>turtle.left(90)</code></div>
-            <div class="op-cell">Turn left 90 degrees</div>
-
-            <div class="op-cell"><code>turtle.penup()</code></div>
-            <div class="op-cell">Lifts the pen up (moving without drawing)</div>
-
-            <div class="op-cell"><code>turtle.pendown()</code></div>
-            <div class="op-cell">Drops the pen back down (draws when moving)</div>
-
-            <div class="op-cell"><code>turtle.pencolor("Red")</code></div>
-            <div class="op-cell">Changes the drawing pen line color</div>
-
-            <div class="op-cell"><code>turtle.fillcolor("Brown")</code></div>
-            <div class="op-cell">Changes the shape fill color</div>
-
-            <div class="op-cell"><code>turtle.begin_fill()</code></div>
-            <div class="op-cell">Starts tracking lines to fill shape</div>
-
-            <div class="op-cell"><code>turtle.end_fill()</code></div>
-            <div class="op-cell">Fills shape drawn since begin_fill()</div>
-
-            <div class="op-cell"><code>turtle.speed(0)</code></div>
-            <div class="op-cell">Fastest speed. Normal speeds are 1 (slow) to 9 (fast).</div>
+turtle.hideturtle()
+print("Zigzag complete")</code></pre>
+            </div>
           </div>
         </div>
 
-        <div class="card">
-          <h2>🎨 Drawing Shapes with Turtle</h2>
-          <p>This program demonstrates how to import the turtle module and use loops to draw a filled square.</p>
-          <div class="code-wrapper">
-            <pre><code class="language-python">import turtle
+        <div id="turtle-examples" class="turtle-section turtle-sub-content">
+          <div class="card">
+            <h2>📐 Turtle Examples to Try</h2>
+            <p>These examples are designed for the main Python editor. Click <strong>Edit</strong> on any snippet to open it in Turtle mode and adapt the drawing.</p>
+            <div class="turtle-example-grid">
+            <div class="turtle-example-card">
+              <h3>Colour Wheel</h3>
+              <div class="turtle-example-intro">
+                This example draws the same circle many times while turning a little after each one. It is a good first pattern for practising loops, colour lists and repeated rotation.
+              </div>
+              <div class="code-wrapper">
+                <pre><code class="language-python">import turtle
 
-# Configure drawing colors and speed
-turtle.pencolor("Red")
-turtle.fillcolor("Gold")
-turtle.speed(3)
+turtle.speed(0)
+turtle.bgcolor("midnightblue")
+turtle.pensize(2)
 
-# Start tracking lines to fill
+colours = ["cyan", "gold", "hotpink", "lime", "orange", "white"]
+
+for i in range(36):
+    turtle.pencolor(colours[i % len(colours)])
+    turtle.circle(70)
+    turtle.right(10)
+
+turtle.hideturtle()
+print("Colour wheel complete")</code></pre>
+              </div>
+            </div>
+
+            <div class="turtle-example-card">
+              <h3>Constellation Map</h3>
+              <div class="turtle-example-intro">
+                This example uses coordinate pairs with <code>goto()</code> to place points around the canvas. It practises absolute movement without copying any of the course drawing targets.
+              </div>
+              <div class="code-wrapper">
+                <pre><code class="language-python">import turtle
+
+turtle.speed(0)
+turtle.bgcolor("midnightblue")
+turtle.pencolor("white")
+
+points = [(-150, 90), (-80, 130), (-20, 70), (55, 120), (120, 50)]
+
+for x, y in points:
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.dot(8, "gold")
+
+turtle.penup()
+turtle.goto(points[0])
+turtle.pendown()
+
+for x, y in points[1:]:
+    turtle.goto(x, y)
+
+turtle.hideturtle()
+print("Constellation complete")</code></pre>
+              </div>
+            </div>
+
+            <div class="turtle-example-card">
+              <h3>Function Flower</h3>
+              <div class="turtle-example-intro">
+                This example decomposes the drawing into one reusable petal function. The loop rotates after every petal, then the centre circle is drawn last so it sits neatly on top.
+              </div>
+              <div class="code-wrapper">
+                <pre><code class="language-python">import turtle
+
+turtle.speed(0)
+turtle.bgcolor("honeydew")
+
+def petal(colour):
+    turtle.color("darkgreen", colour)
+    turtle.begin_fill()
+    for i in range(2):
+        turtle.circle(60, 60)
+        turtle.left(120)
+    turtle.end_fill()
+
+for i in range(12):
+    petal("lightcoral")
+    turtle.right(30)
+
+turtle.color("goldenrod", "gold")
+turtle.penup()
+turtle.goto(0, -25)
+turtle.setheading(0)
+turtle.pendown()
 turtle.begin_fill()
+turtle.circle(25)
+turtle.end_fill()
 
-# Draw four sides of the square
-for i in range(4):
-    turtle.forward(100)
+turtle.hideturtle()
+print("Flower complete")</code></pre>
+              </div>
+            </div>
+
+            <div class="turtle-example-card">
+              <h3>Labelled Points</h3>
+              <div class="turtle-example-intro">
+                This example places labelled points around the canvas. It demonstrates lists, coordinates, <code>goto()</code>, <code>dot()</code> and <code>write()</code> without solving a course drawing task.
+              </div>
+              <div class="code-wrapper">
+                <pre><code class="language-python">import turtle
+
+turtle.speed(0)
+turtle.bgcolor("white")
+turtle.pencolor("navy")
+
+places = [
+    ("Start", -140, 80),
+    ("Checkpoint", -20, 20),
+    ("Goal", 120, -70)
+]
+
+for label, x, y in places:
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.dot(10, "tomato")
+    turtle.forward(12)
+    turtle.write(label, font=("Arial", 12, "bold"))
+
+turtle.hideturtle()
+print("Labels complete")</code></pre>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 1: Movement Commands -->
+        <div id="turtle-movement" class="turtle-section turtle-sub-content">
+          <div class="card">
+            <h2>🏃 Turtle Movement Commands</h2>
+            <p>Control the turtle's direction and coordinate position on the grid. By default, the turtle starts at coordinates <code>(0,0)</code> pointing to the right (East).</p>
+
+            <div class="turtle-example-grid">
+              <div class="turtle-example-card">
+                <h3>Forward and Turn Trail</h3>
+                <div class="turtle-example-intro">
+                  This example practises <code>forward()</code>, <code>left()</code> and <code>right()</code>. It makes a trail, not a course target shape, so students can focus on how turns affect direction.
+                </div>
+                <div class="code-wrapper">
+                  <pre><code class="language-python">import turtle
+
+turtle.speed(4)
+turtle.pencolor("royalblue")
+
+turtle.forward(80)
+turtle.left(60)
+turtle.forward(60)
+turtle.right(120)
+turtle.forward(60)
+turtle.left(60)
+turtle.forward(80)
+
+turtle.hideturtle()
+print("Trail complete")</code></pre>
+                </div>
+              </div>
+
+              <div class="turtle-example-card">
+                <h3>Compass Directions</h3>
+                <div class="turtle-example-intro">
+                  This example uses <code>setheading()</code> to point the turtle in exact compass directions. It shows that <code>0</code>, <code>90</code>, <code>180</code> and <code>270</code> are useful headings.
+                </div>
+                <div class="code-wrapper">
+                  <pre><code class="language-python">import turtle
+
+turtle.speed(4)
+turtle.pencolor("darkgreen")
+
+for heading in [0, 90, 180, 270]:
+    turtle.setheading(heading)
+    turtle.forward(80)
+    turtle.backward(80)
+
+turtle.hideturtle()
+print("Compass complete")</code></pre>
+                </div>
+              </div>
+
+              <div class="turtle-example-card">
+                <h3>Jump Without Drawing</h3>
+                <div class="turtle-example-intro">
+                  This example uses <code>penup()</code>, <code>goto()</code> and <code>pendown()</code> to move the turtle without leaving unwanted joining lines.
+                </div>
+                <div class="code-wrapper">
+                  <pre><code class="language-python">import turtle
+
+turtle.speed(4)
+turtle.pencolor("purple")
+
+positions = [(-120, 40), (-40, -30), (50, 60), (130, -20)]
+
+for x, y in positions:
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.pendown()
+    turtle.forward(35)
+
+turtle.hideturtle()
+print("Jump path complete")</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="turtle-command-list">
+              <div class="turtle-command">
+                <code>turtle.forward(distance)</code>
+                <p>Moves the turtle forward in its current direction by the specified pixel distance.</p>
+                <span class="turtle-alias">Short alias: <code>fd(distance)</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.backward(distance)</code>
+                <p>Moves the turtle backward, opposite to its current heading.</p>
+                <span class="turtle-alias">Short aliases: <code>bk(distance)</code>, <code>back(distance)</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.right(angle)</code>
+                <p>Turns the turtle clockwise by the specified angle in degrees.</p>
+                <span class="turtle-alias">Short alias: <code>rt(angle)</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.left(angle)</code>
+                <p>Turns the turtle counter-clockwise by the specified angle in degrees.</p>
+                <span class="turtle-alias">Short alias: <code>lt(angle)</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.goto(x, y)</code>
+                <p>Moves the turtle directly to coordinates <code>(x, y)</code> on the canvas.</p>
+                <span class="turtle-alias">Short aliases: <code>setpos(x, y)</code>, <code>setposition(x, y)</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.setheading(angle)</code>
+                <p>Sets the turtle direction. <code>0</code> is east, <code>90</code> is north, <code>180</code> is west and <code>270</code> is south.</p>
+                <span class="turtle-alias">Short alias: <code>seth(angle)</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.home()</code>
+                <p>Moves the turtle back to <code>(0, 0)</code> and points it east.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.xcor()</code> / <code>turtle.ycor()</code>
+                <p>Returns the current x-coordinate or y-coordinate.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.pos()</code>
+                <p>Returns the turtle's current position as a coordinate pair.</p>
+                <span class="turtle-alias">Short alias: <code>position()</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.heading()</code>
+                <p>Returns the turtle's current heading angle.</p>
+              </div>
+            </div>
+
+            <!-- Movement Card Viewer -->
+            <div id="viewer-movement-section" class="turtle-card-viewer">
+              <h3>📋 Movement Activity Cards</h3>
+              <p>Task cards for student activities focusing on movement, coordinates, and basic turning:</p>
+
+              <div class="carousel-container">
+                <div class="carousel-track"></div>
+                <button class="carousel-arrow prev-btn">&larr;</button>
+                <button class="carousel-arrow next-btn">&rarr;</button>
+                <div class="carousel-label">Card 1 of 6</div>
+              </div>
+
+              <div class="turtle-card-actions">
+                <a class="list-btn download-btn" style="text-decoration: none;" href="#" download>
+                  📥 Download Current Card (PNG)
+                </a>
+                <a class="list-btn turtle-outline-link" style="text-decoration: none;" href="turtle_course/cards/turtle_coding_cards_A4_landscape.pdf" download target="_blank">
+                  📚 Download All Cards (PDF)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: Pen & Fill -->
+        <div id="turtle-pen-fill" class="turtle-section turtle-sub-content">
+          <div class="card">
+            <h2>✍️ Pen & Fill Commands</h2>
+            <p>Control the drawing state of the turtle's pen, customize outlines, and fill shapes with colors.</p>
+
+            <div class="turtle-command-list">
+              <div class="turtle-command">
+                <code>turtle.penup()</code>
+                <p>Lifts the pen off the canvas. Moving the turtle will not draw any lines.</p>
+                <span class="turtle-alias">Short aliases: <code>pu()</code>, <code>up()</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.pendown()</code>
+                <p>Lowers the pen onto the canvas, so movement draws lines again.</p>
+                <span class="turtle-alias">Short aliases: <code>pd()</code>, <code>down()</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.pencolor(color)</code>
+                <p>Sets the outline colour, such as <code>"navy"</code>, <code>"red"</code> or <code>"#22c55e"</code>.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.fillcolor(color)</code>
+                <p>Sets the colour used between <code>begin_fill()</code> and <code>end_fill()</code>.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.color(pen, fill)</code>
+                <p>Sets both the outline colour and fill colour. With one argument, it sets both to the same colour.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.pensize(width)</code>
+                <p>Sets the thickness of the drawing outline in pixels.</p>
+                <span class="turtle-alias">Short alias: <code>width(width)</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.begin_fill()</code>
+                <p>Call this right before drawing the closed shape you want to fill.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.end_fill()</code>
+                <p>Call this after drawing the shape. Turtle fills it with the current fill colour.</p>
+              </div>
+            </div>
+
+            <div class="turtle-example-grid">
+              <div class="turtle-example-card">
+                <h3>Colour Swatch Chart</h3>
+                <div class="turtle-example-intro">
+                  This reference example shows how <code>color()</code>, <code>begin_fill()</code> and <code>end_fill()</code> work together. It draws a swatch chart so students can test supported colour names.
+                </div>
+                <div class="code-wrapper">
+                  <pre><code class="language-python">import turtle
+
+colors = ["red", "orange", "yellow", "green", "blue", "purple",
+          "pink", "brown", "gray", "black", "white"]
+
+square_size = 30
+gap = 15
+spacing = square_size + gap
+
+turtle.penup()
+turtle.speed(0)
+
+start_x = -130
+start_y = 120
+
+for index in range(len(colors)):
+    row = index // 6
+    col = index % 6
+
+    x = start_x + col * spacing
+    y = start_y - row * 90
+
+    # Draw colour swatch
+    turtle.goto(x, y)
+    turtle.color(colors[index])
+    turtle.begin_fill()
+
+    for side in range(4):
+        turtle.forward(square_size)
+        turtle.right(90)
+
+    turtle.end_fill()
+
+    # Write colour name
+    turtle.goto(x, y - 50)
+    turtle.color("black")
+    turtle.write(colors[index], align="left", font=("Arial", 10, "normal"))
+
+turtle.hideturtle()
+print("Colour swatches complete")</code></pre>
+                </div>
+              </div>
+
+              <div class="turtle-example-card">
+                <h3>Filled Progress Bar</h3>
+                <div class="turtle-example-intro">
+                  This example uses filled rectangles for a simple interface-style drawing. It demonstrates pen colour, fill colour, and drawing a filled shape without matching the course badge or square tasks.
+                </div>
+                <div class="code-wrapper">
+                  <pre><code class="language-python">import turtle
+
+turtle.speed(0)
+
+def rectangle(width, height, outline, fill):
+    turtle.color(outline, fill)
+    turtle.begin_fill()
+    for side in range(2):
+        turtle.forward(width)
+        turtle.right(90)
+        turtle.forward(height)
+        turtle.right(90)
+    turtle.end_fill()
+
+turtle.penup()
+turtle.goto(-150, 30)
+turtle.pendown()
+rectangle(300, 45, "black", "lightgray")
+
+turtle.penup()
+turtle.goto(-145, 25)
+turtle.pendown()
+rectangle(210, 35, "seagreen", "mediumseagreen")
+
+turtle.penup()
+turtle.goto(-30, -40)
+turtle.color("black")
+turtle.write("70% complete", align="center", font=("Arial", 14, "bold"))
+
+turtle.hideturtle()
+print("Progress bar complete")</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pen & Fill Card Viewer -->
+            <div id="viewer-pen-fill-section" class="turtle-card-viewer">
+              <h3>📋 Pen & Fill Activity Cards</h3>
+              <p>Task cards for student activities focusing on line thickness, outlines, and color filling:</p>
+
+              <div class="carousel-container">
+                <div class="carousel-track"></div>
+                <button class="carousel-arrow prev-btn">&larr;</button>
+                <button class="carousel-arrow next-btn">&rarr;</button>
+                <div class="carousel-label">Card 1 of 2</div>
+              </div>
+
+              <div class="turtle-card-actions">
+                <a class="list-btn download-btn" style="text-decoration: none;" href="#" download>
+                  📥 Download Current Card (PNG)
+                </a>
+                <a class="list-btn turtle-outline-link" style="text-decoration: none;" href="turtle_course/cards/turtle_coding_cards_A4_landscape.pdf" download target="_blank">
+                  📚 Download All Cards (PDF)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: Styling -->
+        <div id="turtle-styling" class="turtle-section turtle-sub-content">
+          <div class="card">
+            <h2>🎨 Turtle Styling</h2>
+            <p>Change how the turtle and its marks look: cursor shape, drawing speed, dots, circles, labels and visibility.</p>
+
+            <div class="turtle-command-list">
+              <div class="turtle-command">
+                <code>turtle.circle(radius)</code>
+                <p>Draws a circle. The centre is one radius to the left of the turtle.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.dot(size, color)</code>
+                <p>Draws a solid circular dot at the turtle's current position.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.shape(name)</code>
+                <p>Changes the cursor shape. Try <code>"turtle"</code>, <code>"arrow"</code>, <code>"circle"</code>, <code>"square"</code> or <code>"triangle"</code>.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.speed(level)</code>
+                <p>Sets drawing speed. Use <code>1</code> for slow, <code>10</code> for fast or <code>0</code> for instant drawing.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.write(text, align, font)</code>
+                <p>Writes text on the canvas. For example, use <code>align="center"</code> to centre the label.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.hideturtle()</code>
+                <p>Hides the cursor, which makes finished drawings cleaner.</p>
+                <span class="turtle-alias">Short alias: <code>ht()</code></span>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.showturtle()</code>
+                <p>Makes the turtle cursor visible again.</p>
+                <span class="turtle-alias">Short alias: <code>st()</code></span>
+              </div>
+            </div>
+
+            <div class="turtle-example-grid">
+              <div class="turtle-example-card">
+                <h3>Marker Labels</h3>
+                <div class="turtle-example-intro">
+                  This example uses <code>dot()</code> and <code>write()</code> to place labelled markers. It is useful for showing how styling commands can add readable annotations to a drawing.
+                </div>
+                <div class="code-wrapper">
+                  <pre><code class="language-python">import turtle
+
+turtle.speed(0)
+turtle.shape("turtle")
+turtle.pencolor("navy")
+
+markers = [
+    ("A", -120, 80, "tomato"),
+    ("B", 0, 20, "gold"),
+    ("C", 120, -60, "mediumseagreen")
+]
+
+for label, x, y, colour in markers:
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.dot(18, colour)
+    turtle.forward(14)
+    turtle.write(label, font=("Arial", 14, "bold"))
+
+turtle.hideturtle()
+print("Markers complete")</code></pre>
+                </div>
+              </div>
+
+              <div class="turtle-example-card">
+                <h3>Circle Labels</h3>
+                <div class="turtle-example-intro">
+                  This example uses <code>circle()</code>, <code>dot()</code>, <code>write()</code> and <code>hideturtle()</code> to create labelled markers using supported styling commands.
+                </div>
+                <div class="code-wrapper">
+                  <pre><code class="language-python">import turtle
+
+turtle.speed(0)
+turtle.pencolor("darkslateblue")
+
+items = [("Small", -110, 0, 25), ("Medium", 0, 0, 40), ("Large", 125, 0, 55)]
+
+for label, x, y, radius in items:
+    turtle.penup()
+    turtle.goto(x, y - radius)
+    turtle.pendown()
+    turtle.circle(radius)
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.dot(8, "tomato")
+    turtle.goto(x, y - radius - 24)
+    turtle.write(label, align="center", font=("Arial", 10, "bold"))
+
+turtle.hideturtle()
+print("Circle labels complete")</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Styling Card Viewer -->
+            <div id="viewer-styling-section" class="turtle-card-viewer">
+              <h3>📋 Styling & Circle Art Activity Cards</h3>
+              <p>Task cards for student activities focusing on complex styling, circle repetition, and combining features:</p>
+
+              <div class="carousel-container">
+                <div class="carousel-track"></div>
+                <button class="carousel-arrow prev-btn">&larr;</button>
+                <button class="carousel-arrow next-btn">&rarr;</button>
+                <div class="carousel-label">Card 1 of 3</div>
+              </div>
+
+              <div class="turtle-card-actions">
+                <a class="list-btn download-btn" style="text-decoration: none;" href="#" download>
+                  📥 Download Current Card (PNG)
+                </a>
+                <a class="list-btn turtle-outline-link" style="text-decoration: none;" href="turtle_course/cards/turtle_coding_cards_A4_landscape.pdf" download target="_blank">
+                  📚 Download All Cards (PDF)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: Canvas Configuration -->
+        <div id="turtle-canvas" class="turtle-section turtle-sub-content">
+          <div class="card">
+            <h2>▦ Canvas Configuration</h2>
+            <p>The browser Turtle canvas in Python Code Lab uses a fixed visible drawing area of about <code>-200</code> to <code>200</code> on both axes. Use movement and coordinates to position drawings inside that space.</p>
+
+            <div class="banner info">
+              <span>ℹ️</span>
+              <span><strong>Supported here:</strong> <code>bgcolor()</code>, <code>clear()</code>, <code>reset()</code> and coordinate movement. Full desktop Turtle window controls such as changing the screen size are not supported in this browser tool.</span>
+            </div>
+
+            <div class="turtle-command-list">
+              <div class="turtle-command">
+                <code>turtle.bgcolor(color)</code>
+                <p>Sets the background colour of the drawing canvas.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.clear()</code>
+                <p>Clears the drawing but keeps the turtle's current position and direction.</p>
+              </div>
+              <div class="turtle-command">
+                <code>turtle.reset()</code>
+                <p>Clears the drawing, resets styles and returns the turtle to <code>(0, 0)</code>.</p>
+              </div>
+            </div>
+
+            <div class="turtle-example-grid">
+              <div class="turtle-example-card">
+                <h3>Canvas Coordinate Grid</h3>
+                <div class="turtle-example-intro">
+                  This example draws the fixed <code>-200</code> to <code>200</code> coordinate area used by the browser Turtle canvas. It helps students understand where <code>goto(x, y)</code> positions are on screen.
+                </div>
+                <div class="code-wrapper">
+                  <pre><code class="language-python">import turtle
+
+turtle.speed(0)
+turtle.penup()
+
+# Draw the outer square from -200 to 200
+turtle.goto(-200, 200)
+turtle.pendown()
+turtle.pensize(3)
+
+for side in range(4):
+    turtle.forward(400)
     turtle.right(90)
 
-# Fill the drawn shape
-turtle.end_fill()</code></pre>
+# Draw grid lines every 50 pixels
+turtle.pensize(1)
+
+for x in range(-150, 200, 50):
+    turtle.penup()
+    turtle.goto(x, 200)
+    turtle.pendown()
+    turtle.goto(x, -200)
+
+for y in range(-150, 200, 50):
+    turtle.penup()
+    turtle.goto(-200, y)
+    turtle.pendown()
+    turtle.goto(200, y)
+
+# Draw the x-axis and y-axis
+turtle.pensize(2)
+
+turtle.penup()
+turtle.goto(-200, 0)
+turtle.pendown()
+turtle.goto(200, 0)
+
+turtle.penup()
+turtle.goto(0, 200)
+turtle.pendown()
+turtle.goto(0, -200)
+
+# Label the corners inside the area
+turtle.penup()
+
+turtle.goto(-195, 180)
+turtle.write("(-200, 200)", align="left", font=("Arial", 9, "normal"))
+
+turtle.goto(195, 180)
+turtle.write("(200, 200)", align="right", font=("Arial", 9, "normal"))
+
+turtle.goto(-195, -195)
+turtle.write("(-200, -200)", align="left", font=("Arial", 9, "normal"))
+
+turtle.goto(195, -195)
+turtle.write("(200, -200)", align="right", font=("Arial", 9, "normal"))
+
+# Label the centre
+turtle.goto(5, 5)
+turtle.write("(0, 0)", align="left", font=("Arial", 9, "normal"))
+
+turtle.hideturtle()
+print("Canvas grid complete")</code></pre>
+                </div>
+              </div>
+
+              <div class="turtle-example-card">
+                <h3>Centred Canvas Demo</h3>
+                <div class="turtle-example-intro">
+                  This example shows the safe configuration commands for this tool while keeping the drawing inside the fixed canvas area. It sets a background colour and places a small labelled panel near the centre.
+                </div>
+                <div class="code-wrapper">
+                  <pre><code class="language-python">import turtle
+
+turtle.speed(0)
+turtle.bgcolor("lavender")
+
+turtle.penup()
+turtle.goto(-95, 45)
+turtle.pendown()
+
+turtle.color("navy", "white")
+turtle.begin_fill()
+
+for side in range(2):
+    turtle.forward(190)
+    turtle.right(90)
+    turtle.forward(90)
+    turtle.right(90)
+
+turtle.end_fill()
+
+turtle.penup()
+turtle.goto(0, 8)
+turtle.color("navy")
+turtle.write("Fixed canvas", align="center", font=("Arial", 14, "bold"))
+
+turtle.goto(0, -22)
+turtle.write("Keep drawings near the centre", align="center", font=("Arial", 10, "normal"))
+
+# Try uncommenting one of these lines:
+# turtle.clear()
+# turtle.reset()
+
+turtle.hideturtle()
+print("Canvas demo complete")</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 5: More Examples -->
+        <div id="turtle-more-examples" class="turtle-section turtle-sub-content">
+          <div class="card">
+            <h2>📐 Shape Builder Example</h2>
+            <p>This compact example is useful for teaching variables and procedures because students can change the number of sides, size and colours.</p>
+            <div class="code-wrapper">
+              <pre><code class="language-python">import turtle
+
+turtle.speed(0)
+
+def polygon(sides, length, outline, fill):
+    turtle.color(outline, fill)
+    turtle.begin_fill()
+    for i in range(sides):
+        turtle.forward(length)
+        turtle.right(360 / sides)
+    turtle.end_fill()
+
+for sides in range(3, 9):
+    polygon(sides, 70, "navy", "lightgreen")
+    turtle.penup()
+    turtle.forward(95)
+    turtle.pendown()
+
+turtle.hideturtle()
+print("Shape builder complete")</code></pre>
+            </div>
           </div>
         </div>
       </div>
@@ -3122,7 +4109,7 @@ I think the problem is in the total calculation.</code></pre>
 	        toggleButton.setAttribute('aria-expanded', 'true');
 	      }
 	    }
-	
+
 	    function showTab(tabId, updateHash = true) {
 	      const targetTab = document.getElementById('tab-' + tabId);
 	      if (!targetTab) return;
@@ -3134,7 +4121,7 @@ I think the problem is in the total calculation.</code></pre>
 	          return onclickAttr.includes(`'${tabId}'`) || onclickAttr.includes(`"${tabId}"`);
 	        })
 	        : null;
-	
+
 	      if (tabId !== 'search-results') {
 	        lastActiveTab = tabId;
 	        // Also clear the search bar if they click a tab button directly
@@ -3169,7 +4156,7 @@ I think the problem is in the total calculation.</code></pre>
       });
 
 	      targetTab.classList.add('active');
-	
+
 	      // Highlight sidebar button
 	      buttons.forEach(btn => {
 	        btn.classList.remove('active');
@@ -3194,10 +4181,22 @@ I think the problem is in the total calculation.</code></pre>
         return;
       }
 
+      if (hash.startsWith('turtle-')) {
+        let subTabId = hash.replace('turtle-', ''); // e.g. 'movement', 'pen-fill', 'styling'
+        if (subTabId === 'loops-example') subTabId = 'examples';
+        showTab('turtle', false);
+        showTurtleSubTab(subTabId, false);
+        return;
+      }
+
       // Check if hash matches a tab ID directly
       const tabElement = document.getElementById('tab-' + hash);
       if (tabElement) {
         showTab(hash, false);
+        // Show default card subtab when opening tab-turtle directly
+        if (hash === 'turtle') {
+          showTurtleSubTab('intro', false);
+        }
         return;
       }
 
@@ -3230,6 +4229,7 @@ I think the problem is in the total calculation.</code></pre>
 
     // Listen for hash changes
     window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleHashChange);
 
     // Search implementation
     function handleSearch() {
@@ -4300,6 +5300,125 @@ else:
       }
     }
 
+    // Turtle section anchor navigation.
+    function showTurtleSubTab(subTabId, updateHash = true) {
+      if (subTabId === 'loops-example') subTabId = 'examples';
+      const targetId = subTabId === 'examples' ? 'turtle-examples' : 'turtle-' + subTabId;
+      const targetElement = document.getElementById(targetId);
+
+      document.querySelectorAll('#tab-turtle .turtle-section').forEach(section => {
+        section.classList.remove('active');
+      });
+
+      if (targetElement) {
+        targetElement.classList.add('active');
+      }
+
+      // Update sidebar nav active state highlight
+      const sidebarButtons = document.querySelectorAll('.sidebar .nav-btn');
+      sidebarButtons.forEach(btn => btn.classList.remove('active'));
+      const buttons = document.querySelectorAll('.sidebar .nav-btn');
+      const targetBtn = Array.from(buttons).find(btn => {
+        const onclickAttr = btn.getAttribute('onclick') || '';
+        return onclickAttr.includes('showTab(\'turtle\')') && onclickAttr.includes(`'${subTabId}'`);
+      });
+      if (targetBtn) {
+        targetBtn.classList.add('active');
+      }
+
+      if (updateHash) {
+        const nextHash = `#${targetId}`;
+        if (window.location.hash !== nextHash) {
+          history.pushState(null, '', nextHash);
+        }
+      }
+
+      // Keep Turtle sub-tabs stable. The panel changes in place; scrolling here
+      // makes the top sub-tab menu appear to jump down after a click.
+    }
+
+    // Dynamic Card Viewer setup
+    function setupCardViewer(containerId, cards) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const track = container.querySelector(".carousel-track");
+      const prevBtn = container.querySelector(".prev-btn");
+      const nextBtn = container.querySelector(".next-btn");
+      const label = container.querySelector(".carousel-label");
+      const downloadBtn = container.querySelector(".download-btn");
+
+      if (!track || !prevBtn || !nextBtn || !label || !downloadBtn) return;
+
+      let index = 0;
+
+      // Populate track
+      cards.forEach(c => {
+        const slide = document.createElement("div");
+        slide.className = "carousel-slide";
+        slide.innerHTML = `<img src="turtle_course/cards/${c.file}" alt="${c.title}">`;
+        track.appendChild(slide);
+      });
+
+      function update() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        label.textContent = `${cards[index].title} (Card ${index + 1} of ${cards.length})`;
+        downloadBtn.href = `turtle_course/cards/${cards[index].file}`;
+        downloadBtn.download = cards[index].file;
+      }
+
+      prevBtn.addEventListener("click", () => {
+        index = (index - 1 + cards.length) % cards.length;
+        update();
+      });
+
+      nextBtn.addEventListener("click", () => {
+        index = (index + 1) % cards.length;
+        update();
+      });
+
+      update();
+    }
+
+    function initAllCardViewers() {
+      const allCards = [
+        { file: "card1.png", title: "Step 1: First Steps" },
+        { file: "card2.png", title: "Step 2: Square" },
+        { file: "card3.png", title: "Step 3: Polygons" },
+        { file: "card4.png", title: "Step 4: Colour & Fill" },
+        { file: "card5.png", title: "Step 5: Lift the Pen" },
+        { file: "card6.png", title: "Step 6: Circle Art" },
+        { file: "card7.png", title: "Step 7: Procedures" },
+        { file: "card8.png", title: "Step 8: Spiral" },
+        { file: "card9.png", title: "Step 9: Skyline" },
+        { file: "card10.png", title: "Step 10: Final Postcard" }
+      ];
+
+      const movementCards = [
+        { file: "card1.png", title: "Step 1: First Steps" },
+        { file: "card2.png", title: "Step 2: Square" },
+        { file: "card3.png", title: "Step 3: Polygons" },
+        { file: "card5.png", title: "Step 5: Lift the Pen" },
+        { file: "card8.png", title: "Step 8: Spiral" },
+        { file: "card9.png", title: "Step 9: Skyline" }
+      ];
+
+      const penFillCards = [
+        { file: "card4.png", title: "Step 4: Colour & Fill" },
+        { file: "card5.png", title: "Step 5: Lift the Pen" }
+      ];
+
+      const stylingCards = [
+        { file: "card6.png", title: "Step 6: Circle Art" },
+        { file: "card7.png", title: "Step 7: Procedures" },
+        { file: "card10.png", title: "Step 10: Final Postcard" }
+      ];
+
+      setupCardViewer("viewer-movement-section", movementCards);
+      setupCardViewer("viewer-pen-fill-section", penFillCards);
+      setupCardViewer("viewer-styling-section", stylingCards);
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       renderVisualList();
       renderGridPicker();
@@ -4313,6 +5432,10 @@ else:
       showStructureConcept('queue', 'reset');
       showStructureConcept('linked', 'reset');
       manualTreeLoadDefault();
+      initAllCardViewers();
+      if (!window.location.hash.startsWith('#turtle-')) {
+        showTurtleSubTab('intro', false);
+      }
 
       // Determine initial theme
       let isDark = true;
