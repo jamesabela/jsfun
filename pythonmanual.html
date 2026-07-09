@@ -417,6 +417,33 @@
       font-weight: 800;
     }
 
+    .manual-details {
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.18);
+      overflow: hidden;
+    }
+
+    .manual-details + .manual-details {
+      margin-top: 12px;
+    }
+
+    html.light-theme .manual-details {
+      background: #f8fafc;
+    }
+
+    .manual-details summary {
+      cursor: pointer;
+      color: var(--text-main);
+      font-weight: 800;
+      padding: 11px 12px;
+      user-select: none;
+    }
+
+    .manual-details .code-wrapper {
+      margin: 0 12px 12px;
+    }
+
     .manual-bad {
       color: #ef4444;
       font-weight: 800;
@@ -441,6 +468,208 @@
     .sort-stage {
       min-height: 180px;
       align-items: end;
+    }
+
+    .recursion-stage {
+      height: 360px;
+      min-height: 360px;
+      align-items: stretch;
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr);
+      gap: 14px;
+      overflow: hidden;
+    }
+
+    .recursion-panel {
+      background: rgba(15, 23, 42, 0.36);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    html.light-theme .recursion-panel {
+      background: #f8fafc;
+    }
+
+    .recursion-panel h3 {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    .recursion-stack,
+    .recursion-return-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .recursion-frame,
+    .recursion-return-step {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--card-bg);
+      color: var(--text-main);
+      padding: 9px 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .recursion-frame.active,
+    .recursion-return-step.active {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.22);
+    }
+
+    .recursion-frame.base {
+      border-color: var(--success);
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.18);
+    }
+
+    .recursion-return-step {
+      background: rgba(34, 197, 94, 0.12);
+    }
+
+    .oop-intro-stage {
+      min-height: 300px;
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) 70px minmax(220px, 1fr);
+      gap: 14px;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    .oop-intro-panel {
+      background: rgba(15, 23, 42, 0.36);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    html.light-theme .oop-intro-panel {
+      background: #f8fafc;
+    }
+
+    .oop-intro-panel h3 {
+      margin: 0;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .oop-loose-list,
+    .oop-object-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .oop-loose-row,
+    .oop-object-card,
+    .oop-blueprint {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--card-bg);
+      color: var(--text-main);
+      padding: 9px 10px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .oop-loose-row,
+    .oop-blueprint,
+    .oop-object-card,
+    .oop-arrow-column {
+      transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .oop-arrow-column {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 2rem;
+      font-weight: 900;
+      opacity: 0.25;
+    }
+
+    .oop-blueprint {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary-glow);
+      opacity: 0.28;
+      transform: translateY(8px);
+    }
+
+    .oop-object-card {
+      position: relative;
+      overflow: hidden;
+      opacity: 0.24;
+      transform: translateY(10px);
+    }
+
+    .oop-object-card strong {
+      color: var(--success);
+    }
+
+    .oop-intro-stage.step-1 .oop-loose-row {
+      border-color: rgba(239, 68, 68, 0.45);
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.12);
+    }
+
+    .oop-intro-stage.step-2 .oop-arrow-column,
+    .oop-intro-stage.step-3 .oop-arrow-column,
+    .oop-intro-stage.step-4 .oop-arrow-column,
+    .oop-intro-stage.step-5 .oop-arrow-column {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+
+    .oop-intro-stage.step-2 .oop-blueprint,
+    .oop-intro-stage.step-3 .oop-blueprint,
+    .oop-intro-stage.step-4 .oop-blueprint,
+    .oop-intro-stage.step-5 .oop-blueprint {
+      opacity: 1;
+      transform: translateY(0);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .oop-intro-stage.step-3 .oop-object-card:nth-child(1),
+    .oop-intro-stage.step-4 .oop-object-card:nth-child(1),
+    .oop-intro-stage.step-5 .oop-object-card:nth-child(1) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .oop-intro-stage.step-4 .oop-object-card:nth-child(2),
+    .oop-intro-stage.step-5 .oop-object-card:nth-child(2) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .oop-intro-stage.step-5 .oop-object-card:nth-child(3) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .oop-intro-stage.step-5 .oop-loose-row {
+      opacity: 0.55;
+      transform: translateX(8px);
     }
 
     .sort-bar {
@@ -471,6 +700,21 @@
     .sort-bar.key {
       background: #ede9fe;
       border-color: #8b5cf6;
+    }
+
+    @media (max-width: 760px) {
+      .recursion-stage {
+        grid-template-columns: 1fr;
+      }
+
+      .oop-intro-stage {
+        grid-template-columns: 1fr;
+      }
+
+      .oop-arrow-column {
+        min-height: 40px;
+        transform: rotate(90deg);
+      }
     }
 
     .big-o-layout {
@@ -1747,26 +1991,65 @@
 	        </div>
 	      </div>
 
-	      <div class="nav-section collapsed" data-nav-section>
-	        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
-	          <span>Computer Science</span>
-	          <span class="nav-section-arrow">▾</span>
-	        </button>
-	        <div class="nav-section-items">
-	          <button class="nav-btn" onclick="showTab('searching')">🔎 Searching</button>
-	          <button class="nav-btn" onclick="showTab('big-o')">📈 Big O</button>
-	          <button class="nav-btn" onclick="showTab('bubble-sort')">🫧 Bubble Sort</button>
-	          <button class="nav-btn" onclick="showTab('insertion-sort')">📥 Insertion Sort</button>
-	          <button class="nav-btn" onclick="showTab('stacks')">📚 Stacks</button>
-	          <button class="nav-btn" onclick="showTab('queues')">🚶 Queues</button>
-	          <button class="nav-btn" onclick="showTab('linked-lists')">🔗 Linked Lists</button>
-	          <button class="nav-btn" onclick="showTab('recursion')">🌀 Recursion</button>
-	          <button class="nav-btn" onclick="showTab('oop')">🏛️ OOP</button>
-	          <button class="nav-btn" onclick="showTab('trees')">🌳 Binary Trees</button>
-	        </div>
-	      </div>
+		      <div class="nav-section collapsed" data-nav-section>
+		        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
+		          <span>Sorts and Searches</span>
+		          <span class="nav-section-arrow">▾</span>
+		        </button>
+		        <div class="nav-section-items">
+		          <button class="nav-btn" onclick="showTab('searching')">🔎 Searching</button>
+		          <button class="nav-btn" onclick="showTab('big-o')">📈 Big O</button>
+		          <button class="nav-btn" onclick="showTab('bubble-sort')">🫧 Bubble Sort</button>
+		          <button class="nav-btn" onclick="showTab('insertion-sort')">📥 Insertion Sort</button>
+		        </div>
+		      </div>
 
-	      <div class="nav-section collapsed" data-nav-section>
+		      <div class="nav-section collapsed" data-nav-section>
+		        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
+		          <span>Recursion</span>
+		          <span class="nav-section-arrow">▾</span>
+		        </button>
+		        <div class="nav-section-items">
+		          <button class="nav-btn" onclick="showTab('recursion')">🌀 Recursion Guide</button>
+		        </div>
+		      </div>
+
+		      <div class="nav-section collapsed" data-nav-section>
+		        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
+		          <span>OOP</span>
+		          <span class="nav-section-arrow">▾</span>
+		        </button>
+			        <div class="nav-section-items">
+			          <button class="nav-btn" onclick="showTab('oop')">🏛️ OOP Overview</button>
+			          <button class="nav-btn" onclick="showTab('oop-core')">🧱 Classes & Objects</button>
+			          <button class="nav-btn" onclick="showTab('oop-constructors')">⚙️ Constructors</button>
+				          <button class="nav-btn" onclick="showTab('oop-methods')">🛠️ Methods</button>
+				          <button class="nav-btn" onclick="showTab('oop-encapsulation')">🔒 Encapsulation</button>
+				          <button class="nav-btn" onclick="showTab('oop-objects-lists')">👥 Objects in Lists</button>
+				          <button class="nav-btn" onclick="showTab('oop-file-objects')">📄 Files to Objects</button>
+				          <button class="nav-btn" onclick="showTab('oop-dunder')">✨ Dunder Methods</button>
+				          <button class="nav-btn" onclick="showTab('oop-inheritance')">🧬 Inheritance</button>
+				          <button class="nav-btn" onclick="showTab('oop-polymorphism')">🎭 Polymorphism</button>
+				          <button class="nav-btn" onclick="showTab('oop-aggregation')">🎯 Aggregation</button>
+				          <button class="nav-btn" onclick="showTab('oop-adt-bridge')">📚 OOP ADT Bridge</button>
+			          <button class="nav-btn" onclick="showTab('oop-tree-bridge')">🌳 OOP Trees</button>
+			        </div>
+			      </div>
+
+		      <div class="nav-section collapsed" data-nav-section>
+		        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
+		          <span>ADTs and Trees</span>
+		          <span class="nav-section-arrow">▾</span>
+		        </button>
+		        <div class="nav-section-items">
+		          <button class="nav-btn" onclick="showTab('stacks')">📚 Stack ADT</button>
+		          <button class="nav-btn" onclick="showTab('queues')">🚶 Queue ADT</button>
+		          <button class="nav-btn" onclick="showTab('linked-lists')">🔗 Linked Lists</button>
+		          <button class="nav-btn" onclick="showTab('trees')">🌳 Binary Trees</button>
+		        </div>
+		      </div>
+
+		      <div class="nav-section collapsed" data-nav-section>
 	        <button class="nav-section-toggle" type="button" onclick="toggleNavSection(this)" aria-expanded="false">
 	          <span>Help and Reference</span>
 	          <span class="nav-section-arrow">▾</span>
@@ -3056,16 +3339,60 @@ print(second_score)  # 150</code></pre>
           <h2>📖 Dictionaries: Key-Value Pairs</h2>
           <p>A dictionary stores values under named keys. It is useful when a list index is not meaningful enough.</p>
           <div class="code-wrapper">
-            <pre><code class="language-python">capitals = {
-    "Malaysia": "Kuala Lumpur",
-    "Malta": "Valletta",
-    "England": "London"
+            <pre><code class="language-python">moon_counts = {
+    "Mercury": 0,
+    "Earth": 1,
+    "Mars": 2
 }
 
-print(capitals["Malaysia"])
-print(capitals.get("Japan", "Unknown"))</code></pre>
+print(moon_counts["Earth"])
+print(moon_counts.get("Venus", "Not stored"))</code></pre>
           </div>
           <p><strong>Safe access:</strong> <code>.get()</code> avoids a <code>KeyError</code> if the key is missing.</p>
+        </div>
+
+        <div class="card">
+          <h2>🔑 Keys, Values and List Values</h2>
+          <p>Keys must be unique. If you use the same key twice, the later value replaces the earlier one. Values can be
+            strings, numbers, lists, booleans or even another dictionary.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">museum = {
+    "Dinosaurs": ["Triceratops", "Stegosaurus"],
+    "Planets": ["Mars", "Jupiter"],
+    "Open rooms": 6
+}
+
+print(museum["Dinosaurs"])
+print(museum["Dinosaurs"][0])
+print(museum["Open rooms"])</code></pre>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Common Bug:</strong> <code>museum["Dinosaurs"]</code> gives the whole list. Use
+              <code>museum["Dinosaurs"][0]</code> if you need the first item inside that list.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🛡️ Safe Lookup and Membership</h2>
+          <p>Use <code>in</code> when you need to test whether a key exists. Use <code>.get()</code> when you want a safe
+            fallback value.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">shelf_codes = {
+    "Graphic novels": "A12",
+    "Robotics": "B07",
+    "Space": "C04"
+}
+
+section = input("Library section: ")
+
+if section in shelf_codes:
+    print(shelf_codes[section])
+else:
+    print("Not found")
+
+print(shelf_codes.get("Poetry", "Ask the librarian"))</code></pre>
+          </div>
         </div>
 
         <div class="card">
@@ -3074,18 +3401,123 @@ print(capitals.get("Japan", "Unknown"))</code></pre>
             become the value.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">counts = {}
-words = ["to", "be", "or", "not", "to", "be"]
+events = ["login", "save", "login", "print", "save", "login"]
 
-for word in words:
-    counts[word] = counts.get(word, 0) + 1
+for event in events:
+    counts[event] = counts.get(event, 0) + 1
 
-for word, count in counts.items():
-    print(word, count)</code></pre>
+for event, count in counts.items():
+    print(event, count)</code></pre>
           </div>
           <div class="banner info">
             <span>ℹ️</span>
             <span><strong>Vocabulary:</strong> key, value, item, safe lookup, membership, nested dictionary, word
               frequency.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔁 Looping Through Keys, Values and Items</h2>
+          <p>A normal dictionary loop gives keys. Use <code>.values()</code> for values and <code>.items()</code> when you
+            need both the key and the value.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">bus_times = {
+    "North Gate": "07:40",
+    "Sports Hall": "07:55",
+    "Library": "08:05"
+}
+
+for stop in bus_times:
+    print(stop)
+
+for time in bus_times.values():
+    print(time)
+
+for stop, time in bus_times.items():
+    print(stop, "pickup is", time)</code></pre>
+          </div>
+          <div class="op-grid" style="grid-template-columns: 160px 1fr;">
+            <div class="op-header">View</div>
+            <div class="op-header">Use</div>
+            <div class="op-cell"><code>.keys()</code></div>
+            <div class="op-cell">Shows all keys.</div>
+            <div class="op-cell"><code>.values()</code></div>
+            <div class="op-cell">Shows all stored values.</div>
+            <div class="op-cell"><code>.items()</code></div>
+            <div class="op-cell">Shows key-value pairs, useful for two-variable loops.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>✏️ Updating, Adding, Deleting and Popping</h2>
+          <p>Assigning to a key updates it if the key already exists, or adds a new pair if the key is new.
+            <code>del</code> removes a pair. <code>pop()</code> removes a pair and returns its value.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">inventory = {
+    "torch": 3,
+    "battery": 12,
+    "map": 1,
+    "rope": 2
+}
+
+inventory["torch"] = 4       # update existing key
+inventory["compass"] = 1     # add new key
+
+del inventory["rope"]
+removed = inventory.pop("battery")
+
+print("Removed:", removed)
+print(inventory)</code></pre>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Common Bug:</strong> <code>del inventory["radio"]</code> crashes if the key does not exist. Check
+              with <code>in</code> first, or use <code>pop("radio", "Not found")</code>.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧱 Nested Dictionaries</h2>
+          <p>A nested dictionary stores a dictionary inside another dictionary. This is useful for records such as
+            bookings, products, characters or teams.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">workshops = {
+    "robotics": {"room": "Lab 2", "places": 18, "level": "intermediate"},
+    "animation": {"room": "Studio", "places": 12, "level": "beginner"},
+    "cyber": {"room": "Lab 4", "places": 16, "level": "advanced"}
+}
+
+print(workshops["cyber"]["places"])
+
+for workshop, details in workshops.items():
+    print(workshop, details["room"], details["level"])</code></pre>
+          </div>
+          <p><strong>Pattern:</strong> use the outer key first, then the inner key:
+            <code>workshops["cyber"]["places"]</code>.</p>
+        </div>
+
+        <div class="card">
+          <h2>📄 Word Frequency From a File</h2>
+          <p>A common dictionary task is counting how often each word appears. Clean the text, split it into words, then
+            update a count for each word.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">import string
+
+signal_counts = {}
+
+with open("weather_report.txt", "r") as file:
+    text = file.read().lower()
+
+for mark in string.punctuation:
+    text = text.replace(mark, " ")
+
+words = text.split()
+
+for word in words:
+    signal_counts[word] = signal_counts.get(word, 0) + 1
+
+print("Different words:", len(signal_counts))
+print("rain:", signal_counts.get("rain", 0))</code></pre>
           </div>
         </div>
       </div>
@@ -3129,6 +3561,160 @@ else:
             <span><strong>Vocabulary:</strong> subroutine, parameter, argument, return value, local scope, global scope,
               decomposition, mutable reference parameter.</span>
           </div>
+        </div>
+
+        <div class="card">
+          <h2>📞 Parameters and Arguments</h2>
+          <p>A parameter is the variable name in the subroutine definition. An argument is the real value sent into the
+            subroutine when it is called.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def announce_train(destination, platform):
+    print("Train to", destination)
+    print("Platform", platform)
+
+announce_train("Ipoh", 3)
+announce_train("Seremban", 7)</code></pre>
+          </div>
+          <div class="op-grid" style="grid-template-columns: 170px 1fr;">
+            <div class="op-header">Word</div>
+            <div class="op-header">In this example</div>
+            <div class="op-cell">Parameters</div>
+            <div class="op-cell"><code>destination</code> and <code>platform</code></div>
+            <div class="op-cell">Arguments</div>
+            <div class="op-cell"><code>"Ipoh"</code>, <code>3</code>, <code>"Seremban"</code> and <code>7</code></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>↩️ Return Values</h2>
+          <p>A procedure performs actions. A function calculates or chooses a value and sends it back with
+            <code>return</code>. Store the returned value if you need it later.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def delivery_cost(distance_km):
+    base = 4
+    per_km = 1.5
+    return base + distance_km * per_km
+
+short_trip = delivery_cost(3)
+long_trip = delivery_cost(12)
+
+print(short_trip)
+print(long_trip)</code></pre>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Common Bug:</strong> <code>print()</code> displays a value, but it does not return that value to
+              the rest of the program.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧮 Using Return Values in Expressions</h2>
+          <p>A function call can be used anywhere its returned value makes sense: in a calculation, comparison, variable
+            assignment, or another function call.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def minutes_to_seconds(minutes):
+    return minutes * 60
+
+def total_lesson_seconds(lesson_count, minutes_each):
+    return lesson_count * minutes_to_seconds(minutes_each)
+
+total = total_lesson_seconds(5, 45)
+print("Total seconds:", total)
+
+if minutes_to_seconds(10) > 500:
+    print("Longer than 500 seconds")</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🚪 Early Return</h2>
+          <p>A <code>return</code> statement ends the function immediately. This is useful for validation because you can
+            reject invalid data before the main calculation runs.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def ticket_price(age):
+    if age < 0:
+        return "Invalid age"
+    if age < 12:
+        return 8
+    if age >= 65:
+        return 6
+    return 12
+
+print(ticket_price(9))
+print(ticket_price(40))
+print(ticket_price(-3))</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📦 Local Scope and Global Scope</h2>
+          <p>Variables created inside a function are local to that function. Return a new value instead of secretly
+            changing a global value.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">temperature = 28
+
+def add_heat(current_temperature, increase):
+    new_temperature = current_temperature + increase
+    return new_temperature
+
+updated = add_heat(temperature, 4)
+
+print("Original:", temperature)
+print("Updated:", updated)</code></pre>
+          </div>
+          <div class="banner info">
+            <span>ℹ️</span>
+            <span><strong>Exam phrase:</strong> <code>new_temperature</code> is local because it only exists inside
+              <code>add_heat()</code>.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧺 Mutable Arguments</h2>
+          <p>Lists and dictionaries are mutable. If a procedure changes a list or dictionary that was passed in, the
+            original collection changes too.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def record_scan(log, item_code):
+    log.append(item_code)
+
+scanned_items = []
+
+record_scan(scanned_items, "BK-104")
+record_scan(scanned_items, "USB-210")
+
+print(scanned_items)</code></pre>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Common Bug:</strong> mutable collections can be changed by a subroutine even if there is no
+              <code>return</code> statement.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧱 Decomposition Pattern</h2>
+          <p>Decomposition means splitting a program into small named jobs. A good helper should have one clear purpose.
+          </p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def clean_name(name):
+    return name.strip().title()
+
+def create_badge(name, group):
+    tidy_name = clean_name(name)
+    return tidy_name + " - Group " + group
+
+def print_badge(name, group):
+    badge = create_badge(name, group)
+    print("[" + badge + "]")
+
+print_badge("  maya  ", "C")</code></pre>
+          </div>
+          <ul class="manual-list">
+            <li><code>clean_name()</code> prepares data.</li>
+            <li><code>create_badge()</code> builds a value and returns it.</li>
+            <li><code>print_badge()</code> handles output.</li>
+          </ul>
         </div>
       </div>
 
@@ -3229,6 +3815,23 @@ while low <= high and not found:
         low = mid + 1
 
 print(found)</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧠 Searching Exam Checklist</h2>
+          <div class="op-grid" style="grid-template-columns: 170px 1fr;">
+            <div class="op-header">Algorithm</div>
+            <div class="op-header">What students must say</div>
+            <div class="op-cell"><code>linear search</code></div>
+            <div class="op-cell">Works on unsorted data; checks each item from the start until the target is found or
+              the list ends.</div>
+            <div class="op-cell"><code>binary search</code></div>
+            <div class="op-cell">Requires sorted data; checks the middle item and repeatedly halves the remaining
+              search space.</div>
+            <div class="op-cell"><code>worst case</code></div>
+            <div class="op-cell">Linear search may check every item. Binary search stops after about
+              <code>log2(n)</code> splits.</div>
           </div>
         </div>
       </div>
@@ -3433,6 +4036,26 @@ bubble_sort(numbers)
 print("Sorted list:", numbers)</code></pre>
           </div>
         </div>
+
+        <div class="card">
+          <h2>🧠 Bubble Sort Trace</h2>
+          <p>In exams, students often lose marks because they describe sorting in general instead of the exact pass
+            pattern. Use this trace language.</p>
+          <div class="op-grid" style="grid-template-columns: 110px 1fr 1fr;">
+            <div class="op-header">Step</div>
+            <div class="op-header">Action</div>
+            <div class="op-header">Why it matters</div>
+            <div class="op-cell">Compare</div>
+            <div class="op-cell">Look at two neighbouring items.</div>
+            <div class="op-cell">Bubble sort only swaps adjacent values.</div>
+            <div class="op-cell">Swap</div>
+            <div class="op-cell">If the left item is bigger, swap the pair.</div>
+            <div class="op-cell">The larger value moves one place to the right.</div>
+            <div class="op-cell">Pass</div>
+            <div class="op-cell">Keep comparing until the end of the unsorted section.</div>
+            <div class="op-cell">After one pass, the largest unsorted value is in its final position.</div>
+          </div>
+        </div>
       </div>
 
       <!-- TAB: Insertion Sort -->
@@ -3470,6 +4093,22 @@ print("Sorted list:", numbers)</code></pre>
 numbers = [7, 3, 9, 2, 6]
 insertion_sort(numbers)
 print("Sorted list:", numbers)</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧠 Insertion Sort Trace</h2>
+          <p>Insertion sort grows a sorted section from the left. Each new key is inserted into the correct place inside
+            that section.</p>
+          <div class="op-grid" style="grid-template-columns: 120px 1fr;">
+            <div class="op-header">Term</div>
+            <div class="op-header">Meaning</div>
+            <div class="op-cell"><code>key</code></div>
+            <div class="op-cell">The next value being inserted into the sorted section.</div>
+            <div class="op-cell"><code>shift</code></div>
+            <div class="op-cell">Move larger values one place right to make space for the key.</div>
+            <div class="op-cell"><code>sorted section</code></div>
+            <div class="op-cell">The left part of the list that is already in order.</div>
           </div>
         </div>
       </div>
@@ -3511,27 +4150,67 @@ print("Sorted list:", numbers)</code></pre>
         </div>
 
         <div class="card">
-          <h2>💻 Stack Implementation (using Lists)</h2>
-          <p>In Python, you can easily implement a stack structure using a list, with <code>append()</code> to push and <code>pop()</code> to pop.</p>
-          <div class="code-wrapper">
-            <pre><code class="language-python"># Initialize an empty stack
-stack = []
+          <h2>💻 Stack Implementations</h2>
+          <p>Use the list-based version to learn the behaviour quickly. Use the OOP version when the stack should protect
+            its own data and expose named methods.</p>
+          <details class="manual-details" open>
+            <summary>List-based stack</summary>
+            <div class="code-wrapper">
+              <pre><code class="language-python">stack = []
 
-# Push items onto the stack
-stack.append("A")
-stack.append("B")
-stack.append("C")
-print("Stack after pushes:", stack)
+stack.append("scan")
+stack.append("pack")
+stack.append("label")
 
-# Pop an item from the stack
-removed = stack.pop()
-print("Popped item:", removed)
-print("Stack after pop:", stack)
-
-# Peek at the top item
 top_item = stack[-1]
-print("Top item (peek):", top_item)</code></pre>
-          </div>
+removed = stack.pop()
+
+print("Top was:", top_item)
+print("Removed:", removed)
+print(stack)</code></pre>
+            </div>
+          </details>
+          <details class="manual-details">
+            <summary>OOP stack class</summary>
+            <div class="code-wrapper">
+              <pre><code class="language-python">class Stack:
+    def __init__(self, limit):
+        self.__items = []
+        self.__limit = limit
+
+    def push(self, item):
+        if len(self.__items) == self.__limit:
+            return "Overflow"
+        self.__items.append(item)
+        return "Pushed"
+
+    def pop(self):
+        if len(self.__items) == 0:
+            return "Underflow"
+        return self.__items.pop()
+
+    def peek(self):
+        if len(self.__items) == 0:
+            return None
+        return self.__items[-1]
+
+work = Stack(3)
+work.push("scan")
+work.push("pack")
+print(work.peek())
+print(work.pop())</code></pre>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h2>🧠 Stack Exam Checklist</h2>
+          <ul class="manual-list">
+            <li>Use <code>top</code> to track the most recent item.</li>
+            <li>Check for overflow before pushing onto a fixed-size stack.</li>
+            <li>Check for underflow before popping from an empty stack.</li>
+            <li>Remember that <code>pop()</code> removes and returns an item; <code>peek()</code> only reads it.</li>
+          </ul>
         </div>
       </div>
 
@@ -3568,27 +4247,67 @@ print("Top item (peek):", top_item)</code></pre>
         </div>
 
         <div class="card">
-          <h2>💻 Queue Implementation (using Lists)</h2>
-          <p>In Python, you can implement a queue structure using a list, with <code>append()</code> to enqueue and <code>pop(0)</code> to dequeue.</p>
-          <div class="code-wrapper">
-            <pre><code class="language-python"># Initialize an empty queue
-queue = []
+          <h2>💻 Queue Implementations</h2>
+          <p>The list-based version is short and readable. The OOP version makes the queue behaviour explicit through
+            <code>enqueue()</code>, <code>dequeue()</code> and <code>front()</code>.</p>
+          <details class="manual-details" open>
+            <summary>List-based queue</summary>
+            <div class="code-wrapper">
+              <pre><code class="language-python">queue = []
 
-# Enqueue items at the rear
-queue.append("A")
-queue.append("B")
-queue.append("C")
-print("Queue after enqueues:", queue)
+queue.append("ticket-101")
+queue.append("ticket-102")
+queue.append("ticket-103")
 
-# Dequeue an item from the front
-removed = queue.pop(0)
-print("Dequeued item:", removed)
-print("Queue after dequeue:", queue)
+next_item = queue[0]
+served = queue.pop(0)
 
-# Peek at the front item
-front_item = queue[0]
-print("Front item:", front_item)</code></pre>
-          </div>
+print("Next was:", next_item)
+print("Served:", served)
+print(queue)</code></pre>
+            </div>
+          </details>
+          <details class="manual-details">
+            <summary>OOP queue class</summary>
+            <div class="code-wrapper">
+              <pre><code class="language-python">class Queue:
+    def __init__(self, limit):
+        self.__items = []
+        self.__limit = limit
+
+    def enqueue(self, item):
+        if len(self.__items) == self.__limit:
+            return "Overflow"
+        self.__items.append(item)
+        return "Enqueued"
+
+    def dequeue(self):
+        if len(self.__items) == 0:
+            return "Underflow"
+        return self.__items.pop(0)
+
+    def front(self):
+        if len(self.__items) == 0:
+            return None
+        return self.__items[0]
+
+service = Queue(3)
+service.enqueue("ticket-101")
+service.enqueue("ticket-102")
+print(service.front())
+print(service.dequeue())</code></pre>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h2>🧠 Queue Pointer Checklist</h2>
+          <ul class="manual-list">
+            <li><code>front</code> points to the next item to leave the queue.</li>
+            <li><code>rear</code> points to the newest item added to the queue.</li>
+            <li>In a circular queue, pointers wrap back to index <code>0</code> after the final position.</li>
+            <li>Overflow means enqueueing into a full fixed-size queue; underflow means dequeueing from an empty queue.</li>
+          </ul>
         </div>
       </div>
 
@@ -3598,20 +4317,37 @@ print("Front item:", front_item)</code></pre>
           <h2>🔗 Linked Lists</h2>
           <p>A linked list is made from nodes. Each node stores data and a pointer to the next node. A null pointer
             marks the end.</p>
-          <div class="code-wrapper">
-            <pre><code class="language-python">class Node:
+          <details class="manual-details" open>
+            <summary>List-based linked list using indexes</summary>
+            <div class="code-wrapper">
+              <pre><code class="language-python">data = ["badge", "lanyard", "map"]
+next_index = [1, 2, -1]
+start = 0
+
+current = start
+while current != -1:
+    print(data[current])
+    current = next_index[current]</code></pre>
+            </div>
+          </details>
+          <details class="manual-details">
+            <summary>OOP linked list using nodes</summary>
+            <div class="code-wrapper">
+              <pre><code class="language-python">class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
 
-start = Node("A")
-start.next = Node("B")
+start = Node("badge")
+start.next = Node("lanyard")
+start.next.next = Node("map")
 
 current = start
 while current is not None:
     print(current.data)
     current = current.next</code></pre>
-          </div>
+            </div>
+          </details>
           <p><strong>Vocabulary:</strong> node, pointer, start pointer, null pointer, free list, traversal.</p>
         </div>
 
@@ -3627,6 +4363,23 @@ while current is not None:
               <button class="list-btn secondary" onclick="showStructureConcept('linked', 'reset')">Reset</button>
             </div>
             <div class="manual-log" id="linkedConceptLog"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧠 Linked List Operations</h2>
+          <div class="op-grid" style="grid-template-columns: 150px 1fr;">
+            <div class="op-header">Operation</div>
+            <div class="op-header">Key idea</div>
+            <div class="op-cell">Traverse</div>
+            <div class="op-cell">Start at the first node and follow each <code>next</code> pointer until
+              <code>None</code>.</div>
+            <div class="op-cell">Insert</div>
+            <div class="op-cell">Create a new node, update its pointer, then update the previous node or start pointer.</div>
+            <div class="op-cell">Delete</div>
+            <div class="op-cell">Bypass the removed node by changing the previous node's pointer.</div>
+            <div class="op-cell">Search</div>
+            <div class="op-cell">Compare each node's data while traversing; stop when the value is found or the list ends.</div>
           </div>
         </div>
       </div>
@@ -3649,6 +4402,38 @@ print(factorial(5))</code></pre>
         </div>
 
         <div class="card">
+          <h2>🎬 Factorial Call Stack Animation</h2>
+          <p>This shows <code>factorial(4)</code> in two phases: first Python creates new function calls until it reaches
+            the base case, then each call returns a value back to the previous call.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n - 1)
+
+print(factorial(4))</code></pre>
+          </div>
+          <div class="manual-interactive">
+            <div class="viz-stage recursion-stage">
+              <div class="recursion-panel">
+                <h3>Call stack</h3>
+                <div class="recursion-stack" id="factorialCallStack"></div>
+              </div>
+              <div class="recursion-panel">
+                <h3>Return values</h3>
+                <div class="recursion-return-list" id="factorialReturnList"></div>
+              </div>
+            </div>
+            <div class="list-controls">
+              <button class="list-btn" onclick="stepFactorialViz()">Next step</button>
+              <button class="list-btn secondary" id="factorialPlayBtn" onclick="playFactorialViz()">Play</button>
+              <button class="list-btn secondary" onclick="resetFactorialViz()">Reset</button>
+            </div>
+            <div class="manual-log" id="factorialVizLog"></div>
+          </div>
+        </div>
+
+        <div class="card">
           <h2>📚 Call Stack and Unwinding</h2>
           <p>Each recursive call creates a stack frame storing parameters, local variables and a return address. When
             the base case is reached, the calls return in reverse order. This is called unwinding.</p>
@@ -3658,55 +4443,421 @@ print(factorial(5))</code></pre>
               unwinding, stack overflow, memoisation.</span>
           </div>
         </div>
+
+        <div class="card">
+          <h2>🧠 Recursion Trace Pattern</h2>
+          <p>When tracing recursion, write down each call until the base case, then work backwards as the calls return.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-text">factorial(3)
+= 3 * factorial(2)
+= 3 * 2 * factorial(1)
+= 3 * 2 * 1 * factorial(0)
+= 3 * 2 * 1 * 1
+= 6</code></pre>
+          </div>
+          <div class="banner bug">
+            <span>🐛</span>
+            <span><strong>Common Bug:</strong> if the general case does not move closer to the base case, the recursion
+              never stops.</span>
+          </div>
+        </div>
       </div>
 
-      <!-- TAB: OOP -->
-      <div id="tab-oop" class="tab-content">
-        <div class="card">
-          <h2>🏛️ Classes, Objects and Constructors</h2>
-          <p>A class is a blueprint. An object is an instance created from that class. The constructor
-            <code>__init__</code> sets up the object's attributes.
-          </p>
+	      <!-- TAB: OOP -->
+	      <div id="tab-oop" class="tab-content">
+	        <div class="card" id="oop-map">
+	          <h2>🏛️ Introduction to Object-Oriented Programming</h2>
+	          <p>Object-oriented programming is a way to organise a program around objects. An object keeps related data
+	            and the actions that work on that data together. This is useful when a program has many similar things to
+	            track, such as accounts, sensors, bookings, players, products or tree nodes.</p>
+	          <p>Without OOP, related variables can become scattered through a program. With OOP, a class describes the
+	            pattern once, then each object stores its own values and can use the same methods.</p>
+	          <div class="manual-interactive">
+	            <div class="viz-stage oop-intro-stage" id="oopIntroStage">
+	              <div class="oop-intro-panel">
+	                <h3>Loose variables</h3>
+	                <div class="oop-loose-list">
+	                  <div class="oop-loose-row">sensor1_location = "Lab"<br>sensor1_reading = 21.4</div>
+	                  <div class="oop-loose-row">sensor2_location = "Roof"<br>sensor2_reading = 33.8</div>
+	                  <div class="oop-loose-row">sensor3_location = "Library"<br>sensor3_reading = 24.1</div>
+	                </div>
+	              </div>
+	              <div class="oop-arrow-column">→</div>
+	              <div class="oop-intro-panel">
+	                <h3>Class and objects</h3>
+	                <div class="oop-blueprint">class Sensor<br>attributes: location, reading<br>methods: update(), is_hot()</div>
+	                <div class="oop-object-list">
+	                  <div class="oop-object-card"><strong>lab</strong><br>location: "Lab"<br>reading: 21.4</div>
+	                  <div class="oop-object-card"><strong>roof</strong><br>location: "Roof"<br>reading: 33.8</div>
+	                  <div class="oop-object-card"><strong>library</strong><br>location: "Library"<br>reading: 24.1</div>
+	                </div>
+	              </div>
+	            </div>
+	            <div class="list-controls">
+	              <button class="list-btn" onclick="stepOopIntroViz()">Next step</button>
+	              <button class="list-btn secondary" id="oopIntroPlayBtn" onclick="playOopIntroViz()">Play</button>
+	              <button class="list-btn secondary" onclick="resetOopIntroViz()">Reset</button>
+	            </div>
+	            <div class="manual-log" id="oopIntroLog"></div>
+	          </div>
+	          <div class="op-grid" style="grid-template-columns: 180px 1fr;">
+	            <div class="op-header">OOP idea</div>
+	            <div class="op-header">Why it helps</div>
+	            <div class="op-cell">Class</div>
+	            <div class="op-cell">Defines the shared structure once.</div>
+	            <div class="op-cell">Object</div>
+	            <div class="op-cell">Stores one real item's data using that structure.</div>
+	            <div class="op-cell">Attribute</div>
+	            <div class="op-cell">Keeps a value inside the object it belongs to.</div>
+	            <div class="op-cell">Method</div>
+	            <div class="op-cell">Keeps behaviour close to the data it changes or reads.</div>
+	          </div>
+	        </div>
+
+	      </div>
+
+      <!-- TAB: OOP Classes and Objects -->
+      <div id="tab-oop-core" class="tab-content">
+        <div class="card" id="oop-core">
+          <h2>🧱 Classes, Objects and Instances</h2>
+          <p>A class is a blueprint. An object is one instance made from that blueprint. Each object can store different
+            values in its attributes.</p>
           <div class="code-wrapper">
-            <pre><code class="language-python">class Character:
-    def __init__(self, name, health):
-        self.name = name
-        self.health = health
+            <pre><code class="language-python">class Sensor:
+    def __init__(self, location, reading):
+        self.location = location
+        self.reading = reading
 
-    def take_damage(self, amount):
-        self.health = self.health - amount
+lab = Sensor("Lab", 21.4)
+roof = Sensor("Roof", 33.8)
 
-hero = Character("Ada", 100)
-hero.take_damage(25)
-print(hero.health)</code></pre>
+print(lab.location, lab.reading)
+print(roof.location, roof.reading)</code></pre>
           </div>
         </div>
 
-        <div class="card">
-          <h2>🧱 Encapsulation, Inheritance and Polymorphism</h2>
-          <p>Encapsulation keeps data and methods together. Inheritance lets a subclass reuse a superclass. Polymorphism
-            allows different classes to respond to the same method name in different ways.</p>
+      </div>
+
+      <!-- TAB: OOP Constructors -->
+      <div id="tab-oop-constructors" class="tab-content">
+        <div class="card" id="oop-constructors">
+          <h2>⚙️ Constructors, Attributes and <code>self</code></h2>
+          <p>The constructor <code>__init__</code> runs when a new object is created. <code>self</code> means the current
+            object, so <code>self.reading</code> belongs to one specific sensor object.</p>
+          <div class="op-grid" style="grid-template-columns: 180px 1fr;">
+            <div class="op-header">Code</div>
+            <div class="op-header">Meaning</div>
+            <div class="op-cell"><code>class Sensor:</code></div>
+            <div class="op-cell">Defines a new type of object.</div>
+            <div class="op-cell"><code>__init__</code></div>
+            <div class="op-cell">Sets up a new object when it is created.</div>
+            <div class="op-cell"><code>self.location</code></div>
+            <div class="op-cell">An attribute stored inside the current object.</div>
+            <div class="op-cell"><code>Sensor("Lab", 21.4)</code></div>
+            <div class="op-cell">Creates an instance and passes arguments to the constructor.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB: OOP Methods -->
+      <div id="tab-oop-methods" class="tab-content">
+        <div class="card" id="oop-methods">
+          <h2>🛠️ Methods: Object Behaviour</h2>
+          <p>A method is a function inside a class. It normally uses <code>self</code> so it can read or change that
+            object's attributes.</p>
           <div class="code-wrapper">
-            <pre><code class="language-python">class Enemy:
-    def attack(self):
-        print("Basic attack")
+            <pre><code class="language-python">class Sensor:
+    def __init__(self, location, reading):
+        self.location = location
+        self.reading = reading
 
-class Dragon(Enemy):
-    def attack(self):
-        print("Fire attack")
+    def update(self, new_reading):
+        self.reading = new_reading
 
-creature = Dragon()
-creature.attack()</code></pre>
+    def is_hot(self):
+        return self.reading >= 30
+
+roof = Sensor("Roof", 28.5)
+roof.update(31.2)
+print(roof.is_hot())</code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB: OOP Encapsulation -->
+      <div id="tab-oop-encapsulation" class="tab-content">
+        <div class="card" id="oop-encapsulation">
+          <h2>🔒 Encapsulation, Getters and Setters</h2>
+          <p>Encapsulation keeps data and the methods that control that data together. Getters read a value. Setters
+            update a value, often with validation.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class Locker:
+    def __init__(self, number):
+        self.__number = number
+        self.__open = False
+
+    def get_number(self):
+        return self.__number
+
+    def set_open(self, open_now):
+        if open_now == True or open_now == False:
+            self.__open = open_now
+
+    def is_open(self):
+        return self.__open
+
+locker = Locker(42)
+locker.set_open(True)
+print(locker.get_number(), locker.is_open())</code></pre>
           </div>
           <div class="banner info">
             <span>ℹ️</span>
-            <span><strong>Vocabulary:</strong> class, object, instance, self, attribute, method, getter, setter, private
-              attribute, superclass, subclass, override, abstraction, aggregation.</span>
+            <span><strong>Exam phrase:</strong> private attributes are not meant to be accessed directly from outside the
+              class; methods provide controlled access.</span>
           </div>
         </div>
+
       </div>
 
-      <!-- TAB: Binary Trees -->
+      <!-- TAB: OOP Objects in Lists -->
+      <div id="tab-oop-objects-lists" class="tab-content">
+        <div class="card" id="oop-objects-lists">
+          <h2>👥 Objects in Lists</h2>
+          <p>Programs often create many objects from one class and store them in a list. A loop can then process every
+            object in the collection.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class Sensor:
+    def __init__(self, location, reading):
+        self.location = location
+        self.reading = reading
+
+sensors = [
+    Sensor("Lab", 21.4),
+    Sensor("Roof", 33.8),
+    Sensor("Library", 24.1)
+]
+
+for sensor in sensors:
+    print(sensor.location, sensor.reading)</code></pre>
+          </div>
+        </div>
+
+	      </div>
+
+	      <!-- TAB: OOP Files to Objects -->
+	      <div id="tab-oop-file-objects" class="tab-content">
+	        <div class="card" id="oop-file-objects">
+	          <h2>📄 Loading File Records into Objects</h2>
+	          <p>A common OOP pattern is to read each line from a file, create one object from that line, and append the
+	            object to a list. The list stores the collection; the class stores the data and behaviour for one item.</p>
+	          <div class="code-wrapper">
+	            <pre><code class="language-python">class Plant:
+    def __init__(self, name, sunlight, water_ml):
+        self.name = name
+        self.sunlight = sunlight
+        self.water_ml = int(water_ml)
+
+    def needs_large_drink(self):
+        return self.water_ml >= 300
+
+plants = []
+
+with open("greenhouse.txt", "r") as file:
+    for line in file:
+        line = line.strip()
+        if line != "":
+            parts = line.split(",")
+            plant = Plant(parts[0], parts[1], parts[2])
+            plants.append(plant)
+
+for plant in plants:
+    if plant.needs_large_drink():
+        print(plant.name, "needs", plant.water_ml, "ml")</code></pre>
+	          </div>
+	          <div class="banner info">
+	            <span>ℹ️</span>
+	            <span><strong>Example file line:</strong> <code>Aloe,bright,250</code>. Splitting by comma gives the
+	              constructor arguments for one <code>Plant</code> object.</span>
+	          </div>
+	        </div>
+
+	      </div>
+
+	      <!-- TAB: OOP Dunder Methods -->
+	      <div id="tab-oop-dunder" class="tab-content">
+	        <div class="card" id="oop-dunder">
+	          <h2>✨ Dunder Methods: Printing Objects Clearly</h2>
+	          <p>Dunder methods have double underscores before and after their names. Python calls them automatically for
+	            special behaviour. <code>__str__</code> is the most useful starting point because it controls what appears
+	            when you print an object.</p>
+	          <div class="code-wrapper">
+	            <pre><code class="language-python">class Plant:
+    def __init__(self, name, sunlight, water_ml):
+        self.name = name
+        self.sunlight = sunlight
+        self.water_ml = water_ml
+
+    def __str__(self):
+        return self.name + " needs " + str(self.water_ml) + " ml of water"
+
+    def __repr__(self):
+        return "Plant(" + repr(self.name) + ", " + repr(self.sunlight) + ", " + repr(self.water_ml) + ")"
+
+fern = Plant("Fern", "shade", 180)
+
+print(fern)
+print([fern])</code></pre>
+	          </div>
+	          <div class="op-grid" style="grid-template-columns: 150px 1fr;">
+	            <div class="op-header">Method</div>
+	            <div class="op-header">Use</div>
+	            <div class="op-cell"><code>__str__</code></div>
+	            <div class="op-cell">Human-friendly text for <code>print(object)</code>.</div>
+	            <div class="op-cell"><code>__repr__</code></div>
+	            <div class="op-cell">Developer-friendly text, also used when the object appears inside a list.</div>
+	            <div class="op-cell"><code>__eq__</code></div>
+	            <div class="op-cell">Controls equality checks such as <code>a == b</code>.</div>
+	            <div class="op-cell"><code>__lt__</code></div>
+	            <div class="op-cell">Controls less-than comparisons, useful when sorting objects.</div>
+	          </div>
+	          <div class="banner bug">
+	            <span>🐛</span>
+	            <span><strong>Common Output:</strong> without <code>__str__</code> or <code>__repr__</code>, Python prints a
+	              default object reference instead of useful object data.</span>
+	          </div>
+	        </div>
+
+	      </div>
+
+	      <!-- TAB: OOP Inheritance -->
+	      <div id="tab-oop-inheritance" class="tab-content">
+	        <div class="card" id="oop-inheritance">
+          <h2>🧬 Inheritance</h2>
+          <p>Inheritance lets a subclass reuse attributes and methods from a superclass. Use it when the subclass really
+            is a specialised type of the superclass.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class Vehicle:
+    def __init__(self, identifier):
+        self.identifier = identifier
+
+    def describe(self):
+        print("Vehicle:", self.identifier)
+
+class ElectricBus(Vehicle):
+    def __init__(self, identifier, battery_percent):
+        super().__init__(identifier)
+        self.battery_percent = battery_percent
+
+bus = ElectricBus("BUS-18", 76)
+bus.describe()
+print(bus.battery_percent)</code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB: OOP Polymorphism -->
+      <div id="tab-oop-polymorphism" class="tab-content">
+        <div class="card" id="oop-polymorphism">
+          <h2>🎭 Polymorphism</h2>
+          <p>Polymorphism means different classes can use the same method name, but each class can perform a different
+            action.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class EmailAlert:
+    def send(self):
+        print("Sending email")
+
+class ScreenAlert:
+    def send(self):
+        print("Showing screen message")
+
+alerts = [EmailAlert(), ScreenAlert()]
+
+for alert in alerts:
+    alert.send()</code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB: OOP Aggregation -->
+      <div id="tab-oop-aggregation" class="tab-content">
+        <div class="card" id="oop-aggregation">
+          <h2>🎯 Abstraction and Aggregation</h2>
+          <p>Abstraction means choosing the important details and ignoring unnecessary detail. Aggregation means one
+            object stores or uses another object.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class Battery:
+    def __init__(self, percent):
+        self.percent = percent
+
+class Tablet:
+    def __init__(self, name, battery):
+        self.name = name
+        self.battery = battery
+
+main_battery = Battery(88)
+tablet = Tablet("Art tablet", main_battery)
+
+print(tablet.name, tablet.battery.percent)</code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB: OOP ADT Bridge -->
+      <div id="tab-oop-adt-bridge" class="tab-content">
+        <div class="card" id="oop-adt-bridge">
+          <h2>📚 OOP ADTs: Stacks, Queues and Linked Lists</h2>
+          <p>Abstract data types describe behaviour, not just storage. An OOP implementation hides the internal list or
+            pointers behind methods such as <code>push()</code>, <code>pop()</code>, <code>enqueue()</code>,
+            <code>dequeue()</code>, <code>insert()</code> and <code>search()</code>.</p>
+          <div class="op-grid" style="grid-template-columns: 150px 1fr;">
+            <div class="op-header">ADT</div>
+            <div class="op-header">OOP idea</div>
+            <div class="op-cell">Stack</div>
+            <div class="op-cell">A class can keep a private list and expose only <code>push()</code>,
+              <code>pop()</code> and <code>peek()</code>.</div>
+            <div class="op-cell">Queue</div>
+            <div class="op-cell">A class can control front/rear pointers and hide circular wraparound logic.</div>
+            <div class="op-cell">Linked list</div>
+            <div class="op-cell">A <code>Node</code> class stores data and the next pointer; a list class controls the
+              start pointer.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB: OOP Trees -->
+      <div id="tab-oop-tree-bridge" class="tab-content">
+        <div class="card" id="oop-tree-bridge">
+          <h2>🌳 Binary Trees as OOP Structures</h2>
+          <p>Binary trees are a natural bridge between OOP and recursion. A node object stores data plus left and right
+            references. Insert and search methods usually call themselves on the left or right subtree.</p>
+          <div class="code-wrapper">
+            <pre><code class="language-python">class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+root = TreeNode(50)
+root.left = TreeNode(25)
+root.right = TreeNode(75)
+
+print(root.value)
+print(root.left.value)
+print(root.right.value)</code></pre>
+          </div>
+          <p><strong>Pattern:</strong> smaller values move to the left reference; larger values move to the right
+            reference.</p>
+        </div>
+
+      </div>
+
+	      <!-- TAB: Binary Trees -->
       <div id="tab-trees" class="tab-content">
         <div class="card">
           <h2>🌳 Binary Search Trees</h2>
@@ -3714,18 +4865,17 @@ creature.attack()</code></pre>
             values go right.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">class Node:
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, value):
+        self.value = value
         self.left = None
         self.right = None
 
-root = Node("mango")
-root.left = Node("apple")
-root.right = Node("pear")</code></pre>
+root = Node(50)
+root.left = Node(25)
+root.right = Node(75)</code></pre>
           </div>
-          <p>The local word data used in the tree course includes examples such as <code>mango</code>,
-            <code>apple</code>, <code>banana</code>, <code>pear</code>, <code>kiwi</code> and <code>orange</code>.
-          </p>
+          <p>This is the same object pattern used in the OOP section: each node stores a value and references to child
+            nodes.</p>
         </div>
 
         <div class="card">
@@ -3736,13 +4886,27 @@ root.right = Node("pear")</code></pre>
             <pre><code class="language-python">def inorder(node):
     if node is not None:
         inorder(node.left)
-        print(node.data)
+        print(node.value)
         inorder(node.right)</code></pre>
           </div>
           <div class="banner info">
             <span>ℹ️</span>
             <span><strong>Vocabulary:</strong> root, node, parent, child, leaf, left subtree, right subtree, null
               pointer, recursive insertion, recursive search, pre-order, post-order.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🧠 Traversal Order</h2>
+          <div class="op-grid" style="grid-template-columns: 150px 1fr;">
+            <div class="op-header">Traversal</div>
+            <div class="op-header">Visit order</div>
+            <div class="op-cell">In-order</div>
+            <div class="op-cell">Left subtree, node, right subtree. In a binary search tree, this gives sorted output.</div>
+            <div class="op-cell">Pre-order</div>
+            <div class="op-cell">Node, left subtree, right subtree. Useful when copying or saving a tree structure.</div>
+            <div class="op-cell">Post-order</div>
+            <div class="op-cell">Left subtree, right subtree, node. Useful when deleting or evaluating from the leaves up.</div>
           </div>
         </div>
 
@@ -4110,6 +5274,13 @@ I think the problem is in the total calculation.</code></pre>
 	      }
 	    }
 
+	    function scrollContentAreaToTop() {
+	      const contentArea = document.querySelector('.content-area');
+	      if (contentArea) {
+	        contentArea.scrollTo({ top: 0, behavior: 'auto' });
+	      }
+	    }
+
 	    function showTab(tabId, updateHash = true) {
 	      const targetTab = document.getElementById('tab-' + tabId);
 	      if (!targetTab) return;
@@ -4143,6 +5314,9 @@ I think the problem is in the total calculation.</code></pre>
 	          });
 	          targetBtn.classList.add('active');
 	        }
+	        if (tabId !== 'search-results') {
+	          scrollContentAreaToTop();
+	        }
 	        if (updateHash && tabId !== 'search-results') {
 	          if (window.location.hash !== '#' + tabId) {
 	            window.location.hash = tabId;
@@ -4164,6 +5338,10 @@ I think the problem is in the total calculation.</code></pre>
 	      if (targetBtn) {
 	        expandNavSectionForButton(targetBtn);
 	        targetBtn.classList.add('active');
+	      }
+
+	      if (tabId !== 'search-results') {
+	        scrollContentAreaToTop();
 	      }
 
       if (updateHash && tabId !== 'search-results') {
@@ -4632,6 +5810,72 @@ else:
 
     let bubbleState;
     let insertionState;
+    let factorialVizStep = 0;
+    let factorialVizTimer = null;
+    let oopIntroVizStep = 0;
+    let oopIntroVizTimer = null;
+
+    const factorialVizSteps = [
+      {
+        stack: [4],
+        returns: [],
+        log: 'Call factorial(4). It is not the base case, so Python must calculate 4 * factorial(3).'
+      },
+      {
+        stack: [4, 3],
+        returns: [],
+        log: 'Call factorial(3). This new call waits for factorial(2) before it can finish.'
+      },
+      {
+        stack: [4, 3, 2],
+        returns: [],
+        log: 'Call factorial(2). Each call has its own value of n on the call stack.'
+      },
+      {
+        stack: [4, 3, 2, 1],
+        returns: [],
+        log: 'Call factorial(1). It still is not the base case because n is not 0.'
+      },
+      {
+        stack: [4, 3, 2, 1, 0],
+        returns: ['factorial(0) returns 1'],
+        base: 0,
+        log: 'Call factorial(0). This is the base case, so it returns 1 and stops calling itself.'
+      },
+      {
+        stack: [4, 3, 2],
+        returns: ['factorial(0) returns 1', 'factorial(1) returns 1 * 1 = 1'],
+        activeReturn: 1,
+        log: 'Unwind factorial(1): it can now calculate 1 * 1 and return 1.'
+      },
+      {
+        stack: [4, 3],
+        returns: ['factorial(0) returns 1', 'factorial(1) returns 1', 'factorial(2) returns 2 * 1 = 2'],
+        activeReturn: 2,
+        log: 'Unwind factorial(2): it receives 1 from factorial(1), so it returns 2.'
+      },
+      {
+        stack: [4],
+        returns: ['factorial(0) returns 1', 'factorial(1) returns 1', 'factorial(2) returns 2', 'factorial(3) returns 3 * 2 = 6'],
+        activeReturn: 3,
+        log: 'Unwind factorial(3): it receives 2 from factorial(2), so it returns 6.'
+      },
+      {
+        stack: [],
+        returns: ['factorial(0) returns 1', 'factorial(1) returns 1', 'factorial(2) returns 2', 'factorial(3) returns 6', 'factorial(4) returns 4 * 6 = 24'],
+        activeReturn: 4,
+        log: 'Unwind factorial(4): it receives 6 from factorial(3), so the final answer is 24.'
+      }
+    ];
+
+    const oopIntroVizSteps = [
+      'Start with loose variables. The data for each sensor is spread across separate names.',
+      'The loose variables are related, but the program does not yet have one structure that says they belong together.',
+      'Create a class blueprint once. The class names the attributes and methods every sensor object can have.',
+      'Create the first object. The lab object stores its own location and reading using the class structure.',
+      'Create more objects from the same class. Each object has its own values, but shares the same method pattern.',
+      'Now the program can store objects in a list and loop through them, instead of managing many separate variable names.'
+    ];
 
     const bigOComplexities = [
       {
@@ -4822,6 +6066,137 @@ else:
         bar.textContent = value;
         stage.appendChild(bar);
       });
+    }
+
+    function stopFactorialVizTimer() {
+      if (factorialVizTimer) {
+        clearInterval(factorialVizTimer);
+        factorialVizTimer = null;
+      }
+      const playBtn = document.getElementById('factorialPlayBtn');
+      if (playBtn) playBtn.textContent = 'Play';
+    }
+
+    function renderFactorialViz() {
+      const callStack = document.getElementById('factorialCallStack');
+      const returnList = document.getElementById('factorialReturnList');
+      const log = document.getElementById('factorialVizLog');
+      if (!callStack || !returnList || !log) return;
+
+      const step = factorialVizSteps[factorialVizStep];
+      callStack.innerHTML = '';
+      returnList.innerHTML = '';
+
+      if (step.stack.length === 0) {
+        callStack.innerHTML = '<div class="recursion-frame">Call stack is empty<span>done</span></div>';
+      } else {
+        step.stack.slice().reverse().forEach((n, index) => {
+          const frame = document.createElement('div');
+          frame.className = 'recursion-frame';
+          if (index === 0) frame.classList.add('active');
+          if (n === step.base) frame.classList.add('base');
+          frame.innerHTML = `<span>factorial(${n})</span><code>n = ${n}</code>`;
+          callStack.appendChild(frame);
+        });
+      }
+
+      if (step.returns.length === 0) {
+        returnList.innerHTML = '<div class="recursion-return-step">No values have returned yet.</div>';
+      } else {
+        step.returns.forEach((text, index) => {
+          const item = document.createElement('div');
+          item.className = 'recursion-return-step';
+          if (index === step.activeReturn) item.classList.add('active');
+          item.textContent = text;
+          returnList.appendChild(item);
+        });
+      }
+
+      log.textContent = `Step ${factorialVizStep + 1}/${factorialVizSteps.length}: ${step.log}`;
+    }
+
+    function resetFactorialViz() {
+      stopFactorialVizTimer();
+      factorialVizStep = 0;
+      renderFactorialViz();
+    }
+
+    function stepFactorialViz() {
+      if (factorialVizStep >= factorialVizSteps.length - 1) {
+        stopFactorialVizTimer();
+        renderFactorialViz();
+        return;
+      }
+      factorialVizStep += 1;
+      renderFactorialViz();
+      if (factorialVizStep >= factorialVizSteps.length - 1) {
+        stopFactorialVizTimer();
+      }
+    }
+
+    function playFactorialViz() {
+      const playBtn = document.getElementById('factorialPlayBtn');
+      if (factorialVizTimer) {
+        stopFactorialVizTimer();
+        return;
+      }
+      if (factorialVizStep >= factorialVizSteps.length - 1) {
+        factorialVizStep = 0;
+        renderFactorialViz();
+      }
+      if (playBtn) playBtn.textContent = 'Pause';
+      factorialVizTimer = setInterval(stepFactorialViz, 1100);
+    }
+
+    function stopOopIntroVizTimer() {
+      if (oopIntroVizTimer) {
+        clearInterval(oopIntroVizTimer);
+        oopIntroVizTimer = null;
+      }
+      const playBtn = document.getElementById('oopIntroPlayBtn');
+      if (playBtn) playBtn.textContent = 'Play';
+    }
+
+    function renderOopIntroViz() {
+      const stage = document.getElementById('oopIntroStage');
+      const log = document.getElementById('oopIntroLog');
+      if (!stage || !log) return;
+
+      stage.className = 'viz-stage oop-intro-stage step-' + oopIntroVizStep;
+      log.textContent = `Step ${oopIntroVizStep + 1}/${oopIntroVizSteps.length}: ${oopIntroVizSteps[oopIntroVizStep]}`;
+    }
+
+    function resetOopIntroViz() {
+      stopOopIntroVizTimer();
+      oopIntroVizStep = 0;
+      renderOopIntroViz();
+    }
+
+    function stepOopIntroViz() {
+      if (oopIntroVizStep >= oopIntroVizSteps.length - 1) {
+        stopOopIntroVizTimer();
+        renderOopIntroViz();
+        return;
+      }
+      oopIntroVizStep += 1;
+      renderOopIntroViz();
+      if (oopIntroVizStep >= oopIntroVizSteps.length - 1) {
+        stopOopIntroVizTimer();
+      }
+    }
+
+    function playOopIntroViz() {
+      const playBtn = document.getElementById('oopIntroPlayBtn');
+      if (oopIntroVizTimer) {
+        stopOopIntroVizTimer();
+        return;
+      }
+      if (oopIntroVizStep >= oopIntroVizSteps.length - 1) {
+        oopIntroVizStep = 0;
+        renderOopIntroViz();
+      }
+      if (playBtn) playBtn.textContent = 'Pause';
+      oopIntroVizTimer = setInterval(stepOopIntroViz, 1200);
     }
 
     function resetBubbleSort() {
@@ -5425,6 +6800,8 @@ else:
       setValidationExample();
       setupBigOToggles();
       renderBigOChart();
+      resetFactorialViz();
+      resetOopIntroViz();
       resetBubbleSort();
       resetInsertionSort();
       resetAdtPlayground();
