@@ -1906,6 +1906,76 @@
         height: 300px;
       }
     }
+
+    /* Phone layout: place navigation above the reading area instead of beside it. */
+    @media (max-width: 760px) {
+      header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px 14px;
+      }
+
+      .brand {
+        font-size: 1.2rem;
+        justify-content: center;
+      }
+
+      .header-actions {
+        gap: 8px;
+        width: 100%;
+      }
+
+      .search-container,
+      .search-container:focus-within {
+        flex: 1;
+        min-width: 0;
+        width: auto;
+      }
+
+      .header-icon-link {
+        flex: 0 0 40px;
+      }
+
+      .theme-btn {
+        flex: 0 0 auto;
+        padding: 8px 12px;
+      }
+
+      .app-container {
+        flex-direction: column;
+        height: auto;
+        min-height: calc(100vh - 112px);
+      }
+
+      .sidebar {
+        border-bottom: 1px solid var(--border-color);
+        border-right: 0;
+        overflow: visible;
+        padding: 12px;
+        width: 100%;
+      }
+
+      .content-area {
+        overflow: visible;
+        padding: 16px;
+      }
+
+      .tab-content {
+        gap: 16px;
+      }
+
+      .card {
+        border-radius: 12px;
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      #themeToggleText {
+        display: none;
+      }
+    }
   </style>
 </head>
 

@@ -772,6 +772,7 @@ import sys, builtins
     const runnerToggle = document.getElementById('runnerToggle');
     const fullscreenButton = document.getElementById('fullscreenButton');
     const openNewTabButton = document.getElementById('openNewTabButton');
+    const openPhoneEditorButton = document.getElementById('openPhoneEditorButton');
     const undoEditorButton = document.getElementById('undoEditorButton');
     const redoEditorButton = document.getElementById('redoEditorButton');
     const revertEditorButton = document.getElementById('revertEditorButton');
@@ -1866,6 +1867,10 @@ import sys, builtins
             window.location.href = `to_list.html?${themeSuffix}`;
             return;
           }
+          if (button.dataset.action === 'phone-editor') {
+            openCurrentCodeInMobileEditor();
+            return;
+          }
 
           const starterUrl = button.dataset.url;
           document.getElementById('urlInput').value = starterUrl;
@@ -1944,6 +1949,9 @@ import sys, builtins
       }
       if (revertEditorButton) {
         revertEditorButton.addEventListener('click', revertEditorToSavedFile);
+      }
+      if (openPhoneEditorButton) {
+        openPhoneEditorButton.addEventListener('click', openCurrentCodeInMobileEditor);
       }
 
       // Playback event listeners

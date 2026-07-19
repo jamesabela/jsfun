@@ -750,10 +750,10 @@
 
     .quick-action-row {
       display: grid;
-      grid-template-columns: 1fr 1.2fr 1.2fr;
+      grid-template-columns: 1fr 1.2fr 1.2fr 1.2fr;
       grid-template-rows: 1fr 1fr;
       gap: 8px;
-      width: 400px;
+      width: 510px;
       max-width: 100%;
     }
 
@@ -796,7 +796,9 @@
     .action-blocks,
     .action-flowchart,
     .action-parsons,
-    .action-list {
+    .action-list,
+    .action-phone,
+    .action-manual {
       color: white;
       border: 0;
       font-weight: 800;
@@ -820,6 +822,18 @@
 
     .action-list {
       background: #e11d48;
+    }
+
+    .action-phone {
+      background: #0f766e;
+    }
+
+    .action-manual {
+      background: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
     }
 
     .igcse-lab {
@@ -985,6 +999,10 @@
       background: #94a3b8 !important;
       opacity: 0.6;
       cursor: not-allowed;
+    }
+
+    .phone-editor-button {
+      background: #0f766e;
     }
 
     .run-button {
