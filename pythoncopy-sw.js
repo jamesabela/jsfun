@@ -1,10 +1,10 @@
-const CACHE_NAME = 'python-code-lab-v23';
+const CACHE_NAME = 'python-code-lab-v25';
 const APP_SHELL = [
   './pythoncopy.html',
   './pythoncopy.css',
   './pythoncopy.js',
   './pythoncopyblocks.js',
-  './pythoncopycarousel.html',
+  './pythoncopycarousel.fragment',
   './pythoncopy.webmanifest',
   './python_educator_hero.png',
   './python_blocks_mode.png',

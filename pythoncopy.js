@@ -1664,7 +1664,7 @@ import sys, builtins
 
     document.addEventListener('DOMContentLoaded', () => {
       // Fetch and build instruction carousel dynamically
-      fetch('pythoncopycarousel.html')
+      fetch('pythoncopycarousel.fragment')
         .then(response => response.text())
         .then(html => {
           const track = document.getElementById('carouselTrack');
@@ -2097,6 +2097,76 @@ import sys, builtins
         return editor.value;
       }
 
+      function isLikelyMobilePhone() {
+        const shortSide = Math.min(window.innerWidth, window.innerHeight);
+        const longSide = Math.max(window.innerWidth, window.innerHeight);
+        const coarsePointer = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+        return coarsePointer && shortSide <= 600 && longSide <= 950;
+      }
+
+      function openCurrentCodeInMobileEditor() {
+        const code = getCurrentEditorCode();
+        localStorage.setItem('pymobileDraft', code);
+        localStorage.setItem('pymobileTheme', document.getElementById('dark-mode').checked ? 'dark' : 'light');
+        window.location.href = 'pythonmobile.html';
+      }
+
+      function showMobilePhoneEditorOffer() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('desktop') || params.has('nomobile')) return;
+        if (!isLikelyMobilePhone()) return;
+        if (sessionStorage.getItem('pythoncopyMobileOfferDismissed') === '1') return;
+        if (document.getElementById('mobileEditorOffer')) return;
+
+        const code = getCurrentEditorCode();
+        const imports = extractImports(code);
+        const hasDesktopOnlyMode = currentAppMode === 'blocks' || imports.includes('turtle');
+        const offer = document.createElement('div');
+        offer.id = 'mobileEditorOffer';
+        offer.setAttribute('role', 'dialog');
+        offer.setAttribute('aria-label', 'Open mobile editor');
+        offer.style.cssText = [
+          'position:fixed',
+          'left:12px',
+          'right:12px',
+          'bottom:12px',
+          'z-index:9999',
+          'display:flex',
+          'gap:10px',
+          'align-items:center',
+          'padding:12px',
+          'border-radius:10px',
+          'background:#111827',
+          'color:#f9fafb',
+          'box-shadow:0 12px 32px rgba(0,0,0,0.28)',
+          'font:14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif'
+        ].join(';');
+
+        const message = document.createElement('div');
+        message.style.cssText = 'flex:1;min-width:0;line-height:1.35';
+        message.textContent = hasDesktopOnlyMode
+          ? 'Phone detected. Open text code in PyMobile? Turtle, Blocks, and Trace stay here.'
+          : 'Phone detected. Open this code in PyMobile?';
+
+        const openButton = document.createElement('button');
+        openButton.type = 'button';
+        openButton.textContent = 'Open';
+        openButton.style.cssText = 'border:0;border-radius:8px;background:#10b981;color:white;font-weight:700;padding:10px 12px';
+        openButton.addEventListener('click', openCurrentCodeInMobileEditor);
+
+        const stayButton = document.createElement('button');
+        stayButton.type = 'button';
+        stayButton.textContent = 'Stay';
+        stayButton.style.cssText = 'border:1px solid rgba(255,255,255,0.28);border-radius:8px;background:transparent;color:white;font-weight:700;padding:10px 12px';
+        stayButton.addEventListener('click', () => {
+          sessionStorage.setItem('pythoncopyMobileOfferDismissed', '1');
+          offer.remove();
+        });
+
+        offer.append(message, openButton, stayButton);
+        document.body.appendChild(offer);
+      }
+
       function loadCodeIntoCurrentEditor(code) {
         if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
           exitPlaybackMode(true);
@@ -2325,6 +2395,7 @@ import sys, builtins
 
       // Teacher Mode binds
       document.getElementById('runButton').addEventListener('click', runCurrentCode);
+      setTimeout(showMobilePhoneEditorOffer, 1200);
       const quizBtn = document.getElementById('quizButton');
       if (quizBtn) {
         quizBtn.addEventListener('click', runQuizTests);

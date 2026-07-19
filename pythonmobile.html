@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Python Mobile</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-color: #121417;
+      --text-color: #f4f7fb;
+      --muted-color: #9aa4b2;
+      --panel-bg: #1d222a;
+      --panel-bg-strong: #242b35;
+      --border-color: #344050;
+      --button-bg: #2f3845;
+      --button-text: #f4f7fb;
+      --editor-bg: #0f1217;
+      --output-bg: #151a20;
+      --primary-color: #3b82f6;
+      --run-color: #10b981;
+      --error-color: #f87171;
+      --radius: 8px;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg-color: #f6f8fb;
+      --text-color: #17202c;
+      --muted-color: #5d6878;
+      --panel-bg: #ffffff;
+      --panel-bg-strong: #e8edf5;
+      --border-color: #cfd7e3;
+      --button-bg: #eef2f7;
+      --button-text: #17202c;
+      --editor-bg: #ffffff;
+      --output-bg: #f8fafc;
+      --primary-color: #2563eb;
+      --run-color: #059669;
+      --error-color: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand {
+      min-width: 0;
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .header-controls {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    select,
+    button {
+      min-height: 40px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      background: var(--button-bg);
+      color: var(--button-text);
+      font: inherit;
+      font-size: 14px;
+    }
+
+    select {
+      width: 100%;
+      min-width: 0;
+      padding: 0 8px;
+    }
+
+    button {
+      flex: 0 0 auto;
+      padding: 0 11px;
+      font-weight: 650;
+      touch-action: manipulation;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+    }
+
+    .run-btn {
+      background: var(--run-color);
+      border-color: var(--run-color);
+      color: #ffffff;
+    }
+
+    .icon-btn {
+      width: 40px;
+      padding: 0;
+    }
+
+    .mobile-toolbar {
+      display: flex;
+      gap: 6px;
+      padding: 6px 8px;
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-toolbar button {
+      min-width: 42px;
+      padding: 0 10px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 15px;
+    }
+
+    main {
+      min-height: 0;
+      flex: 1;
+      display: grid;
+      grid-template-rows: minmax(0, 3fr) minmax(120px, 2fr);
+      background: var(--bg-color);
+    }
+
+    .editor-section,
+    .output-section {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-section {
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 42px;
+      padding: 4px 8px;
+      background: var(--panel-bg-strong);
+      color: var(--muted-color);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .editor-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .editor-actions::-webkit-scrollbar {
+      display: none;
+    }
+
+    .editor-actions button {
+      min-height: 32px;
+      padding: 0 9px;
+      border-radius: 7px;
+      font-size: 12px;
+      letter-spacing: 0;
+      text-transform: none;
+      white-space: nowrap;
+    }
+
+    #editor,
+    #output {
+      min-height: 0;
+      flex: 1;
+      width: 100%;
+      border: 0;
+      outline: 0;
+      color: var(--text-color);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      line-height: 1.45;
+      tab-size: 4;
+    }
+
+    #editor {
+      resize: none;
+      padding: 12px;
+      background: var(--editor-bg);
+      font-size: 16px;
+      caret-color: var(--primary-color);
+    }
+
+    #output {
+      overflow: auto;
+      margin: 0;
+      padding: 10px 12px;
+      background: var(--output-bg);
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    #output.error {
+      color: var(--error-color);
+    }
+
+    #runnerStatus {
+      overflow: hidden;
+      max-width: 45vw;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--muted-color);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    @media (orientation: landscape) and (max-height: 520px) {
+      main {
+        grid-template-rows: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 3fr) minmax(220px, 2fr);
+      }
+
+      .editor-section {
+        border-right: 2px solid var(--border-color);
+        border-bottom: 0;
+      }
+    }
+
+    @media (max-width: 430px) {
+      header {
+        grid-template-columns: 1fr auto;
+      }
+
+      .brand {
+        font-size: 15px;
+      }
+
+      .header-controls {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+</head>
+<body>
+  <header>
+    <div class="brand">PyMobile</div>
+    <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch theme">Light</button>
+    <div class="header-controls">
+      <select id="algorithmSelect" aria-label="Load an example algorithm">
+        <option value="">Select Algorithm...</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="mobile-toolbar" aria-label="Python typing shortcuts">
+    <button type="button" data-insert="    ">Tab</button>
+    <button type="button" data-insert=":">:</button>
+    <button type="button" data-insert="("> ( </button>
+    <button type="button" data-insert=")"> ) </button>
+    <button type="button" data-insert="[">[</button>
+    <button type="button" data-insert="]">]</button>
+    <button type="button" data-insert="{">{</button>
+    <button type="button" data-insert="}">}</button>
+    <button type="button" data-insert="&quot;">"</button>
+    <button type="button" data-insert="'">'</button>
+    <button type="button" data-insert="=">=</button>
+    <button type="button" data-insert="+">+</button>
+    <button type="button" data-insert="-">-</button>
+    <button type="button" data-insert="_">_</button>
+  </div>
+
+  <main>
+    <section class="editor-section" aria-label="Python editor">
+      <div class="section-header">
+        <span>Editor</span>
+        <div class="editor-actions" aria-label="Editor actions">
+          <button id="runButton" class="run-btn" type="button">Run</button>
+          <button id="copyButton" type="button">Copy</button>
+          <button id="downloadButton" type="button">Save</button>
+          <button id="clearButton" type="button">Clear</button>
+        </div>
+      </div>
+      <textarea id="editor" spellcheck="false" autocapitalize="off" autocomplete="off"
+        placeholder="Write Python here...">print("Hello from PyMobile")</textarea>
+    </section>
+
+    <section class="output-section" aria-label="Output console">
+      <div class="section-header">
+        <span>Output</span>
+        <span id="runnerStatus">Loading Python...</span>
+      </div>
+      <pre id="output" aria-live="polite"></pre>
+    </section>
+  </main>
+
+  <script>
+    const editor = document.getElementById('editor');
+    const output = document.getElementById('output');
+    const runnerStatus = document.getElementById('runnerStatus');
+    const runButton = document.getElementById('runButton');
+    const clearButton = document.getElementById('clearButton');
+    const copyButton = document.getElementById('copyButton');
+    const downloadButton = document.getElementById('downloadButton');
+    const themeToggle = document.getElementById('themeToggle');
+    const algorithmSelect = document.getElementById('algorithmSelect');
+    let pyodideReadyPromise = null;
+    let pyodide = null;
+
+    function setStatus(text) {
+      runnerStatus.textContent = text;
+    }
+
+    function appendOutput(text) {
+      output.classList.remove('error');
+      output.textContent += text;
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function appendError(text) {
+      output.classList.add('error');
+      output.textContent += text;
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function clearOutput() {
+      output.classList.remove('error');
+      output.textContent = '';
+      setStatus(pyodide ? 'Ready.' : 'Loading Python...');
+    }
+
+    window.clearOutput = clearOutput;
+
+    function insertText(text) {
+      const start = editor.selectionStart;
+      const end = editor.selectionEnd;
+      const value = editor.value;
+      editor.value = value.slice(0, start) + text + value.slice(end);
+      editor.selectionStart = editor.selectionEnd = start + text.length;
+      editor.focus();
+      saveDraft();
+    }
+
+    window.insertText = insertText;
+
+    function saveDraft() {
+      localStorage.setItem('pymobileDraft', editor.value);
+    }
+
+    function loadDraft() {
+      const draft = localStorage.getItem('pymobileDraft');
+      if (draft !== null) {
+        editor.value = draft;
+      }
+    }
+
+    async function copyCode() {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(editor.value);
+        } else {
+          editor.select();
+          document.execCommand('copy');
+          editor.setSelectionRange(editor.value.length, editor.value.length);
+        }
+        setStatus('Code copied.');
+      } catch (error) {
+        setStatus('Copy failed.');
+        appendError(`Copy failed: ${error}\n`);
+      } finally {
+        editor.focus();
+      }
+    }
+
+    function getDownloadFilename() {
+      const selectedOption = algorithmSelect.options[algorithmSelect.selectedIndex];
+      const label = selectedOption && selectedOption.value ? selectedOption.textContent : 'pymobile';
+      const safeLabel = label
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      return `${safeLabel || 'pymobile'}.py`;
+    }
+
+    function downloadCode() {
+      const blob = new Blob([editor.value], { type: 'text/x-python;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = getDownloadFilename();
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setStatus(`Saved ${link.download}.`);
+      editor.focus();
+    }
+
+    function setTheme(theme) {
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = 'Dark';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeToggle.textContent = 'Light';
+      }
+      localStorage.setItem('pymobileTheme', theme);
+    }
+
+    function labelFromUrl(url) {
+      const lastPart = url.split('/').pop() || 'algorithm';
+      return lastPart
+        .replace(/\.(py|blocks)$/i, '')
+        .replace(/[-_]+/g, ' ')
+        .replace(/\b\w/g, letter => letter.toUpperCase());
+    }
+
+    function getDayOfYear(date) {
+      const startOfYear = new Date(date.getFullYear(), 0, 1);
+      const difference = date - startOfYear;
+      const oneDay = 1000 * 60 * 60 * 24;
+      return Math.round(difference / oneDay) + 1;
+    }
+
+    function buildChallengeCode(challenge) {
+      return `# Challenge: ${challenge.title} (${challenge.spice})\n${challenge.comment}\n`;
+    }
+
+    async function addDailyChallengeOption() {
+      try {
+        const response = await fetch('challenges.json');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const challenges = await response.json();
+        if (!Array.isArray(challenges) || challenges.length === 0) return;
+
+        const dayOfYear = getDayOfYear(new Date());
+        const challenge = challenges[(dayOfYear - 1) % challenges.length];
+        const option = document.createElement('option');
+        option.value = buildChallengeCode(challenge);
+        option.textContent = `Today's Challenge: ${challenge.title}`;
+        algorithmSelect.insertBefore(option, algorithmSelect.options[1] || null);
+      } catch (error) {
+        console.warn('Failed to load daily challenge:', error);
+      }
+    }
+
+    function resolveCodeUrl(input) {
+      const rawInput = input.trim();
+      if (!rawInput) {
+        throw new Error('Enter a URL first.');
+      }
+
+      const url = new URL(rawInput, window.location.href);
+      if (url.hostname === 'github.com') {
+        const parts = url.pathname.split('/').filter(Boolean);
+        const markerIndex = parts.findIndex(part => part === 'blob' || part === 'raw');
+        if (parts.length >= 5 && markerIndex === 2) {
+          const [owner, repo] = parts;
+          const branch = parts[3];
+          const filePath = parts.slice(4).join('/');
+          return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`;
+        }
+      }
+
+      return url.href;
+    }
+
+    async function loadCodeFromUrl(inputUrl) {
+      let resolvedUrl = '';
+      try {
+        resolvedUrl = resolveCodeUrl(inputUrl);
+      } catch (error) {
+        setStatus(error.message);
+        return;
+      }
+
+      setStatus('Loading URL...');
+      try {
+        const response = await fetch(resolvedUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const code = (await response.text()).replace(/^\ufeff/, '');
+        editor.value = code;
+        saveDraft();
+        algorithmSelect.value = '';
+        setStatus('Code loaded.');
+        editor.focus();
+      } catch (error) {
+        setStatus('URL load failed.');
+        appendError(`URL load failed: ${error}\n`);
+      }
+    }
+
+    function loadInitialUrlParam() {
+      const params = new URLSearchParams(window.location.search);
+      const url = params.get('url');
+      if (url) {
+        loadCodeFromUrl(url);
+      }
+    }
+
+    async function loadAlgorithms() {
+      try {
+        const response = await fetch('igcse_algorithms.json');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        Object.entries(data).forEach(([url, code]) => {
+          const option = document.createElement('option');
+          option.value = code;
+          option.textContent = labelFromUrl(url);
+          algorithmSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.warn('Failed to load algorithms:', error);
+      }
+    }
+
+    function initPyodide() {
+      if (!pyodideReadyPromise) {
+        runButton.disabled = true;
+        pyodideReadyPromise = loadPyodide({
+          stdout: text => appendOutput(text + '\n'),
+          stderr: text => appendError(text + '\n')
+        }).then(instance => {
+          pyodide = instance;
+          pyodide.setStdin({
+            stdin: () => {
+              const value = window.prompt('Python input:');
+              return value === null ? '' : value;
+            }
+          });
+          runButton.disabled = false;
+          setStatus('Ready.');
+          return pyodide;
+        }).catch(error => {
+          runButton.disabled = false;
+          setStatus('Python failed to load.');
+          appendError(String(error) + '\n');
+          throw error;
+        });
+      }
+      return pyodideReadyPromise;
+    }
+
+    async function runCode() {
+      const source = editor.value;
+      clearOutput();
+      runButton.disabled = true;
+      setStatus('Running...');
+      try {
+        const instance = await initPyodide();
+        await instance.runPythonAsync(source);
+        setStatus('Finished.');
+      } catch (error) {
+        appendError(String(error) + '\n');
+        setStatus('Error.');
+      } finally {
+        runButton.disabled = false;
+      }
+    }
+
+    document.querySelector('.mobile-toolbar').addEventListener('click', event => {
+      const button = event.target.closest('button[data-insert]');
+      if (button) {
+        insertText(button.dataset.insert);
+      }
+    });
+
+    editor.addEventListener('input', saveDraft);
+
+    editor.addEventListener('keydown', event => {
+      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+        event.preventDefault();
+        runCode();
+      }
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        insertText('    ');
+      }
+    });
+
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      setTheme(isLight ? 'dark' : 'light');
+    });
+
+    runButton.addEventListener('click', runCode);
+    clearButton.addEventListener('click', clearOutput);
+    copyButton.addEventListener('click', copyCode);
+    downloadButton.addEventListener('click', downloadCode);
+
+    algorithmSelect.addEventListener('change', event => {
+      if (event.target.value) {
+        editor.value = event.target.value;
+        saveDraft();
+        editor.focus();
+      }
+    });
+
+    loadDraft();
+    setTheme(localStorage.getItem('pymobileTheme') || 'dark');
+    loadInitialUrlParam();
+    addDailyChallengeOption();
+    loadAlgorithms();
+    initPyodide();
+  </script>
+</body>
+</html>
