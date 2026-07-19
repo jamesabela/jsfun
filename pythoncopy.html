@@ -19,7 +19,7 @@
   </style>
   <script>
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 15) {
+      if (window.pythonCopyVersion !== 25) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -447,16 +447,23 @@
         <button class="primary-button" id="uploadPyButton">Upload .py</button>
         <button class="primary-button" id="downloadPyButton">Download .py</button>
         <button class="primary-button" id="downloadTxtButton">Download .txt</button>
-        <button class="primary-button phone-editor-button" id="openPhoneEditorButton" type="button"
-          title="Open the current code in the simplified editor for phones (not tablets)">Phone Mode</button>
         <button class="primary-button" id="openNewTabButton" style="display: none;">Open in New Tab</button>
         <button class="primary-button" id="makePuzzleButton" style="display: none;">Make Puzzle</button>
       </div>
     </div>
 
-    <section class="panel">
+    <section class="panel editor-panel">
       <div class="toggle-row">
         <span id="detectionLabel" hidden>Detection: waiting for code.</span>
+        <div class="button-row editor-run-controls" id="teacherControlsRow">
+          <button class="run-button" id="runButton">Run</button>
+          <button class="quiz-button" id="quizButton" style="display: none;">Run Tests</button>
+          <button class="quiz-button" id="creativeNextButton"
+            style="display: none; background: #8b5cf6 !important;">Next Level ➔</button>
+          <button class="quiz-button" id="creativeEndButton"
+            style="display: none; background: #8b5cf6 !important;">Complete Course 🎓</button>
+          <button class="stop-button" onclick="clearRunner()">Reset</button>
+        </div>
         <div class="editor-action-row" aria-label="Editor actions">
           <button type="button" class="editor-action-button" id="undoEditorButton" title="Undo last edit">Undo</button>
           <button type="button" class="editor-action-button" id="redoEditorButton" title="Redo last edit">Redo</button>
@@ -507,6 +514,7 @@
           </div>
         </div>
       </div>
+
       <!-- Blockly Workspace Area -->
       <div id="blocklyArea"
         style="display: none; height: 350px; position: relative; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 0;">
@@ -534,8 +542,9 @@
       </div>
     </section>
 
+    <div class="runner-toggle" id="runnerToggle" title="Drag left or right to resize the panes">⋮</div>
+
     <div class="runner-layout" id="runnerLayout">
-      <div class="runner-toggle" id="runnerToggle" title="Show or hide run window">◀</div>
       <section class="panel runner-panel">
         <div id="blocksCodePreview" class="blocks-code-preview" style="display: none;">
           <div class="blocks-code-preview-header">
@@ -552,16 +561,6 @@
         </div>
 
         <p class="message" id="runnerMessage"></p>
-
-        <div class="button-row" id="teacherControlsRow">
-          <button class="run-button" id="runButton">Run</button>
-          <button class="quiz-button" id="quizButton" style="display: none;">Run Tests</button>
-          <button class="quiz-button" id="creativeNextButton"
-            style="display: none; background: #8b5cf6 !important;">Next Level ➔</button>
-          <button class="quiz-button" id="creativeEndButton"
-            style="display: none; background: #8b5cf6 !important;">Complete Course 🎓</button>
-          <button class="stop-button" onclick="clearRunner()">Reset</button>
-        </div>
 
         <div class="button-row" id="teachControlsRow" style="display: none;">
           <button class="run-button" id="playPauseButton" style="min-width: 80px;">Play</button>
@@ -674,23 +673,33 @@
           </div>
         </div>
 
-        <div class="console-input-panel" id="consoleInputPanel">
-          <p class="console-input-help" id="consoleInputHelp">This program is waiting for input.</p>
-          <div class="console-input-row">
-            <input type="text" id="consoleInputField" placeholder="Type a value and press Enter">
-            <button class="console-submit-button" id="consoleSubmitButton">Submit</button>
-          </div>
-        </div>
-
-        <div class="status" id="runnerStatus">Ready.</div>
-        <div id="output"></div>
-        <p class="note">
-          Only these modules are supported: <code>random</code>, <code>math</code>, <code>statistics</code>,
-          <code>datetime</code>, <code>string</code>, <code>turtle</code>, <code>time</code>. Use a local IDE for
-          anything else.
-        </p>
       </section>
     </div>
+
+    <div class="terminal-resizer" id="terminalResizer"
+      title="Click to open or close the terminal; drag up or down to resize it">
+      <span class="terminal-toggle-icon" aria-hidden="true">▲</span>
+      <div></div>
+      <span class="terminal-toggle-icon" aria-hidden="true">▲</span>
+    </div>
+
+    <section class="panel output-panel" aria-label="Program output">
+      <div class="console-input-panel" id="consoleInputPanel">
+        <p class="console-input-help" id="consoleInputHelp">This program is waiting for input.</p>
+        <div class="console-input-row">
+          <input type="text" id="consoleInputField" placeholder="Type a value and press Enter">
+          <button class="console-submit-button" id="consoleSubmitButton">Submit</button>
+        </div>
+      </div>
+
+      <div class="status" id="runnerStatus">Ready.</div>
+      <div id="output"></div>
+      <p class="note">
+        Only these modules are supported: <code>random</code>, <code>math</code>, <code>statistics</code>,
+        <code>datetime</code>, <code>string</code>, <code>turtle</code>, <code>time</code>. Use a local IDE for
+        anything else.
+      </p>
+    </section>
   </div>
 
   <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>

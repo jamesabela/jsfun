@@ -720,7 +720,8 @@
     .starter-hero {
       display: flex;
       justify-content: space-between;
-      gap: 18px;
+      row-gap: 18px;
+      column-gap: 0;
       align-items: flex-start;
       margin-bottom: 18px;
       padding-bottom: 16px;
@@ -938,18 +939,108 @@
 
     .workspace {
       display: none;
-      grid-template-columns: minmax(420px, 1fr) auto;
+      grid-template-columns: minmax(420px, 1fr) 14px minmax(280px, 1fr);
+      grid-template-areas:
+        "toolbar toolbar toolbar"
+        "editor divider runner"
+        "terminal terminal terminal";
+      grid-template-rows: auto minmax(0, 1fr) 24px;
       gap: 18px;
       align-items: stretch;
+      height: calc(100vh - var(--header-height));
+      overflow: hidden;
       transition: grid-template-columns 0.28s ease, gap 0.28s ease;
     }
 
     .workspace.runner-collapsed {
-      grid-template-columns: minmax(420px, 1fr) 42px;
-      gap: 12px;
+      grid-template-columns: minmax(420px, 1fr) 0 0;
+      column-gap: 0;
+    }
+
+    .workspace.runner-collapsed .runner-toggle {
+      display: none;
+    }
+
+    .workspace.pane-resized:not(.runner-collapsed),
+    .workspace.pane-resizing:not(.runner-collapsed) {
+      grid-template-columns: minmax(420px, var(--editor-pane-width)) 14px minmax(280px, 1fr);
+    }
+
+    .workspace.pane-resizing {
+      transition: none;
+    }
+
+    .editor-panel {
+      grid-area: editor;
+      min-height: 0;
+    }
+
+    .editor-panel .editor-shell {
+      height: auto;
+      min-height: 0;
+      flex: 1 1 auto;
+    }
+
+    .workspace .output-panel {
+      grid-area: output;
+      display: none;
+    }
+
+    .terminal-resizer {
+      grid-area: terminal;
+      display: flex;
+      height: 24px;
+      align-items: center;
+      justify-content: center;
+      background: #e2e8f0;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: ns-resize;
+      user-select: none;
+    }
+
+    .terminal-toggle-icon {
+      color: #475569;
+      font-size: 12px;
+      line-height: 1;
+      margin: 0 8px;
+      pointer-events: none;
+    }
+
+    .terminal-resizer div {
+      width: 52px;
+      height: 5px;
+      border-radius: 999px;
+      background: #94a3b8;
+    }
+
+    .terminal-resizer:hover {
+      background: #cbd5e1;
+      border-color: #94a3b8;
+    }
+
+    .workspace.terminal-open {
+      grid-template-areas:
+        "toolbar toolbar toolbar"
+        "editor divider runner"
+        "terminal terminal terminal"
+        "output output output";
+      grid-template-rows: auto minmax(180px, 1fr) 24px var(--terminal-height, 300px);
+    }
+
+    .workspace.terminal-open .output-panel {
+      display: flex;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .workspace.terminal-open .output-panel #output {
+      min-height: 0;
     }
 
     .workspace-toolbar {
+      grid-area: toolbar;
       grid-column: 1 / -1;
       display: flex;
       flex-wrap: wrap;
@@ -1046,6 +1137,19 @@
       gap: 6px;
       align-items: center;
       margin-left: auto;
+    }
+
+    .toggle-row .editor-run-controls {
+      width: auto;
+      margin: 0;
+      align-items: center;
+    }
+
+    .toggle-row .editor-run-controls button {
+      padding: 5px 9px;
+      font-size: 13px;
+      line-height: 1.2;
+      min-width: 54px;
     }
 
     .editor-action-button {
@@ -1249,49 +1353,64 @@
     }
 
     .runner-layout {
-      display: grid;
-      grid-template-columns: 42px minmax(280px, 720px);
-      gap: 0;
-      align-items: stretch;
+      grid-area: runner;
+      display: block;
       height: 100%;
       min-height: 100%;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .runner-toggle {
+      grid-area: divider;
+      position: relative;
+      z-index: 5;
       background: #e2e8f0;
       color: #1e293b;
-      border: 1px solid #cbd5e1;
-      border-right: none;
-      border-radius: 10px 0 0 10px;
+      border: 0;
+      border-left: 1px solid #cbd5e1;
+      border-right: 1px solid #cbd5e1;
+      border-radius: 0;
       min-height: 100%;
-      width: 42px;
+      width: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 14px;
       font-weight: bold;
-      cursor: pointer;
+      cursor: col-resize;
+      touch-action: none;
       user-select: none;
       transition: background 0.2s ease;
     }
 
     .runner-toggle:hover {
-      background: #cbd5e1;
+      background: #bfdbfe;
+    }
+
+    .runner-toggle::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -10px;
+      right: -10px;
     }
 
     .runner-panel {
       padding: 14px;
       background: #f8fafc;
       border: 1px solid #dbe3ef;
-      border-radius: 0 10px 10px 0;
+      border-radius: 10px;
       overflow: hidden;
       transition: all 0.28s ease;
-      max-width: 720px;
+      max-width: none;
       opacity: 1;
       height: 100%;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
     }
 
     .blocks-code-preview {
@@ -1461,16 +1580,10 @@
 
 
     .runner-layout.collapsed .runner-panel {
-      max-width: 0;
-      opacity: 0;
-      padding-left: 0;
-      padding-right: 0;
-      border-left-width: 0;
-      border-right-width: 0;
+      display: none;
     }
 
     .runner-layout.collapsed .runner-toggle {
-      border-right: 1px solid #cbd5e1;
       border-radius: 10px;
     }
 
@@ -1545,14 +1658,33 @@
       color: #475569;
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 720px) {
       .workspace {
         grid-template-columns: 1fr;
+        grid-template-areas:
+          "toolbar"
+          "editor"
+          "divider"
+          "runner"
+          "terminal";
+        grid-template-rows: auto;
+        height: auto;
+        overflow: visible;
+      }
+
+      .workspace.terminal-open {
+        grid-template-areas:
+          "toolbar"
+          "editor"
+          "divider"
+          "runner"
+          "terminal"
+          "output";
+        grid-template-rows: auto;
       }
 
       .runner-layout {
-        grid-template-columns: 1fr;
-        grid-template-rows: 38px auto;
+        display: block;
       }
 
       .editor-shell {
@@ -1563,17 +1695,17 @@
         min-height: 38px;
         width: 100%;
         border: 1px solid #cbd5e1;
-        border-bottom: none;
-        border-radius: 10px 10px 0 0;
+        border-radius: 10px;
+        cursor: pointer;
       }
 
       .runner-panel {
         max-width: none;
-        border-radius: 0 0 10px 10px;
+        border-radius: 10px;
       }
 
       .runner-layout.collapsed {
-        grid-template-rows: 38px 0;
+        display: none;
       }
 
       .runner-layout.collapsed .runner-panel {

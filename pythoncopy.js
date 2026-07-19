@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 15;
+    window.pythonCopyVersion = 25;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -1177,6 +1177,7 @@ import sys, builtins
       const editorSplitResizer = document.getElementById('editorSplitResizer');
 
       if (currentAppMode === 'blocks') {
+        ensureRunnerExpanded();
         document.body.classList.remove('display-mode-active');
         document.body.classList.remove('turtle-mode-active');
         document.body.classList.add('blocks-mode-active');
@@ -1249,6 +1250,7 @@ import sys, builtins
         }
 
         if (currentAppMode === 'display') {
+          ensureRunnerExpanded();
           document.body.classList.add('display-mode-active');
           document.body.classList.remove('turtle-mode-active');
           if (displayBadge) displayBadge.style.display = 'inline-block';
@@ -1275,6 +1277,7 @@ import sys, builtins
           clearRunner();
           setRunnerStatus('Display Mode Ready. Click Play to trace code.');
         } else if (currentAppMode === 'turtle') {
+          ensureRunnerExpanded();
           document.body.classList.remove('display-mode-active');
           document.body.classList.add('turtle-mode-active');
           if (turtleBadge) turtleBadge.style.display = 'inline-block';
@@ -1309,6 +1312,9 @@ import sys, builtins
           if (dbgPanel) dbgPanel.style.display = 'none';
 
           if (turtleContainer) turtleContainer.style.display = 'none';
+
+          const previewIsOpen = document.getElementById('webPreviewContainer').style.display === 'block';
+          if (!previewIsOpen) ensureRunnerCollapsed();
 
           clearTeachHighlight();
           clearRunner();
@@ -2468,7 +2474,117 @@ import sys, builtins
       });
       editor.addEventListener('scroll', syncLineNumberScroll);
       displayEditor.addEventListener('scroll', syncLineNumberScroll);
-      runnerToggle.addEventListener('click', toggleRunner);
+
+      // On desktop the divider between the editor and the instructions can be
+      // dragged left and right. It deliberately has no click/pop behaviour.
+      const workspace = document.getElementById('workspace');
+      const editorPanel = document.querySelector('.editor-panel');
+
+      let isResizingRunner = false;
+      let resizeStartX = 0;
+      let resizeStartWidth = 0;
+      let resizedThisGesture = false;
+
+      runnerToggle.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0 || window.matchMedia('(max-width: 720px)').matches ||
+          runnerLayout.classList.contains('collapsed')) return;
+
+        isResizingRunner = true;
+        resizedThisGesture = false;
+        resizeStartX = event.clientX;
+        resizeStartWidth = editorPanel.getBoundingClientRect().width;
+        workspace.classList.add('pane-resizing');
+        runnerToggle.setPointerCapture(event.pointerId);
+      });
+
+      runnerToggle.addEventListener('pointermove', (event) => {
+        if (!isResizingRunner) return;
+
+        const delta = event.clientX - resizeStartX;
+        if (Math.abs(delta) > 3) resizedThisGesture = true;
+
+        const bounds = workspace.getBoundingClientRect();
+        const minEditorWidth = 420;
+        const minInstructionsWidth = 280;
+        const dividerWidth = 14;
+        const maxEditorWidth = Math.max(minEditorWidth, bounds.width - minInstructionsWidth - dividerWidth);
+        const nextWidth = Math.max(minEditorWidth, Math.min(maxEditorWidth, resizeStartWidth + delta));
+        workspace.style.setProperty('--editor-pane-width', `${Math.round(nextWidth)}px`);
+      });
+
+      const finishRunnerResize = (event) => {
+        if (!isResizingRunner) return;
+        isResizingRunner = false;
+        workspace.classList.remove('pane-resizing');
+
+        if (resizedThisGesture) {
+          workspace.classList.add('pane-resized');
+        }
+
+        if (runnerToggle.hasPointerCapture(event.pointerId)) {
+          runnerToggle.releasePointerCapture(event.pointerId);
+        }
+      };
+
+      runnerToggle.addEventListener('pointerup', finishRunnerResize);
+      runnerToggle.addEventListener('pointercancel', finishRunnerResize);
+
+      const terminalResizer = document.getElementById('terminalResizer');
+      const outputPanel = document.querySelector('.output-panel');
+      const savedTerminalHeight = Number(localStorage.getItem('pythonCopyTerminalHeight'));
+      if (Number.isFinite(savedTerminalHeight) && savedTerminalHeight >= 180) {
+        workspace.style.setProperty('--terminal-height', `${savedTerminalHeight}px`);
+      }
+
+      let isResizingTerminal = false;
+      let terminalStartY = 0;
+      let terminalStartHeight = 0;
+      let terminalMovedThisGesture = false;
+      let ignoreTerminalToggleClick = false;
+
+      terminalResizer.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0 || !workspace.classList.contains('terminal-open')) return;
+        isResizingTerminal = true;
+        terminalMovedThisGesture = false;
+        terminalStartY = event.clientY;
+        terminalStartHeight = outputPanel.getBoundingClientRect().height;
+        terminalResizer.setPointerCapture(event.pointerId);
+        event.preventDefault();
+      });
+
+      terminalResizer.addEventListener('pointermove', (event) => {
+        if (!isResizingTerminal) return;
+        if (Math.abs(event.clientY - terminalStartY) > 3) terminalMovedThisGesture = true;
+        const maxHeight = Math.max(180, window.innerHeight * 0.75);
+        const nextHeight = Math.max(180, Math.min(maxHeight, terminalStartHeight - (event.clientY - terminalStartY)));
+        workspace.style.setProperty('--terminal-height', `${Math.round(nextHeight)}px`);
+      });
+
+      const finishTerminalResize = (event) => {
+        if (!isResizingTerminal) return;
+        isResizingTerminal = false;
+        const height = Math.round(outputPanel.getBoundingClientRect().height);
+        localStorage.setItem('pythonCopyTerminalHeight', String(height));
+        if (terminalMovedThisGesture) {
+          ignoreTerminalToggleClick = true;
+          window.setTimeout(() => { ignoreTerminalToggleClick = false; }, 0);
+        }
+        if (terminalResizer.hasPointerCapture(event.pointerId)) {
+          terminalResizer.releasePointerCapture(event.pointerId);
+        }
+      };
+
+      terminalResizer.addEventListener('pointerup', finishTerminalResize);
+      terminalResizer.addEventListener('pointercancel', finishTerminalResize);
+      terminalResizer.addEventListener('click', (event) => {
+        if (ignoreTerminalToggleClick) {
+          event.preventDefault();
+          ignoreTerminalToggleClick = false;
+          return;
+        }
+        if (workspace.classList.contains('terminal-open')) hideTerminal();
+        else showTerminal();
+      });
       window.addEventListener('resize', () => updateRunnerToggleLabel());
 
       document.getElementById('toggleGlobalPreviewBtn').addEventListener('click', () => {
@@ -2578,15 +2694,20 @@ import sys, builtins
       const collapsed = runnerLayout.classList.toggle('collapsed');
       document.getElementById('workspace').classList.toggle('runner-collapsed', collapsed);
       updateRunnerToggleLabel(collapsed);
-      runnerToggle.title = collapsed ? 'Show run window' : 'Hide run window';
+      runnerToggle.title = 'Drag left or right to resize the panes.';
       resizeBlocklyWorkspaceSoon();
     }
 
-    function updateRunnerToggleLabel(collapsed = runnerLayout.classList.contains('collapsed')) {
-      const isStacked = window.matchMedia('(max-width: 1200px)').matches;
-      runnerToggle.textContent = isStacked
-        ? (collapsed ? '▼' : '▲')
-        : (collapsed ? '▶' : '◀');
+    function ensureRunnerExpanded() {
+      if (runnerLayout.classList.contains('collapsed')) toggleRunner();
+    }
+
+    function ensureRunnerCollapsed() {
+      if (!runnerLayout.classList.contains('collapsed')) toggleRunner();
+    }
+
+    function updateRunnerToggleLabel() {
+      runnerToggle.textContent = '⋮';
     }
 
     function resizeBlocklyWorkspaceSoon() {
@@ -2947,6 +3068,7 @@ import sys, builtins
       updateLineNumbers();
       analyseCodeAndUpdateMessage();
       clearRunner();
+      ensureRunnerCollapsed();
       setRunnerStatus('Blank file ready.');
       updateBlocksButtonState();
       playbackHistory = [];
@@ -3517,6 +3639,7 @@ import sys, builtins
       iframe.dataset.lastUrl = url;
       fallbackLink.href = url;
       container.style.display = 'block';
+      ensureRunnerExpanded();
 
       setGlobalPreviewButtonState(true);
       updateReferenceLinks();
@@ -3581,10 +3704,21 @@ import sys, builtins
       resolver(value);
     }
 
+    function showTerminal() {
+      document.getElementById('workspace').classList.add('terminal-open');
+      document.querySelectorAll('.terminal-toggle-icon').forEach(icon => { icon.textContent = '▼'; });
+    }
+
+    function hideTerminal() {
+      document.getElementById('workspace').classList.remove('terminal-open');
+      document.querySelectorAll('.terminal-toggle-icon').forEach(icon => { icon.textContent = '▲'; });
+    }
+
     function clearRunner() {
       executionCancelled = true;
       outputEl.textContent = '';
       hideConsoleInput();
+      hideTerminal();
       clearTeachHighlight();
 
       displayCurrentStep = 0;
@@ -4053,11 +4187,7 @@ json.dumps(_test_result)
       executionCancelled = false;
       outputEl.textContent = '';
       hideConsoleInput();
-
-      const runnerLayout = document.getElementById('runnerLayout');
-      if (runnerLayout && runnerLayout.classList.contains('collapsed')) {
-        toggleRunner();
-      }
+      showTerminal();
 
       setRunnerStatus('Running quiz tests...');
       outputEl.innerHTML = `
@@ -4628,6 +4758,8 @@ json.dumps(_test_result)
         return;
       }
 
+      showTerminal();
+
       const imports = extractImports(source);
       const usesTurtle = imports.includes('turtle');
       const turtleContainer = document.getElementById('turtleCanvasContainer');
@@ -4647,10 +4779,6 @@ json.dumps(_test_result)
       runnerMessage.style.display = 'block';
       runnerMessage.textContent = analysis.message;
       setRunnerStatus('Running...');
-
-      if (runnerLayout.classList.contains('collapsed')) {
-        toggleRunner();
-      }
 
       if (!pyodideInstance && pyodideReadyPromise) {
         setRunnerStatus('Loading Python engine...');
