@@ -2873,6 +2873,41 @@ import sys, builtins
       fetchCode(inputURL);
     }
 
+    function normalizeCodeUrl(url) {
+      if (!url) return url;
+      let normalizedUrl = String(url).trim().replace(/\\\)/g, ')');
+
+      try {
+        const parsedUrl = new URL(normalizedUrl, window.location.href);
+        if (parsedUrl.hostname === 'github.com') {
+          const parts = parsedUrl.pathname.split('/').filter(Boolean);
+          const markerIndex = parts.findIndex(part => part === 'blob' || part === 'raw');
+          if (parts.length >= 5 && markerIndex === 2) {
+            const [owner, repo] = parts;
+            const branch = parts[3];
+            const filePath = parts.slice(4).join('/');
+            normalizedUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`;
+          }
+        }
+      } catch (err) {
+        console.warn('Could not normalize URL:', err);
+      }
+
+      const githubPrefixes = [
+        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
+        "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
+        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
+        "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
+      ];
+      for (const prefix of githubPrefixes) {
+        if (normalizedUrl.startsWith(prefix)) {
+          return normalizedUrl.substring(prefix.length);
+        }
+      }
+
+      return normalizedUrl;
+    }
+
     function startBlankFile() {
       if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
         exitPlaybackMode(true);
@@ -2916,21 +2951,7 @@ import sys, builtins
         exitPlaybackMode(true);
       }
       
-      // Normalize raw GitHub URLs to relative local paths if running locally or matching our repo structure
-      const githubPrefixes = [
-        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
-        "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
-        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
-        "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
-      ];
-      if (url) {
-        for (const prefix of githubPrefixes) {
-          if (url.startsWith(prefix)) {
-            url = url.substring(prefix.length);
-            break;
-          }
-        }
-      }
+      url = normalizeCodeUrl(url);
 
       currentURL = url;
       updatePuzzleButtonVisibility();
@@ -4070,21 +4091,7 @@ json.dumps(_test_result)
       const loadPromises = [];
       const preLoadWarnings = [];
       while ((loadMatch = loadRegex.exec(code)) !== null) {
-        let fileUrl = loadMatch[1];
-        
-        // Normalize raw GitHub URLs to relative local paths if running locally or matching our repo structure
-        const githubPrefixes = [
-          "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
-          "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
-          "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
-          "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
-        ];
-        for (const prefix of githubPrefixes) {
-          if (fileUrl.startsWith(prefix)) {
-            fileUrl = fileUrl.substring(prefix.length);
-            break;
-          }
-        }
+        let fileUrl = normalizeCodeUrl(loadMatch[1]);
 
         try {
           const resolvedUrl = new URL(fileUrl, window.location.href).href;
@@ -4667,21 +4674,7 @@ json.dumps(_test_result)
       const loadPromises = [];
       const preLoadWarnings = [];
       while ((loadMatch = loadRegex.exec(source)) !== null) {
-        let fileUrl = loadMatch[1];
-        
-        // Normalize raw GitHub URLs to relative local paths if running locally or matching our repo structure
-        const githubPrefixes = [
-          "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
-          "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
-          "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
-          "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
-        ];
-        for (const prefix of githubPrefixes) {
-          if (fileUrl.startsWith(prefix)) {
-            fileUrl = fileUrl.substring(prefix.length);
-            break;
-          }
-        }
+        let fileUrl = normalizeCodeUrl(loadMatch[1]);
 
         try {
           const resolvedUrl = new URL(fileUrl, window.location.href).href;
