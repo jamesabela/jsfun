@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>F-String Quick Reference</title>
+  <link rel="stylesheet" href="comic_style.css">
+</head>
+<body>
+  <main class="page">
+    <header>
+      <p class="eyebrow">Student reference</p>
+      <h1>F-String Quick Reference</h1>
+      <p class="subtitle">A one-page reminder</p>
+    </header>
+    <section class="grid">
+      <article class="card"><h2>Basic pattern</h2><pre>name = "Aisha"
+print(f"Hello {name}")</pre></article>
+      <article class="card"><h2>Several values</h2><pre>score = 90
+level = 4
+print(f"Score {score} - Level {level}")</pre></article>
+      <article class="card"><h2>Calculation</h2><pre>coins = 12
+bonus = 5
+print(f"Total: {coins + bonus}")</pre></article>
+      <article class="card"><h2>Two decimal places</h2><pre>price = 7.5
+print(f"${price:.2f}")</pre></article>
+      <article class="card"><h2>Percentage</h2><pre>rate = 3 / 4
+print(f"{rate:.1%}")</pre></article>
+      <article class="card warning"><h2>Remember</h2><ul><li>Add f before the opening quote.</li><li>Put variables inside braces.</li><li>Use a plain string when there are no values to insert.</li></ul></article>
+    </section>
+  </main>
+</body>
+</html>

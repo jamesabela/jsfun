@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level 8: Win Rate Display</title>
+  <link rel="stylesheet" href="comic_style.css">
+</head>
+<body>
+  <main class="page">
+    <header>
+      <p class="eyebrow">F-String Comic Academy - Level 8 of 10</p>
+      <h1>Win Rate Display</h1>
+      <p class="subtitle">Percentage formatting</p>
+    </header>
+
+    <section class="panel">
+      <span class="badge">Comic briefing</span>
+      <div class="characters">
+        <div class="character">
+          <div class="face"><span class="antenna"></span><span class="mouth"></span></div>
+          <div class="bubble">The game stores 0.75 but players expect 75.0%.</div>
+        </div>
+        <div class="character">
+          <div class="face pixel"><span class="mouth"></span></div>
+          <div class="bubble">The format code :.1% converts the decimal to a percentage.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>What you will learn</h2>
+        <p><strong>Format a decimal as a percentage.</strong></p>
+        <p>The format code :.1% multiplies the value by 100, shows one decimal place and adds the percent sign.</p>
+      </article>
+      <article class="card task">
+        <h2>Your mission</h2>
+        <p>Calculate wins divided by games and display the result as a percentage with one decimal place.</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Code pattern</h2>
+      <pre>rate = 3 / 4
+print(f&quot;Win rate: {rate:.1%}&quot;)</pre>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Mission checklist</h2>
+        <ul><li>Calculate win_rate before printing.</li><li>Use :.1% inside the braces.</li><li>Use the player name in the message.</li></ul>
+      </article>
+      <article class="card warning">
+        <h2>Common bug</h2>
+        <p>Do not multiply by 100 as well as using %. The percentage format already does that.</p>
+      </article>
+    </section>
+
+    <footer>Run the code, test it, then unlock the next comic mission.</footer>
+  </main>
+</body>
+</html>

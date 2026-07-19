@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level 1: Hero Name Badge</title>
+  <link rel="stylesheet" href="comic_style.css">
+</head>
+<body>
+  <main class="page">
+    <header>
+      <p class="eyebrow">F-String Comic Academy - Level 1 of 10</p>
+      <h1>Hero Name Badge</h1>
+      <p class="subtitle">One variable</p>
+    </header>
+
+    <section class="panel">
+      <span class="badge">Comic briefing</span>
+      <div class="characters">
+        <div class="character">
+          <div class="face"><span class="antenna"></span><span class="mouth"></span></div>
+          <div class="bubble">My badge still says question marks.</div>
+        </div>
+        <div class="character">
+          <div class="face pixel"><span class="mouth"></span></div>
+          <div class="bubble">Put the variable inside braces and add f before the string.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>What you will learn</h2>
+        <p><strong>Use an f-string to place one variable inside a message.</strong></p>
+        <p>An f-string starts with the letter f. Python replaces anything inside braces with its current value.</p>
+      </article>
+      <article class="card task">
+        <h2>Your mission</h2>
+        <p>Replace the question marks so the program prints the hero name stored in hero_name.</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Code pattern</h2>
+      <pre>hero_name = &quot;Nova&quot;
+print(f&quot;Hero name: {hero_name}&quot;)</pre>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Mission checklist</h2>
+        <ul><li>Keep the f before the opening quote.</li><li>Put hero_name inside braces.</li><li>Keep the words Hero name: in the message.</li></ul>
+      </article>
+      <article class="card warning">
+        <h2>Common bug</h2>
+        <p>Without the f, Python prints the braces and variable name as ordinary text.</p>
+      </article>
+    </section>
+
+    <footer>Run the code, test it, then unlock the next comic mission.</footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,66 @@
+{
+  "course_title": "F-String Comic Academy",
+  "folder": "fstrings",
+  "levels": [
+    {
+      "number": 1,
+      "title": "Hero Name Badge",
+      "python_file": "01_hero_name.py",
+      "tutorial_file": "01_hero_name.html"
+    },
+    {
+      "number": 2,
+      "title": "Power Announcement",
+      "python_file": "02_power_announcement.py",
+      "tutorial_file": "02_power_announcement.html"
+    },
+    {
+      "number": 3,
+      "title": "Gamer Status",
+      "python_file": "03_gamer_status.py",
+      "tutorial_file": "03_gamer_status.html"
+    },
+    {
+      "number": 4,
+      "title": "Score Alert",
+      "python_file": "04_score_alert.py",
+      "tutorial_file": "04_score_alert.html"
+    },
+    {
+      "number": 5,
+      "title": "Bonus Coins",
+      "python_file": "05_bonus_coins.py",
+      "tutorial_file": "05_bonus_coins.html"
+    },
+    {
+      "number": 6,
+      "title": "Comic Shop Bill",
+      "python_file": "06_comic_shop_bill.py",
+      "tutorial_file": "06_comic_shop_bill.html"
+    },
+    {
+      "number": 7,
+      "title": "Comic Issue Title",
+      "python_file": "07_issue_title.py",
+      "tutorial_file": "07_issue_title.html"
+    },
+    {
+      "number": 8,
+      "title": "Win Rate Display",
+      "python_file": "08_win_rate.py",
+      "tutorial_file": "08_win_rate.html"
+    },
+    {
+      "number": 9,
+      "title": "Fix the Broken Message",
+      "python_file": "09_fix_the_message.py",
+      "tutorial_file": "09_fix_the_message.html"
+    },
+    {
+      "number": 10,
+      "title": "Comic Generator",
+      "python_file": "10_comic_generator.py",
+      "tutorial_file": "10_comic_generator.html"
+    }
+  ]
+}

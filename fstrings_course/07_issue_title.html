@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level 7: Comic Issue Title</title>
+  <link rel="stylesheet" href="comic_style.css">
+</head>
+<body>
+  <main class="page">
+    <header>
+      <p class="eyebrow">F-String Comic Academy - Level 7 of 10</p>
+      <h1>Comic Issue Title</h1>
+      <p class="subtitle">Methods in braces</p>
+    </header>
+
+    <section class="panel">
+      <span class="badge">Comic briefing</span>
+      <div class="characters">
+        <div class="character">
+          <div class="face"><span class="antenna"></span><span class="mouth"></span></div>
+          <div class="bubble">Comic titles need to look bold.</div>
+        </div>
+        <div class="character">
+          <div class="face pixel"><span class="mouth"></span></div>
+          <div class="bubble">A string method can run inside the braces.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>What you will learn</h2>
+        <p><strong>Call a simple string method inside an f-string.</strong></p>
+        <p>The expression name.upper() creates an uppercase version of the name. The original variable is not changed.</p>
+      </article>
+      <article class="card task">
+        <h2>Your mission</h2>
+        <p>Display the hero name in uppercase followed by the issue number.</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Code pattern</h2>
+      <pre>name = &quot;Captain Byte&quot;
+print(f&quot;{name.upper()} - ISSUE 7&quot;)</pre>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Mission checklist</h2>
+        <ul><li>Use hero.upper() inside braces.</li><li>Use the issue variable.</li><li>Include a hyphen and the word ISSUE.</li></ul>
+      </article>
+      <article class="card warning">
+        <h2>Common bug</h2>
+        <p>Remember the brackets in upper(). Without them, Python refers to the method instead of running it.</p>
+      </article>
+    </section>
+
+    <footer>Run the code, test it, then unlock the next comic mission.</footer>
+  </main>
+</body>
+</html>

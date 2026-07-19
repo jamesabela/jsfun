@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level 3: Gamer Status</title>
+  <link rel="stylesheet" href="comic_style.css">
+</head>
+<body>
+  <main class="page">
+    <header>
+      <p class="eyebrow">F-String Comic Academy - Level 3 of 10</p>
+      <h1>Gamer Status</h1>
+      <p class="subtitle">Input and f-strings</p>
+    </header>
+
+    <section class="panel">
+      <span class="badge">Comic briefing</span>
+      <div class="characters">
+        <div class="character">
+          <div class="face"><span class="antenna"></span><span class="mouth"></span></div>
+          <div class="bubble">Players want a status message about their favourite game.</div>
+        </div>
+        <div class="character">
+          <div class="face pixel"><span class="mouth"></span></div>
+          <div class="bubble">Save each answer first, then use both variables in the f-string.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>What you will learn</h2>
+        <p><strong>Combine input values with an f-string.</strong></p>
+        <p>input() returns text. Store each answer in a variable and then place the variables inside braces.</p>
+      </article>
+      <article class="card task">
+        <h2>Your mission</h2>
+        <p>Ask for a name and favourite game. Print the status in the exact format shown.</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Code pattern</h2>
+      <pre>name = input(&quot;Name: &quot;)
+game = input(&quot;Game: &quot;)
+print(f&quot;{name} plays {game}.&quot;)</pre>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Mission checklist</h2>
+        <ul><li>Use both input variables.</li><li>End the sentence with a full stop.</li><li>Do not type a fixed name or game.</li></ul>
+      </article>
+      <article class="card warning">
+        <h2>Common bug</h2>
+        <p>Writing {input(...)} directly can make the program hard to read. Clear variable names are better here.</p>
+      </article>
+    </section>
+
+    <footer>Run the code, test it, then unlock the next comic mission.</footer>
+  </main>
+</body>
+</html>

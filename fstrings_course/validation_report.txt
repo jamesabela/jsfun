@@ -1,0 +1,14 @@
+PASS 01_hero_name.py: syntax valid, 1 solution test(s) passed, starter remains incomplete
+PASS 02_power_announcement.py: syntax valid, 1 solution test(s) passed, starter remains incomplete
+PASS 03_gamer_status.py: syntax valid, 2 solution test(s) passed, starter remains incomplete
+PASS 04_score_alert.py: syntax valid, 2 solution test(s) passed, starter remains incomplete
+PASS 05_bonus_coins.py: syntax valid, 2 solution test(s) passed, starter remains incomplete
+PASS 06_comic_shop_bill.py: syntax valid, 2 solution test(s) passed, starter remains incomplete
+PASS 07_issue_title.py: syntax valid, 2 solution test(s) passed, starter remains incomplete
+PASS 08_win_rate.py: syntax valid, 2 solution test(s) passed, starter remains incomplete
+PASS 09_fix_the_message.py: syntax valid, 2 solution test(s) passed, starter remains incomplete
+PASS 10_comic_generator.py: syntax valid, 2 solution test(s) passed, starter remains incomplete
+PASS All tutorial pages use one shared responsive comic stylesheet.
+PASS Tutorial URLs are the first links in all student Python files.
+PASS All #Next links form a complete 10-level progression.
+PASS Final level contains the #End course marker.
