@@ -733,17 +733,27 @@ exitonclick = done
 
     // Pyodide initialization
     if (typeof loadPyodide !== "undefined") {
+      let outputScrollTimer = null;
+      const deferOutputScroll = () => {
+        if (!outputScrollTimer) {
+          outputScrollTimer = requestAnimationFrame(() => {
+            outputEl.scrollTop = outputEl.scrollHeight;
+            outputScrollTimer = null;
+          });
+        }
+      };
+
       pyodideReadyPromise = loadPyodide({
         stdout: (text) => {
           if (currentAppMode !== 'display') {
             outputEl.appendChild(document.createTextNode(text + '\n'));
-            outputEl.scrollTop = outputEl.scrollHeight;
+            deferOutputScroll();
           }
         },
         stderr: (text) => {
           if (currentAppMode !== 'display') {
             outputEl.appendChild(document.createTextNode(text + '\n'));
-            outputEl.scrollTop = outputEl.scrollHeight;
+            deferOutputScroll();
           }
         }
       }).then(p => {
