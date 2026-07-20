@@ -2012,6 +2012,7 @@
 	          <button class="nav-btn" onclick="showTab('variables')">📦 Variables</button>
 	          <button class="nav-btn" onclick="showTab('operators')">➗ Operators</button>
 	          <button class="nav-btn" onclick="showTab('inputs')">📥 Inputs</button>
+	          <button class="nav-btn" onclick="showTab('f-strings')">🧵 F-Strings</button>
 	          <button class="nav-btn" onclick="showTab('delays')">⏰ Delays</button>
 	        </div>
 	      </div>
@@ -2296,6 +2297,153 @@ print("Worth waiting for!")</code></pre>
         </div>
 
 
+      </div>
+
+      <!-- TAB: F-Strings -->
+      <div id="tab-f-strings" class="tab-content">
+        <div class="card">
+          <h2>🧵 F-Strings (Formatted String Literals)</h2>
+          <p>F-strings provide a concise, readable way to format strings in Python. They allow you to embed variables, numbers, and expressions directly inside a string by prefixing it with an <code>f</code> and wrapping the variables or expressions in curly braces <code>{}</code>.</p>
+          
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">name = "Aisha"
+print(f"Hello, {name}!")  # Output: Hello, Aisha!</code></pre>
+          </div>
+          
+          <p><strong>Crucial Rule:</strong> Always remember to put the letter <code>f</code> (lowercase or uppercase) right before the opening quote. If you forget the <code>f</code>, Python will treat it as a normal string and print the braces and variable name literally (e.g., <code>"Hello, {name}!"</code>).</p>
+        </div>
+
+        <div class="card">
+          <h2>🧪 Interactive F-String Builder</h2>
+          <p>Experiment with how variables and values are dynamically formatted inside f-strings. Change the values below to see the generated code and output immediately:</p>
+          
+          <div class="manual-interactive">
+            <div class="manual-grid">
+              <div class="manual-field">
+                <label for="fstrName">Hero Name (String)</label>
+                <input class="list-input" id="fstrName" value="Nova" oninput="updateFStrDemo()">
+              </div>
+              <div class="manual-field">
+                <label for="fstrCoins">Coins (Integer)</label>
+                <input class="list-input" type="number" id="fstrCoins" value="12" oninput="updateFStrDemo()">
+              </div>
+              <div class="manual-field">
+                <label for="fstrPrice">Unit Price (Float)</label>
+                <input class="list-input" type="number" step="0.01" id="fstrPrice" value="5.99" oninput="updateFStrDemo()">
+              </div>
+            </div>
+            
+            <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+              <div><strong>Python Code:</strong></div>
+              <div class="code-wrapper">
+                <pre style="margin: 0;"><code class="language-python" id="fstrDemoCode"># Code will be generated here</code></pre>
+              </div>
+              <div><strong>Program Output:</strong></div>
+              <div class="manual-log" id="fstrDemoOutput" style="font-family: monospace;"># Output will be displayed here</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>✨ Key Features & Course Topics</h2>
+          <p>Here are the key patterns and formatting options for using f-strings, as covered in our <strong>F-String Comic Academy</strong> course:</p>
+
+          <div class="manual-details">
+            <summary>1. Multiple Variables</summary>
+            <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">You can place multiple variables inside a single f-string to build complete sentences.</p>
+            <div class="code-wrapper">
+              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+              <pre><code class="language-python">hero = "Nova"
+city = "Byte City"
+power = "lightning"
+print(f"{hero} protects {city} using {power}!")</code></pre>
+            </div>
+          </div>
+
+          <div class="manual-details">
+            <summary>2. Integers and Mixed Types</summary>
+            <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">Normally, combining strings and numbers with <code>+</code> causes a <code>TypeError</code>. F-strings handle numbers automatically, without needing to call <code>str()</code>.</p>
+            <div class="code-wrapper">
+              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+              <pre><code class="language-python">player = "Pixel"
+score = 95
+# No need for str(score)!
+print(f"{player} scored {score} points!")</code></pre>
+            </div>
+          </div>
+
+          <div class="manual-details">
+            <summary>3. Expressions & Calculations</summary>
+            <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">Braces can contain simple calculations or operations. Python evaluates them before inserting the result into the string.</p>
+            <div class="code-wrapper">
+              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+              <pre><code class="language-python">coins = 12
+bonus = 5
+print(f"You now have {coins + bonus} coins.")  # Output: You now have 17 coins.</code></pre>
+            </div>
+          </div>
+
+          <div class="manual-details">
+            <summary>4. String Methods</summary>
+            <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">You can run string methods directly inside the braces. This returns a modified copy for display without changing the original variable.</p>
+            <div class="code-wrapper">
+              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+              <pre><code class="language-python">hero = "nova"
+print(f"Hero: {hero.upper()}")  # Output: Hero: NOVA</code></pre>
+            </div>
+          </div>
+
+          <div class="manual-details">
+            <summary>5. Money Formatting (2 Decimal Places)</summary>
+            <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">Use the format specifier <code>:.2f</code> inside the braces to round and display numbers with exactly two decimal places.</p>
+            <div class="code-wrapper">
+              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+              <pre><code class="language-python">price = 7.5
+# :.2f ensures two decimals (ideal for currency)
+print(f"Price: ${price:.2f}")  # Output: Price: $7.50</code></pre>
+            </div>
+          </div>
+
+          <div class="manual-details">
+            <summary>6. Percentage Formatting</summary>
+            <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">Use the format specifier <code>:.1%</code> to multiply a decimal by 100, display one decimal place, and append a percentage sign automatically.</p>
+            <div class="code-wrapper">
+              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+              <pre><code class="language-python">rate = 3 / 4
+print(f"Win rate: {rate:.1%}")  # Output: Win rate: 75.0%</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🎓 F-String Comic Academy</h2>
+          <p>Put your knowledge to the test! Learn to master f-strings step-by-step through a series of fun comic missions featuring Byte and Pixel.</p>
+          <div style="margin: 12px 0 0 0; padding: 14px 16px; background: var(--primary-glow); border-left: 4px solid var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.5rem; line-height: 1;">🚀</span>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <strong style="font-size: 0.95rem; color: var(--text-main);">F-String Comic Academy</strong>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">10 levels of beginner f-string challenges.</span>
+              </div>
+            </div>
+            <a href="fstrings/index.html" target="_blank" class="list-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
+              Open Course ↗
+            </a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>💡 Common Mistakes & Best Practices</h2>
+          <p>Keep these rules in mind to avoid errors in your code:</p>
+          <ul style="margin-left: 20px; display: flex; flex-direction: column; gap: 8px; color: var(--text-muted); font-size: 0.95rem;">
+            <li><strong>Missing the 'f':</strong> Writing <code>"{name} scored {score}!"</code> prints the variable names literally. Always add the leading <code>f</code> before the opening quote.</li>
+            <li><strong>Quote Nesting:</strong> If your f-string uses double quotes, use single quotes inside the braces (and vice-versa) to avoid syntax errors:
+              <pre style="margin-top: 4px; padding: 6px 10px; background: var(--code-bg); border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-main);">print(f"Greeting: {user['name']}")</pre>
+            </li>
+            <li><strong>Keep it Clean:</strong> Only use f-strings when you have variables or expressions to insert. For fixed text, plain strings are faster and clearer. Avoid putting complex logic in braces; compute it first and store in a variable.</li>
+          </ul>
+        </div>
       </div>
 
       <!-- TAB 4: Selection (If/Else) -->
@@ -5221,6 +5369,16 @@ I think the problem is in the total calculation.</code></pre>
               style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
               <h3
                 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                🎓 <a href="fstrings/index.html" target="_blank"
+                  style="color: inherit; text-decoration: none;">F-String Comic Academy</a>
+              </h3>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">Learn how to format strings dynamically using variables and expressions in a 10-level beginner comic academy course featuring Byte and Pixel.</p>
+            </div>
+
+            <div
+              style="padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 6px;">
+              <h3
+                style="font-family: var(--font-display); font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                 📚 <a href="https://www.w3schools.com/python/" target="_blank"
                   style="color: inherit; text-decoration: none;">W3Schools Python Tutorial</a>
               </h3>
@@ -6864,10 +7022,47 @@ else:
       setupCardViewer("viewer-styling-section", stylingCards);
     }
 
+    function updateFStrDemo() {
+      const nameInput = document.getElementById('fstrName');
+      const coinsInput = document.getElementById('fstrCoins');
+      const priceInput = document.getElementById('fstrPrice');
+      const codeElement = document.getElementById('fstrDemoCode');
+      const outputElement = document.getElementById('fstrDemoOutput');
+      if (!nameInput || !coinsInput || !priceInput || !codeElement || !outputElement) return;
+
+      const name = nameInput.value || 'Nova';
+      const coins = parseInt(coinsInput.value, 10) || 0;
+      const price = parseFloat(priceInput.value) || 0.0;
+      const total = coins * price;
+
+      const codeText = 'hero = "' + name + '"\n' +
+        'coins = ' + coins + '\n' +
+        'price = ' + price + '\n\n' +
+        '# 1. Simple f-string\n' +
+        'print(f"Hero: {hero}")\n\n' +
+        '# 2. Calculation inside braces\n' +
+        'print(f"Bonus: {coins + 5} coins")\n\n' +
+        '# 3. Floating-point formatting (money)\n' +
+        'total_cost = coins * price\n' +
+        'print(f"Total bill for {hero}: ${total_cost:.2f}")';
+
+      const outputText = 'Hero: ' + name + '\n' +
+        'Bonus: ' + (coins + 5) + ' coins\n' +
+        'Total bill for ' + name + ': $' + total.toFixed(2);
+
+      codeElement.textContent = codeText;
+      outputElement.textContent = outputText;
+
+      if (window.Prism) {
+        Prism.highlightElement(codeElement);
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       renderVisualList();
       renderGridPicker();
       setValidationExample();
+      updateFStrDemo();
       setupBigOToggles();
       renderBigOChart();
       resetFactorialViz();
