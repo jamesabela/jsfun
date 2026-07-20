@@ -1,3 +1,4 @@
+@
 <!DOCTYPE html>
 <html lang="en">
 
@@ -672,7 +673,8 @@
       <div class="header-info">
         <span class="crumb-trail">iGCSE Unit Package</span>
         <h1>F-String Comic Academy</h1>
-        <p>A ten-level beginner Python course where students learn to use f-strings through short comic-themed missions featuring Byte and Pixel.</p>
+        <p>A ten-level beginner Python course where students learn to use f-strings through short comic-themed missions
+          featuring Byte and Pixel.</p>
       </div>
       <div class="header-actions">
         <span
@@ -736,7 +738,9 @@
             tips.</p>
 
           <div class="iframe-container">
-            <iframe src="https://docs.google.com/presentation/d/1ND41xwRKXkrZznTFbGMak1VZAGQACYDSkhdVUFQ80B8/embed?start=false&loop=false&delayms=3000&slide=id.p1" frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+            <iframe
+              src="https://docs.google.com/presentation/d/1ND41xwRKXkrZznTFbGMak1VZAGQACYDSkhdVUFQ80B8/embed?start=false&loop=false&delayms=3000&slide=id.p1"
+              frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
           </div>
 
           <div
@@ -777,7 +781,7 @@
           </div>
         </div>
 
-        
+
 
         <!-- Python Reference -->
         <div class="sidebar-card">
@@ -786,7 +790,8 @@
               style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 8px;">Python
               Reference</span>
             <ul class="resource-list">
-              <li><a class="resource-link" href="../pythonmanual.html" target="_blank"><img src="../images/manual.png" alt=""> Python Code Guide</a></li>
+              <li><a class="resource-link" href="../pythonmanual.html" target="_blank"><img src="../images/manual.png"
+                    alt=""> Python Code Guide</a></li>
             </ul>
           </div>
         </div>
@@ -816,7 +821,7 @@
 
     // 10 Levels Data (Mapping to Illustrations & Metadata)
     const levels = [
-    {
+      {
         "num": 1,
         "file": "01_hero_name.py",
         "title": "Hero Name Badge",
@@ -826,8 +831,8 @@
         "focus": "An f-string starts with the letter f. Python replaces anything inside braces with its current value.",
         code: `hero_name = "Nova"
 print(f"Hero name: {hero_name}")`
-    },
-    {
+      },
+      {
         "num": 2,
         "file": "02_power_announcement.py",
         "title": "Power Announcement",
@@ -839,8 +844,8 @@ print(f"Hero name: {hero_name}")`
 city = "Byte City"
 power = "lightning"
 print(f"{hero} protects {city} using {power}!")`
-    },
-    {
+      },
+      {
         "num": 3,
         "file": "03_gamer_status.py",
         "title": "Gamer Status",
@@ -851,8 +856,8 @@ print(f"{hero} protects {city} using {power}!")`
         code: `name = input("Player name: ")
 game = input("Favourite game: ")
 print(f"{name} plays {game}.")`
-    },
-    {
+      },
+      {
         "num": 4,
         "file": "04_score_alert.py",
         "title": "Score Alert",
@@ -863,8 +868,8 @@ print(f"{name} plays {game}.")`
         code: `player = input("Player: ")
 score = int(input("Score: "))
 print(f"{player} scored {score} points!")`
-    },
-    {
+      },
+      {
         "num": 5,
         "file": "05_bonus_coins.py",
         "title": "Bonus Coins",
@@ -875,8 +880,8 @@ print(f"{player} scored {score} points!")`
         code: `coins = int(input("Coins collected: "))
 bonus = int(input("Bonus coins: "))
 print(f"You now have {coins + bonus} coins.")`
-    },
-    {
+      },
+      {
         "num": 6,
         "file": "06_comic_shop_bill.py",
         "title": "Comic Shop Bill",
@@ -888,8 +893,8 @@ print(f"You now have {coins + bonus} coins.")`
 price = float(input("Price of one comic book: "))
 total = quantity * price
 print(f"{quantity} comic books cost \${total:.2f}.")`
-    },
-    {
+      },
+      {
         "num": 7,
         "file": "07_issue_title.py",
         "title": "Comic Issue Title",
@@ -900,8 +905,8 @@ print(f"{quantity} comic books cost \${total:.2f}.")`
         code: `hero = input("Hero name: ")
 issue = int(input("Issue number: "))
 print(f"{hero.upper()} - ISSUE {issue}")`
-    },
-    {
+      },
+      {
         "num": 8,
         "file": "08_win_rate.py",
         "title": "Win Rate Display",
@@ -914,8 +919,8 @@ wins = int(input("Wins: "))
 games = int(input("Games played: "))
 win_rate = wins / games
 print(f"{player} win rate: {win_rate:.1%}")`
-    },
-    {
+      },
+      {
         "num": 9,
         "file": "09_fix_the_message.py",
         "title": "Fix the Broken Message",
@@ -926,8 +931,8 @@ print(f"{player} win rate: {win_rate:.1%}")`
         code: `name = input("Player name: ")
 level = int(input("Level reached: "))
 print(f"{name} has reached level {level}!")`
-    },
-    {
+      },
+      {
         "num": 10,
         "file": "10_comic_generator.py",
         "title": "Comic Generator",
@@ -945,8 +950,8 @@ print(f"Narrator: At {place} {hero} met {sidekick}.")
 print(f"{hero}: We must stop {villain}!")
 print(f"{sidekick}: I have {gadgets} gadgets ready.")
 print("Narrator: The adventure begins!")`
-    }
-];
+      }
+    ];
 
     // Populate Student Cards
     const roadmapContainer = document.getElementById("studentRoadmap");
