@@ -2306,7 +2306,6 @@ print("Worth waiting for!")</code></pre>
           <p>F-strings provide a concise, readable way to format strings in Python. They allow you to embed variables, numbers, and expressions directly inside a string by prefixing it with an <code>f</code> and wrapping the variables or expressions in curly braces <code>{}</code>.</p>
           
           <div class="code-wrapper">
-            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
             <pre><code class="language-python">name = "Aisha"
 print(f"Hello, {name}!")  # Output: Hello, Aisha!</code></pre>
           </div>
@@ -2353,7 +2352,6 @@ print(f"Hello, {name}!")  # Output: Hello, Aisha!</code></pre>
             <summary>1. Multiple Variables</summary>
             <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">You can place multiple variables inside a single f-string to build complete sentences.</p>
             <div class="code-wrapper">
-              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
               <pre><code class="language-python">hero = "Nova"
 city = "Byte City"
 power = "lightning"
@@ -2365,7 +2363,6 @@ print(f"{hero} protects {city} using {power}!")</code></pre>
             <summary>2. Integers and Mixed Types</summary>
             <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">Normally, combining strings and numbers with <code>+</code> causes a <code>TypeError</code>. F-strings handle numbers automatically, without needing to call <code>str()</code>.</p>
             <div class="code-wrapper">
-              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
               <pre><code class="language-python">player = "Pixel"
 score = 95
 # No need for str(score)!
@@ -2377,7 +2374,6 @@ print(f"{player} scored {score} points!")</code></pre>
             <summary>3. Expressions & Calculations</summary>
             <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">Braces can contain simple calculations or operations. Python evaluates them before inserting the result into the string.</p>
             <div class="code-wrapper">
-              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
               <pre><code class="language-python">coins = 12
 bonus = 5
 print(f"You now have {coins + bonus} coins.")  # Output: You now have 17 coins.</code></pre>
@@ -2388,7 +2384,6 @@ print(f"You now have {coins + bonus} coins.")  # Output: You now have 17 coins.<
             <summary>4. String Methods</summary>
             <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">You can run string methods directly inside the braces. This returns a modified copy for display without changing the original variable.</p>
             <div class="code-wrapper">
-              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
               <pre><code class="language-python">hero = "nova"
 print(f"Hero: {hero.upper()}")  # Output: Hero: NOVA</code></pre>
             </div>
@@ -2398,7 +2393,6 @@ print(f"Hero: {hero.upper()}")  # Output: Hero: NOVA</code></pre>
             <summary>5. Money Formatting (2 Decimal Places)</summary>
             <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">Use the format specifier <code>:.2f</code> inside the braces to round and display numbers with exactly two decimal places.</p>
             <div class="code-wrapper">
-              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
               <pre><code class="language-python">price = 7.5
 # :.2f ensures two decimals (ideal for currency)
 print(f"Price: ${price:.2f}")  # Output: Price: $7.50</code></pre>
@@ -2409,7 +2403,6 @@ print(f"Price: ${price:.2f}")  # Output: Price: $7.50</code></pre>
             <summary>6. Percentage Formatting</summary>
             <p style="margin: 0 12px 8px; font-size: 0.9rem; color: var(--text-muted);">Use the format specifier <code>:.1%</code> to multiply a decimal by 100, display one decimal place, and append a percentage sign automatically.</p>
             <div class="code-wrapper">
-              <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
               <pre><code class="language-python">rate = 3 / 4
 print(f"Win rate: {rate:.1%}")  # Output: Win rate: 75.0%</code></pre>
             </div>
@@ -5785,10 +5778,32 @@ I think the problem is in the total calculation.</code></pre>
       return text.replace(/[&<>"']/g, function (m) { return map[m]; });
     }
 
+    // Helper to copy text with clipboard fallback (supports unsecure IP contexts)
+    function copyTextToClipboard(text, onSuccess, onError) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(onError);
+      } else {
+        try {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          const successful = document.execCommand('copy');
+          document.body.removeChild(textarea);
+          if (successful && onSuccess) onSuccess();
+          else if (!successful && onError) onError();
+        } catch (err) {
+          if (onError) onError(err);
+        }
+      }
+    }
+
     // Copy code snippet
     function copyCode(btn) {
       const code = btn.nextElementSibling.querySelector('code').textContent;
-      navigator.clipboard.writeText(code).then(() => {
+      copyTextToClipboard(code, () => {
         btn.textContent = 'Copied!';
         setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
       });
@@ -7120,7 +7135,7 @@ else:
         copyBtn.className = 'copy-code-btn';
         copyBtn.textContent = 'Copy';
         copyBtn.onclick = () => {
-          navigator.clipboard.writeText(codeEl.textContent).then(() => {
+          copyTextToClipboard(codeEl.textContent, () => {
             copyBtn.textContent = 'Copied!';
             setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
           });
