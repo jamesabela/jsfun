@@ -97,12 +97,64 @@
     .badge-triangle { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
     .badge-lateral { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
     .badge-dice { background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
+
+    /* Print Stylesheet for 0-Screen Printing */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      nav, header, footer, .no-print, .tool-card, .filter-container, #spin-btn {
+        display: none !important;
+      }
+
+      #printable-section {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .print-header {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+      }
+
+      .print-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+      }
+
+      .print-card-box {
+        border: 2px dashed #334155 !important;
+        border-radius: 12px !important;
+        padding: 12px !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 190px;
+      }
+
+      .print-card-swap-btn {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
 
   <!-- Navigation Header -->
-  <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-filter backdrop-blur-md border-b border-slate-800 text-white">
+  <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-filter backdrop-blur-md border-b border-slate-800 text-white no-print">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <a href="roadtrip.html" class="flex items-center gap-2 font-heading font-800 text-lg sm:text-xl tracking-tight text-white hover:opacity-90">
         <span class="text-2xl">🚗</span>
@@ -121,14 +173,14 @@
   </nav>
 
   <!-- Hero Header Section -->
-  <header class="hero-bg text-white pt-10 pb-16 px-4 relative">
+  <header class="hero-bg text-white pt-10 pb-16 px-4 relative no-print">
     <div class="max-w-4xl mx-auto text-center relative z-10">
       
       <!-- Scenario Tags -->
       <div class="flex flex-wrap justify-center gap-2 mb-6">
         <span class="bg-indigo-500/20 text-indigo-200 border border-indigo-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🚗 Road Trips</span>
         <span class="bg-pink-500/20 text-pink-200 border border-pink-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🍽️ Dinner Table</span>
-        <span class="bg-amber-500/20 text-amber-200 border border-amber-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">⛺ Holidays & Camping</span>
+        <span class="bg-amber-500/20 text-amber-200 border border-amber-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🖨️ Screen-Free Printables</span>
         <span class="bg-emerald-500/20 text-emerald-200 border border-emerald-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🛋️ Living Room Chat</span>
       </div>
 
@@ -137,21 +189,18 @@
       </h1>
       
       <p class="text-base sm:text-xl text-slate-300 max-w-2xl mx-auto font-600 mb-8">
-        No boring car rides or silent dinners! Three interactive tools designed to get kids, parents, and friends talking, laughing, and debating.
+        No boring car rides or silent dinners! Play on mobile screens or print a screen-free card sheet for zero digital distraction.
       </p>
 
       <!-- Interactive Quick Pick / Lucky Dip Card -->
-      <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 max-w-2xl mx-auto shadow-2xl text-left relative overflow-hidden">
-        <div class="flex items-center justify-between mb-3">
+      <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 max-w-2xl mx-auto shadow-2xl text-left relative overflow-hidden min-h-[300px] sm:min-h-[270px] flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-800 uppercase tracking-widest text-indigo-300">🎲 Instant Starter Pick</span>
           <span class="text-xs text-slate-300 font-bold bg-white/10 px-2.5 py-1 rounded-full" id="random-tool-badge">Featured Tool</span>
         </div>
 
-        <div id="starter-box" class="mb-5 min-h-[70px] flex flex-col justify-center">
-          <h3 class="text-lg sm:text-2xl font-800 text-white leading-snug" id="starter-prompt">
-            "Which of these 3 is most essential on a long car trip: Snacks, Great Music, or AC?"
-          </h3>
-          <p class="text-xs sm:text-sm text-indigo-200 mt-1 font-600" id="starter-subtext">Priority Triangle — Vote and debate your reasoning!</p>
+        <div id="starter-box" class="my-auto py-2 flex flex-col justify-center min-h-[140px] sm:min-h-[130px]">
+          <!-- Dynamically populated by spinRandomStarter() -->
         </div>
 
         <div class="flex flex-col sm:flex-row gap-3">
@@ -174,17 +223,53 @@
   <main class="max-w-6xl mx-auto px-4 py-12 flex-grow -mt-6">
 
     <!-- Category Filter Tabs -->
-    <div class="flex justify-center mb-10">
+    <div class="flex justify-center mb-10 no-print filter-container">
       <div class="bg-white border border-slate-200 p-1.5 rounded-full shadow-md flex flex-wrap justify-center gap-1 max-w-full overflow-x-auto">
         <button onclick="filterTools('all')" class="filter-btn active px-4 py-2 rounded-full text-xs sm:text-sm font-800" data-filter="all">🌟 All Tools</button>
+        <button onclick="filterTools('print')" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900" data-filter="print">🖨️ Screen-Free Printables</button>
         <button onclick="filterTools('roadtrip')" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900" data-filter="roadtrip">🚗 Road Trips</button>
         <button onclick="filterTools('dinner')" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900" data-filter="dinner">🍽️ Meal Times</button>
-        <button onclick="filterTools('story')" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900" data-filter="story">📖 Storytelling</button>
       </div>
     </div>
 
+    <!-- 0-SCREENS PRINTABLE SHEET SECTION -->
+    <section id="printable-section" class="bg-white rounded-[2.5rem] p-6 sm:p-10 mb-16 shadow-xl border border-slate-200">
+      
+      <!-- Printable Header -->
+      <div class="print-header flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-200">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 font-800 text-xs px-3 py-1 rounded-full mb-2 no-print">
+            <span>🖨️ 0 Screens Required</span>
+            <span>•</span>
+            <span>Equal Mix: 3 Triangles, 3 Riddles, 3 Story Prompts</span>
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-900 text-slate-900">Printable Conversation Cards</h2>
+          <p class="text-sm text-slate-500 font-600 mt-1">Print out this sheet for the car, camping, or dinner table! Re-roll individual cards or the full mix without repeats.</p>
+        </div>
+
+        <div class="flex flex-wrap gap-3 no-print">
+          <button onclick="rerollAllPrintCards()" class="px-5 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-800 rounded-2xl transition-all flex items-center gap-2 border border-indigo-200">
+            <span>🎲 Re-roll All 9 Cards</span>
+          </button>
+          <button onclick="window.print()" class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-pink-600 text-white font-900 rounded-2xl shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
+            <span>🖨️ Print Sheet</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3x3 Cards Grid -->
+      <div id="print-grid" class="print-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Rendered dynamically by JS -->
+      </div>
+
+      <div class="mt-8 text-center text-xs text-slate-400 font-600 no-print border-t border-slate-100 pt-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+        <span>💡 Tip: Cut along the dashed borders to make physical card decks for trips!</span>
+        <span id="pool-status-text" class="text-indigo-600 font-700">All cards are unique and non-repeating</span>
+      </div>
+    </section>
+
     <!-- The 3 Core Tools Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 tool-card-section">
 
       <!-- TOOL 1: Priority Triangle -->
       <div class="glass-card rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between border-t-8 border-t-amber-400 tool-card" data-category="roadtrip dinner">
@@ -288,13 +373,13 @@
     </div>
 
     <!-- How to Play in 3 Simple Steps Section -->
-    <section class="bg-slate-900 text-white rounded-[2.5rem] p-8 sm:p-12 mb-16 relative overflow-hidden shadow-2xl">
+    <section class="bg-slate-900 text-white rounded-[2.5rem] p-8 sm:p-12 mb-16 relative overflow-hidden shadow-2xl no-print">
       <div class="max-w-3xl mx-auto text-center relative z-10">
         <h2 class="text-2xl sm:text-4xl font-900 tracking-tight mb-4">
           How to Play <span class="text-gradient">Anywhere</span>
         </h2>
         <p class="text-slate-400 text-sm sm:text-base font-600 mb-10">
-          Zero preparation needed. Works on any mobile phone or tablet screen!
+          Zero preparation needed. Play interactively on mobile screens or print cards for screen-free fun!
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
@@ -306,8 +391,8 @@
 
           <div class="bg-slate-800/80 border border-slate-700 p-6 rounded-2xl">
             <div class="w-12 h-12 bg-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center text-2xl font-900 mb-4">2</div>
-            <h3 class="font-800 text-lg text-white mb-1">Pass or Display</h3>
-            <p class="text-xs text-slate-400 leading-relaxed font-600">Prop up your phone on the dinner table or pass it around the car.</p>
+            <h3 class="font-800 text-lg text-white mb-1">Pass or Print</h3>
+            <p class="text-xs text-slate-400 leading-relaxed font-600">Prop up your phone on the dinner table or print the screen-free card sheet.</p>
           </div>
 
           <div class="bg-slate-800/80 border border-slate-700 p-6 rounded-2xl">
@@ -322,7 +407,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-white border-t border-slate-200 py-10 px-4 text-center text-slate-500 text-sm">
+  <footer class="bg-white border-t border-slate-200 py-10 px-4 text-center text-slate-500 text-sm no-print">
     <div class="max-w-4xl mx-auto space-y-4">
       <p class="font-700 text-slate-700">
         Created by <a href="https://jamesabela.github.io/ThinkRankStudio/" target="_blank" rel="noopener" class="text-indigo-600 font-800 hover:underline">James Abela</a> — Free thinking & discussion tools.
@@ -340,67 +425,271 @@
   </footer>
 
   <script>
-    // Starters pool combining all 3 tools
-    const starters = [
-      {
-        prompt: "Which of these 3 is most important on a road trip: Snacks, Music, or Air Conditioning?",
-        subtext: "Priority Triangle — Rank your top choice and explain why!",
-        tool: "triangle.html",
-        badge: "🔺 Priority Triangle"
-      },
-      {
-        prompt: "A man pushes his car to a hotel and tells the owner he's bankrupt. Why?",
-        subtext: "Lateral Puzzle — He's playing Monopoly!",
-        tool: "lateral.html",
-        badge: "🧩 Lateral Riddle"
-      },
-      {
-        prompt: "Roll 5 dice and invent a story starting with: 'Suddenly, the dragon ordered a pizza...'",
-        subtext: "Story Dice — Create a wild story using the rolled icons!",
-        tool: "storydice.html",
-        badge: "🎲 Story Dice"
-      },
-      {
-        prompt: "What's more vital for a family vacation: Great Weather, Good Food, or Fun Activities?",
-        subtext: "Priority Triangle — Drag the dot to find the family balance!",
-        tool: "triangle.html",
-        badge: "🔺 Priority Triangle"
-      },
-      {
-        prompt: "A woman enters a room and turns on a light switch. A man dies. Why?",
-        subtext: "Lateral Puzzle — Solve it with Yes/No questions!",
-        tool: "lateral.html",
-        badge: "🧩 Lateral Riddle"
-      },
-      {
-        prompt: "Roll 9 story dice and make up a tale where every family member voices a character!",
-        subtext: "Story Dice — 9 Dice Epic Adventure mode!",
-        tool: "storydice.html",
-        badge: "🎲 Story Dice"
-      }
+    // Emoji pool for dynamic story dice rolling
+    const emojiPool = [
+      "👨‍👩‍👧‍👦", "🧑‍🚀", "🧑‍🔬", "🧑‍🍳", "🧑‍🎨", "🧑‍🚒", "🧙‍♂️", "🧙‍♀️", "🧛‍♂️", "🧝‍♂️",
+      "🐶", "🐱", "🦊", "🐻", "🐼", "🦁", "🐯", "🐸", "🦄", "🐙", "🐠", "🐉", "🐢", "🦕", "🦖", "🦥", "🦘", "🐬", "🦈",
+      "🏠", "🏰", "🏯", "🏕️", "🏜️", "🏝️", "🏟️", "🏥", "🏛️", "🏚️", "🌋",
+      "🚗", "🏎️", "🚑", "🚒", "🚜", "🚲", "🛴", "🚂", "🚀", "🛸", "🚢", "🛶",
+      "🔮", "🎩", "👑", "💎", "📜", "🔥", "🧊",
+      "🌲", "🌴", "🍄", "🏵️", "🌻", "🌸", "🌊", "🌪️", "🌈", "☀️", "🌙", "⭐"
     ];
 
-    let currentStarterIdx = 0;
+    const trianglePool = [
+      { id: "t1", title: "Road Trip Essentials", items: ["Snacks 🍿", "Great Music 🎵", "Air Conditioning ❄️"], desc: "Which one can you NOT survive a 5-hour drive without?" },
+      { id: "t2", title: "Dinner Favorites", items: ["Pizza 🍕", "Burger 🍔", "Pasta 🍝"], desc: "Rank the ultimate family comfort dinner." },
+      { id: "t3", title: "Animation Favorites", items: ["Mickey 🐭", "Donald 🦆", "Goofy 🐶"], desc: "Who is the most classic iconic character?" },
+      { id: "t4", title: "Frozen Trio", items: ["Elsa ❄️", "Anna 🌻", "Olaf ☃️"], desc: "Who brings the most joy to the story?" },
+      { id: "t5", title: "Bluey Family", items: ["Bluey 💙", "Bingo 🧡", "Bandit 🐕"], desc: "Who is the funniest member of the Heeler family?" },
+      { id: "t6", title: "Sweet Treats", items: ["Cake 🎂", "Ice Cream 🍦", "Chocolate 🍫"], desc: "If you could only eat one dessert for a year!" },
+      { id: "t7", title: "Vacation Priorities", items: ["Great Weather ☀️", "Good Food 🍱", "Fun Activities 🎢"], desc: "What makes a holiday truly unforgettable?" },
+      { id: "t8", title: "Dream Careers", items: ["Astronaut 🧑‍🚀", "Artist 🧑‍🎨", "Athlete 🏃"], desc: "Which career would be the most exciting daily adventure?" },
+      { id: "t9", title: "Toy Story Triad", items: ["Woody 🤠", "Buzz Lightyear 🚀", "Jessie 👩‍🌾"], desc: "Who is the true leader of Andy's room?" },
+      { id: "t10", title: "Superpower Pick", items: ["Flight 🦅", "Invisibility 👻", "Time Travel ⏳"], desc: "Which superpower would be the most useful in real life?" },
+      { id: "t11", title: "Breakfast Feast", items: ["Pancakes 🥞", "Waffles 🧇", "French Toast 🍞"], desc: "Which reigns supreme on Sunday morning?" },
+      { id: "t12", title: "Outdoor Fun", items: ["Beach Day 🏖️", "Mountain Hike 🏔️", "Amusement Park 🎡"], desc: "Where should the family go this weekend?" }
+    ];
+
+    const riddlePool = [
+      { id: "r1", title: "The Hotel Guest", scenario: "A man pushes his car to a hotel and tells the owner he is bankrupt. Why?", clue: "It's a board game!", solution: "He's playing Monopoly and landed on a hotel." },
+      { id: "r2", title: "The 30-Storey Jump", scenario: "A man jumps out of a 30-storey building and survives with zero injuries. How?", clue: "Which floor was he on?", solution: "He jumped out of a ground floor window!" },
+      { id: "r3", title: "The Hungry Predators", scenario: "A man must enter one room: Firing squad, Raging fire, or Lions that haven't eaten in 6 months. Which is safe?", clue: "6 months without food?", solution: "The lion room, because lions starving for 6 months are already dead!" },
+      { id: "r4", title: "The Rainy Elevator", scenario: "A woman takes the elevator to the 10th floor, but on sunny days she walks up 5 flights. Why?", clue: "She uses an item on rainy days.", solution: "She is short and can only reach button 10 with her umbrella!" },
+      { id: "r5", title: "The Restrained Night", scenario: "Laura is strapped in all night and cries, but wakes up happy. Why?", clue: "It's for safety and warmth.", solution: "Laura is a newborn baby swaddled in a crib." },
+      { id: "r6", title: "The Missing Child", scenario: "A missing child report is made, but police refuse to investigate. Why?", clue: "Four legs and a tail!", solution: "The 'child' is a lost family dog." },
+      { id: "r7", title: "The Sandbar Path", scenario: "A man walks from an island to the mainland without swimming or a boat. How?", clue: "The ocean level changes.", solution: "He waited for low tide when a sandbar appeared." },
+      { id: "r8", title: "The Library Fine", scenario: "A woman gives money to a clerk, receives nothing back, and walks away happy. Why?", clue: "Overdue item!", solution: "She was paying her library late fine." },
+      { id: "r9", title: "The Bartender's Gun", scenario: "A man asks for water. The bartender pulls out a gun. The man says thank you and leaves. Why?", clue: "He had a physical noise.", solution: "He had hiccups! The scare cured them." },
+      { id: "r10", title: "The Hammered Box", scenario: "A dad uses a hammer so his son cannot play video games. How?", clue: "Building, not smashing!", solution: "He hammered a lock box around the controller." },
+      { id: "r11", title: "The Taxi Surprise", scenario: "A stranger gets into a couple's car, making them burst into tears of joy. Why?", clue: "A ride to the hospital!", solution: "The mother just gave birth to a baby in the taxi." },
+      { id: "r12", title: "The Double Signature", scenario: "A woman writes her name 50 times every fortnight. Why?", clue: "Payday!", solution: "She signs paycheck checks for her staff." }
+    ];
+
+    const storyPool = [
+      { id: "s1", title: "The Dragon's Order", dice: ["🧙‍♂️", "🏰", "🐉", "🔮", "🍕"], prompt: "In a giant castle, a dragon gets hungry and orders a pizza..." },
+      { id: "s2", title: "Space Rescue", dice: ["🚀", "👽", "🪐", "🛸", "⚡"], prompt: "An alien spaceship breaks down near Saturn!" },
+      { id: "s3", title: "Desert Treasure", dice: ["🤠", "🐴", "🌵", "🏜️", "💎"], prompt: "A cowboy finds a glowing diamond hidden under a giant cactus..." },
+      { id: "s4", title: "Superhero Lunch", dice: ["🦸‍♂️", "🏙️", "🚗", "💥", "🍔"], prompt: "A superhero accidentally drops their burger off a skyscraper!" },
+      { id: "s5", title: "Pirate Mystery", dice: ["⛵", "🦈", "🏝️", "🗝️", "🏴‍☠️"], prompt: "The pirate captain finds a mysterious key inside a coconut..." },
+      { id: "s6", title: "Enchanted Forest", dice: ["🦄", "🌲", "🍄", "🌈", "👑"], prompt: "A unicorn discovers a glowing golden crown hidden under a giant mushroom..." },
+      { id: "s7", title: "Stormy Race", dice: ["🏎️", "🏁", "🏆", "⛈️", "🚧"], prompt: "The championship race turns wild during a sudden thunderstorm!" },
+      { id: "s8", title: "Detective Cat", dice: ["🐱", "🕵️‍♂️", "🔦", "🧀", "🐾"], prompt: "Detective Cat investigates the case of the missing cheese wheel..." },
+      { id: "s9", title: "Campfire Surprise", dice: ["🏕️", "🐻", "🌲", "🔥", "⛺"], prompt: "While roasting marshmallows, a friendly bear walks into camp..." },
+      { id: "s10", title: "Dino Island", dice: ["🦖", "🌋", "🌴", "🦕", "🥚"], prompt: "A dinosaur egg starts cracking right as the volcano bubbles!" },
+      { id: "s11", title: "Robot Companion", dice: ["🤖", "🛸", "🔋", "⚙️", "🛰️"], prompt: "A small robot runs low on battery while building a treehouse..." },
+      { id: "s12", title: "Undersea Expedition", dice: ["🐬", "🌊", "🧜‍♀️", "🐚", "👑"], prompt: "A dolphin leads a mermaid to a sunken royal crown..." }
+    ];
+
+    // Tracking sets to guarantee NO DUPLICATES across rerolls
+    let usedTriangleIds = new Set();
+    let usedRiddleIds = new Set();
+    let usedStoryIds = new Set();
+    let usedInstantKeys = new Set();
+
+    // Active sheet state: array of 9 card objects
+    let currentCards = [];
+
+    function getRandomItemFromPool(pool, usedSet) {
+      let available = pool.filter(item => !usedSet.has(item.id));
+      if (available.length === 0) {
+        usedSet.clear();
+        available = [...pool];
+      }
+      const item = available[Math.floor(Math.random() * available.length)];
+      usedSet.add(item.id);
+      return item;
+    }
+
+    function initPrintableSheet() {
+      currentCards = [];
+      
+      // 3 Triangles
+      for (let i = 0; i < 3; i++) {
+        currentCards.push({ type: 'triangle', data: getRandomItemFromPool(trianglePool, usedTriangleIds) });
+      }
+      // 3 Riddles
+      for (let i = 0; i < 3; i++) {
+        currentCards.push({ type: 'riddle', data: getRandomItemFromPool(riddlePool, usedRiddleIds) });
+      }
+      // 3 Story Prompts
+      for (let i = 0; i < 3; i++) {
+        currentCards.push({ type: 'story', data: getRandomItemFromPool(storyPool, usedStoryIds) });
+      }
+
+      renderPrintableSheet();
+    }
+
+    function rerollAllPrintCards() {
+      initPrintableSheet();
+    }
+
+    function swapSingleCard(index) {
+      const card = currentCards[index];
+      if (card.type === 'triangle') {
+        currentCards[index].data = getRandomItemFromPool(trianglePool, usedTriangleIds);
+      } else if (card.type === 'riddle') {
+        currentCards[index].data = getRandomItemFromPool(riddlePool, usedRiddleIds);
+      } else if (card.type === 'story') {
+        currentCards[index].data = getRandomItemFromPool(storyPool, usedStoryIds);
+      }
+      renderPrintableSheet();
+    }
+
+    function renderPrintableSheet() {
+      const container = document.getElementById('print-grid');
+      container.innerHTML = '';
+
+      currentCards.forEach((cardObj, idx) => {
+        const item = cardObj.data;
+        let html = '';
+
+        if (cardObj.type === 'triangle') {
+          html = `
+            <div class="print-card-box border-2 border-dashed border-amber-300 bg-amber-50/50 p-5 rounded-2xl relative flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center mb-2">
+                  <span class="badge-triangle text-[11px] font-900 uppercase tracking-wider px-2.5 py-0.5 rounded-full">🔺 Priority Triangle</span>
+                  <button onclick="swapSingleCard(${idx})" class="print-card-swap-btn text-xs font-bold text-amber-700 bg-amber-200/60 hover:bg-amber-200 px-2 py-0.5 rounded-md transition-all">🔄 Swap</button>
+                </div>
+                <h3 class="font-800 text-lg text-slate-900 mb-1">${item.title}</h3>
+                <p class="text-xs text-slate-600 mb-3 font-600">${item.desc}</p>
+                
+                <div class="bg-white border border-amber-200 p-3 rounded-xl mb-2 text-center">
+                  <span class="text-xs font-800 text-amber-900 block">${item.items.join("  •  ")}</span>
+                </div>
+              </div>
+              <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center pt-2 border-t border-amber-200/60">
+                Vote & Explain Your Choice
+              </div>
+            </div>
+          `;
+        } else if (cardObj.type === 'riddle') {
+          html = `
+            <div class="print-card-box border-2 border-dashed border-blue-300 bg-blue-50/50 p-5 rounded-2xl relative flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center mb-2">
+                  <span class="badge-lateral text-[11px] font-900 uppercase tracking-wider px-2.5 py-0.5 rounded-full">🧩 Lateral Riddle</span>
+                  <button onclick="swapSingleCard(${idx})" class="print-card-swap-btn text-xs font-bold text-blue-700 bg-blue-200/60 hover:bg-blue-200 px-2 py-0.5 rounded-md transition-all">🔄 Swap</button>
+                </div>
+                <h3 class="font-800 text-lg text-slate-900 mb-1">${item.title}</h3>
+                <p class="text-xs sm:text-sm font-700 text-slate-800 mb-3 leading-snug">"${item.scenario}"</p>
+              </div>
+              
+              <div class="bg-white border border-blue-200 p-2.5 rounded-xl">
+                <p class="text-[11px] font-700 text-blue-900">💡 <strong>Clue:</strong> ${item.clue}</p>
+                <p class="text-[10px] text-slate-500 mt-1"><strong>Answer:</strong> ${item.solution}</p>
+              </div>
+            </div>
+          `;
+        } else if (cardObj.type === 'story') {
+          html = `
+            <div class="print-card-box border-2 border-dashed border-pink-300 bg-pink-50/50 p-5 rounded-2xl relative flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center mb-2">
+                  <span class="badge-dice text-[11px] font-900 uppercase tracking-wider px-2.5 py-0.5 rounded-full">🎲 Story Prompts</span>
+                  <button onclick="swapSingleCard(${idx})" class="print-card-swap-btn text-xs font-bold text-pink-700 bg-pink-200/60 hover:bg-pink-200 px-2 py-0.5 rounded-md transition-all">🔄 Swap</button>
+                </div>
+                <h3 class="font-800 text-lg text-slate-900 mb-2">${item.title}</h3>
+                
+                <div class="flex justify-center gap-1.5 text-2xl mb-3 bg-white border border-pink-200 p-2.5 rounded-xl">
+                  ${item.dice.map(d => `<span>${d}</span>`).join('')}
+                </div>
+                <p class="text-xs text-pink-950 font-700 leading-snug">"${item.prompt}"</p>
+              </div>
+
+              <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center pt-2 border-t border-pink-200/60">
+                Use all 5 icons in your tale!
+              </div>
+            </div>
+          `;
+        }
+
+        container.innerHTML += html;
+      });
+    }
+
+    // ----------------------------------------------------
+    // DYNAMIC INSTANT STARTER PICK (DICE ROLLING & NO REPEATS)
+    // ----------------------------------------------------
+
+    function roll5RandomEmojiDice() {
+      let shuffled = [...emojiPool].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 5);
+    }
 
     function spinRandomStarter() {
-      const btn = document.getElementById('spin-btn');
-      const icon = document.getElementById('spin-icon');
-      
-      icon.classList.add('spin-anim');
-      setTimeout(() => icon.classList.remove('spin-anim'), 600);
+      const spinIcon = document.getElementById('spin-icon');
+      spinIcon.classList.add('spin-anim');
+      setTimeout(() => spinIcon.classList.remove('spin-anim'), 600);
 
-      let newIdx;
-      do {
-        newIdx = Math.floor(Math.random() * starters.length);
-      } while (newIdx === currentStarterIdx && starters.length > 1);
+      // Build key pool combining all 3 tools
+      const allKeys = [
+        ...trianglePool.map(t => 't_' + t.id),
+        ...riddlePool.map(r => 'r_' + r.id),
+        ...storyPool.map(s => 's_' + s.id),
+        'dice_live_1', 'dice_live_2', 'dice_live_3'
+      ];
 
-      currentStarterIdx = newIdx;
-      const item = starters[currentStarterIdx];
+      let availableKeys = allKeys.filter(k => !usedInstantKeys.has(k));
+      if (availableKeys.length === 0) {
+        usedInstantKeys.clear();
+        availableKeys = [...allKeys];
+      }
 
-      document.getElementById('starter-prompt').innerText = `"${item.prompt}"`;
-      document.getElementById('starter-subtext').innerText = item.subtext;
-      document.getElementById('starter-launch-link').href = item.tool;
-      document.getElementById('random-tool-badge').innerText = item.badge;
+      const selectedKey = availableKeys[Math.floor(Math.random() * availableKeys.length)];
+      usedInstantKeys.add(selectedKey);
+
+      const container = document.getElementById('starter-box');
+      const badge = document.getElementById('random-tool-badge');
+      const launchLink = document.getElementById('starter-launch-link');
+
+      if (selectedKey.startsWith('t_')) {
+        const item = trianglePool.find(t => 't_' + t.id === selectedKey);
+        badge.innerText = '🔺 Priority Triangle';
+        badge.className = 'text-xs text-amber-200 font-bold bg-amber-500/20 px-2.5 py-1 rounded-full border border-amber-500/30';
+        launchLink.href = 'triangle.html';
+
+        container.innerHTML = `
+          <div class="flex flex-wrap gap-2 mb-2">
+            ${item.items.map(i => `<span class="bg-amber-400/20 border border-amber-300/40 text-amber-100 text-xs font-800 px-3 py-1 rounded-full">${i}</span>`).join('')}
+          </div>
+          <h3 class="text-base sm:text-xl font-800 text-white leading-snug mb-1">"${item.desc}"</h3>
+          <p class="text-xs sm:text-sm text-amber-200 font-600">Priority Triangle — Vote and debate your top pick!</p>
+        `;
+      } else if (selectedKey.startsWith('r_')) {
+        const item = riddlePool.find(r => 'r_' + r.id === selectedKey);
+        badge.innerText = '🧩 Lateral Riddle';
+        badge.className = 'text-xs text-blue-200 font-bold bg-blue-500/20 px-2.5 py-1 rounded-full border border-blue-500/30';
+        launchLink.href = 'lateral.html';
+
+        container.innerHTML = `
+          <h3 class="text-base sm:text-xl font-800 text-white leading-snug mb-2">"${item.scenario}"</h3>
+          <div class="flex flex-wrap items-center gap-3">
+            <button onclick="document.getElementById('instant-riddle-ans').classList.toggle('hidden')" class="text-xs font-bold text-blue-200 hover:text-white bg-blue-500/30 px-3 py-1 rounded-full border border-blue-400/30 transition-all">
+              💡 Show Clue & Solution
+            </button>
+            <span id="instant-riddle-ans" class="hidden text-xs text-blue-100 font-600 bg-blue-950/80 px-3 py-1 rounded-lg border border-blue-500/30">
+              <strong>Clue:</strong> ${item.clue} | <strong>Ans:</strong> ${item.solution}
+            </span>
+          </div>
+        `;
+      } else {
+        // Story Dice Roll (Live 5 Emoji Roll!)
+        const liveDice = roll5RandomEmojiDice();
+        badge.innerText = '🎲 Live Story Dice Roll';
+        badge.className = 'text-xs text-pink-200 font-bold bg-pink-500/20 px-2.5 py-1 rounded-full border border-pink-500/30';
+        launchLink.href = 'storydice.html';
+
+        container.innerHTML = `
+          <div class="flex items-center gap-2 sm:gap-3 mb-2 text-2xl sm:text-3xl bg-white/10 border border-white/20 p-2 rounded-2xl w-fit">
+            ${liveDice.map(d => `<span class="inline-block transition-transform hover:scale-125">${d}</span>`).join('')}
+          </div>
+          <h3 class="text-base sm:text-xl font-800 text-white leading-snug mb-1">
+            "Roll these 5 dice and invent a wild family tale together!"
+          </h3>
+          <p class="text-xs sm:text-sm text-pink-200 font-600">Story Dice — Take turns adding a sentence featuring each rolled icon!</p>
+        `;
+      }
     }
 
     function filterTools(filter) {
@@ -417,6 +706,11 @@
         }
       });
 
+      if (filter === 'print') {
+        document.getElementById('printable-section').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
       cards.forEach(card => {
         const categories = card.getAttribute('data-category').split(' ');
         if (filter === 'all' || categories.includes(filter)) {
@@ -426,6 +720,12 @@
         }
       });
     }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      initPrintableSheet();
+      spinRandomStarter();
+    });
   </script>
 </body>
 </html>
