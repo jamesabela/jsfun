@@ -71,9 +71,78 @@
     footer { text-align:center; padding:2rem 1rem; border-top:1px solid #ffc1e3; font-size:0.95rem; color:#7b1fa2; width:100%; max-width:960px; margin-top:40px; }
     footer a { color:#ff4081; font-weight:600; text-decoration:none; }
     footer a.tea { color:#e73c7e; }
+
+    .nav-header {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .back-btn {
+      text-decoration: none;
+      color: #7b1fa2;
+      background: rgba(255,255,255,0.7);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+    .back-btn:hover { background: #fff; transform: translateY(-1px); }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      h1 { font-size: 2rem; margin-top: 0.5rem; text-align: center; }
+      .controls { padding: 12px; gap: 10px; border-radius: 20px; width: 100%; box-sizing: border-box; }
+      button { padding: 10px 18px; font-size: 1rem; }
+      
+      .dice-scene, .dice-face, .empty-slot { width: 80px; height: 80px; }
+      .dice-face { font-size: 46px; border-width: 3px; border-radius: 16px; }
+      .dice-container { gap: 15px; padding: 10px; }
+      .dice-container.grid-9 { grid-template-columns: repeat(3, 80px); gap: 15px; }
+      .net-layout-container { grid-template-columns: repeat(3, 80px); grid-template-rows: repeat(4, 80px); gap: 10px; }
+
+      .frayer-modal {
+        display: flex;
+        flex-direction: column;
+        width: 95%;
+        max-height: 88vh;
+        overflow-y: auto;
+        padding: 20px 15px 15px;
+        gap: 12px;
+      }
+      .frayer-center {
+        position: relative;
+        top: auto; left: auto;
+        transform: none;
+        width: 100%;
+        height: auto;
+        border-radius: 16px;
+        border-width: 3px;
+        margin: 5px 0;
+        padding: 10px;
+        flex-direction: row;
+        gap: 15px;
+        box-sizing: border-box;
+      }
+      #frayerEmoji { font-size: 40px; }
+      #frayerWord { font-size: 18px; margin-top: 0; }
+      .frayer-quadrant { padding: 12px; }
+      .frayer-quadrant h3 { font-size: 15px; margin-bottom: 5px; }
+      .frayer-quadrant p { font-size: 14px; }
+      .close-modal { top: 10px; right: 10px; width: 36px; height: 36px; font-size: 22px; }
+    }
   </style>
 </head>
 <body>
+<div class="nav-header">
+  <a href="roadtrip.html" class="back-btn">← Family Starters</a>
+  <a href="index.html" class="back-btn">All Tools</a>
+</div>
 <h1>🎲 Story Dice 🎲</h1>
 <p>Click a die to see its Frayer Model vocabulary!</p>
 <div class="controls">

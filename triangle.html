@@ -156,9 +156,17 @@
 
   <div class="max-w-4xl mx-auto px-4 pt-12 text-center">
     <header class="mb-8">
-      <h1 class="text-4xl font-800 tracking-tight text-slate-900">Priority <span class="text-indigo-600">Triangle</span>
+      <div class="flex justify-between items-center mb-4">
+        <a href="roadtrip.html" class="inline-flex items-center gap-1 text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors bg-indigo-50 px-3 py-1.5 rounded-full">
+          ← Family Starters
+        </a>
+        <a href="index.html" class="text-sm font-bold text-slate-500 hover:text-slate-700">
+          All Tools
+        </a>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-800 tracking-tight text-slate-900">Priority <span class="text-indigo-600">Triangle</span>
       </h1>
-      <p class="text-lg text-slate-500 mt-1">Which of these is the most important?</p>
+      <p class="text-base sm:text-lg text-slate-500 mt-1">Which of these is the most important?</p>
     </header>
 
     <!-- Controls Section -->
@@ -199,11 +207,11 @@
 
     <!-- Main Tool -->
     <div
-      class="bg-white rounded-[2.5rem] shadow-2xl shadow-indigo-100 p-8 md:p-12 mb-8 border border-slate-100 relative overflow-hidden">
-      <div class="mb-8 text-center">
+      class="bg-white rounded-[2.5rem] shadow-2xl shadow-indigo-100 p-4 sm:p-8 md:p-12 mb-8 border border-slate-100 relative overflow-hidden">
+      <div class="mb-6 text-center">
         <span class="text-xs font-bold tracking-widest text-indigo-400 uppercase" id="triad-category">Leadership &
           Management</span>
-        <h2 class="text-2xl font-800 text-slate-800 mt-1" id="triad-title">Strategy • Execution • Culture</h2>
+        <h2 class="text-xl sm:text-2xl font-800 text-slate-800 mt-1" id="triad-title">Strategy • Execution • Culture</h2>
       </div>
 
       <div class="flex justify-center mb-10 relative">
@@ -226,30 +234,30 @@
 
           <!-- Vertices (Editable) -->
           <div
-            class="vertex-label bg-amber-50 border-4 border-amber-400 text-amber-900 shadow-xl flex flex-row items-center gap-4 px-6 py-3 rounded-3xl"
+            class="vertex-label bg-amber-50 border-2 sm:border-4 border-amber-400 text-amber-900 shadow-xl flex flex-row items-center gap-2 sm:gap-4 px-3 py-1.5 sm:px-6 sm:py-3 rounded-3xl"
             style="top: 2%; left: 50%;">
             <span id="vertex-top" contenteditable="true" oninput="handleLabelEdit(0, this.textContent)"
-              class="outline-none min-w-[80px] text-2xl font-800">Strategy</span>
+              class="outline-none min-w-[50px] sm:min-w-[80px] text-sm sm:text-2xl font-800">Strategy</span>
             <div class="label-actions">
               <a id="dict1" class="label-action" target="_blank" rel="noopener" title="Dictionary">📖</a>
               <a id="img1" class="label-action" target="_blank" rel="noopener" title="Image Search">🖼️</a>
             </div>
           </div>
           <div
-            class="vertex-label bg-emerald-50 border-4 border-emerald-400 text-emerald-900 shadow-xl flex flex-row items-center gap-4 px-6 py-3 rounded-3xl"
-            style="bottom: 2%; left: 10%;">
+            class="vertex-label bg-emerald-50 border-2 sm:border-4 border-emerald-400 text-emerald-900 shadow-xl flex flex-row items-center gap-2 sm:gap-4 px-3 py-1.5 sm:px-6 sm:py-3 rounded-3xl"
+            style="bottom: 2%; left: 15%;">
             <span id="vertex-left" contenteditable="true" oninput="handleLabelEdit(1, this.textContent)"
-              class="outline-none min-w-[80px] text-2xl font-800">Execution</span>
+              class="outline-none min-w-[50px] sm:min-w-[80px] text-sm sm:text-2xl font-800">Execution</span>
             <div class="label-actions">
               <a id="dict2" class="label-action" target="_blank" rel="noopener" title="Dictionary">📖</a>
               <a id="img2" class="label-action" target="_blank" rel="noopener" title="Image Search">🖼️</a>
             </div>
           </div>
           <div
-            class="vertex-label bg-rose-50 border-4 border-rose-400 text-rose-900 shadow-xl flex flex-row items-center gap-4 px-6 py-3 rounded-3xl"
-            style="bottom: 2%; right: -35%;">
+            class="vertex-label bg-rose-50 border-2 sm:border-4 border-rose-400 text-rose-900 shadow-xl flex flex-row items-center gap-2 sm:gap-4 px-3 py-1.5 sm:px-6 sm:py-3 rounded-3xl"
+            style="bottom: 2%; left: 85%;">
             <span id="vertex-right" contenteditable="true" oninput="handleLabelEdit(2, this.textContent)"
-              class="outline-none min-w-[80px] text-2xl font-800">Culture</span>
+              class="outline-none min-w-[50px] sm:min-w-[80px] text-sm sm:text-2xl font-800">Culture</span>
             <div class="label-actions">
               <a id="dict3" class="label-action" target="_blank" rel="noopener" title="Dictionary">📖</a>
               <a id="img3" class="label-action" target="_blank" rel="noopener" title="Image Search">🖼️</a>

@@ -88,6 +88,14 @@
     "icon": "💬",
     "tools": [
       {
+        "title": "Family Conversation Starters",
+        "emoji": "🚗",
+        "url": "https://jamesabela.github.io/jsfun/roadtrip.html",
+        "desc": "Fun discussion tools for road trips, family meals & game nights. Priority Triangle, Lateral Puzzles & Story Dice.",
+        "tag": "All ages",
+        "isExternal": false
+      },
+      {
         "title": "Connections Grid",
         "emoji": "🔠",
         "url": "https://jamesabela.github.io/jsfun/connections.html",
