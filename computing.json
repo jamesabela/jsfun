@@ -740,6 +740,14 @@
         "desc": "Stunning 3D animations explaining computer hardware, CPU architectures, transistors, fiber optics, and networking in deep technical detail.",
         "tag": "iGCSE / A-Level",
         "isExternal": true
+      },
+      {
+        "title": "Unplugged and Unlocked",
+        "emoji": "🔓",
+        "url": "https://www.youtube.com/@UnpluggedandUnlocked",
+        "desc": "Educational computing video channel by Sethi De Clercq featuring tech tutorials, unplugged activities, and classroom guides.",
+        "tag": "All ages",
+        "isExternal": true
       }
     ]
   }
