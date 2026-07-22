@@ -98,6 +98,71 @@
     .badge-lateral { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
     .badge-dice { background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
 
+    /* 3D Dice Roller Styles for Hero Instant Starter */
+    .dice-3d-scene {
+      width: 90px;
+      height: 90px;
+      perspective: 700px;
+      position: relative;
+      margin: 0 auto;
+      flex-shrink: 0;
+    }
+
+    .dice-3d-cube {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateX(-18deg) rotateY(28deg);
+      transition: transform 1.1s cubic-bezier(0.16, 0.84, 0.31, 1);
+    }
+
+    .dice-shadow {
+      width: 75px;
+      height: 16px;
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 50%;
+      filter: blur(8px);
+      margin: 12px auto 0;
+      transition: all 0.3s ease;
+    }
+
+    .dice-3d-scene.rolling .dice-shadow {
+      opacity: 0.2;
+      transform: scale(0.6) translateY(14px);
+    }
+
+    .dice-face-3d {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #ffffff, #e0e7ff);
+      border: 2.5px solid rgba(255, 255, 255, 0.95);
+      box-shadow:
+        inset -6px -6px 12px rgba(56, 71, 130, 0.15),
+        inset 6px 6px 12px rgba(255, 255, 255, 0.9),
+        0 10px 25px rgba(0, 0, 0, 0.3);
+      backface-visibility: hidden;
+      user-select: none;
+    }
+
+    .face-front  { transform: rotateY(0deg) translateZ(45px); }
+    .face-back   { transform: rotateY(180deg) translateZ(45px); }
+    .face-right  { transform: rotateY(90deg) translateZ(45px); }
+    .face-left   { transform: rotateY(-90deg) translateZ(45px); }
+    .face-top    { transform: rotateX(90deg) translateZ(45px); }
+    .face-bottom { transform: rotateX(-90deg) translateZ(45px); }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
     /* Print Stylesheet for 0-Screen Printing */
     @media print {
       body {
@@ -192,21 +257,37 @@
         No boring car rides or silent dinners! Play on mobile screens or print a screen-free card sheet for zero digital distraction.
       </p>
 
-      <!-- Interactive Quick Pick / Lucky Dip Card -->
-      <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 max-w-2xl mx-auto shadow-2xl text-left relative overflow-hidden min-h-[300px] sm:min-h-[270px] flex flex-col justify-between">
+      <!-- Interactive Quick Pick / Lucky Dip Card with 3D Dice -->
+      <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto shadow-2xl text-left relative overflow-hidden h-[360px] sm:h-[300px] flex flex-col justify-between">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-800 uppercase tracking-widest text-indigo-300">🎲 Instant Starter Pick</span>
           <span class="text-xs text-slate-300 font-bold bg-white/10 px-2.5 py-1 rounded-full" id="random-tool-badge">Featured Tool</span>
         </div>
 
-        <div id="starter-box" class="my-auto py-2 flex flex-col justify-center min-h-[140px] sm:min-h-[130px]">
-          <!-- Dynamically populated by spinRandomStarter() -->
+        <div class="flex flex-col sm:flex-row items-center gap-6 my-auto py-2">
+          <!-- 3D Dice Scene -->
+          <div class="dice-3d-scene">
+            <div class="dice-3d-cube" id="hero-3d-dice">
+              <div class="dice-face-3d face-front">🔺</div>
+              <div class="dice-face-3d face-back">🧩</div>
+              <div class="dice-face-3d face-right">🎲</div>
+              <div class="dice-face-3d face-left">🚗</div>
+              <div class="dice-face-3d face-top">🍽️</div>
+              <div class="dice-face-3d face-bottom">⭐</div>
+            </div>
+            <div class="dice-shadow" id="hero-dice-shadow"></div>
+          </div>
+
+          <!-- Starter Content Display -->
+          <div id="starter-box" class="flex-grow flex flex-col justify-center h-[150px] sm:h-[135px] overflow-hidden">
+            <!-- Dynamically populated by spinRandomStarter() -->
+          </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-3">
+        <div class="flex flex-col sm:flex-row gap-3 mt-3">
           <button onclick="spinRandomStarter()" id="spin-btn" class="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-amber-400 to-pink-500 text-slate-950 font-900 rounded-2xl hover:brightness-110 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2">
             <span id="spin-icon" class="text-xl">🎲</span>
-            <span>Pick Another Starter!</span>
+            <span id="spin-btn-text">Pick Another Starter!</span>
           </button>
           
           <a id="starter-launch-link" href="triangle.html" class="w-full sm:w-auto px-6 py-3.5 bg-white/20 hover:bg-white/30 text-white font-800 rounded-2xl transition-all flex items-center justify-center gap-2 border border-white/30 text-center">
@@ -609,7 +690,7 @@
     }
 
     // ----------------------------------------------------
-    // DYNAMIC INSTANT STARTER PICK (DICE ROLLING & NO REPEATS)
+    // CINEMATIC 3D DICE ROLLER & HERO STARTER REVEAL
     // ----------------------------------------------------
 
     function roll5RandomEmojiDice() {
@@ -617,10 +698,34 @@
       return shuffled.slice(0, 5);
     }
 
+    let totalDiceX = -18;
+    let totalDiceY = 28;
+    let isRollingStarter = false;
+
     function spinRandomStarter() {
+      if (isRollingStarter) return;
+      isRollingStarter = true;
+
+      const btn = document.getElementById('spin-btn');
+      const btnText = document.getElementById('spin-btn-text');
       const spinIcon = document.getElementById('spin-icon');
+      const scene = document.querySelector('.dice-3d-scene');
+      const cube = document.getElementById('hero-3d-dice');
+      const container = document.getElementById('starter-box');
+
+      btn.disabled = true;
+      btn.style.opacity = '0.75';
+      if (btnText) btnText.innerText = 'Rolling 3D Dice...';
       spinIcon.classList.add('spin-anim');
-      setTimeout(() => spinIcon.classList.remove('spin-anim'), 600);
+      if (scene) scene.classList.add('rolling');
+
+      // Suspense rolling message
+      container.innerHTML = `
+        <div class="py-4 animate-pulse">
+          <p class="text-base sm:text-lg font-800 text-indigo-200">🎲 Rolling the 3D Dice...</p>
+          <p class="text-xs text-slate-300 mt-1 font-600">Selecting a random family starter for you!</p>
+        </div>
+      `;
 
       // Build key pool combining all 3 tools
       const allKeys = [
@@ -639,6 +744,44 @@
       const selectedKey = availableKeys[Math.floor(Math.random() * availableKeys.length)];
       usedInstantKeys.add(selectedKey);
 
+      // Target face rotation
+      let targetX = 0;
+      let targetY = 0;
+
+      if (selectedKey.startsWith('t_')) {
+        targetX = 0; targetY = 0; // Front face (🔺)
+      } else if (selectedKey.startsWith('r_')) {
+        targetX = 0; targetY = 180; // Back face (🧩)
+      } else {
+        targetX = 0; targetY = -90; // Right face (🎲)
+      }
+
+      const extraXTurns = (3 + Math.floor(Math.random() * 2)) * 360;
+      const extraYTurns = (3 + Math.floor(Math.random() * 2)) * 360;
+
+      totalDiceX += extraXTurns + targetX;
+      totalDiceY += extraYTurns + targetY;
+
+      totalDiceX = Math.floor(totalDiceX / 360) * 360 + targetX;
+      totalDiceY = Math.floor(totalDiceY / 360) * 360 + targetY;
+
+      if (cube) {
+        cube.style.transform = `rotateX(${totalDiceX}deg) rotateY(${totalDiceY}deg)`;
+      }
+
+      setTimeout(() => {
+        if (scene) scene.classList.remove('rolling');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        if (btnText) btnText.innerText = 'Pick Another Starter!';
+        spinIcon.classList.remove('spin-anim');
+
+        renderHeroStarterContent(selectedKey);
+        isRollingStarter = false;
+      }, 1100);
+    }
+
+    function renderHeroStarterContent(selectedKey) {
       const container = document.getElementById('starter-box');
       const badge = document.getElementById('random-tool-badge');
       const launchLink = document.getElementById('starter-launch-link');
@@ -650,11 +793,13 @@
         launchLink.href = 'triangle.html';
 
         container.innerHTML = `
-          <div class="flex flex-wrap gap-2 mb-2">
-            ${item.items.map(i => `<span class="bg-amber-400/20 border border-amber-300/40 text-amber-100 text-xs font-800 px-3 py-1 rounded-full">${i}</span>`).join('')}
+          <div class="transition-all duration-300 transform" style="animation: popIn 0.4s ease forwards;">
+            <div class="flex flex-wrap gap-2 mb-2">
+              ${item.items.map(i => `<span class="bg-amber-400/20 border border-amber-300/40 text-amber-100 text-xs font-800 px-3 py-1 rounded-full">${i}</span>`).join('')}
+            </div>
+            <h3 class="text-base sm:text-xl font-800 text-white leading-snug mb-1">"${item.desc}"</h3>
+            <p class="text-xs sm:text-sm text-amber-200 font-600">Priority Triangle — Vote and debate your top pick!</p>
           </div>
-          <h3 class="text-base sm:text-xl font-800 text-white leading-snug mb-1">"${item.desc}"</h3>
-          <p class="text-xs sm:text-sm text-amber-200 font-600">Priority Triangle — Vote and debate your top pick!</p>
         `;
       } else if (selectedKey.startsWith('r_')) {
         const item = riddlePool.find(r => 'r_' + r.id === selectedKey);
@@ -663,14 +808,16 @@
         launchLink.href = 'lateral.html';
 
         container.innerHTML = `
-          <h3 class="text-base sm:text-xl font-800 text-white leading-snug mb-2">"${item.scenario}"</h3>
-          <div class="flex flex-wrap items-center gap-3">
-            <button onclick="document.getElementById('instant-riddle-ans').classList.toggle('hidden')" class="text-xs font-bold text-blue-200 hover:text-white bg-blue-500/30 px-3 py-1 rounded-full border border-blue-400/30 transition-all">
-              💡 Show Clue & Solution
-            </button>
-            <span id="instant-riddle-ans" class="hidden text-xs text-blue-100 font-600 bg-blue-950/80 px-3 py-1 rounded-lg border border-blue-500/30">
-              <strong>Clue:</strong> ${item.clue} | <strong>Ans:</strong> ${item.solution}
-            </span>
+          <div class="transition-all duration-300 transform" style="animation: popIn 0.4s ease forwards;">
+            <h3 class="text-base sm:text-xl font-800 text-white leading-snug mb-2">"${item.scenario}"</h3>
+            <div class="flex flex-wrap items-center gap-3">
+              <button onclick="document.getElementById('instant-riddle-ans').classList.toggle('hidden')" class="text-xs font-bold text-blue-200 hover:text-white bg-blue-500/30 px-3 py-1 rounded-full border border-blue-400/30 transition-all">
+                💡 Show Clue & Solution
+              </button>
+              <span id="instant-riddle-ans" class="hidden text-xs text-blue-100 font-600 bg-blue-950/80 px-3 py-1 rounded-lg border border-blue-500/30">
+                <strong>Clue:</strong> ${item.clue} | <strong>Ans:</strong> ${item.solution}
+              </span>
+            </div>
           </div>
         `;
       } else {
@@ -681,13 +828,15 @@
         launchLink.href = 'storydice.html';
 
         container.innerHTML = `
-          <div class="flex items-center gap-2 sm:gap-3 mb-2 text-2xl sm:text-3xl bg-white/10 border border-white/20 p-2 rounded-2xl w-fit">
-            ${liveDice.map(d => `<span class="inline-block transition-transform hover:scale-125">${d}</span>`).join('')}
+          <div class="transition-all duration-300 transform" style="animation: popIn 0.4s ease forwards;">
+            <div class="flex items-center gap-2 mb-1.5 text-xl sm:text-2xl bg-white/10 border border-white/20 px-2.5 py-1 rounded-xl w-fit">
+              ${liveDice.map(d => `<span class="inline-block transition-transform hover:scale-125">${d}</span>`).join('')}
+            </div>
+            <h3 class="text-sm sm:text-lg font-800 text-white leading-snug mb-1">
+              "Roll these 5 dice and invent a wild family tale together!"
+            </h3>
+            <p class="text-xs text-pink-200 font-600">Story Dice — Take turns adding a sentence featuring each rolled icon!</p>
           </div>
-          <h3 class="text-base sm:text-xl font-800 text-white leading-snug mb-1">
-            "Roll these 5 dice and invent a wild family tale together!"
-          </h3>
-          <p class="text-xs sm:text-sm text-pink-200 font-600">Story Dice — Take turns adding a sentence featuring each rolled icon!</p>
         `;
       }
     }
