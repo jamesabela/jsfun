@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Family Conversation Starters — Road Trips, Meals & Fun</title>
-  <meta name="description" content="Free mobile-friendly family discussion tools for road trips, family dinners, and game nights. Priority Triangle, Lateral Thinking Puzzles, and Story Dice.">
-  
+  <meta name="description"
+    content="Free mobile-friendly family discussion tools for road trips, family dinners, and game nights. Priority Triangle, Lateral Thinking Puzzles, and Story Dice.">
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
   <style>
     :root {
       --brand-gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #f59e0b 100%);
@@ -23,7 +27,11 @@
       flex-direction: column;
     }
 
-    h1, h2, h3, h4, .font-heading {
+    h1,
+    h2,
+    h3,
+    h4,
+    .font-heading {
       font-family: 'Outfit', sans-serif;
     }
 
@@ -41,15 +49,23 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(99,102,241,0.25) 0%, rgba(236,72,153,0.15) 35%, transparent 70%);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(236, 72, 153, 0.15) 35%, transparent 70%);
       animation: pulseGlow 12s ease-in-out infinite alternate;
       pointer-events: none;
     }
 
     @keyframes pulseGlow {
-      0% { transform: scale(1) translate(0, 0); }
-      50% { transform: scale(1.1) translate(-2%, 2%); }
-      100% { transform: scale(1) translate(2%, -2%); }
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+
+      50% {
+        transform: scale(1.1) translate(-2%, 2%);
+      }
+
+      100% {
+        transform: scale(1) translate(2%, -2%);
+      }
     }
 
     .text-gradient {
@@ -88,15 +104,37 @@
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg) scale(0.9); }
-      50% { transform: rotate(180deg) scale(1.1); }
-      100% { transform: rotate(360deg) scale(1); }
+      0% {
+        transform: rotate(0deg) scale(0.9);
+      }
+
+      50% {
+        transform: rotate(180deg) scale(1.1);
+      }
+
+      100% {
+        transform: rotate(360deg) scale(1);
+      }
     }
 
     /* Custom badge colors */
-    .badge-triangle { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
-    .badge-lateral { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
-    .badge-dice { background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
+    .badge-triangle {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .badge-lateral {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .badge-dice {
+      background: #fce7f3;
+      color: #9d174d;
+      border: 1px solid #fbcfe8;
+    }
 
     /* 3D Dice Roller Styles for Hero Instant Starter */
     .dice-3d-scene {
@@ -151,16 +189,40 @@
       user-select: none;
     }
 
-    .face-front  { transform: rotateY(0deg) translateZ(45px); }
-    .face-back   { transform: rotateY(180deg) translateZ(45px); }
-    .face-right  { transform: rotateY(90deg) translateZ(45px); }
-    .face-left   { transform: rotateY(-90deg) translateZ(45px); }
-    .face-top    { transform: rotateX(90deg) translateZ(45px); }
-    .face-bottom { transform: rotateX(-90deg) translateZ(45px); }
+    .face-front {
+      transform: rotateY(0deg) translateZ(45px);
+    }
+
+    .face-back {
+      transform: rotateY(180deg) translateZ(45px);
+    }
+
+    .face-right {
+      transform: rotateY(90deg) translateZ(45px);
+    }
+
+    .face-left {
+      transform: rotateY(-90deg) translateZ(45px);
+    }
+
+    .face-top {
+      transform: rotateX(90deg) translateZ(45px);
+    }
+
+    .face-bottom {
+      transform: rotateX(-90deg) translateZ(45px);
+    }
 
     @keyframes popIn {
-      from { opacity: 0; transform: scale(0.92); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     /* Print Stylesheet for 0-Screen Printing */
@@ -172,7 +234,13 @@
         margin: 0 !important;
       }
 
-      nav, header, footer, .no-print, .tool-card, .filter-container, #spin-btn {
+      nav,
+      header,
+      footer,
+      .no-print,
+      .tool-card,
+      .filter-container,
+      #spin-btn {
         display: none !important;
       }
 
@@ -216,21 +284,26 @@
     }
   </style>
 </head>
+
 <body class="bg-slate-50 text-slate-900">
 
   <!-- Navigation Header -->
-  <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-filter backdrop-blur-md border-b border-slate-800 text-white no-print">
+  <nav
+    class="sticky top-0 z-50 bg-slate-900/90 backdrop-filter backdrop-blur-md border-b border-slate-800 text-white no-print">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="roadtrip.html" class="flex items-center gap-2 font-heading font-800 text-lg sm:text-xl tracking-tight text-white hover:opacity-90">
+      <a href="roadtrip.html"
+        class="flex items-center gap-2 font-heading font-800 text-lg sm:text-xl tracking-tight text-white hover:opacity-90">
         <span class="text-2xl">🚗</span>
         <span>Family <span class="text-indigo-400">Starters</span></span>
       </a>
 
       <div class="flex items-center gap-2 sm:gap-4">
-        <a href="index.html" class="text-xs sm:text-sm font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-full hover:bg-slate-800 transition-all">
+        <a href="index.html"
+          class="text-xs sm:text-sm font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-full hover:bg-slate-800 transition-all">
           🌐 All Tools
         </a>
-        <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener" class="text-xs sm:text-sm font-bold text-pink-300 hover:text-pink-100 bg-pink-950/60 border border-pink-500/30 px-3 py-1.5 rounded-full transition-all">
+        <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener"
+          class="text-xs sm:text-sm font-bold text-pink-300 hover:text-pink-100 bg-pink-950/60 border border-pink-500/30 px-3 py-1.5 rounded-full transition-all">
           ☕ Support
         </a>
       </div>
@@ -240,28 +313,39 @@
   <!-- Hero Header Section -->
   <header class="hero-bg text-white pt-10 pb-16 px-4 relative no-print">
     <div class="max-w-4xl mx-auto text-center relative z-10">
-      
+
       <!-- Scenario Tags -->
       <div class="flex flex-wrap justify-center gap-2 mb-6">
-        <span class="bg-indigo-500/20 text-indigo-200 border border-indigo-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🚗 Road Trips</span>
-        <span class="bg-pink-500/20 text-pink-200 border border-pink-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🍽️ Dinner Table</span>
-        <span class="bg-amber-500/20 text-amber-200 border border-amber-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🖨️ Screen-Free Printables</span>
-        <span class="bg-emerald-500/20 text-emerald-200 border border-emerald-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🛋️ Living Room Chat</span>
+        <span
+          class="bg-indigo-500/20 text-indigo-200 border border-indigo-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🚗
+          Road Trips</span>
+        <span
+          class="bg-pink-500/20 text-pink-200 border border-pink-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🍽️
+          Dinner Table</span>
+        <span
+          class="bg-amber-500/20 text-amber-200 border border-amber-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🖨️
+          Screen-Free Printables</span>
+        <span
+          class="bg-emerald-500/20 text-emerald-200 border border-emerald-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full">🛋️
+          Living Room Chat</span>
       </div>
 
       <h1 class="text-3xl sm:text-5xl md:text-6xl font-900 tracking-tight leading-tight mb-4">
         Spark Fun <span class="text-gradient">Family Conversations</span>
       </h1>
-      
+
       <p class="text-base sm:text-xl text-slate-300 max-w-2xl mx-auto font-600 mb-8">
-        No boring car rides or silent dinners! Play on mobile screens or print a screen-free card sheet for zero digital distraction.
+        No boring car rides or silent dinners! Play on mobile screens or print a screen-free card sheet for zero digital
+        distraction.
       </p>
 
       <!-- Interactive Quick Pick / Lucky Dip Card with 3D Dice -->
-      <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto shadow-2xl text-left relative overflow-hidden h-[360px] sm:h-[300px] flex flex-col justify-between">
+      <div
+        class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto shadow-2xl text-left relative overflow-hidden h-[360px] sm:h-[300px] flex flex-col justify-between">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-800 uppercase tracking-widest text-indigo-300">🎲 Instant Starter Pick</span>
-          <span class="text-xs text-slate-300 font-bold bg-white/10 px-2.5 py-1 rounded-full" id="random-tool-badge">Featured Tool</span>
+          <span class="text-xs text-slate-300 font-bold bg-white/10 px-2.5 py-1 rounded-full"
+            id="random-tool-badge">Featured Tool</span>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center gap-6 my-auto py-2">
@@ -285,12 +369,14 @@
         </div>
 
         <div class="flex flex-col sm:flex-row gap-3 mt-3">
-          <button onclick="spinRandomStarter()" id="spin-btn" class="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-amber-400 to-pink-500 text-slate-950 font-900 rounded-2xl hover:brightness-110 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2">
+          <button onclick="spinRandomStarter()" id="spin-btn"
+            class="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-amber-400 to-pink-500 text-slate-950 font-900 rounded-2xl hover:brightness-110 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2">
             <span id="spin-icon" class="text-xl">🎲</span>
             <span id="spin-btn-text">Pick Another Starter!</span>
           </button>
-          
-          <a id="starter-launch-link" href="triangle.html" class="w-full sm:w-auto px-6 py-3.5 bg-white/20 hover:bg-white/30 text-white font-800 rounded-2xl transition-all flex items-center justify-center gap-2 border border-white/30 text-center">
+
+          <a id="starter-launch-link" href="triangle.html"
+            class="w-full sm:w-auto px-6 py-3.5 bg-white/20 hover:bg-white/30 text-white font-800 rounded-2xl transition-all flex items-center justify-center gap-2 border border-white/30 text-center">
             <span>Launch Tool</span>
             <span>→</span>
           </a>
@@ -305,34 +391,49 @@
 
     <!-- Category Filter Tabs -->
     <div class="flex justify-center mb-10 no-print filter-container">
-      <div class="bg-white border border-slate-200 p-1.5 rounded-full shadow-md flex flex-wrap justify-center gap-1 max-w-full overflow-x-auto">
-        <button onclick="filterTools('all')" class="filter-btn active px-4 py-2 rounded-full text-xs sm:text-sm font-800" data-filter="all">🌟 All Tools</button>
-        <button onclick="filterTools('print')" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900" data-filter="print">🖨️ Screen-Free Printables</button>
-        <button onclick="filterTools('roadtrip')" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900" data-filter="roadtrip">🚗 Road Trips</button>
-        <button onclick="filterTools('dinner')" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900" data-filter="dinner">🍽️ Meal Times</button>
+      <div
+        class="bg-white border border-slate-200 p-1.5 rounded-full shadow-md flex flex-wrap justify-center gap-1 max-w-full overflow-x-auto">
+        <button onclick="filterTools('all')"
+          class="filter-btn active px-4 py-2 rounded-full text-xs sm:text-sm font-800" data-filter="all">🌟 All
+          Tools</button>
+        <button onclick="filterTools('print')"
+          class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900"
+          data-filter="print">🖨️ Screen-Free Printables</button>
+        <button onclick="filterTools('roadtrip')"
+          class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900"
+          data-filter="roadtrip">🚗 Road Trips</button>
+        <button onclick="filterTools('dinner')"
+          class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900"
+          data-filter="dinner">🍽️ Meal Times</button>
       </div>
     </div>
 
     <!-- 0-SCREENS PRINTABLE SHEET SECTION -->
-    <section id="printable-section" class="bg-white rounded-[2.5rem] p-6 sm:p-10 mb-16 shadow-xl border border-slate-200">
-      
+    <section id="printable-section"
+      class="bg-white rounded-[2.5rem] p-6 sm:p-10 mb-16 shadow-xl border border-slate-200">
+
       <!-- Printable Header -->
-      <div class="print-header flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-200">
+      <div
+        class="print-header flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-200">
         <div>
-          <div class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 font-800 text-xs px-3 py-1 rounded-full mb-2 no-print">
+          <div
+            class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 font-800 text-xs px-3 py-1 rounded-full mb-2 no-print">
             <span>🖨️ 0 Screens Required</span>
             <span>•</span>
             <span>Equal Mix: 3 Triangles, 3 Riddles, 3 Story Prompts</span>
           </div>
           <h2 class="text-2xl sm:text-4xl font-900 text-slate-900">Printable Conversation Cards</h2>
-          <p class="text-sm text-slate-500 font-600 mt-1">Print out this sheet for the car, camping, or dinner table! Re-roll individual cards or the full mix without repeats.</p>
+          <p class="text-sm text-slate-500 font-600 mt-1">Write or print out this sheet for the car, camping, or dinner
+            table! Re-roll individual cards or the full mix without repeats.</p>
         </div>
 
         <div class="flex flex-wrap gap-3 no-print">
-          <button onclick="rerollAllPrintCards()" class="px-5 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-800 rounded-2xl transition-all flex items-center gap-2 border border-indigo-200">
+          <button onclick="rerollAllPrintCards()"
+            class="px-5 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-800 rounded-2xl transition-all flex items-center gap-2 border border-indigo-200">
             <span>🎲 Re-roll All 9 Cards</span>
           </button>
-          <button onclick="window.print()" class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-pink-600 text-white font-900 rounded-2xl shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
+          <button onclick="window.print()"
+            class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-pink-600 text-white font-900 rounded-2xl shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
             <span>🖨️ Print Sheet</span>
           </button>
         </div>
@@ -343,7 +444,8 @@
         <!-- Rendered dynamically by JS -->
       </div>
 
-      <div class="mt-8 text-center text-xs text-slate-400 font-600 no-print border-t border-slate-100 pt-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div
+        class="mt-8 text-center text-xs text-slate-400 font-600 no-print border-t border-slate-100 pt-4 flex flex-col sm:flex-row justify-between items-center gap-2">
         <span>💡 Tip: Cut along the dashed borders to make physical card decks for trips!</span>
         <span id="pool-status-text" class="text-indigo-600 font-700">All cards are unique and non-repeating</span>
       </div>
@@ -353,22 +455,27 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 tool-card-section">
 
       <!-- TOOL 1: Priority Triangle -->
-      <div class="glass-card rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between border-t-8 border-t-amber-400 tool-card" data-category="roadtrip dinner">
+      <div
+        class="glass-card rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between border-t-8 border-t-amber-400 tool-card"
+        data-category="roadtrip dinner">
         <div>
           <div class="flex items-center justify-between mb-4">
-            <span class="badge-triangle text-xs font-900 uppercase tracking-wider px-3 py-1 rounded-full">🔺 Priority Triangle</span>
+            <span class="badge-triangle text-xs font-900 uppercase tracking-wider px-3 py-1 rounded-full">🔺 Priority
+              Triangle</span>
             <span class="text-xs font-700 text-slate-400">All Ages</span>
           </div>
 
           <div class="text-4xl mb-3">🔺</div>
           <h2 class="text-2xl font-800 text-slate-900 mb-2">Priority Triangle</h2>
           <p class="text-sm text-slate-600 font-600 mb-6 leading-relaxed">
-            Drag the dot to rank what matters most between 3 options! Choose from fun cartoon characters, favorite foods, dream jobs, or custom choices.
+            Drag the dot to rank what matters most between 3 options! Choose from fun cartoon characters, favorite
+            foods, dream jobs, or custom choices.
           </p>
 
           <!-- Sample Topics Badges -->
           <div class="bg-amber-50/80 border border-amber-200/60 rounded-2xl p-4 mb-6">
-            <span class="text-[11px] font-800 uppercase tracking-widest text-amber-800 block mb-2">Fun Discussion Triads:</span>
+            <span class="text-[11px] font-800 uppercase tracking-widest text-amber-800 block mb-2">Fun Discussion
+              Triads:</span>
             <ul class="text-xs font-700 text-amber-900 space-y-1.5">
               <li>🍕 Pizza vs 🍔 Burger vs 🍝 Pasta</li>
               <li>🐶 Bluey vs 👧 Bingo vs 🐕 Bandit</li>
@@ -378,7 +485,8 @@
         </div>
 
         <div>
-          <a href="triangle.html" class="w-full py-4 bg-amber-500 hover:bg-amber-600 text-slate-950 font-900 rounded-2xl shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 text-base">
+          <a href="triangle.html"
+            class="w-full py-4 bg-amber-500 hover:bg-amber-600 text-slate-950 font-900 rounded-2xl shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 text-base">
             <span>Play Priority Triangle</span>
             <span class="text-xl">➔</span>
           </a>
@@ -386,22 +494,27 @@
       </div>
 
       <!-- TOOL 2: Lateral Thinking Puzzles -->
-      <div class="glass-card rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between border-t-8 border-t-blue-500 tool-card" data-category="roadtrip dinner">
+      <div
+        class="glass-card rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between border-t-8 border-t-blue-500 tool-card"
+        data-category="roadtrip dinner">
         <div>
           <div class="flex items-center justify-between mb-4">
-            <span class="badge-lateral text-xs font-900 uppercase tracking-wider px-3 py-1 rounded-full">🧩 Lateral Puzzles</span>
+            <span class="badge-lateral text-xs font-900 uppercase tracking-wider px-3 py-1 rounded-full">🧩 Lateral
+              Puzzles</span>
             <span class="text-xs font-700 text-slate-400">Kids & Adults</span>
           </div>
 
           <div class="text-4xl mb-3">🧩</div>
           <h2 class="text-2xl font-800 text-slate-900 mb-2">Lateral Puzzles</h2>
           <p class="text-sm text-slate-600 font-600 mb-6 leading-relaxed">
-            Mind-bending riddles for long car rides! One designated driver or passenger reads the mysterious riddle, and everyone asks yes/no questions to solve it.
+            Mind-bending riddles for long car rides! One designated driver or passenger reads the mysterious riddle, and
+            everyone asks yes/no questions to solve it.
           </p>
 
           <!-- Key Features Box -->
           <div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 mb-6">
-            <span class="text-[11px] font-800 uppercase tracking-widest text-blue-800 block mb-2">Included Features:</span>
+            <span class="text-[11px] font-800 uppercase tracking-widest text-blue-800 block mb-2">Included
+              Features:</span>
             <ul class="text-xs font-700 text-blue-900 space-y-1.5">
               <li>👶 Kid-Friendly Riddle Filter</li>
               <li>⏱️ Built-in Timer for friendly competition</li>
@@ -411,7 +524,8 @@
         </div>
 
         <div>
-          <a href="lateral.html" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-900 rounded-2xl shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center gap-2 text-base">
+          <a href="lateral.html"
+            class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-900 rounded-2xl shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center gap-2 text-base">
             <span>Solve Lateral Puzzles</span>
             <span class="text-xl">➔</span>
           </a>
@@ -419,17 +533,21 @@
       </div>
 
       <!-- TOOL 3: Story Dice -->
-      <div class="glass-card rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between border-t-8 border-t-pink-500 tool-card" data-category="story roadtrip dinner">
+      <div
+        class="glass-card rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between border-t-8 border-t-pink-500 tool-card"
+        data-category="story roadtrip dinner">
         <div>
           <div class="flex items-center justify-between mb-4">
-            <span class="badge-dice text-xs font-900 uppercase tracking-wider px-3 py-1 rounded-full">🎲 Story Dice</span>
+            <span class="badge-dice text-xs font-900 uppercase tracking-wider px-3 py-1 rounded-full">🎲 Story
+              Dice</span>
             <span class="text-xs font-700 text-slate-400">Creative Tales</span>
           </div>
 
           <div class="text-4xl mb-3">🎲</div>
           <h2 class="text-2xl font-800 text-slate-900 mb-2">Story Dice</h2>
           <p class="text-sm text-slate-600 font-600 mb-6 leading-relaxed">
-            Roll 5 or 9 emoji dice to generate hilarious story prompts! Take turns building a joint family tale using all the rolled characters and items.
+            Roll 5 or 9 emoji dice to generate hilarious story prompts! Take turns building a joint family tale using
+            all the rolled characters and items.
           </p>
 
           <!-- Key Features Box -->
@@ -444,7 +562,8 @@
         </div>
 
         <div>
-          <a href="storydice.html" class="w-full py-4 bg-pink-600 hover:bg-pink-700 text-white font-900 rounded-2xl shadow-lg shadow-pink-600/20 transition-all flex items-center justify-center gap-2 text-base">
+          <a href="storydice.html"
+            class="w-full py-4 bg-pink-600 hover:bg-pink-700 text-white font-900 rounded-2xl shadow-lg shadow-pink-600/20 transition-all flex items-center justify-center gap-2 text-base">
             <span>Roll Story Dice</span>
             <span class="text-xl">➔</span>
           </a>
@@ -454,7 +573,8 @@
     </div>
 
     <!-- How to Play in 3 Simple Steps Section -->
-    <section class="bg-slate-900 text-white rounded-[2.5rem] p-8 sm:p-12 mb-16 relative overflow-hidden shadow-2xl no-print">
+    <section
+      class="bg-slate-900 text-white rounded-[2.5rem] p-8 sm:p-12 mb-16 relative overflow-hidden shadow-2xl no-print">
       <div class="max-w-3xl mx-auto text-center relative z-10">
         <h2 class="text-2xl sm:text-4xl font-900 tracking-tight mb-4">
           How to Play <span class="text-gradient">Anywhere</span>
@@ -465,21 +585,30 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
           <div class="bg-slate-800/80 border border-slate-700 p-6 rounded-2xl">
-            <div class="w-12 h-12 bg-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center text-2xl font-900 mb-4">1</div>
+            <div
+              class="w-12 h-12 bg-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center text-2xl font-900 mb-4">
+              1</div>
             <h3 class="font-800 text-lg text-white mb-1">Pick a Tool</h3>
-            <p class="text-xs text-slate-400 leading-relaxed font-600">Choose Priority Triangle, Lateral Riddles, or Story Dice depending on your mood.</p>
+            <p class="text-xs text-slate-400 leading-relaxed font-600">Choose Priority Triangle, Lateral Riddles, or
+              Story Dice depending on your mood.</p>
           </div>
 
           <div class="bg-slate-800/80 border border-slate-700 p-6 rounded-2xl">
-            <div class="w-12 h-12 bg-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center text-2xl font-900 mb-4">2</div>
+            <div
+              class="w-12 h-12 bg-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center text-2xl font-900 mb-4">
+              2</div>
             <h3 class="font-800 text-lg text-white mb-1">Pass or Print</h3>
-            <p class="text-xs text-slate-400 leading-relaxed font-600">Prop up your phone on the dinner table or print the screen-free card sheet.</p>
+            <p class="text-xs text-slate-400 leading-relaxed font-600">Prop up your phone on the dinner table or print
+              the screen-free card sheet.</p>
           </div>
 
           <div class="bg-slate-800/80 border border-slate-700 p-6 rounded-2xl">
-            <div class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-xl flex items-center justify-center text-2xl font-900 mb-4">3</div>
+            <div
+              class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-xl flex items-center justify-center text-2xl font-900 mb-4">
+              3</div>
             <h3 class="font-800 text-lg text-white mb-1">Share & Debate</h3>
-            <p class="text-xs text-slate-400 leading-relaxed font-600">Everyone shares their funniest reasoning, predictions, and creative stories!</p>
+            <p class="text-xs text-slate-400 leading-relaxed font-600">Everyone shares their funniest reasoning,
+              predictions, and creative stories!</p>
           </div>
         </div>
       </div>
@@ -491,16 +620,19 @@
   <footer class="bg-white border-t border-slate-200 py-10 px-4 text-center text-slate-500 text-sm no-print">
     <div class="max-w-4xl mx-auto space-y-4">
       <p class="font-700 text-slate-700">
-        Created by <a href="https://jamesabela.github.io/ThinkRankStudio/" target="_blank" rel="noopener" class="text-indigo-600 font-800 hover:underline">James Abela</a> — Free thinking & discussion tools.
+        Created by <a href="https://jamesabela.github.io/ThinkRankStudio/" target="_blank" rel="noopener"
+          class="text-indigo-600 font-800 hover:underline">James Abela</a> — Free thinking & discussion tools.
       </p>
       <div class="flex justify-center items-center gap-4 text-xs font-700">
         <a href="triangle.html" class="text-slate-600 hover:text-indigo-600">Priority Triangle</a> •
         <a href="lateral.html" class="text-slate-600 hover:text-indigo-600">Lateral Puzzles</a> •
         <a href="storydice.html" class="text-slate-600 hover:text-indigo-600">Story Dice</a> •
-        <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener" class="text-pink-600 hover:underline">Buy me a tea ☕</a>
+        <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener"
+          class="text-pink-600 hover:underline">Buy me a tea ☕</a>
       </div>
       <p class="text-xs text-slate-400 pt-2">
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener" class="hover:underline">CC BY-NC-SA 4.0</a> © James Abela 2024
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener"
+          class="hover:underline">CC BY-NC-SA 4.0</a> © James Abela 2026
       </p>
     </div>
   </footer>
@@ -583,7 +715,7 @@
 
     function initPrintableSheet() {
       currentCards = [];
-      
+
       // 3 Triangles
       for (let i = 0; i < 3; i++) {
         currentCards.push({ type: 'triangle', data: getRandomItemFromPool(trianglePool, usedTriangleIds) });
@@ -877,4 +1009,5 @@
     });
   </script>
 </body>
+
 </html>
