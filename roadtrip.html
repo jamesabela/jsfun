@@ -396,6 +396,9 @@
         <button onclick="filterTools('all')"
           class="filter-btn active px-4 py-2 rounded-full text-xs sm:text-sm font-800" data-filter="all">🌟 All
           Tools</button>
+        <button onclick="filterTools('podcast')"
+          class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900"
+          data-filter="podcast">🎧 Spotify Podcast</button>
         <button onclick="filterTools('print')"
           class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-800 text-slate-600 hover:text-slate-900"
           data-filter="print">🖨️ Screen-Free Printables</button>
@@ -571,6 +574,48 @@
       </div>
 
     </div>
+
+    <!-- SPOTIFY PODCAST SECTION (Sethi De Clercq's Show) -->
+    <section id="podcast-section"
+      class="bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white rounded-[2.5rem] p-6 sm:p-10 mb-16 shadow-2xl border border-emerald-500/20 relative overflow-hidden no-print">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+
+        <!-- Left Column Info -->
+        <div class="max-w-xl text-left">
+          <div
+            class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-800 uppercase tracking-wider px-3 py-1 rounded-full mb-3">
+            <span>🎧 Car Audio & Podcast</span>
+            <span>•</span>
+            <span>By Sethi De Clercq</span>
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-900 text-white tracking-tight mb-3">
+            Listen on the Road: <span class="text-emerald-400">Spotify Podcast</span>
+          </h2>
+          <p class="text-sm sm:text-base text-slate-300 font-600 mb-6 leading-relaxed">
+            Need awesome audio for long drives? Tune into podcast shows by Sethi De Clercq — perfect listening for the
+            car ride while playing conversation games!
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <a href="https://open.spotify.com/show/033OM247EKK2MuLQoLZIMD?si=WJW6ZHMnThGnRT6bNS9HnQ" target="_blank"
+              rel="noopener"
+              class="px-6 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-900 rounded-2xl transition-all shadow-lg shadow-emerald-500/25 flex items-center gap-2">
+              <span class="text-xl">📻</span>
+              <span>Open in Spotify</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column Spotify Embed Widget -->
+        <div class="w-full md:w-[380px] bg-slate-950/80 p-2.5 rounded-3xl border border-emerald-500/30 shadow-2xl">
+          <iframe style="border-radius:20px;"
+            src="https://open.spotify.com/embed/show/033OM247EKK2MuLQoLZIMD?utm_source=generator&theme=0" width="100%"
+            height="152" frameBorder="0" allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        </div>
+
+      </div>
+    </section>
 
     <!-- How to Play in 3 Simple Steps Section -->
     <section
@@ -989,6 +1034,11 @@
 
       if (filter === 'print') {
         document.getElementById('printable-section').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      if (filter === 'podcast') {
+        document.getElementById('podcast-section').scrollIntoView({ behavior: 'smooth' });
         return;
       }
 
