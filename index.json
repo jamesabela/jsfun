@@ -332,6 +332,14 @@
         "desc": "Play and manage classroom videos in a safe, distraction-free environment. By Sethi De Clercq.",
         "tag": "All ages",
         "isExternal": true
+      },
+      {
+        "title": "AlternativeTo",
+        "emoji": "🔄",
+        "url": "https://alternativeto.net/",
+        "desc": "Find free and open-source alternatives to software applications to reduce software costs.",
+        "tag": "All ages",
+        "isExternal": true
       }
     ]
   }

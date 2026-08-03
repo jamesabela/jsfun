@@ -58,6 +58,14 @@
         "desc": "Google Workspace extension to easily format code in Google Docs and Slides. Perfect for creating worksheets and presentations. By Sethi De Clercq.",
         "tag": "Teacher Tool",
         "isExternal": true
+      },
+      {
+        "title": "IB CS Curriculum Planner",
+        "emoji": "📅",
+        "url": "https://planner.mattelliot.co.uk/",
+        "desc": "Organise the two-year IB DP Computer Science course, check timing pressure, topic order, and export planning documents. By Matt Elliot.",
+        "tag": "Teacher Tool / A-Level",
+        "isExternal": true
       }
     ]
   },
@@ -118,6 +126,14 @@
         "emoji": "🕵️",
         "url": "https://whodunnit.primary-apps.com/whodunnit.html",
         "desc": "Solve mysteries using a suspect database by filtering and comparing records. Great for introducing database queries. By Dave Salt.",
+        "tag": "KS2 / KS3",
+        "isExternal": true
+      },
+      {
+        "title": "Flock XR — 3D Computing & Game Design",
+        "emoji": "🦩",
+        "url": "https://flockxr.com/",
+        "desc": "Free, open-source, browser-based 3D spatial computing and block-based programming tool built on Blockly and Babylon.js. Bridges Scratch to 3D engines.",
         "tag": "KS2 / KS3",
         "isExternal": true
       }
