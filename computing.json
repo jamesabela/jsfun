@@ -82,6 +82,14 @@
         "isExternal": true
       },
       {
+        "title": "AmberCodes — The Logic Lab",
+        "emoji": "🟧",
+        "url": "https://www.ambercodes.com/",
+        "desc": "Visual programming environment for students to learn logic and coding. By Sethi De Clercq.",
+        "tag": "EYFS / KS1 / KS2",
+        "isExternal": true
+      },
+      {
         "title": "Secret Code Generator",
         "emoji": "🔐",
         "url": "https://sethideclercq.com/tools/secretcodegen.html",
