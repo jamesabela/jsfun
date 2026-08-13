@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Python Challenge Widget Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+      --input-bg: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      font-size: 24px;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .main-container {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    select, input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--primary);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .checkbox-group input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .checkbox-group span {
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .code-container {
+      position: relative;
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: monospace;
+      font-size: 13px;
+      color: #38bdf8;
+      word-break: break-all;
+      white-space: pre-wrap;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .copy-btn {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+    }
+
+    .copy-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .preview-badge {
+      font-size: 12px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .preview-frame-wrapper {
+      background: #0b0f19;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 16px 16px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 260px;
+      overflow: auto;
+    }
+
+    iframe {
+      border: none;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10b981;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="brand-logo">🛠️</span>
+      <h1 class="brand-title">Widget Builder & Embedder</h1>
+    </div>
+    <a href="pythoncopy.html" style="color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600;">← Back to Python Editor</a>
+  </header>
+
+  <div class="main-container">
+    <!-- Controls Panel -->
+    <div class="panel">
+      <h2 class="panel-title">⚙️ Customize Widget</h2>
+
+      <div class="form-group">
+        <label class="form-label" for="themeSelect">Color Theme</label>
+        <select id="themeSelect">
+          <option value="auto">Auto (Match System / User Theme)</option>
+          <option value="light">Light Theme</option>
+          <option value="dark">Dark Theme</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="layoutSelect">Layout Mode</label>
+        <select id="layoutSelect">
+          <option value="standard">Standard Card (200px Height)</option>
+          <option value="compact">Compact Mode (160px Height)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-group">
+          <input type="checkbox" id="hideImgCheck">
+          <span>Hide Quest Image Thumbnail</span>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="widthInput">Widget Max Width (px or %)</label>
+        <input type="text" id="widthInput" value="100%">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="baseUrlInput">Editor Link Base URL</label>
+        <input type="text" id="baseUrlInput" value="pythoncopy.html">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Embed Code (HTML iframe)</label>
+        <div class="code-container" id="embedCode">Generating embed code...</div>
+      </div>
+
+      <button class="copy-btn" id="copyBtn">
+        📋 Copy Embed Code
+      </button>
+    </div>
+
+    <!-- Live Preview Panel -->
+    <div class="panel">
+      <div class="preview-header">
+        <h2 class="panel-title">👁️ Live Preview</h2>
+        <span class="preview-badge">Updates Automatically</span>
+      </div>
+      
+      <div class="preview-frame-wrapper">
+        <iframe id="previewIframe" src="daily.html" width="100%" height="220"></iframe>
+      </div>
+
+      <div style="margin-top: auto; font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+        <strong style="color: #fff;">💡 How to use:</strong><br>
+        1. Customize the options on the left to match your website or LMS design.<br>
+        2. Copy the HTML code and paste it into <strong>Google Sites, Canvas, Moodle, WordPress, Notion</strong>, or any HTML embed box.<br>
+        3. Students will see a refreshed daily Python quest every single day!
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard! 🚀</div>
+
+  <script>
+    (function() {
+      const themeSelect = document.getElementById('themeSelect');
+      const layoutSelect = document.getElementById('layoutSelect');
+      const hideImgCheck = document.getElementById('hideImgCheck');
+      const widthInput = document.getElementById('widthInput');
+      const baseUrlInput = document.getElementById('baseUrlInput');
+      const embedCode = document.getElementById('embedCode');
+      const previewIframe = document.getElementById('previewIframe');
+      const copyBtn = document.getElementById('copyBtn');
+      const toast = document.getElementById('toast');
+
+      function updateWidget() {
+        const theme = themeSelect.value;
+        const layout = layoutSelect.value;
+        const hideImg = hideImgCheck.checked;
+        const width = widthInput.value.trim() || '100%';
+        const baseUrl = baseUrlInput.value.trim() || 'pythoncopy.html';
+
+        const params = new URLSearchParams();
+        if (theme !== 'auto') params.set('theme', theme);
+        if (layout === 'compact') params.set('compact', '1');
+        if (hideImg) params.set('hide_image', '1');
+        if (baseUrl !== 'pythoncopy.html') params.set('base_url', baseUrl);
+
+        const queryString = params.toString() ? '?' + params.toString() : '';
+        const widgetSrc = `daily.html${queryString}`;
+
+        const height = layout === 'compact' ? '160' : '220';
+
+        // Update iframe preview
+        previewIframe.src = widgetSrc;
+        previewIframe.style.width = width;
+        previewIframe.height = height;
+
+        // Generate embed HTML
+        const fullWidgetUrl = new URL(widgetSrc, window.location.href).href;
+        const htmlSnippet = `<iframe src="${fullWidgetUrl}" width="${width}" height="${height}" frameborder="0" style="border:none; border-radius:14px; overflow:hidden;" title="Daily Python Challenge"></iframe>`;
+
+        embedCode.textContent = htmlSnippet;
+      }
+
+      themeSelect.addEventListener('change', updateWidget);
+      layoutSelect.addEventListener('change', updateWidget);
+      hideImgCheck.addEventListener('change', updateWidget);
+      widthInput.addEventListener('input', updateWidget);
+      baseUrlInput.addEventListener('input', updateWidget);
+
+      copyBtn.addEventListener('click', function() {
+        const text = embedCode.textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 2500);
+        }).catch(err => {
+          alert('Failed to copy. Please select and copy manually.');
+        });
+      });
+
+      updateWidget();
+    })();
+  </script>
+</body>
+</html>

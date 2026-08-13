@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Python Challenge Widget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-card: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+      --border-card: rgba(59, 130, 246, 0.2);
+      --shadow-card: 0 4px 20px rgba(59, 130, 246, 0.06);
+      --text-title: #1e293b;
+      --text-desc: #475569;
+      --badge-bg: rgba(59, 130, 246, 0.1);
+      --badge-text: #2563eb;
+      --img-bg: #f1f5f9;
+      --view-all: #64748b;
+      --view-all-hover: #2563eb;
+    }
+
+    body.dark-theme {
+      --bg-card: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+      --border-card: rgba(96, 165, 250, 0.25);
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
+      --text-title: #f8fafc;
+      --text-desc: #cbd5e1;
+      --badge-bg: rgba(96, 165, 250, 0.18);
+      --badge-text: #60a5fa;
+      --img-bg: #1e293b;
+      --view-all: #94a3b8;
+      --view-all-hover: #60a5fa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: transparent;
+      padding: 10px;
+      color: var(--text-title);
+      overflow: hidden;
+    }
+
+    .daily-challenge-card {
+      padding: 20px 22px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .daily-challenge-card:hover {
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .daily-challenge-content {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .daily-challenge-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .daily-challenge-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .daily-challenge-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--badge-text);
+      background: var(--badge-bg);
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .spice-tag {
+      font-size: 14px;
+    }
+
+    .daily-challenge-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-title);
+      line-height: 1.3;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .daily-challenge-desc {
+      font-size: 13.5px;
+      color: var(--text-desc);
+      line-height: 1.5;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .daily-challenge-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .daily-challenge-btn {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .daily-challenge-btn:hover {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      box-shadow: 0 6px 18px rgba(59, 130, 246, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .daily-challenge-view-all {
+      font-size: 13px;
+      color: var(--view-all);
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .daily-challenge-view-all:hover {
+      color: var(--view-all-hover);
+    }
+
+    .daily-challenge-image-container {
+      flex: 0 0 110px;
+      width: 110px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      background: var(--img-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .daily-challenge-card:hover .daily-challenge-image-container {
+      transform: scale(1.04) rotate(1deg);
+    }
+
+    .daily-challenge-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Compact Layout */
+    body.compact-mode .daily-challenge-card {
+      padding: 14px 16px;
+    }
+    body.compact-mode .daily-challenge-image-container {
+      width: 80px;
+      height: 80px;
+      flex: 0 0 80px;
+    }
+    body.compact-mode .daily-challenge-title {
+      font-size: 16px;
+    }
+    body.compact-mode .daily-challenge-desc {
+      font-size: 12.5px;
+      margin-bottom: 12px;
+      -webkit-line-clamp: 1;
+    }
+    body.compact-mode .daily-challenge-btn {
+      padding: 8px 14px;
+      font-size: 12.5px;
+    }
+
+    @media (max-width: 480px) {
+      .daily-challenge-content {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+      .daily-challenge-image-container {
+        width: 100%;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="daily-challenge-card" id="dailyChallengeCard">
+    <div class="daily-challenge-content">
+      <div class="daily-challenge-text">
+        <div class="daily-challenge-header">
+          <span class="daily-challenge-badge">📅 Daily Coding Quest</span>
+          <span class="spice-tag" id="dailyChallengeSpice">🌶️</span>
+        </div>
+        <h4 class="daily-challenge-title" id="dailyChallengeTitle">Loading today's challenge...</h4>
+        <p class="daily-challenge-desc" id="dailyChallengeDesc">Please wait while today's python quest is fetched...</p>
+        <div class="daily-challenge-actions">
+          <a href="#" target="_blank" rel="noopener" class="daily-challenge-btn" id="dailyChallengeBtn">
+            Accept Challenge ⚡
+          </a>
+          <a href="challenge_list.html" target="_blank" rel="noopener" class="daily-challenge-view-all" id="dailyChallengeViewAll">
+            Explore All Quests
+          </a>
+        </div>
+      </div>
+      <div class="daily-challenge-image-container" id="dailyChallengeImgBox">
+        <img class="daily-challenge-image" src="challenge.png" alt="Daily Quest" onerror="this.parentNode.style.display='none'">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const themeParam = urlParams.get('theme');
+      const compactParam = urlParams.get('compact');
+      const hideImgParam = urlParams.get('hide_image');
+      const baseUrlParam = urlParams.get('base_url') || 'pythoncopy.html';
+      const jsonParam = urlParams.get('json') || 'challenges.json';
+      const viewAllParam = urlParams.get('view_all_url') || 'challenge_list.html';
+
+      // Theme handling
+      if (themeParam === 'dark' || (!themeParam && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.body.classList.add('dark-theme');
+      }
+
+      // Compact layout
+      if (compactParam === 'true' || compactParam === '1') {
+        document.body.classList.add('compact-mode');
+      }
+
+      // Hide image option
+      if (hideImgParam === 'true' || hideImgParam === '1') {
+        const imgBox = document.getElementById('dailyChallengeImgBox');
+        if (imgBox) imgBox.style.display = 'none';
+      }
+
+      // Update View All link
+      const viewAllEl = document.getElementById('dailyChallengeViewAll');
+      if (viewAllEl) viewAllEl.href = viewAllParam;
+
+      function getChallengeDescription(comment) {
+        return String(comment || '')
+          .split(/\n#\s*(?:input|output|end)\b/i)[0]
+          .replace(/^#\s*instructions:\s*/i, '')
+          .trim();
+      }
+
+      function getDayOfYear(date) {
+        const startOfYear = new Date(date.getFullYear(), 0, 1);
+        const difference = date - startOfYear;
+        const oneDay = 1000 * 60 * 60 * 24;
+        return Math.floor(difference / oneDay) + 1;
+      }
+
+      fetch(jsonParam)
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP error ' + res.status);
+          return res.json();
+        })
+        .then(challenges => {
+          if (!challenges || challenges.length === 0) return;
+
+          const today = new Date();
+          const dayOfYear = getDayOfYear(today);
+          const index = (dayOfYear - 1) % challenges.length;
+          const challenge = challenges[index];
+
+          const pythonCode = `# Challenge: ${challenge.title} (${challenge.spice})\n${challenge.comment}\n`;
+          const utf8Bytes = new TextEncoder().encode(pythonCode);
+          let binary = '';
+          for (let i = 0; i < utf8Bytes.length; i++) {
+            binary += String.fromCharCode(utf8Bytes[i]);
+          }
+          const base64 = btoa(binary);
+          const challengeUrl = `${baseUrlParam}?code=${encodeURIComponent(base64)}`;
+
+          const titleEl = document.getElementById('dailyChallengeTitle');
+          const spiceEl = document.getElementById('dailyChallengeSpice');
+          const descEl = document.getElementById('dailyChallengeDesc');
+          const btnEl = document.getElementById('dailyChallengeBtn');
+
+          if (titleEl) titleEl.textContent = challenge.title;
+          if (spiceEl) spiceEl.textContent = challenge.spice || '🌶️';
+          if (descEl) descEl.textContent = getChallengeDescription(challenge.comment);
+          if (btnEl) btnEl.href = challengeUrl;
+        })
+        .catch(err => {
+          console.error('Failed to initialize daily challenge widget:', err);
+          const titleEl = document.getElementById('dailyChallengeTitle');
+          if (titleEl) titleEl.textContent = 'Daily Python Challenge';
+          const descEl = document.getElementById('dailyChallengeDesc');
+          if (descEl) descEl.textContent = 'Explore our daily coding quests in the Python editor.';
+          const btnEl = document.getElementById('dailyChallengeBtn');
+          if (btnEl) btnEl.href = baseUrlParam;
+        });
+    })();
+  </script>
+</body>
+</html>
