@@ -144,6 +144,14 @@
         "desc": "Free, open-source, browser-based 3D spatial computing and block-based programming tool built on Blockly and Babylon.js. Bridges Scratch to 3D engines.",
         "tag": "KS2 / KS3",
         "isExternal": true
+      },
+      {
+        "title": "Emoji Dojo",
+        "emoji": "🥋",
+        "url": "https://learningkyodai.com/emoji-dojo",
+        "desc": "Interactive computational thinking and digital skills challenges designed for primary learners by Learning Kyodai.",
+        "tag": "EYFS / KS1 / KS2",
+        "isExternal": true
       }
     ]
   },
@@ -771,6 +779,14 @@
         "url": "https://www.youtube.com/@UnpluggedandUnlocked",
         "desc": "Educational computing video channel by Sethi De Clercq featuring tech tutorials, unplugged activities, and classroom guides.",
         "tag": "All ages",
+        "isExternal": true
+      },
+      {
+        "title": "Primary EdTech",
+        "emoji": "🖥️",
+        "url": "https://www.youtube.com/@PrimaryEdTech",
+        "desc": "YouTube channel with practical EdTech tutorials, primary computing guides, and classroom technology ideas.",
+        "tag": "EYFS / KS1 / KS2",
         "isExternal": true
       }
     ]
