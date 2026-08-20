@@ -2,7 +2,13 @@
 
 ## Notes
 
-This course is designed for A-level 9618-style algorithm work. The key teaching emphasis is not only that students can code the algorithms, but that they can explain why the worst-case Big O result follows from the algorithm's steps. Some pages are tutorials rather than test-heavy exercises, especially where turtle is used for visualisation.
+This course is designed for A-level 9618-style algorithm work. The key teaching emphasis is not only that students can code the algorithms, but that they can explain why the worst-case Big O result follows from the algorithm's steps.
+
+### Cambridge 9618 Exam "Middle Step" Guidance
+Exam markers look for a clear **middle step** connecting the algorithm's mechanism to its Big O notation:
+- **Linear Search $O(n)$**: Checks elements one by one. In the worst case, the target is at the very end or absent, requiring $n$ comparisons.
+- **Binary Search $O(\log n)$**: Repeatedly compares with the middle value and discards half the array. Halving an array of $n$ elements down to 1 element takes at most $\log_2(n)$ comparisons.
+- **Bubble Sort & Insertion Sort $O(n^2)$**: Require nested passes comparing/shifting elements, taking up to $n \times n$ comparisons/swaps in the worst case.
 
 ## Solutions
 
@@ -76,6 +82,12 @@ if found == False:
 print("linear worst case = n")
 print("binary worst case = log n")
 ```
+
+**Teacher Tip for Level 6:**
+Ensure students understand *why* binary search is `log n`:
+- Emphasize that dividing a list in half repeatedly is the mathematical inverse of doubling ($2^k = n \implies k = \log_2 n$).
+- Contrast $n = 1,000,000$ (linear: $1,000,000$ steps) vs (binary: ~20 steps) to highlight the power of $O(\log n)$.
+- Remind students that Binary Search **requires sorted data** to achieve this performance.
 
 ## Level 7: Bubble Sort: Compare Neighbours
 
