@@ -348,6 +348,14 @@
         "desc": "Find free and open-source alternatives to software applications to reduce software costs.",
         "tag": "All ages",
         "isExternal": true
+      },
+      {
+        "title": "AI Governance Framework",
+        "emoji": "🛡️",
+        "url": "https://aigovernance.ictevangelist.com/",
+        "desc": "AI governance framework and strategic guidance for schools and educational leaders by Mark Anderson (ICT Evangelist).",
+        "tag": "Teacher Tool",
+        "isExternal": true
       }
     ]
   }

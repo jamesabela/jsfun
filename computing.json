@@ -66,6 +66,14 @@
         "desc": "Organise the two-year IB DP Computer Science course, check timing pressure, topic order, and export planning documents. By Matt Elliot.",
         "tag": "Teacher Tool / A-Level",
         "isExternal": true
+      },
+      {
+        "title": "AI Governance Framework",
+        "emoji": "🛡️",
+        "url": "https://aigovernance.ictevangelist.com/",
+        "desc": "AI governance framework and strategic guidance for schools and educational leaders by Mark Anderson (ICT Evangelist).",
+        "tag": "Teacher Tool",
+        "isExternal": true
       }
     ]
   },
