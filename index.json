@@ -348,7 +348,13 @@
         "desc": "Find free and open-source alternatives to software applications to reduce software costs.",
         "tag": "All ages",
         "isExternal": true
-      },
+      }
+    ]
+  },
+  {
+    "category": "Policies",
+    "icon": "📜",
+    "tools": [
       {
         "title": "AI Governance Framework",
         "emoji": "🛡️",

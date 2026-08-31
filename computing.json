@@ -66,7 +66,13 @@
         "desc": "Organise the two-year IB DP Computer Science course, check timing pressure, topic order, and export planning documents. By Matt Elliot.",
         "tag": "Teacher Tool / A-Level",
         "isExternal": true
-      },
+      }
+    ]
+  },
+  {
+    "category": "Policies",
+    "icon": "📜",
+    "tools": [
       {
         "title": "AI Governance Framework",
         "emoji": "🛡️",
@@ -159,6 +165,14 @@
         "url": "https://learningkyodai.com/emoji-dojo",
         "desc": "Interactive computational thinking and digital skills challenges designed for primary learners by Learning Kyodai.",
         "tag": "EYFS / KS1 / KS2",
+        "isExternal": true
+      },
+      {
+        "title": "LOFI Robot Cardboard",
+        "emoji": "🤖",
+        "url": "https://cardboard.lofirobot.com/",
+        "desc": "Free robot designs and STEAM project ideas for education using cardboard, Micro:bit, and Arduino.",
+        "tag": "KS1 / KS2 / KS3",
         "isExternal": true
       }
     ]
