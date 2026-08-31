@@ -4,6 +4,7 @@
     let hasUnsavedChanges = false;
     let savedEditorCode = '';
     let pasteCount = 0;
+    let hasRunCurrentCode = false;
     let inputResolver = null;
     let pyodideReadyPromise = null;
     let pyodideInstance = null;
@@ -2427,6 +2428,10 @@ import sys, builtins
       const creativeNextBtn = document.getElementById('creativeNextButton');
       if (creativeNextBtn) {
         creativeNextBtn.addEventListener('click', () => {
+          if (!hasRunCurrentCode) {
+            alert("You must run your code at least once before proceeding to test it.");
+            return;
+          }
           if (currentQuizMetadata.nextUrl) {
             window.location.href = window.location.pathname + '?url=' + encodeURIComponent(currentQuizMetadata.nextUrl);
           }
@@ -2435,6 +2440,10 @@ import sys, builtins
       const creativeEndBtn = document.getElementById('creativeEndButton');
       if (creativeEndBtn) {
         creativeEndBtn.addEventListener('click', () => {
+          if (!hasRunCurrentCode) {
+            alert("You must run your code at least once before completing this course to test it.");
+            return;
+          }
           if (currentQuizMetadata.isEnd) {
             renderQuizResults([], 0, 0, null, true, currentQuizMetadata.courseTitle);
             const runnerLayout = document.getElementById('runnerLayout');
@@ -2461,6 +2470,7 @@ import sys, builtins
       });
 
       editor.addEventListener('input', () => {
+        hasRunCurrentCode = false;
         hasUnsavedChanges = editor.value !== savedEditorCode;
         const highlightLayer = document.getElementById('highlightLayer');
         if (highlightLayer) highlightLayer.innerHTML = '';
@@ -2474,6 +2484,7 @@ import sys, builtins
       });
 
       editor.addEventListener('paste', () => {
+        hasRunCurrentCode = false;
         incrementPasteCounter();
         recordPlaybackSnapshot('Paste', true, 'paste');
       });
@@ -4759,6 +4770,7 @@ json.dumps(_test_result)
       const analysis = classifyCode(source);
 
       executionCancelled = false;
+      hasRunCurrentCode = true;
       outputEl.textContent = '';
       hideConsoleInput();
 
