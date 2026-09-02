@@ -1,4 +1,4 @@
-const CACHE_NAME = 'python-code-lab-v35';
+const CACHE_NAME = 'python-code-lab-v36';
 const APP_SHELL = [
   './pythoncopy.html',
   './pythoncopy.css',
