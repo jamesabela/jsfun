@@ -4956,11 +4956,7 @@ json.dumps(_test_result)
             return val;
           } else {
             pendingPrompt = promptMsg;
-            if (promptMsg) {
-              outputEl.appendChild(document.createTextNode(promptMsg));
-              outputEl.scrollTop = outputEl.scrollHeight;
-            }
-            throw new Error("__INPUT_INTERRUPT__");
+            return null;
           }
         };
 
@@ -5003,17 +4999,16 @@ except Exception:
     pass
 
 def custom_run_input(prompt_msg=""):
-    try:
-        val = js.getRunInput(prompt_msg)
-        if prompt_msg:
-            sys.stdout.write(prompt_msg)
-        sys.stdout.write(val + "\\n")
-        sys.stdout.flush()
-        return val
-    except BaseException as e:
-        if "__INPUT_INTERRUPT__" in str(e):
-            raise InputInterrupt(prompt_msg)
-        raise e
+    val = js.getRunInput(prompt_msg)
+    if val is None:
+        raise InputInterrupt(prompt_msg)
+
+    val = str(val)
+    if prompt_msg:
+        sys.stdout.write(prompt_msg)
+    sys.stdout.write(val + "\\n")
+    sys.stdout.flush()
+    return val
 
 # Save original input/print/open if not saved
 if not hasattr(builtins, '_original_run_print'):
