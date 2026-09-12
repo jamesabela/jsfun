@@ -222,25 +222,61 @@
       white-space: nowrap;
     }
 
-    #editor,
+    .editor-container,
     #output {
       min-height: 0;
       flex: 1;
       width: 100%;
+    }
+
+    .editor-container {
+      position: relative;
+      background: var(--editor-bg);
+    }
+
+    #displayEditor,
+    #editor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 12px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      line-height: 1.45;
+      tab-size: 4;
+      border: 0;
+      outline: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    #displayEditor {
+      pointer-events: none;
+      z-index: 1;
+      background: transparent;
+      color: var(--text-color);
+      overflow: hidden;
+    }
+
+    #editor {
+      z-index: 2;
+      background: transparent;
+      color: transparent;
+      caret-color: var(--primary-color);
+      resize: none;
+      overflow: auto;
+    }
+
+    #output {
       border: 0;
       outline: 0;
       color: var(--text-color);
       font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
       line-height: 1.45;
       tab-size: 4;
-    }
-
-    #editor {
-      resize: none;
-      padding: 12px;
-      background: var(--editor-bg);
-      font-size: 16px;
-      caret-color: var(--primary-color);
     }
 
     #output {
@@ -345,6 +381,8 @@
     }
   </style>
   <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 </head>
 <body>
   <header>
@@ -385,8 +423,11 @@
           <button id="clearButton" type="button">Clear</button>
         </div>
       </div>
-      <textarea id="editor" spellcheck="false" autocapitalize="off" autocomplete="off"
-        placeholder="Write Python here...">print("Hello from PyMobile")</textarea>
+      <div class="editor-container">
+        <pre id="displayEditor" aria-hidden="true"><code class="language-python">print("Hello from PyMobile")</code></pre>
+        <textarea id="editor" spellcheck="false" autocapitalize="off" autocomplete="off"
+          placeholder="Write Python here...">print("Hello from PyMobile")</textarea>
+      </div>
     </section>
 
     <section class="output-section" aria-label="Output console">
@@ -400,6 +441,8 @@
 
   <script>
     const editor = document.getElementById('editor');
+    const displayEditor = document.getElementById('displayEditor');
+    const displayEditorCode = document.querySelector('#displayEditor code');
     const output = document.getElementById('output');
     const runnerStatus = document.getElementById('runnerStatus');
     const runButton = document.getElementById('runButton');
@@ -449,13 +492,15 @@
 
     function saveDraft() {
       localStorage.setItem('pymobileDraft', editor.value);
+      updateSyntaxHighlighting();
     }
 
     function loadDraft() {
-      const draft = localStorage.getItem('pymobileDraft');
-      if (draft !== null) {
-        editor.value = draft;
+      const saved = localStorage.getItem('pymobileDraft');
+      if (saved) {
+        editor.value = saved;
       }
+      updateSyntaxHighlighting();
     }
 
     async function copyCode() {
@@ -704,6 +749,25 @@
         editor.value = event.target.value;
         saveDraft();
         editor.focus();
+      }
+    });
+
+    function updateSyntaxHighlighting() {
+      if (!displayEditor || !displayEditorCode) return;
+      let text = editor.value;
+      if (text[text.length - 1] === '\n') {
+        text += ' ';
+      }
+      displayEditorCode.textContent = text;
+      if (typeof Prism !== 'undefined') {
+        Prism.highlightElement(displayEditorCode);
+      }
+    }
+
+    editor.addEventListener('scroll', () => {
+      if (displayEditor) {
+        displayEditor.scrollTop = editor.scrollTop;
+        displayEditor.scrollLeft = editor.scrollLeft;
       }
     });
 
