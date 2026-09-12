@@ -232,6 +232,14 @@
         "desc": "Visualise radioactive decay as repeated halving. See clear workings and visual models for iGCSE Physics.",
         "tag": "iGCSE",
         "isExternal": false
+      },
+      {
+        "title": "Sporty Periodic Table",
+        "emoji": "🏅",
+        "url": "https://sites.google.com/rafflesamericanschool.org/interactive-periodic-table/home",
+        "desc": "Interactive periodic table connecting chemical elements to sports gear, athletic analogies, and real-world facts. By Ken Morrison.",
+        "tag": "All ages",
+        "isExternal": true
       }
     ]
   },

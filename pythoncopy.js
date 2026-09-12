@@ -1294,7 +1294,10 @@ import sys, builtins
           if (turtleBadge) turtleBadge.style.display = 'inline-block';
 
           editor.style.display = 'block';
-          displayEditor.style.display = 'none';
+          displayEditor.style.display = 'block';
+
+          displayCode.textContent = editor.value;
+          Prism.highlightElement(displayCode);
 
           teacherControlsRow.style.display = 'flex';
           teachControlsRow.style.display = 'none';
@@ -1315,7 +1318,10 @@ import sys, builtins
           if (editBadge) editBadge.style.display = 'inline-block';
 
           editor.style.display = 'block';
-          displayEditor.style.display = 'none';
+          displayEditor.style.display = 'block';
+
+          displayCode.textContent = editor.value;
+          Prism.highlightElement(displayCode);
 
           teacherControlsRow.style.display = 'flex';
           teachControlsRow.style.display = 'none';
@@ -2475,6 +2481,10 @@ import sys, builtins
         const highlightLayer = document.getElementById('highlightLayer');
         if (highlightLayer) highlightLayer.innerHTML = '';
         updateLineNumbers();
+        if (currentAppMode === 'edit' || currentAppMode === 'turtle') {
+          displayCode.textContent = editor.value;
+          Prism.highlightElement(displayCode);
+        }
         analyseCodeAndUpdateMessage(true);
         updateBlocksButtonState();
         updateEditorActionButtons();
@@ -2703,12 +2713,19 @@ import sys, builtins
     function syncLineNumberScroll(event) {
       if (event && event.target) {
         const target = event.target;
-        if (target === editor) displayEditor.scrollTop = editor.scrollTop;
-        else if (target === displayEditor) editor.scrollTop = displayEditor.scrollTop;
+        if (target === editor) {
+          displayEditor.scrollTop = editor.scrollTop;
+          displayEditor.scrollLeft = editor.scrollLeft;
+        } else if (target === displayEditor) {
+          editor.scrollTop = displayEditor.scrollTop;
+          editor.scrollLeft = displayEditor.scrollLeft;
+        }
       }
       const scrollTop = currentAppMode === 'display' ? displayEditor.scrollTop : editor.scrollTop;
+      const scrollLeft = currentAppMode === 'display' ? displayEditor.scrollLeft : editor.scrollLeft;
       lineNumbers.scrollTop = scrollTop;
       highlightLayer.style.top = (14 - scrollTop) + 'px';
+      highlightLayer.style.left = (64 - scrollLeft) + 'px';
     }
 
     function toggleRunner() {

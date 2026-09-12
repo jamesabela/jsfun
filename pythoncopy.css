@@ -483,10 +483,15 @@
       border-color: #3f3f46;
     }
 
-    body.dark-theme #editor,
     body.dark-theme #displayEditor,
     body.dark-theme #displayEditor code {
       color: #e7e5e4;
+      background: transparent;
+    }
+
+    body.dark-theme #editor {
+      color: transparent;
+      caret-color: #e7e5e4;
       background: transparent;
     }
 
@@ -1277,7 +1282,7 @@
 
     #displayEditor {
       display: none;
-      width: auto;
+      width: 100%;
       height: 100%;
       padding: 14px;
       margin: 0;
@@ -1285,7 +1290,7 @@
       font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
       font-size: 16px;
       line-height: 24px;
-      overflow: auto;
+      overflow: hidden;
       white-space: pre;
       word-break: normal;
       background: transparent;
@@ -1294,7 +1299,8 @@
       left: 64px;
       right: 0;
       bottom: 0;
-      z-index: 2;
+      z-index: 1;
+      pointer-events: none;
     }
 
     #displayEditor code {
@@ -1343,7 +1349,8 @@
       font-size: 16px;
       line-height: 24px;
       background: transparent;
-      color: #0f172a;
+      color: transparent;
+      caret-color: #0f172a;
       outline: none;
       overflow: auto;
       white-space: pre;
