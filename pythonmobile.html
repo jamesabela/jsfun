@@ -21,6 +21,17 @@
       --run-color: #10b981;
       --error-color: #f87171;
       --radius: 8px;
+
+      /* Syntax Highlighting Dark Mode */
+      --syntax-keyword: #c678dd;
+      --syntax-string: #98c379;
+      --syntax-number: #d19a66;
+      --syntax-function: #61afef;
+      --syntax-comment: #8b949e;
+      --syntax-operator: #56b6c2;
+      --syntax-class: #e5c07b;
+      --syntax-punctuation: #94a3b8;
+      --syntax-text: #e2e8f0;
     }
 
     html[data-theme="light"] {
@@ -38,6 +49,17 @@
       --primary-color: #2563eb;
       --run-color: #059669;
       --error-color: #b91c1c;
+
+      /* Syntax Highlighting Light Mode */
+      --syntax-keyword: #a626a4;
+      --syntax-string: #16a34a;
+      --syntax-number: #d97706;
+      --syntax-function: #2563eb;
+      --syntax-comment: #64748b;
+      --syntax-operator: #0d9488;
+      --syntax-class: #ca8a04;
+      --syntax-punctuation: #475569;
+      --syntax-text: #1e293b;
     }
 
     * {
@@ -270,6 +292,56 @@
         grid-column: 1 / -1;
         grid-row: 2;
       }
+    }
+
+    /* Custom Syntax Highlighting Overrides for Prism.js */
+    code[class*="language-"] {
+      color: var(--syntax-text) !important;
+    }
+    .token.keyword,
+    .token.important,
+    .token.atrule {
+      color: var(--syntax-keyword) !important;
+    }
+    .token.string,
+    .token.char,
+    .token.attr-value,
+    .token.regex {
+      color: var(--syntax-string) !important;
+    }
+    .token.number,
+    .token.boolean {
+      color: var(--syntax-number) !important;
+    }
+    .token.function,
+    .token.builtin {
+      color: var(--syntax-function) !important;
+    }
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: var(--syntax-comment) !important;
+      font-style: italic;
+    }
+    .token.operator,
+    .token.entity,
+    .token.url {
+      color: var(--syntax-operator) !important;
+    }
+    .token.class-name,
+    .token.constant,
+    .token.property,
+    .token.symbol,
+    .token.deleted {
+      color: var(--syntax-class) !important;
+    }
+    .token.punctuation {
+      color: var(--syntax-punctuation) !important;
+    }
+    .token.variable,
+    .token.identifier {
+      color: var(--syntax-text) !important;
     }
   </style>
   <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
