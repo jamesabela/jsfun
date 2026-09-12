@@ -1,6 +1,7 @@
 {
   "name": "Python Code Lab",
   "short_name": "Code Lab",
+  "version": "4.15",
   "description": "Load, edit, run, trace, and build Python code with text or blocks.",
   "id": "./pythoncopy.html",
   "start_url": "./pythoncopy.html",
