@@ -7,6 +7,17 @@
       --teach-bg: #f0fdf4;
       --teach-accent: #10b981;
       --header-height: 64px;
+
+      /* Syntax Highlighting Light Mode */
+      --syntax-keyword: #a626a4; /* Purple */
+      --syntax-string: #16a34a; /* Green */
+      --syntax-number: #d97706; /* Orange */
+      --syntax-function: #2563eb; /* Blue */
+      --syntax-comment: #64748b; /* Grey */
+      --syntax-operator: #0d9488; /* Cyan/Teal */
+      --syntax-class: #ca8a04; /* Gold/Yellow */
+      --syntax-punctuation: #475569; /* Neutral grey */
+      --syntax-text: #1e293b; /* Dark text */
     }
 
     * {
@@ -208,6 +219,17 @@
     body.dark-theme {
       background: #151515 !important;
       color: #f4f4f5;
+
+      /* Syntax Highlighting Dark Mode */
+      --syntax-keyword: #c678dd; /* Purple */
+      --syntax-string: #98c379; /* Green */
+      --syntax-number: #d19a66; /* Orange */
+      --syntax-function: #61afef; /* Blue */
+      --syntax-comment: #8b949e; /* Grey */
+      --syntax-operator: #56b6c2; /* Cyan/Teal */
+      --syntax-class: #e5c07b; /* Gold/Yellow */
+      --syntax-punctuation: #94a3b8; /* Neutral grey */
+      --syntax-text: #e2e8f0; /* Light text */
     }
 
     body.dark-theme.display-mode-active {
@@ -3579,4 +3601,63 @@
 
     body.dark-theme .course-button-desc {
       color: #a1a1aa;
+    }
+
+    /* Custom Syntax Highlighting Overrides for Prism.js */
+    code[class*="language-"] {
+      color: var(--syntax-text) !important;
+    }
+
+    .token.keyword,
+    .token.important,
+    .token.atrule {
+      color: var(--syntax-keyword) !important;
+    }
+
+    .token.string,
+    .token.char,
+    .token.attr-value,
+    .token.regex {
+      color: var(--syntax-string) !important;
+    }
+
+    .token.number,
+    .token.boolean {
+      color: var(--syntax-number) !important;
+    }
+
+    .token.function,
+    .token.builtin {
+      color: var(--syntax-function) !important;
+    }
+
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: var(--syntax-comment) !important;
+      font-style: italic;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url {
+      color: var(--syntax-operator) !important;
+    }
+
+    .token.class-name,
+    .token.constant,
+    .token.property,
+    .token.symbol,
+    .token.deleted {
+      color: var(--syntax-class) !important;
+    }
+
+    .token.punctuation {
+      color: var(--syntax-punctuation) !important;
+    }
+
+    .token.variable,
+    .token.identifier {
+      color: var(--syntax-text) !important;
     }
