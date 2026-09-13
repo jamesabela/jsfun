@@ -326,6 +326,39 @@
             border-color: rgba(43, 178, 122, .72);
         }
 
+        .level-card.recommended {
+            border-color: #f3bb44;
+            box-shadow: 0 12px 28px rgba(242, 184, 65, .2);
+        }
+
+        .level-card.recommended::before {
+            background: linear-gradient(#ffd75c, #f49a3e);
+            opacity: 1;
+        }
+
+        .quest-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+            margin: 0 0 .75rem;
+        }
+
+        .quest-tag, .next-quest-tag, .world-badge {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            border-radius: 999px;
+            font-size: .64rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .quest-tag { padding: .38rem .55rem; color: #4c718d; background: #e7f5fc; border: 1px solid #c7e6f3; }
+        .next-quest-tag { padding: .38rem .55rem; color: #8c5810; background: #fff3bd; border: 1px solid #f5cd61; }
+        .world-badge { margin-top: .65rem; padding: .42rem .65rem; color: #fff4bf; background: rgba(125, 91, 9, .68); border: 1px solid rgba(255, 226, 121, .5); }
+
         .star-badge {
             background: linear-gradient(135deg, #fcd34d, #f59e0b);
             -webkit-background-clip: text;
@@ -392,8 +425,12 @@
                 alt="Byte, the Code Quest robot guide, holding a glowing puzzle piece">
         </section>
 
-        <div class="flex justify-end items-center gap-3 mb-6">
-            <a id="classroomShareBtn" href="#" target="_blank"
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+            <a href="reorder.html?edit=1" class="self-start inline-flex items-center gap-2 px-1 py-2 text-sm font-bold text-[#315f8a] hover:text-[#087c5a] transition-colors">
+                <span aria-hidden="true">✦</span> Make your own Parsons problem <span aria-hidden="true">→</span>
+            </a>
+            <div class="flex items-center self-end gap-3">
+                <a id="classroomShareBtn" href="#" target="_blank"
                 class="share-btn flex items-center gap-2 px-4 py-2 bg-[#00875F]/15 hover:bg-[#00875F]/25 border border-[#00875F]/40 text-[#087c5a] font-semibold rounded-lg text-sm">
                 <svg class="share-icon" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" /><path d="M22 12c.31-.17.65-.28 1-.32V9l-11-6-11 6 11 6 4-2.18c0-.28.05-.55.15-.81L12 15 3.4 10.3 12 5.6l8.6 4.7-2.6 1.42c.8.3 1.5.8 2 1.48L22 12z" /><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2" /></svg>
                 Classroom
@@ -403,6 +440,7 @@
                 <svg class="share-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" /></svg>
                 Teams
             </a>
+            </div>
         </div>
 
         <section
@@ -538,6 +576,7 @@
             const container = document.getElementById('campaign-container');
             container.innerHTML = '';
             const worlds = {};
+            const recommendedLevel = levels.find(level => parseInt(localStorage.getItem('parsons_stars_' + level.id) || '0') === 0) || levels[levels.length - 1];
 
             let totalStars = 0;
             const maxStars = levels.length * 3;
@@ -562,6 +601,7 @@
                         <div class="world-label">${info.icon} ${worldName.startsWith('A Level') ? '9618 A Level questline' : 'iGCSE campaign region'}</div>
                         <h3 class="world-title">${worldName.replace(/^(?:World|A Level) \d+: /, '')}</h3>
                         <p class="world-subtitle">${info.tagline}</p>
+                        ${completedQuests === worldLevels.length ? '<span class="world-badge">🏅 Region cleared</span>' : ''}
                     </div>
                     <div class="world-progress">${completedQuests} / ${worldLevels.length} quests cleared</div>`;
                 wDiv.appendChild(banner);
@@ -584,7 +624,8 @@
                     card.href = url;
 
                     const isCompleted = stars > 0;
-                    card.className = `level-card glass-panel rounded-2xl p-5 cursor-pointer flex flex-col group relative overflow-hidden ${isCompleted ? 'completed' : ''}`;
+                    const isRecommended = lvl.id === recommendedLevel.id;
+                    card.className = `level-card glass-panel rounded-2xl p-5 cursor-pointer flex flex-col group relative overflow-hidden ${isCompleted ? 'completed' : ''} ${isRecommended ? 'recommended' : ''}`;
 
                     const headerRow = document.createElement('div');
                     headerRow.className = 'flex justify-between items-start mb-4';
@@ -603,6 +644,19 @@
 
                     headerRow.appendChild(numBadge);
                     headerRow.appendChild(starsDiv);
+
+                    const meta = document.createElement('div');
+                    meta.className = 'quest-meta';
+                    const difficulty = document.createElement('span');
+                    difficulty.className = 'quest-tag';
+                    difficulty.innerText = getDifficulty(lvl.id);
+                    meta.appendChild(difficulty);
+                    if (isRecommended) {
+                        const nextTag = document.createElement('span');
+                        nextTag.className = 'next-quest-tag';
+                        nextTag.innerText = '★ Recommended next';
+                        meta.appendChild(nextTag);
+                    }
 
                     const title = document.createElement('div');
                     title.className = `font-bold text-lg mb-4 flex-grow ${isCompleted ? 'text-emerald-300' : 'text-slate-200'}`;
@@ -623,6 +677,7 @@
                     footerRow.appendChild(playIcon);
 
                     card.appendChild(headerRow);
+                    card.appendChild(meta);
                     card.appendChild(title);
                     card.appendChild(footerRow);
                     grid.appendChild(card);
@@ -636,6 +691,15 @@
             document.getElementById('progress-text').innerText = `${totalStars} / ${maxStars}`;
             document.getElementById('progress-detail').innerText = `${completedCount} of ${levels.length} quests completed`;
             document.getElementById('progress-fill').style.width = `${(totalStars / maxStars) * 100}%`;
+        }
+
+        function getDifficulty(levelId) {
+            if (levelId <= 9) return 'Starter';
+            if (levelId <= 22) return 'Explorer';
+            if (levelId <= 30) return 'Expert';
+            if (levelId <= 38) return 'A Level core';
+            if (levelId <= 48) return 'A Level advanced';
+            return 'A Level challenge';
         }
 
         function clearProgress() {

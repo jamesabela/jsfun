@@ -380,6 +380,9 @@
                 </div>
                 
                 <div class="flex items-center gap-3">
+                    <a href="parsonsgame.html" class="px-4 py-2 text-sm font-600 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-all">
+                        ← All challenges
+                    </a>
                     <button onclick="toggleEditor()" id="edit-btn" class="px-4 py-2 text-sm font-600 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-all flex items-center gap-2">
                         <span id="edit-icon">✏️</span> <span id="edit-text">Edit Content</span>
                     </button>
@@ -460,9 +463,14 @@
 
             <div class="pt-8 flex flex-col items-center gap-4">
                 <div id="feedback" class="h-8 text-lg font-bold transition-all duration-300"></div>
-                <button onclick="checkOrder()" class="px-12 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-800 rounded-2xl shadow-xl shadow-emerald-600/20 transition-all transform active:scale-95 flex items-center gap-2">
-                    ✅ Check My Order
-                </button>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button onclick="showHint()" class="px-5 py-3 bg-amber-100 hover:bg-amber-200 text-amber-900 font-800 rounded-2xl border border-amber-300 transition-all transform active:scale-95">
+                        💡 Hint (-75 pts)
+                    </button>
+                    <button onclick="checkOrder()" class="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-800 rounded-2xl shadow-xl shadow-emerald-600/20 transition-all transform active:scale-95 flex items-center gap-2">
+                        ✅ Check My Order (-100 pts)
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -487,6 +495,7 @@
             timeElapsed: 0,
             incorrectChecks: 0,
             checkCount: 0,
+            hintCount: 0,
             isSolved: false,
             campaignLevel: null
         };
@@ -494,6 +503,7 @@
         const BONUS_WINDOW_SECONDS = 5 * 60;
         const BASE_COMPLETION_POINTS = 300;
         const CHECK_COST_POINTS = 100;
+        const HINT_COST_POINTS = 75;
         const BONUS_TIERS = [
             { until: 30, points: 1000 },
             { until: 60, points: 850 },
@@ -513,7 +523,7 @@
         }
 
         function calculateScore() {
-            return Math.max(0, BASE_COMPLETION_POINTS + getTimeBonus() - (state.checkCount * CHECK_COST_POINTS));
+            return Math.max(0, BASE_COMPLETION_POINTS + getTimeBonus() - (state.checkCount * CHECK_COST_POINTS) - (state.hintCount * HINT_COST_POINTS));
         }
 
         function getStars(score) {
@@ -558,6 +568,7 @@
             state.timeElapsed = 0;
             state.incorrectChecks = 0;
             state.checkCount = 0;
+            state.hintCount = 0;
             state.isSolved = false;
             const display = document.getElementById('timerDisplay');
             if (display) {
@@ -664,7 +675,7 @@
             
             state.currentOrder.forEach((item, index) => {
                 const el = document.createElement('div');
-                el.className = "line-item p-4 md:px-6 bg-white border-2 border-slate-200 rounded-2xl cursor-grab font-mono text-sm shadow-sm flex items-center gap-4 group";
+                el.className = "line-item p-3 md:p-4 md:px-6 bg-white border-2 border-slate-200 rounded-2xl cursor-grab font-mono text-sm shadow-sm flex items-center gap-3 group";
                 el.innerHTML = `
                     <div class="flex flex-col gap-1 opacity-20 group-hover:opacity-100 transition-opacity flex-shrink-0">
                         <div class="w-4 h-0.5 bg-slate-400"></div>
@@ -817,6 +828,31 @@
             state.currentOrder = items.map(el => {
                 return state.originalOrder.find(o => o.id == el.dataset.id);
             });
+        }
+
+        function showHint() {
+            if (state.isSolved) return;
+            startTimer();
+            state.hintCount++;
+            const items = document.querySelectorAll('.line-item');
+            let hint = 'Try comparing the first few blocks with the intended flow.';
+
+            for (let i = 0; i < items.length; i++) {
+                const expected = state.originalOrder[i];
+                if (expected.id != items[i].dataset.id) {
+                    hint = `Position ${i + 1} should contain: ${expected.text}`;
+                    break;
+                }
+                if (expected.correctIndent != items[i].dataset.indent) {
+                    hint = `Position ${i + 1} needs indentation level ${expected.correctIndent}.`;
+                    break;
+                }
+            }
+
+            updateTimerDisplay();
+            const feedback = document.getElementById('feedback');
+            feedback.innerText = `Hint (-${HINT_COST_POINTS} pts): ${hint}`;
+            feedback.className = 'text-amber-700 font-bold h-8';
         }
 
         function checkOrder() {

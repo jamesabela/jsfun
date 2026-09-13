@@ -36,6 +36,14 @@
         "isExternal": false
       },
       {
+        "title": "Parsons Algorithms Quest",
+        "emoji": "🗺️",
+        "url": "https://jamesabela.github.io/jsfun/parsonsgame.html",
+        "desc": "A 52-quest Parsons campaign for iGCSE and 9618 A Level algorithms. Reorder Python, earn stars, and unlock new regions.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": false
+      },
+      {
         "title": "Python List Maker",
         "emoji": "📋",
         "url": "to_list.html",
