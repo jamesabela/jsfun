@@ -6,10 +6,37 @@
     <title>Reorder Tool (Parsons Problem) — jsfun by James Abela</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #3b82f6;
+
+            /* Syntax Highlighting Light Mode */
+            --syntax-keyword: #a626a4;
+            --syntax-string: #16a34a;
+            --syntax-number: #d97706;
+            --syntax-function: #2563eb;
+            --syntax-comment: #64748b;
+            --syntax-operator: #0d9488;
+            --syntax-class: #ca8a04;
+            --syntax-punctuation: #475569;
+            --syntax-text: #1e293b;
+        }
+
+        body.dark-theme {
+            /* Syntax Highlighting Dark Mode */
+            --syntax-keyword: #c678dd;
+            --syntax-string: #98c379;
+            --syntax-number: #d19a66;
+            --syntax-function: #61afef;
+            --syntax-comment: #8b949e;
+            --syntax-operator: #56b6c2;
+            --syntax-class: #e5c07b;
+            --syntax-punctuation: #94a3b8;
+            --syntax-text: #e2e8f0;
         }
 
         body {
@@ -29,6 +56,23 @@
             transform: scale(1.02);
         }
 
+        /* Indent Guides */
+        #item-list {
+            /* Create vertical grid lines every 30px to indicate indentation levels */
+            background-image: repeating-linear-gradient(to right, transparent, transparent 29px, #e2e8f0 29px, #e2e8f0 30px);
+            background-position: 0 0;
+            border-radius: 1rem;
+            min-height: 100px;
+        }
+        body.dark-theme #item-list {
+            background-image: repeating-linear-gradient(to right, transparent, transparent 29px, #3f3f46 29px, #3f3f46 30px);
+        }
+
+        /* Timer UI */
+        #timerDisplay {
+            font-variant-numeric: tabular-nums;
+        }
+
         /* Feedback States - Light Mode */
         .line-item.correct { border-color: #10b981 !important; background-color: #ecfdf5 !important; color: #065f46 !important; }
         .line-item.incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
@@ -38,6 +82,23 @@
         body.dark-theme .line-item.correct { border-color: #059669 !important; background-color: #064e3b !important; color: #a7f3d0 !important; }
         body.dark-theme .line-item.incorrect { border-color: #dc2626 !important; background-color: #7f1d1d !important; color: #fca5a5 !important; }
         body.dark-theme .line-item.highlight { background-color: #0c4a6e !important; border-color: #0284c7 !important; color: #bae6fd !important; }
+
+        /* Custom Syntax Highlighting Overrides for Prism.js */
+        code[class*="language-"] {
+            color: var(--syntax-text) !important;
+            text-shadow: none !important;
+            background: none !important;
+            font-family: inherit !important;
+        }
+        .token.keyword, .token.important, .token.atrule { color: var(--syntax-keyword) !important; }
+        .token.string, .token.char, .token.attr-value, .token.regex { color: var(--syntax-string) !important; }
+        .token.number, .token.boolean { color: var(--syntax-number) !important; }
+        .token.function, .token.builtin { color: var(--syntax-function) !important; }
+        .token.comment, .token.prolog, .token.doctype, .token.cdata { color: var(--syntax-comment) !important; font-style: italic; }
+        .token.operator, .token.entity, .token.url { color: var(--syntax-operator) !important; }
+        .token.class-name, .token.constant, .token.property, .token.symbol, .token.deleted { color: var(--syntax-class) !important; }
+        .token.punctuation { color: var(--syntax-punctuation) !important; }
+        .token.variable, .token.identifier { color: var(--syntax-text) !important; }
 
         /* Dark Theme overrides */
         body.dark-theme {
@@ -356,7 +417,18 @@
             </div>
             
             <div class="flex items-center justify-between pt-6 border-t border-slate-100 flex-wrap gap-4">
-                <div></div>
+                <div class="flex flex-col gap-3 text-sm font-600 text-slate-700">
+                    <div class="flex items-center gap-4">
+                        <span class="w-20">Difficulty:</span>
+                        <label class="cursor-pointer flex items-center gap-2"><input type="radio" id="mode-1d" name="puzzleMode" value="1D"> Beginner</label>
+                        <label class="cursor-pointer flex items-center gap-2"><input type="radio" id="mode-2d" name="puzzleMode" value="2D" checked> Intermediate</label>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="w-20">Syntax:</span>
+                        <label class="cursor-pointer flex items-center gap-2"><input type="radio" id="syntax-on" name="puzzleSyntax" value="ON" checked> On</label>
+                        <label class="cursor-pointer flex items-center gap-2"><input type="radio" id="syntax-off" name="puzzleSyntax" value="OFF"> Off</label>
+                    </div>
+                </div>
                 <button onclick="generatePuzzle()" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 transition-all transform active:scale-95">
                     Generate Puzzle
                 </button>
@@ -377,8 +449,9 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
-                <div class="text-sm text-slate-500 font-600 italic">Drag blocks into the correct logical order:</div>
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-100">
+                <div id="instruction-text" class="text-sm text-slate-500 font-600 italic">Drag blocks up/down to reorder, left/right to indent. Your 5-minute bonus starts on the first move and drops every 30 seconds.</div>
+                <div id="timerDisplay" class="self-end sm:self-auto flex-none whitespace-nowrap text-base md:text-lg font-bold text-slate-700 bg-slate-100 px-4 py-1 rounded-full shadow-inner">⏱️ 05:00 | ✦ +1000 | 🏆 1300 pts</div>
             </div>
 
             <div id="item-list" class="relative space-y-2 select-none">
@@ -405,8 +478,93 @@
         let state = {
             originalOrder: [],
             currentOrder: [],
-            isEditing: true
+            isEditing: true,
+            mode: '2D',
+            syntaxHighlight: true,
+            timerInterval: null,
+            startTime: null,
+            isTimerRunning: false,
+            timeElapsed: 0,
+            incorrectChecks: 0,
+            checkCount: 0,
+            isSolved: false,
+            campaignLevel: null
         };
+
+        const BONUS_WINDOW_SECONDS = 5 * 60;
+        const BASE_COMPLETION_POINTS = 300;
+        const CHECK_COST_POINTS = 100;
+        const BONUS_TIERS = [
+            { until: 30, points: 1000 },
+            { until: 60, points: 850 },
+            { until: 90, points: 700 },
+            { until: 120, points: 550 },
+            { until: 150, points: 400 },
+            { until: 180, points: 300 },
+            { until: 210, points: 220 },
+            { until: 240, points: 150 },
+            { until: 270, points: 100 },
+            { until: 300, points: 50 }
+        ];
+
+        function getTimeBonus() {
+            const tier = BONUS_TIERS.find(({ until }) => state.timeElapsed <= until);
+            return tier ? tier.points : 0;
+        }
+
+        function calculateScore() {
+            return Math.max(0, BASE_COMPLETION_POINTS + getTimeBonus() - (state.checkCount * CHECK_COST_POINTS));
+        }
+
+        function getStars(score) {
+            if (score >= 900) return 3;
+            if (score >= 500) return 2;
+            return 1;
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateTimerDisplay() {
+            const display = document.getElementById('timerDisplay');
+            if (!display) return;
+            const bonusTime = Math.max(0, BONUS_WINDOW_SECONDS - state.timeElapsed);
+            const timerLabel = bonusTime > 0 ? `⏱️ ${formatTime(bonusTime)}` : '⏱️ Bonus ended';
+            display.innerText = `${timerLabel} | ✦ +${getTimeBonus()} | 🏆 ${calculateScore()} pts`;
+        }
+
+        function startTimer() {
+            if (state.isTimerRunning) return;
+            const display = document.getElementById('timerDisplay');
+            display.classList.remove('hidden');
+            state.isTimerRunning = true;
+            state.startTime = Date.now() - (state.timeElapsed * 1000);
+            state.timerInterval = setInterval(() => {
+                state.timeElapsed = Math.floor((Date.now() - state.startTime) / 1000);
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            state.isTimerRunning = false;
+            clearInterval(state.timerInterval);
+        }
+
+        function resetTimer() {
+            stopTimer();
+            state.timeElapsed = 0;
+            state.incorrectChecks = 0;
+            state.checkCount = 0;
+            state.isSolved = false;
+            const display = document.getElementById('timerDisplay');
+            if (display) {
+                display.classList.remove('hidden');
+                updateTimerDisplay();
+            }
+        }
 
         function encode(s) { return btoa(unescape(encodeURIComponent(s))); }
         function decode(s) { try { return decodeURIComponent(escape(atob(s))); } catch(e) { return "" } }
@@ -428,16 +586,65 @@
             }
         }
 
+        function stripInlineComments(line) {
+            let inString = false;
+            let stringChar = '';
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if ((char === '"' || char === "'") && line[i-1] !== '\\') {
+                    if (!inString) {
+                        inString = true;
+                        stringChar = char;
+                    } else if (stringChar === char) {
+                        inString = false;
+                    }
+                } else if (char === '#' && !inString) {
+                    // Stop at the comment, but preserve the string up to this point
+                    // We don't trim right away to preserve leading indentation
+                    return line.substring(0, i).replace(/\s+$/, ''); // Just trim trailing space
+                }
+            }
+            return line.replace(/\s+$/, '');
+        }
+
         function generatePuzzle(data = null) {
             const raw = data || document.getElementById('code-input').value.trim();
             if (!raw) return;
+            
+            if (!data) { // Only read from UI if generating from UI
+                const is1D = document.getElementById('mode-1d').checked;
+                state.mode = is1D ? '1D' : '2D';
+                const isSyntaxOn = document.getElementById('syntax-on').checked;
+                state.syntaxHighlight = isSyntaxOn;
+            }
 
-            const lines = raw.split('\n').filter(l => l.trim() !== '');
-            state.originalOrder = lines.map((text, i) => ({ text, id: i }));
+            const instructionText = document.getElementById('instruction-text');
+            if (instructionText) {
+                instructionText.innerText = state.mode === '1D' 
+                    ? "Drag blocks up/down to reorder. Your 5-minute bonus starts on the first move and drops every 30 seconds."
+                    : "Drag blocks up/down to reorder, left/right to indent. Your 5-minute bonus starts on the first move and drops every 30 seconds.";
+            }
+
+            const lines = raw.split('\n')
+                .map(l => stripInlineComments(l))
+                .filter(l => l.trim() !== '');
+                
+            state.originalOrder = lines.map((rawText, i) => {
+                const match = rawText.match(/^\s*/);
+                // Calculate indent assuming 4 spaces = 1 indent level. Let's use 30px per 4 spaces or 1 tab.
+                const spaceCount = match ? match[0].replace(/\t/g, '    ').length : 0;
+                const correctIndent = Math.round(spaceCount / 4);
+                return { 
+                    text: rawText.trim(), // Remove leading whitespace for the block display
+                    id: i,
+                    correctIndent 
+                };
+            });
             
             // Shuffle
             state.currentOrder = [...state.originalOrder].sort(() => Math.random() - 0.5);
             
+            resetTimer();
             renderList();
             
             document.getElementById('empty-state').classList.add('hidden');
@@ -464,10 +671,24 @@
                         <div class="w-4 h-0.5 bg-slate-400"></div>
                         <div class="w-4 h-0.5 bg-slate-400"></div>
                     </div>
-                    <span class="whitespace-pre-wrap break-words flex-grow">${item.text}</span>
+                    <code class="code-container language-python whitespace-pre-wrap break-words flex-grow"></code>
                 `;
+                const codeSpan = el.querySelector('.code-container');
+                codeSpan.textContent = item.text;
+                if (state.syntaxHighlight && typeof Prism !== 'undefined') {
+                    Prism.highlightElement(codeSpan);
+                }
                 el.dataset.id = item.id;
                 el.dataset.index = index;
+                
+                if (state.mode === '1D') {
+                    el.dataset.indent = item.correctIndent;
+                    el.style.marginLeft = (item.correctIndent * 30) + 'px';
+                } else {
+                    el.dataset.indent = 0; // Starts unindented in 2D mode
+                    el.style.marginLeft = '0px';
+                }
+                
                 el.style.fontSize = document.getElementById('fontSizeRange').value + 'px';
                 
                 setupDrag(el);
@@ -490,14 +711,18 @@
 
         function setupDrag(el) {
             let isDragging = false;
-            let startY, initialRect;
+            let startY, startX, initialRect, initialIndent;
             let placeholder = null;
 
             el.onpointerdown = (e) => {
                 if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
                 isDragging = true;
                 startY = e.clientY;
+                startX = e.clientX;
                 initialRect = el.getBoundingClientRect();
+                initialIndent = parseInt(el.dataset.indent || 0);
+
+                startTimer(); // Start timer on first interaction
                 
                 // Clear any existing highlights/feedback
                 document.getElementById('feedback').innerText = "";
@@ -523,8 +748,13 @@
                 if (!isDragging) return;
                 
                 const deltaY = e.clientY - startY;
-                el.style.transform = `translateY(${deltaY}px)`;
+                const deltaX = state.mode === '1D' ? 0 : (e.clientX - startX);
+                
+                el.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
+                // Calculate indent snap
+                const tempIndent = state.mode === '1D' ? initialIndent : Math.max(0, initialIndent + Math.round(deltaX / 30));
+                
                 const elRect = el.getBoundingClientRect();
                 const elCenter = elRect.top + elRect.height / 2;
                 
@@ -545,6 +775,11 @@
                         parent.insertBefore(placeholder, neighbor.nextSibling);
                     }
                 }
+                
+                // Snap placeholder horizontally
+                if (placeholder) {
+                    placeholder.style.marginLeft = (tempIndent * 30) + 'px';
+                }
             };
 
             el.onpointerup = (e) => {
@@ -553,6 +788,11 @@
                 
                 el.classList.remove('dragging');
                 el.releasePointerCapture(e.pointerId);
+
+                const deltaX = state.mode === '1D' ? 0 : (e.clientX - startX);
+                const finalIndent = state.mode === '1D' ? initialIndent : Math.max(0, initialIndent + Math.round(deltaX / 30));
+                el.dataset.indent = finalIndent;
+                el.style.marginLeft = (finalIndent * 30) + 'px';
 
                 // Finalize position: move el to where placeholder is
                 if (placeholder && placeholder.parentNode) {
@@ -580,11 +820,17 @@
         }
 
         function checkOrder() {
+            if (state.isSolved) return;
+            state.checkCount++;
             let correct = 0;
             const items = document.querySelectorAll('.line-item');
             
             items.forEach((item, i) => {
-                const isCorrect = state.originalOrder[i].id == item.dataset.id;
+                const isOrderCorrect = state.originalOrder[i].id == item.dataset.id;
+                const isIndentCorrect = state.originalOrder[i].correctIndent == item.dataset.indent;
+                
+                const isCorrect = isOrderCorrect && isIndentCorrect;
+                
                 if (isCorrect) {
                     correct++;
                     item.classList.add('correct');
@@ -595,11 +841,56 @@
 
             const f = document.getElementById('feedback');
             if (correct === state.originalOrder.length) {
-                f.innerText = "Perfect! The logic is sound. 🚀";
+                stopTimer();
+                state.isSolved = true;
+                const finalScore = calculateScore();
+                const stars = getStars(finalScore);
+                const starStr = '⭐'.repeat(stars);
+                
+                f.innerText = `Perfect! The logic is sound. ${starStr} (${finalScore} pts)`;
                 f.className = "text-emerald-600 font-bold h-8 animate-bounce";
+                
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#3b82f6', '#10b981', '#f59e0b', '#ec4899']
+                    });
+                }
+
+                if (state.campaignLevel) {
+                    localStorage.setItem('parsons_stars_' + state.campaignLevel, stars);
+                    
+                    const bestTimeKey = 'parsons_time_' + state.campaignLevel;
+                    const prevBest = localStorage.getItem(bestTimeKey);
+                    if (!prevBest || state.timeElapsed < parseInt(prevBest)) {
+                        localStorage.setItem(bestTimeKey, state.timeElapsed);
+                    }
+
+                    // Add "Back to Campaign" button
+                    let backBtn = document.getElementById('back-to-campaign');
+                    if (!backBtn) {
+                        backBtn = document.createElement('a');
+                        backBtn.id = 'back-to-campaign';
+                        backBtn.href = 'parsonsgame.html';
+                        backBtn.className = "mt-4 px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all text-center block max-w-xs mx-auto";
+                        backBtn.innerText = "⬅️ Back to Campaign";
+                        f.parentElement.appendChild(backBtn);
+                    }
+                }
             } else {
-                f.innerText = "Not quite. Check the sequence again.";
-                f.className = "text-slate-500 font-bold h-8";
+                state.incorrectChecks++;
+                const currentScore = calculateScore();
+                const timerDisplay = document.getElementById('timerDisplay');
+                if (timerDisplay) {
+                    updateTimerDisplay();
+                    timerDisplay.classList.add('text-red-500');
+                    setTimeout(() => timerDisplay.classList.remove('text-red-500'), 500);
+                }
+
+                f.innerText = `Not quite! This check cost ${CHECK_COST_POINTS} pts. Check the sequence and indentation again.`;
+                f.className = "text-red-500 font-bold h-8";
             }
         }
 
@@ -610,6 +901,8 @@
         function updateUrl(raw) {
             const url = new URL(window.location);
             url.searchParams.set('data', encode(raw));
+            url.searchParams.set('mode', state.mode);
+            url.searchParams.set('syntax', state.syntaxHighlight ? 'on' : 'off');
             window.history.replaceState({}, '', url);
         }
 
@@ -890,6 +1183,31 @@
                 .catch(err => console.error('Error loading iGCSE algorithms:', err));
 
             if (data) {
+                const urlMode = params.get('mode');
+                if (urlMode) {
+                    state.mode = urlMode;
+                    if (urlMode === '1D' && document.getElementById('mode-1d')) {
+                        document.getElementById('mode-1d').checked = true;
+                    } else if (urlMode === '2D' && document.getElementById('mode-2d')) {
+                        document.getElementById('mode-2d').checked = true;
+                    }
+                }
+
+                const urlSyntax = params.get('syntax');
+                if (urlSyntax) {
+                    state.syntaxHighlight = (urlSyntax === 'on');
+                    if (state.syntaxHighlight && document.getElementById('syntax-on')) {
+                        document.getElementById('syntax-on').checked = true;
+                    } else if (!state.syntaxHighlight && document.getElementById('syntax-off')) {
+                        document.getElementById('syntax-off').checked = true;
+                    }
+                }
+
+                const urlLevel = params.get('level');
+                if (urlLevel) {
+                    state.campaignLevel = urlLevel;
+                }
+                
                 generatePuzzle(decode(data));
                 lockForStudents(params);
             } else if (legacyUrl) {

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parsons Algorithms Quest – 0478 & 9618</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #173b68;
+            --panel: rgba(255, 255, 255, .88);
+            --line: rgba(89, 167, 219, .24);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #eaf8ff;
+            color: var(--ink);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: radial-gradient(circle at 7% 1%, #fff4ad 0, transparent 25rem), radial-gradient(circle at 93% 9%, #c4b6ff 0, transparent 30rem), linear-gradient(#d7f3ff, #f8fbff 56%, #ddf7ed);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: .38;
+            background-image: radial-gradient(#77c4ee 1px, transparent 1px);
+            background-size: 38px 38px;
+            mask-image: linear-gradient(to bottom, black, transparent 70%);
+            pointer-events: none;
+        }
+
+        .bg-blob {
+            display: none;
+        }
+
+        .glass-panel {
+            background: var(--panel);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--line);
+            box-shadow: 0 16px 40px rgba(51, 122, 164, .12);
+        }
+
+        .quest-hero {
+            min-height: 350px;
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            border: 1px solid rgba(179, 231, 255, .32);
+            border-radius: 30px;
+            background: #0c2851 url('parsonsgame%20assets/code-quest-world-map.png') center / cover no-repeat;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, .3);
+        }
+
+        .quest-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(90deg, rgba(255, 255, 255, .95) 0%, rgba(255, 255, 255, .82) 38%, rgba(255, 255, 255, .08) 72%), linear-gradient(0deg, rgba(10, 50, 90, .18), transparent 50%);
+        }
+
+        .quest-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            opacity: .45;
+            background: linear-gradient(115deg, transparent 15%, rgba(102, 239, 223, .18) 15.2%, transparent 15.5%);
+            background-size: 260px 100%;
+        }
+
+        .hero-copy {
+            max-width: 635px;
+            padding: clamp(2rem, 5vw, 4.5rem);
+        }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: .55rem;
+            padding: .5rem .85rem;
+            border: 1px solid #8edecb;
+            border-radius: 99px;
+            color: #087967;
+            background: rgba(235, 255, 248, .85);
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .13em;
+        }
+
+        .hero-title {
+            max-width: 600px;
+            margin: 1rem 0 .7rem;
+            color: #15365e;
+            font-size: clamp(2.4rem, 6vw, 4.8rem);
+            font-weight: 800;
+            letter-spacing: -.06em;
+            line-height: .96;
+        }
+
+        .hero-title em {
+            color: #0baf91;
+            font-style: normal;
+        }
+
+        .quest-hero .text-slate-200\/90 {
+            color: #315372;
+        }
+
+        .hero-guide {
+            position: absolute;
+            right: clamp(.6rem, 4vw, 4rem);
+            bottom: -1.2rem;
+            width: clamp(145px, 22vw, 265px);
+            filter: drop-shadow(0 18px 20px rgba(0, 0, 0, .35));
+            animation: bob 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes bob {
+            50% {
+                transform: translateY(-10px) rotate(1deg);
+            }
+        }
+
+        .progress-panel {
+            border-color: rgba(56, 194, 164, .35);
+            background: linear-gradient(100deg, rgba(221, 255, 245, .94), rgba(235, 236, 255, .94));
+        }
+
+        .progress-panel .text-white {
+            color: #173b68;
+        }
+
+        .progress-panel .text-emerald-200 {
+            color: #07816c;
+        }
+
+        .progress-panel .text-slate-300 {
+            color: #53728d;
+        }
+
+        .progress-track {
+            height: 9px;
+            overflow: hidden;
+            border-radius: 99px;
+            background: rgba(70, 133, 177, .2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #6cf1d2, #ffd462);
+            box-shadow: 0 0 14px #72f5d5;
+            transition: width .7s ease;
+        }
+
+        .campaign-footer {
+            padding: 1.5rem 0 3rem;
+            text-align: center;
+            color: #7993a8;
+            font-size: .78rem;
+        }
+
+        .reset-inline {
+            margin-left: .2rem;
+            color: #a96c67;
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-color: #efc2bc;
+            text-underline-offset: 3px;
+            transition: color .2s ease;
+        }
+
+        .reset-inline:hover {
+            color: #c84a40;
+        }
+
+        .reset-inline:focus-visible {
+            outline: 3px solid #7ddfc5;
+            outline-offset: 3px;
+            border-radius: 3px;
+        }
+
+        .world-panel {
+            overflow: hidden;
+            border-radius: 26px;
+            background: rgba(255, 255, 255, .9);
+            border: 1px solid rgba(116, 192, 233, .32);
+            box-shadow: 0 18px 45px rgba(59, 132, 172, .15);
+        }
+
+        .world-banner {
+            min-height: 176px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+            background-image: linear-gradient(90deg, rgba(7, 42, 78, .86), rgba(7, 42, 78, .25) 58%, rgba(7, 42, 78, .36)), var(--world-art, url('parsonsgame%20assets/code-quest-world-map.png'));
+            background-size: cover;
+            background-position: var(--world-position, center);
+            border-bottom: 1px solid rgba(116, 192, 233, .25);
+        }
+
+        .world-banner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(7, 42, 78, .42), transparent 55%);
+            pointer-events: none;
+        }
+
+        .world-copy {
+            position: relative;
+            z-index: 1;
+        }
+
+        .world-label {
+            color: #9eeedc;
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+        }
+
+        .world-title {
+            margin: .25rem 0;
+            color: #ffffff;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 800;
+            letter-spacing: -.04em;
+            text-shadow: 0 2px 10px rgba(3, 28, 59, .5);
+        }
+
+        .world-subtitle {
+            color: #d0e0ed;
+            font-size: .88rem;
+        }
+
+        .world-progress {
+            position: absolute;
+            z-index: 1;
+            right: 1.25rem;
+            top: 1.25rem;
+            padding: .5rem .75rem;
+            border: 1px solid rgba(255, 255, 255, .22);
+            border-radius: 99px;
+            color: #fff3c2;
+            background: rgba(5, 19, 40, .68);
+            font-size: .76rem;
+            font-weight: 800;
+            backdrop-filter: blur(7px);
+        }
+
+        .world-grid {
+            padding: 1.25rem;
+        }
+
+        .level-card {
+            border: 1px solid rgba(112, 186, 226, .32);
+            background: linear-gradient(145deg, #ffffff, #edfaff);
+            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+        }
+
+        .level-card:hover {
+            transform: translateY(-6px) rotate(-.35deg);
+            box-shadow: 0 18px 35px rgba(76, 150, 191, .22), 0 0 0 1px rgba(42, 206, 168, .2);
+            border-color: rgba(35, 189, 154, .72);
+            background: linear-gradient(145deg, #fffef0, #e5fff6);
+        }
+
+        .level-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: linear-gradient(#8ef3dc, #6974ef);
+            opacity: .55;
+        }
+
+        .level-card .text-slate-200 {
+            color: #183f68;
+        }
+
+        .level-card .text-slate-600 {
+            color: #9ab7ca;
+        }
+
+        .level-card .text-slate-500 {
+            color: #66839b;
+        }
+
+        .level-card .border-slate-700\/50 {
+            border-color: rgba(118, 184, 217, .28);
+        }
+
+        .level-card.completed {
+            background: linear-gradient(145deg, #e4fff3, #dcf7ee);
+            border-color: rgba(56, 194, 136, .48);
+        }
+
+        .level-card.completed:hover {
+            background: linear-gradient(145deg, #d4ffea, #ecfff6);
+            border-color: rgba(43, 178, 122, .72);
+        }
+
+        .star-badge {
+            background: linear-gradient(135deg, #fcd34d, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));
+        }
+
+        .share-btn {
+            transition: all 0.2s;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .share-icon {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 640px) {
+            .quest-hero {
+                min-height: 420px;
+                background-position: 64% center;
+            }
+
+            .quest-hero::before {
+                background: linear-gradient(0deg, rgba(255, 255, 255, .98) 0%, rgba(255, 255, 255, .82) 60%, rgba(255, 255, 255, .2));
+            }
+
+            .hero-copy {
+                padding: 2rem 1.5rem;
+            }
+
+            .hero-guide {
+                width: 150px;
+                right: -.4rem;
+                bottom: -.75rem;
+            }
+
+            .world-banner {
+                min-height: 155px;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
+
+    <main class="max-w-6xl mx-auto p-4 pt-8 md:p-8 md:pt-12">
+        <section class="quest-hero mb-6" aria-labelledby="quest-heading">
+            <div class="hero-copy">
+                <span class="hero-kicker">✦ 52 coding quests await</span>
+                <h2 id="quest-heading" class="hero-title">Turn code into <em>adventure.</em></h2>
+                <p class="text-slate-200/90 text-base md:text-lg leading-relaxed max-w-lg">Put scrambled Python into the
+                    right order, collect stars, and light the path to the Robot Citadel.</p>
+            </div>
+            <img class="hero-guide" src="parsonsgame%20assets/byte-guide.png"
+                alt="Byte, the Code Quest robot guide, holding a glowing puzzle piece">
+        </section>
+
+        <div class="flex justify-end items-center gap-3 mb-6">
+            <a id="classroomShareBtn" href="#" target="_blank"
+                class="share-btn flex items-center gap-2 px-4 py-2 bg-[#00875F]/15 hover:bg-[#00875F]/25 border border-[#00875F]/40 text-[#087c5a] font-semibold rounded-lg text-sm">
+                <svg class="share-icon" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" /><path d="M22 12c.31-.17.65-.28 1-.32V9l-11-6-11 6 11 6 4-2.18c0-.28.05-.55.15-.81L12 15 3.4 10.3 12 5.6l8.6 4.7-2.6 1.42c.8.3 1.5.8 2 1.48L22 12z" /><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+                Classroom
+            </a>
+            <a id="teamsShareBtn" href="#" target="_blank"
+                class="share-btn flex items-center gap-2 px-4 py-2 bg-[#5a5eb9]/12 hover:bg-[#5a5eb9]/20 border border-[#5a5eb9]/40 text-[#5656b7] font-semibold rounded-lg text-sm">
+                <svg class="share-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" /></svg>
+                Teams
+            </a>
+        </div>
+
+        <section
+            class="glass-panel progress-panel rounded-2xl p-5 mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            aria-label="Course progress">
+            <div>
+                <p class="text-xs font-extrabold uppercase tracking-[.16em] text-emerald-200">Your expedition</p>
+                <h2 class="text-xl font-bold text-white mt-1">Every solved quest powers up the map.</h2>
+            </div>
+            <div class="flex items-center gap-5 w-full sm:w-auto">
+                <div class="flex-1 sm:w-56">
+                    <div class="progress-track">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <p id="progress-detail" class="text-xs text-slate-300 mt-2 font-semibold">0 of 30 quests completed
+                    </p>
+                </div>
+                <div
+                    class="flex items-center gap-2 rounded-full px-4 py-2 bg-slate-950/30 border border-white/10 whitespace-nowrap">
+                    <span class="text-lg">⭐</span><span class="text-sm font-bold text-white" id="progress-text">0 /
+                        90</span>
+                </div>
+            </div>
+        </section>
+
+        <div id="campaign-container" class="space-y-16">
+            <!-- Worlds will be injected here -->
+        </div>
+        <div class="campaign-footer">
+            Need a fresh start?<button type="button" onclick="clearProgress()" class="reset-inline"
+                title="Reset saved stars and best times">Reset progress</button>
+        </div>
+    </main>
+
+    <script>
+        // Encode exactly like reorder.html
+        function encode(str) { return btoa(unescape(encodeURIComponent(str))); }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        const levels = [
+            // World 1: Basics
+            { world: "World 1: The Basics", id: 1, title: "Hello World", code: `print("Hello World!")` },
+            { world: "World 1: The Basics", id: 2, title: "The Greeter", code: `name = input("Enter your name:")\nprint("Hello", name)` },
+            { world: "World 1: The Basics", id: 3, title: "Simple Calculator", code: `num1 = 5\nnum2 = 10\ntotal = num1 + num2\nprint(total)` },
+            { world: "World 1: The Basics", id: 4, title: "The Switcheroo", code: `a = 5\nb = 10\ntemp = a\na = b\nb = temp` },
+
+            // World 2: Selection
+            { world: "World 2: Crossroads", id: 5, title: "Password Check", code: `pwd = input("Password:")\nif pwd == "secret":\n    print("Access Granted")\nelse:\n    print("Access Denied")` },
+            { world: "World 2: Crossroads", id: 6, title: "Pass or Fail", code: `score = 75\nif score >= 50:\n    print("Pass")\nelse:\n    print("Fail")` },
+            { world: "World 2: Crossroads", id: 7, title: "Grading System", code: `score = 85\nif score >= 90:\n    print("A")\nelif score >= 70:\n    print("B")\nelse:\n    print("C")` },
+            { world: "World 2: Crossroads", id: 8, title: "Rollercoaster Ride", code: `height = 130\nage = 12\nif height > 120:\n    if age > 10:\n        print("You can ride!")\n    else:\n        print("Too young")\nelse:\n    print("Too short")` },
+            { world: "World 2: Crossroads", id: 9, title: "Alarm System", code: `door_open = True\nmotion = False\nif door_open or motion:\n    print("SOUND ALARM!")` },
+
+            // World 3: Iteration
+            { world: "World 3: The Loop Zone", id: 10, title: "Blastoff!", code: `for i in range(10, 0, -1):\n    print(i)\nprint("Blastoff!")` },
+            { world: "World 3: The Loop Zone", id: 11, title: "Times Tables", code: `table = 5\nfor i in range(1, 13):\n    ans = table * i\n    print(ans)` },
+            { world: "World 3: The Loop Zone", id: 12, title: "Try Again", code: `pwd = ""\nwhile pwd != "admin":\n    pwd = input("Enter password:")\nprint("Logged in!")` },
+            { world: "World 3: The Loop Zone", id: 13, title: "Input Validation", code: `num = 0\nwhile num < 1 or num > 10:\n    num = int(input("Enter 1-10:"))\nprint("Valid!")` },
+            { world: "World 3: The Loop Zone", id: 14, title: "The Main Menu", code: `choice = ""\nwhile choice != "q":\n    print("Press q to quit")\n    choice = input(">")\n    if choice == "1":\n        print("Option 1")` },
+
+            // World 4: Totalling
+            { world: "World 4: The Accumulator", id: 15, title: "The Counter", code: `count = 0\nfor i in range(5):\n    count = count + 1\nprint(count)` },
+            { world: "World 4: The Accumulator", id: 16, title: "Sum of Five", code: `total = 0\nfor i in range(5):\n    num = int(input("Number:"))\n    total = total + num\nprint(total)` },
+            { world: "World 4: The Accumulator", id: 17, title: "The Average", code: `total = 0\nfor i in range(5):\n    num = 10\n    total = total + num\nans = total / 5\nprint(ans)` },
+            { world: "World 4: The Accumulator", id: 18, title: "Tallying Votes", code: `yes_votes = 0\nfor i in range(10):\n    vote = input("Vote:")\n    if vote == "yes":\n        yes_votes += 1\nprint(yes_votes)` },
+
+            // World 5: Extremes
+            { world: "World 5: Highs and Lows", id: 19, title: "Find the Biggest", code: `max_val = 0\nfor i in range(5):\n    num = int(input("Num:"))\n    if num > max_val:\n        max_val = num\nprint(max_val)` },
+            { world: "World 5: Highs and Lows", id: 20, title: "Find the Smallest", code: `min_val = 9999\nfor i in range(5):\n    num = int(input("Num:"))\n    if num < min_val:\n        min_val = num\nprint(min_val)` },
+            { world: "World 5: Highs and Lows", id: 21, title: "Highest Score", code: `max_score = 0\nmax_name = ""\nfor i in range(3):\n    name = input("Name:")\n    score = int(input("Score:"))\n    if score > max_score:\n        max_score = score\n        max_name = name` },
+            { world: "World 5: Highs and Lows", id: 22, title: "Max & Min Together", code: `mx = 0\nmn = 999\nfor i in range(3):\n    n = int(input("Num:"))\n    if n > mx:\n        mx = n\n    if n < mn:\n        mn = n` },
+
+            // World 6: Arrays
+            { world: "World 6: The Vault", id: 23, title: "Array Setup", code: `names = ["Ali", "Ben", "Cam"]\nprint(names[0])` },
+            { world: "World 6: The Vault", id: 24, title: "Fill the Array", code: `data = []\nfor i in range(5):\n    val = input("Enter:")\n    data.append(val)\nprint(data)` },
+            { world: "World 6: The Vault", id: 25, title: "Array Totalling", code: `nums = [10, 20, 30]\ntotal = 0\nfor x in nums:\n    total += x\nprint(total)` },
+            { world: "World 6: The Vault", id: 26, title: "Above Average", code: `nums = [5, 10, 15]\navg = sum(nums) / 3\ncount = 0\nfor x in nums:\n    if x > avg:\n        count += 1` },
+
+            // World 7: Search and Sort
+            { world: "World 7: Final Bosses", id: 27, title: "Linear Search", code: `data = [4, 2, 7]\ntarget = 7\nfound = False\nfor item in data:\n    if item == target:\n        found = True\nprint(found)` },
+            { world: "World 7: Final Bosses", id: 28, title: "Advanced Search", code: `data = [4, 2, 7]\ntarget = 2\npos = -1\nfor i in range(len(data)):\n    if data[i] == target:\n        pos = i\nprint(pos)` },
+            { world: "World 7: Final Bosses", id: 29, title: "The Swap", code: `data = [5, 3]\nfor i in range(len(data) - 1):\n    if data[i] > data[i+1]:\n        temp = data[i]\n        data[i] = data[i+1]\n        data[i+1] = temp` },
+            { world: "World 7: Final Bosses", id: 30, title: "Bubble Sort", code: `data = [5, 3, 4]\nswapped = True\nwhile swapped:\n    swapped = False\n    for i in range(len(data)-1):\n        if data[i] > data[i+1]:\n            temp = data[i]\n            data[i] = data[i+1]\n            data[i+1] = temp\n            swapped = True` },
+
+            // Cambridge 9618 A Level: Algorithms, ADTs and Recursion
+            { world: "A Level 1: Precision Search", id: 31, title: "Binary Search: Found", code: `data = [3, 7, 12, 18, 25]\ntarget = 18\nlow = 0\nhigh = len(data) - 1\nfound = False\nwhile low <= high:\n    mid = (low + high) // 2\n    if data[mid] == target:\n        found = True\n        break\n    elif data[mid] < target:\n        low = mid + 1\n    else:\n        high = mid - 1\nprint(found)` },
+            { world: "A Level 1: Precision Search", id: 32, title: "Binary Search: Position", code: `data = [4, 9, 14, 21, 30]\ntarget = 21\nlow = 0\nhigh = len(data) - 1\npos = -1\nwhile low <= high:\n    mid = (low + high) // 2\n    if data[mid] == target:\n        pos = mid\n        break\n    elif data[mid] < target:\n        low = mid + 1\n    else:\n        high = mid - 1\nprint(pos)` },
+            { world: "A Level 1: Precision Search", id: 33, title: "The Sorted Gate", code: `data = [2, 5, 9, 14, 20]\nsorted_ok = True\nfor i in range(len(data) - 1):\n    if data[i] > data[i + 1]:\n        sorted_ok = False\n        break\nprint(sorted_ok)` },
+            { world: "A Level 1: Precision Search", id: 34, title: "Search Steps", code: `data = [2, 5, 8, 12, 16, 21, 30]\ntarget = 16\nlow = 0\nhigh = len(data) - 1\nsteps = 0\nwhile low <= high:\n    steps += 1\n    mid = (low + high) // 2\n    if data[mid] == target:\n        break\n    if data[mid] < target:\n        low = mid + 1\n    else:\n        high = mid - 1\nprint(steps)` },
+
+            { world: "A Level 2: The Sorting Forge", id: 35, title: "Insertion Sort", code: `data = [7, 3, 5, 2]\nfor i in range(1, len(data)):\n    key = data[i]\n    pos = i - 1\n    while pos >= 0 and data[pos] > key:\n        data[pos + 1] = data[pos]\n        pos -= 1\n    data[pos + 1] = key\nprint(data)` },
+            { world: "A Level 2: The Sorting Forge", id: 36, title: "Descending Insertion", code: `data = [4, 9, 1, 6]\nfor i in range(1, len(data)):\n    key = data[i]\n    pos = i - 1\n    while pos >= 0 and data[pos] < key:\n        data[pos + 1] = data[pos]\n        pos -= 1\n    data[pos + 1] = key\nprint(data)` },
+            { world: "A Level 2: The Sorting Forge", id: 37, title: "Early Exit Bubble", code: `data = [2, 5, 3, 7]\nswapped = True\nwhile swapped:\n    swapped = False\n    for i in range(len(data) - 1):\n        if data[i] > data[i + 1]:\n            data[i], data[i + 1] = data[i + 1], data[i]\n            swapped = True\nprint(data)` },
+            { world: "A Level 2: The Sorting Forge", id: 38, title: "Bubble Sort Counter", code: `data = [4, 1, 3]\nswaps = 0\nfor end in range(len(data) - 1, 0, -1):\n    for i in range(end):\n        if data[i] > data[i + 1]:\n            data[i], data[i + 1] = data[i + 1], data[i]\n            swaps += 1\nprint(swaps)` },
+
+            { world: "A Level 3: Structure Station", id: 39, title: "Safe Stack Push", code: `stack = [10, 20]\nmax_size = 5\nvalue = 30\nif len(stack) < max_size:\n    stack.append(value)\nelse:\n    print("Stack full")\nprint(stack)` },
+            { world: "A Level 3: Structure Station", id: 40, title: "Safe Stack Pop", code: `stack = ["map", "key", "torch"]\nif len(stack) > 0:\n    item = stack.pop()\n    print(item)\nelse:\n    print("Stack empty")` },
+            { world: "A Level 3: Structure Station", id: 41, title: "Queue Departure", code: `queue = ["Ava", "Ben", "Chen"]\nif len(queue) > 0:\n    next_player = queue.pop(0)\n    print(next_player)\nelse:\n    print("Queue empty")` },
+            { world: "A Level 3: Structure Station", id: 42, title: "Queue Arrival", code: `queue = ["Ava", "Ben"]\nnew_player = "Chen"\nqueue.append(new_player)\nprint(queue)` },
+            { world: "A Level 3: Structure Station", id: 43, title: "Linked List Trail", code: `data = ["A", "B", "C"]\nnext_node = [1, 2, -1]\ncurrent = 0\nwhile current != -1:\n    print(data[current])\n    current = next_node[current]` },
+            { world: "A Level 3: Structure Station", id: 44, title: "Linked List Search", code: `data = ["red", "blue", "gold"]\nnext_node = [1, 2, -1]\ntarget = "blue"\ncurrent = 0\nfound = False\nwhile current != -1:\n    if data[current] == target:\n        found = True\n        break\n    current = next_node[current]\nprint(found)` },
+            { world: "A Level 3: Structure Station", id: 45, title: "Linked List Insert", code: `data = ["A", "C", "B"]\nnext_node = [1, -1, -1]\nnew_node = 2\ncurrent = 0\nwhile next_node[current] != -1:\n    current = next_node[current]\nnext_node[new_node] = next_node[current]\nnext_node[current] = new_node\nprint(next_node)` },
+            { world: "A Level 3: Structure Station", id: 46, title: "Linked List Delete", code: `data = ["A", "B", "C"]\nnext_node = [1, 2, -1]\nremove_node = 1\ncurrent = 0\nwhile next_node[current] != remove_node:\n    current = next_node[current]\nnext_node[current] = next_node[remove_node]\nprint(next_node)` },
+            { world: "A Level 3: Structure Station", id: 47, title: "Binary Tree Search", code: `tree = [8, 4, 12, 2, 6, 10, 14]\ntarget = 10\nindex = 0\nfound = False\nwhile index < len(tree):\n    if tree[index] == target:\n        found = True\n        break\n    elif target < tree[index]:\n        index = 2 * index + 1\n    else:\n        index = 2 * index + 2\nprint(found)` },
+            { world: "A Level 3: Structure Station", id: 48, title: "Binary Tree Insert", code: `tree = [8, 4, 12, None, 6, None, None, None, None, None, None, None, None, None, None]\nvalue = 10\nindex = 0\nwhile tree[index] is not None:\n    if value < tree[index]:\n        index = 2 * index + 1\n    else:\n        index = 2 * index + 2\ntree[index] = value\nprint(tree)` },
+
+            { world: "A Level 4: Recursion Summit", id: 49, title: "Factorial Flight", code: `def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\n\nanswer = factorial(5)\nprint(answer)` },
+            { world: "A Level 4: Recursion Summit", id: 50, title: "Recursive Total", code: `def total(values, index):\n    if index == len(values):\n        return 0\n    return values[index] + total(values, index + 1)\n\nnums = [4, 6, 8]\nprint(total(nums, 0))` },
+            { world: "A Level 4: Recursion Summit", id: 51, title: "Recursive Binary Search", code: `def search(data, target, low, high):\n    if low > high:\n        return -1\n    mid = (low + high) // 2\n    if data[mid] == target:\n        return mid\n    if data[mid] > target:\n        return search(data, target, low, mid - 1)\n    return search(data, target, mid + 1, high)\n\ndata = [3, 7, 11, 15, 19]\nprint(search(data, 15, 0, len(data) - 1))` },
+            { world: "A Level 4: Recursion Summit", id: 52, title: "Recursive Countdown", code: `def countdown(n):\n    if n == 0:\n        print("Launch!")\n        return\n    print(n)\n    countdown(n - 1)\n\ncountdown(5)` }
+        ];
+
+        const worldInfo = {
+            "World 1: The Basics": { icon: "☀️", tagline: "Wake the first sparks of code at Camp Console.", position: "10% 70%" },
+            "World 2: Crossroads": { icon: "🌳", tagline: "Choose wisely through the branching forest paths.", position: "33% 55%" },
+            "World 3: The Loop Zone": { icon: "🌀", tagline: "Master repeating patterns on the neon circuit track.", position: "52% 48%" },
+            "World 4: The Accumulator": { icon: "💎", tagline: "Gather every value in the glittering crystal caverns.", position: "55% 83%" },
+            "World 5: Highs and Lows": { icon: "🏔️", tagline: "Scout the highest peaks and deepest data valleys.", position: "72% 36%" },
+            "World 6: The Vault": { icon: "🏛️", tagline: "Unlock the library of arrays and hidden records.", position: "90% 61%" },
+            "World 7: Final Bosses": { icon: "🤖", tagline: "Search, sort, and reach the Robot Citadel.", position: "97% 25%" },
+            "A Level 1: Precision Search": { icon: "🔭", tagline: "Narrow the range and find the answer with precision.", position: "center", art: "parsonsgame%20assets/a-level-precision-search.png" },
+            "A Level 2: The Sorting Forge": { icon: "⚙️", tagline: "Forge ordered data with insertion and bubble techniques.", position: "center", art: "parsonsgame%20assets/a-level-sorting-forge.png" },
+            "A Level 3: Structure Station": { icon: "🚉", tagline: "Route data through stacks, queues, lists and trees.", position: "center", art: "parsonsgame%20assets/a-level-structure-station.png" },
+            "A Level 4: Recursion Summit": { icon: "⛰️", tagline: "Climb by calling back to the smallest possible problem.", position: "center", art: "parsonsgame%20assets/a-level-recursion-summit.png" }
+        };
+
+        function renderCampaign() {
+            const container = document.getElementById('campaign-container');
+            container.innerHTML = '';
+            const worlds = {};
+
+            let totalStars = 0;
+            const maxStars = levels.length * 3;
+
+            levels.forEach(l => {
+                if (!worlds[l.world]) worlds[l.world] = [];
+                worlds[l.world].push(l);
+            });
+
+            for (const [worldName, worldLevels] of Object.entries(worlds)) {
+                const info = worldInfo[worldName] || { icon: "✦", tagline: "A new coding adventure awaits.", position: "center" };
+                const completedQuests = worldLevels.filter(level => parseInt(localStorage.getItem('parsons_stars_' + level.id) || '0') > 0).length;
+                const wDiv = document.createElement('div');
+                wDiv.className = 'world-panel relative';
+
+                const banner = document.createElement('div');
+                banner.className = 'world-banner';
+                banner.style.setProperty('--world-position', info.position);
+                if (info.art) banner.style.setProperty('--world-art', `url("${info.art}")`);
+                banner.innerHTML = `
+                    <div class="world-copy">
+                        <div class="world-label">${info.icon} ${worldName.startsWith('A Level') ? '9618 A Level questline' : 'iGCSE campaign region'}</div>
+                        <h3 class="world-title">${worldName.replace(/^(?:World|A Level) \d+: /, '')}</h3>
+                        <p class="world-subtitle">${info.tagline}</p>
+                    </div>
+                    <div class="world-progress">${completedQuests} / ${worldLevels.length} quests cleared</div>`;
+                wDiv.appendChild(banner);
+
+                const grid = document.createElement('div');
+                grid.className = 'world-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4';
+
+                worldLevels.forEach(lvl => {
+                    const starsStr = localStorage.getItem('parsons_stars_' + lvl.id);
+                    const stars = starsStr ? parseInt(starsStr) : 0;
+                    totalStars += stars;
+
+                    const timeStr = localStorage.getItem('parsons_time_' + lvl.id);
+                    const bestTime = timeStr ? parseInt(timeStr) : null;
+
+                    const mode = lvl.id <= 15 ? '1D' : '2D';
+                    const url = `reorder.html?level=${lvl.id}&mode=${mode}&syntax=on&data=${encodeURIComponent(encode(lvl.code))}`;
+
+                    const card = document.createElement('a');
+                    card.href = url;
+
+                    const isCompleted = stars > 0;
+                    card.className = `level-card glass-panel rounded-2xl p-5 cursor-pointer flex flex-col group relative overflow-hidden ${isCompleted ? 'completed' : ''}`;
+
+                    const headerRow = document.createElement('div');
+                    headerRow.className = 'flex justify-between items-start mb-4';
+
+                    const numBadge = document.createElement('div');
+                    numBadge.className = `w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow-inner ${isCompleted ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700/50 text-slate-400 border border-slate-600'}`;
+                    numBadge.innerText = lvl.id;
+
+                    const starsDiv = document.createElement('div');
+                    starsDiv.className = 'text-lg tracking-wider font-mono flex items-center gap-1';
+                    if (isCompleted) {
+                        starsDiv.innerHTML = '<span class="star-badge">★</span>'.repeat(stars) + '<span class="text-slate-600">★</span>'.repeat(3 - stars);
+                    } else {
+                        starsDiv.innerHTML = '<span class="text-slate-600">★</span>'.repeat(3);
+                    }
+
+                    headerRow.appendChild(numBadge);
+                    headerRow.appendChild(starsDiv);
+
+                    const title = document.createElement('div');
+                    title.className = `font-bold text-lg mb-4 flex-grow ${isCompleted ? 'text-emerald-300' : 'text-slate-200'}`;
+                    title.innerText = lvl.title;
+
+                    const footerRow = document.createElement('div');
+                    footerRow.className = 'flex items-center justify-between mt-auto pt-4 border-t border-slate-700/50';
+
+                    const timeDiv = document.createElement('div');
+                    timeDiv.className = `text-xs font-mono font-medium px-2 py-1 rounded-md ${isCompleted ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800/50 text-slate-500'}`;
+                    timeDiv.innerHTML = bestTime !== null ? `⏱️ ${formatTime(bestTime)}` : '⏱️ --:--';
+
+                    const playIcon = document.createElement('div');
+                    playIcon.className = `w-8 h-8 rounded-full flex items-center justify-center transition-transform group-hover:scale-110 ${isCompleted ? 'bg-emerald-500 text-slate-900' : 'bg-indigo-500 text-white'}`;
+                    playIcon.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+
+                    footerRow.appendChild(timeDiv);
+                    footerRow.appendChild(playIcon);
+
+                    card.appendChild(headerRow);
+                    card.appendChild(title);
+                    card.appendChild(footerRow);
+                    grid.appendChild(card);
+                });
+
+                wDiv.appendChild(grid);
+                container.appendChild(wDiv);
+            }
+
+            const completedCount = levels.filter(level => parseInt(localStorage.getItem('parsons_stars_' + level.id) || '0') > 0).length;
+            document.getElementById('progress-text').innerText = `${totalStars} / ${maxStars}`;
+            document.getElementById('progress-detail').innerText = `${completedCount} of ${levels.length} quests completed`;
+            document.getElementById('progress-fill').style.width = `${(totalStars / maxStars) * 100}%`;
+        }
+
+        function clearProgress() {
+            if (confirm("Are you sure you want to reset all your stars and best times?")) {
+                for (let i = 1; i <= levels.length; i++) {
+                    localStorage.removeItem('parsons_stars_' + i);
+                    localStorage.removeItem('parsons_time_' + i);
+                }
+                renderCampaign();
+            }
+        }
+
+        window.onload = () => {
+            renderCampaign();
+
+            // Set Share URLs
+            const pageUrl = window.location.href;
+            document.getElementById("classroomShareBtn").href = `https://classroom.google.com/share?url=${encodeURIComponent(pageUrl)}`;
+            document.getElementById("teamsShareBtn").href = `https://teams.microsoft.com/share?href=${encodeURIComponent(pageUrl)}`;
+        };
+    </script>
+</body>
+
+</html>
