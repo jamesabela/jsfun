@@ -13,9 +13,9 @@
     }
     #carousel {
       perspective: 1000px;
-      height: 350px;
+      height: 400px;
       position: relative;
-      margin-top: 50px;
+      margin-top: 120px;
     }
     .stick-container {
       display: flex;
@@ -28,7 +28,7 @@
     }
     .stick {
       width: 100px;
-      height: 250px;
+      height: 220px;
       margin: 10px;
       display: flex;
       justify-content: center;
@@ -54,9 +54,9 @@
     }
     #picked-box {
       position: absolute;
-      top: 50%;
+      top: 80%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       padding: 20px;
       background-color: #333;
       color: white;
@@ -86,11 +86,39 @@
 
 <button class="btn" onclick="pickRandomStick()" style="display:none;" id="pick-btn">Pick Random Stick</button>
 <button class="btn" onclick="removeRandomStick()" style="display:none;" id="remove-btn">Remove Random Stick</button>
+<button class="btn" onclick="toggleList()" style="display:none;" id="toggle-list-btn">Edit List</button>
+<button class="btn" onclick="toggleFullScreen()" id="fullscreen-btn">Full Screen</button>
 
 <script>
   let sticks = [];
   let currentAngle = 0;
   let lastPickedIndex = -1; // Store the last picked stick index
+
+  function toggleList() {
+    document.getElementById('question-inputs').style.display = 'block';
+    document.getElementById('toggle-list-btn').style.display = 'none';
+  }
+
+  function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.log(`Error attempting to enable fullscreen: ${err.message} (${err.name})`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  }
+
+  document.addEventListener('fullscreenchange', (event) => {
+    const btn = document.getElementById('fullscreen-btn');
+    if (document.fullscreenElement) {
+      btn.textContent = 'Exit Full Screen';
+    } else {
+      btn.textContent = 'Full Screen';
+    }
+  });
 
   const colors = [
     '#ffcc00', '#ff6666', '#66cc66', '#6699ff', '#ff9966', '#ff66ff', '#33ccff', '#33ff66', '#ff6633', '#cc33ff',
@@ -107,6 +135,12 @@
 
     sticks = questions.map((question, index) => ({ text: question, id: index }));
     updateUrl(questions); // Update the URL with the questions
+    document.getElementById('picked-box').style.display = 'none';
+    
+    document.getElementById('question-inputs').style.display = 'none';
+    const toggleBtn = document.getElementById('toggle-list-btn');
+    if (toggleBtn) toggleBtn.style.display = 'inline-block';
+
     renderCarousel();
   }
 
@@ -128,7 +162,12 @@
     });
 
     document.getElementById('pick-btn').style.display = 'inline-block';
-    document.getElementById('remove-btn').style.display = 'inline-block';
+    const removeBtn = document.getElementById('remove-btn');
+    removeBtn.style.display = 'inline-block';
+    removeBtn.style.backgroundColor = 'grey';
+    removeBtn.style.color = 'white';
+    removeBtn.disabled = true;
+    removeBtn.style.cursor = 'not-allowed';
   }
 
   function pickRandomStick() {
@@ -148,11 +187,22 @@
     container.style.transform = `rotateY(${targetAngle}deg)`; // Apply the rotation
     lastPickedIndex = randomIndex; // Store the picked stick index
 
+    const removeBtn = document.getElementById('remove-btn');
+    removeBtn.style.backgroundColor = 'grey';
+    removeBtn.style.color = 'white';
+    removeBtn.disabled = true;
+    removeBtn.style.cursor = 'not-allowed';
+    document.getElementById('picked-box').style.display = 'none';
+
     setTimeout(() => {
       const pickedStick = sticks[randomIndex];
       const pickedBox = document.getElementById('picked-box');
       pickedBox.textContent = pickedStick.text;
       pickedBox.style.display = 'block';
+      
+      removeBtn.style.backgroundColor = '#4CAF50';
+      removeBtn.disabled = false;
+      removeBtn.style.cursor = 'pointer';
     }, 4000); // Wait for the animation to finish (4 seconds for smooth spin)
   }
 
@@ -169,6 +219,7 @@
     // Remove the last picked stick
     sticks.splice(lastPickedIndex, 1);
     lastPickedIndex = -1; // Reset after removal
+    document.getElementById('picked-box').style.display = 'none';
 
     // Re-generate carousel with remaining sticks
     renderCarousel();
@@ -187,6 +238,11 @@
       const questions = decodeURIComponent(urlParams.get('questions')).split(',');
       document.getElementById('questions').value = questions.join('\n');
       sticks = questions.map((question, index) => ({ text: question, id: index }));
+      
+      document.getElementById('question-inputs').style.display = 'none';
+      const toggleBtn = document.getElementById('toggle-list-btn');
+      if (toggleBtn) toggleBtn.style.display = 'inline-block';
+      
       renderCarousel(); // Re-render the carousel with loaded questions
     }
   };
