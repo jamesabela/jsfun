@@ -4,18 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Lollipop Stick Carousel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Outfit', Arial, sans-serif;
       text-align: center;
-      background-color: #f0f0f0;
+      background: radial-gradient(circle at center, #ffffff 0%, #e6e9f0 100%);
+      min-height: 100vh;
+      margin: 0;
       overflow: hidden;
     }
+    h1 {
+      margin-top: 30px;
+      color: #2c3e50;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
     #carousel {
-      perspective: 1000px;
+      perspective: 1200px;
       height: 400px;
       position: relative;
-      margin-top: 120px;
+      margin-top: 100px; 
     }
     .stick-container {
       display: flex;
@@ -24,10 +34,10 @@
       width: 100%;
       height: 300px;
       transform-style: preserve-3d;
-      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1); /* Smooth ease-out spin */
+      transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
     }
     .stick {
-      width: 100px;
+      width: 90px;
       height: 220px;
       margin: 10px;
       display: flex;
@@ -36,38 +46,104 @@
       position: absolute;
       cursor: pointer;
       transform-style: preserve-3d;
+      border-radius: 45px 45px 8px 8px; 
+      box-shadow: -5px 10px 20px rgba(0,0,0,0.15), inset -5px -5px 15px rgba(0,0,0,0.1);
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+    .stick::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.15) 100%);
+      pointer-events: none;
     }
     .stick span {
       position: absolute;
-      bottom: 20px;
-      font-size: 16px;
-      font-weight: bold;
+      bottom: 25px;
+      font-size: 18px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+      transform: translateZ(10px); 
     }
     #question-inputs {
       margin: 20px 0;
+      z-index: 10;
+      position: relative;
+    }
+    textarea {
+      font-family: 'Outfit', Arial, sans-serif;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+      resize: vertical;
+      font-size: 14px;
     }
     .btn {
-      padding: 10px 20px;
+      padding: 12px 24px;
       margin: 5px;
       font-size: 16px;
+      font-weight: 600;
+      font-family: 'Outfit', sans-serif;
       cursor: pointer;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0);
+      border: 1px solid #dcdcdc;
+      color: #333;
+      border-radius: 25px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
     }
+    .btn:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      background: linear-gradient(135deg, #ffffff, #e8e8e8);
+    }
+    .btn:active:not([disabled]) {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    #pick-btn {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+    }
+    #pick-btn:hover:not([disabled]) {
+      background: linear-gradient(135deg, #45a049, #3d8b40);
+    }
+    #remove-btn {
+      border: none;
+    }
+    
+    @keyframes popIn {
+      0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+      70% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+      100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    }
+    
     #picked-box {
       position: absolute;
       top: 80%;
       left: 50%;
       transform: translateX(-50%);
-      padding: 20px;
-      background-color: #333;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, #2c3e50, #1a252f);
       color: white;
-      font-size: 20px;
-      font-weight: bold;
-      width: 50%;
-      max-width: 400px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      font-size: 26px;
+      font-weight: 800;
+      min-width: 200px;
+      text-align: center;
+      border-radius: 50px; 
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       display: none;
-      z-index: 1;
+      z-index: 100;
+      border: 3px solid rgba(255,255,255,0.1);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
   </style>
 </head>
@@ -164,7 +240,7 @@
     document.getElementById('pick-btn').style.display = 'inline-block';
     const removeBtn = document.getElementById('remove-btn');
     removeBtn.style.display = 'inline-block';
-    removeBtn.style.backgroundColor = 'grey';
+    removeBtn.style.background = 'linear-gradient(135deg, #9e9e9e, #757575)';
     removeBtn.style.color = 'white';
     removeBtn.disabled = true;
     removeBtn.style.cursor = 'not-allowed';
@@ -188,7 +264,7 @@
     lastPickedIndex = randomIndex; // Store the picked stick index
 
     const removeBtn = document.getElementById('remove-btn');
-    removeBtn.style.backgroundColor = 'grey';
+    removeBtn.style.background = 'linear-gradient(135deg, #9e9e9e, #757575)';
     removeBtn.style.color = 'white';
     removeBtn.disabled = true;
     removeBtn.style.cursor = 'not-allowed';
@@ -200,7 +276,7 @@
       pickedBox.textContent = pickedStick.text;
       pickedBox.style.display = 'block';
       
-      removeBtn.style.backgroundColor = '#4CAF50';
+      removeBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
       removeBtn.disabled = false;
       removeBtn.style.cursor = 'pointer';
     }, 4000); // Wait for the animation to finish (4 seconds for smooth spin)
