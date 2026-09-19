@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>String Methods, Indexing and Slicing</title><style>
+:root { --bg:linear-gradient(135deg,#f8fafc,#eef6ff); --card:#fff; --text:#172033; --muted:#607089; --gold:#b88917; --blue:#2563eb; --green:#15803d; --border:#dbe4f0; --code:#101827; --code-text:#f8fafc; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; line-height:1.55; padding:24px; }
+.container { max-width:760px; margin:0 auto; display:grid; gap:18px; }
+header,.card { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:22px; box-shadow:0 8px 24px rgba(15,23,42,.06); }
+.kicker { margin:0 0 6px; color:var(--gold); font-weight:700; letter-spacing:.05em; text-transform:uppercase; font-size:.82rem; }
+h1 { margin:0; font-size:1.8rem; line-height:1.15; }
+.subtitle { margin:8px 0 0; color:var(--muted); }
+.card h2 { margin-top:0; font-size:1.12rem; color:var(--blue); }
+.command-grid { display:flex; flex-wrap:wrap; gap:8px; }
+.command { font-family:Consolas,Monaco,monospace; background:#eef2ff; border:1px solid #c7d2fe; border-radius:999px; padding:5px 10px; font-size:.88rem; }
+pre { background:var(--code); color:var(--code-text); padding:16px; border-radius:12px; overflow-x:auto; font-size:.9rem; line-height:1.5; }
+code { font-family:Consolas,Monaco,monospace; }
+.tip { border-left:4px solid var(--green); background:#f0fdf4; padding:12px 14px; border-radius:8px; }
+.task { border-left:4px solid var(--gold); background:#fffaf0; padding:12px 14px; border-radius:8px; }
+.footer { color:var(--muted); font-size:.85rem; text-align:center; padding-bottom:12px; }
+</style></head>
+<body><div class="container">
+<header><p class="kicker">Level 8 - Strings</p><h1>String Methods, Indexing and Slicing</h1><p class="subtitle">String questions use real Python operations. Students need both methods and index or slice notation.</p></header>
+<section class="card"><h2>Commands to know</h2><div class="command-grid"><span class="command">len()</span><span class="command">.find()</span><span class="command">.count()</span><span class="command">.upper()</span><span class="command">.lower()</span><span class="command">.title()</span><span class="command">.replace()</span><span class="command">+</span><span class="command">[0]</span><span class="command">[-1]</span><span class="command">[start:end]</span></div></section>
+<section class="card"><h2>Example</h2><pre><code>text = &quot;python programming&quot;
+print(len(text))
+print(text.find(&quot;pro&quot;))
+print(text.count(&quot;m&quot;))
+print(text.upper())
+print(text.lower())
+print(text.title())
+print(text.replace(&quot;python&quot;, &quot;coding&quot;))
+print(text[0])
+print(text[-1])
+print(text[0:6])</code></pre></section>
+<section class="card"><h2>Your task</h2><div class="task">Input a phrase. Print its length, first character, last character, first three characters, uppercase version, title case version, and the number of times the letter a appears.</div><p class="tip"><strong>Tip:</strong> Run the program often. Read error messages carefully and use the tests when you think the task is complete.</p></section>
+<p class="footer">Cambridge 0265 Python Commands - 2029 - designed for Python Code Lab</p>
+</div></body></html>
