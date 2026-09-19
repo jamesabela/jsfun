@@ -7,6 +7,10 @@
   <title>Cambridge 0265 Python Commands (2029) - Teacher Portal & Course Directory</title>
   <meta name="description" content="Comprehensive Teacher Portal and Course Directory for Cambridge IGCSE Computer Science 0265 (2029 Syllabus). 17 hands-on coding levels, reference solutions, and syllabus command checklist.">
 
+  <!-- Favicon / Course Icon -->
+  <link rel="icon" type="image/jpeg" href="camicon.jpg">
+  <link rel="apple-touch-icon" href="camicon.jpg">
+
   <!-- Modern Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -116,6 +120,29 @@
       gap: 30px;
       position: relative;
       z-index: 2;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex: 1;
+    }
+
+    .header-logo {
+      width: 90px;
+      height: 90px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      flex-shrink: 0;
+      background: #ffffff;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .header-logo:hover {
+      transform: scale(1.06) rotate(-2deg);
     }
 
     .header-info {
@@ -994,6 +1021,11 @@
         text-align: center;
       }
 
+      .header-brand {
+        flex-direction: column;
+        text-align: center;
+      }
+
       .header-actions {
         width: 100%;
         align-items: center;
@@ -1072,10 +1104,13 @@
 
   <header>
     <div class="container header-content">
-      <div class="header-info">
-        <span class="crumb-trail">Cambridge IGCSE 0265 • 2029 Syllabus</span>
-        <h1>Cambridge Python Commands</h1>
-        <p>Complete 17-level focused Python Code Lab toolkit designed specifically for the Cambridge 0265 Computer Science 2029 syllabus. Every level includes interactive tutorials, automated self-marking tests, and reference teacher solutions.</p>
+      <div class="header-brand">
+        <img src="camicon.jpg" alt="Cambridge 0265 Python Commands Course Logo" class="header-logo">
+        <div class="header-info">
+          <span class="crumb-trail">Cambridge IGCSE 0265 • 2029 Syllabus</span>
+          <h1>Cambridge Python Commands</h1>
+          <p>Complete 17-level focused Python Code Lab toolkit designed specifically for the Cambridge 0265 Computer Science 2029 syllabus. Every level includes interactive tutorials, automated self-marking tests, and reference teacher solutions.</p>
+        </div>
       </div>
       <div class="header-actions">
         <span style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent);">Quick-Share First Lesson</span>
