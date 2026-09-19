@@ -2039,11 +2039,12 @@
 	        </button>
 	        <div class="nav-section-items">
 	          <button class="nav-btn" onclick="showTab('selection')">🔀 Selection (If/Else)</button>
+	          <button class="nav-btn" onclick="showTab('match-case')">🚦 Pattern Matching</button>
 	          <button class="nav-btn" onclick="showTab('validation')">✅ Validation</button>
 	          <button class="nav-btn" onclick="showTab('while-loops')">🔁 While Loops</button>
 	          <button class="nav-btn" onclick="showTab('break')">🛑 Break</button>
 	          <button class="nav-btn" onclick="showTab('for-loops')">🔂 For Loops</button>
-	          <button class="nav-btn" onclick="showTab('logical-or')">🔍 Logical OR</button>
+	          <button class="nav-btn" onclick="showTab('logical-or')">⚖️ Comparisons & Logic</button>
 	        </div>
 	      </div>
 
@@ -2053,12 +2054,13 @@
 	          <span class="nav-section-arrow">▾</span>
 	        </button>
 	        <div class="nav-section-items">
-	          <button class="nav-btn" onclick="showTab('string-length')">📏 String Length</button>
+	          <button class="nav-btn" onclick="showTab('string-length')">🔤 Strings & Slicing</button>
 	          <button class="nav-btn" onclick="showTab('lists')">🗂️ Lists Guide</button>
 	          <button class="nav-btn" onclick="showTab('2d-lists')">▦ 2D Lists</button>
 	          <button class="nav-btn" onclick="showTab('files')">💾 Files</button>
 	          <button class="nav-btn" onclick="showTab('dictionaries')">📖 Dictionaries</button>
 	          <button class="nav-btn" onclick="showTab('functions')">🧩 Functions</button>
+	          <button class="nav-btn" onclick="showTab('random-statistics')">🎲 Random & Statistics</button>
 	        </div>
 	      </div>
 
@@ -2156,25 +2158,101 @@
       <!-- TAB: Variables -->
       <div id="tab-variables" class="tab-content">
         <div class="card">
-          <h2>📦 Variable Assignment</h2>
-          <p>Variables are like boxes that store values. You assign a value to a variable using a single equals sign
-            <code>=</code>.
-          </p>
+          <h2>📦 Variable Assignment and Comments</h2>
+          <p>Variables store data values under a name. Assign a value using a single equals sign <code>=</code>. Use the hash symbol <code>#</code> to write comments that explain your code.</p>
           <div class="code-wrapper">
-            <pre><code class="language-python"># Assigning a number
-a = 5
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python"># Assigning text (strings) and numbers
+player_name = "Maya"
+player_age = 15
+score = 0
+is_active = True
 
-# Assigning text (strings)
-a = "hello"</code></pre>
+print("Player:", player_name)
+print("Age:", player_age)</code></pre>
           </div>
           <div class="banner bug">
             <span>🐛</span>
-            <span><strong>Common Bug:</strong> Text values (strings) <strong>always</strong> need speech marks
-              <code>" "</code> or <code>' '</code>. Numbers and variable names do not!</span>
+            <span><strong>Common Bug:</strong> Text strings <strong>always</strong> need speech marks <code>" "</code> or <code>' '</code>. Variable names and numbers must NOT have speech marks.</span>
           </div>
         </div>
 
+        <div class="card">
+          <h2>🏷️ Core Python Data Types</h2>
+          <p>Every value in Python has a specific data type that defines what operations can be performed on it.</p>
+          <div class="op-grid" style="grid-template-columns: 80px 140px 1fr 140px;">
+            <div class="op-header">Type</div>
+            <div class="op-header">Name</div>
+            <div class="op-header">Example Values</div>
+            <div class="op-header">Usage</div>
 
+            <div class="op-cell"><code>str</code></div>
+            <div class="op-cell">String</div>
+            <div class="op-cell"><code>"Maya"</code>, <code>'London'</code>, <code>"123"</code></div>
+            <div class="op-cell">Textual characters</div>
+
+            <div class="op-cell"><code>int</code></div>
+            <div class="op-cell">Integer</div>
+            <div class="op-cell"><code>14</code>, <code>0</code>, <code>-5</code>, <code>100</code></div>
+            <div class="op-cell">Whole numbers</div>
+
+            <div class="op-cell"><code>float</code></div>
+            <div class="op-cell">Float</div>
+            <div class="op-cell"><code>3.14</code>, <code>-0.5</code>, <code>10.0</code></div>
+            <div class="op-cell">Decimal numbers</div>
+
+            <div class="op-cell"><code>bool</code></div>
+            <div class="op-cell">Boolean</div>
+            <div class="op-cell"><code>True</code>, <code>False</code></div>
+            <div class="op-cell">Logical truth flags</div>
+          </div>
+          <div class="banner info" style="margin-top: 14px;">
+            <span>💡</span>
+            <span><strong>Python Tip:</strong> Boolean values <code>True</code> and <code>False</code> must always be capitalized. Check a variable's type anytime in code with <code>type(my_var)</code>.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>➕ Augmented Assignment (+=, -=)</h2>
+          <p>Augmented assignment lets you update an existing variable in place using its current value.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">points = 10
+points += 5   # Same as: points = points + 5 (now 15)
+
+health = 100
+health -= 25  # Same as: health = health - 25 (now 75)
+
+message = "Hello"
+message += " World"  # Appends to string: "Hello World"
+
+print("Points:", points)
+print("Health:", health)
+print(message)</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔄 Type Conversion (Casting)</h2>
+          <p>Convert values between data types using <code>int()</code>, <code>float()</code>, and <code>str()</code>.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python"># Convert string to integer for calculations
+age = int(input("Enter age: "))
+next_age = age + 1
+
+# Convert integer to string for text concatenation
+score = 95
+summary = "Your final score is: " + str(score)
+
+# Convert string to decimal float
+price = float("19.99")
+
+print("Next age:", next_age)
+print(summary)
+print("Total price with 10% tax:", price * 1.10)</code></pre>
+          </div>
+        </div>
       </div>
 
       <!-- TAB 2: Operators -->
@@ -2499,6 +2577,59 @@ else:
         </div>
       </div>
 
+      <!-- TAB: Pattern Matching (match and case) -->
+      <div id="tab-match-case" class="tab-content">
+        <div class="card">
+          <h2>🚦 Pattern Matching: match and case</h2>
+          <p>Python's <code>match</code> and <code>case</code> statement compares a variable or expression against distinct literal choices. It provides a clean, readable alternative to long chains of <code>if</code> / <code>elif</code> / <code>else</code> when matching specific exact values.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">colour = input("Traffic light colour: ").lower()
+
+match colour:
+    case "red":
+        print("STOP")
+    case "amber" | "yellow":
+        print("WAIT")
+    case "green":
+        print("GO")
+    case _:
+        print("UNKNOWN COLOUR")</code></pre>
+          </div>
+          <div class="banner info" style="margin-top: 14px;">
+            <span>ℹ️</span>
+            <span>
+              <strong>Key Syntax to Remember:</strong><br>
+              • Use the pipe symbol <code>|</code> to combine multiple choices on a single line (e.g. <code>case "amber" | "yellow":</code>).<br>
+              • The underscore <code>case _:</code> is the <strong>wildcard fallback</strong> (equivalent to <code>else</code>) that catches anything not matched above.<br>
+              • Python checks cases sequentially from top to bottom and exits the match block as soon as the first matching case executes.
+            </span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>⚖️ When to Use match/case vs if/elif/else</h2>
+          <p>Understanding which selection structure to choose is a key computational thinking skill:</p>
+          <div class="op-grid" style="grid-template-columns: 140px 1fr 1fr;">
+            <div class="op-header">Feature</div>
+            <div class="op-header"><code>match / case</code></div>
+            <div class="op-header"><code>if / elif / else</code></div>
+
+            <div class="op-cell"><strong>Best for</strong></div>
+            <div class="op-cell">Discrete, exact matching against known options (commands, menus, status codes).</div>
+            <div class="op-cell">Ranges, mathematical inequalities (<code>&gt;=</code>, <code>&lt;</code>), and complex boolean expressions.</div>
+
+            <div class="op-cell"><strong>Multiple options</strong></div>
+            <div class="op-cell">Concise single-line syntax using pipe: <code>case "a" | "b":</code>.</div>
+            <div class="op-cell">Requires explicit repetition: <code>elif x == "a" or x == "b":</code>.</div>
+
+            <div class="op-cell"><strong>Fallback</strong></div>
+            <div class="op-cell">Wildcard catch-all: <code>case _:</code></div>
+            <div class="op-cell">Default catch-all: <code>else:</code></div>
+          </div>
+        </div>
+      </div>
+
       <!-- TAB: While Loops -->
       <div id="tab-while-loops" class="tab-content">
         <div class="card">
@@ -2547,28 +2678,165 @@ for i in range(1, 100, 2):
         </div>
       </div>
 
-      <!-- TAB: String Length -->
+      <!-- TAB: String Length, Indexing & Methods -->
       <div id="tab-string-length" class="tab-content">
         <div class="card">
           <h2>📏 String Length: len()</h2>
-          <p>The <code>len()</code> function returns the number of characters in a string.</p>
+          <p>The <code>len()</code> function returns the total number of characters in a string, including spaces and punctuation.</p>
           <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
             <pre><code class="language-python">greeting = "Good Day!"
-print(len(greeting)) # Outputs: 9</code></pre>
+print("Length:", len(greeting)) # Outputs: 9</code></pre>
           </div>
           <div class="banner bug">
             <span>🐛</span>
-            <span><strong>Common Bug:</strong> <code>len()</code> does not work on numbers (integers). To find the
-              length of a number, convert it to a string first: <br><code>print(len(str(mynum)))</code></span>
+            <span><strong>Common Bug:</strong> <code>len()</code> cannot be called directly on an integer. To find the number of digits in a number, cast it to a string first: <code>len(str(mynum))</code>.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔤 String Indexing and Slicing</h2>
+          <p>Individual characters in a string can be accessed by their index number in square brackets <code>[ ]</code>. Python indexing starts at <code>0</code>.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">phrase = "Cambridge"
+
+# Positive Indexing (from left, starts at 0)
+first_char = phrase[0]   # "C"
+
+# Negative Indexing (from right, starts at -1)
+last_char = phrase[-1]   # "e"
+
+# Slicing: [start:stop] (stops BEFORE the stop index)
+first_three = phrase[0:3]  # "Cam" (indexes 0, 1, 2)
+middle_part = phrase[3:7]  # "brid"
+
+# Omitted bounds
+from_start = phrase[:4]    # "Camb" (from index 0 up to 4)
+to_end = phrase[4:]        # "ridge" (from index 4 to end)
+
+print(first_char, last_char, first_three)</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🛠️ Essential String Methods</h2>
+          <p>Python strings have built-in methods for changing case, searching, counting, and replacing text.</p>
+          <div class="op-grid" style="grid-template-columns: 140px 180px 1fr 140px;">
+            <div class="op-header">Method</div>
+            <div class="op-header">Purpose</div>
+            <div class="op-header">Example</div>
+            <div class="op-header">Result</div>
+
+            <div class="op-cell"><code>.upper()</code></div>
+            <div class="op-cell">Convert to uppercase</div>
+            <div class="op-cell"><code>"hello".upper()</code></div>
+            <div class="op-cell"><code>"HELLO"</code></div>
+
+            <div class="op-cell"><code>.lower()</code></div>
+            <div class="op-cell">Convert to lowercase</div>
+            <div class="op-cell"><code>"HELLO".lower()</code></div>
+            <div class="op-cell"><code>"hello"</code></div>
+
+            <div class="op-cell"><code>.title()</code></div>
+            <div class="op-cell">Capitalize each word</div>
+            <div class="op-cell"><code>"computer science".title()</code></div>
+            <div class="op-cell"><code>"Computer Science"</code></div>
+
+            <div class="op-cell"><code>.find(sub)</code></div>
+            <div class="op-cell">Find index (or -1)</div>
+            <div class="op-cell"><code>"banana".find("na")</code></div>
+            <div class="op-cell"><code>2</code></div>
+
+            <div class="op-cell"><code>.count(sub)</code></div>
+            <div class="op-cell">Count occurrences</div>
+            <div class="op-cell"><code>"banana".count("a")</code></div>
+            <div class="op-cell"><code>3</code></div>
+
+            <div class="op-cell"><code>.replace(o, n)</code></div>
+            <div class="op-cell">Replace occurrences</div>
+            <div class="op-cell"><code>"cats".replace("c", "b")</code></div>
+            <div class="op-cell"><code>"bats"</code></div>
+          </div>
+          <div class="banner info" style="margin-top: 14px;">
+            <span>ℹ️</span>
+            <span><strong>Immutability:</strong> Strings in Python are <em>immutable</em> (they cannot be changed in place). String methods always return a <strong>new</strong> string rather than modifying the original one.</span>
           </div>
         </div>
       </div>
 
-      <!-- TAB: Logical OR -->
+      <!-- TAB: Comparisons and Boolean Logic -->
       <div id="tab-logical-or" class="tab-content">
         <div class="card">
-          <h2>🔍 Logical Operator: or</h2>
-          <p>Use the <code>or</code> operator to check if at least one of multiple statements is true.</p>
+          <h2>⚖️ Comparison Operators</h2>
+          <p>Comparison operators compare two values and always produce a Boolean result: <code>True</code> or <code>False</code>.</p>
+          <div class="op-grid" style="grid-template-columns: 80px 170px 1fr 110px;">
+            <div class="op-header">Operator</div>
+            <div class="op-header">Meaning</div>
+            <div class="op-header">Example</div>
+            <div class="op-header">Result</div>
+
+            <div class="op-cell"><code>==</code></div>
+            <div class="op-cell">Equal to</div>
+            <div class="op-cell"><code>5 == 5</code></div>
+            <div class="op-cell"><code>True</code></div>
+
+            <div class="op-cell"><code>!=</code></div>
+            <div class="op-cell">Not equal to</div>
+            <div class="op-cell"><code>5 != 3</code></div>
+            <div class="op-cell"><code>True</code></div>
+
+            <div class="op-cell"><code>&lt;</code></div>
+            <div class="op-cell">Less than</div>
+            <div class="op-cell"><code>4 &lt; 10</code></div>
+            <div class="op-cell"><code>True</code></div>
+
+            <div class="op-cell"><code>&lt;=</code></div>
+            <div class="op-cell">Less than or equal</div>
+            <div class="op-cell"><code>5 &lt;= 5</code></div>
+            <div class="op-cell"><code>True</code></div>
+
+            <div class="op-cell"><code>&gt;</code></div>
+            <div class="op-cell">Greater than</div>
+            <div class="op-cell"><code>8 &gt; 12</code></div>
+            <div class="op-cell"><code>False</code></div>
+
+            <div class="op-cell"><code>&gt;=</code></div>
+            <div class="op-cell">Greater than or equal</div>
+            <div class="op-cell"><code>17 &gt;= 13</code></div>
+            <div class="op-cell"><code>True</code></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔗 Boolean Logic: and, or, not</h2>
+          <p>Logical operators allow you to combine or invert conditions to form complex decision rules.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">age = int(input("Enter student age: "))
+
+# and: BOTH conditions must be True
+is_teenager = age >= 13 and age <= 17
+
+# or: AT LEAST ONE condition must be True
+is_outside_range = age < 13 or age > 17
+
+# not: INVERTS the condition (True becomes False, False becomes True)
+is_not_sixteen = not (age == 16)  # Equivalent to: age != 16
+
+print("Teenager:", is_teenager)
+print("Outside 13-17 range:", is_outside_range)
+print("Not sixteen:", is_not_sixteen)</code></pre>
+          </div>
+          <div class="banner bug" style="margin-top: 14px;">
+            <span>🐛</span>
+            <span><strong>Common Trap:</strong> Writing <code>if age == 13 or 14:</code> does NOT work! Python evaluates <code>14</code> as truthy. Always write the full comparison on both sides: <code>if age == 13 or age == 14:</code>.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>🔍 While Loop Validation with or</h2>
+          <p>Use the <code>or</code> operator to validate user input and repeat prompting until the value is valid.</p>
           <div class="code-wrapper">
             <pre><code class="language-python">number = 0
 while number < 15 or number > 20:
@@ -2628,6 +2896,69 @@ MyList = ["Kuala Lumpur", "London", "Paris", "New York", "Bangkok"]</code></pre>
             <button class="list-btn secondary" onclick="resetVisualList()">Reset List</button>
           </div>
           <div class="instruction-text" id="list-feedback" style="font-weight: 600; color: var(--accent-pink);"></div>
+        </div>
+
+        <div class="card">
+          <h2>📊 Built-in List Analysis Functions</h2>
+          <p>Python provides fast built-in functions to analyse lists without needing to write manual search loops.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">scores = [12, 18, 18, 15, 20]
+
+# Total sum of elements
+total = sum(scores)          # 83
+
+# Highest and lowest values
+highest = max(scores)        # 20
+lowest = min(scores)         # 12
+
+# Count total elements
+count_all = len(scores)      # 5
+
+# Count specific occurrences
+num_eighteens = scores.count(18)  # 2
+
+# Membership testing with in / not in (returns True / False)
+has_fifteen = 15 in scores        # True
+has_fifty = 50 in scores          # False
+missing_zero = 0 not in scores    # True
+
+print("Sum:", total, "Max:", highest, "Min:", lowest)
+print("18 appears:", num_eighteens, "times")
+print("Has 15:", has_fifteen)</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📋 Modifying, Inserting, and Sorting Lists</h2>
+          <p>Unlike strings, Python lists are <strong>mutable</strong>, meaning you can add, insert, remove, and reorder elements in place.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">numbers = [5, 2, 9]
+
+# 1. append(item): Adds an item to the end of the list
+numbers.append(4)           # [5, 2, 9, 4]
+
+# 2. insert(index, item): Inserts an item at a specific index
+numbers.insert(1, 7)        # [5, 7, 2, 9, 4] (7 is inserted at index 1)
+
+# 3. pop(index): Removes and returns the item at index
+removed = numbers.pop(2)    # Removes index 2 (value 2)
+# numbers is now: [5, 7, 9, 4]
+
+# 4. sort(): Sorts the list ascending in place
+numbers.sort()              # [4, 5, 7, 9]
+
+# 5. sort(reverse=True): Sorts descending in place
+numbers.sort(reverse=True)  # [9, 7, 5, 4]
+
+print("Removed item:", removed)
+print("Final sorted list:", numbers)</code></pre>
+          </div>
+          <div class="banner info" style="margin-top: 14px;">
+            <span>ℹ️</span>
+            <span><code>numbers.pop()</code> without an argument removes and returns the <em>very last</em> item in the list.</span>
+          </div>
         </div>
       </div>
 
@@ -3507,15 +3838,28 @@ with open("score.txt", "a") as file:
           </div>
 
           <h3>3. Reading from a File (Read Mode)</h3>
-          <p>Opening a file with <code>"r"</code> allows you to read from it.</p>
+          <p>Opening a file with <code>"r"</code> allows you to read stored data. Python provides three essential methods depending on your needs:</p>
           <div class="code-wrapper">
-            <pre><code class="language-python"># Reads contents from the file
-with open("score.txt", "r") as file:
-    first_score = int(file.readline())
-    second_score = int(file.readline())
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python"># Method 1: read() - Reads the whole file into one single string
+with open("scores.txt", "r") as file:
+    whole_text = file.read()
+print("Contains Ben:", "Ben" in whole_text)
 
-print(first_score)   # 120
-print(second_score)  # 150</code></pre>
+# Method 2: readline() - Reads one line at a time
+with open("scores.txt", "r") as file:
+    first_line = file.readline()
+print("First line:", first_line.strip())
+
+# Method 3: readlines() - Reads all remaining lines into a list of strings
+with open("scores.txt", "r") as file:
+    all_lines = file.readlines()
+print("Total lines:", len(all_lines))
+
+# Older pattern: explicit open() and close()
+f = open("scores.txt", "r")
+data = f.read()
+f.close()  # Must remember to close!</code></pre>
           </div>
 
           <div class="banner info" style="margin-top: 15px; margin-bottom: 15px;">
@@ -3882,6 +4226,28 @@ print("Updated:", updated)</code></pre>
         </div>
 
         <div class="card">
+          <h2>🌐 The global Keyword</h2>
+          <p>By default, assigning to a variable inside a function creates a new <strong>local variable</strong>, leaving any variable outside with the same name untouched. To explicitly modify a variable that was created at the outer (module) level, declare it using the <code>global</code> keyword.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">score = 4
+
+def add_bonus():
+    global score   # Explicitly refers to the outer global 'score'
+    score += 3
+
+add_bonus()
+add_bonus()
+
+print("Final Score:", score)  # Outputs: 10</code></pre>
+          </div>
+          <div class="banner bug" style="margin-top: 14px;">
+            <span>⚠️</span>
+            <span><strong>Good Practice:</strong> Use <code>global</code> deliberately. Overusing global state makes code harder to follow and test. Whenever possible, pass values in as parameters and return new values using <code>return</code>.</span>
+          </div>
+        </div>
+
+        <div class="card">
           <h2>🧺 Mutable Arguments</h2>
           <p>Lists and dictionaries are mutable. If a procedure changes a list or dictionary that was passed in, the
             original collection changes too.</p>
@@ -3926,6 +4292,67 @@ print_badge("  maya  ", "C")</code></pre>
             <li><code>create_badge()</code> builds a value and returns it.</li>
             <li><code>print_badge()</code> handles output.</li>
           </ul>
+        </div>
+      </div>
+
+      <!-- TAB: Random and Statistics Modules -->
+      <div id="tab-random-statistics" class="tab-content">
+        <div class="card">
+          <h2>🎲 The random Module: randint() & randrange()</h2>
+          <p>Python's built-in <code>random</code> module generates pseudo-random numbers for games, simulations, and algorithmic problem-solving.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">import random
+
+# 1. randint(a, b): Random integer INCLUSIVE of both endpoints (a <= N <= b)
+dice_roll = random.randint(1, 6)      # Returns 1, 2, 3, 4, 5, or 6
+
+# 2. randrange(stop): Random integer from 0 up to (but not including) stop
+idx = random.randrange(10)            # Returns 0 to 9
+
+# 3. randrange(start, stop, step): Stepped random choices
+# Example: Random even number from 2 to 10 inclusive (stops before 12)
+even_num = random.randrange(2, 12, 2) # Returns 2, 4, 6, 8, or 10
+
+# 4. choice(sequence): Random element from a list
+colours = ["red", "blue", "green"]
+selected = random.choice(colours)
+
+print("Dice roll:", dice_roll)
+print("Random even:", even_num)
+print("Selected colour:", selected)</code></pre>
+          </div>
+          <div class="banner info" style="margin-top: 14px;">
+            <span>💡</span>
+            <span><strong>randint vs randrange:</strong> <code>random.randint(1, 6)</code> includes 6. In contrast, <code>random.randrange(1, 6)</code> generates values up to 5 (exclusive of the stop value, just like Python's standard <code>range()</code>).</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📊 The statistics Module & round()</h2>
+          <p>The <code>statistics</code> module provides mathematical functions for calculating statistics of numerical datasets, while <code>round()</code> formats floating-point values to a specified precision.</p>
+          <div class="code-wrapper">
+            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-python">import statistics
+
+scores = [11, 14, 16, 20]
+
+# 1. statistics.mean(): Calculates arithmetic average (sum / count)
+raw_mean = statistics.mean(scores)  # 15.25
+
+# 2. round(value, ndigits): Round to decimal places
+rounded_mean = round(raw_mean, 1)   # 15.3 (rounded to 1 decimal place)
+whole_mean = round(raw_mean)        # 15 (rounded to nearest whole integer)
+
+print("Scores:", scores)
+print("Raw Mean:", raw_mean)
+print("Rounded Mean (1 d.p.):", rounded_mean)
+print("Whole Mean:", whole_mean)</code></pre>
+          </div>
+          <div class="banner bug" style="margin-top: 14px;">
+            <span>ℹ️</span>
+            <span><strong>ZeroDivisionError:</strong> <code>statistics.mean([])</code> on an empty list raises a <code>StatisticsError</code>. Always ensure your list contains at least one number before computing the mean!</span>
+          </div>
         </div>
       </div>
 
