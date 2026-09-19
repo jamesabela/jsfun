@@ -6,6 +6,7 @@ A focused Python Code Lab course for the Python commands and syntax students nee
 `jsfun/cambridge0265_2029_commands/`
 
 ## Start links
+- Teacher Portal & Course Hub: `https://jamesabela.github.io/jsfun/cambridge0265_2029_commands/index.html`
 - Raw first level: `https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/cambridge0265_2029_commands/01_variables_input.py`
 - Python Code Lab: `https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/cambridge0265_2029_commands/01_variables_input.py`
 
@@ -29,6 +30,7 @@ A focused Python Code Lab course for the Python commands and syntax students nee
 17. **Final Structured Challenge** - input, list, for, def, return, if/elif/else, statistics.mean, round, max, min
 
 ## Files included
+- `index.html` - Interactive Teacher Portal & Course Directory.
 - One `.py` starter file and one `.html` tutorial page for each level.
 - `scores.txt` for the file-reading activity.
 - `teachers.md` with solutions and teaching notes.

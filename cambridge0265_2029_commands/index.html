@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cambridge 0265 Python Commands (2029) - Teacher Portal & Course Directory</title>
+  <meta name="description" content="Comprehensive Teacher Portal and Course Directory for Cambridge IGCSE Computer Science 0265 (2029 Syllabus). 17 hands-on coding levels, reference solutions, and syllabus command checklist.">
+
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* Custom CSS Variables - Cambridge Blue & Academic Gold Theme */
+    :root {
+      --primary-base: 218;
+      --primary: hsl(var(--primary-base), 65%, 16%);
+      --primary-light: hsl(var(--primary-base), 55%, 30%);
+      --primary-glow: hsla(var(--primary-base), 65%, 20%, 0.1);
+
+      --accent-base: 38;
+      --accent: hsl(var(--accent-base), 92%, 48%);
+      --accent-glow: hsla(var(--accent-base), 92%, 48%, 0.16);
+
+      --bg-gradient: linear-gradient(135deg, hsl(var(--primary-base), 25%, 97%), hsl(210, 25%, 93%));
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --card-border: rgba(15, 35, 75, 0.12);
+      --text-main: hsl(218, 35%, 15%);
+      --text-muted: hsl(218, 15%, 35%);
+      --text-dim: hsl(218, 10%, 55%);
+      --input-bg: #ffffff;
+      --shadow: 0 10px 30px -10px hsla(var(--primary-base), 50%, 15%, 0.08);
+
+      --badge-bg: #eef2ff;
+      --badge-border: #c7d2fe;
+      --badge-text: #3730a3;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(135deg, hsl(var(--primary-base), 50%, 5%), hsl(220, 40%, 8%));
+      --card-bg: rgba(20, 28, 44, 0.92);
+      --card-border: rgba(245, 158, 11, 0.2);
+      --text-main: hsl(218, 20%, 93%);
+      --text-muted: hsl(218, 15%, 72%);
+      --text-dim: hsl(218, 10%, 52%);
+      --input-bg: hsl(218, 35%, 10%);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+
+      --badge-bg: rgba(99, 102, 241, 0.12);
+      --badge-border: rgba(129, 140, 248, 0.3);
+      --badge-text: #a5b4fc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+      padding-bottom: 60px;
+      transition: var(--transition);
+    }
+
+    /* Core container */
+    .container {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header Styling */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 44px 0 40px;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      margin-bottom: 35px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.15) 0%, transparent 55%),
+                  radial-gradient(circle at 10% 85%, rgba(59, 130, 246, 0.12) 0%, transparent 45%);
+      pointer-events: none;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-info {
+      flex: 1;
+    }
+
+    .crumb-trail {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 10px;
+      background: rgba(245, 158, 11, 0.12);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .header-info h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      line-height: 1.15;
+      font-weight: 800;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .header-info p {
+      font-size: 1.02rem;
+      opacity: 0.92;
+      max-width: 680px;
+      line-height: 1.55;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle-btn {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .theme-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: scale(1.06);
+    }
+
+    .theme-toggle-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* Sharing Actions */
+    .share-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .share-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .share-classroom {
+      background-color: #fbbc04;
+      color: #0f172a;
+    }
+
+    .share-classroom:hover {
+      background-color: #fcc934;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(251, 188, 4, 0.35);
+    }
+
+    .share-teams {
+      background-color: #464eb8;
+      color: white;
+    }
+
+    .share-teams:hover {
+      background-color: #5b62ca;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(70, 78, 184, 0.35);
+    }
+
+    .share-icon {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* Main Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+      gap: 30px;
+      align-items: start;
+    }
+
+    .dashboard-grid > * {
+      min-width: 0;
+    }
+
+    /* Controls: Search & Category Filter */
+    .controls-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 42px;
+      font-size: 0.92rem;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      background: var(--input-bg);
+      color: var(--text-main);
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .level-count-badge {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--primary-glow);
+      padding: 6px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+      background: var(--input-bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    [data-theme="dark"] .filter-btn.active {
+      background: var(--accent);
+      color: #0f172a;
+      border-color: var(--accent);
+    }
+
+    /* Roadmap List */
+    .roadmap-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .roadmap-section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.45rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+    }
+
+    .roadmap-section-title svg {
+      width: 24px;
+      height: 24px;
+      color: var(--accent);
+    }
+
+    .student-roadmap {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Level Card */
+    .level-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 20px;
+      position: relative;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .level-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 14px 32px -10px hsla(var(--accent-base), 85%, 25%, 0.18);
+    }
+
+    .level-illustration {
+      width: 76px;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-glow);
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(245, 158, 11, 0.35);
+      font-size: 2.1rem;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .level-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .level-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .level-num {
+      background: var(--accent);
+      color: #0f172a;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.74rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+
+    .concept-badge {
+      background: var(--primary-glow);
+      color: var(--primary-light);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    [data-theme="dark"] .concept-badge {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .level-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .level-desc {
+      font-size: 0.91rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .commands-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .cmd-pill {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--badge-text);
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    .level-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .launch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    [data-theme="dark"] .launch-btn {
+      background: var(--primary-light);
+    }
+
+    .launch-btn:hover {
+      background: var(--primary-light);
+      box-shadow: 0 4px 12px var(--primary-glow);
+      transform: translateY(-1px);
+    }
+
+    [data-theme="dark"] .launch-btn:hover {
+      background: hsl(var(--primary-base), 55%, 40%);
+    }
+
+    .launch-btn svg {
+      width: 15px;
+      height: 15px;
+      fill: currentColor;
+    }
+
+    .secondary-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .secondary-link-btn:hover {
+      color: var(--text-main);
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .copy-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--text-dim);
+      border: 1px solid transparent;
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .copy-link-btn:hover {
+      color: var(--text-main);
+      border-color: var(--card-border);
+      background: var(--primary-glow);
+    }
+
+    .copy-link-btn.copied {
+      color: #10b981;
+    }
+
+    /* Sidebar Column */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .sidebar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .sidebar-card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--primary-glow);
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-card-title svg {
+      width: 20px;
+      height: 20px;
+      color: var(--accent);
+    }
+
+    .sidebar-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    /* Solutions Accordion */
+    .solution-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .accordion-item {
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--input-bg);
+      transition: var(--transition);
+    }
+
+    .accordion-header {
+      background: var(--primary-glow);
+      padding: 11px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      transition: var(--transition);
+    }
+
+    .accordion-header:hover {
+      background: hsla(var(--primary-base), 65%, 20%, 0.15);
+    }
+
+    .accordion-header-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .accordion-icon {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.3s ease;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease-out;
+      background: var(--input-bg);
+    }
+
+    .accordion-inner {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.86rem;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .accordion-meta-block {
+      background: rgba(15, 35, 75, 0.03);
+      padding: 10px 12px;
+      border-radius: 6px;
+      border-left: 3px solid var(--accent);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    [data-theme="dark"] .accordion-meta-block {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .accordion-meta-block p {
+      margin: 0;
+      font-size: 0.83rem;
+      line-height: 1.45;
+    }
+
+    .accordion-meta-block strong {
+      color: var(--text-main);
+    }
+
+    .accordion-inner pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .copy-code-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--primary-glow);
+      color: var(--primary-light);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    [data-theme="dark"] .copy-code-btn {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .copy-code-btn:hover {
+      background: var(--primary-light);
+      color: white;
+      border-color: var(--primary-light);
+    }
+
+    .copy-code-btn.copied {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: #10b981;
+      color: #10b981;
+    }
+
+    .accordion-item.is-open .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-item.is-open .accordion-content {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    /* Specification Matrix */
+    .spec-table-wrapper {
+      max-height: 380px;
+      overflow-y: auto;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      margin-top: 10px;
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: left;
+    }
+
+    .spec-table th, .spec-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .spec-table th {
+      background: var(--primary-glow);
+      font-weight: 700;
+      color: var(--text-main);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .spec-table td.syntax-col {
+      font-family: 'Fira Code', monospace;
+      color: var(--primary-light);
+      word-break: break-word;
+    }
+
+    [data-theme="dark"] .spec-table td.syntax-col {
+      color: #93c5fd;
+    }
+
+    /* Out of Scope Box */
+    .scope-guard-box {
+      border-left: 4px solid #ef4444;
+      background: rgba(239, 68, 68, 0.08);
+      padding: 12px 14px;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .scope-guard-box strong {
+      color: #dc2626;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    [data-theme="dark"] .scope-guard-box strong {
+      color: #f87171;
+    }
+
+    /* Resource List */
+    .resource-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .resource-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.88rem;
+      padding: 9px 12px;
+      background: var(--primary-glow);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    [data-theme="dark"] .resource-link {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .resource-link:hover {
+      background: hsla(var(--primary-base), 65%, 20%, 0.2);
+      transform: translateX(4px);
+    }
+
+    .resource-link svg {
+      width: 18px;
+      height: 18px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .resource-link img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 30px;
+      text-align: center;
+      font-size: 0.86rem;
+      color: var(--text-dim);
+    }
+
+    footer a {
+      color: var(--primary-light);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    [data-theme="dark"] footer a {
+      color: #93c5fd;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    footer a.tea {
+      color: #e73c7e;
+    }
+
+    footer a.computing-link {
+      display: inline-block;
+      margin-top: 6px;
+    }
+
+    /* Responsive */
+    @media (max-width: 950px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .header-actions {
+        width: 100%;
+        align-items: center;
+      }
+
+      .share-container {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .level-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .level-illustration {
+        margin: 0 auto;
+      }
+
+      .level-badge-row, .level-actions, .commands-preview {
+        justify-content: center;
+      }
+    }
+
+    /* Print Stylesheet for Teachers */
+    @media print {
+      body {
+        background: white;
+        color: black;
+        padding-bottom: 0;
+      }
+      header {
+        background: white;
+        color: black;
+        box-shadow: none;
+        padding: 10px 0;
+        border-bottom: 2px solid #333;
+      }
+      .theme-toggle-btn, .header-actions, .controls-panel, .launch-btn, .copy-code-btn, .copy-link-btn, footer {
+        display: none !important;
+      }
+      .dashboard-grid {
+        display: block;
+      }
+      .level-card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
+        margin-bottom: 12px;
+      }
+      .accordion-content {
+        max-height: none !important;
+      }
+      .accordion-item {
+        page-break-inside: avoid;
+        margin-bottom: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Theme Toggle Button -->
+  <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle theme mode">
+    <svg id="themeSun" viewBox="0 0 24 24">
+      <path
+        d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0c-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0c-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.01a.996.996 0 0 0 0-1.41l-1.06-1.06c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0z" />
+    </svg>
+    <svg id="themeMoon" viewBox="0 0 24 24" style="display: none;">
+      <path
+        d="M12.3 22c5.02 0 9.1-4.08 9.1-9.1 0-1.55-.39-3.03-1.08-4.32-.35-.65-1.12-.83-1.69-.37-.44.36-.63.95-.47 1.5.21.72.33 1.47.33 2.26 0 4.19-3.41 7.6-7.6 7.6-2.1 0-4.01-.85-5.4-2.22-.39-.38-1.01-.35-1.37.07-.37.43-.37 1.07.03 1.47C6.01 20.75 8.99 22 12.3 22zM9.27 4.49c-.25.59.04 1.25.64 1.5.42.17.9-.01 1.13-.41.27-.47.62-.9 1.01-1.27.46-.42.48-1.14.04-1.59-.44-.45-1.16-.42-1.56.07-.5.62-.93 1.32-1.26 1.7z" />
+    </svg>
+  </button>
+
+  <header>
+    <div class="container header-content">
+      <div class="header-info">
+        <span class="crumb-trail">Cambridge IGCSE 0265 • 2029 Syllabus</span>
+        <h1>Cambridge Python Commands</h1>
+        <p>Complete 17-level focused Python Code Lab toolkit designed specifically for the Cambridge 0265 Computer Science 2029 syllabus. Every level includes interactive tutorials, automated self-marking tests, and reference teacher solutions.</p>
+      </div>
+      <div class="header-actions">
+        <span style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent);">Quick-Share First Lesson</span>
+        <div class="share-container">
+          <a id="classroomShareBtn" href="#" target="_blank" class="share-btn share-classroom" title="Post Level 1 to Google Classroom">
+            <svg class="share-icon" viewBox="0 0 24 24">
+              <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
+              <path d="M22 12c.31-.17.65-.28 1-.32V9l-11-6-11 6 11 6 4-2.18c0-.28.05-.55.15-.81L12 15 3.4 10.3 12 5.6l8.6 4.7-2.6 1.42c.8.3 1.5.8 2 1.48L22 12z" />
+              <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+            Google Classroom
+          </a>
+          <a id="teamsShareBtn" href="#" target="_blank" class="share-btn share-teams" title="Post Level 1 to Microsoft Teams">
+            <svg class="share-icon" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" />
+            </svg>
+            Microsoft Teams
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="dashboard-grid">
+
+      <!-- Left Column: Student Course Directory & Interactive Filters -->
+      <section>
+        <div class="controls-panel">
+          <div class="search-row">
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="courseSearchInput" class="search-input" placeholder="Search commands, syntax, or level titles (e.g., match, range, file)..." autocomplete="off">
+            </div>
+            <span class="level-count-badge" id="levelCountBadge">17 Levels</span>
+          </div>
+
+          <div class="filter-row" id="filterRow">
+            <button class="filter-btn active" data-filter="all">All Topics</button>
+            <button class="filter-btn" data-filter="basics">Variables & Arithmetic</button>
+            <button class="filter-btn" data-filter="control">Control Flow (if/while/for)</button>
+            <button class="filter-btn" data-filter="data">Strings & Lists</button>
+            <button class="filter-btn" data-filter="functions">Functions & Scope</button>
+            <button class="filter-btn" data-filter="files">Files & Modules</button>
+          </div>
+        </div>
+
+        <div class="roadmap-header-row">
+          <h2 class="roadmap-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 22 22 22 12 2"></polygon>
+              <circle cx="12" cy="13" r="3"></circle>
+            </svg>
+            Course Progression Map
+          </h2>
+        </div>
+
+        <div class="student-roadmap" id="studentRoadmap">
+          <!-- Dynamically populated level cards -->
+        </div>
+      </section>
+
+      <!-- Right Column: Teacher Resources & Solutions -->
+      <aside class="sidebar">
+
+        <!-- Teacher Reference Guides & Solutions -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              <line x1="12" y1="11" x2="12" y2="17"></line>
+              <line x1="9" y1="14" x2="15" y2="14"></line>
+            </svg>
+            Teacher Solutions & Focus
+          </h3>
+          <p>Click any level below to review the teaching goal, student task, and copy the tested drop-in reference solution.</p>
+
+          <div class="solution-accordion" id="solutionAccordion">
+            <!-- Accordion items populated dynamically -->
+          </div>
+        </div>
+
+        <!-- 2029 Syllabus Command Specification Matrix -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 11 12 14 22 4"></polyline>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            Cambridge 0265 Command Matrix
+          </h3>
+          <p>The course is strictly limited to the official Cambridge 0265 Python subset for 2029 examinations.</p>
+
+          <div class="spec-table-wrapper">
+            <table class="spec-table">
+              <thead>
+                <tr>
+                  <th>Topic Area</th>
+                  <th>Python Commands</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Assignment</strong></td>
+                  <td class="syntax-col">=, +=</td>
+                </tr>
+                <tr>
+                  <td><strong>Types & Values</strong></td>
+                  <td class="syntax-col">int, float, str, bool, True, False</td>
+                </tr>
+                <tr>
+                  <td><strong>Input / Output</strong></td>
+                  <td class="syntax-col">input(), print()</td>
+                </tr>
+                <tr>
+                  <td><strong>Casting</strong></td>
+                  <td class="syntax-col">int(), float(), str()</td>
+                </tr>
+                <tr>
+                  <td><strong>Comments</strong></td>
+                  <td class="syntax-col"># comment</td>
+                </tr>
+                <tr>
+                  <td><strong>Arithmetic</strong></td>
+                  <td class="syntax-col">+, -, *, /, //, %, **</td>
+                </tr>
+                <tr>
+                  <td><strong>Comparison</strong></td>
+                  <td class="syntax-col">==, !=, &lt;, &lt;=, &gt;, &gt;=</td>
+                </tr>
+                <tr>
+                  <td><strong>Boolean Logic</strong></td>
+                  <td class="syntax-col">and, or, not</td>
+                </tr>
+                <tr>
+                  <td><strong>Selection</strong></td>
+                  <td class="syntax-col">if, elif, else, match, case, case _, |</td>
+                </tr>
+                <tr>
+                  <td><strong>Iteration</strong></td>
+                  <td class="syntax-col">for, while, range(), break</td>
+                </tr>
+                <tr>
+                  <td><strong>Strings</strong></td>
+                  <td class="syntax-col">len(), .find(), .count(), .upper(), .lower(), .title(), .replace(), +, [0], [-1], [start:end]</td>
+                </tr>
+                <tr>
+                  <td><strong>Lists</strong></td>
+                  <td class="syntax-col">[], [idx], 2D [r][c], sum(), max(), min(), len(), .count(), .append(), .insert(), .pop(), .sort(), in, not in</td>
+                </tr>
+                <tr>
+                  <td><strong>Functions</strong></td>
+                  <td class="syntax-col">def, parameters, arguments, return, function calls</td>
+                </tr>
+                <tr>
+                  <td><strong>Statistics</strong></td>
+                  <td class="syntax-col">import statistics, statistics.mean(), round()</td>
+                </tr>
+                <tr>
+                  <td><strong>Random</strong></td>
+                  <td class="syntax-col">import random, random.randrange(), random.randint()</td>
+                </tr>
+                <tr>
+                  <td><strong>Scope</strong></td>
+                  <td class="syntax-col">global</td>
+                </tr>
+                <tr>
+                  <td><strong>Files</strong></td>
+                  <td class="syntax-col">open(), with open(...) as ..., "r", "w", "a", .close(), .read(), .readline(), .readlines(), .write()</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="scope-guard-box">
+            <strong>Exclusions: Deliberately NOT on 0265:</strong>
+            Dictionaries, tuples, sets, classes, OOP, exception handling (try/except), lambdas, list comprehensions, recursion, enumerate(), zip(), continue, or f-strings.
+          </div>
+        </div>
+
+        <!-- Supporting Resources -->
+        <div class="sidebar-card">
+          <h3 class="sidebar-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              <path d="M2 12h20"></path>
+            </svg>
+            Course Resources
+          </h3>
+          <p>Teacher guide documents, markdown checklists, and reference companions.</p>
+          <ul class="resource-list">
+            <li>
+              <a class="resource-link" href="https://github.com/jamesabela/jsfun/blob/main/cambridge0265_2029_commands/teachers.md" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <span>Solution Guide (teachers.md)</span>
+              </a>
+            </li>
+            <li>
+              <a class="resource-link" href="https://github.com/jamesabela/jsfun/blob/main/cambridge0265_2029_commands/command_checklist.md" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                <span>Command Checklist (command_checklist.md)</span>
+              </a>
+            </li>
+            <li>
+              <a class="resource-link" href="../pythonmanual.html" target="_blank">
+                <img src="../images/manual.png" alt="" onerror="this.style.display='none'">
+                <span>Python Reference Guide</span>
+              </a>
+            </li>
+            <li>
+              <a class="resource-link" href="../computing.html" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                <span>More Computing Tools</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <footer class="container">
+    <p>
+      Made with ❤️ for better thinking. If it helped you, support the project.
+      <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+      <br>
+      <a href="../computing.html" class="computing-link">More Computing Tools</a>
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.85rem;">
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> © James Abela 2026
+    </p>
+  </footer>
+
+  <script>
+    // Configuration details
+    const rawGithubBase = "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/cambridge0265_2029_commands/";
+    const editorPrefix = "../pythoncopy.html?url=";
+    const absoluteEditorPrefix = "https://jamesabela.github.io/jsfun/pythoncopy.html?url=";
+
+    // 17 Complete Levels Data for Cambridge 0265 (2029)
+    const levels = [
+      {
+        num: 1,
+        file: "01_variables_input.py",
+        htmlFile: "01_variables_input.html",
+        title: "Variables, Input and Output",
+        category: "basics",
+        concept: "Variables & I/O",
+        emoji: "📝",
+        desc: "Master foundational commands: variables, user input, casting, string concatenation, and print statements.",
+        commands: ["=", "+=", "int()", "float()", "str()", "bool()", "input()", "print()"],
+        goal: "Start with the commands that appear in almost every Python program: variables, keyboard input, output, data types and type conversion.",
+        task: "Ask for a student name and age. Convert the age to an integer. Start points at 10, then add 5 using +=. Print the name, the age next year and the points.",
+        code: `name = input("Name: ")
+age = int(input("Age: "))
+
+points = 10
+points += 5
+
+print("Hello " + name)
+print("Next age:", age + 1)
+print("Points:", points)`
+      },
+      {
+        num: 2,
+        file: "02_arithmetic.py",
+        htmlFile: "02_arithmetic.html",
+        title: "Arithmetic Operators",
+        category: "basics",
+        concept: "Arithmetic",
+        emoji: "➗",
+        desc: "Perform calculations using integer division, remainder modulo, and exponent power operators.",
+        commands: ["+", "-", "*", "/", "//", "%", "**"],
+        goal: "Cambridge expects students to use the common arithmetic operators, including integer division, remainder and powers.",
+        task: "Input a number of seconds. Print the whole number of minutes using // and the seconds left using %. Then print the square of the original value using **.",
+        code: `seconds = int(input("Seconds: "))
+minutes = seconds // 60
+left = seconds % 60
+square = seconds ** 2
+print("Minutes:", minutes)
+print("Seconds left:", left)
+print("Square:", square)`
+      },
+      {
+        num: 3,
+        file: "03_comparisons_logic.py",
+        htmlFile: "03_comparisons_logic.html",
+        title: "Comparisons and Boolean Logic",
+        category: "control",
+        concept: "Logic & Boolean",
+        emoji: "⚖️",
+        desc: "Evaluate boolean expressions and connect multiple conditions with and, or, and not.",
+        commands: ["==", "!=", "<", "<=", ">", ">=", "and", "or", "not"],
+        goal: "Comparisons produce Boolean results. Logical operators let you combine conditions into rules.",
+        task: "Input an age. Print whether it is between 13 and 17 inclusive, whether it is not 16, and whether it is younger than 13 or older than 17.",
+        code: `age = int(input("Age: "))
+teen = age >= 13 and age <= 17
+not_sixteen = age != 16
+outside = age < 13 or age > 17
+print("Teen:", teen)
+print("Not sixteen:", not_sixteen)
+print("Outside:", outside)`
+      },
+      {
+        num: 4,
+        file: "04_selection.py",
+        htmlFile: "04_selection.html",
+        title: "if, elif and else",
+        category: "control",
+        concept: "Selection",
+        emoji: "🔀",
+        desc: "Implement multi-way selection branches to execute specific actions based on evaluated criteria.",
+        commands: ["if", "elif", "else"],
+        goal: "Use selection when a program needs to choose between different actions.",
+        task: "Input a temperature. Print Hot for 30 or more, Warm for 20 to 29, and Cool for anything lower.",
+        code: `temperature = int(input("Temperature: "))
+if temperature >= 30:
+    print("Hot")
+elif temperature >= 20:
+    print("Warm")
+else:
+    print("Cool")`
+      },
+      {
+        num: 5,
+        file: "05_match_case.py",
+        htmlFile: "05_match_case.html",
+        title: "match and case",
+        category: "control",
+        concept: "Pattern Matching",
+        emoji: "🚦",
+        desc: "Use Python's match and case syntax to handle exact patterns, compound options, and default wildcards.",
+        commands: ["match", "case", "case _", "|"],
+        goal: "Pattern selection is useful when one value is compared with several exact choices.",
+        task: "Input a traffic light colour. Print STOP for red, WAIT for amber or yellow, GO for green, and UNKNOWN for anything else.",
+        code: `colour = input("Colour: ").lower()
+match colour:
+    case "red":
+        print("STOP")
+    case "amber" | "yellow":
+        print("WAIT")
+    case "green":
+        print("GO")
+    case _:
+        print("UNKNOWN")`
+      },
+      {
+        num: 6,
+        file: "06_while_break.py",
+        htmlFile: "06_while_break.html",
+        title: "while Loops and break",
+        category: "control",
+        concept: "Condition Loops",
+        emoji: "🔄",
+        desc: "Repeat code blocks based on condition evaluation and deliberately exit infinite loops with break.",
+        commands: ["while", "while True", "break"],
+        goal: "A while loop repeats while a condition is true. A while True loop can be stopped deliberately with break.",
+        task: "Keep asking for a positive number. Stop when the user enters 0. Add all positive numbers to a total and print the total when the loop ends.",
+        code: `total = 0
+while True:
+    number = int(input("Number: "))
+    if number == 0:
+        break
+    total += number
+print("Total:", total)`
+      },
+      {
+        num: 7,
+        file: "07_for_range.py",
+        htmlFile: "07_for_range.html",
+        title: "for Loops and range()",
+        category: "control",
+        concept: "Counted Loops",
+        emoji: "🔁",
+        desc: "Loop with counted range intervals (start, stop, step) and iterate directly over sequence elements.",
+        commands: ["for", "range(stop)", "range(start, stop)", "range(s, e, step)"],
+        goal: "Students should recognise all three common forms of range(), as well as looping directly through a list.",
+        task: "Use range(start, stop, step) to print 10, 8, 6, 4, 2. Then use a second for loop to print each name in the supplied list.",
+        code: `names = ["Aisha", "Ben", "Chen"]
+for number in range(10, 0, -2):
+    print(number)
+for name in names:
+    print(name)`
+      },
+      {
+        num: 8,
+        file: "08_strings.py",
+        htmlFile: "08_strings.html",
+        title: "String Methods, Indexing and Slicing",
+        category: "data",
+        concept: "Strings",
+        emoji: "🔤",
+        desc: "Extract substrings with index and slice notation, and transform text using built-in methods.",
+        commands: ["len()", ".find()", ".count()", ".upper()", ".lower()", ".title()", "[0]", "[-1]", "[0:3]"],
+        goal: "String questions use real Python operations. Students need both methods and index or slice notation.",
+        task: "Input a phrase. Print its length, first character, last character, first three characters, uppercase version, title case version, and the number of times the letter a appears.",
+        code: `phrase = input("Phrase: ")
+print("Length:", len(phrase))
+print("First:", phrase[0])
+print("Last:", phrase[-1])
+print("First three:", phrase[0:3])
+print(phrase.upper())
+print(phrase.title())
+print("Count a:", phrase.lower().count("a"))`
+      },
+      {
+        num: 9,
+        file: "09_list_analysis.py",
+        htmlFile: "09_list_analysis.html",
+        title: "List Analysis",
+        category: "data",
+        concept: "List Inspection",
+        emoji: "📊",
+        desc: "Query and inspect 1D lists using aggregation functions (sum, max, min, len) and membership operators.",
+        commands: ["[]", "list[i]", "sum()", "max()", "min()", "len()", ".count()", "in", "not in"],
+        goal: "Lists store several values under one variable name. Students should analyse them using built-in functions and membership tests.",
+        task: "Use the supplied list to print the first score, total, highest, lowest, length, how many 18s there are, and whether 15 is present.",
+        code: `scores = [12, 18, 18, 15]
+print("First:", scores[0])
+print("Total:", sum(scores))
+print("Highest:", max(scores))
+print("Lowest:", min(scores))
+print("Length:", len(scores))
+print("Number of 18s:", scores.count(18))
+print("Has 15:", 15 in scores)`
+      },
+      {
+        num: 10,
+        file: "10_list_editing.py",
+        htmlFile: "10_list_editing.html",
+        title: "Editing and Sorting Lists",
+        category: "data",
+        concept: "List Modification",
+        emoji: "📋",
+        desc: "Add items, insert at specific indices, remove elements with pop, and sort ascending or descending.",
+        commands: [".append()", ".insert()", ".pop()", ".sort()", ".sort(reverse=True)"],
+        goal: "Students need to add, insert, remove and sort items in a list.",
+        task: "Start with [5, 2, 9]. Append 4, insert 7 at index 1, remove the item at index 2 with pop(), then sort descending. Print the removed value and final list.",
+        code: `numbers = [5, 2, 9]
+numbers.append(4)
+numbers.insert(1, 7)
+removed = numbers.pop(2)
+numbers.sort(reverse=True)
+print("Removed:", removed)
+print("Final:", numbers)`
+      },
+      {
+        num: 11,
+        file: "11_2d_lists.py",
+        htmlFile: "11_2d_lists.html",
+        title: "2D Lists and Nested Loops",
+        category: "data",
+        concept: "2D Lists",
+        emoji: "🔲",
+        desc: "Access row and column elements in two-dimensional matrices and traverse grids with nested loops.",
+        commands: ["list[row][col]", "nested for loops"],
+        goal: "A 2D list is a list containing lists. Students should understand row and column indexing and how nested loops visit every value.",
+        task: "Use nested loops to total every number in the 2D list. Also print the value at row 1, column 2.",
+        code: `grid = [[2, 4, 6], [1, 3, 5]]
+total = 0
+for row in grid:
+    for value in row:
+        total += value
+print("Cell:", grid[1][2])
+print("Total:", total)`
+      },
+      {
+        num: 12,
+        file: "12_functions.py",
+        htmlFile: "12_functions.html",
+        title: "Functions, Parameters and return",
+        category: "functions",
+        concept: "Functions & Parameters",
+        emoji: "⚙️",
+        desc: "Define modular reusable code blocks, accept input parameters, and return calculated values to caller.",
+        commands: ["def", "parameters", "return", "function call"],
+        goal: "Functions package reusable logic. Parameters receive values and return sends a result back to the caller.",
+        task: "Complete the function rectangle_area(width, height) so that it returns the area. Input width and height, call the function and print the result.",
+        code: `def rectangle_area(width, height):
+    return width * height
+
+width = int(input("Width: "))
+height = int(input("Height: "))
+area = rectangle_area(width, height)
+print("Area:", area)`
+      },
+      {
+        num: 13,
+        file: "13_global.py",
+        htmlFile: "13_global.html",
+        title: "Global Variables",
+        category: "functions",
+        concept: "Variable Scope",
+        emoji: "🌐",
+        desc: "Understand function variable scope and deliberately alter global state using the global keyword.",
+        commands: ["global", "variable scope"],
+        goal: "The global keyword allows a function to change a variable created outside the function. It should be used deliberately rather than everywhere.",
+        task: "Complete add_bonus() so that each call adds 3 to the global score. Call it twice and print the final score.",
+        code: `score = 4
+
+def add_bonus():
+    global score
+    score += 3
+
+add_bonus()
+add_bonus()
+print("Score:", score)`
+      },
+      {
+        num: 14,
+        file: "14_random_statistics.py",
+        htmlFile: "14_random_statistics.html",
+        title: "Random, Statistics and Rounding",
+        category: "files",
+        concept: "Modules & Math",
+        emoji: "🎲",
+        desc: "Generate random integers and stepped numbers, calculate mean statistics, and round floats.",
+        commands: ["import random", "random.randint()", "random.randrange()", "import statistics", "statistics.mean()", "round()"],
+        goal: "The syllabus names random and statistics. Students should know the specified functions and how to round results.",
+        task: "Calculate and print the mean of the supplied scores rounded to 1 decimal place. Then generate a random die roll from 1 to 6 and a random even number from 2 to 10 using randrange().",
+        code: `import random
+import statistics
+
+scores = [11, 14, 16, 20]
+mean_score = round(statistics.mean(scores), 1)
+die = random.randint(1, 6)
+even = random.randrange(2, 12, 2)
+
+print("Mean:", mean_score)
+print("Die:", die)
+print("Even:", even)`
+      },
+      {
+        num: 15,
+        file: "15_file_reading.py",
+        htmlFile: "15_file_reading.html",
+        title: "Reading Text Files",
+        category: "files",
+        concept: "File Reading",
+        emoji: "📖",
+        desc: "Open and read text files using open/read/close and context-managed with open, readline, and readlines.",
+        commands: ["open()", '"r"', ".read()", ".readline()", ".readlines()", ".close()", "with open(...) as ..."],
+        goal: "File reading lets a program use stored data. This level shows both explicit open and close and the safer with open pattern.",
+        task: "Read scores.txt. First use open(), read() and close() to check whether Ben appears. Then reopen the file with with open(), read one line with readline() and the remaining lines with readlines().",
+        code: `file = open("scores.txt", "r")
+whole_text = file.read()
+file.close()
+
+with open("scores.txt", "r") as file:
+    first = file.readline()
+    remaining = file.readlines()
+
+print("Contains Ben:", "Ben" in whole_text)
+print("First:", first.strip())
+print("Remaining:", len(remaining))`
+      },
+      {
+        num: 16,
+        file: "16_file_writing.py",
+        htmlFile: "16_file_writing.html",
+        title: "Writing and Appending Files",
+        category: "files",
+        concept: "File Writing",
+        emoji: "✍️",
+        desc: "Differentiate between write mode ('w') which overwrites files and append mode ('a') which appends rows.",
+        commands: ['"w"', '"a"', ".write()", "with open(...) as ..."],
+        goal: "Write mode creates or replaces file contents. Append mode adds new content to the end of a file.",
+        task: "Input a name and score. Write name,score to result.txt using write mode. Then append PASS on a new line. Reopen the file and print its contents.",
+        code: `name = input("Name: ")
+score = int(input("Score: "))
+
+with open("result.txt", "w") as file:
+    file.write(name + "," + str(score) + "\\n")
+
+with open("result.txt", "a") as file:
+    file.write("PASS\\n")
+
+with open("result.txt", "r") as file:
+    result = file.read()
+
+print(result)`
+      },
+      {
+        num: 17,
+        file: "17_final_challenge.py",
+        htmlFile: "17_final_challenge.html",
+        title: "Final Structured Challenge",
+        category: "functions",
+        concept: "Synthesis Project",
+        emoji: "🏆",
+        desc: "Combine loops, lists, user input, custom subroutines, statistics, and conditional logic in one structured project.",
+        commands: ["input", "list", "for", "def", "return", "if/elif/else", "statistics.mean()", "round()", "max()", "min()"],
+        goal: "The final level combines several commands in one structured programming task. The aim is to select the right Python tools rather than memorise isolated syntax.",
+        task: "Input three scores. Store them in a list. Write a function classify(score) returning High for 80+, Medium for 50-79 and Low below 50. Print the rounded mean, highest, lowest and classification of the highest score.",
+        code: `import statistics
+
+def classify(score):
+    if score >= 80:
+        return "High"
+    elif score >= 50:
+        return "Medium"
+    else:
+        return "Low"
+
+scores = []
+for i in range(3):
+    scores.append(int(input("Score: ")))
+
+mean_score = round(statistics.mean(scores))
+highest = max(scores)
+lowest = min(scores)
+
+print("Mean:", mean_score)
+print("Highest:", highest)
+print("Lowest:", lowest)
+print("Band:", classify(highest))`
+      }
+    ];
+
+    let currentFilter = "all";
+    let searchQuery = "";
+
+    // DOM Elements
+    const roadmapContainer = document.getElementById("studentRoadmap");
+    const accordionContainer = document.getElementById("solutionAccordion");
+    const searchInput = document.getElementById("courseSearchInput");
+    const levelCountBadge = document.getElementById("levelCountBadge");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+
+    // Render Student Roadmap Cards
+    function renderRoadmap() {
+      roadmapContainer.innerHTML = "";
+
+      const filtered = levels.filter(lvl => {
+        const matchesFilter = currentFilter === "all" || lvl.category === currentFilter;
+        const q = searchQuery.toLowerCase().trim();
+        const matchesSearch = !q ||
+          lvl.title.toLowerCase().includes(q) ||
+          lvl.concept.toLowerCase().includes(q) ||
+          lvl.desc.toLowerCase().includes(q) ||
+          lvl.commands.some(c => c.toLowerCase().includes(q)) ||
+          lvl.file.toLowerCase().includes(q);
+
+        return matchesFilter && matchesSearch;
+      });
+
+      levelCountBadge.textContent = `${filtered.length} of 17 Levels`;
+
+      if (filtered.length === 0) {
+        roadmapContainer.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px; background: var(--card-bg); border-radius: var(--radius-md); border: 1px dashed var(--card-border);">
+            <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 6px;">No levels match your search.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Try clearing the search box or selecting "All Topics".</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(lvl => {
+        const card = document.createElement("div");
+        card.className = "level-card";
+
+        const labUrl = editorPrefix + encodeURIComponent(rawGithubBase + lvl.file);
+        const shareableLabUrl = absoluteEditorPrefix + encodeURIComponent(rawGithubBase + lvl.file);
+
+        card.innerHTML = `
+          <div class="level-illustration">
+            ${lvl.emoji}
+          </div>
+          <div class="level-info">
+            <div>
+              <div class="level-badge-row">
+                <span class="level-num">LEVEL ${String(lvl.num).padStart(2, '0')}</span>
+                <span class="concept-badge">${lvl.concept}</span>
+              </div>
+              <h3 class="level-title">${lvl.title}</h3>
+              <p class="level-desc">${lvl.desc}</p>
+              <div class="commands-preview">
+                ${lvl.commands.map(cmd => `<span class="cmd-pill">${escapeHTML(cmd)}</span>`).join("")}
+              </div>
+            </div>
+            <div class="level-actions">
+              <a href="${labUrl}" target="_blank" class="launch-btn" title="Launch Level ${lvl.num} in Python Code Lab">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                Launch in Lab
+              </a>
+              <a href="./${lvl.htmlFile}" target="_blank" class="secondary-link-btn" title="View Level ${lvl.num} tutorial sheet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                View Tutorial
+              </a>
+              <button class="copy-link-btn" onclick="copyCourseLink(this, '${shareableLabUrl}')" title="Copy direct link for students">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Share Link</span>
+              </button>
+              <span style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-dim); margin-left: auto;">${lvl.file}</span>
+            </div>
+          </div>
+        `;
+        roadmapContainer.appendChild(card);
+      });
+    }
+
+    // Render Teacher Accordion
+    function renderAccordion() {
+      accordionContainer.innerHTML = "";
+      levels.forEach(lvl => {
+        const item = document.createElement("div");
+        item.className = "accordion-item";
+
+        item.innerHTML = `
+          <div class="accordion-header" onclick="toggleAccordion(this.parentElement)">
+            <span class="accordion-header-title">Level ${lvl.num}: ${lvl.title}</span>
+            <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <div class="accordion-meta-block">
+                <p><strong>Teaching Goal:</strong> ${escapeHTML(lvl.goal)}</p>
+                <p><strong>Student Task:</strong> ${escapeHTML(lvl.task)}</p>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim);">Reference Solution</span>
+                <button class="copy-code-btn" onclick="event.stopPropagation(); copySolutionCode(this, ${lvl.num - 1})">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy Code
+                </button>
+              </div>
+              <pre><code>${escapeHTML(lvl.code)}</code></pre>
+            </div>
+          </div>
+        `;
+        accordionContainer.appendChild(item);
+      });
+    }
+
+    // Toggle Accordion functionality
+    function toggleAccordion(item) {
+      const isOpen = item.classList.contains("is-open");
+
+      document.querySelectorAll(".accordion-item").forEach(acc => {
+        acc.classList.remove("is-open");
+        acc.querySelector(".accordion-content").style.maxHeight = null;
+      });
+
+      if (!isOpen) {
+        item.classList.add("is-open");
+        const content = item.querySelector(".accordion-content");
+        content.style.maxHeight = content.scrollHeight + 30 + "px";
+      }
+    }
+
+    // Copy Solution Code functionality
+    function copySolutionCode(btn, index) {
+      const rawCode = levels[index].code;
+      copyTextToClipboard(rawCode, () => {
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Copied!
+        `;
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove("copied");
+        }, 2000);
+      });
+    }
+
+    // Copy Shareable Lab Link
+    function copyCourseLink(btn, url) {
+      copyTextToClipboard(url, () => {
+        const span = btn.querySelector("span");
+        const originalText = span.textContent;
+        span.textContent = "Copied!";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          span.textContent = originalText;
+          btn.classList.remove("copied");
+        }, 2000);
+      });
+    }
+
+    // Generic Clipboard Helper with robust fallback
+    function copyTextToClipboard(text, onSuccess) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
+      } else {
+        fallbackCopy(text, onSuccess);
+      }
+    }
+
+    function fallbackCopy(text, onSuccess) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.top = "0";
+      textarea.style.left = "0";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        if (onSuccess) onSuccess();
+      } catch (err) {
+        console.error("Copy fallback error", err);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // HTML Escaper helper
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g,
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+
+    // Search input listener
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      renderRoadmap();
+    });
+
+    // Category Filter Buttons
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.getAttribute("data-filter");
+        renderRoadmap();
+      });
+    });
+
+    // Theme Management
+    const themeBtn = document.getElementById("themeToggleBtn");
+    const sunIcon = document.getElementById("themeSun");
+    const moonIcon = document.getElementById("themeMoon");
+
+    let activeTheme = localStorage.getItem("cambridge0265-theme") || "light";
+    document.documentElement.setAttribute("data-theme", activeTheme);
+    updateThemeIcons();
+
+    themeBtn.addEventListener("click", () => {
+      activeTheme = activeTheme === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", activeTheme);
+      localStorage.setItem("cambridge0265-theme", activeTheme);
+      updateThemeIcons();
+    });
+
+    function updateThemeIcons() {
+      if (activeTheme === "light") {
+        sunIcon.style.display = "block";
+        moonIcon.style.display = "none";
+      } else {
+        sunIcon.style.display = "none";
+        moonIcon.style.display = "block";
+      }
+    }
+
+    // Initialize Social Share Links targeting Level 1
+    const firstLevelRaw = rawGithubBase + "01_variables_input.py";
+    const absoluteFirstStepCodeLab = absoluteEditorPrefix + encodeURIComponent(firstLevelRaw);
+
+    document.getElementById("classroomShareBtn").href = `https://classroom.google.com/share?url=${encodeURIComponent(absoluteFirstStepCodeLab)}`;
+    document.getElementById("teamsShareBtn").href = `https://teams.microsoft.com/share?href=${encodeURIComponent(absoluteFirstStepCodeLab)}`;
+
+    // Initial render
+    renderRoadmap();
+    renderAccordion();
+  </script>
+  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+
+</html>
