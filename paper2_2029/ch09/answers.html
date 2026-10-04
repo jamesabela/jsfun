@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Answers - ch09</title>
+    <link rel="stylesheet" href="../course.css">
+</head>
+<body>
+    <main>
+        <nav aria-label="Site navigation" style="margin-bottom:24px;">
+            <a href="../index.html#ch09">← Back to Chapter</a>
+        </nav>
+        <section class="card">
+            <header>
+                <small>TEACHER RESOURCE</small>
+                <h2>Answers for Ch09</h2>
+            </header>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level01</h3>
+                <pre><code>def show_title():
+    print(&quot;Score Centre&quot;)
+
+show_title()
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level02</h3>
+                <pre><code>def greet(name):
+    print(&quot;Hello&quot;, name)
+
+name = input(&quot;Name: &quot;)
+greet(name)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level03</h3>
+                <pre><code>def area(width, height):
+    return width * height
+
+width = int(input(&quot;Width: &quot;))
+height = int(input(&quot;Height: &quot;))
+print(area(width, height))
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level04</h3>
+                <pre><code>def doubled(number):
+    result = number * 2
+    return result
+
+number = int(input(&quot;Number: &quot;))
+print(doubled(number))
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level05</h3>
+                <pre><code>import statistics
+scores = [8, 12, 8, 20]
+print(&quot;Total:&quot;, sum(scores))
+print(&quot;Count:&quot;, scores.count(8))
+print(&quot;Maximum:&quot;, max(scores))
+print(&quot;Minimum:&quot;, min(scores))
+print(&quot;Mean:&quot;, statistics.mean(scores))
+</code></pre>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>

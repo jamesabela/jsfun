@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Answers - ch13</title>
+    <link rel="stylesheet" href="../course.css">
+</head>
+<body>
+    <main>
+        <nav aria-label="Site navigation" style="margin-bottom:24px;">
+            <a href="../index.html#ch13">← Back to Chapter</a>
+        </nav>
+        <section class="card">
+            <header>
+                <small>TEACHER RESOURCE</small>
+                <h2>Answers for Ch13</h2>
+            </header>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level01</h3>
+                <pre><code>total = 0
+for index in range(3):
+    value = int(input(&quot;Score: &quot;))
+    total = total + value
+print(&quot;Total:&quot;, total)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level02</h3>
+                <pre><code>value = int(input(&quot;Value: &quot;))
+if value &gt;= 1 and value &lt;= 8:
+    print(&quot;Accepted&quot;)
+else:
+    print(&quot;Rejected&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level03</h3>
+                <pre><code>count = int(input(&quot;Count: &quot;))
+total = int(input(&quot;Total: &quot;))
+if count == 0:
+    print(&quot;No data&quot;)
+else:
+    print(&quot;Mean:&quot;, total / count)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level04</h3>
+                <pre><code>highest = int(input(&quot;First: &quot;))
+for index in range(2):
+    value = int(input(&quot;Next: &quot;))
+    if value &gt; highest:
+        highest = value
+print(&quot;Highest:&quot;, highest)
+</code></pre>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>

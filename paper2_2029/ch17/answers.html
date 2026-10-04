@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Answers - ch17</title>
+    <link rel="stylesheet" href="../course.css">
+</head>
+<body>
+    <main>
+        <nav aria-label="Site navigation" style="margin-bottom:24px;">
+            <a href="../index.html#ch17">← Back to Chapter</a>
+        </nav>
+        <section class="card">
+            <header>
+                <small>TEACHER RESOURCE</small>
+                <h2>Answers for Ch17</h2>
+            </header>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level01</h3>
+                <pre><code>votes = [0] * 8
+summary = []
+for activity in range(1, 5):
+    summary.append([activity, 0])
+print(&quot;Size:&quot;, len(votes))
+for row in summary:
+    print(row[0], row[1])
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level02</h3>
+                <pre><code>votes = [0] * 4
+for index in range(4):
+    votes[index] = int(input(&quot;Activity 1-4: &quot;))
+for vote in votes:
+    print(vote)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level03</h3>
+                <pre><code>votes = [2, 1, 2, 4, 1, 2, 4, 3]
+summary = [[1, 0], [2, 0], [3, 0], [4, 0]]
+for index in range(4):
+    summary[index][1] = votes.count(summary[index][0])
+for row in summary:
+    print(row[0], row[1])
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level04</h3>
+                <pre><code>summary = [[1, 2], [2, 3], [3, 1], [4, 2]]
+swapped = True
+while swapped:
+    swapped = False
+    for index in range(len(summary) - 1):
+        if summary[index][1] &lt; summary[index + 1][1]:
+            temporary = summary[index]
+            summary[index] = summary[index + 1]
+            summary[index + 1] = temporary
+            swapped = True
+for row in summary:
+    print(&quot;Activity&quot;, row[0], &quot;Votes&quot;, row[1])
+</code></pre>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Answers - ch08</title>
+    <link rel="stylesheet" href="../course.css">
+</head>
+<body>
+    <main>
+        <nav aria-label="Site navigation" style="margin-bottom:24px;">
+            <a href="../index.html#ch08">← Back to Chapter</a>
+        </nav>
+        <section class="card">
+            <header>
+                <small>TEACHER RESOURCE</small>
+                <h2>Answers for Ch08</h2>
+            </header>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level01</h3>
+                <pre><code>values = [12, 4, 7, 4, 19]
+target = int(input(&quot;Target: &quot;))
+position = -1
+for index in range(len(values)):
+    if values[index] == target:
+        position = index
+        break
+print(&quot;Position:&quot;, position)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level02</h3>
+                <pre><code>values = []
+for index in range(4):
+    values.append(int(input(&quot;Value: &quot;)))
+for index in range(len(values) - 1):
+    if values[index] &gt; values[index + 1]:
+        temporary = values[index]
+        values[index] = values[index + 1]
+        values[index + 1] = temporary
+for value in values:
+    print(value)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level03</h3>
+                <pre><code>values = []
+for index in range(4):
+    values.append(int(input(&quot;Value: &quot;)))
+swapped = True
+while swapped:
+    swapped = False
+    for index in range(len(values) - 1):
+        if values[index] &gt; values[index + 1]:
+            temporary = values[index]
+            values[index] = values[index + 1]
+            values[index + 1] = temporary
+            swapped = True
+for value in values:
+    print(value)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level04</h3>
+                <pre><code>values = []
+for index in range(4):
+    values.append(int(input(&quot;Value: &quot;)))
+swapped = True
+while swapped:
+    swapped = False
+    for index in range(len(values) - 1):
+        if values[index] &lt; values[index + 1]:
+            temporary = values[index]
+            values[index] = values[index + 1]
+            values[index + 1] = temporary
+            swapped = True
+for value in values:
+    print(value)
+</code></pre>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>

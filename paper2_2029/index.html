@@ -65,5 +65,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // Prepend to lesson
     lesson.insertBefore(label, lesson.firstChild);
   });
+
+  // 3. Remove "Read lesson" navigation links
+  document.querySelectorAll('.lesson .actions a:not(.button)').forEach(a => {
+    if (a.textContent.includes('Read lesson')) {
+      a.remove();
+    }
+  });
+
+  // 4. Add Share Buttons & Teacher Answers to each Chapter
+  document.querySelectorAll('section').forEach(section => {
+    const chapterId = section.id;
+    const shareUrl = encodeURIComponent(window.location.href.split('#')[0] + '#' + chapterId);
+    
+    let actionsDiv = section.querySelector(':scope > .actions');
+    if (!actionsDiv) {
+      actionsDiv = document.createElement('div');
+      actionsDiv.className = 'actions';
+      section.appendChild(actionsDiv);
+    }
+    
+    const gcBtn = document.createElement('a');
+    gcBtn.className = 'button secondary';
+    gcBtn.href = `https://classroom.google.com/share?url=${shareUrl}`;
+    gcBtn.target = '_blank';
+    gcBtn.innerHTML = '🎓 Google Classroom';
+    actionsDiv.appendChild(gcBtn);
+    
+    const msBtn = document.createElement('a');
+    msBtn.className = 'button secondary';
+    msBtn.href = `https://teams.microsoft.com/share?href=${shareUrl}`;
+    msBtn.target = '_blank';
+    msBtn.innerHTML = '👥 MS Teams';
+    actionsDiv.appendChild(msBtn);
+    
+    const ansBtn = document.createElement('a');
+    ansBtn.className = 'button';
+    ansBtn.style.backgroundColor = 'var(--gold)';
+    ansBtn.style.color = '#000';
+    ansBtn.style.borderColor = 'var(--gold-light)';
+    ansBtn.href = `${chapterId}/answers.html`;
+    ansBtn.target = '_blank';
+    ansBtn.innerHTML = '📝 Teacher Answers';
+    actionsDiv.appendChild(ansBtn);
+  });
 });
 </script></body></html>

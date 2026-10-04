@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Answers - ch04</title>
+    <link rel="stylesheet" href="../course.css">
+</head>
+<body>
+    <main>
+        <nav aria-label="Site navigation" style="margin-bottom:24px;">
+            <a href="../index.html#ch04">← Back to Chapter</a>
+        </nav>
+        <section class="card">
+            <header>
+                <small>TEACHER RESOURCE</small>
+                <h2>Answers for Ch04</h2>
+            </header>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level01</h3>
+                <pre><code>n = int(input(&quot;Limit: &quot;))
+for number in range(1, n + 1):
+    print(number)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level02</h3>
+                <pre><code>total = 0
+for index in range(3):
+    total = total + int(input(&quot;Score: &quot;))
+print(&quot;Total:&quot;, total)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level03</h3>
+                <pre><code>count = 0
+for index in range(4):
+    mark = int(input(&quot;Mark: &quot;))
+    if mark &gt;= 50:
+        count = count + 1
+print(&quot;Passes:&quot;, count)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level04</h3>
+                <pre><code>total = 0
+value = int(input(&quot;Value or -1: &quot;))
+while value != -1:
+    total = total + value
+    value = int(input(&quot;Value or -1: &quot;))
+print(&quot;Total:&quot;, total)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level05</h3>
+                <pre><code>while True:
+    answer = input(&quot;Enter GO: &quot;)
+    if answer == &quot;GO&quot;:
+        break
+    print(&quot;Try again&quot;)
+print(&quot;Continuing&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level06</h3>
+                <pre><code>for row in range(2):
+    for column in range(3):
+        print(row, column)
+</code></pre>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>

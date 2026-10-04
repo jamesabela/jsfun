@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Answers - ch10</title>
+    <link rel="stylesheet" href="../course.css">
+</head>
+<body>
+    <main>
+        <nav aria-label="Site navigation" style="margin-bottom:24px;">
+            <a href="../index.html#ch10">← Back to Chapter</a>
+        </nav>
+        <section class="card">
+            <header>
+                <small>TEACHER RESOURCE</small>
+                <h2>Answers for Ch10</h2>
+            </header>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level01</h3>
+                <pre><code>scores = [12, 18, 9]
+value = int(input(&quot;New score: &quot;))
+scores[1] = value
+for score in scores:
+    print(score)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level02</h3>
+                <pre><code>names = [&quot;Aisha&quot;, &quot;Chen&quot;]
+names.append(&quot;Dina&quot;)
+names.insert(1, &quot;Ben&quot;)
+for name in names:
+    print(name)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level03</h3>
+                <pre><code>names = [&quot;Aisha&quot;, &quot;Ben&quot;, &quot;Chen&quot;]
+index = int(input(&quot;Index: &quot;))
+removed = names.pop(index)
+print(&quot;Removed:&quot;, removed)
+for name in names:
+    print(name)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level04</h3>
+                <pre><code>grid = []
+for row in range(3):
+    grid.append([0] * 2)
+grid[0][0] = 7
+for row in grid:
+    for value in row:
+        print(value)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level05</h3>
+                <pre><code>grid = [[2, 4, 6], [1, 3, 5]]
+for row in grid:
+    total = 0
+    for value in row:
+        total = total + value
+    print(&quot;Total:&quot;, total)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level06</h3>
+                <pre><code>players = [[&quot;Aisha&quot;, 12], [&quot;Ben&quot;, 18], [&quot;Chen&quot;, 9]]
+swapped = True
+while swapped:
+    swapped = False
+    for index in range(len(players) - 1):
+        if players[index][1] &lt; players[index + 1][1]:
+            temporary = players[index]
+            players[index] = players[index + 1]
+            players[index + 1] = temporary
+            swapped = True
+for row in players:
+    print(row[0], row[1])
+</code></pre>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>

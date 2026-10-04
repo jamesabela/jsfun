@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SQL exercises | Paper 2 companion</title><link rel="stylesheet" href="../course.css"></head>
-<body><main><nav aria-label="Course navigation"><a href="../index.html#ch15" target="_top">← Course chapters</a></nav><header><small>CHAPTER 15</small><h1>SQL exercises</h1></header><section><h2>SQL practice</h2>
+<body><main><header><small>CHAPTER 15</small><h1>SQL exercises</h1></header><section><h2>SQL practice</h2>
 <p>Use a fresh database created by setup.sql. Tasks 1-7 use the original data. Task 8 changes it. The CREATE TABLE and PRAGMA setup are practical infrastructure, not additional required exam commands.</p>
 <h3>1. Select fields</h3>
 <p>List club names and fees, ordered by name.</p>
@@ -59,4 +59,4 @@ INSERT INTO STUDENT VALUES (&#x27;S01&#x27;,&#x27;Aisha&#x27;,&#x27;9A&#x27;,&#x
 <pre><code>INSERT INTO STUDENT (StudentID, StudentName, TutorGroup, ClubID) VALUES (&#x27;S05&#x27;,&#x27;Eli&#x27;,&#x27;9B&#x27;,&#x27;C02&#x27;);</code></pre>
 <p>Expected result: <code>[(2,)]</code>.</p>
 <p>Check using:</p>
-<pre><code>SELECT COUNT(*) FROM STUDENT INNER JOIN CLUB ON STUDENT.ClubID = CLUB.ClubID WHERE CLUB.ClubName = &#x27;Art&#x27;;</code></pre></details></section><nav aria-label="Course navigation"><a href="../index.html#ch15" target="_top">← Course chapters</a></nav></main></body></html>
+<pre><code>SELECT COUNT(*) FROM STUDENT INNER JOIN CLUB ON STUDENT.ClubID = CLUB.ClubID WHERE CLUB.ClubName = &#x27;Art&#x27;;</code></pre></details></section></main></body></html>

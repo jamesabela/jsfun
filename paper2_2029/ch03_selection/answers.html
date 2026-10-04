@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Answers - ch03_selection</title>
+    <link rel="stylesheet" href="../course.css">
+</head>
+<body>
+    <main>
+        <nav aria-label="Site navigation" style="margin-bottom:24px;">
+            <a href="../index.html#ch03_selection">← Back to Chapter</a>
+        </nav>
+        <section class="card">
+            <header>
+                <small>TEACHER RESOURCE</small>
+                <h2>Answers for Ch03 Selection</h2>
+            </header>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level1_If</h3>
+                <pre><code>score = int(input(&quot;Score: &quot;))
+if score &gt;= 50:
+    print(&quot;Pass&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level2_Else</h3>
+                <pre><code>age = int(input(&quot;Age: &quot;))
+if age &lt; 13:
+    print(&quot;Child&quot;)
+else:
+    print(&quot;Teen or adult&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level3_Elif</h3>
+                <pre><code>score = int(input(&quot;Score: &quot;))
+if score &gt;= 80:
+    print(&quot;Excellent&quot;)
+elif score &gt;= 50:
+    print(&quot;Pass&quot;)
+else:
+    print(&quot;Not yet passed&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level4_And_Or</h3>
+                <pre><code>age = int(input(&quot;Age: &quot;))
+height = int(input(&quot;Height in cm: &quot;))
+if age &gt;= 12 and height &gt;= 140:
+    print(&quot;Allowed&quot;)
+else:
+    print(&quot;Not allowed&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level5_Not</h3>
+                <pre><code>logged_in_text = input(&quot;Logged in? True/False: &quot;)
+logged_in = logged_in_text == &quot;True&quot;
+if not logged_in:
+    print(&quot;Please log in&quot;)
+else:
+    print(&quot;Welcome&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level6_Nested</h3>
+                <pre><code>member_text = input(&quot;Member? True/False: &quot;)
+member = member_text == &quot;True&quot;
+points = int(input(&quot;Points: &quot;))
+if member == True:
+    if points &gt;= 100:
+        print(&quot;Reward unlocked&quot;)
+    else:
+        print(&quot;More points needed&quot;)
+else:
+    print(&quot;Membership required&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level7_Strings</h3>
+                <pre><code>answer = input(&quot;Continue? &quot;)
+if answer == &quot;yes&quot;:
+    print(&quot;Continuing&quot;)
+else:
+    print(&quot;Stopping&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level8_Match</h3>
+                <pre><code>option = int(input(&quot;Choose 1-3: &quot;))
+match option:
+    case 1:
+        print(&quot;Play&quot;)
+    case 2:
+        print(&quot;Settings&quot;)
+    case 3:
+        print(&quot;Quit&quot;)
+    case _:
+        print(&quot;Invalid&quot;)
+</code></pre>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>

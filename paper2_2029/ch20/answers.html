@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Answers - ch20</title>
+    <link rel="stylesheet" href="../course.css">
+</head>
+<body>
+    <main>
+        <nav aria-label="Site navigation" style="margin-bottom:24px;">
+            <a href="../index.html#ch20">← Back to Chapter</a>
+        </nav>
+        <section class="card">
+            <header>
+                <small>TEACHER RESOURCE</small>
+                <h2>Answers for Ch20</h2>
+            </header>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level01</h3>
+                <pre><code>score = int(input(&quot;Score: &quot;))
+if score &gt;= 80:
+    print(&quot;Gold&quot;)
+elif score &gt;= 50:
+    print(&quot;Silver&quot;)
+else:
+    print(&quot;Bronze&quot;)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level02</h3>
+                <pre><code>total = 0
+count = 0
+for index in range(3):
+    value = int(input(&quot;Value: &quot;))
+    total = total + value
+    if value &gt;= 5:
+        count = count + 1
+print(total)
+print(count)
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level03</h3>
+                <pre><code>ratings = [5, 3, 5, 1, 3, 5, 2, 4]
+frequency = []
+for rating in range(1, 6):
+    frequency.append([rating, ratings.count(rating)])
+for row in frequency:
+    print(row[0], row[1])
+</code></pre>
+            </div>
+
+            <div class="lesson" style="flex-direction:column; align-items:stretch;">
+                <h3 style="margin-bottom:12px;">Level04</h3>
+                <pre><code>frequency = [[1, 1], [2, 1], [3, 2], [4, 1], [5, 3]]
+swapped = True
+while swapped:
+    swapped = False
+    for index in range(len(frequency) - 1):
+        if frequency[index][1] &lt; frequency[index + 1][1]:
+            temporary = frequency[index]
+            frequency[index] = frequency[index + 1]
+            frequency[index + 1] = temporary
+            swapped = True
+for row in frequency:
+    print(&quot;Rating&quot;, row[0], &quot;Count&quot;, row[1])
+</code></pre>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>
