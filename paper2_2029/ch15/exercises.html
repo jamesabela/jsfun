@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL exercises | Paper 2 companion</title><link rel="stylesheet" href="../course.css"></head>
+<body><main><nav aria-label="Course navigation"><a href="../index.html#ch15" target="_top">← Course chapters</a></nav><header><small>CHAPTER 15</small><h1>SQL exercises</h1></header><section><h2>SQL practice</h2>
+<p>Use a fresh database created by setup.sql. Tasks 1-7 use the original data. Task 8 changes it. The CREATE TABLE and PRAGMA setup are practical infrastructure, not additional required exam commands.</p>
+<h3>1. Select fields</h3>
+<p>List club names and fees, ordered by name.</p>
+<h3>2. Inclusive filter</h3>
+<p>List names of clubs with capacity at least 15, ordered by name.</p>
+<h3>3. Two conditions</h3>
+<p>List names with capacity at least 15 AND fee below 7.</p>
+<h3>4. Descending order</h3>
+<p>List club names and fees, highest fee first.</p>
+<h3>5. Count records</h3>
+<p>Count students choosing C01.</p>
+<h3>6. Sum values</h3>
+<p>Find the total capacity of all clubs.</p>
+<h3>7. Join and filter</h3>
+<p>List only names and tutor groups of students choosing Coding, ordered by name.</p>
+<h3>8. Insert a record</h3>
+<p>Add S05, Eli, 9B, C02, then count students choosing Art.</p><p>Use a fresh SQLite database in your database tool. Run the setup below, then attempt the exercises.</p><details><summary>Database setup SQL</summary><pre><code>PRAGMA foreign_keys = ON;
+CREATE TABLE CLUB (
+ ClubID TEXT PRIMARY KEY NOT NULL,
+ ClubName TEXT NOT NULL,
+ Capacity INTEGER NOT NULL CHECK(Capacity &gt; 0),
+ Fee NUMERIC NOT NULL CHECK(Fee &gt;= 0)
+);
+CREATE TABLE STUDENT (
+ StudentID TEXT PRIMARY KEY NOT NULL,
+ StudentName TEXT NOT NULL,
+ TutorGroup TEXT NOT NULL,
+ ClubID TEXT NOT NULL REFERENCES CLUB(ClubID)
+);
+INSERT INTO CLUB VALUES (&#x27;C01&#x27;,&#x27;Coding&#x27;,20,5.00),(&#x27;C02&#x27;,&#x27;Art&#x27;,15,8.00),(&#x27;C03&#x27;,&#x27;Music&#x27;,12,6.50);
+INSERT INTO STUDENT VALUES (&#x27;S01&#x27;,&#x27;Aisha&#x27;,&#x27;9A&#x27;,&#x27;C01&#x27;),(&#x27;S02&#x27;,&#x27;Ben&#x27;,&#x27;9B&#x27;,&#x27;C02&#x27;),(&#x27;S03&#x27;,&#x27;Chen&#x27;,&#x27;9A&#x27;,&#x27;C01&#x27;),(&#x27;S04&#x27;,&#x27;Dina&#x27;,&#x27;9C&#x27;,&#x27;C03&#x27;);
+</code></pre></details><p><a href="setup.sql" download>Download setup.sql</a></p><details><summary>SQL model answers</summary><h2>SQL teacher answers</h2>
+<h3>1. Select fields</h3>
+<pre><code>SELECT ClubName, Fee FROM CLUB ORDER BY ClubName ASC;</code></pre>
+<p>Expected result: <code>[(&#x27;Art&#x27;, 8), (&#x27;Coding&#x27;, 5), (&#x27;Music&#x27;, 6.5)]</code>.</p>
+<h3>2. Inclusive filter</h3>
+<pre><code>SELECT ClubName FROM CLUB WHERE Capacity &gt;= 15 ORDER BY ClubName ASC;</code></pre>
+<p>Expected result: <code>[(&#x27;Art&#x27;,), (&#x27;Coding&#x27;,)]</code>.</p>
+<h3>3. Two conditions</h3>
+<pre><code>SELECT ClubName FROM CLUB WHERE Capacity &gt;= 15 AND Fee &lt; 7;</code></pre>
+<p>Expected result: <code>[(&#x27;Coding&#x27;,)]</code>.</p>
+<h3>4. Descending order</h3>
+<pre><code>SELECT ClubName, Fee FROM CLUB ORDER BY Fee DESC;</code></pre>
+<p>Expected result: <code>[(&#x27;Art&#x27;, 8), (&#x27;Music&#x27;, 6.5), (&#x27;Coding&#x27;, 5)]</code>.</p>
+<h3>5. Count records</h3>
+<pre><code>SELECT COUNT(*) FROM STUDENT WHERE ClubID = &#x27;C01&#x27;;</code></pre>
+<p>Expected result: <code>[(2,)]</code>.</p>
+<h3>6. Sum values</h3>
+<pre><code>SELECT SUM(Capacity) FROM CLUB;</code></pre>
+<p>Expected result: <code>[(47,)]</code>.</p>
+<h3>7. Join and filter</h3>
+<pre><code>SELECT STUDENT.StudentName, STUDENT.TutorGroup FROM STUDENT INNER JOIN CLUB ON STUDENT.ClubID = CLUB.ClubID WHERE CLUB.ClubName = &#x27;Coding&#x27; ORDER BY STUDENT.StudentName ASC;</code></pre>
+<p>Expected result: <code>[(&#x27;Aisha&#x27;, &#x27;9A&#x27;), (&#x27;Chen&#x27;, &#x27;9A&#x27;)]</code>.</p>
+<h3>8. Insert a record</h3>
+<pre><code>INSERT INTO STUDENT (StudentID, StudentName, TutorGroup, ClubID) VALUES (&#x27;S05&#x27;,&#x27;Eli&#x27;,&#x27;9B&#x27;,&#x27;C02&#x27;);</code></pre>
+<p>Expected result: <code>[(2,)]</code>.</p>
+<p>Check using:</p>
+<pre><code>SELECT COUNT(*) FROM STUDENT INNER JOIN CLUB ON STUDENT.ClubID = CLUB.ClubID WHERE CLUB.ClubName = &#x27;Art&#x27;;</code></pre></details></section><nav aria-label="Course navigation"><a href="../index.html#ch15" target="_top">← Course chapters</a></nav></main></body></html>

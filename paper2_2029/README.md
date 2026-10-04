@@ -1,6 +1,8 @@
 # Companion courses and activities
 
-These files are prepared for publication, not uploaded. Open local HTML tutorials to read them, or load/copy a starter into Python Code Lab. Course navigation and preview links work after the folder is hosted at the paths below. SQL and written tasks have separate instructions.
+Open [the course dashboard](index.html) to choose from all 20 chapters. Each programming level has a **Launch in Lab** button, a readable HTML lesson, and a downloadable Python starter. Lessons include previous/next navigation and a return to the chapter overview. Written activities and SQL exercises have their own HTML pages.
+
+Serve the repository through HTTP (for example, `python3 -m http.server`) to use Code Lab launches. Lessons and worksheets can also be read directly from disk. The tutorial URLs embedded in Python starters use the published GitHub Pages site; those previews require the corresponding files to be published.
 
 - Chapter 1: [Getting Started with Python](ch01/README.md) - 5 programming levels
 - Chapter 2: [Variables, Data Types and Operators](ch02/README.md) - 5 programming levels

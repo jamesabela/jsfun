@@ -1,5 +1,19 @@
 [
   {
+    "category": "Computing Courses",
+    "icon": "🐍",
+    "tools": [
+      {
+        "title": "Paper 2 Companion · 2029",
+        "emoji": "📚",
+        "url": "paper2_2029/index.html",
+        "desc": "20 chapters of Python challenges, algorithms, written activities and SQL practice. Launch levels in Python Code Lab or read the lesson guides.",
+        "tag": "iGCSE",
+        "isExternal": false
+      }
+    ]
+  },
+  {
     "category": "Question Tools",
     "icon": "❓",
     "tools": [
