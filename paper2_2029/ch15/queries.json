@@ -1,0 +1,108 @@
+[
+  [
+    "Select fields",
+    "List club names and fees, ordered by name.",
+    "SELECT ClubName, Fee FROM CLUB ORDER BY ClubName ASC;",
+    [
+      [
+        "Art",
+        8
+      ],
+      [
+        "Coding",
+        5
+      ],
+      [
+        "Music",
+        6.5
+      ]
+    ]
+  ],
+  [
+    "Inclusive filter",
+    "List names of clubs with capacity at least 15, ordered by name.",
+    "SELECT ClubName FROM CLUB WHERE Capacity >= 15 ORDER BY ClubName ASC;",
+    [
+      [
+        "Art"
+      ],
+      [
+        "Coding"
+      ]
+    ]
+  ],
+  [
+    "Two conditions",
+    "List names with capacity at least 15 AND fee below 7.",
+    "SELECT ClubName FROM CLUB WHERE Capacity >= 15 AND Fee < 7;",
+    [
+      [
+        "Coding"
+      ]
+    ]
+  ],
+  [
+    "Descending order",
+    "List club names and fees, highest fee first.",
+    "SELECT ClubName, Fee FROM CLUB ORDER BY Fee DESC;",
+    [
+      [
+        "Art",
+        8
+      ],
+      [
+        "Music",
+        6.5
+      ],
+      [
+        "Coding",
+        5
+      ]
+    ]
+  ],
+  [
+    "Count records",
+    "Count students choosing C01.",
+    "SELECT COUNT(*) FROM STUDENT WHERE ClubID = 'C01';",
+    [
+      [
+        2
+      ]
+    ]
+  ],
+  [
+    "Sum values",
+    "Find the total capacity of all clubs.",
+    "SELECT SUM(Capacity) FROM CLUB;",
+    [
+      [
+        47
+      ]
+    ]
+  ],
+  [
+    "Join and filter",
+    "List only names and tutor groups of students choosing Coding, ordered by name.",
+    "SELECT STUDENT.StudentName, STUDENT.TutorGroup FROM STUDENT INNER JOIN CLUB ON STUDENT.ClubID = CLUB.ClubID WHERE CLUB.ClubName = 'Coding' ORDER BY STUDENT.StudentName ASC;",
+    [
+      [
+        "Aisha",
+        "9A"
+      ],
+      [
+        "Chen",
+        "9A"
+      ]
+    ]
+  ],
+  [
+    "Insert a record",
+    "Add S05, Eli, 9B, C02, then count students choosing Art.",
+    "INSERT INTO STUDENT (StudentID, StudentName, TutorGroup, ClubID) VALUES ('S05','Eli','9B','C02');",
+    [
+      [
+        2
+      ]
+    ]
+  ]
+]

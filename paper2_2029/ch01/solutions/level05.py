@@ -1,0 +1,6 @@
+name = input("Name: ")
+game = input("Game: ")
+lives = int(input("Lives: "))
+print("Name:", name)
+print("Game:", game)
+print("Lives:", lives)

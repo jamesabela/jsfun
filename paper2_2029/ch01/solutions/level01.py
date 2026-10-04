@@ -1,0 +1,2 @@
+print("Ready")
+print("Code")
