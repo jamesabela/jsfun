@@ -498,3 +498,71 @@ tr:last-child td { border-bottom: none; }
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
+
+/* --- Chapter Collapsible Features --- */
+.chapter-collapsible {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+.chapter-collapsible summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.chapter-collapsible summary::-webkit-details-marker {
+  display: none;
+}
+.chapter-collapsible summary::after {
+  content: '▼';
+  margin-left: auto;
+  color: var(--cyan);
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+.chapter-collapsible[open] summary::after {
+  transform: rotate(180deg);
+}
+.chapter-collapsible summary header {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  flex-grow: 1;
+}
+.chapter-collapsible[open] summary header {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(255,255,255,0.1);
+}
+
+/* --- Search functionality --- */
+.search-container {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 250px;
+}
+
+#exercise-search {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: rgba(6, 13, 31, 0.6);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+#exercise-search::placeholder {
+  color: var(--text-muted);
+}
+
+#exercise-search:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+  background: rgba(13, 26, 56, 0.9);
+}
