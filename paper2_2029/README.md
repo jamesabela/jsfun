@@ -4,6 +4,8 @@ Open [the course dashboard](index.html) to choose from all 20 chapters. Each pro
 
 Serve the repository through HTTP (for example, `python3 -m http.server`) to use Code Lab launches. Lessons and worksheets can also be read directly from disk. The tutorial URLs embedded in Python starters use the published GitHub Pages site; those previews require the corresponding files to be published.
 
+For printable student activities, choose **Printable worksheet** beside a level or **Print chapter / PDF** below a chapter on the dashboard. The preview includes the lesson text, starter code and optional writing space, with written/SQL model answers removed. Select **Print / Save as PDF**, then choose your printer or **Save as PDF**. Use A4 and disable browser headers and footers. Print previews load current lesson files and require HTTP (the published site or a local web server).
+
 - Chapter 1: [Getting Started with Python](ch01/README.md) - 5 programming levels
 - Chapter 2: [Variables, Data Types and Operators](ch02/README.md) - 5 programming levels
 - Chapter 4: [Loops](ch04/README.md) - 6 programming levels

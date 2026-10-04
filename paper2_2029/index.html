@@ -66,10 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
     lesson.insertBefore(label, lesson.firstChild);
   });
 
-  // 3. Remove "Read lesson" navigation links
+  // 3. Offer a printable worksheet for each activity.
   document.querySelectorAll('.lesson .actions a:not(.button)').forEach(a => {
     if (a.textContent.includes('Read lesson')) {
-      a.remove();
+      a.href = `print.html?activity=${encodeURIComponent(a.getAttribute('href'))}`;
+      a.textContent = 'Printable worksheet';
     }
   });
 
@@ -108,6 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
     ansBtn.target = '_blank';
     ansBtn.innerHTML = '📝 Teacher Answers';
     actionsDiv.appendChild(ansBtn);
+
+    const printLink = document.createElement('a');
+    printLink.className = 'button secondary';
+    printLink.href = `print.html?chapter=${encodeURIComponent(chapterId)}`;
+    printLink.textContent = 'Print chapter / PDF';
+    actionsDiv.appendChild(printLink);
   });
 });
 </script></body></html>
