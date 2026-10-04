@@ -75,7 +75,7 @@ function makeWorksheet(page, activity) {
     const sections = [...content.querySelectorAll('section, .card')].filter(section =>
       /^(Try|Task|Change and explain)$/.test(section.querySelector('h2')?.textContent.trim() || '')
     );
-    if (sections.length) sections.forEach(section => addWritingSpace(section, 5));
+    if (sections.length) sections.forEach(section => addWritingSpace(section, 3));
     else addWritingSpace(content.lastElementChild, 12);
   }
   article.append(...content.childNodes);
