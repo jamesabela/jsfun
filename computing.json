@@ -370,6 +370,14 @@
         "desc": "Interactive logic gate simulator. Design and test digital circuits in your browser with AND, OR, NOT, and other gates.",
         "tag": "iGCSE / A-Level",
         "isExternal": true
+      },
+      {
+        "title": "Boolean Logic Workbench",
+        "emoji": "🧮",
+        "url": "https://prayogashaala.com/digitalcircuits/",
+        "desc": "Enter Boolean expressions to instantly generate truth tables, Karnaugh maps (K-maps), and logic circuit diagrams. By Prayogashaala.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": true
       }
     ]
   },
@@ -792,7 +800,7 @@
     ]
   },
   {
-    "category": "Educational Video Channels",
+    "category": "Educational Videos & Channels",
     "icon": "🎥",
     "tools": [
       {
@@ -817,6 +825,22 @@
         "url": "https://www.youtube.com/@PrimaryEdTech",
         "desc": "YouTube channel with practical EdTech tutorials, primary computing guides, and classroom technology ideas.",
         "tag": "EYFS / KS1 / KS2",
+        "isExternal": true
+      },
+      {
+        "title": "AI Just Crossed the Terrifying Line — Kurzgesagt",
+        "emoji": "🤖",
+        "url": "https://www.youtube.com/watch?v=ujkD4SxPKOI",
+        "desc": "Kurzgesagt explores recent breakthroughs in autonomous AI agents, multi-agent coordination, emergent deceptive behavior, and the critical implications for AI safety.",
+        "tag": "iGCSE / A-Level",
+        "isExternal": true
+      },
+      {
+        "title": "Computerphile IB CS Video Mapping",
+        "emoji": "📑",
+        "url": "https://docs.google.com/spreadsheets/d/1BhKOGwXMjBRqFNP-tuzb3uOUA-bvYG3xg6TtkuYl6uI/edit?gid=1124921736#gid=1124921736",
+        "desc": "Curated spreadsheet mapping Computerphile YouTube videos directly against the IB Diploma Programme Computer Science (2026) curriculum topics.",
+        "tag": "Teacher Tool / A-Level",
         "isExternal": true
       }
     ]
