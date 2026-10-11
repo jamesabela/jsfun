@@ -1,0 +1,6 @@
+# Dependencies and temporary files
+.DS_Store
+*.tmp
+
+# Resource backups
+.resource_backups/
