@@ -182,6 +182,20 @@
           "isExternal": false
         },
         {
+          "title": "End of the World — US vs China AI Crisis",
+          "url": "https://jamesabela.github.io/EndOfWorld/",
+          "desc": "High-stakes decision game simulating an escalating US-China AI conflict across 10 critical levels. Explore AI safety, ethics, and geopolitical trade-offs.",
+          "tag": "KS3 / iGCSE / A-Level",
+          "topics": [
+            "general",
+            "computing",
+            "social_sciences"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
           "title": "Family Conversation Starters",
           "url": "https://jamesabela.github.io/jsfun/roadtrip.html",
           "desc": "Fun discussion tools for road trips, family meals & game nights. Priority Triangle, Lateral Puzzles & Story Dice.",
@@ -2324,6 +2338,20 @@
             "isExternal": false
           },
           {
+            "title": "End of the World — US vs China AI Crisis",
+            "url": "https://jamesabela.github.io/EndOfWorld/",
+            "desc": "High-stakes decision game simulating an escalating US-China AI conflict across 10 critical levels. Explore AI safety, ethics, and geopolitical trade-offs.",
+            "tag": "KS3 / iGCSE / A-Level",
+            "topics": [
+              "general",
+              "computing",
+              "social_sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
             "title": "Family Conversation Starters",
             "url": "https://jamesabela.github.io/jsfun/roadtrip.html",
             "desc": "Fun discussion tools for road trips, family meals & game nights. Priority Triangle, Lateral Puzzles & Story Dice.",
@@ -2736,6 +2764,27 @@
       }
     ],
     "computing": [
+      {
+        "category": "Discussion & Ranking Tools",
+        "description": "Critical thinking, concept ranking, debates, mind mapping, and conversation starters.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "End of the World — US vs China AI Crisis",
+            "url": "https://jamesabela.github.io/EndOfWorld/",
+            "desc": "High-stakes decision game simulating an escalating US-China AI conflict across 10 critical levels. Explore AI safety, ethics, and geopolitical trade-offs.",
+            "tag": "KS3 / iGCSE / A-Level",
+            "topics": [
+              "general",
+              "computing",
+              "social_sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
       {
         "category": "Primary Creative & Fun",
         "description": "Creative arts, soundboards, storytellers, and playful early years tools.",
@@ -4546,6 +4595,20 @@
         "description": "Critical thinking, concept ranking, debates, mind mapping, and conversation starters.",
         "tutorialVideo": null,
         "tools": [
+          {
+            "title": "End of the World — US vs China AI Crisis",
+            "url": "https://jamesabela.github.io/EndOfWorld/",
+            "desc": "High-stakes decision game simulating an escalating US-China AI conflict across 10 critical levels. Explore AI safety, ethics, and geopolitical trade-offs.",
+            "tag": "KS3 / iGCSE / A-Level",
+            "topics": [
+              "general",
+              "computing",
+              "social_sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
           {
             "title": "Interactive Mind Map",
             "url": "https://jamesabela.github.io/mindmap",
