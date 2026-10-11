@@ -1,6 +1,6 @@
 /**
  * renderer.js - Dynamic Tool Card Renderer
- * Handles loading JSON data, rendering cards, and filtering/search logic.
+ * Handles loading JSON data, topic switching, rendering clean cards, and filtering/search logic.
  */
 
 const stem = (word) => {
@@ -9,15 +9,36 @@ const stem = (word) => {
     .replace(/(\w)\1$/, '$1'); // simplify double consonants
 };
 
+let rawResourcesData = null;
 let allToolsData = [];
+let currentTopic = 'all';
 let currentTag = 'all';
 let currentSearch = '';
 
-async function initTools(jsonPath) {
+async function initTools(jsonPath = 'usefulresources.json', topic = 'all') {
+  currentTopic = topic;
   try {
     const response = await fetch(jsonPath);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    allToolsData = await response.json();
+    const data = await response.json();
+    rawResourcesData = data;
+
+    if (Array.isArray(data)) {
+      // Legacy flat array format (index.json, computing.json)
+      allToolsData = data;
+    } else if (data.byTopic) {
+      // usefulresources.json format
+      if (topic === 'all') {
+        allToolsData = data.categories || Object.values(data.byTopic).flat();
+      } else if (data.byTopic[topic]) {
+        allToolsData = data.byTopic[topic];
+      } else {
+        allToolsData = data.categories || [];
+      }
+    } else {
+      allToolsData = data.categories || [];
+    }
+
     renderTools();
   } catch (error) {
     console.error("Error loading tools:", error);
@@ -32,6 +53,25 @@ async function initTools(jsonPath) {
   }
 }
 
+function switchTopic(newTopic, btn) {
+  currentTopic = newTopic;
+  if (rawResourcesData && rawResourcesData.byTopic) {
+    if (newTopic === 'all') {
+      allToolsData = rawResourcesData.categories || Object.values(rawResourcesData.byTopic).flat();
+    } else if (rawResourcesData.byTopic[newTopic]) {
+      allToolsData = rawResourcesData.byTopic[newTopic];
+    }
+  }
+
+  // Update button active state
+  document.querySelectorAll('.topic-btn, .topic-pill').forEach(b => b.classList.remove('active'));
+  if (btn) {
+    btn.classList.add('active');
+  }
+
+  renderTools();
+}
+
 function handleSearch(val) {
   currentSearch = val;
   renderTools();
@@ -44,7 +84,6 @@ function filterByTag(tag, btn) {
   if (btn) {
     btn.classList.add('active');
   } else {
-    // If no btn provided, try to find it by text
     document.querySelectorAll('.filter-btn').forEach(b => {
       if (b.textContent === tag || (tag === 'all' && b.textContent === 'All')) {
         b.classList.add('active');
@@ -72,7 +111,7 @@ function renderTools() {
     section.tools.forEach(tool => {
       // Tag matching logic
       let tagMatch = false;
-      const cardTag = tool.tag;
+      const cardTag = tool.tag || 'All ages';
       
       if (currentTag === 'all' || cardTag.includes('All ages')) {
         tagMatch = true;
@@ -87,9 +126,10 @@ function renderTools() {
       // Search matching logic (fuzzy/forgiving)
       let searchMatch = true;
       if (queryStems.length > 0) {
-        const title = tool.title.toLowerCase();
-        const desc = tool.desc.toLowerCase();
-        const content = title + " " + desc;
+        const title = (tool.title || '').toLowerCase();
+        const desc = (tool.desc || '').toLowerCase();
+        const author = (tool.author || '').toLowerCase();
+        const content = `${title} ${desc} ${author}`;
         const contentWords = content.split(/\W+/).filter(w => w.length > 0);
         const contentStems = contentWords.map(w => stem(w));
         
@@ -101,22 +141,39 @@ function renderTools() {
       if (tagMatch && searchMatch) {
         visibleCount++;
         const externalClass = tool.isExternal ? ' external' : '';
+        const authorHtml = tool.author ? `<span class="card-author">by ${tool.author}</span>` : '';
+        const tutorialBtn = tool.tutorialVideo ? `
+          <a class="card-tutorial-btn" href="${tool.tutorialVideo}" target="_blank" rel="noopener" onclick="event.stopPropagation();" title="Watch tutorial video">
+            ▶ Tutorial
+          </a>` : '';
+
         visibleToolsHtml += `
           <a class="card${externalClass}" href="${tool.url}" target="_blank" rel="noopener">
-            <span class="card-emoji">${tool.emoji}</span>
             <div class="card-title">${tool.title}</div>
             <div class="card-desc">${tool.desc}</div>
-            <span class="card-tag">${tool.tag}</span>
+            <div class="card-footer">
+              <div class="card-meta">
+                <span class="card-tag">${tool.tag}</span>
+                ${authorHtml}
+              </div>
+              ${tutorialBtn}
+            </div>
           </a>`;
       }
     });
 
     if (visibleCount > 0) {
+      const iconHtml = section.icon ? `<span class="icon">${section.icon}</span> ` : '';
+      const sectionVideoHtml = section.tutorialVideo ? `
+        <a class="section-video-btn" href="${section.tutorialVideo}" target="_blank" rel="noopener" onclick="event.stopPropagation();" title="Watch category overview">
+          ▶ Overview
+        </a>` : '';
+
       html += `
         <details open class="category-section">
           <summary class="section-heading">
-            <span class="icon">${section.icon}</span> 
-            ${section.category}
+            ${iconHtml}${section.category}
+            ${sectionVideoHtml}
             <span class="chevron"></span>
           </summary>
           <div class="cards">

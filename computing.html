@@ -217,10 +217,6 @@
       border-color: var(--primary);
     }
 
-    .card-emoji {
-      font-size: 1.6rem;
-    }
-
     .card-title {
       font-size: 1.05rem;
       font-weight: 700;
@@ -233,6 +229,23 @@
       line-height: 1.4;
     }
 
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: auto;
+      padding-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
     .card-tag {
       display: inline-block;
       font-size: 0.75rem;
@@ -241,8 +254,49 @@
       border-radius: 999px;
       background: var(--primary-light);
       color: var(--primary-dark);
-      margin-top: auto;
       align-self: flex-start;
+    }
+
+    .card-author {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .card-tutorial-btn {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #b91c1c;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: background 0.18s, transform 0.15s;
+    }
+
+    .card-tutorial-btn:hover {
+      background: #fecaca;
+      transform: scale(1.03);
+    }
+
+    .section-video-btn {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #b91c1c;
+      text-decoration: none;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+      transition: background 0.18s;
+    }
+
+    .section-video-btn:hover {
+      background: #fecaca;
     }
 
     /* External indicator */
@@ -415,7 +469,7 @@
 
   <main>
     <div id="tools-container">
-      <!-- Tools will be rendered here dynamically from computing.json -->
+      <!-- Tools will be rendered here dynamically from usefulresources.json -->
     </div>
   </main>
 
@@ -432,9 +486,9 @@
 
   <script src="renderer.js"></script>
   <script>
-    // Initialize the tools from computing.json
+    // Initialize tools from usefulresources.json for Computing
     window.addEventListener('DOMContentLoaded', () => {
-      initTools('computing.json');
+      initTools('usefulresources.json', 'computing');
     });
   </script>
 

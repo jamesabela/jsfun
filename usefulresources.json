@@ -1,0 +1,4995 @@
+{
+  "$schema": "./usefulresources.schema.json",
+  "version": "1.0.0",
+  "updatedAt": "2026-10-11",
+  "topics": [
+    {
+      "id": "general",
+      "name": "General Teaching",
+      "icon": "🎓"
+    },
+    {
+      "id": "computing",
+      "name": "Computing Tools",
+      "icon": "💻"
+    },
+    {
+      "id": "english",
+      "name": "English Tools",
+      "icon": "📚"
+    },
+    {
+      "id": "social_sciences",
+      "name": "Social Sciences",
+      "icon": "🌍"
+    },
+    {
+      "id": "sciences",
+      "name": "Sciences",
+      "icon": "🧪"
+    },
+    {
+      "id": "maths",
+      "name": "Mathematics",
+      "icon": "🔢"
+    }
+  ],
+  "categories": [
+    {
+      "category": "Question Tools",
+      "description": "Interactive question formats, scramble puzzles, and matching challenges.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Link Two Sides",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html",
+          "desc": "Draw lines between matching items — a very common exam question type. Customisable with your own content.",
+          "tag": "All ages",
+          "topics": [
+            "general",
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "More Than / Less Than",
+          "url": "https://sethideclercq.com/tools/comparison.html",
+          "desc": "Comparison tool for numerical reasoning. By Sethi De Clercq.",
+          "tag": "Primary / KS3",
+          "topics": [
+            "maths",
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Sentence Ordering Quiz",
+          "url": "https://jamesabela.github.io/jsfun/scramble.html",
+          "desc": "Order scrambled words, sentences or processes. Answers are encrypted so students can't guess from the URL.",
+          "tag": "All ages",
+          "topics": [
+            "english",
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Choosers & Pickers",
+      "description": "Randomizers, spinners, draggable manipulatives, and classroom decision makers.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "3D Lollipop Carousel",
+          "url": "https://jamesabela.github.io/jsfun/lollipop.html",
+          "desc": "Choose random names, groups or questions with a beautiful 3D spinning carousel.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Debate Picker",
+          "url": "https://jamesabela.github.io/jsfun/debate.html",
+          "desc": "Structure and run a classroom debate with this simple tool.",
+          "tag": "KS3+",
+          "topics": [
+            "general",
+            "english",
+            "social_sciences"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Draggable Manipulatives",
+          "url": "https://jamesabela.github.io/jsfun/manip.html",
+          "desc": "Drag and drop items for categorisation or grouping activities on a whiteboard.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Mega Spinner",
+          "url": "https://jamesabela.github.io/jsfun/megaspinner.html",
+          "desc": "Spin the wheel to choose from large groups of names — perfect for bigger classes.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Number Flash Cards",
+          "url": "https://sethideclercq.com/tools/number-gen.html",
+          "desc": "Random number flash card generator. By Sethi De Clercq.",
+          "tag": "Primary / KS3",
+          "topics": [
+            "maths",
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Presentation Spinner",
+          "url": "https://jamesabela.github.io/jsfun/prezzispinner.html",
+          "desc": "Get two students presenting at once — great for peer assessment activities.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Discussion & Ranking Tools",
+      "description": "Critical thinking, concept ranking, debates, mind mapping, and conversation starters.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Connections Grid",
+          "url": "https://jamesabela.github.io/jsfun/connections.html",
+          "desc": "Create a 4x4 connection grid activity. Includes easy URL sharing and save/load features.",
+          "tag": "All ages",
+          "topics": [
+            "general",
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Family Conversation Starters",
+          "url": "https://jamesabela.github.io/jsfun/roadtrip.html",
+          "desc": "Fun discussion tools for road trips, family meals & game nights. Priority Triangle, Lateral Puzzles & Story Dice.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Interactive Mind Map",
+          "url": "https://jamesabela.github.io/mindmap",
+          "desc": "Visually organize your thoughts, brainstorm ideas, and map out concepts collaboratively. Excellent for eliciting vocabulary.",
+          "tag": "All ages",
+          "topics": [
+            "general",
+            "english",
+            "social_sciences"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Lateral Thinking Puzzles",
+          "url": "https://jamesabela.github.io/jsfun/lateral.html",
+          "desc": "Kickstart your class with 100+ lateral thinking puzzles. Includes cryptic hints, full solutions, and a countdown timer.",
+          "tag": "KS2 / KS3 / KS4",
+          "topics": [
+            "general",
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Priority Triangle",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html",
+          "desc": "Which concept is most important? Editable words, dictionary look-up and image search built in.",
+          "tag": "All ages",
+          "topics": [
+            "general",
+            "social_sciences",
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "ThinkRank Studio",
+          "url": "https://jamesabela.github.io/ThinkRankStudio",
+          "desc": "Full ranking suite — Diamond 9, Diamond 5, Triangle, Line ranking, Podium and Elimination mode.",
+          "tag": "All ages",
+          "topics": [
+            "general",
+            "social_sciences",
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Unplugged Podcast Maker",
+          "url": "https://apps.apple.com/us/app/unplugged-podcast-maker/id6811337503",
+          "desc": "Audio recording and podcast creator designed for student discussions, interviews, and audio storytelling on iOS. By Sethi De Clercq.",
+          "tag": "iOS / All ages",
+          "topics": [
+            "general",
+            "english"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "X The Haze",
+          "url": "https://scratch.mit.edu/projects/119336460",
+          "desc": "Understand the complexities of rainforest burning and environmental issues in this simulation. Can you avoid bribes and central government detection?",
+          "tag": "All ages",
+          "topics": [
+            "social_sciences",
+            "general"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Image Tools",
+      "description": "Visual reveal games, image spotlights, and comparative image analysis.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Image Compare",
+          "url": "https://jamesabela.github.io/jsfun/imgcomp.html",
+          "desc": "Overlay two images to compare them — great for Now & Then, or just \"which do you prefer?\"",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Image Reveal Spotlight",
+          "url": "https://jamesabela.github.io/jsfun/imgrev.html",
+          "desc": "Spotlight effect to slowly explore an image. Wonderful for younger children investigating a visual stimulus.",
+          "tag": "Primary / KS3",
+          "topics": [
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Tile Reveal Game",
+          "url": "https://jamesabela.github.io/jsfun/imgtiles.html",
+          "desc": "Reveal tiles one by one — who can guess the hidden image first? Great as a starter activity.",
+          "tag": "All ages",
+          "topics": [
+            "general",
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Primary Creative & Fun",
+      "description": "Creative arts, soundboards, storytellers, and playful early years tools.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Amber Animator",
+          "url": "https://apps.apple.com/us/app/amber-animator/id6808616675",
+          "desc": "Frame-by-frame 2D animation app designed for young learners and creative classroom storytelling on iOS. By Sethi De Clercq.",
+          "tag": "iOS / Primary",
+          "topics": [
+            "general",
+            "computing",
+            "english"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "AmberPuppets — Digital Storytelling",
+          "url": "https://www.amberpuppets.com",
+          "desc": "Turn your classroom into a digital puppet theater. Interactive storytelling tool designed for primary education. By Sethi De Clercq.",
+          "tag": "EYFS / KS1",
+          "topics": [
+            "general",
+            "english"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Animal Soundboard",
+          "url": "https://sethideclercq.com/tools/animalsoundboard",
+          "desc": "Interactive soundboard with a variety of animal sounds. Perfect for primary storytelling and activities. By Sethi De Clercq.",
+          "tag": "Primary",
+          "topics": [
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Emoji Search & Sheet Coder",
+          "url": "https://sethideclercq.com/tools/emojisearch.html",
+          "desc": "Search emojis, get Unicode values and Google Sheets / Excel formulas. Click to copy. By Sethi De Clercq.",
+          "tag": "All ages",
+          "topics": [
+            "general",
+            "computing"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "How Many Sleeps?",
+          "url": "https://sethideclercq.com/tools/howmanysleeps.html",
+          "desc": "Count down to birthdays and special events in days, sleeps or hours. Add names and dates, upload via CSV. By Sethi De Clercq.",
+          "tag": "EYFS / KS1",
+          "topics": [
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Paint Tool",
+          "url": "https://sethideclercq.com/tools/simplepaint.html",
+          "desc": "No-frills drawing tool for young learners — brush/eraser modes, adjustable sizes, and simple colour palette. Save as PNG. By Sethi De Clercq.",
+          "tag": "EYFS / KS1",
+          "topics": [
+            "general",
+            "computing"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Pixel Art Creator",
+          "url": "https://sethideclercq.com/tools/MyCreations/mypixelart.html",
+          "desc": "Create pixel art on 8×8, 16×16 or 32×32 grids — introduces digital art, coordinates and grids. Export to PDF. By Sethi De Clercq.",
+          "tag": "EYFS / KS1 / KS2",
+          "topics": [
+            "general",
+            "computing"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Productivity & Timers",
+      "description": "Focus timers, visual guides, study organizers, and classroom utilities.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "AlternativeTo",
+          "url": "https://alternativeto.net",
+          "desc": "Find free and open-source alternatives to software applications to reduce software costs.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Classroom Video Station",
+          "url": "https://sethideclercq.com/tools/classroomvideostation",
+          "desc": "Play and manage classroom videos in a safe, distraction-free environment. By Sethi De Clercq.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Emerald Lens",
+          "url": "https://emeraldlens.sethideclercq.com",
+          "desc": "Privacy-first video study tool. Capture timestamps, organize notes and export beautiful reports. By Sethi De Clercq.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": "https://www.youtube.com/watch?v=AUHl3qsX5hw",
+          "isExternal": true
+        },
+        {
+          "title": "PausePoint (Windows)",
+          "url": "https://apps.microsoft.com/detail/9nptgptc4877",
+          "desc": "Classroom break timer and mindful focus pause tool for Windows desktop to prevent screen fatigue. By Sethi De Clercq.",
+          "tag": "Windows / All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Pomodoro Timer",
+          "url": "https://minnowfish.github.io/Pomodoro-Timer",
+          "desc": "Classic 25/5 focus timer to help students manage their work time. Student created.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "minnowfish",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "RedactingFriend",
+          "url": "https://redactingfriend.sethideclercq.com",
+          "desc": "Turn screenshots into simplified, redacted graphics and clean visual guides without exposing private data. By Sethi De Clercq.",
+          "tag": "Teacher Tool / All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "SapphireStudio",
+          "url": "https://sapphirestudio.sethideclercq.com",
+          "desc": "Browser-based video recorder for high-quality tutorials and demonstrations without cloud uploads — create videos, skip the cloud. By Sethi De Clercq.",
+          "tag": "Teacher Tool / All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Simple Timer",
+          "url": "https://sethideclercq.com/tools/simpletimer.html",
+          "desc": "Countdown timer with an end-of-time chime. Set minutes and seconds. Clean, minimal design for any whiteboard. By Sethi De Clercq.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Tutorial Friend",
+          "url": "https://tutorialfriend.sethideclercq.com",
+          "desc": "Create step-by-step visual guides and tutorials in seconds. Perfect for teachers building instructions. By Sethi De Clercq.",
+          "tag": "All ages",
+          "topics": [
+            "general"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Policies & AI Governance",
+      "description": "Institutional guidance, AI policy frameworks, and school leadership strategies.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "AI Governance Framework",
+          "url": "https://aigovernance.ictevangelist.com",
+          "desc": "AI governance framework and strategic guidance for schools and educational leaders by Mark Anderson (ICT Evangelist).",
+          "tag": "Teacher Tool",
+          "topics": [
+            "general",
+            "computing"
+          ],
+          "author": "Mark Anderson",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Display & Editing Tools",
+      "description": "Python lab, interactive syntax cheat sheets, flowchart generators, and coding utilities.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "IB CS Curriculum Planner",
+          "url": "https://planner.mattelliot.co.uk",
+          "desc": "Organise the two-year IB DP Computer Science course, check timing pressure, topic order, and export planning documents. By Matt Elliot.",
+          "tag": "Teacher Tool / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Matt Elliot",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Parsons Algorithms Quest",
+          "url": "https://jamesabela.github.io/jsfun/parsonsgame.html",
+          "desc": "A 52-quest Parsons campaign for iGCSE and 9618 A Level algorithms. Reorder Python, earn stars, and unlock new regions.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Parsons Puzzle (Reorder)",
+          "url": "https://jamesabela.github.io/jsfun/reorder.html",
+          "desc": "Reorder scrambled lines of code back into the correct order. Works with any raw Python URL (up to 20 lines).",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Pseudocode.pro",
+          "url": "https://pseudocode.pro",
+          "desc": "Write, check and practise pseudocode in the Cambridge International style. Specifically designed for Cambridge iGCSE and A-Level Computer Science students.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Python Code Guide",
+          "url": "https://jamesabela.github.io/jsfun/pythonmanual.html",
+          "desc": "An interactive cheat sheet and syntax reference guide for Python. Covers variables, operators, selection, loops, lists, and turtle commands.",
+          "tag": "KS2 / KS3 / iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Python Code Lab",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy",
+          "desc": "Display, edit, run simple code, upload & download (.py or .txt), visualise and make puzzles from any raw Python file. Paste a GitHub Gist or Pastebin URL.",
+          "tag": "KS2 / KS3 / iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Python List Maker",
+          "url": "https://jamesabela.github.io/jsfun/to_list.html",
+          "desc": "Convert lists of items from separate lines into formatted Python lists with custom options like data type parsing, sorting, and deduplication. Open directly in Python Code Lab.",
+          "tag": "KS3 / iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Python to Flowchart",
+          "url": "https://jamesabela.github.io/jsfun/python2flow.html",
+          "desc": "Convert Python code into a visual flowchart. Step through loops and conditions, customize theme layouts, and print or export diagrams as SVG/PNG.",
+          "tag": "KS3 / iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Syntax Styler",
+          "url": "https://syntaxstyler.sethideclercq.com",
+          "desc": "Google Workspace extension to easily format code in Google Docs and Slides. Perfect for creating worksheets and presentations. By Sethi De Clercq.",
+          "tag": "Teacher Tool",
+          "topics": [
+            "computing"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Early Years & Primary Computing",
+      "description": "ScratchJr preparation, early coding concepts, and visual digital creators.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "AmberCodes — The Logic Lab",
+          "url": "https://www.ambercodes.com",
+          "desc": "Visual programming environment for students to learn logic and coding. By Sethi De Clercq.",
+          "tag": "EYFS / KS1 / KS2",
+          "topics": [
+            "computing"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "AmberJr — ScratchJr Prep Tool",
+          "url": "https://amberjr.vercel.app",
+          "desc": "Create, edit and customise ScratchJr projects for class — add custom characters, backgrounds and sounds with a drag-and-drop scene editor. By Sethi De Clercq.",
+          "tag": "EYFS / KS1",
+          "topics": [
+            "computing"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "EduBlocks — Blocks to Text Made Easy",
+          "url": "https://edublocks.org",
+          "desc": "Free tool by Anaconda. Learn Python or HTML using familiar drag-and-drop blocks, then switch to text code — a perfect bridge from Scratch to real programming.",
+          "tag": "KS2 / KS3 / iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Emoji Dojo",
+          "url": "https://learningkyodai.com/emoji-dojo",
+          "desc": "Interactive computational thinking and digital skills challenges designed for primary learners by Learning Kyodai.",
+          "tag": "EYFS / KS1 / KS2",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Flock XR — 3D Computing & Game Design",
+          "url": "https://flockxr.com",
+          "desc": "Free, open-source, browser-based 3D spatial computing and block-based programming tool built on Blockly and Babylon.js. Bridges Scratch to 3D engines.",
+          "tag": "KS2 / KS3",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "LOFI Robot Cardboard",
+          "url": "https://cardboard.lofirobot.com",
+          "desc": "Free robot designs and STEAM project ideas for education using cardboard, Micro:bit, and Arduino.",
+          "tag": "KS1 / KS2 / KS3",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Mail Merge Cards",
+          "url": "https://mailmerge.primary-apps.com",
+          "desc": "Create your own trading cards by merging data from a spreadsheet. A visual way to learn about databases and mail merge. By Dave Salt.",
+          "tag": "KS2 / KS3",
+          "topics": [
+            "computing"
+          ],
+          "author": "Dave Salt",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Secret Code Generator",
+          "url": "https://sethideclercq.com/tools/secretcodegen.html",
+          "desc": "Create and crack secret codes and ciphers — a hands-on introduction to cryptography for young learners. Message Centre friendly. By Sethi De Clercq.",
+          "tag": "EYFS / KS1 / KS2",
+          "topics": [
+            "computing"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Whodunnit Database Detective",
+          "url": "https://whodunnit.primary-apps.com/whodunnit.html",
+          "desc": "Solve mysteries using a suspect database by filtering and comparing records. Great for introducing database queries. By Dave Salt.",
+          "tag": "KS2 / KS3",
+          "topics": [
+            "computing"
+          ],
+          "author": "Dave Salt",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Binary & Data Representation",
+      "description": "Binary conversions, quizzes, parity checks, bitwise logic, and data games.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "8-bit Binary Display",
+          "url": "https://sethideclercq.com/tools/binaryvisualiser.html",
+          "desc": "Visual 8-bit binary bulb display. By Sethi De Clercq.",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Binary Adder",
+          "url": "https://binaryadder.netlify.app",
+          "desc": "Binary addition simulator by Matt King. Suitable for GCSE and A-level.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": "Matt King",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Binary Conversion Tool",
+          "url": "https://jamesabela.github.io/jsfun/binaryconvertor.html",
+          "desc": "Convert between decimal and binary step by step.",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Binary DMZ",
+          "url": "https://jamesabela.github.io/binarydmz",
+          "desc": "Space-themed binary game with 4 difficulty levels (Rookie → Insane) and 3 game modes: Unsigned, Two's Complement and Hexadecimal.",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Binary Quiz",
+          "url": "https://jamesabela.github.io/jsfun/binaryquiz.html",
+          "desc": "Test binary conversion knowledge with a quiz.",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Binary Snake",
+          "url": "https://jamesabela.github.io/jsfun/binarysnake.html",
+          "desc": "Snake game with a binary challenge twist.",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Binary Timed Challenge",
+          "url": "https://sethideclercq.com/tools/8bitquest.html",
+          "desc": "Race against the clock on binary conversions. By Sethi De Clercq.",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Boolean Logic Workbench",
+          "url": "https://prayogashaala.com/digitalcircuits",
+          "desc": "Enter Boolean expressions to instantly generate truth tables, Karnaugh maps (K-maps), and logic circuit diagrams. By Prayogashaala.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Decimal → Binary Tool",
+          "url": "https://sethideclercq.com/tools/switchmaster.html",
+          "desc": "Step-by-step decimal to binary conversion. By Sethi De Clercq.",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "File Size Calculator",
+          "url": "https://ians.site/file",
+          "desc": "Calculate file sizes for iGCSE questions. Student created.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Logic.ly Gate Simulator",
+          "url": "https://logic.ly/demo/samples",
+          "desc": "Interactive logic gate simulator. Design and test digital circuits in your browser with AND, OR, NOT, and other gates.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Parity Byte",
+          "url": "https://jamesabela.github.io/jsfun/paritybyte.html",
+          "desc": "Understand how parity bits detect errors in data transmission.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing",
+            "maths"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Diamond 9 — CS Topics",
+      "description": "Diamond 9 ranking tasks covering computer hardware, ethics, networking, and data structures.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Computer Networks Components",
+          "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Routers%2CSwitches%2CFirewalls%2CNICs%2CCables%2CModems%2CBridges%2CGateways%2CRepeaters",
+          "desc": "Routers, Switches, Firewalls, NICs, Cables, Modems, Bridges, Gateways, Repeaters",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Cybersecurity Threats",
+          "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Phishing%2CMalware%2CSocial%2CRansomware%2CDDoS%2CPhysical%2CSpyware%2CAdware%2CKeyloggers",
+          "desc": "Phishing, Malware, Social Engineering, Ransomware, DDoS, Physical, Spyware, Adware, Keyloggers",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Ethical Issues in Computing",
+          "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Privacy%2CSecurity%2CProperty%2CDivide%2CAutomation%2COpen%2CTransparency%2CAccountability%2CConsent",
+          "desc": "Privacy, Security, Property, Divide, Automation, Open Source, Transparency, Accountability, Consent",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Hardware Components",
+          "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=CPU%2CRAM%2CStorage%2CMotherboard%2CPower%2CPeripheral%2CMonitor%2CKeyboard%2CMouse",
+          "desc": "CPU, RAM, Storage, Motherboard, Power Supply, Peripherals, Monitor, Keyboard, Mouse",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Key Algorithms",
+          "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Sorting%2CSearching%2CGraph%2CDynamic%2CGreedy%2CRecursion%2CTree%2CBacktracking%2CHashing",
+          "desc": "Sorting, Searching, Graph, Dynamic, Greedy, Recursion, Tree, Backtracking, Hashing",
+          "tag": "A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Programming Concepts",
+          "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Variables%2CFunctions%2CLoops%2CAlgorithms%2CObjects%2CSyntax%2CData%2CPseudocode%2COperators",
+          "desc": "Variables, Functions, Loops, Algorithms, Objects, Syntax, Data, Pseudocode, Operators",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Programming Paradigms",
+          "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=OOP%2CProcedural%2CFunctional%2CEvent-Driven%2CLogic%2CDeclarative%2CImperative%2CConcurrent%2CAspect-Oriented",
+          "desc": "OOP, Procedural, Functional, Event-Driven, Logic, Declarative, Imperative, Concurrent, Aspect-Oriented",
+          "tag": "A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "SDLC Stages",
+          "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Requirements%2CDesign%2CImplementation%2CTesting%2CDeployment%2CMaintenance%2CPlanning%2CReview%2CClosure",
+          "desc": "Requirements, Design, Implementation, Testing, Deployment, Maintenance, Planning, Review, Closure",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Types of Software Testing",
+          "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Unit%2CIntegration%2CSystem%2CUAT%2CRegression%2CAlpha%2CBeta%2CLoad%2CStress",
+          "desc": "Unit, Integration, System, UAT, Regression, Alpha, Beta, Load, Stress",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Priority Triangle — CS Topics",
+      "description": "Triangular evaluation tasks weighing core concepts in computer science.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Accessibility",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Usability&word2=Accessibility&word3=Inclusion",
+          "desc": "Usability · Accessibility · Inclusion",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "AI",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Data&word2=Algorithm&word3=Compute",
+          "desc": "Data · Algorithm · Compute",
+          "tag": "A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Algorithms",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Speed&word2=Accuracy&word3=Memory",
+          "desc": "Speed · Accuracy · Memory",
+          "tag": "A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Cybercrime",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Phishing&word2=Malware&word3=Hacking",
+          "desc": "Phishing · Malware · Hacking",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Data",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Volume&word2=Velocity&word3=Variety",
+          "desc": "Volume · Velocity · Variety",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Digital Divide",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Access&word2=Skills&word3=Motivation",
+          "desc": "Access · Skills · Motivation",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Ethics",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Responsibility&word2=Accountability&word3=Transparency",
+          "desc": "Responsibility · Accountability · Transparency",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Networking",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Bandwidth&word2=Latency&word3=Reliability",
+          "desc": "Bandwidth · Latency · Reliability",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Open Source",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Community&word2=Transparency&word3=Freedom",
+          "desc": "Community · Transparency · Freedom",
+          "tag": "A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Privacy",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Privacy&word2=Security&word3=Convenience",
+          "desc": "Privacy · Security · Convenience",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Scalability",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Speed&word2=Quality&word3=Cost",
+          "desc": "Speed · Quality · Cost",
+          "tag": "A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Security",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Confidentiality&word2=Integrity&word3=Availability",
+          "desc": "Confidentiality · Integrity · Availability",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Sustainability",
+          "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Environmental&word2=Social&word3=Economic",
+          "desc": "Environmental · Social · Economic",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Link Two Sides — CS Quizzes",
+      "description": "Interactive matching quizzes linking CS terms, units, definitions, and syntax.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Algorithm Basics",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSBzdGVwLWJ5LXN0ZXAgcHJvY2VkdXJlIGZvciBzb2x2aW5nIGEgcHJvYmxlbS4KQSBzdHJ1Y3R1cmUgdXNlZCB0byByZXByZXNlbnQgYSBkZWNpc2lvbi1tYWtpbmcgcHJvY2Vzcy4KQW4gb3JkZXJlZCBsaXN0IG9mIGVsZW1lbnRzLgpBIGJyYW5jaGluZyBwb2ludCBpbiBhIHByb2dyYW0gd2hlcmUgbXVsdGlwbGUgb3B0aW9ucyBhcmUgcG9zc2libGUu&right=QWxnb3JpdGhtCkZsb3djaGFydApBcnJheQpEZWNpc2lvbg==",
+          "desc": "Match Algorithm, Flowchart, Array, Decision to their descriptions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Data Storage",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=Vm9sYXRpbGUgbWVtb3J5IHRoYXQgc3RvcmVzIGRhdGEgdGVtcG9yYXJpbHkuCk5vbi12b2xhdGlsZSBzdG9yYWdlIGRldmljZSB0aGF0IHN0b3JlcyBkYXRhIHBlcm1hbmVudGx5LgpBIHBvcnRhYmxlIHN0b3JhZ2UgZGV2aWNlIHRoYXQgY2FuIGJlIGNvbm5lY3RlZCB2aWEgVVNCLgpEYXRhIHN0b3JhZ2UgbWVkaXVtIHRoYXQgdXNlcyBsYXNlcnMgdG8gcmVhZCBhbmQgd3JpdGUgZGF0YS4=&right=UkFNCkhhcmQgRGlzayBEcml2ZQpVU0IgRmxhc2ggRHJpdmUKT3B0aWNhbCBEaXNj",
+          "desc": "Match RAM, Hard Disk, USB Flash Drive, Optical Disc to their descriptions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Data Types",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSB3aG9sZSBudW1iZXIKQSBzaW5nbGUgbGV0dGVyCkEgd29yZCBvciBwaHJhc2UKQSBudW1iZXIgd2l0aCB0d28gZGVjaW1hbCBwbGFjZXM=&right=SU5URUdFUgpDSEFSClNUUklORwpSRUFM",
+          "desc": "Match INTEGER, CHAR, STRING, REAL to their definitions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Logic Gates",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=T3V0cHV0cyB0cnVlIG9ubHkgd2hlbiBib3RoIGlucHV0cyBhcmUgdHJ1ZS4KT3V0cHV0cyB0cnVlIHdoZW4gZWl0aGVyIGlucHV0IGlzIHRydWUuCk91dHB1dHMgdHJ1ZSB3aGVuIG5laXRoZXIgaW5wdXQgaXMgdHJ1ZS4KT3V0cHV0cyB0cnVlIG9ubHkgd2hlbiB0aGUgaW5wdXRzIGFyZSBkaWZmZXJlbnQu&right=QU5EIGdhdGUKT1IgZ2F0ZQpOT1IgZ2F0ZQpYT1IgZ2F0ZQ==",
+          "desc": "Match AND, OR, NOR, XOR gates to their truth-table descriptions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Networking Concepts",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSB1bmlxdWUgaWRlbnRpZmllciBhc3NpZ25lZCB0byBkZXZpY2VzIG9uIGEgbmV0d29yay4KVGhlIHN0YW5kYXJkIGNvbW11bmljYXRpb24gcHJvdG9jb2wgb2YgdGhlIGludGVybmV0LgpBIGRldmljZSB0aGF0IGZvcndhcmRzIGRhdGEgcGFja2V0cyBiZXR3ZWVuIG5ldHdvcmtzLgpBIGNvbXB1dGVyIHRoYXQgcHJvdmlkZXMgc2VydmljZXMgdG8gb3RoZXIgY29tcHV0ZXJzIG92ZXIgYSBuZXR3b3JrLg==&right=SVAgQWRkcmVzcwpUQ1AvSVAKUm91dGVyClNlcnZlcg==",
+          "desc": "Match IP Address, TCP/IP, Router, Server to their descriptions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Program Development Life Cycle",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=RGV2ZWxvcCBhbiBhbGdvcml0aG0gdG8gc29sdmUgdGhlIHByb2JsZW0gYnkgdXNpbmcgc3RydWN0dXJlIGRpYWdyYW1zLCBmbG93Y2hhcnRzLCBvciBwc2V1ZG9jb2RlCkRldGVjdCBhbmQgZml4IHRoZSBlcnJvcnMgaW4gdGhlIHByb2dyYW0KSWRlbnRpZnkgdGhlIHByb2JsZW0gYW5kIGl0cyByZXF1aXJlbWVudHMKV3JpdGUgYW5kIGltcGxlbWVudCB0aGUgaW5zdHJ1Y3Rpb25zIHRvIHNvbHZlIHRoZSBwcm9ibGVt&right=RGVzaWduClRlc3RpbmcKQW5hbHlzaXMKQ29kaW5n",
+          "desc": "Match Design, Testing, Analysis, Coding to their PDLC stage descriptions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Programming Concepts",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=TGlicmFyeSByb3V0aW5lClN0cnVjdHVyZSBkaWFncmFtClByb2NlZHVyZQpGdW5jdGlvbg==&right=QSBzdGFuZGFyZCBzdWJyb3V0aW5lIHRoYXQgaXMgYXZhaWxhYmxlIGZvciBpbW1lZGlhdGUgdXNlLgpBbiBvdmVydmlldyBvZiBhIHByb2dyYW0gb3Igc3Vicm91dGluZS4KQSBzdWJyb3V0aW5lIHRoYXQgbWF5IG5vdCByZXR1cm4gYSB2YWx1ZS4KQSBzdWJyb3V0aW5lIHRoYXQgY2FuIGJlIHVzZWQgaW4gYW4gYXNzaWdubWVudCBzdGF0ZW1lbnQu",
+          "desc": "Match Library routine, Structure diagram, Procedure, Function to their definitions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Programming Constructs",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSBsb29wIHRoYXQgcmVwZWF0cyBhIHNldCBvZiBpbnN0cnVjdGlvbnMgYSBrbm93biBudW1iZXIgb2YgdGltZXMuCkEgY29uZGl0aW9uIHRoYXQgY2hlY2tzIGlmIGEgc3RhdGVtZW50IGlzIHRydWUgb3IgZmFsc2UuCkEgbG9vcCB0aGF0IGNvbnRpbnVlcyB1bnRpbCBhIGNlcnRhaW4gY29uZGl0aW9uIGlzIG1ldC4KQSBjb21tYW5kIHRoYXQgYWxsb3dzIGEgcHJvZ3JhbSB0byBza2lwIGluc3RydWN0aW9ucyBpZiBhIGNvbmRpdGlvbiBpcyBmYWxzZS4=&right=Rm9yIGxvb3AKSWYgc3RhdGVtZW50CldoaWxlIGxvb3AKRWxzZSBzdGF0ZW1lbnQ=",
+          "desc": "Match: For loop, If statement, While loop, Else statement to their definitions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Pseudocode Keywords",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=U3RvcmVzIGRhdGEgaW4gYSBmaWxlClJldHJpZXZlcyBkYXRhIGZyb20gYSBmaWxlCkRpc3BsYXlzIGRhdGEgb24gYSBzY3JlZW4KRW50ZXJzIGRhdGEgZnJvbSBhIGtleWJvYXJk&right=V1JJVEUKUkVBRApPVVRQVVQKSU5QVVQ=",
+          "desc": "Match WRITE, READ, OUTPUT, INPUT to their pseudocode actions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Pseudocode Statements",
+          "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSBzdGF0ZW1lbnQgdG8gY291bnQuCkEgc3RhdGVtZW50IHRvIHRvdGFsLgpBIHN0YXRlbWVudCB0byBzdGFydCBhIHByZS1jb25kaXRpb24gbG9vcC4KQSBzdGF0ZW1lbnQgdG8gc3RhcnQgYSBwb3N0LWNvbmRpdGlvbiBsb29wLg==&right=Rk9SIENvdW50IOKGkCAxIFRPIDEwClZhbHVlIOKGkCBWYWx1ZSArIE5ld1ZhbHVlCldISUxFIFZhbHVlID4gMTAgRE8KUkVQRUFU",
+          "desc": "Match FOR, totalling, WHILE, REPEAT to their pseudocode descriptions.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Coding Challenges & Problem Solving",
+      "description": "Mini-quests, code challenges, spreadsheet games, and logic puzzles.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Array Explorer",
+          "url": "https://cie-igcse-array-explorer.lovable.app",
+          "desc": "Learn arrays interactively: memory diagrams, pseudocode, Python, searching, and classroom games. By Hari Denton.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "Hari Denton",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Average",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py",
+          "desc": "Calculate the average of a list of numbers.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Bubble Sort",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble",
+          "desc": "Classic bubble sort algorithm implementation.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Cipher Wheel",
+          "url": "https://scratch.mit.edu/projects/427196904",
+          "desc": "Interactive Caesar cipher / substitution cipher wheel in Scratch.",
+          "tag": "KS3",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Counting",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py",
+          "desc": "Counting algorithm — tallying occurrences.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Data Representation",
+          "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-representation.json",
+          "desc": "Penalty shootout game covering binary, hex, compression and data types.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Data Transmission",
+          "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-transmission.json",
+          "desc": "Penalty shootout game covering networking, packets and error detection.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Find the Cell",
+          "url": "https://jamesabela.github.io/jsfun/cells.html",
+          "desc": "Spreadsheet cell reference game — surprisingly addictive! Builds data literacy skills.",
+          "tag": "KS3",
+          "topics": [
+            "computing",
+            "maths",
+            "sciences"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "For Loop",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/forloop.py",
+          "desc": "A definite iteration example using a for loop.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Gandalf AI Challenge",
+          "url": "https://gandalf.lakera.ai/baseline",
+          "desc": "Learn about AI safety and prompt injection by trying to trick the AI into revealing its secret password across levels of increasing difficulty.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Hardware",
+          "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-hardware.json",
+          "desc": "Penalty shootout game covering CPU, memory and storage devices.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "If / Else",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py",
+          "desc": "Selection — branching logic with if/else.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Internet & Its Uses",
+          "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-internet.json",
+          "desc": "Penalty shootout game covering the web, digital currency and cyber security.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "KS3 Python Practice",
+          "url": "https://mrdavekang.github.io/y8-python/python-practice-ks3.html",
+          "desc": "An interactive Python course designed for Year 8 students. Covers fundamentals like variables, input, and selection. By Dave Kang.",
+          "tag": "KS3",
+          "topics": [
+            "computing"
+          ],
+          "author": "Dave Kang",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Linear Search",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py",
+          "desc": "Search through a list one item at a time.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Linked List Puzzle",
+          "url": "https://jamesabela.github.io/jsfun/linkedlist.html",
+          "desc": "Master memory addresses and pointers by correctly linking nodes in a chain. Visualise RAM and traversal.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Max & Min",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py",
+          "desc": "Find the maximum and minimum in a list.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Networx",
+          "url": "https://milesberry.net/networx",
+          "desc": "Network simulator by Miles Berry. Useful for understanding topologies and data flow. Suitable for GCSE and A-level.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Miles Berry",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Python Challenges",
+          "url": "https://jamesabela.github.io/jsfun/challenge_list.html",
+          "desc": "A collection of 90+ interactive Python programming challenges with progress tracking, achievement badges, and certificate generation.",
+          "tag": "KS3 / iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Repeat Loop",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py",
+          "desc": "Post-condition loop (repeat…until style).",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Right Hand Rule",
+          "url": "https://scratch.mit.edu/projects/287065173",
+          "desc": "Maze-solving using the right-hand rule algorithm.",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Software",
+          "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-software.json",
+          "desc": "Penalty shootout game covering operating systems and utility software.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Totalling",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py",
+          "desc": "Running total / accumulator pattern.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Towers of Hanoi",
+          "url": "https://hanoitowers.my.canva.site",
+          "desc": "Classic recursive problem in an interactive visual format. By Sethi De Clercq.",
+          "tag": "All ages",
+          "topics": [
+            "computing"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Von Neumann Architecture",
+          "url": "https://scratch.mit.edu/projects/621571362",
+          "desc": "Visual model of the Von Neumann computer architecture.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "While Loop",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py",
+          "desc": "Pre-condition indefinite iteration with while.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Educational Videos & Channels",
+      "description": "Top curated video channels, animations, and playlists for deep computer science learning.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "AI Just Crossed the Terrifying Line — Kurzgesagt",
+          "url": "https://www.youtube.com/watch?v=ujkD4SxPKOI",
+          "desc": "Kurzgesagt explores recent breakthroughs in autonomous AI agents, multi-agent coordination, emergent deceptive behavior, and the critical implications for AI safety.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Branch Education",
+          "url": "https://www.youtube.com/@BranchEducation",
+          "desc": "Stunning 3D animations explaining computer hardware, CPU architectures, transistors, fiber optics, and networking in deep technical detail.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Computerphile IB CS Video Mapping",
+          "url": "https://docs.google.com/spreadsheets/d/1BhKOGwXMjBRqFNP-tuzb3uOUA-bvYG3xg6TtkuYl6uI/edit?gid=1124921736#gid=1124921736",
+          "desc": "Curated spreadsheet mapping Computerphile YouTube videos directly against the IB Diploma Programme Computer Science (2026) curriculum topics.",
+          "tag": "Teacher Tool / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Primary EdTech",
+          "url": "https://www.youtube.com/@PrimaryEdTech",
+          "desc": "YouTube channel with practical EdTech tutorials, primary computing guides, and classroom technology ideas.",
+          "tag": "EYFS / KS1 / KS2",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Unplugged and Unlocked",
+          "url": "https://www.youtube.com/@UnpluggedandUnlocked",
+          "desc": "Educational computing video channel by Sethi De Clercq featuring tech tutorials, unplugged activities, and classroom guides.",
+          "tag": "All ages",
+          "topics": [
+            "computing"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Reading & Writing Tools",
+      "description": "Procedural 3D readers, crawl animations, chat simulations, blackout poetry, and story generators.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Blackout Poetry Creator",
+          "url": "https://sethideclercq.com/tools/blackoutpoetry.html",
+          "desc": "Upload any text and use highlighting tools to create blackout poetry. Share or export your creations.",
+          "tag": "Literature / KS2+",
+          "topics": [
+            "english"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Chat Maker",
+          "url": "https://jamesabela.github.io/reading/whatsapp-chat.html",
+          "desc": "Quickly create fake WhatsApp-style chats for roleplay or classroom displays. Simple text-to-chat logic.",
+          "tag": "Roleplay / Writing",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Minecraft Reader",
+          "url": "https://jamesabela.github.io/reading/minecraft-reader.html",
+          "desc": "Experience your stories in a procedural 3D world. Paste your text and watch it become part of the landscape!",
+          "tag": "3D / Literacy",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Plot Device Chooser",
+          "url": "https://scratch.mit.edu/projects/2261416/fullscreen",
+          "desc": "Scratch-based story plot device generator for creative writing inspiration.",
+          "tag": "Storytelling / KS1-3",
+          "topics": [
+            "english"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Star Wars Crawler",
+          "url": "https://jamesabela.github.io/reading/star-wars-crawler.html",
+          "desc": "Create your own opening crawl! Paste your text and move it at your own pace through deep space.",
+          "tag": "Visual / Focus",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Story Dice",
+          "url": "https://jamesabela.github.io/jsfun/storydice.html",
+          "desc": "Generate story prompts and story net images. Even saves images for you!",
+          "tag": "Creative / Primary",
+          "topics": [
+            "english",
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Writing Adventures",
+          "url": "https://sethideclercq.com/tools/MyCreations/mywriting.html",
+          "desc": "Distraction-free writing tool for young learners to practise typing and build writing confidence.",
+          "tag": "Primary / Writing",
+          "topics": [
+            "english"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Vocabulary & Language Analysis",
+      "description": "Ngram viewer, word clouds, parts of speech highlighters, and vocabulary builders.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Arctic Reading",
+          "url": "https://arcticreading.vercel.app",
+          "desc": "A powerful tool that enables teachers to analyse text and perform rainbow word analysis for literacy development.",
+          "tag": "Analysis / Literacy",
+          "topics": [
+            "english"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Google Books Ngram",
+          "url": "https://books.google.com/ngrams",
+          "desc": "Analyze the frequency of words and phrases across centuries of literature.",
+          "tag": "History / Research",
+          "topics": [
+            "english",
+            "social_sciences"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Word Cloud",
+          "url": "https://jamesabela.github.io/jsfun/wordcloud.html",
+          "desc": "Quickly generate a word cloud from any text. Great for summarising themes in a text.",
+          "tag": "Themes / Visual",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Word Search Maker",
+          "url": "https://sethideclercq.com/tools/wordsearch.html",
+          "desc": "Create custom word searches with your own word list. Multiple grid sizes, upper/lower case support.",
+          "tag": "Warmer / Primary",
+          "topics": [
+            "english"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Word Type Highlighter",
+          "url": "https://sethideclercq.com/tools/wordtype.html",
+          "desc": "Highlight nouns, verbs, adjectives and more with school colour codes. Build grammar awareness.",
+          "tag": "Grammar / KS1-2",
+          "topics": [
+            "english"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Literacy Games & Puzzles",
+      "description": "Word scrambles, letter games, interactive crosswords, and verbal logic grids.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Custom Crossword Studio",
+          "url": "https://jamesabela.github.io/reading/crossword.html",
+          "desc": "Design, generate, play, print, and export custom crossword puzzles instantly. Features designer and play-only modes.",
+          "tag": "Puzzle / Vocab",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Ice Maze",
+          "url": "https://jamesabela.github.io/icemaze",
+          "desc": "Navigate a maze collecting words in the right order to build sentences. Progressive stages.",
+          "tag": "Game / Grammar",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Jump Duck Letters",
+          "url": "https://jamesabela.github.io/reading/jump-duck-letters.html",
+          "desc": "An exciting runner game where you jump over tall letters, duck under low letters, and collect middle letters. Create and share custom story levels easily!",
+          "tag": "Game / Reading",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Penalty Shootout",
+          "url": "https://jamesabela.github.io/reading/penalties.html",
+          "desc": "Master vocabulary definitions with this high-stakes penalty game. Score goals by picking the right words!",
+          "tag": "Game / Vocab",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Support, Fluency & Accessibility",
+      "description": "Ticker tape focus readers, OpenDyslexic typography, AI reading coach, and text-to-speech tools.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Arctic Text to Speech",
+          "url": "https://apps.microsoft.com/detail/9nhk6rvkm8cc?cid=DevShareMCLPCS&hl=en-US&gl=MY",
+          "desc": "Personalized offline Text to Speech application for reading any text aloud. (Note: Windows Executable)",
+          "tag": "Accessibility / Windows",
+          "topics": [
+            "english"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Gemini Storybook",
+          "url": "https://gemini.google/overview/storybook",
+          "desc": "Create personalized, illustrated stories. Describe your idea and get a unique 10-page book with read-aloud narration.",
+          "tag": "AI / Storytelling",
+          "topics": [
+            "english"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Google Read Along",
+          "url": "https://readalong.google.com",
+          "desc": "Helping children discover the joy of reading with an AI reading buddy.",
+          "tag": "Primary / Phonics",
+          "topics": [
+            "english"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Microsoft Reading Coach",
+          "url": "https://coach.microsoft.com/en-us",
+          "desc": "AI-powered reading practice personalized for every student.",
+          "tag": "AI / Fluency",
+          "topics": [
+            "english"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "OpenDyslexic",
+          "url": "https://opendyslexic.org",
+          "desc": "A typeface designed against some common symptoms of dyslexia—integrated into Concept Grid.",
+          "tag": "Accessibility / Typeface",
+          "topics": [
+            "english"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Optical Reading Simulator",
+          "url": "https://jamesabela.github.io/reading/reading-experience.html",
+          "desc": "An interactive experience showing various reading challenges and text accessibility settings.",
+          "tag": "Simulator / Literacy",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Simple English News",
+          "url": "https://simpleenglishnews.com",
+          "desc": "Current events and news stories written in accessible, simplified language for English learners.",
+          "tag": "Reading / Literacy",
+          "topics": [
+            "english"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Ticker Pro",
+          "url": "https://jamesabela.github.io/reading/ticker-tape.html",
+          "desc": "A professional, broadcast-ready scrolling ticker tape. Customise and float it anywhere.",
+          "tag": "Focus / Accessibility",
+          "topics": [
+            "english"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    },
+    {
+      "category": "Mathematics",
+      "description": "Interactive mathematics, Pi Day activities, ten frames, part-whole models, polygon geometry, and numerical reasoning.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Missing Number Grids",
+          "url": "https://sethideclercq.com/tools/sheets/numbergrid.html",
+          "desc": "5×5 or 10×10 grids with missing numbers for students to fill in. Export to PDF for printing. By Sethi De Clercq.",
+          "tag": "KS1 / KS2",
+          "topics": [
+            "maths"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Part-Whole Challenges",
+          "url": "https://sethideclercq.com/tools/partwhole.html",
+          "desc": "Interactive part-whole model tool — visually explore fractions, addition and subtraction. Numbers up to 10, 20 or 50. By Sethi De Clercq.",
+          "tag": "EYFS / KS1",
+          "topics": [
+            "maths"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Pi Day in Space",
+          "url": "https://jamesabela.github.io/piday/index.html",
+          "desc": "Interactive Pi Day activities including a quiz, Buffon's needle experiment, and the history of Pi.",
+          "tag": "All ages",
+          "topics": [
+            "maths"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Polygon Viewer",
+          "url": "https://jamesabela.github.io/jsfun/polygon.html",
+          "desc": "Interactive regular polygon geometry visualizer. Adjust the number of sides with a slider to explore polygon angles and coordinate geometry.",
+          "tag": "Primary / KS3",
+          "topics": [
+            "maths"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Ten Frame Tool",
+          "url": "https://sethideclercq.com/tools/tenframes.html",
+          "desc": "Visual ten frames with 4 coloured counters. Choose 1 or 2 frames, horizontal or vertical. Toggle running totals on/off. By Sethi De Clercq.",
+          "tag": "EYFS / KS1",
+          "topics": [
+            "maths"
+          ],
+          "author": "Sethi De Clercq",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Sciences",
+      "description": "Interactive physics models, radioactive half-life visualizer, sporty periodic table, and biology simulations.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Half-Life Calculator",
+          "url": "https://jamesabela.github.io/jsfun/halflife.html",
+          "desc": "Visualise radioactive decay as repeated halving. See clear workings and visual models for iGCSE Physics.",
+          "tag": "iGCSE",
+          "topics": [
+            "sciences"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Sporty Periodic Table",
+          "url": "https://sites.google.com/rafflesamericanschool.org/interactive-periodic-table/home",
+          "desc": "Interactive periodic table connecting chemical elements to sports gear, athletic analogies, and real-world facts. By Ken Morrison.",
+          "tag": "All ages",
+          "topics": [
+            "sciences"
+          ],
+          "author": "Ken Morrison",
+          "tutorialVideo": null,
+          "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Social Sciences & Economics",
+      "description": "Supply and demand curve visualizer, rainforest deforestation simulation, historical text research, and structured debates.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Supply & Demand",
+          "url": "https://jamesabela.github.io/jsfun/demandsupply.html",
+          "desc": "Interactive supply and demand curve display tool.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "social_sciences",
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        }
+      ]
+    }
+  ],
+  "byTopic": {
+    "general": [
+      {
+        "category": "Question Tools",
+        "description": "Interactive question formats, scramble puzzles, and matching challenges.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Link Two Sides",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html",
+            "desc": "Draw lines between matching items — a very common exam question type. Customisable with your own content.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "More Than / Less Than",
+            "url": "https://sethideclercq.com/tools/comparison.html",
+            "desc": "Comparison tool for numerical reasoning. By Sethi De Clercq.",
+            "tag": "Primary / KS3",
+            "topics": [
+              "maths",
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Sentence Ordering Quiz",
+            "url": "https://jamesabela.github.io/jsfun/scramble.html",
+            "desc": "Order scrambled words, sentences or processes. Answers are encrypted so students can't guess from the URL.",
+            "tag": "All ages",
+            "topics": [
+              "english",
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Choosers & Pickers",
+        "description": "Randomizers, spinners, draggable manipulatives, and classroom decision makers.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "3D Lollipop Carousel",
+            "url": "https://jamesabela.github.io/jsfun/lollipop.html",
+            "desc": "Choose random names, groups or questions with a beautiful 3D spinning carousel.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Debate Picker",
+            "url": "https://jamesabela.github.io/jsfun/debate.html",
+            "desc": "Structure and run a classroom debate with this simple tool.",
+            "tag": "KS3+",
+            "topics": [
+              "general",
+              "english",
+              "social_sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Draggable Manipulatives",
+            "url": "https://jamesabela.github.io/jsfun/manip.html",
+            "desc": "Drag and drop items for categorisation or grouping activities on a whiteboard.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Mega Spinner",
+            "url": "https://jamesabela.github.io/jsfun/megaspinner.html",
+            "desc": "Spin the wheel to choose from large groups of names — perfect for bigger classes.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Number Flash Cards",
+            "url": "https://sethideclercq.com/tools/number-gen.html",
+            "desc": "Random number flash card generator. By Sethi De Clercq.",
+            "tag": "Primary / KS3",
+            "topics": [
+              "maths",
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Presentation Spinner",
+            "url": "https://jamesabela.github.io/jsfun/prezzispinner.html",
+            "desc": "Get two students presenting at once — great for peer assessment activities.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Discussion & Ranking Tools",
+        "description": "Critical thinking, concept ranking, debates, mind mapping, and conversation starters.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Connections Grid",
+            "url": "https://jamesabela.github.io/jsfun/connections.html",
+            "desc": "Create a 4x4 connection grid activity. Includes easy URL sharing and save/load features.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Family Conversation Starters",
+            "url": "https://jamesabela.github.io/jsfun/roadtrip.html",
+            "desc": "Fun discussion tools for road trips, family meals & game nights. Priority Triangle, Lateral Puzzles & Story Dice.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Interactive Mind Map",
+            "url": "https://jamesabela.github.io/mindmap",
+            "desc": "Visually organize your thoughts, brainstorm ideas, and map out concepts collaboratively. Excellent for eliciting vocabulary.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "english",
+              "social_sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Lateral Thinking Puzzles",
+            "url": "https://jamesabela.github.io/jsfun/lateral.html",
+            "desc": "Kickstart your class with 100+ lateral thinking puzzles. Includes cryptic hints, full solutions, and a countdown timer.",
+            "tag": "KS2 / KS3 / KS4",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Priority Triangle",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html",
+            "desc": "Which concept is most important? Editable words, dictionary look-up and image search built in.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "social_sciences",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "ThinkRank Studio",
+            "url": "https://jamesabela.github.io/ThinkRankStudio",
+            "desc": "Full ranking suite — Diamond 9, Diamond 5, Triangle, Line ranking, Podium and Elimination mode.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "social_sciences",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Unplugged Podcast Maker",
+            "url": "https://apps.apple.com/us/app/unplugged-podcast-maker/id6811337503",
+            "desc": "Audio recording and podcast creator designed for student discussions, interviews, and audio storytelling on iOS. By Sethi De Clercq.",
+            "tag": "iOS / All ages",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "X The Haze",
+            "url": "https://scratch.mit.edu/projects/119336460",
+            "desc": "Understand the complexities of rainforest burning and environmental issues in this simulation. Can you avoid bribes and central government detection?",
+            "tag": "All ages",
+            "topics": [
+              "social_sciences",
+              "general"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Image Tools",
+        "description": "Visual reveal games, image spotlights, and comparative image analysis.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Image Compare",
+            "url": "https://jamesabela.github.io/jsfun/imgcomp.html",
+            "desc": "Overlay two images to compare them — great for Now & Then, or just \"which do you prefer?\"",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Image Reveal Spotlight",
+            "url": "https://jamesabela.github.io/jsfun/imgrev.html",
+            "desc": "Spotlight effect to slowly explore an image. Wonderful for younger children investigating a visual stimulus.",
+            "tag": "Primary / KS3",
+            "topics": [
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Tile Reveal Game",
+            "url": "https://jamesabela.github.io/jsfun/imgtiles.html",
+            "desc": "Reveal tiles one by one — who can guess the hidden image first? Great as a starter activity.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Primary Creative & Fun",
+        "description": "Creative arts, soundboards, storytellers, and playful early years tools.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Amber Animator",
+            "url": "https://apps.apple.com/us/app/amber-animator/id6808616675",
+            "desc": "Frame-by-frame 2D animation app designed for young learners and creative classroom storytelling on iOS. By Sethi De Clercq.",
+            "tag": "iOS / Primary",
+            "topics": [
+              "general",
+              "computing",
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "AmberPuppets — Digital Storytelling",
+            "url": "https://www.amberpuppets.com",
+            "desc": "Turn your classroom into a digital puppet theater. Interactive storytelling tool designed for primary education. By Sethi De Clercq.",
+            "tag": "EYFS / KS1",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Animal Soundboard",
+            "url": "https://sethideclercq.com/tools/animalsoundboard",
+            "desc": "Interactive soundboard with a variety of animal sounds. Perfect for primary storytelling and activities. By Sethi De Clercq.",
+            "tag": "Primary",
+            "topics": [
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Emoji Search & Sheet Coder",
+            "url": "https://sethideclercq.com/tools/emojisearch.html",
+            "desc": "Search emojis, get Unicode values and Google Sheets / Excel formulas. Click to copy. By Sethi De Clercq.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "How Many Sleeps?",
+            "url": "https://sethideclercq.com/tools/howmanysleeps.html",
+            "desc": "Count down to birthdays and special events in days, sleeps or hours. Add names and dates, upload via CSV. By Sethi De Clercq.",
+            "tag": "EYFS / KS1",
+            "topics": [
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Paint Tool",
+            "url": "https://sethideclercq.com/tools/simplepaint.html",
+            "desc": "No-frills drawing tool for young learners — brush/eraser modes, adjustable sizes, and simple colour palette. Save as PNG. By Sethi De Clercq.",
+            "tag": "EYFS / KS1",
+            "topics": [
+              "general",
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Pixel Art Creator",
+            "url": "https://sethideclercq.com/tools/MyCreations/mypixelart.html",
+            "desc": "Create pixel art on 8×8, 16×16 or 32×32 grids — introduces digital art, coordinates and grids. Export to PDF. By Sethi De Clercq.",
+            "tag": "EYFS / KS1 / KS2",
+            "topics": [
+              "general",
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Productivity & Timers",
+        "description": "Focus timers, visual guides, study organizers, and classroom utilities.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "AlternativeTo",
+            "url": "https://alternativeto.net",
+            "desc": "Find free and open-source alternatives to software applications to reduce software costs.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Classroom Video Station",
+            "url": "https://sethideclercq.com/tools/classroomvideostation",
+            "desc": "Play and manage classroom videos in a safe, distraction-free environment. By Sethi De Clercq.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Emerald Lens",
+            "url": "https://emeraldlens.sethideclercq.com",
+            "desc": "Privacy-first video study tool. Capture timestamps, organize notes and export beautiful reports. By Sethi De Clercq.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": "https://www.youtube.com/watch?v=AUHl3qsX5hw",
+            "isExternal": true
+          },
+          {
+            "title": "PausePoint (Windows)",
+            "url": "https://apps.microsoft.com/detail/9nptgptc4877",
+            "desc": "Classroom break timer and mindful focus pause tool for Windows desktop to prevent screen fatigue. By Sethi De Clercq.",
+            "tag": "Windows / All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Pomodoro Timer",
+            "url": "https://minnowfish.github.io/Pomodoro-Timer",
+            "desc": "Classic 25/5 focus timer to help students manage their work time. Student created.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "minnowfish",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "RedactingFriend",
+            "url": "https://redactingfriend.sethideclercq.com",
+            "desc": "Turn screenshots into simplified, redacted graphics and clean visual guides without exposing private data. By Sethi De Clercq.",
+            "tag": "Teacher Tool / All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "SapphireStudio",
+            "url": "https://sapphirestudio.sethideclercq.com",
+            "desc": "Browser-based video recorder for high-quality tutorials and demonstrations without cloud uploads — create videos, skip the cloud. By Sethi De Clercq.",
+            "tag": "Teacher Tool / All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Simple Timer",
+            "url": "https://sethideclercq.com/tools/simpletimer.html",
+            "desc": "Countdown timer with an end-of-time chime. Set minutes and seconds. Clean, minimal design for any whiteboard. By Sethi De Clercq.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Tutorial Friend",
+            "url": "https://tutorialfriend.sethideclercq.com",
+            "desc": "Create step-by-step visual guides and tutorials in seconds. Perfect for teachers building instructions. By Sethi De Clercq.",
+            "tag": "All ages",
+            "topics": [
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Policies & AI Governance",
+        "description": "Institutional guidance, AI policy frameworks, and school leadership strategies.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "AI Governance Framework",
+            "url": "https://aigovernance.ictevangelist.com",
+            "desc": "AI governance framework and strategic guidance for schools and educational leaders by Mark Anderson (ICT Evangelist).",
+            "tag": "Teacher Tool",
+            "topics": [
+              "general",
+              "computing"
+            ],
+            "author": "Mark Anderson",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Reading & Writing Tools",
+        "description": "Procedural 3D readers, crawl animations, chat simulations, blackout poetry, and story generators.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Story Dice",
+            "url": "https://jamesabela.github.io/jsfun/storydice.html",
+            "desc": "Generate story prompts and story net images. Even saves images for you!",
+            "tag": "Creative / Primary",
+            "topics": [
+              "english",
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Social Sciences & Economics",
+        "description": "Supply and demand curve visualizer, rainforest deforestation simulation, historical text research, and structured debates.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Supply & Demand",
+            "url": "https://jamesabela.github.io/jsfun/demandsupply.html",
+            "desc": "Interactive supply and demand curve display tool.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "social_sciences",
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      }
+    ],
+    "computing": [
+      {
+        "category": "Primary Creative & Fun",
+        "description": "Creative arts, soundboards, storytellers, and playful early years tools.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Amber Animator",
+            "url": "https://apps.apple.com/us/app/amber-animator/id6808616675",
+            "desc": "Frame-by-frame 2D animation app designed for young learners and creative classroom storytelling on iOS. By Sethi De Clercq.",
+            "tag": "iOS / Primary",
+            "topics": [
+              "general",
+              "computing",
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Emoji Search & Sheet Coder",
+            "url": "https://sethideclercq.com/tools/emojisearch.html",
+            "desc": "Search emojis, get Unicode values and Google Sheets / Excel formulas. Click to copy. By Sethi De Clercq.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Paint Tool",
+            "url": "https://sethideclercq.com/tools/simplepaint.html",
+            "desc": "No-frills drawing tool for young learners — brush/eraser modes, adjustable sizes, and simple colour palette. Save as PNG. By Sethi De Clercq.",
+            "tag": "EYFS / KS1",
+            "topics": [
+              "general",
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Pixel Art Creator",
+            "url": "https://sethideclercq.com/tools/MyCreations/mypixelart.html",
+            "desc": "Create pixel art on 8×8, 16×16 or 32×32 grids — introduces digital art, coordinates and grids. Export to PDF. By Sethi De Clercq.",
+            "tag": "EYFS / KS1 / KS2",
+            "topics": [
+              "general",
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Policies & AI Governance",
+        "description": "Institutional guidance, AI policy frameworks, and school leadership strategies.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "AI Governance Framework",
+            "url": "https://aigovernance.ictevangelist.com",
+            "desc": "AI governance framework and strategic guidance for schools and educational leaders by Mark Anderson (ICT Evangelist).",
+            "tag": "Teacher Tool",
+            "topics": [
+              "general",
+              "computing"
+            ],
+            "author": "Mark Anderson",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Display & Editing Tools",
+        "description": "Python lab, interactive syntax cheat sheets, flowchart generators, and coding utilities.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "IB CS Curriculum Planner",
+            "url": "https://planner.mattelliot.co.uk",
+            "desc": "Organise the two-year IB DP Computer Science course, check timing pressure, topic order, and export planning documents. By Matt Elliot.",
+            "tag": "Teacher Tool / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Matt Elliot",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Parsons Algorithms Quest",
+            "url": "https://jamesabela.github.io/jsfun/parsonsgame.html",
+            "desc": "A 52-quest Parsons campaign for iGCSE and 9618 A Level algorithms. Reorder Python, earn stars, and unlock new regions.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Parsons Puzzle (Reorder)",
+            "url": "https://jamesabela.github.io/jsfun/reorder.html",
+            "desc": "Reorder scrambled lines of code back into the correct order. Works with any raw Python URL (up to 20 lines).",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Pseudocode.pro",
+            "url": "https://pseudocode.pro",
+            "desc": "Write, check and practise pseudocode in the Cambridge International style. Specifically designed for Cambridge iGCSE and A-Level Computer Science students.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Python Code Guide",
+            "url": "https://jamesabela.github.io/jsfun/pythonmanual.html",
+            "desc": "An interactive cheat sheet and syntax reference guide for Python. Covers variables, operators, selection, loops, lists, and turtle commands.",
+            "tag": "KS2 / KS3 / iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Python Code Lab",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy",
+            "desc": "Display, edit, run simple code, upload & download (.py or .txt), visualise and make puzzles from any raw Python file. Paste a GitHub Gist or Pastebin URL.",
+            "tag": "KS2 / KS3 / iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Python List Maker",
+            "url": "https://jamesabela.github.io/jsfun/to_list.html",
+            "desc": "Convert lists of items from separate lines into formatted Python lists with custom options like data type parsing, sorting, and deduplication. Open directly in Python Code Lab.",
+            "tag": "KS3 / iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Python to Flowchart",
+            "url": "https://jamesabela.github.io/jsfun/python2flow.html",
+            "desc": "Convert Python code into a visual flowchart. Step through loops and conditions, customize theme layouts, and print or export diagrams as SVG/PNG.",
+            "tag": "KS3 / iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Syntax Styler",
+            "url": "https://syntaxstyler.sethideclercq.com",
+            "desc": "Google Workspace extension to easily format code in Google Docs and Slides. Perfect for creating worksheets and presentations. By Sethi De Clercq.",
+            "tag": "Teacher Tool",
+            "topics": [
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Early Years & Primary Computing",
+        "description": "ScratchJr preparation, early coding concepts, and visual digital creators.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "AmberCodes — The Logic Lab",
+            "url": "https://www.ambercodes.com",
+            "desc": "Visual programming environment for students to learn logic and coding. By Sethi De Clercq.",
+            "tag": "EYFS / KS1 / KS2",
+            "topics": [
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "AmberJr — ScratchJr Prep Tool",
+            "url": "https://amberjr.vercel.app",
+            "desc": "Create, edit and customise ScratchJr projects for class — add custom characters, backgrounds and sounds with a drag-and-drop scene editor. By Sethi De Clercq.",
+            "tag": "EYFS / KS1",
+            "topics": [
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "EduBlocks — Blocks to Text Made Easy",
+            "url": "https://edublocks.org",
+            "desc": "Free tool by Anaconda. Learn Python or HTML using familiar drag-and-drop blocks, then switch to text code — a perfect bridge from Scratch to real programming.",
+            "tag": "KS2 / KS3 / iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Emoji Dojo",
+            "url": "https://learningkyodai.com/emoji-dojo",
+            "desc": "Interactive computational thinking and digital skills challenges designed for primary learners by Learning Kyodai.",
+            "tag": "EYFS / KS1 / KS2",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Flock XR — 3D Computing & Game Design",
+            "url": "https://flockxr.com",
+            "desc": "Free, open-source, browser-based 3D spatial computing and block-based programming tool built on Blockly and Babylon.js. Bridges Scratch to 3D engines.",
+            "tag": "KS2 / KS3",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "LOFI Robot Cardboard",
+            "url": "https://cardboard.lofirobot.com",
+            "desc": "Free robot designs and STEAM project ideas for education using cardboard, Micro:bit, and Arduino.",
+            "tag": "KS1 / KS2 / KS3",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Mail Merge Cards",
+            "url": "https://mailmerge.primary-apps.com",
+            "desc": "Create your own trading cards by merging data from a spreadsheet. A visual way to learn about databases and mail merge. By Dave Salt.",
+            "tag": "KS2 / KS3",
+            "topics": [
+              "computing"
+            ],
+            "author": "Dave Salt",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Secret Code Generator",
+            "url": "https://sethideclercq.com/tools/secretcodegen.html",
+            "desc": "Create and crack secret codes and ciphers — a hands-on introduction to cryptography for young learners. Message Centre friendly. By Sethi De Clercq.",
+            "tag": "EYFS / KS1 / KS2",
+            "topics": [
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Whodunnit Database Detective",
+            "url": "https://whodunnit.primary-apps.com/whodunnit.html",
+            "desc": "Solve mysteries using a suspect database by filtering and comparing records. Great for introducing database queries. By Dave Salt.",
+            "tag": "KS2 / KS3",
+            "topics": [
+              "computing"
+            ],
+            "author": "Dave Salt",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Binary & Data Representation",
+        "description": "Binary conversions, quizzes, parity checks, bitwise logic, and data games.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "8-bit Binary Display",
+            "url": "https://sethideclercq.com/tools/binaryvisualiser.html",
+            "desc": "Visual 8-bit binary bulb display. By Sethi De Clercq.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Binary Adder",
+            "url": "https://binaryadder.netlify.app",
+            "desc": "Binary addition simulator by Matt King. Suitable for GCSE and A-level.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "Matt King",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Binary Conversion Tool",
+            "url": "https://jamesabela.github.io/jsfun/binaryconvertor.html",
+            "desc": "Convert between decimal and binary step by step.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Binary DMZ",
+            "url": "https://jamesabela.github.io/binarydmz",
+            "desc": "Space-themed binary game with 4 difficulty levels (Rookie → Insane) and 3 game modes: Unsigned, Two's Complement and Hexadecimal.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Binary Quiz",
+            "url": "https://jamesabela.github.io/jsfun/binaryquiz.html",
+            "desc": "Test binary conversion knowledge with a quiz.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Binary Snake",
+            "url": "https://jamesabela.github.io/jsfun/binarysnake.html",
+            "desc": "Snake game with a binary challenge twist.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Binary Timed Challenge",
+            "url": "https://sethideclercq.com/tools/8bitquest.html",
+            "desc": "Race against the clock on binary conversions. By Sethi De Clercq.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Boolean Logic Workbench",
+            "url": "https://prayogashaala.com/digitalcircuits",
+            "desc": "Enter Boolean expressions to instantly generate truth tables, Karnaugh maps (K-maps), and logic circuit diagrams. By Prayogashaala.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Decimal → Binary Tool",
+            "url": "https://sethideclercq.com/tools/switchmaster.html",
+            "desc": "Step-by-step decimal to binary conversion. By Sethi De Clercq.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "File Size Calculator",
+            "url": "https://ians.site/file",
+            "desc": "Calculate file sizes for iGCSE questions. Student created.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Logic.ly Gate Simulator",
+            "url": "https://logic.ly/demo/samples",
+            "desc": "Interactive logic gate simulator. Design and test digital circuits in your browser with AND, OR, NOT, and other gates.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Parity Byte",
+            "url": "https://jamesabela.github.io/jsfun/paritybyte.html",
+            "desc": "Understand how parity bits detect errors in data transmission.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Diamond 9 — CS Topics",
+        "description": "Diamond 9 ranking tasks covering computer hardware, ethics, networking, and data structures.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Computer Networks Components",
+            "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Routers%2CSwitches%2CFirewalls%2CNICs%2CCables%2CModems%2CBridges%2CGateways%2CRepeaters",
+            "desc": "Routers, Switches, Firewalls, NICs, Cables, Modems, Bridges, Gateways, Repeaters",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Cybersecurity Threats",
+            "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Phishing%2CMalware%2CSocial%2CRansomware%2CDDoS%2CPhysical%2CSpyware%2CAdware%2CKeyloggers",
+            "desc": "Phishing, Malware, Social Engineering, Ransomware, DDoS, Physical, Spyware, Adware, Keyloggers",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Ethical Issues in Computing",
+            "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Privacy%2CSecurity%2CProperty%2CDivide%2CAutomation%2COpen%2CTransparency%2CAccountability%2CConsent",
+            "desc": "Privacy, Security, Property, Divide, Automation, Open Source, Transparency, Accountability, Consent",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Hardware Components",
+            "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=CPU%2CRAM%2CStorage%2CMotherboard%2CPower%2CPeripheral%2CMonitor%2CKeyboard%2CMouse",
+            "desc": "CPU, RAM, Storage, Motherboard, Power Supply, Peripherals, Monitor, Keyboard, Mouse",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Key Algorithms",
+            "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Sorting%2CSearching%2CGraph%2CDynamic%2CGreedy%2CRecursion%2CTree%2CBacktracking%2CHashing",
+            "desc": "Sorting, Searching, Graph, Dynamic, Greedy, Recursion, Tree, Backtracking, Hashing",
+            "tag": "A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Programming Concepts",
+            "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Variables%2CFunctions%2CLoops%2CAlgorithms%2CObjects%2CSyntax%2CData%2CPseudocode%2COperators",
+            "desc": "Variables, Functions, Loops, Algorithms, Objects, Syntax, Data, Pseudocode, Operators",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Programming Paradigms",
+            "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=OOP%2CProcedural%2CFunctional%2CEvent-Driven%2CLogic%2CDeclarative%2CImperative%2CConcurrent%2CAspect-Oriented",
+            "desc": "OOP, Procedural, Functional, Event-Driven, Logic, Declarative, Imperative, Concurrent, Aspect-Oriented",
+            "tag": "A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "SDLC Stages",
+            "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Requirements%2CDesign%2CImplementation%2CTesting%2CDeployment%2CMaintenance%2CPlanning%2CReview%2CClosure",
+            "desc": "Requirements, Design, Implementation, Testing, Deployment, Maintenance, Planning, Review, Closure",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Types of Software Testing",
+            "url": "https://jamesabela.github.io/ThinkRankStudio/index.html?words=Unit%2CIntegration%2CSystem%2CUAT%2CRegression%2CAlpha%2CBeta%2CLoad%2CStress",
+            "desc": "Unit, Integration, System, UAT, Regression, Alpha, Beta, Load, Stress",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Priority Triangle — CS Topics",
+        "description": "Triangular evaluation tasks weighing core concepts in computer science.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Accessibility",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Usability&word2=Accessibility&word3=Inclusion",
+            "desc": "Usability · Accessibility · Inclusion",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "AI",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Data&word2=Algorithm&word3=Compute",
+            "desc": "Data · Algorithm · Compute",
+            "tag": "A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Algorithms",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Speed&word2=Accuracy&word3=Memory",
+            "desc": "Speed · Accuracy · Memory",
+            "tag": "A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Cybercrime",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Phishing&word2=Malware&word3=Hacking",
+            "desc": "Phishing · Malware · Hacking",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Data",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Volume&word2=Velocity&word3=Variety",
+            "desc": "Volume · Velocity · Variety",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Digital Divide",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Access&word2=Skills&word3=Motivation",
+            "desc": "Access · Skills · Motivation",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Ethics",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Responsibility&word2=Accountability&word3=Transparency",
+            "desc": "Responsibility · Accountability · Transparency",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Networking",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Bandwidth&word2=Latency&word3=Reliability",
+            "desc": "Bandwidth · Latency · Reliability",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Open Source",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Community&word2=Transparency&word3=Freedom",
+            "desc": "Community · Transparency · Freedom",
+            "tag": "A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Privacy",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Privacy&word2=Security&word3=Convenience",
+            "desc": "Privacy · Security · Convenience",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Scalability",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Speed&word2=Quality&word3=Cost",
+            "desc": "Speed · Quality · Cost",
+            "tag": "A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Security",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Confidentiality&word2=Integrity&word3=Availability",
+            "desc": "Confidentiality · Integrity · Availability",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Sustainability",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html?word1=Environmental&word2=Social&word3=Economic",
+            "desc": "Environmental · Social · Economic",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Link Two Sides — CS Quizzes",
+        "description": "Interactive matching quizzes linking CS terms, units, definitions, and syntax.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Algorithm Basics",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSBzdGVwLWJ5LXN0ZXAgcHJvY2VkdXJlIGZvciBzb2x2aW5nIGEgcHJvYmxlbS4KQSBzdHJ1Y3R1cmUgdXNlZCB0byByZXByZXNlbnQgYSBkZWNpc2lvbi1tYWtpbmcgcHJvY2Vzcy4KQW4gb3JkZXJlZCBsaXN0IG9mIGVsZW1lbnRzLgpBIGJyYW5jaGluZyBwb2ludCBpbiBhIHByb2dyYW0gd2hlcmUgbXVsdGlwbGUgb3B0aW9ucyBhcmUgcG9zc2libGUu&right=QWxnb3JpdGhtCkZsb3djaGFydApBcnJheQpEZWNpc2lvbg==",
+            "desc": "Match Algorithm, Flowchart, Array, Decision to their descriptions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Data Storage",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=Vm9sYXRpbGUgbWVtb3J5IHRoYXQgc3RvcmVzIGRhdGEgdGVtcG9yYXJpbHkuCk5vbi12b2xhdGlsZSBzdG9yYWdlIGRldmljZSB0aGF0IHN0b3JlcyBkYXRhIHBlcm1hbmVudGx5LgpBIHBvcnRhYmxlIHN0b3JhZ2UgZGV2aWNlIHRoYXQgY2FuIGJlIGNvbm5lY3RlZCB2aWEgVVNCLgpEYXRhIHN0b3JhZ2UgbWVkaXVtIHRoYXQgdXNlcyBsYXNlcnMgdG8gcmVhZCBhbmQgd3JpdGUgZGF0YS4=&right=UkFNCkhhcmQgRGlzayBEcml2ZQpVU0IgRmxhc2ggRHJpdmUKT3B0aWNhbCBEaXNj",
+            "desc": "Match RAM, Hard Disk, USB Flash Drive, Optical Disc to their descriptions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Data Types",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSB3aG9sZSBudW1iZXIKQSBzaW5nbGUgbGV0dGVyCkEgd29yZCBvciBwaHJhc2UKQSBudW1iZXIgd2l0aCB0d28gZGVjaW1hbCBwbGFjZXM=&right=SU5URUdFUgpDSEFSClNUUklORwpSRUFM",
+            "desc": "Match INTEGER, CHAR, STRING, REAL to their definitions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Logic Gates",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=T3V0cHV0cyB0cnVlIG9ubHkgd2hlbiBib3RoIGlucHV0cyBhcmUgdHJ1ZS4KT3V0cHV0cyB0cnVlIHdoZW4gZWl0aGVyIGlucHV0IGlzIHRydWUuCk91dHB1dHMgdHJ1ZSB3aGVuIG5laXRoZXIgaW5wdXQgaXMgdHJ1ZS4KT3V0cHV0cyB0cnVlIG9ubHkgd2hlbiB0aGUgaW5wdXRzIGFyZSBkaWZmZXJlbnQu&right=QU5EIGdhdGUKT1IgZ2F0ZQpOT1IgZ2F0ZQpYT1IgZ2F0ZQ==",
+            "desc": "Match AND, OR, NOR, XOR gates to their truth-table descriptions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Networking Concepts",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSB1bmlxdWUgaWRlbnRpZmllciBhc3NpZ25lZCB0byBkZXZpY2VzIG9uIGEgbmV0d29yay4KVGhlIHN0YW5kYXJkIGNvbW11bmljYXRpb24gcHJvdG9jb2wgb2YgdGhlIGludGVybmV0LgpBIGRldmljZSB0aGF0IGZvcndhcmRzIGRhdGEgcGFja2V0cyBiZXR3ZWVuIG5ldHdvcmtzLgpBIGNvbXB1dGVyIHRoYXQgcHJvdmlkZXMgc2VydmljZXMgdG8gb3RoZXIgY29tcHV0ZXJzIG92ZXIgYSBuZXR3b3JrLg==&right=SVAgQWRkcmVzcwpUQ1AvSVAKUm91dGVyClNlcnZlcg==",
+            "desc": "Match IP Address, TCP/IP, Router, Server to their descriptions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Program Development Life Cycle",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=RGV2ZWxvcCBhbiBhbGdvcml0aG0gdG8gc29sdmUgdGhlIHByb2JsZW0gYnkgdXNpbmcgc3RydWN0dXJlIGRpYWdyYW1zLCBmbG93Y2hhcnRzLCBvciBwc2V1ZG9jb2RlCkRldGVjdCBhbmQgZml4IHRoZSBlcnJvcnMgaW4gdGhlIHByb2dyYW0KSWRlbnRpZnkgdGhlIHByb2JsZW0gYW5kIGl0cyByZXF1aXJlbWVudHMKV3JpdGUgYW5kIGltcGxlbWVudCB0aGUgaW5zdHJ1Y3Rpb25zIHRvIHNvbHZlIHRoZSBwcm9ibGVt&right=RGVzaWduClRlc3RpbmcKQW5hbHlzaXMKQ29kaW5n",
+            "desc": "Match Design, Testing, Analysis, Coding to their PDLC stage descriptions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Programming Concepts",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=TGlicmFyeSByb3V0aW5lClN0cnVjdHVyZSBkaWFncmFtClByb2NlZHVyZQpGdW5jdGlvbg==&right=QSBzdGFuZGFyZCBzdWJyb3V0aW5lIHRoYXQgaXMgYXZhaWxhYmxlIGZvciBpbW1lZGlhdGUgdXNlLgpBbiBvdmVydmlldyBvZiBhIHByb2dyYW0gb3Igc3Vicm91dGluZS4KQSBzdWJyb3V0aW5lIHRoYXQgbWF5IG5vdCByZXR1cm4gYSB2YWx1ZS4KQSBzdWJyb3V0aW5lIHRoYXQgY2FuIGJlIHVzZWQgaW4gYW4gYXNzaWdubWVudCBzdGF0ZW1lbnQu",
+            "desc": "Match Library routine, Structure diagram, Procedure, Function to their definitions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Programming Constructs",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSBsb29wIHRoYXQgcmVwZWF0cyBhIHNldCBvZiBpbnN0cnVjdGlvbnMgYSBrbm93biBudW1iZXIgb2YgdGltZXMuCkEgY29uZGl0aW9uIHRoYXQgY2hlY2tzIGlmIGEgc3RhdGVtZW50IGlzIHRydWUgb3IgZmFsc2UuCkEgbG9vcCB0aGF0IGNvbnRpbnVlcyB1bnRpbCBhIGNlcnRhaW4gY29uZGl0aW9uIGlzIG1ldC4KQSBjb21tYW5kIHRoYXQgYWxsb3dzIGEgcHJvZ3JhbSB0byBza2lwIGluc3RydWN0aW9ucyBpZiBhIGNvbmRpdGlvbiBpcyBmYWxzZS4=&right=Rm9yIGxvb3AKSWYgc3RhdGVtZW50CldoaWxlIGxvb3AKRWxzZSBzdGF0ZW1lbnQ=",
+            "desc": "Match: For loop, If statement, While loop, Else statement to their definitions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Pseudocode Keywords",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=U3RvcmVzIGRhdGEgaW4gYSBmaWxlClJldHJpZXZlcyBkYXRhIGZyb20gYSBmaWxlCkRpc3BsYXlzIGRhdGEgb24gYSBzY3JlZW4KRW50ZXJzIGRhdGEgZnJvbSBhIGtleWJvYXJk&right=V1JJVEUKUkVBRApPVVRQVVQKSU5QVVQ=",
+            "desc": "Match WRITE, READ, OUTPUT, INPUT to their pseudocode actions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Pseudocode Statements",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html?left=QSBzdGF0ZW1lbnQgdG8gY291bnQuCkEgc3RhdGVtZW50IHRvIHRvdGFsLgpBIHN0YXRlbWVudCB0byBzdGFydCBhIHByZS1jb25kaXRpb24gbG9vcC4KQSBzdGF0ZW1lbnQgdG8gc3RhcnQgYSBwb3N0LWNvbmRpdGlvbiBsb29wLg==&right=Rk9SIENvdW50IOKGkCAxIFRPIDEwClZhbHVlIOKGkCBWYWx1ZSArIE5ld1ZhbHVlCldISUxFIFZhbHVlID4gMTAgRE8KUkVQRUFU",
+            "desc": "Match FOR, totalling, WHILE, REPEAT to their pseudocode descriptions.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Coding Challenges & Problem Solving",
+        "description": "Mini-quests, code challenges, spreadsheet games, and logic puzzles.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Array Explorer",
+            "url": "https://cie-igcse-array-explorer.lovable.app",
+            "desc": "Learn arrays interactively: memory diagrams, pseudocode, Python, searching, and classroom games. By Hari Denton.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "Hari Denton",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Average",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py",
+            "desc": "Calculate the average of a list of numbers.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Bubble Sort",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble",
+            "desc": "Classic bubble sort algorithm implementation.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Cipher Wheel",
+            "url": "https://scratch.mit.edu/projects/427196904",
+            "desc": "Interactive Caesar cipher / substitution cipher wheel in Scratch.",
+            "tag": "KS3",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Counting",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py",
+            "desc": "Counting algorithm — tallying occurrences.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Data Representation",
+            "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-representation.json",
+            "desc": "Penalty shootout game covering binary, hex, compression and data types.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Data Transmission",
+            "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-data-transmission.json",
+            "desc": "Penalty shootout game covering networking, packets and error detection.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Find the Cell",
+            "url": "https://jamesabela.github.io/jsfun/cells.html",
+            "desc": "Spreadsheet cell reference game — surprisingly addictive! Builds data literacy skills.",
+            "tag": "KS3",
+            "topics": [
+              "computing",
+              "maths",
+              "sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "For Loop",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/forloop.py",
+            "desc": "A definite iteration example using a for loop.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Gandalf AI Challenge",
+            "url": "https://gandalf.lakera.ai/baseline",
+            "desc": "Learn about AI safety and prompt injection by trying to trick the AI into revealing its secret password across levels of increasing difficulty.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Hardware",
+            "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-hardware.json",
+            "desc": "Penalty shootout game covering CPU, memory and storage devices.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "If / Else",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py",
+            "desc": "Selection — branching logic with if/else.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Internet & Its Uses",
+            "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-internet.json",
+            "desc": "Penalty shootout game covering the web, digital currency and cyber security.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "KS3 Python Practice",
+            "url": "https://mrdavekang.github.io/y8-python/python-practice-ks3.html",
+            "desc": "An interactive Python course designed for Year 8 students. Covers fundamentals like variables, input, and selection. By Dave Kang.",
+            "tag": "KS3",
+            "topics": [
+              "computing"
+            ],
+            "author": "Dave Kang",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Linear Search",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py",
+            "desc": "Search through a list one item at a time.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Linked List Puzzle",
+            "url": "https://jamesabela.github.io/jsfun/linkedlist.html",
+            "desc": "Master memory addresses and pointers by correctly linking nodes in a chain. Visualise RAM and traversal.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Max & Min",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py",
+            "desc": "Find the maximum and minimum in a list.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Networx",
+            "url": "https://milesberry.net/networx",
+            "desc": "Network simulator by Miles Berry. Useful for understanding topologies and data flow. Suitable for GCSE and A-level.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Miles Berry",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Python Challenges",
+            "url": "https://jamesabela.github.io/jsfun/challenge_list.html",
+            "desc": "A collection of 90+ interactive Python programming challenges with progress tracking, achievement badges, and certificate generation.",
+            "tag": "KS3 / iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Repeat Loop",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py",
+            "desc": "Post-condition loop (repeat…until style).",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Right Hand Rule",
+            "url": "https://scratch.mit.edu/projects/287065173",
+            "desc": "Maze-solving using the right-hand rule algorithm.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Software",
+            "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-software.json",
+            "desc": "Penalty shootout game covering operating systems and utility software.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Totalling",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py",
+            "desc": "Running total / accumulator pattern.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Towers of Hanoi",
+            "url": "https://hanoitowers.my.canva.site",
+            "desc": "Classic recursive problem in an interactive visual format. By Sethi De Clercq.",
+            "tag": "All ages",
+            "topics": [
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Von Neumann Architecture",
+            "url": "https://scratch.mit.edu/projects/621571362",
+            "desc": "Visual model of the Von Neumann computer architecture.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "While Loop",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/whileloop.py",
+            "desc": "Pre-condition indefinite iteration with while.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Educational Videos & Channels",
+        "description": "Top curated video channels, animations, and playlists for deep computer science learning.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "AI Just Crossed the Terrifying Line — Kurzgesagt",
+            "url": "https://www.youtube.com/watch?v=ujkD4SxPKOI",
+            "desc": "Kurzgesagt explores recent breakthroughs in autonomous AI agents, multi-agent coordination, emergent deceptive behavior, and the critical implications for AI safety.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Branch Education",
+            "url": "https://www.youtube.com/@BranchEducation",
+            "desc": "Stunning 3D animations explaining computer hardware, CPU architectures, transistors, fiber optics, and networking in deep technical detail.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Computerphile IB CS Video Mapping",
+            "url": "https://docs.google.com/spreadsheets/d/1BhKOGwXMjBRqFNP-tuzb3uOUA-bvYG3xg6TtkuYl6uI/edit?gid=1124921736#gid=1124921736",
+            "desc": "Curated spreadsheet mapping Computerphile YouTube videos directly against the IB Diploma Programme Computer Science (2026) curriculum topics.",
+            "tag": "Teacher Tool / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Primary EdTech",
+            "url": "https://www.youtube.com/@PrimaryEdTech",
+            "desc": "YouTube channel with practical EdTech tutorials, primary computing guides, and classroom technology ideas.",
+            "tag": "EYFS / KS1 / KS2",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Unplugged and Unlocked",
+            "url": "https://www.youtube.com/@UnpluggedandUnlocked",
+            "desc": "Educational computing video channel by Sethi De Clercq featuring tech tutorials, unplugged activities, and classroom guides.",
+            "tag": "All ages",
+            "topics": [
+              "computing"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      }
+    ],
+    "english": [
+      {
+        "category": "Question Tools",
+        "description": "Interactive question formats, scramble puzzles, and matching challenges.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Link Two Sides",
+            "url": "https://jamesabela.github.io/jsfun/linksides.html",
+            "desc": "Draw lines between matching items — a very common exam question type. Customisable with your own content.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Sentence Ordering Quiz",
+            "url": "https://jamesabela.github.io/jsfun/scramble.html",
+            "desc": "Order scrambled words, sentences or processes. Answers are encrypted so students can't guess from the URL.",
+            "tag": "All ages",
+            "topics": [
+              "english",
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Choosers & Pickers",
+        "description": "Randomizers, spinners, draggable manipulatives, and classroom decision makers.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Debate Picker",
+            "url": "https://jamesabela.github.io/jsfun/debate.html",
+            "desc": "Structure and run a classroom debate with this simple tool.",
+            "tag": "KS3+",
+            "topics": [
+              "general",
+              "english",
+              "social_sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Discussion & Ranking Tools",
+        "description": "Critical thinking, concept ranking, debates, mind mapping, and conversation starters.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Connections Grid",
+            "url": "https://jamesabela.github.io/jsfun/connections.html",
+            "desc": "Create a 4x4 connection grid activity. Includes easy URL sharing and save/load features.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Interactive Mind Map",
+            "url": "https://jamesabela.github.io/mindmap",
+            "desc": "Visually organize your thoughts, brainstorm ideas, and map out concepts collaboratively. Excellent for eliciting vocabulary.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "english",
+              "social_sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Lateral Thinking Puzzles",
+            "url": "https://jamesabela.github.io/jsfun/lateral.html",
+            "desc": "Kickstart your class with 100+ lateral thinking puzzles. Includes cryptic hints, full solutions, and a countdown timer.",
+            "tag": "KS2 / KS3 / KS4",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Priority Triangle",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html",
+            "desc": "Which concept is most important? Editable words, dictionary look-up and image search built in.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "social_sciences",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "ThinkRank Studio",
+            "url": "https://jamesabela.github.io/ThinkRankStudio",
+            "desc": "Full ranking suite — Diamond 9, Diamond 5, Triangle, Line ranking, Podium and Elimination mode.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "social_sciences",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Unplugged Podcast Maker",
+            "url": "https://apps.apple.com/us/app/unplugged-podcast-maker/id6811337503",
+            "desc": "Audio recording and podcast creator designed for student discussions, interviews, and audio storytelling on iOS. By Sethi De Clercq.",
+            "tag": "iOS / All ages",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Image Tools",
+        "description": "Visual reveal games, image spotlights, and comparative image analysis.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Tile Reveal Game",
+            "url": "https://jamesabela.github.io/jsfun/imgtiles.html",
+            "desc": "Reveal tiles one by one — who can guess the hidden image first? Great as a starter activity.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Primary Creative & Fun",
+        "description": "Creative arts, soundboards, storytellers, and playful early years tools.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Amber Animator",
+            "url": "https://apps.apple.com/us/app/amber-animator/id6808616675",
+            "desc": "Frame-by-frame 2D animation app designed for young learners and creative classroom storytelling on iOS. By Sethi De Clercq.",
+            "tag": "iOS / Primary",
+            "topics": [
+              "general",
+              "computing",
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "AmberPuppets — Digital Storytelling",
+            "url": "https://www.amberpuppets.com",
+            "desc": "Turn your classroom into a digital puppet theater. Interactive storytelling tool designed for primary education. By Sethi De Clercq.",
+            "tag": "EYFS / KS1",
+            "topics": [
+              "general",
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Reading & Writing Tools",
+        "description": "Procedural 3D readers, crawl animations, chat simulations, blackout poetry, and story generators.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Blackout Poetry Creator",
+            "url": "https://sethideclercq.com/tools/blackoutpoetry.html",
+            "desc": "Upload any text and use highlighting tools to create blackout poetry. Share or export your creations.",
+            "tag": "Literature / KS2+",
+            "topics": [
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Chat Maker",
+            "url": "https://jamesabela.github.io/reading/whatsapp-chat.html",
+            "desc": "Quickly create fake WhatsApp-style chats for roleplay or classroom displays. Simple text-to-chat logic.",
+            "tag": "Roleplay / Writing",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Minecraft Reader",
+            "url": "https://jamesabela.github.io/reading/minecraft-reader.html",
+            "desc": "Experience your stories in a procedural 3D world. Paste your text and watch it become part of the landscape!",
+            "tag": "3D / Literacy",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Plot Device Chooser",
+            "url": "https://scratch.mit.edu/projects/2261416/fullscreen",
+            "desc": "Scratch-based story plot device generator for creative writing inspiration.",
+            "tag": "Storytelling / KS1-3",
+            "topics": [
+              "english"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Star Wars Crawler",
+            "url": "https://jamesabela.github.io/reading/star-wars-crawler.html",
+            "desc": "Create your own opening crawl! Paste your text and move it at your own pace through deep space.",
+            "tag": "Visual / Focus",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Story Dice",
+            "url": "https://jamesabela.github.io/jsfun/storydice.html",
+            "desc": "Generate story prompts and story net images. Even saves images for you!",
+            "tag": "Creative / Primary",
+            "topics": [
+              "english",
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Writing Adventures",
+            "url": "https://sethideclercq.com/tools/MyCreations/mywriting.html",
+            "desc": "Distraction-free writing tool for young learners to practise typing and build writing confidence.",
+            "tag": "Primary / Writing",
+            "topics": [
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Vocabulary & Language Analysis",
+        "description": "Ngram viewer, word clouds, parts of speech highlighters, and vocabulary builders.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Arctic Reading",
+            "url": "https://arcticreading.vercel.app",
+            "desc": "A powerful tool that enables teachers to analyse text and perform rainbow word analysis for literacy development.",
+            "tag": "Analysis / Literacy",
+            "topics": [
+              "english"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Google Books Ngram",
+            "url": "https://books.google.com/ngrams",
+            "desc": "Analyze the frequency of words and phrases across centuries of literature.",
+            "tag": "History / Research",
+            "topics": [
+              "english",
+              "social_sciences"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Word Cloud",
+            "url": "https://jamesabela.github.io/jsfun/wordcloud.html",
+            "desc": "Quickly generate a word cloud from any text. Great for summarising themes in a text.",
+            "tag": "Themes / Visual",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Word Search Maker",
+            "url": "https://sethideclercq.com/tools/wordsearch.html",
+            "desc": "Create custom word searches with your own word list. Multiple grid sizes, upper/lower case support.",
+            "tag": "Warmer / Primary",
+            "topics": [
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Word Type Highlighter",
+            "url": "https://sethideclercq.com/tools/wordtype.html",
+            "desc": "Highlight nouns, verbs, adjectives and more with school colour codes. Build grammar awareness.",
+            "tag": "Grammar / KS1-2",
+            "topics": [
+              "english"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Literacy Games & Puzzles",
+        "description": "Word scrambles, letter games, interactive crosswords, and verbal logic grids.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Custom Crossword Studio",
+            "url": "https://jamesabela.github.io/reading/crossword.html",
+            "desc": "Design, generate, play, print, and export custom crossword puzzles instantly. Features designer and play-only modes.",
+            "tag": "Puzzle / Vocab",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Ice Maze",
+            "url": "https://jamesabela.github.io/icemaze",
+            "desc": "Navigate a maze collecting words in the right order to build sentences. Progressive stages.",
+            "tag": "Game / Grammar",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Jump Duck Letters",
+            "url": "https://jamesabela.github.io/reading/jump-duck-letters.html",
+            "desc": "An exciting runner game where you jump over tall letters, duck under low letters, and collect middle letters. Create and share custom story levels easily!",
+            "tag": "Game / Reading",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Penalty Shootout",
+            "url": "https://jamesabela.github.io/reading/penalties.html",
+            "desc": "Master vocabulary definitions with this high-stakes penalty game. Score goals by picking the right words!",
+            "tag": "Game / Vocab",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Support, Fluency & Accessibility",
+        "description": "Ticker tape focus readers, OpenDyslexic typography, AI reading coach, and text-to-speech tools.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Arctic Text to Speech",
+            "url": "https://apps.microsoft.com/detail/9nhk6rvkm8cc?cid=DevShareMCLPCS&hl=en-US&gl=MY",
+            "desc": "Personalized offline Text to Speech application for reading any text aloud. (Note: Windows Executable)",
+            "tag": "Accessibility / Windows",
+            "topics": [
+              "english"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Gemini Storybook",
+            "url": "https://gemini.google/overview/storybook",
+            "desc": "Create personalized, illustrated stories. Describe your idea and get a unique 10-page book with read-aloud narration.",
+            "tag": "AI / Storytelling",
+            "topics": [
+              "english"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Google Read Along",
+            "url": "https://readalong.google.com",
+            "desc": "Helping children discover the joy of reading with an AI reading buddy.",
+            "tag": "Primary / Phonics",
+            "topics": [
+              "english"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Microsoft Reading Coach",
+            "url": "https://coach.microsoft.com/en-us",
+            "desc": "AI-powered reading practice personalized for every student.",
+            "tag": "AI / Fluency",
+            "topics": [
+              "english"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "OpenDyslexic",
+            "url": "https://opendyslexic.org",
+            "desc": "A typeface designed against some common symptoms of dyslexia—integrated into Concept Grid.",
+            "tag": "Accessibility / Typeface",
+            "topics": [
+              "english"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Optical Reading Simulator",
+            "url": "https://jamesabela.github.io/reading/reading-experience.html",
+            "desc": "An interactive experience showing various reading challenges and text accessibility settings.",
+            "tag": "Simulator / Literacy",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Simple English News",
+            "url": "https://simpleenglishnews.com",
+            "desc": "Current events and news stories written in accessible, simplified language for English learners.",
+            "tag": "Reading / Literacy",
+            "topics": [
+              "english"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Ticker Pro",
+            "url": "https://jamesabela.github.io/reading/ticker-tape.html",
+            "desc": "A professional, broadcast-ready scrolling ticker tape. Customise and float it anywhere.",
+            "tag": "Focus / Accessibility",
+            "topics": [
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      }
+    ],
+    "social_sciences": [
+      {
+        "category": "Choosers & Pickers",
+        "description": "Randomizers, spinners, draggable manipulatives, and classroom decision makers.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Debate Picker",
+            "url": "https://jamesabela.github.io/jsfun/debate.html",
+            "desc": "Structure and run a classroom debate with this simple tool.",
+            "tag": "KS3+",
+            "topics": [
+              "general",
+              "english",
+              "social_sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Discussion & Ranking Tools",
+        "description": "Critical thinking, concept ranking, debates, mind mapping, and conversation starters.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Interactive Mind Map",
+            "url": "https://jamesabela.github.io/mindmap",
+            "desc": "Visually organize your thoughts, brainstorm ideas, and map out concepts collaboratively. Excellent for eliciting vocabulary.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "english",
+              "social_sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Priority Triangle",
+            "url": "https://jamesabela.github.io/jsfun/triangle.html",
+            "desc": "Which concept is most important? Editable words, dictionary look-up and image search built in.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "social_sciences",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "ThinkRank Studio",
+            "url": "https://jamesabela.github.io/ThinkRankStudio",
+            "desc": "Full ranking suite — Diamond 9, Diamond 5, Triangle, Line ranking, Podium and Elimination mode.",
+            "tag": "All ages",
+            "topics": [
+              "general",
+              "social_sciences",
+              "english"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "X The Haze",
+            "url": "https://scratch.mit.edu/projects/119336460",
+            "desc": "Understand the complexities of rainforest burning and environmental issues in this simulation. Can you avoid bribes and central government detection?",
+            "tag": "All ages",
+            "topics": [
+              "social_sciences",
+              "general"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Vocabulary & Language Analysis",
+        "description": "Ngram viewer, word clouds, parts of speech highlighters, and vocabulary builders.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Google Books Ngram",
+            "url": "https://books.google.com/ngrams",
+            "desc": "Analyze the frequency of words and phrases across centuries of literature.",
+            "tag": "History / Research",
+            "topics": [
+              "english",
+              "social_sciences"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Social Sciences & Economics",
+        "description": "Supply and demand curve visualizer, rainforest deforestation simulation, historical text research, and structured debates.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Supply & Demand",
+            "url": "https://jamesabela.github.io/jsfun/demandsupply.html",
+            "desc": "Interactive supply and demand curve display tool.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "social_sciences",
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      }
+    ],
+    "sciences": [
+      {
+        "category": "Coding Challenges & Problem Solving",
+        "description": "Mini-quests, code challenges, spreadsheet games, and logic puzzles.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Find the Cell",
+            "url": "https://jamesabela.github.io/jsfun/cells.html",
+            "desc": "Spreadsheet cell reference game — surprisingly addictive! Builds data literacy skills.",
+            "tag": "KS3",
+            "topics": [
+              "computing",
+              "maths",
+              "sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Sciences",
+        "description": "Interactive physics models, radioactive half-life visualizer, sporty periodic table, and biology simulations.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Half-Life Calculator",
+            "url": "https://jamesabela.github.io/jsfun/halflife.html",
+            "desc": "Visualise radioactive decay as repeated halving. See clear workings and visual models for iGCSE Physics.",
+            "tag": "iGCSE",
+            "topics": [
+              "sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Sporty Periodic Table",
+            "url": "https://sites.google.com/rafflesamericanschool.org/interactive-periodic-table/home",
+            "desc": "Interactive periodic table connecting chemical elements to sports gear, athletic analogies, and real-world facts. By Ken Morrison.",
+            "tag": "All ages",
+            "topics": [
+              "sciences"
+            ],
+            "author": "Ken Morrison",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      }
+    ],
+    "maths": [
+      {
+        "category": "Question Tools",
+        "description": "Interactive question formats, scramble puzzles, and matching challenges.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "More Than / Less Than",
+            "url": "https://sethideclercq.com/tools/comparison.html",
+            "desc": "Comparison tool for numerical reasoning. By Sethi De Clercq.",
+            "tag": "Primary / KS3",
+            "topics": [
+              "maths",
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Choosers & Pickers",
+        "description": "Randomizers, spinners, draggable manipulatives, and classroom decision makers.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Number Flash Cards",
+            "url": "https://sethideclercq.com/tools/number-gen.html",
+            "desc": "Random number flash card generator. By Sethi De Clercq.",
+            "tag": "Primary / KS3",
+            "topics": [
+              "maths",
+              "general"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Binary & Data Representation",
+        "description": "Binary conversions, quizzes, parity checks, bitwise logic, and data games.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "8-bit Binary Display",
+            "url": "https://sethideclercq.com/tools/binaryvisualiser.html",
+            "desc": "Visual 8-bit binary bulb display. By Sethi De Clercq.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Binary Adder",
+            "url": "https://binaryadder.netlify.app",
+            "desc": "Binary addition simulator by Matt King. Suitable for GCSE and A-level.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "Matt King",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Binary Conversion Tool",
+            "url": "https://jamesabela.github.io/jsfun/binaryconvertor.html",
+            "desc": "Convert between decimal and binary step by step.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Binary DMZ",
+            "url": "https://jamesabela.github.io/binarydmz",
+            "desc": "Space-themed binary game with 4 difficulty levels (Rookie → Insane) and 3 game modes: Unsigned, Two's Complement and Hexadecimal.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Binary Quiz",
+            "url": "https://jamesabela.github.io/jsfun/binaryquiz.html",
+            "desc": "Test binary conversion knowledge with a quiz.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Binary Snake",
+            "url": "https://jamesabela.github.io/jsfun/binarysnake.html",
+            "desc": "Snake game with a binary challenge twist.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Binary Timed Challenge",
+            "url": "https://sethideclercq.com/tools/8bitquest.html",
+            "desc": "Race against the clock on binary conversions. By Sethi De Clercq.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Boolean Logic Workbench",
+            "url": "https://prayogashaala.com/digitalcircuits",
+            "desc": "Enter Boolean expressions to instantly generate truth tables, Karnaugh maps (K-maps), and logic circuit diagrams. By Prayogashaala.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Decimal → Binary Tool",
+            "url": "https://sethideclercq.com/tools/switchmaster.html",
+            "desc": "Step-by-step decimal to binary conversion. By Sethi De Clercq.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "File Size Calculator",
+            "url": "https://ians.site/file",
+            "desc": "Calculate file sizes for iGCSE questions. Student created.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Logic.ly Gate Simulator",
+            "url": "https://logic.ly/demo/samples",
+            "desc": "Interactive logic gate simulator. Design and test digital circuits in your browser with AND, OR, NOT, and other gates.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Parity Byte",
+            "url": "https://jamesabela.github.io/jsfun/paritybyte.html",
+            "desc": "Understand how parity bits detect errors in data transmission.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing",
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Coding Challenges & Problem Solving",
+        "description": "Mini-quests, code challenges, spreadsheet games, and logic puzzles.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Find the Cell",
+            "url": "https://jamesabela.github.io/jsfun/cells.html",
+            "desc": "Spreadsheet cell reference game — surprisingly addictive! Builds data literacy skills.",
+            "tag": "KS3",
+            "topics": [
+              "computing",
+              "maths",
+              "sciences"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
+        "category": "Mathematics",
+        "description": "Interactive mathematics, Pi Day activities, ten frames, part-whole models, polygon geometry, and numerical reasoning.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Missing Number Grids",
+            "url": "https://sethideclercq.com/tools/sheets/numbergrid.html",
+            "desc": "5×5 or 10×10 grids with missing numbers for students to fill in. Export to PDF for printing. By Sethi De Clercq.",
+            "tag": "KS1 / KS2",
+            "topics": [
+              "maths"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Part-Whole Challenges",
+            "url": "https://sethideclercq.com/tools/partwhole.html",
+            "desc": "Interactive part-whole model tool — visually explore fractions, addition and subtraction. Numbers up to 10, 20 or 50. By Sethi De Clercq.",
+            "tag": "EYFS / KS1",
+            "topics": [
+              "maths"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Pi Day in Space",
+            "url": "https://jamesabela.github.io/piday/index.html",
+            "desc": "Interactive Pi Day activities including a quiz, Buffon's needle experiment, and the history of Pi.",
+            "tag": "All ages",
+            "topics": [
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Polygon Viewer",
+            "url": "https://jamesabela.github.io/jsfun/polygon.html",
+            "desc": "Interactive regular polygon geometry visualizer. Adjust the number of sides with a slider to explore polygon angles and coordinate geometry.",
+            "tag": "Primary / KS3",
+            "topics": [
+              "maths"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Ten Frame Tool",
+            "url": "https://sethideclercq.com/tools/tenframes.html",
+            "desc": "Visual ten frames with 4 coloured counters. Choose 1 or 2 frames, horizontal or vertical. Toggle running totals on/off. By Sethi De Clercq.",
+            "tag": "EYFS / KS1",
+            "topics": [
+              "maths"
+            ],
+            "author": "Sethi De Clercq",
+            "tutorialVideo": null,
+            "isExternal": true
+          }
+        ]
+      }
+    ]
+  }
+}

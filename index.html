@@ -226,10 +226,6 @@
       border-color: var(--primary);
     }
 
-    .card-emoji {
-      font-size: 1.6rem;
-    }
-
     .card-title {
       font-size: 1.05rem;
       font-weight: 700;
@@ -242,6 +238,23 @@
       line-height: 1.4;
     }
 
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: auto;
+      padding-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
     .card-tag {
       display: inline-block;
       font-size: 0.75rem;
@@ -250,8 +263,85 @@
       border-radius: 999px;
       background: var(--primary-light);
       color: var(--primary-dark);
-      margin-top: auto;
       align-self: flex-start;
+    }
+
+    .card-author {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .card-tutorial-btn {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #b91c1c;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: background 0.18s, transform 0.15s;
+    }
+
+    .card-tutorial-btn:hover {
+      background: #fecaca;
+      transform: scale(1.03);
+    }
+
+    .section-video-btn {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #b91c1c;
+      text-decoration: none;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+      transition: background 0.18s;
+    }
+
+    .section-video-btn:hover {
+      background: #fecaca;
+    }
+
+    /* Topic Pills Bar */
+    .topic-bar-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 1.5rem auto 0;
+      padding: 0 1rem;
+      max-width: 960px;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .topic-btn {
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .topic-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .topic-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(26, 106, 255, 0.25);
     }
 
     /* External indicator */
@@ -410,6 +500,17 @@
     <input type="text" id="searchInput" class="search-input" placeholder="Search for tools (e.g. spinner, quiz, video)..." oninput="handleSearch(this.value)">
   </div>
 
+  <!-- Topic Filter bar -->
+  <div class="topic-bar-wrap">
+    <button class="topic-btn active" onclick="switchTopic('general', this)">🎓 General</button>
+    <button class="topic-btn" onclick="switchTopic('maths', this)">🔢 Maths</button>
+    <button class="topic-btn" onclick="switchTopic('sciences', this)">🧪 Sciences</button>
+    <button class="topic-btn" onclick="switchTopic('social_sciences', this)">🌍 Social Sciences</button>
+    <button class="topic-btn" onclick="switchTopic('computing', this)">💻 Computing</button>
+    <button class="topic-btn" onclick="switchTopic('english', this)">📚 English</button>
+    <button class="topic-btn" onclick="switchTopic('all', this)">🌐 All Tools</button>
+  </div>
+
   <!-- Filter bar -->
   <div class="filter-bar-wrap">
     <button class="filter-btn active" onclick="filterByTag('all', this)">All</button>
@@ -423,7 +524,7 @@
 
   <main>
     <div id="tools-container">
-      <!-- Tools will be rendered here dynamically from index.json -->
+      <!-- Tools will be rendered here dynamically from usefulresources.json -->
     </div>
   </main>
 
@@ -440,9 +541,9 @@
 
   <script src="renderer.js"></script>
   <script>
-    // Initialize the tools from index.json
+    // Initialize tools from usefulresources.json
     window.addEventListener('DOMContentLoaded', () => {
-      initTools('index.json');
+      initTools('usefulresources.json', 'general');
     });
   </script>
 
