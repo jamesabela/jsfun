@@ -35,36 +35,127 @@
       min-height: 100vh;
     }
 
-    /* ───── Hero ───── */
-    .hero {
-      background: linear-gradient(135deg, #94c5fa 0%, #c4aff0 50%, #f0a0c8 100%);
-      color: #0d1b3e;
-      text-align: center;
-      padding: 3.5rem 1rem 5rem;
-      clip-path: ellipse(120% 100% at 50% 0%);
+    /* ───── Hero Carousel ───── */
+    .hero-carousel-container {
+      max-width: 1024px;
+      margin: 1.5rem auto 0.75rem;
+      padding: 0 1rem;
     }
 
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.5rem;
-      color: #0d1b3e;
+    .carousel-track-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1024 / 341;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(13, 27, 62, 0.12);
+      border: 1px solid var(--border);
+      background: #0d1b3e;
     }
 
-    .hero p {
-      font-size: 1.15rem;
-      opacity: 0.75;
-      max-width: 560px;
-      margin: 0 auto;
-      color: #0d1b3e;
+    .carousel-slides {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out, transform 0.8s ease-out;
+      transform: scale(1.02);
+      display: block;
+      text-decoration: none;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+      z-index: 2;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Carousel Arrow Controls */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(4px);
+      border: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--text);
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.25s, background 0.2s, transform 0.2s;
+    }
+
+    .carousel-track-wrapper:hover .carousel-arrow {
+      opacity: 0.9;
+    }
+
+    .carousel-arrow:hover {
+      background: var(--white);
+      transform: translateY(-50%) scale(1.1);
+      opacity: 1 !important;
+    }
+
+    .carousel-arrow.prev { left: 1rem; }
+    .carousel-arrow.next { right: 1rem; }
+
+    /* Indicator Dots */
+    .carousel-dots {
+      position: absolute;
+      bottom: 0.85rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      background: rgba(13, 27, 62, 0.45);
+      backdrop-filter: blur(6px);
+      border-radius: 999px;
+    }
+
+    .carousel-dots .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.6);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-dots .dot.active {
+      width: 24px;
+      background: #ffffff;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
     }
 
     /* ───── Tab bar (Navigation) ───── */
     .tab-bar-wrap {
       display: flex;
       justify-content: center;
-      margin-top: -2.5rem;
+      margin: 1.25rem auto 0;
       position: relative;
       z-index: 10;
     }
@@ -434,10 +525,41 @@
 
 <body>
 
-  <div class="hero">
-    <h1>💻 Computing Tools</h1>
-    <p>Technical and programming tools for the classroom — from binary to algorithms.</p>
-  </div>
+  <!-- Hero Banner Carousel -->
+  <header class="hero-carousel-container" aria-label="Featured Computing Resources">
+    <div class="carousel-track-wrapper">
+      <div class="carousel-slides" id="heroCarouselSlides">
+        <!-- Slide 1: Python Code Lab -->
+        <a class="carousel-slide active" href="https://jamesabela.github.io/jsfun/pythoncopy" title="Python Code Lab — Interactive code editor, runner and visualizer">
+          <img src="computing%20hero%20images/codelab.jpg" alt="Python Code Lab" width="1024" height="341">
+        </a>
+        <!-- Slide 2: Python Challenges -->
+        <a class="carousel-slide" href="https://jamesabela.github.io/jsfun/challenge_list.html" title="Python Challenges — Interactive coding quests and drills">
+          <img src="computing%20hero%20images/challenges.jpg" alt="Python Challenges" width="1024" height="341">
+        </a>
+        <!-- Slide 3: Python for iGCSE -->
+        <a class="carousel-slide" href="https://www.amazon.com/dp/B086PNZFK5" target="_blank" rel="noopener noreferrer" title="Python for iGCSE on Amazon">
+          <img src="computing%20hero%20images/igcse.jpg" alt="Python for iGCSE" width="1024" height="341">
+        </a>
+        <!-- Slide 4: 21st Century Problem Solving -->
+        <a class="carousel-slide" href="https://www.amazon.com/dp/B0H4BCHRLH" target="_blank" rel="noopener noreferrer" title="21st Century Problem Solving on Amazon">
+          <img src="computing%20hero%20images/probsolving.jpg" alt="21st Century Problem Solving" width="1024" height="341">
+        </a>
+      </div>
+
+      <!-- Arrow Controls -->
+      <button class="carousel-arrow prev" aria-label="Previous Slide" onclick="changeBannerSlide(-1)">&#10094;</button>
+      <button class="carousel-arrow next" aria-label="Next Slide" onclick="changeBannerSlide(1)">&#10095;</button>
+
+      <!-- Indicator Dots -->
+      <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Banner slide navigation">
+        <button class="dot active" aria-label="Slide 1: Python Code Lab" onclick="goToBannerSlide(0)"></button>
+        <button class="dot" aria-label="Slide 2: Python Challenges" onclick="goToBannerSlide(1)"></button>
+        <button class="dot" aria-label="Slide 3: Python for iGCSE" onclick="goToBannerSlide(2)"></button>
+        <button class="dot" aria-label="Slide 4: 21st Century Problem Solving" onclick="goToBannerSlide(3)"></button>
+      </div>
+    </div>
+  </header>
 
   <!-- Navigation -->
   <div class="tab-bar-wrap">
@@ -489,7 +611,88 @@
     // Initialize tools from usefulresources.json for Computing
     window.addEventListener('DOMContentLoaded', () => {
       initTools('usefulresources.json', 'computing');
+      initHeroCarousel();
     });
+
+    // Gentle Cycling Hero Carousel
+    let currentSlideIndex = 0;
+    let carouselTimer = null;
+    const slideInterval = 5500; // gentle 5.5s cycle
+
+    function showSlide(index) {
+      const slides = document.querySelectorAll('.carousel-slide');
+      const dots = document.querySelectorAll('.carousel-dots .dot');
+      if (!slides.length) return;
+
+      if (index >= slides.length) currentSlideIndex = 0;
+      else if (index < 0) currentSlideIndex = slides.length - 1;
+      else currentSlideIndex = index;
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === currentSlideIndex);
+      });
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlideIndex);
+      });
+    }
+
+    function changeBannerSlide(step) {
+      showSlide(currentSlideIndex + step);
+      resetBannerTimer();
+    }
+
+    function goToBannerSlide(index) {
+      showSlide(index);
+      resetBannerTimer();
+    }
+
+    function startBannerTimer() {
+      stopBannerTimer();
+      carouselTimer = setInterval(() => {
+        showSlide(currentSlideIndex + 1);
+      }, slideInterval);
+    }
+
+    function stopBannerTimer() {
+      if (carouselTimer) {
+        clearInterval(carouselTimer);
+        carouselTimer = null;
+      }
+    }
+
+    function resetBannerTimer() {
+      stopBannerTimer();
+      startBannerTimer();
+    }
+
+    function initHeroCarousel() {
+      const carouselWrapper = document.querySelector('.carousel-track-wrapper');
+      if (carouselWrapper) {
+        // Pause on mouse hover for easy clicking
+        carouselWrapper.addEventListener('mouseenter', stopBannerTimer);
+        carouselWrapper.addEventListener('mouseleave', startBannerTimer);
+
+        // Mobile touch swipe support
+        let touchStartX = 0;
+        carouselWrapper.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+          stopBannerTimer();
+        }, { passive: true });
+
+        carouselWrapper.addEventListener('touchend', (e) => {
+          const touchEndX = e.changedTouches[0].screenX;
+          const diffX = touchEndX - touchStartX;
+          if (Math.abs(diffX) > 40) {
+            changeBannerSlide(diffX > 0 ? -1 : 1);
+          } else {
+            startBannerTimer();
+          }
+        }, { passive: true });
+      }
+
+      startBannerTimer();
+    }
   </script>
 
   <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
