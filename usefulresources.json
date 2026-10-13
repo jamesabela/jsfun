@@ -572,6 +572,19 @@
       "tutorialVideo": null,
       "tools": [
         {
+          "title": "Flowchart Studio",
+          "url": "https://jamesabela.github.io/jsfun/flowchart.html",
+          "desc": "Draw and export flowcharts with draggable shapes, connecting arrows, and PowerPoint or image exports. Ideal for algorithms in Computing, processes in DT, and workflows across subjects.",
+          "tag": "All ages",
+          "topics": [
+            "computing",
+            "general"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
           "title": "IB CS Curriculum Planner",
           "url": "https://planner.mattelliot.co.uk",
           "desc": "Organise the two-year IB DP Computer Science course, check timing pressure, topic order, and export planning documents. By Matt Elliot.",
@@ -2723,6 +2736,26 @@
         ]
       },
       {
+        "category": "Display & Editing Tools",
+        "description": "Python lab, interactive syntax cheat sheets, flowchart generators, and coding utilities.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Flowchart Studio",
+            "url": "https://jamesabela.github.io/jsfun/flowchart.html",
+            "desc": "Draw and export flowcharts with draggable shapes, connecting arrows, and PowerPoint or image exports. Ideal for algorithms in Computing, processes in DT, and workflows across subjects.",
+            "tag": "All ages",
+            "topics": [
+              "computing",
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          }
+        ]
+      },
+      {
         "category": "Reading & Writing Tools",
         "description": "Procedural 3D readers, crawl animations, chat simulations, blackout poetry, and story generators.",
         "tutorialVideo": null,
@@ -2870,6 +2903,19 @@
         "description": "Python lab, interactive syntax cheat sheets, flowchart generators, and coding utilities.",
         "tutorialVideo": null,
         "tools": [
+          {
+            "title": "Flowchart Studio",
+            "url": "https://jamesabela.github.io/jsfun/flowchart.html",
+            "desc": "Draw and export flowcharts with draggable shapes, connecting arrows, and PowerPoint or image exports. Ideal for algorithms in Computing, processes in DT, and workflows across subjects.",
+            "tag": "All ages",
+            "topics": [
+              "computing",
+              "general"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
           {
             "title": "IB CS Curriculum Planner",
             "url": "https://planner.mattelliot.co.uk",
