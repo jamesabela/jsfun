@@ -143,7 +143,38 @@
       const prev=points[i-1],curr=points[i],length=Math.hypot(curr.x-prev.x,curr.y-prev.y);
       if (length>longest.length) longest={length,x:(prev.x+curr.x)/2,y:(prev.y+curr.y)/2};
     }
-    return { d: points.map((pt,i)=>`${i?'L':'M'}${pt.x},${pt.y}`).join(' '), label: longest, points };
+    return { d: points.map((pt,i)=>`${i?'L':'M'}${pt.x},${pt.y}`).join(' '), label: longest, points, from, to };
+  }
+  function straighten() {
+    let moved = 0;
+    change(() => {
+      // Plan both axes before moving anything, so automatic ports stay consistent.
+      const routes = chart.edges.filter(e => !e.via).map(e => ({ edge: e, ...route(e) }));
+      const positions = new Map(chart.nodes.map(n => [n.id, { x: n.x, y: n.y }]));
+      for (const axis of ['x', 'y']) {
+        const groups = new Map(chart.nodes.map(n => [n.id, [n]]));
+        const sides = axis === 'x' ? ['top', 'bottom'] : ['left', 'right'];
+        for (const { edge, from, to } of routes) {
+          if (from === to || !sides.includes(from) || !sides.includes(to)) continue;
+          const a = groups.get(edge.from), b = groups.get(edge.to);
+          if (a === b) continue;
+          const merged = [...a, ...b], values = merged.map(n => n[axis]);
+          // Limit the whole group's spread to avoid collapsing distinct branches.
+          if (Math.max(...values) - Math.min(...values) > 40) continue;
+          merged.forEach(n => groups.set(n.id, merged));
+        }
+        for (const group of new Set(groups.values())) {
+          const values = group.map(n => n[axis]).sort((a, b) => a - b);
+          const centre = values[Math.floor((values.length - 1) / 2)];
+          group.forEach(n => { positions.get(n.id)[axis] = centre; });
+        }
+      }
+      chart.nodes.forEach(n => {
+        const next = positions.get(n.id);
+        if (n.x !== next.x || n.y !== next.y) { Object.assign(n, next); moved++; }
+      });
+    });
+    status(moved ? `Straightened ${moved} shape${moved === 1 ? '' : 's'} — Undo to restore` : 'No small offsets to straighten');
   }
   function edgeElement(e, clean = false) {
     const r = route(e), g = svg('g', { class: `edge${selected?.id === e.id?' selected':''}`, 'data-id': e.id, tabindex: 0, role: 'button', 'aria-label': `Arrow${e.text?': '+e.text:''}` });
@@ -163,6 +194,7 @@
     if (focusedId) [...$('canvas').querySelectorAll('.node,.edge')].find(el=>el.dataset.id===focusedId)?.focus({preventScroll:true});
     $('empty-state').hidden = chart.nodes.length>0;
     $('counts').textContent = `${chart.nodes.length} shapes · ${chart.edges.length} arrows`;
+    $('straighten').disabled = !chart.edges.length;
     updateHistory(); applyView();
   }
   function selectedItem() { return selected && chart[selected.kind].find(item=>item.id===selected.id); }
@@ -261,6 +293,7 @@
   $('edge-to').addEventListener('change',()=>change(()=>{selectedItem().toSide=$('edge-to').value;}));
   $('delete').onclick=remove;$('duplicate').onclick=duplicate;
   $('undo').onclick=()=>restore(history,future);$('redo').onclick=()=>restore(future,history);
+  $('straighten').onclick=straighten;
   $('zoom-in').onclick=()=>zoom(1.2);$('zoom-out').onclick=()=>zoom(1/1.2);$('zoom-reset').onclick=()=>zoom(1/view.scale);$('fit').onclick=fit;
   function applyTheme() {
     document.documentElement.dataset.theme = darkMode ? 'dark' : 'light';

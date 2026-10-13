@@ -81,6 +81,8 @@ header>nav[aria-label="File actions"]{margin-left:auto}
 .toolbar .history-tools{flex-wrap:nowrap;gap:4px;padding:2px 4px;border-radius:6px;background:rgba(241,245,249,.8);border:1px solid #e2e8f0}
 .toolbar .history-tools button{display:inline-flex;align-items:center;justify-content:center;min-width:40px;min-height:40px;padding:6px 8px;border:1px solid transparent;border-radius:4px;background:transparent;color:#1e293b;opacity:1}
 .history-tools svg{display:block;flex:none;width:24px;height:24px;pointer-events:none}
+.toolbar #straighten{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px}
+#straighten svg{display:block;flex:none;pointer-events:none}
 .toolbar .history-tools button:not(:disabled):hover{background:#e2e8f0;border-color:#cbd5e1}
 .toolbar .history-tools button:disabled{color:#94a3b8;cursor:default}
 [data-theme="dark"] .toolbar .history-tools{background:#1e293b;border-color:#475569}
