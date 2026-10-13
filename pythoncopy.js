@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 26;
+    window.pythonCopyVersion = 27;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -1856,6 +1856,9 @@ import sys, builtins
 
       document.querySelectorAll('.starter-button').forEach(button => {
         button.addEventListener('click', function () {
+          if (button.tagName === 'A' && button.getAttribute('href')) {
+            return;
+          }
           if (button.dataset.action === 'blank') {
             startBlankFile();
             return;

@@ -856,12 +856,16 @@
       background: #0f766e;
     }
 
+    .action-flowchart,
     .action-manual {
-      background: #475569;
       display: flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
+    }
+
+    .action-manual {
+      background: #475569;
     }
 
     .igcse-lab {
