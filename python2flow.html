@@ -386,6 +386,9 @@
             top: 1.5rem;
             right: 1.5rem;
             display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            max-width: calc(100% - 3rem);
             gap: 0.5rem;
             z-index: 5;
         }
@@ -750,6 +753,12 @@
 
             <!-- Floating controls on canvas -->
             <div class="canvas-controls">
+                <button class="btn" id="btn-edit-flowchart" title="Edit this flowchart in a new tab" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="m18 2 4 4-12 12H6v-4L18 2Z" />
+                    </svg>
+                    Edit chart
+                </button>
                 <button class="btn btn-circle" id="btn-zoom-in" title="Zoom In">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -992,6 +1001,21 @@
             parseAndRenderFlowchart();
 
             // Set up event listeners
+            document.getElementById('btn-edit-flowchart').addEventListener('click', () => {
+                // Build from the current parser tree, keeping joins and loop backs
+                // as editable connections rather than disconnected SVG lines.
+                try {
+                    parseAndRenderFlowchart();
+                    if (!shapes.length) return;
+                    const chart = buildEditableFlowchart();
+                    const destination = new URL('flowchart.html', window.location.href);
+                    destination.hash = new URLSearchParams({ chart: JSON.stringify(chart) }).toString();
+                    window.open(destination.href, '_blank', 'noopener');
+                } catch (error) {
+                    console.error('Could not open the flowchart editor:', error);
+                    alert('Could not transfer this chart. ' + error.message);
+                }
+            });
             codeInput.addEventListener('input', () => {
                 if (algorithmSelect) algorithmSelect.value = '';
                 syncEditor();
@@ -1583,6 +1607,68 @@
 
         let shapes = [];
         let lines = [];
+        let editableTrees = [];
+
+        function buildEditableFlowchart() {
+            const originX = Math.min(...shapes.map(shape => shape.x));
+            const originY = Math.min(...shapes.map(shape => shape.y));
+            // The manual editor uses larger, wrapped shapes; give them room.
+            const nodes = shapes.map((shape, index) => ({
+                id: `python-node-${index}`,
+                type: ['start', 'end'].includes(shape.type) ? 'terminator' : shape.type,
+                text: shape.text,
+                x: Math.round((shape.x - originX) * 1.8 + 180),
+                y: Math.round((shape.y - originY) * 1.8 + 80)
+            }));
+            const edges = [];
+            const at = (x, y) => {
+                const index = shapes.findIndex(shape => Math.abs(shape.x - x) < 0.01 && Math.abs(shape.y - y) < 0.01);
+                if (index < 0) throw new Error('A generated shape could not be matched.');
+                return nodes[index].id;
+            };
+            function link(from, destination, text = '', fromSide = 'bottom', via) {
+                if (!destination) return;
+                edges.push({ id: `python-edge-${edges.length}`, from, to: destination.id,
+                    text, fromSide, toSide: destination.side || 'top',
+                    ...((via || destination.via) ? { via: via || destination.via } : {}) });
+            }
+            function block(items, next) {
+                let entry = next;
+                for (let i = items.length - 1; i >= 0; i--) entry = visit(items[i], entry);
+                return entry;
+            }
+            function visit(node, next) {
+                if (node.type === 'function') {
+                    const start = at(node.x, node.y - node.h / 2 + 25);
+                    const end = at(node.x, node.y + node.h / 2 - 25);
+                    link(start, block(node.body, { id: end }));
+                    return { id: start };
+                }
+                if (node.type === 'conditional') {
+                    const id = at(node.x, node.y - node.h / 2 + 40);
+                    node.branches.forEach((branch, index) => {
+                        link(id, block(branch.body, next), index === 0 ? 'True' : branch.condition === 'else' ? 'False' : branch.condition,
+                            index === 0 ? 'bottom' : 'right');
+                    });
+                    if (!node.branches.some(branch => branch.condition === 'else')) link(id, next, 'False', 'right');
+                    return { id };
+                }
+                if (node.type === 'while' || node.type === 'for') {
+                    const id = at(node.x, node.y - node.h / 2 + 40);
+                    link(id, block(node.body, { id, side: 'left', via: 'left' }), 'True');
+                    link(id, next, 'False', 'right', 'right');
+                    return { id };
+                }
+                const id = at(node.x, node.y);
+                link(id, next);
+                return { id };
+            }
+            editableTrees.forEach(tree => block(tree, null));
+            if (nodes.some(node => node.text.length > 240) || edges.some(edge => edge.text.length > 40)) {
+                throw new Error('Shorten shape text to 240 characters and branch labels to 40 characters before editing.');
+            }
+            return { version: 1, title: 'Python flowchart', nodes, edges };
+        }
 
         function collectVisualElements(node) {
             if (!node) return;
@@ -2005,6 +2091,8 @@
             // 1. Reset state
             shapes = [];
             lines = [];
+            editableTrees = [];
+            document.getElementById('btn-edit-flowchart').disabled = true;
 
             // 2. Parse code block levels
             const rawTree = parsePython(code);
@@ -2058,6 +2146,8 @@
             functions.forEach(func => {
                 collectVisualElements(func);
             });
+            editableTrees = [mainTree, ...functions.map(func => [func])];
+            document.getElementById('btn-edit-flowchart').disabled = shapes.length === 0;
 
             // 6. Inject tags inside SVG
             renderVisuals();

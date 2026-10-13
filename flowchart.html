@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Draw simple flowcharts with draggable shapes, labelled arrows and image exports. Free, with no sign-in required.">
+  <title>Flowchart Studio</title>
+  <link rel="stylesheet" href="flowchart.css">
+  <script src="vendor/pptxgenjs/pptxgen.bundle.js" defer></script>
+  <script src="flowchart-starters.js" defer></script>
+  <script src="flowchart.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="brand-icon" aria-hidden="true">◇</span><div><h1>Flowchart Studio</h1><p>Turn your thinking into a diagram.</p></div></div>
+    <nav aria-label="File actions">
+      <button id="new">New</button><button id="open">Open</button>
+      <details id="export-menu">
+        <summary class="primary">Save ▾</summary>
+        <div class="menu">
+          <button id="copy-link">Copy link</button>
+          <a id="classroomShareBtn" class="share-classroom" href="https://classroom.google.com/share" target="_blank" rel="noopener noreferrer">Google Classroom</a>
+          <a id="teamsShareBtn" class="share-teams" href="https://teams.microsoft.com/share" target="_blank" rel="noopener noreferrer">Microsoft Teams</a>
+          <button id="save">Download JSON</button>
+          <button id="svg-export">Download SVG</button>
+          <button id="png-export">Download PNG</button>
+          <button id="pptx-export">Download PPTX</button>
+          <button id="print">Print / PDF</button>
+        </div>
+      </details>
+    </nav>
+    <nav class="site-nav" aria-label="Code Lab links">
+      <a href="pythoncopy.html?blank" target="_blank" rel="noopener" title="New Blank File" aria-label="New Blank File"><img src="images/blank.png" alt=""></a>
+      <a href="pythoncopy.html" target="_blank" rel="noopener" title="Home" aria-label="Home"><img src="images/home.png" alt=""></a>
+      <a href="pythonmanual.html" target="_blank" rel="noopener" title="Python Manual" aria-label="Python Manual"><img src="images/manual.png" alt=""></a>
+    </nav>
+  </header>
+  <main>
+    <aside>
+      <label class="field-label" for="chart-title">CHART NAME</label>
+      <input id="chart-title" value="My flowchart" maxlength="100">
+      <section class="starter-picker" aria-labelledby="starter-heading">
+        <h2 id="starter-heading">Start with</h2>
+        <div class="start-options">
+          <button id="start-blank" title="Start a blank flowchart">Blank</button>
+          <button id="choose-igcse" aria-expanded="false" aria-controls="igcse-options">iGCSE</button>
+          <a href="python2flow.html" target="_blank" rel="noopener" title="Create a flowchart from Python in a new tab">From Python</a>
+        </div>
+        <div id="igcse-options" hidden>
+          <select id="starter-select" aria-label="iGCSE algorithm"><option value="">Choose algorithm…</option></select>
+          <button id="load-starter" disabled>Load</button>
+        </div>
+      </section>
+      <section aria-labelledby="shape-heading">
+        <h2 id="shape-heading">Add a shape</h2>
+        <p class="hint">Click a shape to add it to the canvas.</p>
+        <div class="palette">
+          <button data-shape="terminator"><svg viewBox="0 0 60 36" aria-hidden="true"><rect x="3" y="6" width="54" height="24" rx="12" fill="#e0e7ff" stroke="#4f46e5"/></svg><span>Start / End</span></button>
+          <button data-shape="process"><svg viewBox="0 0 60 36" aria-hidden="true"><rect x="3" y="6" width="54" height="24" fill="#e0f2fe" stroke="#0284c7"/></svg><span>Process</span></button>
+          <button data-shape="decision"><svg viewBox="0 0 60 36" aria-hidden="true"><path d="M30 2 58 18 30 34 2 18Z" fill="#fffbeb" stroke="#d97706"/></svg><span>Decision</span></button>
+          <button data-shape="io"><svg viewBox="0 0 60 36" aria-hidden="true"><path d="M12 6H58L48 30H2Z" fill="#ecfdf4" stroke="#059669"/></svg><span>Input / Output</span></button>
+          <button data-shape="subroutine"><svg viewBox="0 0 60 36" aria-hidden="true"><path d="M3 6H57V30H3Z M11 6V30 M49 6V30" fill="#ffe4e6" stroke="#e11d48"/></svg><span>Subroutine</span></button>
+        </div>
+      </section>
+      <section id="inspector" aria-labelledby="edit-heading">
+        <h2 id="edit-heading">Edit selection</h2>
+        <p id="no-selection" class="hint">Select a shape or an arrow to edit it.</p>
+        <div id="selection-fields" hidden>
+          <label for="label-input" id="label-caption">Shape text</label>
+          <textarea id="label-input" rows="3" maxlength="240" placeholder="Enter text…"></textarea>
+          <div id="node-fields"><label for="shape-type">Shape</label><select id="shape-type"><option value="terminator">Start / End</option><option value="process">Process</option><option value="decision">Decision</option><option value="io">Input / Output</option><option value="subroutine">Subroutine</option></select></div>
+          <div id="edge-fields" hidden><label for="edge-from">Leave shape from</label><select id="edge-from"><option value="auto">Automatic</option><option value="bottom">Bottom</option><option value="right">Right</option><option value="left">Left</option><option value="top">Top</option></select><label for="edge-to">Enter shape at</label><select id="edge-to"><option value="auto">Automatic</option><option value="top">Top</option><option value="left">Left</option><option value="right">Right</option><option value="bottom">Bottom</option></select></div>
+          <div class="selection-actions"><button id="duplicate">Duplicate</button><button id="delete" class="danger">Delete</button></div>
+        </div>
+      </section>
+      <div class="sidebar-footer"><p>Drafts stay in this browser.<br>Save a file to keep or share your work.</p></div>
+    </aside>
+    <section class="workspace" aria-label="Flowchart workspace">
+      <div class="toolbar">
+        <div class="tool-group drawing-tools" role="group" aria-label="Drawing tools"><button id="select-tool" aria-pressed="true" title="Select and move (V)">↖ Select</button><button id="connect-tool" aria-pressed="false" title="Connect two shapes (C)">↳ Connect</button><button id="pan-tool" aria-pressed="false" title="Move around the canvas (H)">✋ Pan</button></div>
+        <div class="tool-group history-tools" role="group" aria-label="Undo and redo">
+          <button id="undo" title="Undo (Ctrl / ⌘ Z)" aria-label="Undo"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 4-5 5 5 5M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+          <button id="redo" title="Redo (Ctrl / ⌘ Shift Z)" aria-label="Redo"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 4 5 5-5 5M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
+        </div>
+        <div class="tool-group zoom"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-reset" title="Reset zoom">100%</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="fit">Fit</button></div>
+        <div class="tool-group view-tools" role="group" aria-label="Display options">
+          <button id="theme-toggle" aria-pressed="false" title="Switch to dark mode">☾ Dark</button>
+          <button id="fullscreen" aria-pressed="false" title="Full-screen whiteboard view">⛶ Full screen</button>
+        </div>
+      </div>
+      <div id="canvas-wrap">
+        <svg id="canvas" xmlns="http://www.w3.org/2000/svg" aria-label="Flowchart drawing canvas" tabindex="0">
+          <defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#cbd5e1"/></pattern><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="#475569"/></marker></defs>
+          <g id="viewport"><rect id="grid-bg" x="-50000" y="-50000" width="100000" height="100000" fill="url(#grid)"/><g id="edges"></g><g id="nodes"></g></g>
+        </svg>
+        <div id="empty-state"><span aria-hidden="true">◇</span><h2>A little structure for your ideas.</h2><p>Add your first shape, or choose an iGCSE starting point from the left panel.</p></div>
+        <div class="canvas-tip" id="canvas-tip">Drag shapes to arrange them · Double-click to edit</div>
+      </div>
+      <footer><span id="status" role="status" aria-live="polite">Ready</span><span id="counts">0 shapes · 0 arrows</span></footer>
+    </section>
+  </main>
+  <input type="file" id="file-input" accept=".json,application/json" hidden>
+  <section id="print-output" aria-label="Printable flowchart"></section>
+  <dialog id="copy-link-dialog" aria-labelledby="copy-link-heading">
+    <h2 id="copy-link-heading">Copy chart link</h2>
+    <p id="copy-link-help">Copy the selected link to reopen this editable chart.</p>
+    <label for="share-link">Chart link</label>
+    <textarea id="share-link" rows="4" readonly aria-describedby="copy-link-help"></textarea>
+    <form method="dialog"><button>Done</button></form>
+  </dialog>
+  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
