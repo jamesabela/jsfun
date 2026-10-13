@@ -148,7 +148,8 @@ function renderTools() {
           </a>` : '';
 
         visibleToolsHtml += `
-          <a class="card${externalClass}" href="${tool.url}" target="_blank" rel="noopener">
+          <div class="card${externalClass}">
+            <a class="card-main-link" href="${tool.url}" target="_blank" rel="noopener" aria-label="${tool.title}"></a>
             <div class="card-title">${tool.title}</div>
             <div class="card-desc">${tool.desc}</div>
             <div class="card-footer">
@@ -158,7 +159,7 @@ function renderTools() {
               </div>
               ${tutorialBtn}
             </div>
-          </a>`;
+          </div>`;
       }
     });
 

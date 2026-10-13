@@ -1,7 +1,7 @@
 {
   "$schema": "./usefulresources.schema.json",
   "version": "1.0.0",
-  "updatedAt": "2026-10-11",
+  "updatedAt": "2026-10-13",
   "topics": [
     {
       "id": "general",
@@ -218,7 +218,7 @@
             "social_sciences"
           ],
           "author": "James Abela",
-          "tutorialVideo": null,
+          "tutorialVideo": "https://www.youtube.com/watch?v=izuk15sESm0",
           "isExternal": false
         },
         {
@@ -2374,7 +2374,7 @@
               "social_sciences"
             ],
             "author": "James Abela",
-            "tutorialVideo": null,
+            "tutorialVideo": "https://www.youtube.com/watch?v=izuk15sESm0",
             "isExternal": false
           },
           {
@@ -4136,7 +4136,7 @@
               "social_sciences"
             ],
             "author": "James Abela",
-            "tutorialVideo": null,
+            "tutorialVideo": "https://www.youtube.com/watch?v=izuk15sESm0",
             "isExternal": false
           },
           {
@@ -4620,7 +4620,7 @@
               "social_sciences"
             ],
             "author": "James Abela",
-            "tutorialVideo": null,
+            "tutorialVideo": "https://www.youtube.com/watch?v=izuk15sESm0",
             "isExternal": false
           },
           {

@@ -300,12 +300,19 @@
       gap: 0.35rem;
       transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
       position: relative;
+      cursor: pointer;
     }
 
     .card:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 24px rgba(230, 57, 70, 0.14);
       border-color: var(--primary);
+    }
+
+    .card-main-link {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
     }
 
     .card-title {
@@ -366,6 +373,8 @@
       align-items: center;
       gap: 0.25rem;
       transition: background 0.18s, transform 0.15s;
+      position: relative;
+      z-index: 2;
     }
 
     .card-tutorial-btn:hover {
@@ -399,6 +408,7 @@
       font-size: 0.85rem;
       color: var(--muted);
       opacity: 0.5;
+      pointer-events: none;
     }
 
     /* ───── Footer ───── */
