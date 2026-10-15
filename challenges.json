@@ -7,7 +7,8 @@
     "tags": [
       "selection",
       "repetition"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#random-statistics"
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "tags": [
       "repetition",
       "counting"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 3,
@@ -28,7 +30,8 @@
       "repetition",
       "counting",
       "Turtle"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#turtle"
   },
   {
     "id": 4,
@@ -38,7 +41,8 @@
     "tags": [
       "selection",
       "totalling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 5,
@@ -50,7 +54,8 @@
       "repetition",
       "counting",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 6,
@@ -60,7 +65,8 @@
     "tags": [
       "repetition",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 7,
@@ -70,7 +76,8 @@
     "tags": [
       "selection",
       "repetition"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 8,
@@ -82,7 +89,8 @@
       "counting",
       "totalling",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 9,
@@ -92,7 +100,8 @@
     "tags": [
       "array",
       "strings"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 10,
@@ -103,7 +112,8 @@
       "selection",
       "counting",
       "totalling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 11,
@@ -115,7 +125,8 @@
       "repetition",
       "array",
       "strings"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 12,
@@ -125,7 +136,8 @@
     "tags": [
       "selection",
       "repetition"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 13,
@@ -137,7 +149,8 @@
       "repetition",
       "array",
       "strings"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 14,
@@ -147,7 +160,8 @@
     "tags": [
       "selection",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 15,
@@ -161,7 +175,8 @@
       "totalling",
       "array",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 16,
@@ -171,7 +186,8 @@
     "tags": [
       "repetition",
       "Turtle"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#turtle"
   },
   {
     "id": 17,
@@ -184,7 +200,8 @@
       "array",
       "2D Arrays",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#2d-lists"
   },
   {
     "id": 18,
@@ -198,7 +215,8 @@
       "totalling",
       "array",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 19,
@@ -212,7 +230,8 @@
       "totalling",
       "array",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 20,
@@ -226,7 +245,8 @@
       "cryptography",
       "functions",
       "file-handling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#files"
   },
   {
     "id": 21,
@@ -240,7 +260,8 @@
       "array",
       "2D Arrays",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#2d-lists"
   },
   {
     "id": 22,
@@ -253,7 +274,8 @@
       "strings",
       "cryptography",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 23,
@@ -264,7 +286,8 @@
       "functions",
       "Recursion",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#recursion"
   },
   {
     "id": 24,
@@ -279,7 +302,8 @@
       "cryptography",
       "Student Created",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 25,
@@ -289,7 +313,8 @@
     "tags": [
       "repetition",
       "Turtle"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#turtle"
   },
   {
     "id": 26,
@@ -298,7 +323,8 @@
     "comment": "# instructions: Use turtle to draw a picture of a house.",
     "tags": [
       "Turtle"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#turtle"
   },
   {
     "id": 27,
@@ -309,7 +335,8 @@
       "repetition",
       "array",
       "Turtle"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#turtle"
   },
   {
     "id": 28,
@@ -320,7 +347,8 @@
       "repetition",
       "counting",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 29,
@@ -332,7 +360,8 @@
       "repetition",
       "counting",
       "totalling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 30,
@@ -343,7 +372,8 @@
       "selection",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 31,
@@ -355,7 +385,8 @@
       "counting",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 32,
@@ -367,7 +398,8 @@
       "repetition",
       "counting",
       "totalling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 33,
@@ -378,7 +410,8 @@
       "selection",
       "totalling",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 34,
@@ -390,7 +423,8 @@
       "repetition",
       "counting",
       "totalling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 35,
@@ -402,7 +436,8 @@
       "repetition",
       "counting",
       "strings"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 36,
@@ -414,7 +449,8 @@
       "counting",
       "array",
       "strings"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 37,
@@ -425,7 +461,8 @@
       "functions",
       "Turtle",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#turtle"
   },
   {
     "id": 38,
@@ -436,7 +473,8 @@
       "strings",
       "cryptography",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 39,
@@ -447,7 +485,8 @@
       "selection",
       "functions",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#functions"
   },
   {
     "id": 40,
@@ -459,7 +498,8 @@
       "strings",
       "Student Created",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 41,
@@ -468,7 +508,8 @@
     "comment": "# instructions: Create procedures to print ASCII art for a happy face, a sad face and a surprised face.",
     "tags": [
       "functions"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#functions"
   },
   {
     "id": 42,
@@ -480,7 +521,8 @@
       "functions",
       "Student Created",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#functions"
   },
   {
     "id": 43,
@@ -492,7 +534,8 @@
       "functions",
       "Turtle",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#turtle"
   },
   {
     "id": 44,
@@ -506,7 +549,8 @@
       "cryptography",
       "functions",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 45,
@@ -519,7 +563,8 @@
       "strings",
       "functions",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#functions"
   },
   {
     "id": 46,
@@ -530,7 +575,8 @@
       "repetition",
       "array",
       "strings"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 47,
@@ -540,7 +586,8 @@
     "tags": [
       "selection",
       "repetition"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 48,
@@ -550,7 +597,8 @@
     "tags": [
       "object-oriented",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#oop"
   },
   {
     "id": 49,
@@ -561,7 +609,8 @@
       "selection",
       "repetition",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#searching"
   },
   {
     "id": 50,
@@ -572,7 +621,8 @@
       "selection",
       "array",
       "file-handling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#files"
   },
   {
     "id": 51,
@@ -583,7 +633,8 @@
       "functions",
       "Recursion",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#recursion"
   },
   {
     "id": 52,
@@ -593,7 +644,8 @@
     "tags": [
       "strings",
       "Turtle"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#turtle"
   },
   {
     "id": 53,
@@ -604,7 +656,8 @@
       "repetition",
       "totalling",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 54,
@@ -615,7 +668,8 @@
       "selection",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 55,
@@ -625,7 +679,8 @@
     "tags": [
       "repetition",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#bubble-sort"
   },
   {
     "id": 56,
@@ -635,7 +690,8 @@
     "tags": [
       "repetition",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#searching"
   },
   {
     "id": 57,
@@ -646,7 +702,8 @@
       "repetition",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 58,
@@ -658,7 +715,8 @@
       "counting",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 59,
@@ -670,7 +728,8 @@
       "strings",
       "cryptography",
       "file-handling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#files"
   },
   {
     "id": 60,
@@ -683,7 +742,8 @@
       "array",
       "strings",
       "file-handling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#files"
   },
   {
     "id": 61,
@@ -695,7 +755,8 @@
       "counting",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 62,
@@ -706,7 +767,8 @@
       "counting",
       "totalling",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 63,
@@ -717,7 +779,8 @@
       "repetition",
       "array",
       "functions"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 64,
@@ -729,7 +792,8 @@
       "counting",
       "totalling",
       "file-handling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#files"
   },
   {
     "id": 65,
@@ -739,7 +803,8 @@
     "tags": [
       "repetition",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 66,
@@ -748,7 +813,8 @@
     "comment": "# instructions: Take a list of numbers and create a new list containing only the first and last elements.",
     "tags": [
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 67,
@@ -760,7 +826,8 @@
       "repetition",
       "array",
       "2D Arrays"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#2d-lists"
   },
   {
     "id": 68,
@@ -771,7 +838,8 @@
       "selection",
       "counting",
       "strings"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#validation"
   },
   {
     "id": 69,
@@ -782,7 +850,8 @@
       "repetition",
       "array",
       "Student Created"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 70,
@@ -793,7 +862,8 @@
       "repetition",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 71,
@@ -803,7 +873,8 @@
     "tags": [
       "repetition",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#insertion-sort"
   },
   {
     "id": 72,
@@ -814,7 +885,8 @@
       "repetition",
       "array",
       "file-handling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#files"
   },
   {
     "id": 73,
@@ -825,7 +897,8 @@
       "repetition",
       "array",
       "functions"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 74,
@@ -836,7 +909,8 @@
       "selection",
       "repetition",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 75,
@@ -848,7 +922,8 @@
       "totalling",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 76,
@@ -859,7 +934,8 @@
       "repetition",
       "totalling",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#while-loops"
   },
   {
     "id": 77,
@@ -870,7 +946,8 @@
       "repetition",
       "counting",
       "totalling"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 78,
@@ -881,7 +958,8 @@
       "selection",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 79,
@@ -891,7 +969,8 @@
     "tags": [
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 80,
@@ -900,7 +979,8 @@
     "comment": "# instructions: Create a timer that gives each sibling an equal amount of PS4 time.",
     "tags": [
       "counting"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 81,
@@ -910,7 +990,8 @@
     "tags": [
       "selection",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 82,
@@ -921,7 +1002,8 @@
       "repetition",
       "counting",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 83,
@@ -931,7 +1013,8 @@
     "tags": [
       "repetition",
       "counting"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 84,
@@ -943,7 +1026,8 @@
       "strings",
       "Student Created",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 85,
@@ -954,7 +1038,8 @@
       "counting",
       "totalling",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 86,
@@ -964,7 +1049,8 @@
     "tags": [
       "selection",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 87,
@@ -977,7 +1063,8 @@
       "counting",
       "totalling",
       "array"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 88,
@@ -988,7 +1075,8 @@
       "counting",
       "totalling",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 89,
@@ -998,7 +1086,8 @@
     "tags": [
       "selection",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 90,
@@ -1009,7 +1098,8 @@
       "selection",
       "strings",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#validation"
   },
   {
     "id": 91,
@@ -1021,7 +1111,8 @@
       "totalling",
       "repetition",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 92,
@@ -1033,7 +1124,8 @@
       "totalling",
       "repetition",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 93,
@@ -1044,7 +1136,8 @@
       "maths",
       "counting",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 94,
@@ -1055,7 +1148,8 @@
       "maths",
       "counting",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 95,
@@ -1066,7 +1160,8 @@
       "maths",
       "selection",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 96,
@@ -1077,7 +1172,8 @@
       "maths",
       "functions",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#functions"
   },
   {
     "id": 97,
@@ -1089,7 +1185,8 @@
       "strings",
       "totalling",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 98,
@@ -1102,7 +1199,8 @@
       "totalling",
       "repetition",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 99,
@@ -1114,7 +1212,8 @@
       "array",
       "functions",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 100,
@@ -1126,7 +1225,8 @@
       "repetition",
       "totalling",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 101,
@@ -1139,7 +1239,8 @@
       "repetition",
       "array",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 102,
@@ -1151,7 +1252,8 @@
       "repetition",
       "selection",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 103,
@@ -1163,7 +1265,8 @@
       "repetition",
       "counting",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 104,
@@ -1176,7 +1279,8 @@
       "strings",
       "totalling",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 105,
@@ -1188,7 +1292,8 @@
       "repetition",
       "counting",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 106,
@@ -1200,7 +1305,8 @@
       "repetition",
       "counting",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#for-loops"
   },
   {
     "id": 107,
@@ -1213,7 +1319,8 @@
       "strings",
       "totalling",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 108,
@@ -1224,7 +1331,8 @@
       "maths",
       "repetition",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#while-loops"
   },
   {
     "id": 109,
@@ -1234,7 +1342,8 @@
     "tags": [
       "maths",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 110,
@@ -1247,7 +1356,8 @@
       "counting",
       "array",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 111,
@@ -1259,7 +1369,8 @@
       "repetition",
       "functions",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#functions"
   },
   {
     "id": 112,
@@ -1270,7 +1381,8 @@
       "maths",
       "functions",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#functions"
   },
   {
     "id": 113,
@@ -1281,7 +1393,8 @@
       "maths",
       "repetition",
       "selection"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 114,
@@ -1293,7 +1406,8 @@
       "repetition",
       "random",
       "creative"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#turtle"
   },
   {
     "id": 115,
@@ -1304,7 +1418,8 @@
       "selection",
       "array",
       "strings"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 116,
@@ -1315,7 +1430,8 @@
       "strings",
       "array",
       "random"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#lists"
   },
   {
     "id": 117,
@@ -1326,7 +1442,8 @@
       "strings",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#string-length"
   },
   {
     "id": 118,
@@ -1338,7 +1455,8 @@
       "maths",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 119,
@@ -1349,7 +1467,8 @@
       "maths",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 120,
@@ -1360,7 +1479,8 @@
       "maths",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 121,
@@ -1371,7 +1491,8 @@
       "maths",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 122,
@@ -1382,7 +1503,8 @@
       "maths",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   },
   {
     "id": 123,
@@ -1393,7 +1515,8 @@
       "selection",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 124,
@@ -1404,7 +1527,8 @@
       "selection",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 125,
@@ -1415,7 +1539,8 @@
       "selection",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#selection"
   },
   {
     "id": 126,
@@ -1426,6 +1551,7 @@
       "maths",
       "Halloween",
       "Self Marking"
-    ]
+    ],
+    "helpUrl": "pythonmanual.html#operators"
   }
 ]

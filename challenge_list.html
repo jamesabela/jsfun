@@ -363,7 +363,8 @@
     .challenge-completed-wrapper {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      gap: 12px;
       margin-top: 14px;
       padding-top: 14px;
       border-top: 1px dashed var(--border-color);
@@ -377,6 +378,41 @@
       height: 18px;
       cursor: pointer;
       accent-color: #10b981;
+    }
+
+    .card-help-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.18);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .card-help-link:hover {
+      background: var(--primary-color);
+      color: #ffffff;
+      border-color: var(--primary-color);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+    }
+
+    body.dark-theme .card-help-link {
+      background: rgba(96, 165, 250, 0.12);
+      border-color: rgba(96, 165, 250, 0.25);
+      color: #93c5fd;
+    }
+
+    body.dark-theme .card-help-link:hover {
+      background: var(--primary-color);
+      color: #0f172a;
     }
 
     .challenge-card.completed {
@@ -1489,6 +1525,45 @@
         label.prepend(checkbox);
 
         completedWrapper.appendChild(label);
+
+        // Link to relevant area of pythonmanual.html in the bottom right corner
+        if (c.helpUrl) {
+          const helpLink = document.createElement('a');
+          helpLink.href = c.helpUrl;
+          helpLink.target = '_blank';
+          helpLink.className = 'card-help-link';
+          helpLink.title = 'Open Python Manual guide for this challenge';
+
+          let topicName = 'Python Guide';
+          if (c.helpUrl.includes('#')) {
+            const hash = c.helpUrl.split('#')[1];
+            const topicLabels = {
+              'lists': 'Lists Guide',
+              '2d-lists': '2D Lists Guide',
+              'selection': 'If/Else Guide',
+              'for-loops': 'For Loops Guide',
+              'while-loops': 'While Loops Guide',
+              'string-length': 'Strings Guide',
+              'operators': 'Operators Guide',
+              'turtle': 'Turtle Guide',
+              'functions': 'Functions Guide',
+              'files': 'Files Guide',
+              'recursion': 'Recursion Guide',
+              'oop': 'OOP Guide',
+              'random-statistics': 'Random Guide',
+              'searching': 'Search Guide',
+              'bubble-sort': 'Bubble Sort Guide',
+              'insertion-sort': 'Insertion Sort Guide',
+              'validation': 'Validation Guide',
+              'inputs': 'Inputs Guide',
+              'variables': 'Variables Guide',
+              'dictionaries': 'Dictionaries Guide'
+            };
+            topicName = topicLabels[hash] || 'Guide';
+          }
+          helpLink.innerHTML = `📖 ${topicName} ↗`;
+          completedWrapper.appendChild(helpLink);
+        }
 
         // Print QR Code box (for physical cut-out card deck)
         const printQr = document.createElement('div');

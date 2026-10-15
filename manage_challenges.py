@@ -270,6 +270,53 @@ def normalize_comment(raw_instructions: str) -> str:
     return text
 
 
+def infer_help_url(tags: List[str], instructions: str, title: str) -> str:
+    """Infers the relevant pythonmanual.html section anchor for a challenge."""
+    t_lower = [t.lower() for t in tags]
+    c_lower = instructions.lower()
+    tit_lower = title.lower()
+
+    if "bubble sort" in tit_lower or "bubble sort" in c_lower:
+        return "pythonmanual.html#bubble-sort"
+    if "insertion sort" in tit_lower or "insertion sort" in c_lower:
+        return "pythonmanual.html#insertion-sort"
+    if "binary search" in tit_lower or "linear search" in tit_lower or "search" in t_lower:
+        return "pythonmanual.html#searching"
+    if "turtle" in t_lower or "turtle" in c_lower:
+        return "pythonmanual.html#turtle"
+    if "recursion" in t_lower or "recursive" in c_lower:
+        return "pythonmanual.html#recursion"
+    if "object-oriented" in t_lower or "oop" in t_lower or "class" in tit_lower:
+        return "pythonmanual.html#oop"
+    if "file-handling" in t_lower or "file handler" in tit_lower:
+        return "pythonmanual.html#files"
+    if "2d arrays" in t_lower or "2d" in t_lower:
+        return "pythonmanual.html#2d-lists"
+    if "array" in t_lower or "list" in t_lower or "lists" in c_lower:
+        return "pythonmanual.html#lists"
+    if "functions" in t_lower or "procedure" in tit_lower:
+        return "pythonmanual.html#functions"
+    if "cryptography" in t_lower or "cipher" in tit_lower:
+        return "pythonmanual.html#string-length"
+    if "validate" in tit_lower or "validation" in t_lower:
+        return "pythonmanual.html#validation"
+    if "random" in t_lower or "random" in tit_lower:
+        return "pythonmanual.html#random-statistics"
+    if "strings" in t_lower or "text" in tit_lower or "word" in tit_lower:
+        return "pythonmanual.html#string-length"
+    if "selection" in t_lower:
+        return "pythonmanual.html#selection"
+    if "while" in c_lower or "until" in c_lower:
+        return "pythonmanual.html#while-loops"
+    if "repetition" in t_lower:
+        return "pythonmanual.html#for-loops"
+    if "totalling" in t_lower or "maths" in t_lower or "counting" in t_lower:
+        return "pythonmanual.html#operators"
+    if "input" in c_lower or "ask " in c_lower:
+        return "pythonmanual.html#inputs"
+    return "pythonmanual.html#variables"
+
+
 def cmd_stats(args: argparse.Namespace) -> None:
     """Displays overview statistics for challenges.json."""
     challenges = load_challenges()
@@ -410,12 +457,15 @@ def cmd_add(args: argparse.Namespace) -> None:
     norm_tags = normalize_tags(tags)
     norm_comment = normalize_comment(instructions)
     
+    help_url = getattr(args, "help_url", None) or infer_help_url(norm_tags, norm_comment, clean_t)
+    
     new_challenge = {
         "id": next_id,
         "title": clean_t,
         "spice": norm_spice,
         "comment": norm_comment,
         "tags": norm_tags,
+        "helpUrl": help_url,
     }
     
     print(bold("\n📝 Prepared New Challenge:"))
@@ -446,6 +496,7 @@ def main():
     add_parser.add_argument("--spice", "-s", help="Spice level 1, 2, or 3 (or chili emoji)")
     add_parser.add_argument("--tags", help="Comma-separated tags (e.g. 'Selection, Loops, Creative')")
     add_parser.add_argument("--instructions", "-i", help="Challenge description instructions")
+    add_parser.add_argument("--help-url", help="Custom help link to pythonmanual.html (e.g. 'pythonmanual.html#lists')")
     add_parser.add_argument("--yes", "-y", action="store_true", help="Auto-confirm write without prompt")
     
     # list command
