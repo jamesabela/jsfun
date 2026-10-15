@@ -1321,101 +1321,111 @@
     "id": 117,
     "title": "Name Your Ghost",
     "spice": "🌶️",
-    "comment": "# instructions: Ask the user for their name and introduce them as a friendly ghost. Example: What is your name? Sam -> Boo! I am the ghost of Sam!",
+    "comment": "# instructions: Ask the user for their name and introduce them as a friendly ghost.\n#Input\n# \"Sam\"\n# \"Casper\"\n\n#output\n# \"Boo! I am the ghost of Sam!\"\n# \"Boo! I am the ghost of Casper!\"\n\n#End Name Your Ghost",
     "tags": [
       "strings",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   },
   {
     "id": 118,
     "title": "Trick or Treat Total",
     "spice": "🌶️",
-    "comment": "# instructions: Ask how many sweets you collected from two houses. Display the total number of sweets. Example: House 1: 5, House 2: 8 -> Total sweets: 13.",
+    "comment": "# instructions: Ask how many sweets you collected from two houses. Display the total number of sweets.\n#Input\n# 5, 8\n# 10, 15\n\n#output\n# 13\n# 25\n\n#End Trick or Treat Total",
     "tags": [
       "totalling",
       "maths",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   },
   {
     "id": 119,
     "title": "Vampire Age Calculator",
     "spice": "🌶️",
-    "comment": "# instructions: A vampire is 100 years older than their human age. Ask for their human age and calculate their vampire age. Example: Human age: 14 -> Vampire age: 114.",
+    "comment": "# instructions: A vampire is 100 years older than their human age. Ask for their human age and calculate their vampire age.\n#Input\n# 14\n# 25\n\n#output\n# 114\n# 125\n\n#End Vampire Age Calculator",
     "tags": [
       "maths",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   },
   {
     "id": 120,
     "title": "Spider Leg Counter",
     "spice": "🌶️",
-    "comment": "# instructions: Every spider has eight legs. Ask how many spiders are in the room and calculate the total number of legs. Example: Number of spiders: 6 -> Total legs: 48.",
+    "comment": "# instructions: Every spider has eight legs. Ask how many spiders are in the room and calculate the total number of legs.\n#Input\n# 6\n# 9\n\n#output\n# 48\n# 72\n\n#End Spider Leg Counter",
     "tags": [
       "maths",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   },
   {
     "id": 121,
     "title": "Witch's Potion Recipe",
     "spice": "🌶️",
-    "comment": "# instructions: Each magic potion needs 3 bat wings and 2 frog legs. Ask how many potions the witch wants and calculate the ingredients needed. Example: Number of potions: 4 -> Bat wings: 12, Frog legs: 8.",
+    "comment": "# instructions: Each magic potion needs 3 bat wings and 2 frog legs. Ask how many potions the witch wants and calculate the ingredients needed.\n#Input\n# 4\n# 5\n\n#output\n# 12, 8\n# 15, 10\n\n#End Witch's Potion Recipe",
     "tags": [
       "maths",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   },
   {
     "id": 122,
     "title": "Pumpkin Carving Contest",
     "spice": "🌶️",
-    "comment": "# instructions: Ask how many pumpkins were carved and how many were broken. Calculate how many good pumpkins remain. Example: Pumpkins carved: 12, Pumpkins broken: 3 -> Good pumpkins: 9.",
+    "comment": "# instructions: Ask how many pumpkins were carved and how many were broken. Calculate how many good pumpkins remain.\n#Input\n# 12, 3\n# 20, 7\n\n#output\n# 9\n# 13\n\n#End Pumpkin Carving Contest",
     "tags": [
       "maths",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   },
   {
     "id": 123,
     "title": "Zombie Warning System",
     "spice": "🌶️",
-    "comment": "# instructions: Ask how many zombies are approaching. If there are 10 or more, display DANGER! Otherwise, display SAFE! Example: Number of zombies: 12 -> DANGER!",
+    "comment": "# instructions: Ask how many zombies are approaching. If there are 10 or more, display DANGER! Otherwise, display SAFE!\n#Input\n# 12\n# 4\n\n#output\n# \"DANGER!\"\n# \"SAFE!\"\n\n#End Zombie Warning System",
     "tags": [
       "selection",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   },
   {
     "id": 124,
     "title": "Haunted House Entry",
     "spice": "🌶️",
-    "comment": "# instructions: Ask for the visitor's age. Visitors aged 12 or older can enter the haunted house. Everyone else is too young. Example: Your age: 11 -> Too young!; Your age: 13 -> You may enter!",
+    "comment": "# instructions: Ask for the visitor's age. Visitors aged 12 or older can enter the haunted house. Everyone else is too young.\n#Input\n# 11\n# 13\n# 12\n\n#output\n# \"Too young!\"\n# \"You may enter!\"\n# \"You may enter!\"\n\n#End Haunted House Entry",
     "tags": [
       "selection",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   },
   {
     "id": 125,
     "title": "Midnight Monster",
     "spice": "🌶️",
-    "comment": "# instructions: Ask for the hour using a 24-hour clock. If the hour is 0, display THE MONSTER AWAKENS! Otherwise, display The monster is sleeping. Example: Hour: 0 -> THE MONSTER AWAKENS!",
+    "comment": "# instructions: Ask for the hour using a 24-hour clock. If the hour is 0, display THE MONSTER AWAKENS! Otherwise, display The monster is sleeping.\n#Input\n# 0\n# 14\n\n#output\n# \"THE MONSTER AWAKENS!\"\n# \"The monster is sleeping\"\n\n#End Midnight Monster",
     "tags": [
       "selection",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   },
   {
     "id": 126,
     "title": "Sharing Halloween Sweets",
     "spice": "🌶️",
-    "comment": "# instructions: Ask for the total number of sweets and the number of friends. Share them equally and display how many each friend gets and how many are left over. Example: Total sweets: 23, Number of friends: 5 -> Each friend gets: 4, Sweets left over: 3.",
+    "comment": "# instructions: Ask for the total number of sweets and the number of friends. Share them equally and display how many each friend gets and how many are left over.\n#Input\n# 23, 5\n# 35, 4\n\n#output\n# 4, 3\n# 8, 3\n\n#End Sharing Halloween Sweets",
     "tags": [
       "maths",
-      "Halloween"
+      "Halloween",
+      "Self Marking"
     ]
   }
 ]

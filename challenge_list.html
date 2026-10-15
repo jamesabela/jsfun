@@ -590,15 +590,370 @@
       color: #10b981;
       display: block;
     }
+
+    /* Theme Toggle */
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-main);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .theme-toggle-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary-color);
+    }
+
+    /* Dark Theme */
+    body.dark-theme {
+      --primary-color: #60a5fa;
+      --primary-hover: #3b82f6;
+      --bg-color: #0b1120;
+      --card-bg: #151f32;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+    }
+
+    body.dark-theme .stat-card,
+    body.dark-theme .filter-panel,
+    body.dark-theme .achievement-card {
+      background: var(--card-bg);
+      border-color: var(--border-color);
+    }
+
+    body.dark-theme .search-input,
+    body.dark-theme .share-name-input {
+      background: #0b1120;
+      color: #f8fafc;
+      border-color: #334155;
+    }
+
+    body.dark-theme .filter-btn {
+      background: #151f32;
+      color: #94a3b8;
+      border-color: #334155;
+    }
+
+    body.dark-theme .filter-btn:hover {
+      background: #1e293b;
+      color: #f8fafc;
+    }
+
+    body.dark-theme .filter-btn.active {
+      background: var(--primary-color);
+      color: #0f172a;
+      border-color: var(--primary-color);
+    }
+
+    body.dark-theme .spice-badge {
+      background: #272015;
+      border-color: #45341a;
+      color: #fde68a;
+    }
+
+    body.dark-theme .challenge-id {
+      background: #1e293b;
+      color: #94a3b8;
+    }
+
+    body.dark-theme .challenge-tag-badge {
+      background: #1e1b4b;
+      border-color: #312e81;
+      color: #a5b4fc;
+    }
+
+    body.dark-theme .challenge-completed-wrapper {
+      border-top-color: #1e293b;
+    }
+
+    body.dark-theme .achievement-progress-bar {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    body.dark-theme .share-filter-btn {
+      background: #1e293b;
+      border-color: #334155;
+      color: #a5b4fc;
+    }
+
+    body.dark-theme .share-filter-btn:hover {
+      background: #283556;
+      border-color: #475569;
+    }
+
+    body.dark-theme .share-action-btn.teams-btn {
+      background: #1e1e38;
+      color: #9aa1f5;
+      border-color: #2e2e54;
+    }
+
+    body.dark-theme .share-action-btn.classroom-btn {
+      background: #142a1e;
+      color: #5cdb95;
+      border-color: #1f422e;
+    }
+
+    /* Filter Share Group & Buttons */
+    .filter-share-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    .share-filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #c7d2fe;
+      background: #eef2ff;
+      color: #4338ca;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .share-filter-btn.share-filter-teams {
+      background: #f3f2fc;
+      color: #464eb8;
+      border-color: #dcd9f8;
+    }
+
+    .share-filter-btn.share-filter-teams:hover {
+      background: #464eb8;
+      color: #ffffff;
+      border-color: #464eb8;
+    }
+
+    .share-filter-btn.share-filter-classroom {
+      background: #e6f7ed;
+      color: #1e8e3e;
+      border-color: #bbf0cf;
+    }
+
+    .share-filter-btn.share-filter-classroom:hover {
+      background: #1e8e3e;
+      color: #ffffff;
+      border-color: #1e8e3e;
+    }
+
+    .share-filter-btn.print-btn {
+      background: #ecfdf5;
+      color: #047857;
+      border-color: #a7f3d0;
+    }
+
+    .share-filter-btn.print-btn:hover {
+      background: #059669;
+      color: #ffffff;
+      border-color: #059669;
+    }
+
+    body.dark-theme .share-filter-btn.print-btn {
+      background: #064e3b;
+      color: #6ee7b7;
+      border-color: #047857;
+    }
+
+    body.dark-theme .share-filter-btn.print-btn:hover {
+      background: #059669;
+      color: #ffffff;
+      border-color: #059669;
+    }
+
+    /* QR Code for Card Deck (Hidden on screen, shown in print) */
+    .print-qr-code {
+      display: none;
+    }
+
+    /* Print Card Deck Styling */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 8mm;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        font-size: 10pt;
+      }
+
+      header,
+      footer,
+      .filter-panel,
+      .stats-bar,
+      .back-home,
+      .launch-btn,
+      .share-actions-row,
+      .challenge-completed-wrapper,
+      .today-badge,
+      #themeToggleBtn {
+        display: none !important;
+      }
+
+      .challenge-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        grid-auto-rows: 86mm !important;
+        gap: 4mm !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .challenge-card {
+        position: relative !important;
+        height: 86mm !important;
+        max-height: 86mm !important;
+        min-height: 86mm !important;
+        box-sizing: border-box !important;
+        border: 1.5px dashed #475569 !important;
+        border-radius: 8px !important;
+        padding: 8mm 6mm 4mm 6mm !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+      }
+
+      /* Cut indicator */
+      .challenge-card::before {
+        content: '✂️ Cut along dashed line' !important;
+        position: absolute !important;
+        top: 1.5mm !important;
+        left: 3mm !important;
+        font-size: 6.5pt !important;
+        color: #64748b !important;
+        background: none !important;
+        height: auto !important;
+        letter-spacing: 0.05em;
+      }
+
+      .challenge-card .challenge-id {
+        position: absolute !important;
+        top: 1.5mm !important;
+        right: 3mm !important;
+        font-size: 8pt !important;
+        background: #f1f5f9 !important;
+        color: #000000 !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 1px 6px !important;
+        border-radius: 4px !important;
+      }
+
+      .challenge-card .challenge-header {
+        margin-top: 1mm !important;
+        margin-bottom: 2mm !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+      }
+
+      .challenge-card .spice-badge {
+        font-size: 11pt !important;
+        padding: 1px 4px !important;
+        border: 1px solid #d1d5db !important;
+        background: #f9fafb !important;
+      }
+
+      .challenge-card .challenge-title {
+        font-size: 11pt !important;
+        font-weight: 700 !important;
+        color: #000000 !important;
+        line-height: 1.2 !important;
+        padding-right: 0 !important;
+      }
+
+      .challenge-card .challenge-desc {
+        font-size: 9pt !important;
+        color: #1f2937 !important;
+        line-height: 1.35 !important;
+        margin-bottom: 2mm !important;
+        flex: 1 !important;
+        overflow: hidden !important;
+      }
+
+      .challenge-card .challenge-tags-wrapper {
+        display: flex !important;
+        gap: 4px !important;
+        flex-wrap: wrap !important;
+        margin-bottom: 0 !important;
+        margin-top: auto !important;
+        max-width: 65% !important;
+      }
+
+      .challenge-card .challenge-tag-badge {
+        font-size: 7.5pt !important;
+        padding: 1px 5px !important;
+        background: #f1f5f9 !important;
+        color: #334155 !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 4px !important;
+      }
+
+      .challenge-card .print-qr-code {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        position: absolute !important;
+        bottom: 3mm !important;
+        right: 3mm !important;
+      }
+
+      .challenge-card .print-qr-code img {
+        width: 19mm !important;
+        height: 19mm !important;
+        display: block !important;
+      }
+
+      .challenge-card .print-qr-code span {
+        font-size: 6pt !important;
+        color: #475569 !important;
+        font-weight: 700 !important;
+        margin-top: 1mm !important;
+      }
+    }
   </style>
 </head>
 
 <body>
 
   <header>
-    <a href="pythoncopy.html" class="back-home">
-      ← Back to Python Code Lab
-    </a>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+      <a href="pythoncopy.html" class="back-home" style="margin-bottom: 0;">
+        ← Back to Python Code Lab
+      </a>
+      <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Dark Mode</span>
+      </button>
+    </div>
     <h1 id="mainTitle">Python Challenges Index</h1>
     <p class="subtitle" id="mainSubtitle">Quickly verify, preview, and load challenges directly in the
       editor</p>
@@ -660,10 +1015,34 @@
         <button class="filter-btn" data-filter="🌶️🌶️">Medium (🌶️🌶️)</button>
         <button class="filter-btn" data-filter="🌶️🌶️🌶️">Spicy (🌶️🌶️🌶️)</button>
       </div>
-      <button class="share-filter-btn" id="btnShareFilter" onclick="copyFilterShareUrl()"
-        title="Copy shareable link with current filters" style="margin-left: auto;">
-        🔗 Share Filter Link
-      </button>
+      <div class="filter-share-group">
+        <button class="share-filter-btn" id="btnShareFilter" onclick="copyFilterShareUrl()"
+          title="Copy shareable link with current filters">
+          🔗 Copy Link
+        </button>
+        <a class="share-filter-btn share-filter-teams" id="btnTeamsFilter" target="_blank"
+          title="Share filtered challenges to Microsoft Teams">
+          <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+            <path d="M9.186 4.797a2.42 2.42 0 1 0-2.86-2.448h1.178c.929 0 1.682.753 1.682 1.682zm-4.295 7.738h2.613c.929 0 1.682-.753 1.682-1.682V5.58h2.783a.7.7 0 0 1 .682.716v4.294a4.197 4.197 0 0 1-4.093 4.293c-1.618-.04-3-.99-3.667-2.35Zm10.737-9.372a1.674 1.674 0 1 1-3.349 0 1.674 1.674 0 0 1 3.349 0m-2.238 9.488-.12-.002a5.2 5.2 0 0 0 .381-2.07V6.306a1.7 1.7 0 0 0-.15-.725h1.792c.39 0 .707.317.707.707v3.765a2.6 2.6 0 0 1-2.598 2.598z"/>
+            <path d="M.682 3.349h6.822c.377 0 .682.305.682.682v6.822a.68.68 0 0 1-.682.682H.682A.68.68 0 0 1 0 10.853V4.03c0-.377.305-.682.682-.682Zm5.206 2.596v-.72h-3.59v.72h1.357V9.66h.87V5.945z"/>
+          </svg>
+          Teams
+        </a>
+        <a class="share-filter-btn share-filter-classroom" id="btnClassroomFilter" target="_blank"
+          title="Share filtered challenges to Google Classroom">
+          <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2z"/>
+            <path d="M2.5 3a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V3zm1 4.5h8v-4h-8v4z"/>
+            <path d="M5 13.5v1h6v-1H5z"/>
+            <path d="M3.5 12.5v3h1v-3h-1zm8 0v3h1v-3h-1z"/>
+          </svg>
+          Classroom
+        </a>
+        <button class="share-filter-btn print-btn" id="btnPrint" onclick="window.print()"
+          title="Print challenges">
+          🖨️ Print
+        </button>
+      </div>
     </div>
     <div id="tagFilterContainer"
       style="display: flex; gap: 8px; flex-wrap: wrap; padding-top: 12px; border-top: 1px dashed var(--border-color); align-items: center;">
@@ -691,6 +1070,35 @@
     let challengeData = [];
     let currentFilter = 'all';
     let selectedTags = [];
+
+    // Theme Management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('pycodelab_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.body.classList.add('dark-theme');
+      } else {
+        document.body.classList.remove('dark-theme');
+      }
+      updateThemeButton();
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark-theme');
+      localStorage.setItem('pycodelab_theme', isDark ? 'dark' : 'light');
+      updateThemeButton();
+    }
+
+    function updateThemeButton() {
+      const isDark = document.body.classList.contains('dark-theme');
+      const icon = document.getElementById('themeToggleIcon');
+      const text = document.getElementById('themeToggleText');
+      if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+      if (text) text.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    }
+
+    // Call initTheme immediately
+    initTheme();
 
     const badges = [
       {
@@ -1082,6 +1490,18 @@
 
         completedWrapper.appendChild(label);
 
+        // Print QR Code box (for physical cut-out card deck)
+        const printQr = document.createElement('div');
+        printQr.className = 'print-qr-code';
+        const qrImg = document.createElement('img');
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(challengeUrl)}`;
+        qrImg.alt = 'QR Code';
+        qrImg.loading = 'lazy';
+        const qrCaption = document.createElement('span');
+        qrCaption.textContent = 'Scan to Code 📱';
+        printQr.appendChild(qrImg);
+        printQr.appendChild(qrCaption);
+
         card.appendChild(idBadge);
         card.appendChild(header);
         card.appendChild(desc);
@@ -1112,6 +1532,7 @@
 
         card.appendChild(footer);
         card.appendChild(completedWrapper);
+        card.appendChild(printQr);
 
         grid.appendChild(card);
       });
@@ -1410,22 +1831,43 @@
 
     function updateShareFilterBtn() {
       const btn = document.getElementById('btnShareFilter');
-      if (!btn) return;
+      const teamsBtn = document.getElementById('btnTeamsFilter');
+      const classroomBtn = document.getElementById('btnClassroomFilter');
+
       const parts = [];
       if (selectedTags.length > 0) {
         parts.push(selectedTags.join(', '));
       }
       if (currentFilter && currentFilter !== 'all') {
-        parts.push(currentFilter);
+        let spiceLabel = 'Mild (🌶️)';
+        if (currentFilter === '🌶️🌶️') spiceLabel = 'Medium (🌶️🌶️)';
+        else if (currentFilter === '🌶️🌶️🌶️') spiceLabel = 'Spicy (🌶️🌶️🌶️)';
+        parts.push(spiceLabel);
       }
       const q = (document.getElementById('searchInput')?.value || '').trim();
       if (q) {
         parts.push(`"${q}"`);
       }
-      if (parts.length > 0) {
-        btn.innerHTML = `🔗 Share Filter (${escapeHtml(parts.join(' + '))})`;
-      } else {
-        btn.innerHTML = `🔗 Share Filter Link`;
+
+      const filterDesc = parts.length > 0 ? parts.join(' + ') : 'All Challenges';
+
+      if (btn) {
+        if (parts.length > 0) {
+          btn.innerHTML = `🔗 Copy Link (${escapeHtml(filterDesc)})`;
+        } else {
+          btn.innerHTML = `🔗 Copy Link`;
+        }
+      }
+
+      const currentFilteredUrl = window.location.href;
+
+      if (teamsBtn) {
+        const teamsMsg = `Check out these Python Challenges (${filterDesc}):`;
+        teamsBtn.href = `https://teams.microsoft.com/share?href=${encodeURIComponent(currentFilteredUrl)}&msgText=${encodeURIComponent(teamsMsg)}`;
+      }
+
+      if (classroomBtn) {
+        classroomBtn.href = `https://classroom.google.com/share?url=${encodeURIComponent(currentFilteredUrl)}`;
       }
     }
 
