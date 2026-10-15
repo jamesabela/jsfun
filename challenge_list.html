@@ -185,6 +185,28 @@
       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
     }
 
+    .share-filter-btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #c7d2fe;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #eef2ff;
+      color: #4338ca;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .share-filter-btn:hover {
+      background: #e0e7ff;
+      border-color: #a5b4fc;
+      transform: translateY(-1px);
+    }
+
     /* Challenge Grid */
     .challenge-grid {
       max-width: 1200px;
@@ -578,7 +600,7 @@
       ← Back to Python Code Lab
     </a>
     <h1 id="mainTitle">Python Challenges Index</h1>
-    <p class="subtitle" id="mainSubtitle">Quickly verify, preview, and load any of the 113 challenges directly in the
+    <p class="subtitle" id="mainSubtitle">Quickly verify, preview, and load challenges directly in the
       editor</p>
 
     <div style="margin-top: 16px; margin-bottom: 8px;">
@@ -603,7 +625,7 @@
           <div class="achievement-progress-bar">
             <div class="achievement-progress-fill" id="achievementProgressFill"></div>
           </div>
-          <span class="achievement-progress-text" id="achievementProgressText">0% Completed (0 / 113)</span>
+          <span class="achievement-progress-text" id="achievementProgressText">Loading progress...</span>
         </div>
       </div>
     </div>
@@ -638,6 +660,10 @@
         <button class="filter-btn" data-filter="🌶️🌶️">Medium (🌶️🌶️)</button>
         <button class="filter-btn" data-filter="🌶️🌶️🌶️">Spicy (🌶️🌶️🌶️)</button>
       </div>
+      <button class="share-filter-btn" id="btnShareFilter" onclick="copyFilterShareUrl()"
+        title="Copy shareable link with current filters" style="margin-left: auto;">
+        🔗 Share Filter Link
+      </button>
     </div>
     <div id="tagFilterContainer"
       style="display: flex; gap: 8px; flex-wrap: wrap; padding-top: 12px; border-top: 1px dashed var(--border-color); align-items: center;">
@@ -758,10 +784,15 @@
         challengeData = data;
         updateStats();
         checkImportProgress();
+        applyUrlFilters();
+        renderTagFilters();
         renderChallenges();
+        syncUrlWithFilters();
       })
       .catch(err => {
         console.error('Error loading challenges.json:', err);
+        const progressTextEl = document.getElementById('achievementProgressText');
+        if (progressTextEl) progressTextEl.textContent = 'Unable to load challenges';
         document.getElementById('challengeGrid').innerHTML = '<p class="no-results">Error loading challenges. Please ensure challenges.json is in the directory.</p>';
       });
 
@@ -785,7 +816,8 @@
 
     function updateStats() {
       const completed = getCompletedChallenges().length;
-      const total = challengeData.length || 113;
+      const total = challengeData.length;
+      if (!total) return;
       const percentage = Math.round((completed / total) * 100);
 
       const titleMain = document.getElementById('mainTitle');
@@ -860,6 +892,8 @@
           } else {
             selectedTags.push(t);
           }
+          syncUrlWithFilters();
+          renderTagFilters();
           renderChallenges();
         });
         container.appendChild(pill);
@@ -1067,6 +1101,8 @@
               if (!selectedTags.some(selTag => selTag.toLowerCase() === t.toLowerCase())) {
                 selectedTags.push(t);
               }
+              syncUrlWithFilters();
+              renderTagFilters();
               renderChallenges();
             });
             tagsWrapper.appendChild(tagSpan);
@@ -1229,8 +1265,175 @@
       }
     }
 
+    function applyUrlFilters() {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // 1. Tag or Tags parameter (e.g. ?tag=Halloween or ?tags=selection,Halloween)
+      const rawTags = [...urlParams.getAll('tag'), ...urlParams.getAll('tags')];
+      if (rawTags.length > 0) {
+        const parsedTags = rawTags.flatMap(p => p.split(',')).map(t => t.trim()).filter(Boolean);
+        parsedTags.forEach(t => {
+          const match = challengeData.flatMap(c => c.tags || []).find(existing => existing.toLowerCase() === t.toLowerCase());
+          const tagToAdd = match || t;
+          if (!selectedTags.some(selTag => selTag.toLowerCase() === tagToAdd.toLowerCase())) {
+            selectedTags.push(tagToAdd);
+          }
+        });
+      }
+
+      // 2. Spice, Difficulty, or Level parameter (e.g. ?spice=1, ?difficulty=mild, ?level=2)
+      const spiceParam = urlParams.get('spice') || urlParams.get('difficulty') || urlParams.get('level');
+      if (spiceParam) {
+        const s = spiceParam.toLowerCase().trim();
+        if (s === '1' || s === 'mild' || s === '🌶' || s === '🌶️') {
+          currentFilter = '🌶️';
+        } else if (s === '2' || s === 'medium' || s === '🌶🌶' || s === '🌶️🌶️') {
+          currentFilter = '🌶️🌶️';
+        } else if (s === '3' || s === 'spicy' || s === '🌶🌶🌶' || s === '🌶️🌶️🌶️') {
+          currentFilter = '🌶️🌶️🌶️';
+        } else if (s === 'all') {
+          currentFilter = 'all';
+        }
+
+        document.querySelectorAll('.filter-buttons .filter-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-filter') === currentFilter);
+        });
+      }
+
+      // 3. Search query parameter (e.g. ?q=ghost or ?search=pumpkin)
+      const qParam = urlParams.get('q') || urlParams.get('search');
+      if (qParam) {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+          searchInput.value = qParam;
+        }
+      }
+    }
+
+    function syncUrlWithFilters() {
+      const url = new URL(window.location.href);
+      const params = url.searchParams;
+
+      const importParam = params.get('import');
+
+      params.delete('tag');
+      params.delete('tags');
+      params.delete('spice');
+      params.delete('difficulty');
+      params.delete('level');
+      params.delete('q');
+      params.delete('search');
+
+      if (importParam) {
+        params.set('import', importParam);
+      }
+
+      if (selectedTags.length === 1) {
+        params.set('tag', selectedTags[0]);
+      } else if (selectedTags.length > 1) {
+        params.set('tags', selectedTags.join(','));
+      }
+
+      if (currentFilter && currentFilter !== 'all') {
+        let spiceVal = '1';
+        if (currentFilter === '🌶️🌶️') spiceVal = '2';
+        else if (currentFilter === '🌶️🌶️🌶️') spiceVal = '3';
+        params.set('spice', spiceVal);
+      }
+
+      const searchInput = document.getElementById('searchInput');
+      const q = searchInput ? searchInput.value.trim() : '';
+      if (q) {
+        params.set('q', q);
+      }
+
+      const queryString = params.toString();
+      const newUrl = queryString ? `${url.pathname}?${queryString}` : url.pathname;
+      window.history.replaceState({}, '', newUrl);
+
+      updateShareFilterBtn();
+    }
+
+    function copyFilterShareUrl() {
+      syncUrlWithFilters();
+      const shareUrl = window.location.href;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showFilterCopySuccess();
+        }).catch(() => {
+          fallbackCopyFilterUrl(shareUrl);
+        });
+        return;
+      }
+      fallbackCopyFilterUrl(shareUrl);
+    }
+
+    function fallbackCopyFilterUrl(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.setAttribute('readonly', '');
+      textArea.style.position = 'fixed';
+      textArea.style.top = '0';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        if (document.execCommand('copy')) {
+          showFilterCopySuccess();
+        } else {
+          prompt('Copy shareable link:', text);
+        }
+      } catch (e) {
+        prompt('Copy shareable link:', text);
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    }
+
+    function showFilterCopySuccess() {
+      const btn = document.getElementById('btnShareFilter');
+      if (btn) {
+        btn.innerHTML = 'Copied Link! 📋';
+        btn.style.background = '#dcfce7';
+        btn.style.color = '#15803d';
+        btn.style.borderColor = '#86efac';
+        setTimeout(() => {
+          btn.style.background = '';
+          btn.style.color = '';
+          btn.style.borderColor = '';
+          updateShareFilterBtn();
+        }, 2000);
+      }
+    }
+
+    function updateShareFilterBtn() {
+      const btn = document.getElementById('btnShareFilter');
+      if (!btn) return;
+      const parts = [];
+      if (selectedTags.length > 0) {
+        parts.push(selectedTags.join(', '));
+      }
+      if (currentFilter && currentFilter !== 'all') {
+        parts.push(currentFilter);
+      }
+      const q = (document.getElementById('searchInput')?.value || '').trim();
+      if (q) {
+        parts.push(`"${q}"`);
+      }
+      if (parts.length > 0) {
+        btn.innerHTML = `🔗 Share Filter (${escapeHtml(parts.join(' + '))})`;
+      } else {
+        btn.innerHTML = `🔗 Share Filter Link`;
+      }
+    }
+
     // Event listeners
-    document.getElementById('searchInput').addEventListener('input', renderChallenges);
+    document.getElementById('searchInput').addEventListener('input', () => {
+      syncUrlWithFilters();
+      renderChallenges();
+    });
 
     document.querySelectorAll('.filter-buttons .filter-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -1244,8 +1447,25 @@
           if (searchInput) searchInput.value = '';
         }
         
+        syncUrlWithFilters();
+        renderTagFilters();
         renderChallenges();
       });
+    });
+
+    window.addEventListener('popstate', () => {
+      selectedTags = [];
+      currentFilter = 'all';
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = '';
+      document.querySelectorAll('.filter-buttons .filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-filter') === 'all');
+      });
+
+      applyUrlFilters();
+      renderTagFilters();
+      renderChallenges();
+      updateShareFilterBtn();
     });
   </script>
 <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>

@@ -440,13 +440,12 @@
     fetch('challenges.json')
       .then(res => res.json())
       .then(challenges => {
-        const total = challenges.length || 113;
+        const total = Array.isArray(challenges) ? challenges.length : 0;
         initializeCertificate(challenges, total);
       })
       .catch(err => {
         console.error("Error loading challenges.json:", err);
-        // Fallback to static 113 if fetch fails
-        initializeCertificate([], 113);
+        initializeCertificate([], 0);
       });
 
     function initializeCertificate(challenges, total) {
@@ -485,13 +484,17 @@
       if (name !== null) {
         const count = completedIds.length;
         const badge = getBadge(count);
-        const percentage = Math.round((count / total) * 100);
+        const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
 
         document.getElementById('badgeImage').src = badge.imageUrl;
         document.getElementById('certRank').textContent = badge.title;
-        document.getElementById('certMessage').innerHTML = `This certifies that <strong>${escapeHtml(name)}</strong> has successfully completed <strong>${count} of ${total}</strong> Python Code Lab challenges!`;
+        document.getElementById('certMessage').innerHTML = total > 0
+          ? `This certifies that <strong>${escapeHtml(name)}</strong> has successfully completed <strong>${count} of ${total}</strong> Python Code Lab challenges!`
+          : `This certifies that <strong>${escapeHtml(name)}</strong> has successfully completed <strong>${count}</strong> Python Code Lab challenges!`;
         document.getElementById('certDesc').textContent = badge.comment;
-        document.getElementById('progressText').textContent = `${percentage}% Completed (${count} / ${total})`;
+        document.getElementById('progressText').textContent = total > 0
+          ? `${percentage}% Completed (${count} / ${total})`
+          : `${count} Completed`;
         
         // Trigger progress bar animation
         setTimeout(() => {

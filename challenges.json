@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "Random Guessing Game",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create a game where the user guesses a number from 1 to 100. Tell the user if the answer is higher or lower, and check for invalid input.",
     "tags": [
       "selection",
@@ -12,7 +12,7 @@
   {
     "id": 2,
     "title": "Mario Pyramid",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Ask the user to enter a number. Use that number to create a pyramid pattern of the correct size.",
     "tags": [
       "repetition",
@@ -22,7 +22,7 @@
   {
     "id": 3,
     "title": "Drunk Pirate",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Use turtle to draw the path of a drunk pirate. The pirate should turn randomly, move forward, then repeat several times.",
     "tags": [
       "repetition",
@@ -33,7 +33,7 @@
   {
     "id": 4,
     "title": "Vending Machine",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Simulate a vending machine. Let the user insert coins, choose a product, then output the product and any change left over.",
     "tags": [
       "selection",
@@ -43,7 +43,7 @@
   {
     "id": 5,
     "title": "Fizzbuzz",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Print the numbers from 1 to 20, but print Fizz for numbers divisible by 3, Buzz for numbers divisible by 5, and FizzBuzz for numbers divisible by both.\n#Input\n# \"\"\n\n#output\n# 1, 2, fizz, 4, buzz, fizzbuzz, 19, buzz\n\n#End Fizzbuzz",
     "tags": [
       "selection",
@@ -55,7 +55,7 @@
   {
     "id": 6,
     "title": "Lazy Report Writer",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a random report writer using a list of generic comments. Ask for the number of students and generate one random comment for each student.",
     "tags": [
       "repetition",
@@ -65,7 +65,7 @@
   {
     "id": 7,
     "title": "The Prisoners Dilemma",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Simulate the prisoner's dilemma. Let the user choose to confess or stay silent, make the computer choose an outcome, then show the result and ask if they want to play again.",
     "tags": [
       "selection",
@@ -75,7 +75,7 @@
   {
     "id": 8,
     "title": "Think You Know Each Other?",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a two-player quiz where each user writes questions about themselves. The other user answers them, and the program records and displays the scores.",
     "tags": [
       "repetition",
@@ -87,7 +87,7 @@
   {
     "id": 9,
     "title": "The Roasting Machine",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create a random roast generator. Ask for the student's name and include it in a randomly selected roast from a list.",
     "tags": [
       "array",
@@ -97,7 +97,7 @@
   {
     "id": 10,
     "title": "Primary Quiz Machine",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create an arithmetic quiz machine for addition, subtraction, multiplication and division. Let the user choose the time before the answer is shown and the maximum number size.",
     "tags": [
       "selection",
@@ -108,7 +108,7 @@
   {
     "id": 11,
     "title": "Hangman",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a game of hangman using a word list.",
     "tags": [
       "selection",
@@ -120,7 +120,7 @@
   {
     "id": 12,
     "title": "Rock Paper Scissors",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create a rock, paper, scissors game where the user plays against the computer.",
     "tags": [
       "selection",
@@ -130,7 +130,7 @@
   {
     "id": 13,
     "title": "Pokemon Word Game",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create a word-chain game using a category list. Each new word must begin with the final letter of the previous word, and words cannot be repeated.",
     "tags": [
       "selection",
@@ -142,7 +142,7 @@
   {
     "id": 14,
     "title": "Magic 8 Ball",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create a magic 8 ball using random choices from a list of possible answers.",
     "tags": [
       "selection",
@@ -152,7 +152,7 @@
   {
     "id": 15,
     "title": "Turn Based Fighting Game",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create a turn-based fighting game where characters have health and individual moves. For extra challenge, allow the player to choose different characters.",
     "tags": [
       "selection",
@@ -166,7 +166,7 @@
   {
     "id": 16,
     "title": "Turtle Starfield",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Use turtle to create a starfield based on a seed, so the same starfield can be regenerated later.",
     "tags": [
       "repetition",
@@ -176,7 +176,7 @@
   {
     "id": 17,
     "title": "Tic Tac Toe",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create a game of tic tac toe using a two-dimensional array.",
     "tags": [
       "selection",
@@ -189,7 +189,7 @@
   {
     "id": 18,
     "title": "Top Trumps",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a two-player Top Trumps game. Each player gets five random cards, and the card with the higher score wins each round.",
     "tags": [
       "selection",
@@ -203,7 +203,7 @@
   {
     "id": 19,
     "title": "Uno",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Recreate a text-based version of Uno where the user can play against the computer.",
     "tags": [
       "selection",
@@ -217,7 +217,7 @@
   {
     "id": 20,
     "title": "Ultimate Caesar Cipher",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create a Caesar cipher program that can encode a file, decode a file and attempt to crack an encoded file.",
     "tags": [
       "selection",
@@ -231,7 +231,7 @@
   {
     "id": 21,
     "title": "Blackjack",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create a text version of blackjack. Remember that the ace card can have more than one value.",
     "tags": [
       "selection",
@@ -245,7 +245,7 @@
   {
     "id": 22,
     "title": "Substitution Cipher",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create a substitution cipher that uses a randomly generated alphabet sequence to encrypt a custom message.",
     "tags": [
       "selection",
@@ -258,7 +258,7 @@
   {
     "id": 23,
     "title": "Tower Of Hanoi",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Use recursion to solve the Tower of Hanoi puzzle. Move all disks to another tower, moving only one disk at a time and never placing a larger disk on a smaller disk.",
     "tags": [
       "functions",
@@ -269,7 +269,7 @@
   {
     "id": 24,
     "title": "Morse Code Converter",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a menu-driven converter that can convert text to Morse code and Morse code back to text. Self-marking checks use these trials: choose text-to-Morse with SOS -> ... --- ...; choose Morse-to-text with ... --- ... -> sos.\n#Input\n# 1, SOS\n# 2, ... --- ...\n\n#output\n# ... --- ...\n# sos\n\n#End Morse Code Converter",
     "tags": [
       "selection",
@@ -284,7 +284,7 @@
   {
     "id": 25,
     "title": "Any Shape",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Use turtle so that when the user enters a number, the program creates a polygon with that many sides.",
     "tags": [
       "repetition",
@@ -294,7 +294,7 @@
   {
     "id": 26,
     "title": "House",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Use turtle to draw a picture of a house.",
     "tags": [
       "Turtle"
@@ -303,7 +303,7 @@
   {
     "id": 27,
     "title": "Bar Chart",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Use turtle to create a bar chart.",
     "tags": [
       "repetition",
@@ -314,7 +314,7 @@
   {
     "id": 28,
     "title": "Countdown",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create a countdown for NASA. Self-marking checks expect the countdown to include 10 down to 1 and a blast-off message.\n#Input\n# \"\"\n\n#output\n# 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, blast\n\n#End Countdown",
     "tags": [
       "repetition",
@@ -325,7 +325,7 @@
   {
     "id": 29,
     "title": "Rugby Calculator",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a rugby scoring system. Ask for two team names and record tries, conversions and penalty kicks separately, then display the final scores and how the points were scored.",
     "tags": [
       "selection",
@@ -337,7 +337,7 @@
   {
     "id": 30,
     "title": "Drunkometer",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Check that someone is competent to operate machinery by making them type the same tricky phrase twice. Compare the two entries. Self-marking checks use these trials: the quick brown fox twice -> competent; the quick brown fox then the quick brown fix -> not competent.\n#Input\n# the quick brown fox, the quick brown fox\n# the quick brown fox, the quick brown fix\n\n#output\n# competent\n# not\n\n#End Drunkometer",
     "tags": [
       "selection",
@@ -348,7 +348,7 @@
   {
     "id": 31,
     "title": "Roman Numerals",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Print the first 100 numbers in Roman numerals.\n#Input\n# \"\"\n\n#output\n# I, IV, IX, XL, L, XC, C\n\n#End Roman Numerals",
     "tags": [
       "repetition",
@@ -360,7 +360,7 @@
   {
     "id": 32,
     "title": "Multiplication Game",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create a multiplication game using numbers from 0 to 12.",
     "tags": [
       "selection",
@@ -372,7 +372,7 @@
   {
     "id": 33,
     "title": "Physics Formula Code",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a physics formula application that allows the user to solve for one of the variables in each formula.",
     "tags": [
       "selection",
@@ -383,7 +383,7 @@
   {
     "id": 34,
     "title": "Hex And Binary Quiz",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a hex and binary quiz machine.",
     "tags": [
       "selection",
@@ -395,7 +395,7 @@
   {
     "id": 35,
     "title": "Parity Bit Checker Game",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a parity bit checker quiz that challenges students on odd and even parity. The computer should correct wrong answers.",
     "tags": [
       "selection",
@@ -407,7 +407,7 @@
   {
     "id": 36,
     "title": "Help The CIA Find The Password",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Ask the user to input a large amount of text. Find and print the top three most common letters and the top three least common letters.",
     "tags": [
       "repetition",
@@ -419,7 +419,7 @@
   {
     "id": 37,
     "title": "Boxplot",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Use turtle to draw a box plot. Ask the user for the minimum, maximum, upper quartile, lower quartile and median.",
     "tags": [
       "functions",
@@ -430,7 +430,7 @@
   {
     "id": 38,
     "title": "Randomly Generated Password",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create a randomly generated password based on the user's favourite colour, place and animal. Add special characters to the end.",
     "tags": [
       "strings",
@@ -441,7 +441,7 @@
   {
     "id": 39,
     "title": "Logic Gates In Python",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create the AND, OR, NOR, XOR and NOT gates using only NAND gates in Python.",
     "tags": [
       "selection",
@@ -452,7 +452,7 @@
   {
     "id": 40,
     "title": "Denary To BCD Converter",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Ask the user to input a denary number and output its Binary Coded Decimal conversion. Self-marking checks use these trials: 9 -> 1001; 42 -> 0100 0010; 507 -> 0101 0000 0111.\n#Input\n# 9\n# 42\n# 507\n\n#output\n# 1001\n# 0100, 0010\n# 0101, 0000, 0111\n\n#End Denary To BCD Converter",
     "tags": [
       "repetition",
@@ -464,7 +464,7 @@
   {
     "id": 41,
     "title": "Smile, Sad And Surprised",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create procedures to print ASCII art for a happy face, a sad face and a surprised face.",
     "tags": [
       "functions"
@@ -473,7 +473,7 @@
   {
     "id": 42,
     "title": "Make It Laugh Procedure",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Write a procedure called make_it_laugh that replaces all vowels in a string with \"haha\", then prints the modified string. Self-marking checks use these trials: hello -> hhahallhaha; banana -> bhahanhahanhaha.\n#Input\n# hello\n# banana\n\n#output\n# hhahallhaha\n# bhahanhahanhaha\n\n#End Make It Laugh Procedure",
     "tags": [
       "strings",
@@ -485,7 +485,7 @@
   {
     "id": 43,
     "title": "Carpet Designer Function",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create a function that randomly designs a carpet pattern based on a polygon. The side length should be a parameter, and the shapes should touch but not overlap.",
     "tags": [
       "repetition",
@@ -497,7 +497,7 @@
   {
     "id": 44,
     "title": "Guess The Code",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Given a Caesar-ciphered string, create a function that tries to decipher it and output the most likely natural string.",
     "tags": [
       "repetition",
@@ -511,7 +511,7 @@
   {
     "id": 45,
     "title": "Roman Numerals Conversion",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create a program that converts numbers to Roman numerals and Roman numerals to numbers. It should work for values greater than 0 and less than 4000. Self-marking checks use these trials: 58 -> LVIII; 1994 -> MCMXCIV; MCMXCIV -> 1994.\n#Input\n# 1, 58\n# 1, 1994\n# 2, MCMXCIV\n\n#output\n# LVIII\n# MCMXCIV\n# 1994\n\n#End Roman Numerals Conversion",
     "tags": [
       "selection",
@@ -524,7 +524,7 @@
   {
     "id": 46,
     "title": "IP Address Generator",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Generate private IPv4 and IPv6 addresses for between 1 and 100 network devices.",
     "tags": [
       "repetition",
@@ -535,7 +535,7 @@
   {
     "id": 47,
     "title": "Number From 1 To 111",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a program that guesses a number between 1 and 111 as efficiently as possible. After each guess, it should use higher or lower feedback to improve its next guess.",
     "tags": [
       "selection",
@@ -545,7 +545,7 @@
   {
     "id": 48,
     "title": "Rocket Launch",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create an instance of a planet class. When the user enters the planet's mass and radius, output the escape velocity required for a rocket. Self-marking checks use Earth values: mass 5.972e24 and radius 6371000 should give an escape velocity beginning 1118.\n#Input\n# 5.972e24, 6371000\n\n#output\n# 1118\n\n#End Rocket Launch",
     "tags": [
       "object-oriented",
@@ -555,7 +555,7 @@
   {
     "id": 49,
     "title": "Bullet Proof Binary Search",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a binary search program. If the item is not found, sort the list and search again before reporting that the item cannot be found.",
     "tags": [
       "selection",
@@ -566,7 +566,7 @@
   {
     "id": 50,
     "title": "File Handler",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create file error handling that tells the user if a file does not exist, shows the current directory and lists the files that are available.",
     "tags": [
       "selection",
@@ -577,7 +577,7 @@
   {
     "id": 51,
     "title": "Recursive Sum Digits",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Write a recursive program that calculates the sum of the digits in an integer. For example, sumDigits(345) should return 12. Self-marking checks use these trials: 345 -> 12; 9999 -> 36.\n#Input\n# 345\n# 9999\n\n#output\n# 12\n# 36\n\n#End Recursive Sum Digits",
     "tags": [
       "functions",
@@ -588,7 +588,7 @@
   {
     "id": 52,
     "title": "Underline Any Length",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Use turtle to create input text in a window and draw lines that match the length of the text.",
     "tags": [
       "strings",
@@ -598,7 +598,7 @@
   {
     "id": 53,
     "title": "Random Number List",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Use the random function to create a list of 50 random numbers, then calculate the minimum, maximum and mean average.",
     "tags": [
       "repetition",
@@ -609,7 +609,7 @@
   {
     "id": 54,
     "title": "Email Checker",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Validate an email address. Check that it has a valid personal part, an @ symbol and a valid domain part. Self-marking checks use these trials: alice@test.com -> valid; alicetest.com -> invalid; @test.com -> invalid.\n#Input\n# alice@test.com\n# alicetest.com\n# @test.com\n\n#output\n# valid\n# invalid\n# invalid\n\n#End Email Checker",
     "tags": [
       "selection",
@@ -620,7 +620,7 @@
   {
     "id": 55,
     "title": "Bubble Sort",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Write a Python bubble sort and test it using 9 randomly assigned numbers.",
     "tags": [
       "repetition",
@@ -630,7 +630,7 @@
   {
     "id": 56,
     "title": "Linear Search",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Write the Python required to perform a linear search for an item in an array.",
     "tags": [
       "repetition",
@@ -640,7 +640,7 @@
   {
     "id": 57,
     "title": "Mirror Text",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Ask the user to enter text, then display the text backwards. Self-marking checks use these trials: hello -> olleh; Python -> nohtyP.\n#Input\n# hello\n# Python\n\n#output\n# olleh\n# nohtyP\n\n#End Mirror Text",
     "tags": [
       "repetition",
@@ -651,7 +651,7 @@
   {
     "id": 58,
     "title": "Vowel Count",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Ask the user to enter a word, then count how many vowels it contains. Self-marking checks use these trials: education -> 5; sky -> 0.\n#Input\n# education\n# sky\n\n#output\n# 5\n# 0\n\n#End Vowel Count",
     "tags": [
       "repetition",
@@ -663,7 +663,7 @@
   {
     "id": 59,
     "title": "Pass Phrase Generator",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a pass phrase generator to help students make secure passwords. For a bonus, use an external file.",
     "tags": [
       "repetition",
@@ -675,7 +675,7 @@
   {
     "id": 60,
     "title": "Python To Pseudocode",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Create a program that takes Python code from a file and exports a text file showing what it might look like in pseudocode.",
     "tags": [
       "pseudocode",
@@ -688,7 +688,7 @@
   {
     "id": 61,
     "title": "Brackets Checker",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a program that checks whether the number of opening and closing brackets is balanced. Self-marking checks use these trials: (()) -> balanced; (() -> not balanced.\n#Input\n# (())\n# (()\n\n#output\n# balanced\n# not\n\n#End Brackets Checker",
     "tags": [
       "repetition",
@@ -700,7 +700,7 @@
   {
     "id": 62,
     "title": "Project Timeline",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Ask the user for two dates and calculate the number of days in the project. The project may be from 1 day to more than 1 year long. Self-marking checks use these trials: 2024-01-01 to 2024-01-31 -> 30 days; 2024-02-01 to 2024-02-29 -> 28 days.\n#Input\n# 2024-01-01, 2024-01-31\n# 2024-02-01, 2024-02-29\n\n#output\n# 30\n# 28\n\n#End Project Timeline",
     "tags": [
       "counting",
@@ -711,7 +711,7 @@
   {
     "id": 63,
     "title": "Histograms",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Define a procedure called histogram that takes a list of integers and prints a text histogram using asterisks.",
     "tags": [
       "repetition",
@@ -722,7 +722,7 @@
   {
     "id": 64,
     "title": "Word Length Calculator",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Read text from a file and calculate the average word length by dividing the total length of all words by the number of words.",
     "tags": [
       "repetition",
@@ -734,7 +734,7 @@
   {
     "id": 65,
     "title": "Improved Security",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Generate a random order for security guards to visit every floor exactly once. Let the building manager choose the number of floors.",
     "tags": [
       "repetition",
@@ -744,7 +744,7 @@
   {
     "id": 66,
     "title": "Beginning And End",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Take a list of numbers and create a new list containing only the first and last elements.",
     "tags": [
       "array"
@@ -753,7 +753,7 @@
   {
     "id": 67,
     "title": "X-Factor",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Given a list of 10 artists with 10 songs each, create a random song order where the same artist has a minimum distance of 2 songs between appearances.",
     "tags": [
       "selection",
@@ -765,7 +765,7 @@
   {
     "id": 68,
     "title": "Validate A Byte",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a parity byte entry system generator that uses even parity.",
     "tags": [
       "selection",
@@ -776,7 +776,7 @@
   {
     "id": 69,
     "title": "Minimum Difference",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Given a list of numbers, output the smallest difference between any two numbers in the list.",
     "tags": [
       "repetition",
@@ -787,7 +787,7 @@
   {
     "id": 70,
     "title": "Character Merge",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Merge two strings by adding letters in alternating order, starting with the first string. If one string is longer, add the remaining letters to the end. Self-marking checks use these trials: abc and XYZ -> aXbYcZ; hi and world -> hwiorld.\n#Input\n# abc, XYZ\n# hi, world\n\n#output\n# aXbYcZ\n# hwiorld\n\n#End Character Merge",
     "tags": [
       "repetition",
@@ -798,7 +798,7 @@
   {
     "id": 71,
     "title": "Insertion Sort",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Write the Python required for an insertion sort and test it using 9 randomly assigned numbers.",
     "tags": [
       "repetition",
@@ -808,7 +808,7 @@
   {
     "id": 72,
     "title": "List Word Sort",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Create a program where the user can paste a list of words. Sort the words alphabetically and save them to a file for loading later.",
     "tags": [
       "repetition",
@@ -819,7 +819,7 @@
   {
     "id": 73,
     "title": "Operation Duplicates Removal",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Write a function that takes a list and returns a new list containing the same elements but with duplicates removed.",
     "tags": [
       "repetition",
@@ -830,7 +830,7 @@
   {
     "id": 74,
     "title": "Prime Numbers",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Write a program that checks whether a given number is prime using a for loop. Self-marking checks use these trials: 7 -> prime; 9 -> not prime; 1 -> not prime.\n#Input\n# 7\n# 9\n# 1\n\n#output\n# prime\n# not\n# not\n\n#End Prime Numbers",
     "tags": [
       "selection",
@@ -841,7 +841,7 @@
   {
     "id": 75,
     "title": "Number Extraction",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Write a program that finds the sum of all digits in a string containing both letters and numbers. Self-marking checks use these trials: abc123 -> 6; a1b2c3d4 -> 10.\n#Input\n# abc123\n# a1b2c3d4\n\n#output\n# 6\n# 10\n\n#End Number Extraction",
     "tags": [
       "repetition",
@@ -853,7 +853,7 @@
   {
     "id": 76,
     "title": "Factorial Finder",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Write a program that finds the factorial of a given number using a while loop. Self-marking checks use these trials: 5 -> 120; 0 -> 1.\n#Input\n# 5\n# 0\n\n#output\n# 120\n# 1\n\n#End Factorial Finder",
     "tags": [
       "repetition",
@@ -864,7 +864,7 @@
   {
     "id": 77,
     "title": "Bill Calculator",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Ask the user to enter the quantity and price of each item. Calculate the total for each item and the final bill amount.",
     "tags": [
       "repetition",
@@ -875,7 +875,7 @@
   {
     "id": 78,
     "title": "12 To 24 Hour Clock",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Ask the user to enter a 12-hour time and whether it is am or pm, then convert it to 24-hour time. Self-marking checks use these trials: 2:30 pm -> 14:30; 12:00 am -> 00:00; 12:15 pm -> 12:15.\n#Input\n# 2:30, pm\n# 12:00, am\n# 12:15, pm\n\n#output\n# 14:30\n# 00:00\n# 12:15\n\n#End 12 To 24 Hour Clock",
     "tags": [
       "selection",
@@ -886,7 +886,7 @@
   {
     "id": 79,
     "title": "Greetings",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Ask for somebody's name and age, then greet them. Self-marking checks use Ada and age 12, and the greeting should include both Ada and 12.\n#Input\n# Ada, 12\n\n#output\n# Ada, 12\n\n#End Greetings",
     "tags": [
       "strings",
@@ -896,7 +896,7 @@
   {
     "id": 80,
     "title": "Brotherly Screentime",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create a timer that gives each sibling an equal amount of PS4 time.",
     "tags": [
       "counting"
@@ -905,7 +905,7 @@
   {
     "id": 81,
     "title": "Body Mass Index",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Ask the user for their weight in kilograms and height in metres, then calculate and classify their BMI. Self-marking checks use these trials: 70 kg and 1.75 m -> BMI beginning 22 and normal; 100 kg and 1.6 m -> BMI beginning 39 and obese.\n#Input\n# 70, 1.75\n# 100, 1.6\n\n#output\n# 22, normal\n# 39, obese\n\n#End Body Mass Index",
     "tags": [
       "selection",
@@ -915,7 +915,7 @@
   {
     "id": 82,
     "title": "99 Bottles Of Cola",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Use a loop to print the 99 bottles of cola song, reducing the number of bottles each time. Self-marking checks expect the song text to include 99 bottles, 98 bottles, and no more bottles.\n#Input\n# \"\"\n\n#output\n# 99 bottles, 98 bottles, no more\n\n#End 99 Bottles Of Cola",
     "tags": [
       "repetition",
@@ -926,7 +926,7 @@
   {
     "id": 83,
     "title": "Times Tables",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Create a times tables generator that primary teachers can copy and paste from.",
     "tags": [
       "repetition",
@@ -936,7 +936,7 @@
   {
     "id": 84,
     "title": "Qwerty Detector",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Check whether the characters qwerty appear together in a piece of text. Self-marking checks use these trials: the qwerty keyboard -> qwerty found; hello world -> not found.\n#Input\n# the qwerty keyboard\n# hello world\n\n#output\n# qwerty\n# not\n\n#End Qwerty Detector",
     "tags": [
       "selection",
@@ -948,7 +948,7 @@
   {
     "id": 85,
     "title": "Rocket Build Up",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: The spaceship needs 51 hours to charge. The current time is 2pm. Calculate what time the alarm should go off. Self-marking checks expect the alarm time to include 5 after adding 51 hours to 2pm.\n#Input\n# \"\"\n\n#output\n# 5\n\n#End Rocket Build Up",
     "tags": [
       "counting",
@@ -958,9 +958,9 @@
   },
   {
     "id": 86,
-    "title": "Are You Sure That\u2019s A Number?",
-    "spice": "\ud83c\udf36\ufe0f",
-    "comment": "# instructions: Write a small program that checks whether the user's input is a float and shows an error if it is not. Self-marking checks use these trials: 3.14 -> float; hello -> error.\n#Input\n# 3.14\n# hello\n\n#output\n# float\n# error\n\n#End Are You Sure That\u2019s A Number?",
+    "title": "Are You Sure That’s A Number?",
+    "spice": "🌶️",
+    "comment": "# instructions: Write a small program that checks whether the user's input is a float and shows an error if it is not. Self-marking checks use these trials: 3.14 -> float; hello -> error.\n#Input\n# 3.14\n# hello\n\n#output\n# float\n# error\n\n#End Are You Sure That’s A Number?",
     "tags": [
       "selection",
       "Self Marking"
@@ -969,7 +969,7 @@
   {
     "id": 87,
     "title": "Diet Calculator",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Ask the user for the food they consumed and the calories in it. Track the day's calories, reject invalid inputs and reset when the user types \"end day\".",
     "tags": [
       "selection",
@@ -982,7 +982,7 @@
   {
     "id": 88,
     "title": "Max Heart Rate",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Ask the user for their age, then calculate their training heart rate using 70 percent of 225 minus their age. Self-marking checks use these trials: age 25 -> 140; age 45 -> 126.\n#Input\n# 25\n# 45\n\n#output\n# 140\n# 126\n\n#End Max Heart Rate",
     "tags": [
       "counting",
@@ -993,7 +993,7 @@
   {
     "id": 89,
     "title": "Divide By 3",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Ask the user for a number and tell them whether it can be divided exactly by 3. Self-marking checks use these trials: 9 -> yes; 10 -> no.\n#Input\n# 9\n# 10\n\n#output\n# yes\n# no\n\n#End Divide By 3",
     "tags": [
       "selection",
@@ -1003,7 +1003,7 @@
   {
     "id": 90,
     "title": "Validate A Character",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Check that the user has entered a single character. Self-marking checks use these trials: A -> single character; AB -> invalid.\n#Input\n# A\n# AB\n\n#output\n# single\n# invalid\n\n#End Validate A Character",
     "tags": [
       "selection",
@@ -1014,7 +1014,7 @@
   {
     "id": 91,
     "title": "Project Euler 1: Multiples of 3 or 5",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Find the sum of all the multiples of 3 or 5 below 1000. For example, the multiples of 3 or 5 below 10 are 3, 5, 6 and 9, and their sum is 23. To solve this in under 5000 steps, use a simple loop, or use the arithmetic progression sum formula: sum = n * (a1 + an) / 2 for 3, 5, and 15.\n#Input\n# \"\"\n\n#output\n# 233168\n\n#End Project Euler 1: Multiples of 3 or 5",
     "tags": [
       "maths",
@@ -1026,7 +1026,7 @@
   {
     "id": 92,
     "title": "Project Euler 2: Even Fibonacci Numbers",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms. The sequence starts with 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ... Hint: Since every third Fibonacci number is even, you can generate only even Fibonacci numbers directly using the recurrence: E(n) = 4 * E(n-1) + E(n-2) starting with E(1) = 2 and E(2) = 8, or just loop through the standard sequence.\n#Input\n# \"\"\n\n#output\n# 4613732\n\n#End Project Euler 2: Even Fibonacci Numbers",
     "tags": [
       "maths",
@@ -1038,7 +1038,7 @@
   {
     "id": 93,
     "title": "Project Euler 5: Smallest Multiple",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder. Find the smallest positive number that is evenly divisible by all of the numbers from 1 to 20. Hint: Calculate the Least Common Multiple (LCM) directly by multiplying the highest prime powers under 20: 2^4 * 3^2 * 5 * 7 * 11 * 13 * 17 * 19.\n#Input\n# \"\"\n\n#output\n# 232792560\n\n#End Project Euler 5: Smallest Multiple",
     "tags": [
       "maths",
@@ -1049,7 +1049,7 @@
   {
     "id": 94,
     "title": "Project Euler 6: Sum Square Difference",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum. For example, for the first 10 numbers the difference is 3025 - 385 = 2640. Optimize using formulas: sum = n * (n + 1) / 2, and sum of squares = n * (n + 1) * (2n + 1) / 6.\n#Input\n# \"\"\n\n#output\n# 25164150\n\n#End Project Euler 6: Sum Square Difference",
     "tags": [
       "maths",
@@ -1060,7 +1060,7 @@
   {
     "id": 95,
     "title": "Project Euler 9: Special Pythagorean Triplet",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: A Pythagorean triplet is a set of three natural numbers, a < b < c, for which, a^2 + b^2 = c^2. There exists exactly one Pythagorean triplet for which a + b + c = 1000. Find the product a * b * c. Hint: Use Euclid's formula for generating primitive triplets (a = m^2 - n^2, b = 2mn, c = m^2 + n^2) where m * (m + n) = 500. Loop small values of m and n to find the solution in very few steps.\n#Input\n# \"\"\n\n#output\n# 31875000\n\n#End Project Euler 9: Special Pythagorean Triplet",
     "tags": [
       "maths",
@@ -1071,7 +1071,7 @@
   {
     "id": 96,
     "title": "Project Euler 15: Lattice Paths",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Starting in the top left corner of a 2x2 grid, and only being able to move to the right and down, there are exactly 6 routes to the bottom right corner. How many such routes are there through a 20x20 grid? Hint: Moving through a 20x20 grid requires exactly 40 moves (20 right, 20 down). The number of paths is 40 choose 20, which is calculated as 40! / (20! * 20!).\n#Input\n# \"\"\n\n#output\n# 137846528820\n\n#End Project Euler 15: Lattice Paths",
     "tags": [
       "maths",
@@ -1082,7 +1082,7 @@
   {
     "id": 97,
     "title": "Project Euler 16: Power Digit Sum",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: 2^15 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26. What is the sum of the digits of the number 2^1000? Hint: Calculate 2^1000 using Python's native BigInt support, convert the result to a string, and sum the digits in a loop.\n#Input\n# \"\"\n\n#output\n# 1366\n\n#End Project Euler 16: Power Digit Sum",
     "tags": [
       "maths",
@@ -1094,7 +1094,7 @@
   {
     "id": 98,
     "title": "Project Euler 20: Factorial Digit Sum",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Find the sum of the digits in the number 100!. For example, 10! = 3628800, and the sum of its digits is 3 + 6 + 2 + 8 + 8 + 0 + 0 = 27. Hint: Use an optimized native loop to calculate 100! or import math to use math.factorial(100), then convert to string and sum the digits.\n#Input\n# \"\"\n\n#output\n# 648\n\n#End Project Euler 20: Factorial Digit Sum",
     "tags": [
       "maths",
@@ -1107,7 +1107,7 @@
   {
     "id": 99,
     "title": "Project Euler 24: Lexicographic Permutations",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: The lexicographic permutations of 0, 1 and 2 are: 012, 021, 102, 120, 201, 210. What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9? Hint: Use the Factorial Number System (Factoradic). Divide 999,999 (0-indexed 1,000,000th term) by 9!, 8!, 7!, etc., to pinpoint the exact digits sequentially without generating all permutations.\n#Input\n# \"\"\n\n#output\n# 2783915460\n\n#End Project Euler 24: Lexicographic Permutations",
     "tags": [
       "maths",
@@ -1119,7 +1119,7 @@
   {
     "id": 100,
     "title": "Project Euler 28: Number Spiral Diagonals",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Starting with the number 1 and moving to the right in a clockwise direction, a 5 by 5 spiral is formed. The sum of the numbers on the diagonals is 101. What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed in the same way? Hint: For each shell layer of odd size x from 3 to 1001, the sum of its four corners is 4 * x^2 - 6 * x + 6. Start with a total of 1 (for the center) and loop x from 3 to 1001 stepping by 2.\n#Input\n# \"\"\n\n#output\n# 669171001\n\n#End Project Euler 28: Number Spiral Diagonals",
     "tags": [
       "maths",
@@ -1131,7 +1131,7 @@
   {
     "id": 101,
     "title": "Project Euler 39: Integer Right Triangles",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: For a right triangle with integer side lengths {a, b, c} and perimeter p, if p = 120, there are exactly three solutions: {20,48,52}, {24,45,51}, {30,40,50}. For which value of p <= 1000 is the number of solutions maximized? Hint: To stay under 5000 steps, use Euclid's formula to generate Pythagorean perimeters: p = 2 * m * (m + n) * k, where m > n > 0, gcd(m, n) = 1, one of m, n is even, and k is a multiplier. Count the perimeters in an array.\n#Input\n# \"\"\n\n#output\n# 840\n\n#End Project Euler 39: Integer Right Triangles",
     "tags": [
       "maths",
@@ -1144,7 +1144,7 @@
   {
     "id": 102,
     "title": "Project Euler 45: Tri, Pent, and Hex",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Triangle, pentagonal, and hexagonal numbers are generated by formulas: T(n) = n*(n+1)/2, P(n) = n*(3n-1)/2, H(n) = n*(2n-1). It is verified that T(285) = P(165) = H(143) = 40755. Find the next triangle number that is also pentagonal and hexagonal. Hint: Since all hexagonal numbers are also triangle numbers, loop through hexagonal numbers starting from n = 144 and check if (sqrt(24 * H(n) + 1) + 1) / 6 is an integer.\n#Input\n# \"\"\n\n#output\n# 1533776805\n\n#End Project Euler 45: Tri, Pent, and Hex",
     "tags": [
       "maths",
@@ -1156,7 +1156,7 @@
   {
     "id": 103,
     "title": "Project Euler 53: Combinatoric Selections",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: How many, not necessarily distinct, values of n choose r (combinations of n elements taken r at a time) for 1 <= n <= 100 are greater than one million? Hint: For each n from 23 to 100, find the first r where n choose r > 1,000,000. Since combinations are symmetric and increase towards the middle, the number of valid r values for that n is n - 2*r + 1.\n#Input\n# \"\"\n\n#output\n# 4075\n\n#End Project Euler 53: Combinatoric Selections",
     "tags": [
       "maths",
@@ -1168,7 +1168,7 @@
   {
     "id": 104,
     "title": "Project Euler 56: Powerful Digit Sum",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Considering natural numbers of the form a^b, where a, b < 100, what is the maximum digital sum? Hint: The largest digit sums mathematically occur when a and b are very close to 100. Limit your search loop for a and b from 90 to 99, sum the digits of a^b, and find the maximum sum.\n#Input\n# \"\"\n\n#output\n# 972\n\n#End Project Euler 56: Powerful Digit Sum",
     "tags": [
       "maths",
@@ -1181,7 +1181,7 @@
   {
     "id": 105,
     "title": "Project Euler 57: Square Root Convergents",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: In the infinite continued fraction expansion of sqrt(2), the first four convergents are 3/2, 7/5, 17/12, and 41/29. In the first one thousand expansions, how many fractions contain a numerator with more digits than the denominator? Hint: Use the recurrence: N_next = N + 2 * D and D_next = N + D starting with N = 3, D = 2. Loop 1000 times, check length of string representation of N and D, and count.\n#Input\n# \"\"\n\n#output\n# 153\n\n#End Project Euler 57: Square Root Convergents",
     "tags": [
       "maths",
@@ -1193,7 +1193,7 @@
   {
     "id": 106,
     "title": "Project Euler 63: Powerful Digit Counts",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: The 5-digit number, 16807 = 7^5, is also a fifth power. Similarly, 134217728 = 8^9 is a ninth power. How many n-digit positive integers exist which are also an nth power? Hint: Loop bases b from 1 to 9 and powers n from 1 to 21. Count how many times b^n has exactly n digits (since b cannot be 10, and 9^22 has only 21 digits).\n#Input\n# \"\"\n\n#output\n# 49\n\n#End Project Euler 63: Powerful Digit Counts",
     "tags": [
       "maths",
@@ -1205,7 +1205,7 @@
   {
     "id": 107,
     "title": "Project Euler 65: Convergents of e",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Find the sum of digits in the numerator of the 100th convergent of the continued fraction for e. The sequence of coefficients for e is [2; 1, 2, 1, 1, 4, 1, 1, 6, 1, ...]. Hint: Use the recurrence: N(k) = a(k) * N(k-1) + N(k-2) starting with N(0) = 1, N(1) = 2. For k from 2 to 100, the coefficient a(k) is 2 * (k // 3) if k is divisible by 3, otherwise 1.\n#Input\n# \"\"\n\n#output\n# 272\n\n#End Project Euler 65: Convergents of e",
     "tags": [
       "maths",
@@ -1218,7 +1218,7 @@
   {
     "id": 108,
     "title": "Project Euler 69: Totient Maximum",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Euler's totient function, phi(n), finds the count of numbers less than n that are relatively prime to n. Find the value of n <= 1,000,000 for which n / phi(n) is a maximum. Hint: To maximize n / phi(n), n must have the maximum number of distinct prime factors. Multiply the smallest primes together (2 * 3 * 5 * 7 * 11 * 13 * 17...) until the product barely stays under 1,000,000.\n#Input\n# \"\"\n\n#output\n# 510510\n\n#End Project Euler 69: Totient Maximum",
     "tags": [
       "maths",
@@ -1229,7 +1229,7 @@
   {
     "id": 109,
     "title": "Project Euler 71: Ordered Fractions",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: Consider the fraction n/d, where n and d are positive integers. If d <= 1,000,000 and n/d < 3/7, find the numerator of the fraction immediately to the left of 3/7. Hint: The closest fraction to 3/7 satisfies 3*d - 7*n = 1. Find the largest d <= 1,000,000 such that d leaves a remainder of 5 when divided by 7, then compute n = (3*d - 1) / 7.\n#Input\n# \"\"\n\n#output\n# 428570\n\n#End Project Euler 71: Ordered Fractions",
     "tags": [
       "maths",
@@ -1239,7 +1239,7 @@
   {
     "id": 110,
     "title": "Project Euler 73: Fractions in a Range",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: How many reduced proper fractions lie between 1/3 and 1/2 in the sorted set of reduced proper fractions for d <= 3000? Hint: To stay under 5000 steps, use a dynamic programming array of size 3001. Initialize dp[d] = (d - 1) // 2 - d // 3, then subtract dp[i] from all its multiples dp[2*i], dp[3*i]... up to 3000.\n#Input\n# \"\"\n\n#output\n# 456030\n\n#End Project Euler 73: Fractions in a Range",
     "tags": [
       "maths",
@@ -1252,7 +1252,7 @@
   {
     "id": 111,
     "title": "Project Euler 76: Counting Summations",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️🌶️",
     "comment": "# instructions: How many different ways can the number 100 be written as a sum of at least two positive integers? Hint: Use Euler's Pentagonal Number Theorem to compute integer partitions up to 100. This recurrence runs in under 300 steps and calculates the exact partition count.\n#Input\n# \"\"\n\n#output\n# 190569291\n\n#End Project Euler 76: Counting Summations",
     "tags": [
       "maths",
@@ -1264,7 +1264,7 @@
   {
     "id": 112,
     "title": "Project Euler 97: Large Non-Mersenne Prime",
-    "spice": "\ud83c\udf36\ufe0f",
+    "spice": "🌶️",
     "comment": "# instructions: Find the last ten digits of the massive non-Mersenne prime: 28433 * 2^7830457 + 1. Hint: Use Python's native modular exponentiation via pow(2, 7830457, 10**10) to slice the calculation to only look at the last 10 digits at each step, making it run in under 10 steps.\n#Input\n# \"\"\n\n#output\n# 8739992577\n\n#End Project Euler 97: Large Non-Mersenne Prime",
     "tags": [
       "maths",
@@ -1275,12 +1275,147 @@
   {
     "id": 113,
     "title": "Project Euler 99: Largest Exponential",
-    "spice": "\ud83c\udf36\ufe0f\ud83c\udf36\ufe0f",
+    "spice": "🌶️🌶️",
     "comment": "# instructions: Using a list of base-exponent pairs (base^exponent), determine which index has the greatest numerical value. Hint: Do not compute the exponentials directly. Instead, apply the logarithm law: log(a^b) = b * log(a). Multiply the exponent by the log of the base for each pair, and find the index with the maximum value.",
     "tags": [
       "maths",
       "repetition",
       "selection"
+    ]
+  },
+  {
+    "id": 114,
+    "title": "The Unsnoozable Alarm Clock",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Design an alarm clock that stops teenagers going back to sleep! Make users solve puzzles, remember sequences or complete creative challenges before they can dismiss it. Use text or Turtle graphics.",
+    "tags": [
+      "selection",
+      "repetition",
+      "random",
+      "creative"
+    ]
+  },
+  {
+    "id": 115,
+    "title": "The Forgotten Homework Machine",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Design a school bag checker that stops students forgetting important things! Ask about tomorrow's lessons, create packing lists and warn users about missing equipment.",
+    "tags": [
+      "selection",
+      "array",
+      "strings"
+    ]
+  },
+  {
+    "id": 116,
+    "title": "The Fake News Factory",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Create a programme that invents ridiculous news headlines using random people, places and events. Can you make headlines that sound believable even when they're completely made up?",
+    "tags": [
+      "strings",
+      "array",
+      "random"
+    ]
+  },
+  {
+    "id": 117,
+    "title": "Name Your Ghost",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user for their name and introduce them as a friendly ghost. Example: What is your name? Sam -> Boo! I am the ghost of Sam!",
+    "tags": [
+      "strings",
+      "Halloween"
+    ]
+  },
+  {
+    "id": 118,
+    "title": "Trick or Treat Total",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask how many sweets you collected from two houses. Display the total number of sweets. Example: House 1: 5, House 2: 8 -> Total sweets: 13.",
+    "tags": [
+      "totalling",
+      "maths",
+      "Halloween"
+    ]
+  },
+  {
+    "id": 119,
+    "title": "Vampire Age Calculator",
+    "spice": "🌶️",
+    "comment": "# instructions: A vampire is 100 years older than their human age. Ask for their human age and calculate their vampire age. Example: Human age: 14 -> Vampire age: 114.",
+    "tags": [
+      "maths",
+      "Halloween"
+    ]
+  },
+  {
+    "id": 120,
+    "title": "Spider Leg Counter",
+    "spice": "🌶️",
+    "comment": "# instructions: Every spider has eight legs. Ask how many spiders are in the room and calculate the total number of legs. Example: Number of spiders: 6 -> Total legs: 48.",
+    "tags": [
+      "maths",
+      "Halloween"
+    ]
+  },
+  {
+    "id": 121,
+    "title": "Witch's Potion Recipe",
+    "spice": "🌶️",
+    "comment": "# instructions: Each magic potion needs 3 bat wings and 2 frog legs. Ask how many potions the witch wants and calculate the ingredients needed. Example: Number of potions: 4 -> Bat wings: 12, Frog legs: 8.",
+    "tags": [
+      "maths",
+      "Halloween"
+    ]
+  },
+  {
+    "id": 122,
+    "title": "Pumpkin Carving Contest",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask how many pumpkins were carved and how many were broken. Calculate how many good pumpkins remain. Example: Pumpkins carved: 12, Pumpkins broken: 3 -> Good pumpkins: 9.",
+    "tags": [
+      "maths",
+      "Halloween"
+    ]
+  },
+  {
+    "id": 123,
+    "title": "Zombie Warning System",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask how many zombies are approaching. If there are 10 or more, display DANGER! Otherwise, display SAFE! Example: Number of zombies: 12 -> DANGER!",
+    "tags": [
+      "selection",
+      "Halloween"
+    ]
+  },
+  {
+    "id": 124,
+    "title": "Haunted House Entry",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask for the visitor's age. Visitors aged 12 or older can enter the haunted house. Everyone else is too young. Example: Your age: 11 -> Too young!; Your age: 13 -> You may enter!",
+    "tags": [
+      "selection",
+      "Halloween"
+    ]
+  },
+  {
+    "id": 125,
+    "title": "Midnight Monster",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask for the hour using a 24-hour clock. If the hour is 0, display THE MONSTER AWAKENS! Otherwise, display The monster is sleeping. Example: Hour: 0 -> THE MONSTER AWAKENS!",
+    "tags": [
+      "selection",
+      "Halloween"
+    ]
+  },
+  {
+    "id": 126,
+    "title": "Sharing Halloween Sweets",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask for the total number of sweets and the number of friends. Share them equally and display how many each friend gets and how many are left over. Example: Total sweets: 23, Number of friends: 5 -> Each friend gets: 4, Sweets left over: 3.",
+    "tags": [
+      "maths",
+      "Halloween"
     ]
   }
 ]
