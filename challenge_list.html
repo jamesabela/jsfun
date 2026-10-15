@@ -818,10 +818,7 @@
       border-color: #059669;
     }
 
-    /* QR Code for Card Deck (Hidden on screen, shown in print) */
-    .print-qr-code {
-      display: none;
-    }
+
 
     /* Print Card Deck Styling */
     @media print {
@@ -942,7 +939,7 @@
         flex-wrap: wrap !important;
         margin-bottom: 0 !important;
         margin-top: auto !important;
-        max-width: 65% !important;
+        width: 100% !important;
       }
 
       .challenge-card .challenge-tag-badge {
@@ -952,28 +949,6 @@
         color: #334155 !important;
         border: 1px solid #cbd5e1 !important;
         border-radius: 4px !important;
-      }
-
-      .challenge-card .print-qr-code {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        position: absolute !important;
-        bottom: 3mm !important;
-        right: 3mm !important;
-      }
-
-      .challenge-card .print-qr-code img {
-        width: 19mm !important;
-        height: 19mm !important;
-        display: block !important;
-      }
-
-      .challenge-card .print-qr-code span {
-        font-size: 6pt !important;
-        color: #475569 !important;
-        font-weight: 700 !important;
-        margin-top: 1mm !important;
       }
     }
   </style>
@@ -1565,18 +1540,6 @@
           completedWrapper.appendChild(helpLink);
         }
 
-        // Print QR Code box (for physical cut-out card deck)
-        const printQr = document.createElement('div');
-        printQr.className = 'print-qr-code';
-        const qrImg = document.createElement('img');
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&margin=0&data=${encodeURIComponent(challengeUrl)}`;
-        qrImg.alt = 'QR Code';
-        qrImg.loading = 'lazy';
-        const qrCaption = document.createElement('span');
-        qrCaption.textContent = 'Scan to Code 📱';
-        printQr.appendChild(qrImg);
-        printQr.appendChild(qrCaption);
-
         card.appendChild(idBadge);
         card.appendChild(header);
         card.appendChild(desc);
@@ -1607,7 +1570,6 @@
 
         card.appendChild(footer);
         card.appendChild(completedWrapper);
-        card.appendChild(printQr);
 
         grid.appendChild(card);
       });
