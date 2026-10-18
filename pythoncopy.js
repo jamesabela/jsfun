@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 27;
+    window.pythonCopyVersion = 28;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -2704,6 +2704,14 @@ import sys, builtins
     }
 
     function updateLineNumbers() {
+      // The textarea is transparent; keep its visible code layer in sync after
+      // URL loads and other programmatic edits that do not fire input events.
+      if (displayCode.textContent !== editor.value) {
+        displayCode.textContent = editor.value;
+        if (typeof Prism !== 'undefined') {
+          Prism.highlightElement(displayCode);
+        }
+      }
       const lines = Math.max(1, editor.value.split('\n').length);
       let nums = '';
       for (let i = 1; i <= lines; i++) {
