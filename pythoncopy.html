@@ -19,7 +19,7 @@
   </style>
   <script>
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 28) {
+      if (window.pythonCopyVersion !== 32) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -498,6 +498,22 @@
         </div>
       </div>
       <!-- Playback Controls Bar -->
+      <div id="activityReminderBanner" class="activity-reminder-banner" hidden>
+        Before leaving, download your activity TSV if you want to share it with your teacher.
+        Nothing is uploaded automatically. If the browser warns when closing or reloading, choose Cancel to return and download.
+        <button type="button" id="activityReminderOpen" class="activity-download-button">Download activity…</button>
+      </div>
+      <dialog id="activityReminderDialog" aria-labelledby="activityReminderTitle" aria-describedby="activityReminderDescription">
+        <h2 id="activityReminderTitle">Download your activity before leaving?</h2>
+        <p id="activityReminderDescription">You can share the TSV with your teacher. This session’s activity is cleared when you leave or reload. Nothing is uploaded automatically.</p>
+        <p>The download includes beginning and ending code plus edits, including earlier and deleted text, which may contain personal information. You can review the file before sharing it.</p>
+        <div class="activity-export-controls">
+          <button type="button" id="activityReminderDownload" class="activity-download-button">Download TSV</button>
+          <button type="button" id="activityReminderStay" class="activity-secondary-button">Stay on page</button>
+          <button type="button" id="activityReminderLeave" class="activity-secondary-button">Leave page</button>
+        </div>
+        <p id="activityReminderStatus" role="status"></p>
+      </dialog>
       <div id="playbackControlsBar" class="playback-controls-bar"
         style="display: none; flex-direction: column; gap: 10px;">
         <!-- Row 1: Full-width Timeline Slider -->
@@ -536,6 +552,13 @@
               title="Exit playback mode">Close</button>
           </div>
         </div>
+        <div class="activity-export-controls">
+          <button type="button" class="playback-action-btn activity-download-button" id="downloadActivityButton"
+            aria-describedby="activityPrivacyNote">Download activity TSV</button>
+        </div>
+        <p id="activityPrivacyNote" class="activity-export-note">Activity stays in this tab’s memory and clears when you refresh or close it. Downloading does not upload it.
+          The TSV contains timings, actions, beginning and ending code, and edits between them. It does not add names or file URLs. Edits can reveal earlier code,
+          even deleted text, and may contain personal information. The download covers all files worked on in this tab session.</p>
       </div>
 
       <!-- Blockly Workspace Area -->
@@ -733,6 +756,7 @@
   <script src="https://unpkg.com/@blockly/toolbox-search@3.1.0/dist/index.js"></script>
   <script src="https://unpkg.com/@blockly/plugin-workspace-search@10.1.1/dist/index.js"></script>
   <script src="pythoncopyblocks.js"></script>
+  <script src="pythoncopy-activity.js"></script>
   <script src="pythoncopy.js"></script>
   <script>
     if ('serviceWorker' in navigator) {

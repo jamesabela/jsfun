@@ -3665,3 +3665,29 @@
     .token.identifier {
       color: var(--syntax-text) !important;
     }
+
+    .activity-export-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .activity-export-controls label { font-size: 13px; cursor: pointer; }
+    .activity-export-note { margin: 0; font-size: 12px; line-height: 1.5; }
+
+    .activity-download-button,
+    #downloadActivityButton {
+      background: #1d4ed8;
+      color: #ffffff;
+      border: 1px solid #1d4ed8;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .activity-download-button:hover, #downloadActivityButton:hover { background: #1e40af; }
+    .activity-download-button:focus-visible, #downloadActivityButton:focus-visible,
+    .activity-secondary-button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
+    .activity-reminder-banner { padding: 12px; margin: 8px 0; border: 1px solid #93c5fd; border-radius: 8px; background: #eff6ff; color: #1e3a8a; font-size: 13px; line-height: 1.5; }
+    .activity-reminder-banner button { margin: 6px; }
+    #activityReminderDialog { max-width: 520px; width: calc(100% - 48px); box-sizing: border-box; border: 1px solid #94a3b8; border-radius: 12px; padding: 24px; background: #ffffff; color: #1e293b; line-height: 1.5; }
+    #activityReminderDialog::backdrop { background: rgb(15 23 42 / 55%); }
+    .activity-secondary-button { background: #e2e8f0; color: #1e293b; border: 1px solid #94a3b8; border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+    body.dark-theme #activityReminderDialog { background: #1e293b; color: #f8fafc; }
+    body.dark-theme .activity-reminder-banner { background: #172554; color: #dbeafe; }

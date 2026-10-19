@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 28;
+    window.pythonCopyVersion = 32;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -106,6 +106,91 @@
     let copyButtonTimeout = null;
 
     // --- Editor Session Playback State ---
+    const activityLog = new PythonCopyActivityLog();
+    let activityPlaybackActive = false;
+    const activityReminderEnabled = new URLSearchParams(window.location.search).get('remindDownload') === '1';
+    let activityNeedsDownload = false;
+    let activityNavigationApproved = false;
+    let pendingActivityNavigation = null;
+
+    function shouldRemindActivityDownload() {
+      return activityReminderEnabled && activityNeedsDownload && !activityNavigationApproved;
+    }
+
+    function showActivityReminder(destination = null) {
+      const dialog = document.getElementById('activityReminderDialog');
+      pendingActivityNavigation = destination;
+      document.getElementById('activityReminderLeave').hidden = !destination;
+      if (!dialog.open) dialog.showModal();
+    }
+
+    function navigateWithActivityReminder(destination) {
+      if (shouldRemindActivityDownload()) {
+        showActivityReminder(destination);
+        return;
+      }
+      window.location.href = destination;
+    }
+    // Also used by dynamically rendered next-level buttons.
+    window.navigateWithActivityReminder = navigateWithActivityReminder;
+
+    function initializeActivityReminder() {
+      const banner = document.getElementById('activityReminderBanner');
+      banner.hidden = !activityReminderEnabled;
+      document.getElementById('activityReminderOpen').addEventListener('click', () => showActivityReminder());
+      const dialog = document.getElementById('activityReminderDialog');
+      document.getElementById('activityReminderStay').addEventListener('click', () => dialog.close());
+      document.getElementById('activityReminderDownload').addEventListener('click', () => {
+        downloadActivityTSV();
+        document.getElementById('activityReminderStatus').textContent = 'Download requested. You can share the TSV with your teacher when ready.';
+      });
+      document.getElementById('activityReminderLeave').addEventListener('click', () => {
+        const destination = pendingActivityNavigation;
+        dialog.close();
+        if (!destination) return;
+        activityNavigationApproved = true;
+        window.location.href = destination;
+        // If the existing unsaved-code warning cancels navigation, re-arm this reminder.
+        setTimeout(() => { activityNavigationApproved = false; }, 0);
+      });
+      document.addEventListener('click', event => {
+        const link = event.target.closest('a[href]');
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+          || !link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
+        const target = new URL(link.href, window.location.href);
+        if (!['http:', 'https:'].includes(target.protocol)) return;
+        if (target.origin === window.location.origin && target.pathname === window.location.pathname
+          && target.search === window.location.search && target.hash) return;
+        if (shouldRemindActivityDownload()) {
+          event.preventDefault();
+          showActivityReminder(target.href);
+        }
+      });
+    }
+
+    function recordActivity(type, code = activityLog.code, newFile = false) {
+      if ((!newFile && code !== activityLog.code) || ['run_code', 'paste', 'save_file_py', 'save_file_txt', 'save_blocks'].includes(type)) {
+        activityNeedsDownload = true;
+      }
+      return activityLog.record(type, code, { newFile, visible: !document.hidden });
+    }
+
+    function downloadActivityTSV() {
+      // The editor can currently show an old playback revision. Export the live
+      // session state, not whichever revision the student is inspecting.
+      recordActivity('export', activityPlaybackActive ? originalCodeBeforePlayback : editor.value);
+      const blob = new Blob([activityLog.toTSV()], { type: 'text/tab-separated-values;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'python-activity.tsv';
+      document.body.appendChild(link);
+      link.click();
+      activityNeedsDownload = false;
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
     let playbackHistory = [];
     let playbackIndex = -1;
     let playbackInterval = null;
@@ -947,6 +1032,7 @@ import sys, builtins
 
       clearRunner();
       refreshEditorAfterProgrammaticChange('Reverted to saved file.');
+      recordPlaybackSnapshot('Revert', true, 'save');
       editor.focus();
     }
 
@@ -1449,7 +1535,13 @@ import sys, builtins
     let playbackZoomLevel = 1;
 
     function recordPlaybackSnapshot(reason = 'Edit', isCheckpoint = false, checkpointType = '') {
+      if (activityPlaybackActive) return;
       const code = editor.value;
+      if (reason === 'Last Edit' && code !== activityLog.code) recordActivity('edit', code);
+      if (reason !== 'Last Edit' && !(reason === 'Typing' && isCheckpoint)) {
+        const type = reason === 'Typing' ? 'edit' : reason.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_$/, '');
+        recordActivity(type, code, playbackHistory.length === 0);
+      }
       
       if (playbackHistory.length > 0 && playbackHistory[playbackHistory.length - 1].code === code) {
         if (isCheckpoint) {
@@ -1467,6 +1559,7 @@ import sys, builtins
       
       playbackHistory.push({
         code: code,
+        revisionId: activityLog.revision,
         timestamp: timeStr,
         reason: reason,
         isCheckpoint: isCheckpoint,
@@ -1500,6 +1593,7 @@ import sys, builtins
       }
 
       originalCodeBeforePlayback = editor.value;
+      activityPlaybackActive = true;
 
       const pbBar = document.getElementById('playbackControlsBar');
       if (pbBar) pbBar.style.display = 'flex';
@@ -1661,6 +1755,7 @@ import sys, builtins
       const pbBar = document.getElementById('playbackControlsBar');
       if (pbBar) pbBar.style.display = 'none';
 
+      activityPlaybackActive = false;
       editor.readOnly = false;
       editor.classList.remove('playback-readonly');
 
@@ -1874,7 +1969,7 @@ import sys, builtins
             const query = starterUrl
               ? `?url=${encodeURIComponent(starterUrl)}&${themeSuffix}`
               : `?${themeSuffix}`;
-            window.location.href = `python2flow.html${query}`;
+            navigateWithActivityReminder(`python2flow.html${query}`);
             return;
           }
           if (button.dataset.action === 'parsons') {
@@ -1884,13 +1979,13 @@ import sys, builtins
             const query = starterUrl
               ? `?url=${encodeURIComponent(starterUrl)}&${themeSuffix}`
               : `?${themeSuffix}`;
-            window.location.href = `reorder.html${query}`;
+            navigateWithActivityReminder(`reorder.html${query}`);
             return;
           }
           if (button.dataset.action === 'create-list') {
             const isDark = document.getElementById('dark-mode').checked;
             const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
-            window.location.href = `to_list.html?${themeSuffix}`;
+            navigateWithActivityReminder(`to_list.html?${themeSuffix}`);
             return;
           }
           if (button.dataset.action === 'phone-editor') {
@@ -1979,6 +2074,15 @@ import sys, builtins
       if (openPhoneEditorButton) {
         openPhoneEditorButton.addEventListener('click', openCurrentCodeInMobileEditor);
       }
+
+      document.getElementById('downloadActivityButton')?.addEventListener('click', downloadActivityTSV);
+      document.addEventListener('visibilitychange', () => recordActivity(document.hidden ? 'page_hidden' : 'page_visible'));
+      // Capture timing before Tab/Enter handlers make programmatic edits.
+      editor.addEventListener('keydown', () => {
+        if (!activityPlaybackActive) recordActivity('editor_key');
+      }, true);
+
+      initializeActivityReminder();
 
       // Playback event listeners
       const pbBtn = document.getElementById('playbackButton');
@@ -2142,7 +2246,7 @@ import sys, builtins
         const code = getCurrentEditorCode();
         localStorage.setItem('pymobileDraft', code);
         localStorage.setItem('pymobileTheme', document.getElementById('dark-mode').checked ? 'dark' : 'light');
-        window.location.href = 'pythonmobile.html';
+        navigateWithActivityReminder('pythonmobile.html');
       }
 
       function showMobilePhoneEditorOffer() {
@@ -2442,7 +2546,7 @@ import sys, builtins
             return;
           }
           if (currentQuizMetadata.nextUrl) {
-            window.location.href = window.location.pathname + '?url=' + encodeURIComponent(currentQuizMetadata.nextUrl);
+            navigateWithActivityReminder(window.location.pathname + '?url=' + encodeURIComponent(currentQuizMetadata.nextUrl));
           }
         });
       }
@@ -2478,7 +2582,7 @@ import sys, builtins
         }
       });
 
-      editor.addEventListener('input', () => {
+      editor.addEventListener('input', (event) => {
         hasRunCurrentCode = false;
         hasUnsavedChanges = editor.value !== savedEditorCode;
         const highlightLayer = document.getElementById('highlightLayer');
@@ -2492,14 +2596,16 @@ import sys, builtins
         updateBlocksButtonState();
         updateEditorActionButtons();
         updatePuzzleButtonVisibility();
-        recordPlaybackSnapshot('Typing', false);
+        const reason = currentAppMode === 'blocks' ? 'Blocks Edit'
+          : event.inputType === 'insertFromPaste' ? 'Paste' : 'Typing';
+        recordPlaybackSnapshot(reason, reason === 'Paste', reason === 'Paste' ? 'paste' : '');
         scheduleRecordHistoryDebounced('Typing');
       });
 
       editor.addEventListener('paste', () => {
         hasRunCurrentCode = false;
         incrementPasteCounter();
-        recordPlaybackSnapshot('Paste', true, 'paste');
+        // The input event records the resulting code after the paste.
       });
 
       editor.addEventListener('keydown', (event) => {
@@ -2664,7 +2770,7 @@ import sys, builtins
       recordPlaybackSnapshot('Initial Load', true, 'save');
 
       window.addEventListener('beforeunload', function (e) {
-        if (hasUnsavedChanges) {
+        if (hasUnsavedChanges || shouldRemindActivityDownload()) {
           e.preventDefault();
           e.returnValue = '';
         }
@@ -4550,7 +4656,7 @@ json.dumps(_test_result)
             <div class="quiz-completion-panel pass">
               <h4>🎉 Level Passed!</h4>
               <p>You have successfully completed all tests for this level.</p>
-              <button class="next-level-btn" onclick="window.location.href = window.location.pathname + '?url=' + encodeURIComponent('${nextUrl}')">Next Level ➔</button>
+              <button class="next-level-btn" onclick="window.navigateWithActivityReminder(window.location.pathname + '?url=' + encodeURIComponent('${nextUrl}'))">Next Level ➔</button>
             </div>
           `;
         } else if (isEnd) {
