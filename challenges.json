@@ -1553,5 +1553,19 @@
       "Self Marking"
     ],
     "helpUrl": "pythonmanual.html#operators"
+  },
+  {
+    "id": 127,
+    "title": "Greatest Common Divisor",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Ask the user to enter two positive integers and display their Greatest Common Divisor (GCD). A clever mathematical trick (due to Euclid) makes it easy to find greatest common divisors. Suppose that a and b are two positive integers: if b = 0, then the answer is a; otherwise, gcd(a, b) is the same as gcd(b, a % b). Examples: gcd(2, 12) = 2, gcd(6, 12) = 6, gcd(9, 12) = 3, gcd(17, 12) = 1.\n#Input\n# 2, 12\n# 6, 12\n# 9, 12\n# 17, 12\n\n#output\n# 2\n# 6\n# 3\n# 1\n\n#End Greatest Common Divisor",
+    "tags": [
+      "maths",
+      "functions",
+      "Recursion",
+      "repetition",
+      "Self Marking"
+    ],
+    "helpUrl": "pythonmanual.html#recursion"
   }
 ]
