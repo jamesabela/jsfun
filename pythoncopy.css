@@ -69,6 +69,65 @@
       border: 1px solid #e2e8f0;
     }
 
+    .screen-control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 3px 6px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 999px;
+      transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .screen-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px 8px;
+      border: none;
+      background: transparent;
+      border-radius: 999px;
+      color: #475569;
+      cursor: pointer;
+      line-height: 1;
+      font-size: 16px;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+    }
+
+    .screen-pill-btn:hover {
+      background: rgba(0, 0, 0, 0.06);
+      color: #0f172a;
+    }
+
+    .screen-pill-btn:active {
+      transform: scale(0.94);
+    }
+
+    .mode-pill-divider {
+      display: inline-block;
+      width: 1px;
+      height: 16px;
+      background-color: #cbd5e1;
+      align-self: center;
+      flex-shrink: 0;
+      margin: 0 1px;
+    }
+
+    .distraction-chevron-icon {
+      display: block;
+      width: 16px;
+      height: 16px;
+      stroke-width: 2.5;
+      color: currentColor;
+    }
+
+    /* Distraction-free toggle is only available in Edit Mode */
+    body:not(.edit-mode-active) #distractionFreeButton,
+    body:not(.edit-mode-active) #screenControlDivider {
+      display: none !important;
+    }
+
     .visual-controls {
       display: flex;
       align-items: center;
@@ -283,6 +342,24 @@
 
     body.dark-theme.blocks-mode-active .mode-btn.active {
       color: #c084fc;
+    }
+
+    body.dark-theme .screen-control-pill {
+      background: #2a2a2a;
+      border-color: #3f3f46;
+    }
+
+    body.dark-theme .screen-pill-btn {
+      color: #a1a1aa;
+    }
+
+    body.dark-theme .screen-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+
+    body.dark-theme .mode-pill-divider {
+      background-color: #475569;
     }
 
     body.dark-theme .display-badge {
@@ -4330,36 +4407,102 @@
       background: #475569 !important;
     }
 
-    /* Activity Tracking Mode (remindDownload=1) & Minimal Mode (min=1):
+    /* Activity Tracking Mode (remindDownload=1) & Minimal / Distraction-Free Mode:
        Removes modeHeader and non-essential workspace toolbar buttons (Copy, Upload, Download .py/.txt, etc.)
        to give maximum vertical space back to the code editor.
        Preserves Run, Reset, Undo, Redo, Revert, Playback, and the counter. */
     html.activity-tracking-mode,
     body.activity-tracking-mode,
     html.minimal-mode,
-    body.minimal-mode {
+    body.minimal-mode,
+    html.distraction-free-mode,
+    body.distraction-free-mode {
       --header-height: 0px !important;
       padding-top: 0 !important;
     }
 
-    html.activity-tracking-mode #modeHeader,
-    body.activity-tracking-mode #modeHeader,
+    html.activity-tracking-mode:not(.distraction-free-mode) #modeHeader,
+    body.activity-tracking-mode:not(.distraction-free-mode) #modeHeader {
+      display: none !important;
+    }
+
+    html.distraction-free-mode #modeHeader,
+    body.distraction-free-mode #modeHeader,
     html.minimal-mode #modeHeader,
     body.minimal-mode #modeHeader {
+      height: 0 !important;
+      min-height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      pointer-events: none !important;
+      overflow: visible !important;
+    }
+
+    html.distraction-free-mode #modeHeader .brand,
+    body.distraction-free-mode #modeHeader .brand,
+    html.minimal-mode #modeHeader .brand,
+    body.minimal-mode #modeHeader .brand,
+    html.distraction-free-mode #modeHeader .visual-controls > :not(#screenControlPill),
+    body.distraction-free-mode #modeHeader .visual-controls > :not(#screenControlPill),
+    html.minimal-mode #modeHeader .visual-controls > :not(#screenControlPill),
+    body.minimal-mode #modeHeader .visual-controls > :not(#screenControlPill) {
       display: none !important;
+    }
+
+    html.distraction-free-mode #modeHeader .visual-controls,
+    body.distraction-free-mode #modeHeader .visual-controls,
+    html.minimal-mode #modeHeader .visual-controls,
+    body.minimal-mode #modeHeader .visual-controls {
+      pointer-events: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+    }
+
+    html.distraction-free-mode #screenControlPill,
+    body.distraction-free-mode #screenControlPill,
+    html.minimal-mode #screenControlPill,
+    body.minimal-mode #screenControlPill {
+      display: inline-flex !important;
+      pointer-events: auto !important;
+      position: fixed !important;
+      top: 8px !important;
+      right: 14px !important;
+      z-index: 1200 !important;
+      background: rgba(241, 245, 249, 0.94) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+
+    body.dark-theme.distraction-free-mode #screenControlPill,
+    html.distraction-free-mode body.dark-theme #screenControlPill,
+    body.dark-theme.minimal-mode #screenControlPill,
+    html.minimal-mode body.dark-theme #screenControlPill {
+      background: rgba(42, 42, 42, 0.94) !important;
+      border-color: #3f3f46 !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45) !important;
     }
 
     html.activity-tracking-mode .workspace-toolbar,
     body.activity-tracking-mode .workspace-toolbar,
     html.minimal-mode .workspace-toolbar,
-    body.minimal-mode .workspace-toolbar {
+    body.minimal-mode .workspace-toolbar,
+    html.distraction-free-mode .workspace-toolbar,
+    body.distraction-free-mode .workspace-toolbar {
       display: none !important;
     }
 
     html.activity-tracking-mode .workspace,
     body.activity-tracking-mode .workspace,
     html.minimal-mode .workspace,
-    body.minimal-mode .workspace {
+    body.minimal-mode .workspace,
+    html.distraction-free-mode .workspace,
+    body.distraction-free-mode .workspace {
       padding-top: 8px !important;
       height: 100vh !important;
       box-sizing: border-box !important;
@@ -4372,7 +4515,9 @@
     html.activity-tracking-mode .workspace.terminal-open,
     body.activity-tracking-mode .workspace.terminal-open,
     html.minimal-mode .workspace.terminal-open,
-    body.minimal-mode .workspace.terminal-open {
+    body.minimal-mode .workspace.terminal-open,
+    html.distraction-free-mode .workspace.terminal-open,
+    body.distraction-free-mode .workspace.terminal-open {
       grid-template-areas:
         "editor divider runner"
         "terminal terminal terminal"
@@ -4384,7 +4529,9 @@
       html.activity-tracking-mode .workspace,
       body.activity-tracking-mode .workspace,
       html.minimal-mode .workspace,
-      body.minimal-mode .workspace {
+      body.minimal-mode .workspace,
+      html.distraction-free-mode .workspace,
+      body.distraction-free-mode .workspace {
         grid-template-areas:
           "editor"
           "divider"
@@ -4396,7 +4543,9 @@
       html.activity-tracking-mode .workspace.terminal-open,
       body.activity-tracking-mode .workspace.terminal-open,
       html.minimal-mode .workspace.terminal-open,
-      body.minimal-mode .workspace.terminal-open {
+      body.minimal-mode .workspace.terminal-open,
+      html.distraction-free-mode .workspace.terminal-open,
+      body.distraction-free-mode .workspace.terminal-open {
         grid-template-areas:
           "editor"
           "divider"
@@ -4419,7 +4568,13 @@
     html.minimal-mode #teacherControlsRow,
     body.minimal-mode #teacherControlsRow,
     html.minimal-mode .editor-action-row,
-    body.minimal-mode .editor-action-row {
+    body.minimal-mode .editor-action-row,
+    html.distraction-free-mode .toggle-row,
+    body.distraction-free-mode .toggle-row,
+    html.distraction-free-mode #teacherControlsRow,
+    body.distraction-free-mode #teacherControlsRow,
+    html.distraction-free-mode .editor-action-row,
+    body.distraction-free-mode .editor-action-row {
       display: flex !important;
     }
 
@@ -4443,6 +4598,15 @@
     html.minimal-mode #initialFeelingDialog,
     body.minimal-mode #initialFeelingDialog,
     html.minimal-mode #activityReminderDialog,
-    body.minimal-mode #activityReminderDialog {
+    body.minimal-mode #activityReminderDialog,
+    html.distraction-free-mode #initialFeelingDialog,
+    body.distraction-free-mode #initialFeelingDialog {
+      display: none !important;
+    }
+
+    html.distraction-free-mode #starterPanel,
+    body.distraction-free-mode #starterPanel,
+    html.distraction-free-mode #instructionsPanel,
+    body.distraction-free-mode #instructionsPanel {
       display: none !important;
     }

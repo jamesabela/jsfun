@@ -13,19 +13,19 @@
   <meta name="apple-mobile-web-app-title" content="Python Code Lab">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
     id="prism-theme">
-  <link rel="stylesheet" href="pythoncopy.css?v=38">
+  <link rel="stylesheet" href="pythoncopy.css?v=39">
   <style id="dynamicLinksStyle">
     /* Extra dynamic overrides if needed */
   </style>
   <script>
     const initialUrlParams = new URLSearchParams(window.location.search);
     if (initialUrlParams.get('min') === '1') {
-      document.documentElement.classList.add('minimal-mode');
+      document.documentElement.classList.add('minimal-mode', 'distraction-free-mode');
     } else if (initialUrlParams.get('remindDownload') === '1') {
       document.documentElement.classList.add('activity-tracking-mode');
     }
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 38) {
+      if (window.pythonCopyVersion !== 39) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -58,7 +58,7 @@
   </script>
 </head>
 
-<body>
+<body class="edit-mode-active">
   <header id="modeHeader">
     <div class="brand">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -72,7 +72,7 @@
         <path d="M4 12H2" />
         <path d="M2 9h2" />
       </svg>
-      Python Code Lab 4.17
+      Python Code Lab 4.18
       <span class="mode-badge edit-badge">Edit</span>
       <span class="mode-badge display-badge">Display</span>
       <span class="mode-badge turtle-badge">Turtle</span>
@@ -98,9 +98,17 @@
           to code with text!</button>
       </div>
 
-      <div class="mode-toggle-pill">
-        <button class="mode-btn" id="fullscreenButton" title="Full Screen"
-          style="font-size: 18px; padding: 2px 12px;">⛶</button>
+      <div class="mode-toggle-pill screen-control-pill" id="screenControlPill">
+        <button class="mode-btn screen-pill-btn" id="fullscreenButton" title="Full Screen"
+          aria-label="Toggle Full Screen" style="font-size: 18px; padding: 2px 10px;">⛶</button>
+        <span class="mode-pill-divider" id="screenControlDivider" aria-hidden="true"></span>
+        <button class="mode-btn screen-pill-btn" id="distractionFreeButton" title="Distraction-Free Mode"
+          aria-label="Toggle Distraction-Free Mode"
+          style="padding: 2px 8px; display: inline-flex; align-items: center; justify-content: center;">
+          <svg class="distraction-chevron-icon" id="distractionChevronIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path id="distractionChevronPath" d="m18 15-6-6-6 6" />
+          </svg>
+        </button>
       </div>
 
       <div class="theme-toggle" aria-label="Theme">
@@ -889,7 +897,7 @@
   <script src="https://unpkg.com/@blockly/plugin-workspace-search@10.1.1/dist/index.js"></script>
   <script src="pythoncopyblocks.js"></script>
   <script src="pythoncopy-activity.js"></script>
-  <script src="pythoncopy.js"></script>
+  <script src="pythoncopy.js?v=39"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

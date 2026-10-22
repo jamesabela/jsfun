@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 38;
+    window.pythonCopyVersion = 39;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -232,6 +232,7 @@
       if (isMinimalMode) {
         document.documentElement.classList.add('minimal-mode');
         document.body.classList.add('minimal-mode');
+        setDistractionFreeMode(true);
       } else if (activityReminderEnabled) {
         document.documentElement.classList.add('activity-tracking-mode');
         document.body.classList.add('activity-tracking-mode');
@@ -1360,6 +1361,13 @@ import sys, builtins
       }
 
       currentAppMode = mode;
+      if (mode === 'edit') {
+        document.body.classList.add('edit-mode-active');
+      } else {
+        document.body.classList.remove('edit-mode-active');
+        // Distraction-free mode applies when in edit mode
+        setDistractionFreeMode(false);
+      }
       btnEditMode.classList.toggle('active', mode === 'edit');
       btnDisplayMode.classList.toggle('active', mode === 'display');
       btnTurtleMode.classList.toggle('active', mode === 'turtle');
@@ -1439,6 +1447,7 @@ import sys, builtins
         ensureRunnerExpanded();
         document.body.classList.remove('display-mode-active');
         document.body.classList.remove('turtle-mode-active');
+        document.body.classList.remove('edit-mode-active');
         document.body.classList.add('blocks-mode-active');
         showBlocksEditorToolbar();
         if (blocksBadge) blocksBadge.style.display = 'inline-block';
@@ -1512,6 +1521,7 @@ import sys, builtins
           ensureRunnerExpanded();
           document.body.classList.add('display-mode-active');
           document.body.classList.remove('turtle-mode-active');
+          document.body.classList.remove('edit-mode-active');
           if (displayBadge) displayBadge.style.display = 'inline-block';
 
           editor.style.display = 'none';
@@ -1539,6 +1549,7 @@ import sys, builtins
           ensureRunnerExpanded();
           document.body.classList.remove('display-mode-active');
           document.body.classList.add('turtle-mode-active');
+          document.body.classList.remove('edit-mode-active');
           if (turtleBadge) turtleBadge.style.display = 'inline-block';
 
           editor.style.display = 'block';
@@ -1563,6 +1574,7 @@ import sys, builtins
         } else {
           document.body.classList.remove('display-mode-active');
           document.body.classList.remove('turtle-mode-active');
+          document.body.classList.add('edit-mode-active');
           if (editBadge) editBadge.style.display = 'inline-block';
 
           editor.style.display = 'block';
@@ -2678,6 +2690,25 @@ import sys, builtins
         }
       });
 
+      const distractionFreeButton = document.getElementById('distractionFreeButton');
+      if (distractionFreeButton) {
+        distractionFreeButton.addEventListener('click', toggleDistractionFreeMode);
+      }
+
+      document.addEventListener('fullscreenchange', function () {
+        if (fullscreenButton) {
+          if (document.fullscreenElement) {
+            fullscreenButton.classList.add('active');
+            fullscreenButton.title = 'Exit Full Screen';
+            fullscreenButton.setAttribute('aria-label', 'Exit Full Screen');
+          } else {
+            fullscreenButton.classList.remove('active');
+            fullscreenButton.title = 'Full Screen';
+            fullscreenButton.setAttribute('aria-label', 'Full Screen');
+          }
+        }
+      });
+
       openNewTabButton.addEventListener('click', function () {
         window.open(window.location.href, '_blank', 'noopener');
       });
@@ -2924,6 +2955,9 @@ import sys, builtins
       });
 
       updateFullscreenAvailability();
+      if (isMinimalMode) {
+        setDistractionFreeMode(true);
+      }
       updateLineNumbers();
       applyCodeFontSize(document.getElementById('font-size').value);
       updateRunnerToggleLabel();
@@ -2950,6 +2984,76 @@ import sys, builtins
       openNewTabButton.style.display = isEmbedded ? 'inline-block' : 'none';
       if (document.fullscreenEnabled) return;
       fullscreenButton.style.display = 'none';
+    }
+
+    function isDistractionFreeActive() {
+      if (typeof document === 'undefined' || !document.documentElement) return false;
+      return document.documentElement.classList.contains('distraction-free-mode') ||
+             (document.body && document.body.classList.contains('distraction-free-mode')) ||
+             document.documentElement.classList.contains('minimal-mode') ||
+             (document.body && document.body.classList.contains('minimal-mode'));
+    }
+
+    function setDistractionFreeMode(enable) {
+      if (typeof document === 'undefined' || !document.documentElement) return;
+
+      // Distraction-free mode applies when in edit mode
+      if (enable && currentAppMode !== 'edit') {
+        setAppMode('edit');
+      }
+
+      const docEl = document.documentElement;
+      const bodyEl = document.body;
+      const btn = document.getElementById('distractionFreeButton');
+      const chevronPath = document.getElementById('distractionChevronPath');
+      const workspace = document.getElementById('workspace');
+
+      if (enable) {
+        docEl.classList.add('distraction-free-mode');
+        if (bodyEl) bodyEl.classList.add('distraction-free-mode');
+
+        if (workspace && (workspace.style.display === 'none' || (window.getComputedStyle && window.getComputedStyle(workspace).display === 'none'))) {
+          workspace.style.display = 'grid';
+          const starter = document.getElementById('starterPanel');
+          if (starter) starter.style.display = 'none';
+          const instr = document.getElementById('instructionsPanel');
+          if (instr) instr.style.display = 'none';
+        }
+
+        if (chevronPath) {
+          // Chevron points DOWN (V) to signify "expand / enable the rest of the buttons"
+          chevronPath.setAttribute('d', 'm6 9 6 6 6-6');
+        }
+        if (btn) {
+          btn.title = 'Show all buttons (Exit Distraction-Free)';
+          btn.setAttribute('aria-label', 'Show all buttons (Exit Distraction-Free)');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      } else {
+        docEl.classList.remove('distraction-free-mode', 'minimal-mode');
+        if (bodyEl) bodyEl.classList.remove('distraction-free-mode', 'minimal-mode');
+
+        const workspaceToolbar = document.querySelector('.workspace-toolbar');
+        if (workspaceToolbar && currentAppMode !== 'blocks') {
+          workspaceToolbar.style.display = '';
+        }
+
+        if (chevronPath) {
+          // Chevron points UP (Λ) to signify "collapse into distraction-free mode"
+          chevronPath.setAttribute('d', 'm18 15-6-6-6 6');
+        }
+        if (btn) {
+          btn.title = 'Distraction-Free Mode (Hide header & toolbars)';
+          btn.setAttribute('aria-label', 'Toggle Distraction-Free Mode');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      }
+
+      window.dispatchEvent(new Event('resize'));
+    }
+
+    function toggleDistractionFreeMode() {
+      setDistractionFreeMode(!isDistractionFreeActive());
     }
 
     function applyCodeFontSize(sizeValue) {
