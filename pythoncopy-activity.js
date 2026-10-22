@@ -9,9 +9,24 @@ class PythonCopyActivityLog {
     this.file = 0;
     this.lastKey = null;
     this.fileEnds = new Map();
+    this.frustration = '';
+    this.feeling = '';
+    this.challengeFeeling = '';
   }
 
-  record(type, code = this.code, { newFile = false, visible = true } = {}) {
+  setFeeling(feeling) {
+    this.feeling = feeling ? String(feeling).trim() : '';
+  }
+
+  setFrustration(frustration) {
+    this.frustration = frustration ? String(frustration).trim() : '';
+  }
+
+  setChallengeFeeling(challengeFeeling) {
+    this.challengeFeeling = challengeFeeling ? String(challengeFeeling).trim() : '';
+  }
+
+  record(type, code = this.code, { newFile = false, visible = true, feeling, frustration, challengeFeeling } = {}) {
     newFile = newFile || this.file === 0;
     const elapsed = Math.max(0, Math.round(this.now() - this.started));
     if (newFile) {
@@ -28,6 +43,10 @@ class PythonCopyActivityLog {
       newEnd--;
     }
     if (newFile || code !== this.code) this.revision++;
+    if (feeling !== undefined) this.feeling = feeling ? String(feeling).trim() : '';
+    if (frustration !== undefined) this.frustration = frustration ? String(frustration).trim() : '';
+    if (challengeFeeling !== undefined) this.challengeFeeling = challengeFeeling ? String(challengeFeeling).trim() : '';
+
     const event = {
       event_number: this.events.length + 1,
       file_id: this.file,
@@ -45,7 +64,10 @@ class PythonCopyActivityLog {
       change_start_utf16: !newFile && code !== previous ? start : '',
       change_delete_utf16: !newFile && code !== previous ? oldEnd - start : '',
       change_insert: newFile ? '' : code.slice(start, newEnd),
-      code_begin: newFile ? code : null
+      code_begin: newFile ? code : null,
+      frustration: this.frustration,
+      feeling: this.feeling,
+      challenge_feeling: this.challengeFeeling
     };
     this.code = code;
     if (type === 'editor_key') this.lastKey = elapsed;
@@ -58,7 +80,8 @@ class PythonCopyActivityLog {
     const columns = ['event_number', 'file_id', 'revision_id', 'event_type', 'elapsed_ms',
       'since_previous_event_ms', 'since_last_editor_key_ms', 'characters_added',
       'characters_removed', 'code_length', 'page_visible', 'change_start_utf16',
-      'change_delete_utf16', 'change_insert', 'code_begin', 'code_end'];
+      'change_delete_utf16', 'change_insert', 'code_begin', 'code_end',
+      'frustration', 'feeling', 'challenge_feeling'];
     // JSON encoding keeps arbitrary code on one physical TSV row and prevents
     // code beginning with spreadsheet formula characters from being evaluated.
     return columns.join('\t') + '\n' + this.events.map(event => {
@@ -67,7 +90,11 @@ class PythonCopyActivityLog {
         if (column === 'code_end') return end.event_number === event.event_number ? JSON.stringify(end.code) : '';
         if (column === 'code_begin') return event.code_begin === null ? '' : JSON.stringify(event.code_begin);
         if (column === 'change_insert') return JSON.stringify(event.change_insert);
-        return String(event[column]);
+        if (['frustration', 'feeling', 'challenge_feeling'].includes(column)) {
+          const val = event[column] == null ? '' : String(event[column]);
+          return val.replace(/[\t\r\n]+/g, ' ').trim();
+        }
+        return String(event[column] ?? '');
       }).join('\t');
     }).join('\n') + '\n';
   }

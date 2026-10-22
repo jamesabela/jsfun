@@ -46,10 +46,11 @@ for (let i = 0; i < 1100; i++) {
 assert.equal(run('playbackHistory.length'), 1000);
 assert.ok(run('activityLog.events.length') > 1100);
 const tsv = run('activityLog.toTSV()');
-const rows = tsv.trimEnd().split('\n').map(row => row.split('\t'));
-assert.ok(rows.every(row => row.length === 16));
+const rows = tsv.replace(/\n$/, '').split('\n').map(row => row.split('\t'));
+assert.ok(rows.every(row => row.length === 19));
 assert.equal(JSON.parse(rows.find(row => row[3] === 'paste')[13]), specialCode);
-assert.equal(rows[0].at(-1), 'code_end', 'ending code is always included');
+assert.equal(rows[0][15], 'code_end', 'ending code is always included');
+assert.equal(rows[0].slice(16).join(','), 'frustration,feeling,challenge_feeling');
 assert.ok(tsv.includes('# starter'), 'earlier code remains in the export');
 
 // Download from playback uses the live code, not the revision on screen.
@@ -95,7 +96,7 @@ record('=formula\r\n"quoted"\t\\');
 record('second file', true);
 record('second FILE');
 record('second FILE');
-const exported = compact.toTSV().trimEnd().split('\n').map(line => line.split('\t'));
+const exported = compact.toTSV().replace(/\n$/, '').split('\n').map(line => line.split('\t'));
 let reconstructed = '';
 let beginCount = 0;
 let endCount = 0;
@@ -124,3 +125,32 @@ for (let i = 0; i < 1000; i++) { largeCode += 'y'; large.record('edit', largeCod
 const retainedText = large.events.reduce((n, event) => n + (event.code_begin?.length || 0) + event.change_insert.length, 0);
 assert.equal(retainedText, 11000, 'activity events retain initial code plus inserted changes');
 console.log('PASS: exact reconstruction, Unicode, empty files, per-file beginnings/endings, repeated exports, compact storage.');
+
+// Test feelings, frustration scale, and challenge reflection
+const feelingLog = run('new PythonCopyActivityLog()');
+feelingLog.setFeeling('Excited');
+feelingLog.record('initial_mood', '# start');
+feelingLog.record('editor_key', '# start a');
+assert.equal(feelingLog.events[0].feeling, 'Excited');
+assert.equal(feelingLog.events[1].feeling, 'Excited');
+assert.equal(feelingLog.events[0].frustration, '');
+
+feelingLog.setFrustration('Moderately');
+feelingLog.record('frustration_level', '# start a');
+assert.equal(feelingLog.events[2].frustration, 'Moderately');
+assert.equal(feelingLog.events[2].feeling, 'Excited');
+
+feelingLog.setChallengeFeeling('Loved it - great challenge');
+feelingLog.record('challenge_feeling', '# start a');
+assert.equal(feelingLog.events[3].challenge_feeling, 'Loved it - great challenge');
+
+const feelingTSV = feelingLog.toTSV();
+const feelingRows = feelingTSV.replace(/\n$/, '').split('\n').map(r => r.split('\t'));
+assert.equal(feelingRows[0][16], 'frustration');
+assert.equal(feelingRows[0][17], 'feeling');
+assert.equal(feelingRows[0][18], 'challenge_feeling');
+assert.equal(feelingRows[3][16], 'Moderately');
+assert.equal(feelingRows[3][17], 'Excited');
+assert.equal(feelingRows[4][18], 'Loved it - great challenge');
+console.log('PASS: feelings, frustration scale, and challenge reflection tracking in TSV.');
+

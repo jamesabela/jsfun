@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 32;
+    window.pythonCopyVersion = 36;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -113,14 +113,100 @@
     let activityNavigationApproved = false;
     let pendingActivityNavigation = null;
 
+    const MOOD_EMOJIS = {
+      'Excited': '🤩',
+      'Happy': '😊',
+      'Calm': '😌',
+      'Silly': '😜',
+      'Confused': '😕',
+      'Tired': '😴',
+      'Sad': '😢',
+      'Frustrated': '😡',
+      'Surprised': '😮'
+    };
+
+    let frustrationSavedTimeout = null;
+
     function shouldRemindActivityDownload() {
       return activityReminderEnabled && activityNeedsDownload && !activityNavigationApproved;
     }
 
+    function showInitialFeelingModal() {
+      const dialog = document.getElementById('initialFeelingDialog');
+      if (dialog && !dialog.open) {
+        dialog.showModal();
+      }
+    }
+
+    function updateMoodDisplay(mood) {
+      const iconEl = document.getElementById('activityCurrentMoodIcon');
+      const textEl = document.getElementById('activityCurrentMoodText');
+      if (iconEl && textEl) {
+        if (mood) {
+          iconEl.textContent = MOOD_EMOJIS[mood] || '💭';
+          textEl.textContent = mood;
+        } else {
+          iconEl.textContent = '💭';
+          textEl.textContent = 'Set feeling';
+        }
+      }
+    }
+
+    function setInitialMood(mood) {
+      if (!mood) return;
+      const isInitial = !activityLog.feeling;
+      activityLog.setFeeling(mood);
+      updateMoodDisplay(mood);
+      recordActivity(isInitial ? 'initial_mood' : 'mood_change', activityLog.code, { feeling: mood });
+
+      document.querySelectorAll('#initialFeelingDialog .feeling-card').forEach(btn => {
+        btn.classList.toggle('selected', btn.getAttribute('data-mood') === mood);
+      });
+
+      if (mood === 'Frustrated' && !activityLog.frustration) {
+        setFrustrationLevel('Moderately', false);
+      }
+
+      setTimeout(() => {
+        const dialog = document.getElementById('initialFeelingDialog');
+        if (dialog && dialog.open) dialog.close();
+      }, 220);
+    }
+
+    function setFrustrationLevel(level, record = true) {
+      if (!level) return;
+      activityLog.setFrustration(level);
+      if (record) {
+        recordActivity('frustration_level', activityLog.code, { frustration: level });
+      }
+
+      document.querySelectorAll('.frustration-scale-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.getAttribute('data-level') === level);
+      });
+
+      const notice = document.getElementById('frustrationSavedNotice');
+      if (notice) {
+        notice.textContent = `✓ Saved: ${level}`;
+        notice.style.opacity = '1';
+        clearTimeout(frustrationSavedTimeout);
+        frustrationSavedTimeout = setTimeout(() => {
+          notice.style.opacity = '0';
+        }, 2200);
+      }
+    }
+
     function showActivityReminder(destination = null) {
       const dialog = document.getElementById('activityReminderDialog');
+      if (!dialog) return;
       pendingActivityNavigation = destination;
-      document.getElementById('activityReminderLeave').hidden = !destination;
+      const leaveBtn = document.getElementById('activityReminderLeave');
+      if (leaveBtn) leaveBtn.hidden = !destination;
+      const titleEl = document.getElementById('activityReminderTitle');
+      if (titleEl) {
+        titleEl.textContent = destination
+          ? 'Download your activity before leaving?'
+          : 'Download your activity TSV';
+      }
       if (!dialog.open) dialog.showModal();
     }
 
@@ -136,23 +222,89 @@
 
     function initializeActivityReminder() {
       const banner = document.getElementById('activityReminderBanner');
-      banner.hidden = !activityReminderEnabled;
-      document.getElementById('activityReminderOpen').addEventListener('click', () => showActivityReminder());
-      const dialog = document.getElementById('activityReminderDialog');
-      document.getElementById('activityReminderStay').addEventListener('click', () => dialog.close());
-      document.getElementById('activityReminderDownload').addEventListener('click', () => {
-        downloadActivityTSV();
-        document.getElementById('activityReminderStatus').textContent = 'Download requested. You can share the TSV with your teacher when ready.';
+      if (banner) banner.hidden = !activityReminderEnabled;
+
+      if (activityReminderEnabled) {
+        document.documentElement.classList.add('activity-tracking-mode');
+        document.body.classList.add('activity-tracking-mode');
+      }
+
+      const feelingDialog = document.getElementById('initialFeelingDialog');
+      if (activityReminderEnabled && feelingDialog) {
+        // Automatically ask students initially how they feel when remindDownload=1
+        setTimeout(() => {
+          if (!activityLog.feeling) {
+            showInitialFeelingModal();
+          }
+        }, 350);
+
+        document.querySelectorAll('#initialFeelingDialog .feeling-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const mood = card.getAttribute('data-mood');
+            setInitialMood(mood);
+          });
+        });
+
+        document.getElementById('initialFeelingSkip')?.addEventListener('click', () => {
+          feelingDialog.close();
+        });
+
+        document.getElementById('activityChangeMoodBtn')?.addEventListener('click', () => {
+          showInitialFeelingModal();
+        });
+      }
+
+      document.querySelectorAll('.frustration-scale-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const level = btn.getAttribute('data-level');
+          setFrustrationLevel(level);
+        });
       });
-      document.getElementById('activityReminderLeave').addEventListener('click', () => {
+
+      document.querySelectorAll('.challenge-feeling-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.challenge-feeling-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+        });
+      });
+
+      document.getElementById('activityReminderOpen')?.addEventListener('click', () => showActivityReminder());
+      const dialog = document.getElementById('activityReminderDialog');
+      document.getElementById('activityReminderStay')?.addEventListener('click', () => dialog?.close());
+
+      document.getElementById('activityReminderDownload')?.addEventListener('click', () => {
+        const selectedBtn = document.querySelector('.challenge-feeling-btn.selected');
+        const notesInput = document.getElementById('challengeNotesInput');
+        const notes = notesInput ? notesInput.value.trim() : '';
+        let challengeFeedback = selectedBtn ? selectedBtn.getAttribute('data-feeling') : '';
+        if (challengeFeedback && notes) {
+          challengeFeedback = `${challengeFeedback}: ${notes}`;
+        } else if (!challengeFeedback && notes) {
+          challengeFeedback = notes;
+        }
+
+        if (challengeFeedback) {
+          activityLog.setChallengeFeeling(challengeFeedback);
+          recordActivity('challenge_feeling', activityLog.code, { challengeFeeling: challengeFeedback });
+        }
+
+        downloadActivityTSV();
+        const statusEl = document.getElementById('activityReminderStatus');
+        if (statusEl) {
+          statusEl.textContent = '✅ Activity TSV downloaded! You can share it with your teacher.';
+        }
+      });
+
+      document.getElementById('activityReminderLeave')?.addEventListener('click', () => {
         const destination = pendingActivityNavigation;
-        dialog.close();
+        dialog?.close();
         if (!destination) return;
         activityNavigationApproved = true;
         window.location.href = destination;
         // If the existing unsaved-code warning cancels navigation, re-arm this reminder.
         setTimeout(() => { activityNavigationApproved = false; }, 0);
       });
+
       document.addEventListener('click', event => {
         const link = event.target.closest('a[href]');
         if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
@@ -168,11 +320,13 @@
       });
     }
 
-    function recordActivity(type, code = activityLog.code, newFile = false) {
-      if ((!newFile && code !== activityLog.code) || ['run_code', 'paste', 'save_file_py', 'save_file_txt', 'save_blocks'].includes(type)) {
+    function recordActivity(type, code = activityLog.code, options = {}) {
+      const opts = typeof options === 'boolean' ? { newFile: options } : options;
+      const { newFile = false, feeling, frustration, challengeFeeling } = opts;
+      if ((!newFile && code !== activityLog.code) || ['run_code', 'paste', 'save_file_py', 'save_file_txt', 'save_blocks', 'frustration_level', 'initial_mood', 'mood_change', 'challenge_feeling'].includes(type)) {
         activityNeedsDownload = true;
       }
-      return activityLog.record(type, code, { newFile, visible: !document.hidden });
+      return activityLog.record(type, code, { newFile, visible: !document.hidden, feeling, frustration, challengeFeeling });
     }
 
     function downloadActivityTSV() {
@@ -1211,7 +1365,7 @@ import sys, builtins
       if (blocksTabHeader) blocksTabHeader.style.display = 'none';
 
       const workspaceToolbar = document.querySelector('.workspace-toolbar');
-      if (workspaceToolbar) workspaceToolbar.style.display = 'flex';
+      if (workspaceToolbar && !activityReminderEnabled) workspaceToolbar.style.display = 'flex';
 
       const modeTogglePill = document.getElementById('modeTogglePill');
       if (modeTogglePill) modeTogglePill.style.display = '';
@@ -2075,7 +2229,13 @@ import sys, builtins
         openPhoneEditorButton.addEventListener('click', openCurrentCodeInMobileEditor);
       }
 
-      document.getElementById('downloadActivityButton')?.addEventListener('click', downloadActivityTSV);
+      document.getElementById('downloadActivityButton')?.addEventListener('click', () => {
+        if (activityReminderEnabled) {
+          showActivityReminder();
+        } else {
+          downloadActivityTSV();
+        }
+      });
       document.addEventListener('visibilitychange', () => recordActivity(document.hidden ? 'page_hidden' : 'page_visible'));
       // Capture timing before Tab/Enter handlers make programmatic edits.
       editor.addEventListener('keydown', () => {

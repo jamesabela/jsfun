@@ -3672,22 +3672,735 @@
 
     .activity-download-button,
     #downloadActivityButton {
-      background: #1d4ed8;
-      color: #ffffff;
-      border: 1px solid #1d4ed8;
+      background: #2563eb !important;
+      color: #ffffff !important;
+      border: 1px solid #1d4ed8 !important;
       border-radius: 6px;
-      padding: 8px 14px;
+      padding: 8px 16px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
+      transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
     }
-    .activity-download-button:hover, #downloadActivityButton:hover { background: #1e40af; }
-    .activity-download-button:focus-visible, #downloadActivityButton:focus-visible,
-    .activity-secondary-button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
-    .activity-reminder-banner { padding: 12px; margin: 8px 0; border: 1px solid #93c5fd; border-radius: 8px; background: #eff6ff; color: #1e3a8a; font-size: 13px; line-height: 1.5; }
-    .activity-reminder-banner button { margin: 6px; }
-    #activityReminderDialog { max-width: 520px; width: calc(100% - 48px); box-sizing: border-box; border: 1px solid #94a3b8; border-radius: 12px; padding: 24px; background: #ffffff; color: #1e293b; line-height: 1.5; }
-    #activityReminderDialog::backdrop { background: rgb(15 23 42 / 55%); }
-    .activity-secondary-button { background: #e2e8f0; color: #1e293b; border: 1px solid #94a3b8; border-radius: 6px; padding: 8px 14px; cursor: pointer; }
-    body.dark-theme #activityReminderDialog { background: #1e293b; color: #f8fafc; }
-    body.dark-theme .activity-reminder-banner { background: #172554; color: #dbeafe; }
+    .activity-download-button:hover,
+    #downloadActivityButton:hover {
+      background: #1e40af !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px -2px rgba(30, 64, 175, 0.4);
+    }
+    .activity-download-button:focus-visible,
+    #downloadActivityButton:focus-visible,
+    .activity-secondary-button:focus-visible,
+    .feeling-card:focus-visible,
+    .frustration-scale-btn:focus-visible,
+    .challenge-feeling-btn:focus-visible {
+      outline: 3px solid #f59e0b;
+      outline-offset: 3px;
+    }
+
+    /* Initial Feeling Modal (3x3 grid matching reference design) */
+    dialog.initial-feeling-dialog,
+    #initialFeelingDialog {
+      border: none !important;
+      outline: none !important;
+      padding: 0 !important;
+      border-radius: 20px !important;
+      background: transparent !important;
+      max-width: 580px !important;
+      width: calc(100% - 32px) !important;
+      box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.35) !important;
+    }
+    dialog.initial-feeling-dialog::backdrop,
+    #initialFeelingDialog::backdrop {
+      background: rgba(15, 23, 42, 0.65) !important;
+      backdrop-filter: blur(6px) !important;
+      -webkit-backdrop-filter: blur(6px) !important;
+    }
+    .feeling-modal-card {
+      background: #ffffff !important;
+      border: 2px solid #93c5fd !important;
+      border-radius: 20px !important;
+      padding: 28px 24px 22px !important;
+      box-sizing: border-box !important;
+      color: #0f172a !important;
+      font-family: inherit !important;
+    }
+    .feeling-modal-header {
+      text-align: center;
+    }
+    .feeling-modal-title {
+      font-size: 26px !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      margin: 0 0 6px !important;
+      letter-spacing: -0.02em !important;
+    }
+    .feeling-modal-subtitle {
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      color: #4338ca !important;
+      margin: 0 0 16px !important;
+    }
+    .feeling-modal-divider {
+      height: 2px !important;
+      background: #818cf8 !important;
+      opacity: 0.8 !important;
+      margin: 0 auto 20px !important;
+      border-radius: 2px !important;
+      width: 100% !important;
+    }
+    .feeling-modal-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 14px !important;
+      margin-bottom: 16px !important;
+    }
+    .feeling-card {
+      background: #ffffff !important;
+      border: 1.5px solid #93c5fd !important;
+      border-radius: 12px !important;
+      padding: 16px 8px !important;
+      cursor: pointer !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      outline: none !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+      color: #0f172a !important;
+    }
+    .feeling-card-emoji {
+      font-size: 38px !important;
+      line-height: 1 !important;
+      pointer-events: none !important;
+      transition: transform 0.18s ease !important;
+    }
+    .feeling-card-label {
+      font-size: 15px !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      pointer-events: none !important;
+    }
+    .feeling-card:hover {
+      border-color: #2563eb !important;
+      background: #eff6ff !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 18px -4px rgba(37, 99, 235, 0.25) !important;
+    }
+    .feeling-card:hover .feeling-card-emoji {
+      transform: scale(1.12) !important;
+    }
+    .feeling-card:hover .feeling-card-label {
+      color: #1d4ed8 !important;
+    }
+    .feeling-card.selected {
+      border-color: #1d4ed8 !important;
+      background: #dbeafe !important;
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.4) !important;
+      transform: scale(1.02) !important;
+    }
+    .feeling-card.selected .feeling-card-label {
+      color: #1e40af !important;
+    }
+    .feeling-modal-footer {
+      text-align: center;
+      margin-top: 6px;
+    }
+    .feeling-skip-button {
+      background: none !important;
+      border: none !important;
+      color: #475569 !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      text-decoration: underline !important;
+      padding: 6px 14px !important;
+      border-radius: 6px !important;
+    }
+    .feeling-skip-button:hover {
+      color: #0f172a !important;
+    }
+
+    /* Activity Tracking Banner */
+    .activity-reminder-banner {
+      padding: 14px 18px !important;
+      margin: 10px 0 !important;
+      border: 1.5px solid #60a5fa !important;
+      border-radius: 12px !important;
+      background: #f0f7ff !important;
+      color: #1e3a8a !important;
+      font-size: 13px !important;
+      line-height: 1.5 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+      box-shadow: 0 4px 12px -2px rgba(14, 165, 233, 0.1) !important;
+    }
+    .activity-banner-row {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: wrap !important;
+      gap: 14px !important;
+    }
+    .activity-mood-indicator {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    .activity-banner-label {
+      font-weight: 800 !important;
+      font-size: 13px !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.04em !important;
+      color: #1e3a8a !important;
+    }
+    .activity-mood-badge {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 6px 14px !important;
+      border-radius: 20px !important;
+      border: 1.5px solid #3b82f6 !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      font-size: 13px !important;
+      font-weight: 800 !important;
+      cursor: pointer !important;
+      transition: all 0.18s ease !important;
+    }
+    .activity-mood-badge #activityCurrentMoodText {
+      color: #0f172a !important;
+      font-weight: 800 !important;
+    }
+    .activity-mood-badge:hover {
+      background: #eff6ff !important;
+      border-color: #1d4ed8 !important;
+      color: #1e40af !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.2) !important;
+    }
+    .activity-mood-badge:hover #activityCurrentMoodText {
+      color: #1e40af !important;
+    }
+    .activity-mood-edit-icon {
+      font-size: 11px !important;
+      opacity: 0.7 !important;
+    }
+    .activity-frustration-section {
+      display: inline-flex !important;
+      align-items: center !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+    }
+    .frustration-scale-bar {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      flex-wrap: wrap !important;
+      background: rgba(255, 255, 255, 0.9) !important;
+      padding: 4px !important;
+      border-radius: 10px !important;
+      border: 1.5px solid #93c5fd !important;
+    }
+    .frustration-scale-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      padding: 6px 12px !important;
+      border-radius: 7px !important;
+      border: 1.5px solid #94a3b8 !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      transition: all 0.18s ease !important;
+      white-space: nowrap !important;
+    }
+    .frustration-scale-btn .frustration-text {
+      color: #0f172a !important;
+      font-weight: 700 !important;
+    }
+    .frustration-scale-btn:hover {
+      background: #eff6ff !important;
+      border-color: #2563eb !important;
+      color: #1d4ed8 !important;
+      transform: translateY(-1px) !important;
+    }
+    .frustration-scale-btn:hover .frustration-text {
+      color: #1d4ed8 !important;
+    }
+    .frustration-scale-btn.selected {
+      background: #1d4ed8 !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      border-color: #1e40af !important;
+      box-shadow: 0 2px 8px rgba(29, 78, 216, 0.4) !important;
+      transform: translateY(-1px) !important;
+    }
+    .frustration-scale-btn.selected .frustration-text {
+      color: #ffffff !important;
+      font-weight: 800 !important;
+    }
+    .frustration-emoji {
+      font-size: 16px !important;
+      line-height: 1 !important;
+    }
+    .frustration-saved-notice {
+      font-size: 12px !important;
+      font-weight: 800 !important;
+      color: #047857 !important;
+      min-width: 110px !important;
+      transition: opacity 0.3s ease !important;
+    }
+    .activity-banner-actions {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: wrap !important;
+      gap: 12px !important;
+      border-top: 1.5px solid #bfdbfe !important;
+      padding-top: 10px !important;
+    }
+    .activity-banner-help {
+      font-size: 13px !important;
+      color: #1e3a8a !important;
+      font-weight: 600 !important;
+    }
+
+    /* Activity Download & Challenge Reflection Dialog */
+    #activityReminderDialog {
+      max-width: 560px !important;
+      width: calc(100% - 32px) !important;
+      box-sizing: border-box !important;
+      border: 2px solid #94a3b8 !important;
+      border-radius: 16px !important;
+      padding: 24px !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      line-height: 1.5 !important;
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.3) !important;
+    }
+    #activityReminderDialog::backdrop {
+      background: rgba(15, 23, 42, 0.65) !important;
+      backdrop-filter: blur(4px) !important;
+    }
+    #activityReminderDialog h2 {
+      margin-top: 0 !important;
+      font-size: 20px !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+    }
+    #activityReminderDescription {
+      color: #334155 !important;
+      font-weight: 500 !important;
+    }
+    .challenge-feeling-box {
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 12px !important;
+      padding: 16px !important;
+      margin: 16px 0 14px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+    }
+    .challenge-feeling-title {
+      font-size: 15px !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      margin-bottom: 2px !important;
+      display: block !important;
+    }
+    .challenge-feeling-grid {
+      display: grid !important;
+      grid-template-columns: repeat(5, 1fr) !important;
+      gap: 8px !important;
+    }
+    .challenge-feeling-btn {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 4px !important;
+      padding: 10px 4px !important;
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 8px !important;
+      cursor: pointer !important;
+      transition: all 0.18s ease !important;
+      color: #0f172a !important;
+    }
+    .challenge-feeling-emoji {
+      font-size: 22px !important;
+      line-height: 1 !important;
+    }
+    .challenge-feeling-text {
+      font-size: 12px !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+    }
+    .challenge-feeling-btn:hover {
+      border-color: #2563eb !important;
+      background: #eff6ff !important;
+      transform: translateY(-1px) !important;
+    }
+    .challenge-feeling-btn:hover .challenge-feeling-text {
+      color: #1d4ed8 !important;
+    }
+    .challenge-feeling-btn.selected {
+      background: #1d4ed8 !important;
+      border-color: #1e40af !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.4) !important;
+    }
+    .challenge-feeling-btn.selected .challenge-feeling-text {
+      color: #ffffff !important;
+    }
+    .challenge-notes-row {
+      margin-top: 4px !important;
+    }
+    .challenge-notes-input {
+      width: 100% !important;
+      box-sizing: border-box !important;
+      padding: 10px 14px !important;
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 8px !important;
+      font-size: 13px !important;
+      font-family: inherit !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      font-weight: 500 !important;
+      transition: border-color 0.18s, box-shadow 0.18s !important;
+    }
+    .challenge-notes-input:focus {
+      outline: none !important;
+      border-color: #2563eb !important;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+    }
+    .activity-privacy-subtext {
+      font-size: 12px !important;
+      color: #475569 !important;
+      margin: 4px 0 16px !important;
+      line-height: 1.4 !important;
+    }
+    .activity-export-controls {
+      display: flex !important;
+      gap: 10px !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+    }
+    .activity-secondary-button {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+      border: 1.5px solid #94a3b8 !important;
+      border-radius: 6px !important;
+      padding: 8px 14px !important;
+      cursor: pointer !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      transition: background 0.18s !important;
+    }
+    .activity-secondary-button:hover {
+      background: #cbd5e1 !important;
+      color: #000000 !important;
+    }
+
+    /* ========================================================
+       DARK MODE THEME OVERRIDES (body.dark-theme & html.dark-theme)
+       ======================================================== */
+    body.dark-theme .feeling-modal-card,
+    html.dark-theme .feeling-modal-card {
+      background: #0f172a !important;
+      border-color: #3b82f6 !important;
+      color: #f8fafc !important;
+      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.7) !important;
+    }
+    body.dark-theme .feeling-modal-title,
+    html.dark-theme .feeling-modal-title {
+      color: #f8fafc !important;
+    }
+    body.dark-theme .feeling-modal-subtitle,
+    html.dark-theme .feeling-modal-subtitle {
+      color: #a5b4fc !important;
+    }
+    body.dark-theme .feeling-modal-divider,
+    html.dark-theme .feeling-modal-divider {
+      background: #6366f1 !important;
+    }
+    body.dark-theme .feeling-card,
+    html.dark-theme .feeling-card {
+      background: #1e293b !important;
+      border-color: #3b82f6 !important;
+      color: #f8fafc !important;
+    }
+    body.dark-theme .feeling-card-label,
+    html.dark-theme .feeling-card-label {
+      color: #f8fafc !important;
+    }
+    body.dark-theme .feeling-card:hover,
+    html.dark-theme .feeling-card:hover {
+      background: #1e3a8a !important;
+      border-color: #60a5fa !important;
+      box-shadow: 0 8px 18px -4px rgba(96, 165, 250, 0.35) !important;
+    }
+    body.dark-theme .feeling-card:hover .feeling-card-label,
+    html.dark-theme .feeling-card:hover .feeling-card-label {
+      color: #ffffff !important;
+    }
+    body.dark-theme .feeling-card.selected,
+    html.dark-theme .feeling-card.selected {
+      background: #1d4ed8 !important;
+      border-color: #93c5fd !important;
+      box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.4) !important;
+    }
+    body.dark-theme .feeling-card.selected .feeling-card-label,
+    html.dark-theme .feeling-card.selected .feeling-card-label {
+      color: #ffffff !important;
+    }
+    body.dark-theme .feeling-skip-button,
+    html.dark-theme .feeling-skip-button {
+      color: #94a3b8 !important;
+    }
+    body.dark-theme .feeling-skip-button:hover,
+    html.dark-theme .feeling-skip-button:hover {
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme .activity-reminder-banner,
+    html.dark-theme .activity-reminder-banner {
+      background: #0f172a !important;
+      border-color: #1e40af !important;
+      color: #dbeafe !important;
+      box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.5) !important;
+    }
+    body.dark-theme .activity-banner-label,
+    html.dark-theme .activity-banner-label {
+      color: #93c5fd !important;
+    }
+    body.dark-theme .activity-mood-badge,
+    html.dark-theme .activity-mood-badge {
+      background: #1e293b !important;
+      border-color: #3b82f6 !important;
+      color: #f8fafc !important;
+    }
+    body.dark-theme .activity-mood-badge #activityCurrentMoodText,
+    html.dark-theme .activity-mood-badge #activityCurrentMoodText {
+      color: #f8fafc !important;
+    }
+    body.dark-theme .activity-mood-badge:hover,
+    html.dark-theme .activity-mood-badge:hover {
+      background: #1e3a8a !important;
+      border-color: #60a5fa !important;
+      color: #ffffff !important;
+    }
+    body.dark-theme .activity-mood-badge:hover #activityCurrentMoodText,
+    html.dark-theme .activity-mood-badge:hover #activityCurrentMoodText {
+      color: #ffffff !important;
+    }
+    body.dark-theme .frustration-scale-bar,
+    html.dark-theme .frustration-scale-bar {
+      background: #0b1120 !important;
+      border-color: #1e40af !important;
+    }
+    body.dark-theme .frustration-scale-btn,
+    html.dark-theme .frustration-scale-btn {
+      background: #1e293b !important;
+      border-color: #475569 !important;
+      color: #f8fafc !important;
+    }
+    body.dark-theme .frustration-scale-btn .frustration-text,
+    html.dark-theme .frustration-scale-btn .frustration-text {
+      color: #f8fafc !important;
+    }
+    body.dark-theme .frustration-scale-btn:hover,
+    html.dark-theme .frustration-scale-btn:hover {
+      background: #334155 !important;
+      border-color: #60a5fa !important;
+      color: #93c5fd !important;
+    }
+    body.dark-theme .frustration-scale-btn:hover .frustration-text,
+    html.dark-theme .frustration-scale-btn:hover .frustration-text {
+      color: #93c5fd !important;
+    }
+    body.dark-theme .frustration-scale-btn.selected,
+    html.dark-theme .frustration-scale-btn.selected {
+      background: #2563eb !important;
+      border-color: #93c5fd !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.5) !important;
+    }
+    body.dark-theme .frustration-scale-btn.selected .frustration-text,
+    html.dark-theme .frustration-scale-btn.selected .frustration-text {
+      color: #ffffff !important;
+    }
+    body.dark-theme .frustration-saved-notice,
+    html.dark-theme .frustration-saved-notice {
+      color: #34d399 !important;
+    }
+    body.dark-theme .activity-banner-actions,
+    html.dark-theme .activity-banner-actions {
+      border-color: #1e3a8a !important;
+    }
+    body.dark-theme .activity-banner-help,
+    html.dark-theme .activity-banner-help {
+      color: #cbd5e1 !important;
+    }
+
+    body.dark-theme #activityReminderDialog,
+    html.dark-theme #activityReminderDialog {
+      background: #1e293b !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme #activityReminderDialog h2,
+    html.dark-theme #activityReminderDialog h2 {
+      color: #f8fafc !important;
+    }
+    body.dark-theme #activityReminderDescription,
+    html.dark-theme #activityReminderDescription {
+      color: #cbd5e1 !important;
+    }
+    body.dark-theme .challenge-feeling-box,
+    html.dark-theme .challenge-feeling-box {
+      background: #0f172a !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme .challenge-feeling-title,
+    html.dark-theme .challenge-feeling-title {
+      color: #f1f5f9 !important;
+    }
+    body.dark-theme .challenge-feeling-btn,
+    html.dark-theme .challenge-feeling-btn {
+      background: #1e293b !important;
+      border-color: #475569 !important;
+      color: #f8fafc !important;
+    }
+    body.dark-theme .challenge-feeling-btn .challenge-feeling-text,
+    html.dark-theme .challenge-feeling-btn .challenge-feeling-text {
+      color: #f8fafc !important;
+    }
+    body.dark-theme .challenge-feeling-btn:hover,
+    html.dark-theme .challenge-feeling-btn:hover {
+      background: #334155 !important;
+      border-color: #60a5fa !important;
+    }
+    body.dark-theme .challenge-feeling-btn.selected,
+    html.dark-theme .challenge-feeling-btn.selected {
+      background: #2563eb !important;
+      border-color: #93c5fd !important;
+      color: #ffffff !important;
+    }
+    body.dark-theme .challenge-feeling-btn.selected .challenge-feeling-text,
+    html.dark-theme .challenge-feeling-btn.selected .challenge-feeling-text {
+      color: #ffffff !important;
+    }
+    body.dark-theme .challenge-notes-input,
+    html.dark-theme .challenge-notes-input {
+      background: #0f172a !important;
+      border-color: #475569 !important;
+      color: #f8fafc !important;
+    }
+    body.dark-theme .activity-privacy-subtext,
+    html.dark-theme .activity-privacy-subtext {
+      color: #94a3b8 !important;
+    }
+    body.dark-theme .activity-secondary-button,
+    html.dark-theme .activity-secondary-button {
+      background: #334155 !important;
+      color: #f8fafc !important;
+      border-color: #475569 !important;
+    }
+    body.dark-theme .activity-secondary-button:hover,
+    html.dark-theme .activity-secondary-button:hover {
+      background: #475569 !important;
+    }
+
+    /* Activity Tracking Mode (remindDownload=1):
+       Removes modeHeader and non-essential workspace toolbar buttons (Copy, Upload, Download .py/.txt, etc.)
+       to give maximum vertical space back to the code editor.
+       Preserves Run, Reset, Undo, Redo, Revert, Playback, and the counter. */
+    html.activity-tracking-mode,
+    body.activity-tracking-mode {
+      --header-height: 0px !important;
+      padding-top: 0 !important;
+    }
+
+    html.activity-tracking-mode #modeHeader,
+    body.activity-tracking-mode #modeHeader {
+      display: none !important;
+    }
+
+    html.activity-tracking-mode .workspace-toolbar,
+    body.activity-tracking-mode .workspace-toolbar {
+      display: none !important;
+    }
+
+    html.activity-tracking-mode .workspace,
+    body.activity-tracking-mode .workspace {
+      padding-top: 8px !important;
+      height: 100vh !important;
+      box-sizing: border-box !important;
+      grid-template-areas:
+        "editor divider runner"
+        "terminal terminal terminal";
+      grid-template-rows: minmax(0, 1fr) 24px;
+    }
+
+    html.activity-tracking-mode .workspace.terminal-open,
+    body.activity-tracking-mode .workspace.terminal-open {
+      grid-template-areas:
+        "editor divider runner"
+        "terminal terminal terminal"
+        "output output output";
+      grid-template-rows: minmax(180px, 1fr) 24px var(--terminal-height, 300px);
+    }
+
+    @media (max-width: 720px) {
+      html.activity-tracking-mode .workspace,
+      body.activity-tracking-mode .workspace {
+        grid-template-areas:
+          "editor"
+          "divider"
+          "runner"
+          "terminal";
+        grid-template-rows: auto;
+      }
+      html.activity-tracking-mode .workspace.terminal-open,
+      body.activity-tracking-mode .workspace.terminal-open {
+        grid-template-areas:
+          "editor"
+          "divider"
+          "runner"
+          "terminal"
+          "output";
+        grid-template-rows: auto;
+      }
+    }
+
+    /* Ensure Run, Reset, Undo, Redo, Revert, and Playback row remains completely visible and aligned */
+    html.activity-tracking-mode .toggle-row,
+    body.activity-tracking-mode .toggle-row,
+    html.activity-tracking-mode #teacherControlsRow,
+    body.activity-tracking-mode #teacherControlsRow,
+    html.activity-tracking-mode .editor-action-row,
+    body.activity-tracking-mode .editor-action-row {
+      display: flex !important;
+    }
+
+    /* Tighten banner in tracking mode to return vertical space to the editor */
+    html.activity-tracking-mode .activity-reminder-banner,
+    body.activity-tracking-mode .activity-reminder-banner {
+      margin: 4px 0 8px 0 !important;
+      padding: 8px 12px !important;
+      gap: 8px !important;
+    }
+
+    html.activity-tracking-mode .activity-banner-actions,
+    body.activity-tracking-mode .activity-banner-actions {
+      padding-top: 6px !important;
+      gap: 8px !important;
+    }

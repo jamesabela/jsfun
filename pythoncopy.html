@@ -13,13 +13,16 @@
   <meta name="apple-mobile-web-app-title" content="Python Code Lab">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
     id="prism-theme">
-  <link rel="stylesheet" href="pythoncopy.css">
+  <link rel="stylesheet" href="pythoncopy.css?v=36">
   <style id="dynamicLinksStyle">
     /* Extra dynamic overrides if needed */
   </style>
   <script>
+    if (new URLSearchParams(window.location.search).get('remindDownload') === '1') {
+      document.documentElement.classList.add('activity-tracking-mode');
+    }
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 32) {
+      if (window.pythonCopyVersion !== 36) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -498,19 +501,138 @@
         </div>
       </div>
       <!-- Playback Controls Bar -->
+      <!-- Initial Feeling Dialog (triggered when ?remindDownload=1) -->
+      <dialog id="initialFeelingDialog" class="initial-feeling-dialog" aria-labelledby="initialFeelingTitle">
+        <div class="feeling-modal-card">
+          <div class="feeling-modal-header">
+            <h2 id="initialFeelingTitle" class="feeling-modal-title">How are you feeling? 💭</h2>
+            <p class="feeling-modal-subtitle">Share your mood and choose how tough you want the tutor to be.</p>
+            <div class="feeling-modal-divider"></div>
+          </div>
+          <div class="feeling-modal-grid" role="radiogroup" aria-label="Select how you feel">
+            <button type="button" class="feeling-card" data-mood="Excited" aria-label="Excited">
+              <span class="feeling-card-emoji">🤩</span>
+              <span class="feeling-card-label">Excited</span>
+            </button>
+            <button type="button" class="feeling-card" data-mood="Happy" aria-label="Happy">
+              <span class="feeling-card-emoji">😊</span>
+              <span class="feeling-card-label">Happy</span>
+            </button>
+            <button type="button" class="feeling-card" data-mood="Calm" aria-label="Calm">
+              <span class="feeling-card-emoji">😌</span>
+              <span class="feeling-card-label">Calm</span>
+            </button>
+            <button type="button" class="feeling-card" data-mood="Silly" aria-label="Silly">
+              <span class="feeling-card-emoji">😜</span>
+              <span class="feeling-card-label">Silly</span>
+            </button>
+            <button type="button" class="feeling-card" data-mood="Confused" aria-label="Confused">
+              <span class="feeling-card-emoji">😕</span>
+              <span class="feeling-card-label">Confused</span>
+            </button>
+            <button type="button" class="feeling-card" data-mood="Tired" aria-label="Tired">
+              <span class="feeling-card-emoji">😴</span>
+              <span class="feeling-card-label">Tired</span>
+            </button>
+            <button type="button" class="feeling-card" data-mood="Sad" aria-label="Sad">
+              <span class="feeling-card-emoji">😢</span>
+              <span class="feeling-card-label">Sad</span>
+            </button>
+            <button type="button" class="feeling-card" data-mood="Frustrated" aria-label="Frustrated">
+              <span class="feeling-card-emoji">😡</span>
+              <span class="feeling-card-label">Frustrated</span>
+            </button>
+            <button type="button" class="feeling-card" data-mood="Surprised" aria-label="Surprised">
+              <span class="feeling-card-emoji">😮</span>
+              <span class="feeling-card-label">Surprised</span>
+            </button>
+          </div>
+          <div class="feeling-modal-footer">
+            <button type="button" id="initialFeelingSkip" class="feeling-skip-button">Skip for now</button>
+          </div>
+        </div>
+      </dialog>
+
+      <!-- Activity Tracking & Download Reminder Banner -->
       <div id="activityReminderBanner" class="activity-reminder-banner" hidden>
-        Before leaving, download your activity TSV if you want to share it with your teacher.
-        Nothing is uploaded automatically. If the browser warns when closing or reloading, choose Cancel to return and
-        download.
-        <button type="button" id="activityReminderOpen" class="activity-download-button">Download activity…</button>
+        <div class="activity-banner-row">
+          <div class="activity-mood-indicator">
+            <span class="activity-banner-label">Mood:</span>
+            <button type="button" id="activityChangeMoodBtn" class="activity-mood-badge" title="Click to view or change your mood">
+              <span id="activityCurrentMoodIcon">💭</span>
+              <span id="activityCurrentMoodText">Set feeling</span>
+              <span class="activity-mood-edit-icon" aria-hidden="true">✏️</span>
+            </button>
+          </div>
+          <div class="activity-frustration-section">
+            <span class="activity-banner-label">Frustration:</span>
+            <div class="frustration-scale-bar" role="radiogroup" aria-label="Frustration scale">
+              <button type="button" class="frustration-scale-btn" data-level="Not at all" title="Not at all frustrated">
+                <span class="frustration-emoji">🙂</span>
+                <span class="frustration-text">Not at all</span>
+              </button>
+              <button type="button" class="frustration-scale-btn" data-level="A little" title="A little frustrated">
+                <span class="frustration-emoji">😐</span>
+                <span class="frustration-text">A little</span>
+              </button>
+              <button type="button" class="frustration-scale-btn" data-level="Moderately" title="Moderately frustrated">
+                <span class="frustration-emoji">😕</span>
+                <span class="frustration-text">Moderately</span>
+              </button>
+              <button type="button" class="frustration-scale-btn" data-level="Very" title="Very frustrated">
+                <span class="frustration-emoji">😣</span>
+                <span class="frustration-text">Very</span>
+              </button>
+              <button type="button" class="frustration-scale-btn" data-level="Extremely" title="Extremely frustrated">
+                <span class="frustration-emoji">😫</span>
+                <span class="frustration-text">Extremely</span>
+              </button>
+            </div>
+            <span id="frustrationSavedNotice" class="frustration-saved-notice" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="activity-banner-actions">
+          <span class="activity-banner-help">Before leaving, download your activity TSV to share with your teacher.</span>
+          <button type="button" id="activityReminderOpen" class="activity-download-button">Download activity TSV…</button>
+        </div>
       </div>
+
       <dialog id="activityReminderDialog" aria-labelledby="activityReminderTitle"
         aria-describedby="activityReminderDescription">
-        <h2 id="activityReminderTitle">Download your activity before leaving?</h2>
+        <h2 id="activityReminderTitle">Download your activity TSV</h2>
         <p id="activityReminderDescription">You can share the TSV with your teacher. This session’s activity is cleared
           when you leave or reload. Nothing is uploaded automatically.</p>
-        <p>The download includes beginning and ending code plus edits, including earlier and deleted text, which may
-          contain personal information. You can review the file before sharing it.</p>
+
+        <div class="challenge-feeling-box">
+          <label class="challenge-feeling-title" id="challengeFeelingLabel">How do you feel about this challenge? 🎯</label>
+          <div class="challenge-feeling-grid" role="radiogroup" aria-labelledby="challengeFeelingLabel">
+            <button type="button" class="challenge-feeling-btn" data-feeling="Loved it" title="Loved it!">
+              <span class="challenge-feeling-emoji">🤩</span>
+              <span class="challenge-feeling-text">Loved it!</span>
+            </button>
+            <button type="button" class="challenge-feeling-btn" data-feeling="Good" title="Good">
+              <span class="challenge-feeling-emoji">😊</span>
+              <span class="challenge-feeling-text">Good</span>
+            </button>
+            <button type="button" class="challenge-feeling-btn" data-feeling="Okay" title="Okay">
+              <span class="challenge-feeling-emoji">😐</span>
+              <span class="challenge-feeling-text">Okay</span>
+            </button>
+            <button type="button" class="challenge-feeling-btn" data-feeling="Tricky" title="Tricky">
+              <span class="challenge-feeling-emoji">😕</span>
+              <span class="challenge-feeling-text">Tricky</span>
+            </button>
+            <button type="button" class="challenge-feeling-btn" data-feeling="Too hard" title="Too hard">
+              <span class="challenge-feeling-emoji">😫</span>
+              <span class="challenge-feeling-text">Too hard</span>
+            </button>
+          </div>
+          <div class="challenge-notes-row">
+            <input type="text" id="challengeNotesInput" class="challenge-notes-input" placeholder="Any thoughts or comments about this challenge? (optional)" />
+          </div>
+        </div>
+
+        <p class="activity-privacy-subtext">The TSV contains timings, actions, code edits, your mood &amp; frustration ratings, and challenge feedback.</p>
         <div class="activity-export-controls">
           <button type="button" id="activityReminderDownload" class="activity-download-button">Download TSV</button>
           <button type="button" id="activityReminderStay" class="activity-secondary-button">Stay on page</button>
