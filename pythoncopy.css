@@ -3823,19 +3823,30 @@
       color: #0f172a !important;
     }
 
-    /* Activity Tracking Banner */
-    .activity-reminder-banner {
-      padding: 14px 18px !important;
-      margin: 10px 0 !important;
+    /* Activity Tracking Banner:
+       Hidden by default. ONLY displayed when activity-tracking-mode (&remindDownload=1) is active and not hidden. */
+    .activity-reminder-banner,
+    #activityReminderBanner,
+    .activity-reminder-banner[hidden],
+    #activityReminderBanner[hidden] {
+      display: none !important;
+    }
+
+    html.activity-tracking-mode .activity-reminder-banner:not([hidden]),
+    body.activity-tracking-mode .activity-reminder-banner:not([hidden]),
+    html.activity-tracking-mode #activityReminderBanner:not([hidden]),
+    body.activity-tracking-mode #activityReminderBanner:not([hidden]) {
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 8px 12px !important;
+      margin: 4px 0 8px 0 !important;
       border: 1.5px solid #60a5fa !important;
       border-radius: 12px !important;
       background: #f0f7ff !important;
       color: #1e3a8a !important;
       font-size: 13px !important;
       line-height: 1.5 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 12px !important;
+      gap: 8px !important;
       box-shadow: 0 4px 12px -2px rgba(14, 165, 233, 0.1) !important;
     }
     .activity-banner-row {
@@ -4319,28 +4330,36 @@
       background: #475569 !important;
     }
 
-    /* Activity Tracking Mode (remindDownload=1):
+    /* Activity Tracking Mode (remindDownload=1) & Minimal Mode (min=1):
        Removes modeHeader and non-essential workspace toolbar buttons (Copy, Upload, Download .py/.txt, etc.)
        to give maximum vertical space back to the code editor.
        Preserves Run, Reset, Undo, Redo, Revert, Playback, and the counter. */
     html.activity-tracking-mode,
-    body.activity-tracking-mode {
+    body.activity-tracking-mode,
+    html.minimal-mode,
+    body.minimal-mode {
       --header-height: 0px !important;
       padding-top: 0 !important;
     }
 
     html.activity-tracking-mode #modeHeader,
-    body.activity-tracking-mode #modeHeader {
+    body.activity-tracking-mode #modeHeader,
+    html.minimal-mode #modeHeader,
+    body.minimal-mode #modeHeader {
       display: none !important;
     }
 
     html.activity-tracking-mode .workspace-toolbar,
-    body.activity-tracking-mode .workspace-toolbar {
+    body.activity-tracking-mode .workspace-toolbar,
+    html.minimal-mode .workspace-toolbar,
+    body.minimal-mode .workspace-toolbar {
       display: none !important;
     }
 
     html.activity-tracking-mode .workspace,
-    body.activity-tracking-mode .workspace {
+    body.activity-tracking-mode .workspace,
+    html.minimal-mode .workspace,
+    body.minimal-mode .workspace {
       padding-top: 8px !important;
       height: 100vh !important;
       box-sizing: border-box !important;
@@ -4351,7 +4370,9 @@
     }
 
     html.activity-tracking-mode .workspace.terminal-open,
-    body.activity-tracking-mode .workspace.terminal-open {
+    body.activity-tracking-mode .workspace.terminal-open,
+    html.minimal-mode .workspace.terminal-open,
+    body.minimal-mode .workspace.terminal-open {
       grid-template-areas:
         "editor divider runner"
         "terminal terminal terminal"
@@ -4361,16 +4382,21 @@
 
     @media (max-width: 720px) {
       html.activity-tracking-mode .workspace,
-      body.activity-tracking-mode .workspace {
+      body.activity-tracking-mode .workspace,
+      html.minimal-mode .workspace,
+      body.minimal-mode .workspace {
         grid-template-areas:
           "editor"
           "divider"
           "runner"
           "terminal";
         grid-template-rows: auto;
+        height: auto !important;
       }
       html.activity-tracking-mode .workspace.terminal-open,
-      body.activity-tracking-mode .workspace.terminal-open {
+      body.activity-tracking-mode .workspace.terminal-open,
+      html.minimal-mode .workspace.terminal-open,
+      body.minimal-mode .workspace.terminal-open {
         grid-template-areas:
           "editor"
           "divider"
@@ -4387,7 +4413,13 @@
     html.activity-tracking-mode #teacherControlsRow,
     body.activity-tracking-mode #teacherControlsRow,
     html.activity-tracking-mode .editor-action-row,
-    body.activity-tracking-mode .editor-action-row {
+    body.activity-tracking-mode .editor-action-row,
+    html.minimal-mode .toggle-row,
+    body.minimal-mode .toggle-row,
+    html.minimal-mode #teacherControlsRow,
+    body.minimal-mode #teacherControlsRow,
+    html.minimal-mode .editor-action-row,
+    body.minimal-mode .editor-action-row {
       display: flex !important;
     }
 
@@ -4403,4 +4435,14 @@
     body.activity-tracking-mode .activity-banner-actions {
       padding-top: 6px !important;
       gap: 8px !important;
+    }
+
+    /* Minimal Mode (min=1): strictly removes mood and DownloadActivity */
+    html.minimal-mode #activityReminderBanner,
+    body.minimal-mode #activityReminderBanner,
+    html.minimal-mode #initialFeelingDialog,
+    body.minimal-mode #initialFeelingDialog,
+    html.minimal-mode #activityReminderDialog,
+    body.minimal-mode #activityReminderDialog {
+      display: none !important;
     }

@@ -154,3 +154,33 @@ assert.equal(feelingRows[3][17], 'Excited');
 assert.equal(feelingRows[4][18], 'Loved it - great challenge');
 console.log('PASS: feelings, frustration scale, and challenge reflection tracking in TSV.');
 
+// Test minimal mode (&min=1) configuration
+const minContext = vm.createContext({
+  URLSearchParams,
+  window: { location: { search: '?min=1&remindDownload=1' } },
+  performance: { now: () => 0 },
+  document: { hidden: false },
+  Blob,
+  setTimeout: () => {},
+  URL: { createObjectURL: () => '', revokeObjectURL: () => {} }
+});
+vm.runInContext(fs.readFileSync('pythoncopy-activity.js', 'utf8'), minContext);
+vm.runInContext(app.slice(app.indexOf('    const activityLog ='), app.indexOf('    // --- Turtle Graphics')), minContext);
+assert.equal(vm.runInContext('isMinimalMode', minContext), true);
+assert.equal(vm.runInContext('activityReminderEnabled', minContext), false);
+
+const trackingContext = vm.createContext({
+  URLSearchParams,
+  window: { location: { search: '?remindDownload=1' } },
+  performance: { now: () => 0 },
+  document: { hidden: false },
+  Blob,
+  setTimeout: () => {},
+  URL: { createObjectURL: () => '', revokeObjectURL: () => {} }
+});
+vm.runInContext(fs.readFileSync('pythoncopy-activity.js', 'utf8'), trackingContext);
+vm.runInContext(app.slice(app.indexOf('    const activityLog ='), app.indexOf('    // --- Turtle Graphics')), trackingContext);
+assert.equal(vm.runInContext('isMinimalMode', trackingContext), false);
+assert.equal(vm.runInContext('activityReminderEnabled', trackingContext), true);
+console.log('PASS: minimal mode (&min=1) suppresses mood and activity reminders while tracking mode preserves them.');
+

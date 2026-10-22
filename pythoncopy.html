@@ -13,16 +13,19 @@
   <meta name="apple-mobile-web-app-title" content="Python Code Lab">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
     id="prism-theme">
-  <link rel="stylesheet" href="pythoncopy.css?v=36">
+  <link rel="stylesheet" href="pythoncopy.css?v=38">
   <style id="dynamicLinksStyle">
     /* Extra dynamic overrides if needed */
   </style>
   <script>
-    if (new URLSearchParams(window.location.search).get('remindDownload') === '1') {
+    const initialUrlParams = new URLSearchParams(window.location.search);
+    if (initialUrlParams.get('min') === '1') {
+      document.documentElement.classList.add('minimal-mode');
+    } else if (initialUrlParams.get('remindDownload') === '1') {
       document.documentElement.classList.add('activity-tracking-mode');
     }
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 36) {
+      if (window.pythonCopyVersion !== 38) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -554,7 +557,7 @@
       </dialog>
 
       <!-- Activity Tracking & Download Reminder Banner -->
-      <div id="activityReminderBanner" class="activity-reminder-banner" hidden>
+      <div id="activityReminderBanner" class="activity-reminder-banner" hidden style="display: none;">
         <div class="activity-banner-row">
           <div class="activity-mood-indicator">
             <span class="activity-banner-label">Mood:</span>

@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 36;
+    window.pythonCopyVersion = 38;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -108,7 +108,8 @@
     // --- Editor Session Playback State ---
     const activityLog = new PythonCopyActivityLog();
     let activityPlaybackActive = false;
-    const activityReminderEnabled = new URLSearchParams(window.location.search).get('remindDownload') === '1';
+    const isMinimalMode = new URLSearchParams(window.location.search).get('min') === '1';
+    const activityReminderEnabled = !isMinimalMode && new URLSearchParams(window.location.search).get('remindDownload') === '1';
     let activityNeedsDownload = false;
     let activityNavigationApproved = false;
     let pendingActivityNavigation = null;
@@ -132,6 +133,7 @@
     }
 
     function showInitialFeelingModal() {
+      if (!activityReminderEnabled || isMinimalMode) return;
       const dialog = document.getElementById('initialFeelingDialog');
       if (dialog && !dialog.open) {
         dialog.showModal();
@@ -222,9 +224,15 @@
 
     function initializeActivityReminder() {
       const banner = document.getElementById('activityReminderBanner');
-      if (banner) banner.hidden = !activityReminderEnabled;
+      if (banner) {
+        banner.hidden = isMinimalMode || !activityReminderEnabled;
+        banner.style.display = (activityReminderEnabled && !isMinimalMode) ? 'flex' : 'none';
+      }
 
-      if (activityReminderEnabled) {
+      if (isMinimalMode) {
+        document.documentElement.classList.add('minimal-mode');
+        document.body.classList.add('minimal-mode');
+      } else if (activityReminderEnabled) {
         document.documentElement.classList.add('activity-tracking-mode');
         document.body.classList.add('activity-tracking-mode');
       }
@@ -1365,7 +1373,7 @@ import sys, builtins
       if (blocksTabHeader) blocksTabHeader.style.display = 'none';
 
       const workspaceToolbar = document.querySelector('.workspace-toolbar');
-      if (workspaceToolbar && !activityReminderEnabled) workspaceToolbar.style.display = 'flex';
+      if (workspaceToolbar && !activityReminderEnabled && !isMinimalMode) workspaceToolbar.style.display = 'flex';
 
       const modeTogglePill = document.getElementById('modeTogglePill');
       if (modeTogglePill) modeTogglePill.style.display = '';
@@ -2099,7 +2107,7 @@ import sys, builtins
 
         // Force initialize Blocks
         setAppMode('blocks');
-      } else if (urlParams.has('blank')) {
+      } else if (urlParams.has('blank') || isMinimalMode) {
         startBlankFile();
       }
 
