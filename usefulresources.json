@@ -1,7 +1,7 @@
 {
   "$schema": "./usefulresources.schema.json",
   "version": "1.0.0",
-  "updatedAt": "2026-10-13",
+  "updatedAt": "2026-10-23",
   "topics": [
     {
       "id": "general",
@@ -571,6 +571,19 @@
       "description": "Python lab, interactive syntax cheat sheets, flowchart generators, and coding utilities.",
       "tutorialVideo": null,
       "tools": [
+        {
+          "title": "Diffchecker",
+          "url": "https://www.diffchecker.com/",
+          "desc": "Online diff tool to compare text, code, images, and files side by side. Very useful to check small differences in student work.",
+          "tag": "Teacher Tool / All ages",
+          "topics": [
+            "computing",
+            "general"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
         {
           "title": "Flowchart Studio",
           "url": "https://jamesabela.github.io/jsfun/flowchart.html",
@@ -2741,6 +2754,19 @@
         "tutorialVideo": null,
         "tools": [
           {
+            "title": "Diffchecker",
+            "url": "https://www.diffchecker.com/",
+            "desc": "Online diff tool to compare text, code, images, and files side by side. Very useful to check small differences in student work.",
+            "tag": "Teacher Tool / All ages",
+            "topics": [
+              "computing",
+              "general"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
             "title": "Flowchart Studio",
             "url": "https://jamesabela.github.io/jsfun/flowchart.html",
             "desc": "Draw and export flowcharts with draggable shapes, connecting arrows, and PowerPoint or image exports. Ideal for algorithms in Computing, processes in DT, and workflows across subjects.",
@@ -2903,6 +2929,19 @@
         "description": "Python lab, interactive syntax cheat sheets, flowchart generators, and coding utilities.",
         "tutorialVideo": null,
         "tools": [
+          {
+            "title": "Diffchecker",
+            "url": "https://www.diffchecker.com/",
+            "desc": "Online diff tool to compare text, code, images, and files side by side. Very useful to check small differences in student work.",
+            "tag": "Teacher Tool / All ages",
+            "topics": [
+              "computing",
+              "general"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
           {
             "title": "Flowchart Studio",
             "url": "https://jamesabela.github.io/jsfun/flowchart.html",
