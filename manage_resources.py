@@ -219,6 +219,13 @@ def validate_database(data: Dict[str, Any]) -> Tuple[int, int]:
                 else:
                     url_map[url] = f"{cname} -> {title}"
             
+            # Date added validation (optional, format YYYY-MM-DD)
+            if "dateAdded" in tool and tool["dateAdded"]:
+                d_val = str(tool["dateAdded"]).strip()
+                if not re.match(r"^\d{4}-\d{2}-\d{2}$", d_val):
+                    errors += 1
+                    print(red(f"  [Invalid dateAdded] Tool '{title}' in '{cname}' has invalid dateAdded format '{d_val}'. Expected YYYY-MM-DD."))
+
             # Topic validation
             tool_topics = tool.get("topics", [])
             if not isinstance(tool_topics, list) or len(tool_topics) == 0:
@@ -408,8 +415,10 @@ def print_tool_card(tool: Dict[str, Any], category: str):
     if desc_line2:
         print(cyan("│") + f"       {desc_line2}".ljust(w - 2) + cyan("│"))
     print(cyan("│") + f" Tag: {yellow(tool.get('tag', ''))}  |  Author: {tool.get('author') or 'None'}".ljust(w + 7) + cyan("│"))
+    date_display = tool.get('dateAdded') or 'None (Legacy)'
+    print(cyan("│") + f" Date Added: {yellow(date_display)}  |  External: {tool.get('isExternal')}".ljust(w + 7) + cyan("│"))
     topics_display = ", ".join(tool.get("topics", []))
-    print(cyan("│") + f" Topics: {green(topics_display)}  |  External: {tool.get('isExternal')}".ljust(w + 7) + cyan("│"))
+    print(cyan("│") + f" Topics: {green(topics_display)}".ljust(w + 7) + cyan("│"))
     if tool.get("tutorialVideo"):
         print(cyan("│") + f" Tutorial: {tool.get('tutorialVideo')}".ljust(w - 2) + cyan("│"))
     print(cyan("└" + "─" * (w - 2) + "┘") + "\n")
@@ -458,6 +467,9 @@ def add_tool_wizard(data: Dict[str, Any]) -> bool:
     
     tutorial = prompt_input("Tutorial Video URL (optional, press Enter to skip)", default="") or None
     
+    today_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    date_added = prompt_input("Date Added (YYYY-MM-DD)", default=today_str).strip()
+    
     new_tool = {
         "title": title,
         "url": url,
@@ -466,7 +478,8 @@ def add_tool_wizard(data: Dict[str, Any]) -> bool:
         "topics": topics,
         "author": author if author else None,
         "tutorialVideo": tutorial,
-        "isExternal": is_external
+        "isExternal": is_external,
+        "dateAdded": date_added if date_added else today_str
     }
     
     print_tool_card(new_tool, category)
@@ -521,33 +534,36 @@ def search_and_edit_tool(data: Dict[str, Any], initial_query: Optional[str] = No
     print_tool_card(tool, current_cat_name)
     
     print(bold("Select field to edit:"))
-    fields = ["Title", "URL", "Description", "Tag", "Topics", "Author", "External Flag", "Tutorial Video", "Category", "ALL FIELDS"]
+    fields = ["Title", "URL", "Description", "Tag", "Topics", "Author", "External Flag", "Tutorial Video", "Date Added", "Category", "ALL FIELDS"]
     for i, f in enumerate(fields, 1):
         print(f"  {cyan(str(i))}. {f}")
     
-    f_choice = prompt_input("Enter choice", default="10")
+    f_choice = prompt_input("Enter choice", default="11")
     if not f_choice.isdigit():
         return
     f_idx = int(f_choice)
     
-    if f_idx in [1, 10]:
+    if f_idx in [1, 11]:
         tool["title"] = prompt_input("Title", default=tool.get("title"))
-    if f_idx in [2, 10]:
+    if f_idx in [2, 11]:
         tool["url"] = prompt_input("URL", default=tool.get("url"))
-    if f_idx in [3, 10]:
+    if f_idx in [3, 11]:
         tool["desc"] = prompt_input("Description", default=tool.get("desc"))
-    if f_idx in [4, 10]:
+    if f_idx in [4, 11]:
         tool["tag"] = select_tag(current_tag=tool.get("tag"))
-    if f_idx in [5, 10]:
+    if f_idx in [5, 11]:
         tool["topics"] = select_topics(data, preselected=tool.get("topics", []))
-    if f_idx in [6, 10]:
+    if f_idx in [6, 11]:
         tool["author"] = prompt_input("Author", default=tool.get("author") or "") or None
-    if f_idx in [7, 10]:
+    if f_idx in [7, 11]:
         ext_def = "y" if tool.get("isExternal") else "n"
         tool["isExternal"] = prompt_input("Is External (y/n)", default=ext_def).lower().startswith("y")
-    if f_idx in [8, 10]:
+    if f_idx in [8, 11]:
         tool["tutorialVideo"] = prompt_input("Tutorial Video", default=tool.get("tutorialVideo") or "") or None
-    if f_idx in [9, 10]:
+    if f_idx in [9, 11]:
+        today_default = datetime.datetime.now().strftime("%Y-%m-%d")
+        tool["dateAdded"] = prompt_input("Date Added (YYYY-MM-DD)", default=tool.get("dateAdded") or today_default) or None
+    if f_idx in [10, 11]:
         new_cat = select_category(data)
         if new_cat != current_cat_name:
             category_obj["tools"].remove(tool)

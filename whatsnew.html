@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What's New &amp; Resource of the Day — jsfun Teaching Tools</title>
+  <meta name="description"
+    content="Discover newly added educational tools and explore a featured Resource of the Day across all classroom subjects.">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a6aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #1a6aff;
+      --primary-dark: #0047cc;
+      --primary-light: #e6f0ff;
+      --accent: #8b5cf6;
+      --accent-light: #f3e8ff;
+      --text: #0d1b3e;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --radius: 0.85rem;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    body {
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ───── Hero Header ───── */
+    .hero {
+      background: linear-gradient(135deg, #94c5fa 0%, #c4aff0 50%, #f0a0c8 100%);
+      color: #0d1b3e;
+      text-align: center;
+      padding: 3.5rem 1rem 5rem;
+      clip-path: ellipse(120% 100% at 50% 0%);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+      color: #0d1b3e;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      opacity: 0.82;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ───── Tab bar ───── */
+    .tab-bar-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: -2.5rem;
+      position: relative;
+      z-index: 10;
+      padding: 0 1rem;
+    }
+
+    .tab-bar {
+      background: var(--white);
+      border-radius: 999px;
+      padding: 0.35rem;
+      display: inline-flex;
+      gap: 0.25rem;
+      box-shadow: 0 4px 24px rgba(26, 106, 255, 0.15);
+      border: 1px solid var(--border);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tab-btn {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.55rem 1.4rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--muted);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(26, 106, 255, 0.35);
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .tab-btn.link-btn {
+      background: transparent;
+      color: #0d9488;
+      border: 1.5px solid #0d9488;
+    }
+
+    .tab-btn.link-btn:hover {
+      background: #ccfbf1;
+      color: #0f766e;
+      border-color: #0f766e;
+    }
+
+    /* ───── Main Layout ───── */
+    main {
+      max-width: 1040px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1.25rem;
+      flex-grow: 1;
+    }
+
+    /* ───── Resource of the Day Spotlight ───── */
+    .spotlight-section {
+      margin-bottom: 3rem;
+    }
+
+    .spotlight-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%);
+      border: 2px solid #ddd6fe;
+      border-radius: 1.25rem;
+      padding: 2rem 2.25rem;
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.12);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .spotlight-card:hover {
+      box-shadow: 0 14px 38px rgba(139, 92, 246, 0.18);
+    }
+
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .spotlight-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .spotlight-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #7c3aed;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+    }
+
+    .spotlight-date {
+      font-size: 0.95rem;
+      color: #6b21a8;
+      font-weight: 700;
+      background: #ede9fe;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+    }
+
+    .spotlight-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .spotlight-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .spotlight-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #1e1b4b;
+      line-height: 1.25;
+    }
+
+    .spotlight-category {
+      font-size: 0.88rem;
+      color: #5b21b6;
+      font-weight: 700;
+      background: #e9d5ff;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+    }
+
+    .spotlight-desc {
+      font-size: 1.1rem;
+      color: #334155;
+      line-height: 1.55;
+      max-width: 820px;
+    }
+
+    .spotlight-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #e9d5ff;
+      flex-wrap: wrap;
+    }
+
+    .spotlight-tags {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tag-pill {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+
+    .tag-topic {
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+
+    .spotlight-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-primary-action {
+      font-family: inherit;
+      font-size: 0.98rem;
+      font-weight: 700;
+      padding: 0.65rem 1.4rem;
+      border-radius: 999px;
+      background: #7c3aed;
+      color: #ffffff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+    }
+
+    .btn-primary-action:hover {
+      background: #6d28d9;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.45);
+    }
+
+    .btn-secondary-action {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #6b21a8;
+      border: 1.5px solid #c4b5fd;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.18s ease;
+    }
+
+    .btn-secondary-action:hover {
+      background: #ede9fe;
+      border-color: #7c3aed;
+      transform: translateY(-1px);
+    }
+
+    /* ───── Timeline Section Heading & Controls ───── */
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .section-heading-main {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .controls-panel {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .controls-top-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .search-container {
+      position: relative;
+      flex: 1 1 300px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.65rem 1rem 0.65rem 2.5rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 106, 255, 0.15);
+      background: #fff;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+
+    .sort-toggle-btn {
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+
+    .sort-toggle-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-pill {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-pill:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .filter-pill.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 6px rgba(26, 106, 255, 0.25);
+    }
+
+    /* ───── Cards Grid & Date Feed ───── */
+    .timeline-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .date-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .date-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-top: 0.5rem;
+    }
+
+    .date-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    .date-chip {
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .dated-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .dated-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.45rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .dated-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(26, 106, 255, 0.12);
+      border-color: var(--primary);
+    }
+
+    .dated-card-link {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .dated-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .card-date-badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1e40af;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .card-category-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+    }
+
+    .dated-card-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .dated-card-desc {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.45;
+      flex-grow: 1;
+    }
+
+    .dated-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding-top: 0.6rem;
+      border-top: 1px solid #f1f5f9;
+      flex-wrap: wrap;
+    }
+
+    .dated-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .dated-card-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .dated-card-launch {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* External link indicator */
+    .dated-card.external .dated-card-title::after {
+      content: ' ↗';
+      font-size: 0.9rem;
+      color: var(--muted);
+      opacity: 0.6;
+      font-weight: normal;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background: var(--white);
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      margin: 1.5rem 0;
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ───── Footer ───── */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 960px;
+      margin: 3rem auto 0;
+      width: 100%;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .tea {
+      display: inline-block;
+      margin-left: 0.25rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 640px) {
+      .spotlight-card {
+        padding: 1.35rem;
+      }
+      .spotlight-title {
+        font-size: 1.35rem;
+      }
+      .spotlight-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .spotlight-actions {
+        width: 100%;
+        flex-direction: column;
+      }
+      .btn-primary-action, .btn-secondary-action {
+        width: 100%;
+        justify-content: center;
+      }
+      .tab-btn {
+        padding: 0.45rem 0.9rem;
+        font-size: 0.88rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hero">
+    <h1>✨ What's New</h1>
+    <p>Explore recently added teaching tools, sort by release date, and discover today’s featured resource from our full classroom catalog.</p>
+  </div>
+
+  <!-- Navigation -->
+  <div class="tab-bar-wrap">
+    <div class="tab-bar" role="tablist">
+      <a href="index.html" class="tab-btn">🎓 General Teaching</a>
+      <a href="computing.html" class="tab-btn">💻 Computing Tools</a>
+      <a class="tab-btn link-btn" href="https://jamesabela.github.io/reading/apps.html">📚 English Tools</a>
+      <a href="whatsnew.html" class="tab-btn active">✨ What's New</a>
+      <a class="tab-btn link-btn" href="https://readysetcompute.com/">🚀 ReadySetCompute</a>
+    </div>
+  </div>
+
+  <main>
+    <!-- Resource of the Day Spotlight -->
+    <section class="spotlight-section" aria-label="Resource of the Day">
+      <div class="spotlight-card" id="spotlightCard">
+        <div class="spotlight-header">
+          <div class="spotlight-badge">
+            <span>🌟</span> Resource of the Day
+          </div>
+          <div class="spotlight-date" id="spotlightDateLabel">
+            Today
+          </div>
+        </div>
+
+        <div class="spotlight-content" id="spotlightContent">
+          <div class="spotlight-title-row">
+            <h2 class="spotlight-title" id="spotlightTitle">Loading daily spotlight…</h2>
+            <span class="spotlight-category" id="spotlightCategory">Category</span>
+          </div>
+          <p class="spotlight-desc" id="spotlightDesc">Preparing the featured classroom tool for today...</p>
+        </div>
+
+        <div class="spotlight-footer">
+          <div class="spotlight-tags" id="spotlightTags">
+            <span class="tag-pill" id="spotlightTag">Audience</span>
+          </div>
+          <div class="spotlight-actions">
+            <button type="button" class="btn-secondary-action" id="btnPickAnother" title="Pick another random resource from the full catalog">
+              <span>🎲</span> Pick Another
+            </button>
+            <a class="btn-primary-action" id="spotlightLink" href="#" target="_blank" rel="noopener">
+              Open Resource ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources Added by Date -->
+    <section class="dated-section" aria-label="Resources added by date">
+      <div class="section-header-row">
+        <h2 class="section-heading-main">
+          <span>📅</span> Resources Added by Date
+        </h2>
+        <span id="datedCountBadge" class="card-date-badge" style="font-size: 0.85rem;">0 new resources</span>
+      </div>
+      <p class="section-subtitle">
+        Chronological list of additions to the directory. Older legacy tools without an explicit date are archived in the main subject categories.
+      </p>
+
+      <!-- Controls: Filter & Search & Sort -->
+      <div class="controls-panel">
+        <div class="controls-top-row">
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="datedSearchInput" class="search-input" placeholder="Filter new resources by name, topic, or description..." aria-label="Filter new resources">
+          </div>
+          <button type="button" id="sortOrderBtn" class="sort-toggle-btn" title="Toggle sorting order">
+            <span id="sortOrderIcon">⬇️</span>
+            <span id="sortOrderText">Newest First</span>
+          </button>
+        </div>
+
+        <div class="filter-pills" id="topicFilterPills" role="radiogroup" aria-label="Filter by Topic">
+          <button type="button" class="filter-pill active" data-topic="all">🌐 All Topics</button>
+          <button type="button" class="filter-pill" data-topic="computing">💻 Computing</button>
+          <button type="button" class="filter-pill" data-topic="general">🎓 General</button>
+          <button type="button" class="filter-pill" data-topic="english">📚 English</button>
+          <button type="button" class="filter-pill" data-topic="maths">🔢 Maths</button>
+          <button type="button" class="filter-pill" data-topic="sciences">🧪 Sciences</button>
+          <button type="button" class="filter-pill" data-topic="social_sciences">🌍 Social Sciences</button>
+        </div>
+      </div>
+
+      <!-- Chronological Feed Container -->
+      <div id="datedFeedContainer" class="timeline-container">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Made with ❤️ for better thinking. If it helped you, support the project.
+      <a class="tea" href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener">Buy me a tea</a>.
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.85rem;">
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
+      James Abela 2024–2026
+    </p>
+  </footer>
+
+  <script>
+    let allCatalogTools = [];
+    let datedTools = [];
+    let sortDirection = 'desc'; // 'desc' = newest first, 'asc' = oldest first
+    let activeTopic = 'all';
+    let searchQuery = '';
+
+    // Month names for date formatting
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const FULL_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    function formatDateFriendly(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        const y = parts[0];
+        const m = parseInt(parts[1], 10) - 1;
+        const d = parseInt(parts[2], 10);
+        return `${d} ${MONTHS[m] || ''} ${y}`;
+      }
+      return dateStr;
+    }
+
+    function formatTodayFull() {
+      const now = new Date();
+      const dayName = DAYS[now.getDay()];
+      const d = now.getDate();
+      const mName = FULL_MONTHS[now.getMonth()];
+      const y = now.getFullYear();
+      return `${dayName}, ${d} ${mName} ${y}`;
+    }
+
+    function getTodayString() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    // Extract all unique tools across all categories
+    function extractToolsFromDatabase(data) {
+      const tools = [];
+      const seenUrls = new Set();
+
+      if (data && data.categories && Array.isArray(data.categories)) {
+        data.categories.forEach(cat => {
+          const catName = cat.category || 'General';
+          (cat.tools || []).forEach(tool => {
+            if (tool && tool.url && !seenUrls.has(tool.url)) {
+              seenUrls.add(tool.url);
+              tools.push({
+                ...tool,
+                categoryName: catName
+              });
+            }
+          });
+        });
+      }
+      return tools;
+    }
+
+    // Deterministic daily index from date string
+    function computeDailyIndex(dateStr, totalCount) {
+      if (totalCount <= 0) return 0;
+      let hash = 0;
+      for (let i = 0; i < dateStr.length; i++) {
+        hash = (hash << 5) - hash + dateStr.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash) % totalCount;
+    }
+
+    // Render the Resource of the Day
+    function renderResourceOfTheDay(tool, isManualShuffle = false) {
+      if (!tool) return;
+
+      const dateLabel = document.getElementById('spotlightDateLabel');
+      const title = document.getElementById('spotlightTitle');
+      const category = document.getElementById('spotlightCategory');
+      const desc = document.getElementById('spotlightDesc');
+      const tagsContainer = document.getElementById('spotlightTags');
+      const link = document.getElementById('spotlightLink');
+
+      dateLabel.textContent = isManualShuffle ? '🎲 Random Pick' : formatTodayFull();
+      title.textContent = tool.title || 'Untitled Tool';
+      category.textContent = tool.categoryName || 'Tool';
+      desc.textContent = tool.desc || 'No description available.';
+      link.href = tool.url || '#';
+
+      // Build tags
+      let tagsHtml = `<span class="tag-pill">${tool.tag || 'All ages'}</span>`;
+      if (tool.topics && Array.isArray(tool.topics)) {
+        tool.topics.forEach(t => {
+          tagsHtml += `<span class="tag-pill tag-topic">${t}</span>`;
+        });
+      }
+      if (tool.author) {
+        tagsHtml += `<span class="tag-pill">by ${tool.author}</span>`;
+      }
+      tagsContainer.innerHTML = tagsHtml;
+    }
+
+    // Render the chronological feed of dated resources
+    function renderDatedFeed() {
+      const container = document.getElementById('datedFeedContainer');
+      const countBadge = document.getElementById('datedCountBadge');
+      if (!container) return;
+
+      // Filter by search and topic
+      const filtered = datedTools.filter(tool => {
+        // Topic filter
+        if (activeTopic !== 'all') {
+          const topics = tool.topics || [];
+          if (!topics.includes(activeTopic)) return false;
+        }
+
+        // Search query
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase().trim();
+          const title = (tool.title || '').toLowerCase();
+          const desc = (tool.desc || '').toLowerCase();
+          const tag = (tool.tag || '').toLowerCase();
+          const cat = (tool.categoryName || '').toLowerCase();
+          return title.includes(q) || desc.includes(q) || tag.includes(q) || cat.includes(q);
+        }
+
+        return true;
+      });
+
+      // Sort
+      filtered.sort((a, b) => {
+        const dateA = a.dateAdded || '';
+        const dateB = b.dateAdded || '';
+        if (dateA === dateB) {
+          return (a.title || '').localeCompare(b.title || '');
+        }
+        return sortDirection === 'desc' ? dateB.localeCompare(dateA) : dateA.localeCompare(dateB);
+      });
+
+      countBadge.textContent = `${filtered.length} resource${filtered.length === 1 ? '' : 's'}`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🔎</div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">No matching dated resources found</h3>
+            <p>Try adjusting your search terms or selecting 'All Topics' above.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Group by date
+      const groupsByDate = {};
+      filtered.forEach(tool => {
+        const d = tool.dateAdded || 'Unknown Date';
+        if (!groupsByDate[d]) {
+          groupsByDate[d] = [];
+        }
+        groupsByDate[d].push(tool);
+      });
+
+      let html = '';
+      const sortedDates = Object.keys(groupsByDate);
+
+      sortedDates.forEach(dateKey => {
+        const toolsOnDate = groupsByDate[dateKey];
+        const dateHeading = formatDateFriendly(dateKey);
+
+        html += `
+          <div class="date-group">
+            <div class="date-header">
+              <span>📅</span>
+              <span>Added on ${dateHeading}</span>
+              <span class="date-chip">${toolsOnDate.length} tool${toolsOnDate.length === 1 ? '' : 's'}</span>
+            </div>
+            <div class="dated-grid">
+        `;
+
+        toolsOnDate.forEach(tool => {
+          const externalClass = tool.isExternal ? ' external' : '';
+          const authorHtml = tool.author ? `<span style="font-size: 0.75rem; color: #64748b;">by ${tool.author}</span>` : '';
+
+          html += `
+            <div class="dated-card${externalClass}">
+              <a class="dated-card-link" href="${tool.url}" target="_blank" rel="noopener" aria-label="${tool.title}"></a>
+              <div class="dated-card-top">
+                <span class="card-date-badge">📅 ${formatDateFriendly(tool.dateAdded)}</span>
+                <span class="card-category-badge">${tool.categoryName || 'Tool'}</span>
+              </div>
+              <div class="dated-card-title">${tool.title}</div>
+              <div class="dated-card-desc">${tool.desc || ''}</div>
+              <div class="dated-card-footer">
+                <div class="dated-card-meta">
+                  <span class="dated-card-tag">${tool.tag || 'All ages'}</span>
+                  ${authorHtml}
+                </div>
+                <span class="dated-card-launch">Open ➔</span>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Initialize data & event listeners
+    async function initPage() {
+      try {
+        const res = await fetch('usefulresources.json');
+        if (!res.ok) throw new Error('Failed to fetch usefulresources.json');
+        const data = await res.json();
+
+        allCatalogTools = extractToolsFromDatabase(data);
+
+        // Filter only tools with dateAdded
+        datedTools = allCatalogTools.filter(tool => Boolean(tool.dateAdded && String(tool.dateAdded).trim() !== ''));
+
+        // 1. Pick Resource of the Day based on ALL resources available
+        if (allCatalogTools.length > 0) {
+          const todayStr = getTodayString();
+          const dailyIdx = computeDailyIndex(todayStr, allCatalogTools.length);
+          renderResourceOfTheDay(allCatalogTools[dailyIdx]);
+        }
+
+        // 2. Render Chronological Dated Feed
+        renderDatedFeed();
+
+      } catch (err) {
+        console.error('Error loading resources:', err);
+        const container = document.getElementById('datedFeedContainer');
+        if (container) {
+          container.innerHTML = `
+            <div class="empty-state" style="border-color: #fecaca; background: #fff5f5; color: #b91c1c;">
+              <div class="empty-icon">⚠️</div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem;">Could not load resources</h3>
+              <p>Please make sure you are loading this page via a web server or GitHub Pages.</p>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Attach Event Handlers
+    document.addEventListener('DOMContentLoaded', () => {
+      initPage();
+
+      // Pick another random resource button
+      const btnPickAnother = document.getElementById('btnPickAnother');
+      if (btnPickAnother) {
+        btnPickAnother.addEventListener('click', () => {
+          if (allCatalogTools.length === 0) return;
+          const randomIndex = Math.floor(Math.random() * allCatalogTools.length);
+          renderResourceOfTheDay(allCatalogTools[randomIndex], true);
+        });
+      }
+
+      // Sort Order Toggle
+      const sortOrderBtn = document.getElementById('sortOrderBtn');
+      const sortOrderText = document.getElementById('sortOrderText');
+      const sortOrderIcon = document.getElementById('sortOrderIcon');
+      if (sortOrderBtn) {
+        sortOrderBtn.addEventListener('click', () => {
+          if (sortDirection === 'desc') {
+            sortDirection = 'asc';
+            sortOrderText.textContent = 'Oldest First';
+            sortOrderIcon.textContent = '⬆️';
+          } else {
+            sortDirection = 'desc';
+            sortOrderText.textContent = 'Newest First';
+            sortOrderIcon.textContent = '⬇️';
+          }
+          renderDatedFeed();
+        });
+      }
+
+      // Search input filter
+      const searchInput = document.getElementById('datedSearchInput');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          searchQuery = e.target.value;
+          renderDatedFeed();
+        });
+      }
+
+      // Topic filter pills
+      const filterPills = document.querySelectorAll('#topicFilterPills .filter-pill');
+      filterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          filterPills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          activeTopic = pill.getAttribute('data-topic') || 'all';
+          renderDatedFeed();
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
