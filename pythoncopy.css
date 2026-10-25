@@ -2185,6 +2185,7 @@
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
+      min-height: 220px;
       overflow: hidden;
       border-radius: 12px;
       background: #0f172a;
@@ -2199,10 +2200,13 @@
       object-fit: cover;
       opacity: 0;
       transition: opacity 1.1s ease-in-out;
+      pointer-events: none;
     }
 
     .pythoncopy-hero-carousel img.active {
       opacity: 1;
+      pointer-events: auto;
+      z-index: 2;
     }
 
     .pythoncopy-instructions-link {

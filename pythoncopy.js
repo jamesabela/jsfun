@@ -1,4 +1,4 @@
-    window.pythonCopyVersion = 39;
+    window.pythonCopyVersion = 40;
     let currentURL = '';
     let executionCancelled = false;
     let hasUnsavedChanges = false;
@@ -1113,6 +1113,8 @@ import sys, builtins
           flowchartBtn.style.display = 'none';
         }
       }
+
+      updatePuzzleButtonVisibility();
     }
 
     function updatePasteCounter() {
@@ -1403,8 +1405,8 @@ import sys, builtins
         exitPlaybackMode(true);
       }
       currentURL = '';
-      updatePuzzleButtonVisibility();
       editor.value = '';
+      updatePuzzleButtonVisibility();
       markCurrentEditorCodeSaved('');
       displayCode.textContent = '';
       document.getElementById('urlInput').value = '';
@@ -1706,6 +1708,10 @@ import sys, builtins
       scheduleInstructionAutoFade();
     }
 
+    window.prevInstructionSlide = prevInstructionSlide;
+    window.nextInstructionSlide = nextInstructionSlide;
+    window.goToInstructionSlide = goToInstructionSlide;
+
     let playbackZoomLevel = 1;
 
     function recordPlaybackSnapshot(reason = 'Edit', isCheckpoint = false, checkpointType = '') {
@@ -1956,34 +1962,41 @@ import sys, builtins
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Fetch and build instruction carousel dynamically
-      fetch('pythoncopycarousel.fragment')
-        .then(response => response.text())
-        .then(html => {
-          const track = document.getElementById('carouselTrack');
-          if (track) {
-            track.innerHTML = html;
-            const slides = getInstructionImages();
-            totalInstructionSlides = slides.length;
-            
-            const dotsContainer = document.getElementById('carouselDots');
-            if (dotsContainer) {
-              dotsContainer.innerHTML = '';
-              for (let i = 0; i < totalInstructionSlides; i++) {
-                const dot = document.createElement('button');
-                dot.type = 'button';
-                dot.className = 'dot' + (i === 0 ? ' active' : '');
-                dot.setAttribute('aria-label', `Show screenshot ${i + 1}`);
-                dot.onclick = () => goToInstructionSlide(i);
-                dotsContainer.appendChild(dot);
-              }
-            }
-            currentInstructionSlide = 0;
-            updateInstructionCarousel();
-            scheduleInstructionAutoFade();
+      // Build instruction carousel (from pre-rendered DOM or fallback fragment fetch)
+      function initInstructionCarousel() {
+        const slides = getInstructionImages();
+        totalInstructionSlides = slides.length;
+        if (!totalInstructionSlides) return;
+
+        const dotsContainer = document.getElementById('carouselDots');
+        if (dotsContainer) {
+          dotsContainer.innerHTML = '';
+          for (let i = 0; i < totalInstructionSlides; i++) {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', `Show screenshot ${i + 1}`);
+            dot.onclick = () => goToInstructionSlide(i);
+            dotsContainer.appendChild(dot);
           }
-        })
-        .catch(err => console.error('Error loading instruction carousel:', err));
+        }
+        currentInstructionSlide = 0;
+        updateInstructionCarousel();
+        scheduleInstructionAutoFade();
+      }
+
+      const track = document.getElementById('carouselTrack');
+      if (track && track.querySelector('.pythoncopy-hero-carousel')) {
+        initInstructionCarousel();
+      } else if (track) {
+        fetch('pythoncopycarousel.fragment')
+          .then(response => response.text())
+          .then(html => {
+            track.innerHTML = html;
+            initInstructionCarousel();
+          })
+          .catch(err => console.error('Error loading instruction carousel:', err));
+      }
 
       const urlParams = new URLSearchParams(window.location.search);
       const isBlocksTab = urlParams.has('blocks');
@@ -2069,7 +2082,6 @@ import sys, builtins
           currentQuizMetadata = parsedRes.metadata;
           loadedMetadataLinks = currentQuizMetadata.links || [];
           const strippedDecodedCode = parsedRes.strippedCode;
-          updatePuzzleButtonVisibility();
 
           editor.value = strippedDecodedCode;
           markCurrentEditorCodeSaved(strippedDecodedCode);
@@ -2085,6 +2097,7 @@ import sys, builtins
           clearRunner();
           setRunnerStatus('Code loaded from manual.');
           updateBlocksButtonState();
+          updatePuzzleButtonVisibility();
           playbackHistory = [];
           if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
             window.blocklyWorkspace.clearUndo();
@@ -2119,6 +2132,7 @@ import sys, builtins
 
         // Force initialize Blocks
         setAppMode('blocks');
+        updatePuzzleButtonVisibility();
       } else if (urlParams.has('blank') || isMinimalMode) {
         startBlankFile();
       }
@@ -2490,7 +2504,6 @@ import sys, builtins
           exitPlaybackMode(true);
         }
         currentURL = '';
-        updatePuzzleButtonVisibility();
         if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
           if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(code)) {
             setRunnerStatus('This file contains Python code that cannot be converted to blocks.');
@@ -2544,6 +2557,7 @@ import sys, builtins
         setRunnerStatus('File loaded successfully.');
         autoPreviewFirstLink();
         updateBlocksButtonState();
+        updatePuzzleButtonVisibility();
         playbackHistory = [];
         if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
           window.blocklyWorkspace.clearUndo();
@@ -2577,7 +2591,6 @@ import sys, builtins
           exitPlaybackMode(true);
         }
         currentURL = '';
-        updatePuzzleButtonVisibility();
 
         const previousDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
@@ -2592,6 +2605,7 @@ import sys, builtins
           analyseCodeAndUpdateMessage();
           clearRunner();
           setRunnerStatus('Blocks file loaded successfully.');
+          updatePuzzleButtonVisibility();
           playbackHistory = [];
           if (blocklyWorkspace && typeof blocklyWorkspace.clearUndo === 'function') {
             blocklyWorkspace.clearUndo();
@@ -3477,8 +3491,8 @@ import sys, builtins
         links: []
       };
       loadedMetadataLinks = [];
-      updatePuzzleButtonVisibility();
       editor.value = '';
+      updatePuzzleButtonVisibility();
       markCurrentEditorCodeSaved('');
       displayCode.textContent = '';
       document.getElementById('urlInput').value = '';
@@ -3556,6 +3570,7 @@ import sys, builtins
                 clearRunner();
                 autoPreviewFirstLink();
                 updateBlocksButtonState();
+                updatePuzzleButtonVisibility();
                 playbackHistory = [];
                 recordPlaybackSnapshot('Load Blocks Gist', true, 'save');
 
@@ -3591,6 +3606,7 @@ import sys, builtins
           clearRunner();
           autoPreviewFirstLink();
           updateBlocksButtonState();
+          updatePuzzleButtonVisibility();
           playbackHistory = [];
           if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
             window.blocklyWorkspace.clearUndo();
@@ -3724,6 +3740,7 @@ import sys, builtins
       updateReferenceLinks();
       updateQuizDetection();
       updateShareLinkButton();
+      updatePuzzleButtonVisibility();
     }
 
     function updateQuizDetection() {
@@ -5140,6 +5157,7 @@ json.dumps(_test_result)
         analyseCodeAndUpdateMessage();
         updateBlocksButtonState();
         updateEditorActionButtons();
+        updatePuzzleButtonVisibility();
         setAppMode('edit');
         editor.focus();
       }
@@ -6591,9 +6609,11 @@ def _run_trace():
     function updatePuzzleButtonVisibility() {
       const makePuzzleBtn = document.getElementById('makePuzzleButton');
       if (makePuzzleBtn) {
-        const codeText = typeof editor !== 'undefined' ? editor.value : '';
-        const lines = codeText.split('\n');
-        const hasContent = codeText.trim().length > 0;
+        const editorEl = typeof editor !== 'undefined' ? editor : document.getElementById('editor');
+        const codeText = editorEl ? editorEl.value : '';
+        const trimmedCode = codeText.trim();
+        const lines = trimmedCode ? trimmedCode.split('\n') : [];
+        const hasContent = trimmedCode.length > 0;
         if (hasContent && lines.length <= 20) {
           makePuzzleBtn.style.display = '';
         } else {

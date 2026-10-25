@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-title" content="Python Code Lab">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
     id="prism-theme">
-  <link rel="stylesheet" href="pythoncopy.css?v=39">
+  <link rel="stylesheet" href="pythoncopy.css?v=40">
   <style id="dynamicLinksStyle">
     /* Extra dynamic overrides if needed */
   </style>
@@ -25,7 +25,7 @@
       document.documentElement.classList.add('activity-tracking-mode');
     }
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 39) {
+      if (window.pythonCopyVersion !== 40) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -72,7 +72,7 @@
         <path d="M4 12H2" />
         <path d="M2 9h2" />
       </svg>
-      Python Code Lab 4.18
+      Python Code Lab 4.18.1
       <span class="mode-badge edit-badge">Edit</span>
       <span class="mode-badge display-badge">Display</span>
       <span class="mode-badge turtle-badge">Turtle</span>
@@ -105,7 +105,8 @@
         <button class="mode-btn screen-pill-btn" id="distractionFreeButton" title="Distraction-Free Mode"
           aria-label="Toggle Distraction-Free Mode"
           style="padding: 2px 8px; display: inline-flex; align-items: center; justify-content: center;">
-          <svg class="distraction-chevron-icon" id="distractionChevronIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="distraction-chevron-icon" id="distractionChevronIcon" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path id="distractionChevronPath" d="m18 15-6-6-6 6" />
           </svg>
         </button>
@@ -149,7 +150,31 @@
     </div>
     <div class="carousel-container">
       <div class="carousel-track" id="carouselTrack">
-        <!-- Loaded dynamically from pythoncopycarousel.fragment -->
+        <div class="pythoncopy-hero-carousel" aria-label="Python Code Lab screenshots">
+          <img src="pythoncopy/pythoncopyhero1.jpg" alt="Python Code Lab screenshot 1" class="active">
+          <img src="pythoncopy/pythoncopyhero2.jpg" alt="Python Code Lab screenshot 2">
+          <img src="pythoncopy/pythoncopyhero3.jpg" alt="Python Code Lab screenshot 3">
+          <img src="pythoncopy/pythoncopyhero4.jpg" alt="Python Code Lab screenshot 4">
+          <img src="pythoncopy/pythoncopyhero5.jpg" alt="Python Code Lab screenshot 5">
+          <img src="pythoncopy/pythoncopyhero6.jpg" alt="Python Code Lab screenshot 6">
+          <img src="pythoncopy/pythoncopyhero7.jpg" alt="Python Code Lab screenshot 7">
+          <img src="pythoncopy/pythoncopyhero8.jpg" alt="Python Code Lab screenshot 8">
+        </div>
+
+        <div class="carousel-controls" aria-label="Screenshot navigation">
+          <button class="carousel-btn" type="button" onclick="prevInstructionSlide()"
+            aria-label="Previous screenshot">‹</button>
+          <div class="carousel-dots" id="carouselDots"></div>
+          <button class="carousel-btn" type="button" onclick="nextInstructionSlide()"
+            aria-label="Next screenshot">›</button>
+        </div>
+
+        <p class="pythoncopy-instructions-link">
+          <a href="https://docs.google.com/presentation/d/e/2PACX-1vRCmJnbNtE3vmdP0LucHV9wEDtLFPeBuYfMqVdisr8q9d1tMoJzDftd48_cMCf2MZ5dkeX_Py_Ch9ow/pub?start=false&amp;loop=false&amp;delayms=3000"
+            target="_blank" rel="noopener">
+            Open the full instructions slide deck
+          </a>
+        </p>
       </div>
     </div>
   </div>
@@ -569,7 +594,8 @@
         <div class="activity-banner-row">
           <div class="activity-mood-indicator">
             <span class="activity-banner-label">Mood:</span>
-            <button type="button" id="activityChangeMoodBtn" class="activity-mood-badge" title="Click to view or change your mood">
+            <button type="button" id="activityChangeMoodBtn" class="activity-mood-badge"
+              title="Click to view or change your mood">
               <span id="activityCurrentMoodIcon">💭</span>
               <span id="activityCurrentMoodText">Set feeling</span>
               <span class="activity-mood-edit-icon" aria-hidden="true">✏️</span>
@@ -603,8 +629,10 @@
           </div>
         </div>
         <div class="activity-banner-actions">
-          <span class="activity-banner-help">Before leaving, download your activity TSV to share with your teacher.</span>
-          <button type="button" id="activityReminderOpen" class="activity-download-button">Download activity TSV…</button>
+          <span class="activity-banner-help">Before leaving, download your activity TSV to share with your
+            teacher.</span>
+          <button type="button" id="activityReminderOpen" class="activity-download-button">Download activity
+            TSV…</button>
         </div>
       </div>
 
@@ -615,7 +643,8 @@
           when you leave or reload. Nothing is uploaded automatically.</p>
 
         <div class="challenge-feeling-box">
-          <label class="challenge-feeling-title" id="challengeFeelingLabel">How do you feel about this challenge? 🎯</label>
+          <label class="challenge-feeling-title" id="challengeFeelingLabel">How do you feel about this challenge?
+            🎯</label>
           <div class="challenge-feeling-grid" role="radiogroup" aria-labelledby="challengeFeelingLabel">
             <button type="button" class="challenge-feeling-btn" data-feeling="Loved it" title="Loved it!">
               <span class="challenge-feeling-emoji">🤩</span>
@@ -639,11 +668,13 @@
             </button>
           </div>
           <div class="challenge-notes-row">
-            <input type="text" id="challengeNotesInput" class="challenge-notes-input" placeholder="Any thoughts or comments about this challenge? (optional)" />
+            <input type="text" id="challengeNotesInput" class="challenge-notes-input"
+              placeholder="Any thoughts or comments about this challenge? (optional)" />
           </div>
         </div>
 
-        <p class="activity-privacy-subtext">The TSV contains timings, actions, code edits, your mood &amp; frustration ratings, and challenge feedback.</p>
+        <p class="activity-privacy-subtext">The TSV contains timings, actions, code edits, your mood &amp; frustration
+          ratings, and challenge feedback.</p>
         <div class="activity-export-controls">
           <button type="button" id="activityReminderDownload" class="activity-download-button">Download TSV</button>
           <button type="button" id="activityReminderStay" class="activity-secondary-button">Stay on page</button>
@@ -897,7 +928,7 @@
   <script src="https://unpkg.com/@blockly/plugin-workspace-search@10.1.1/dist/index.js"></script>
   <script src="pythoncopyblocks.js"></script>
   <script src="pythoncopy-activity.js"></script>
-  <script src="pythoncopy.js?v=39"></script>
+  <script src="pythoncopy.js?v=40"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
