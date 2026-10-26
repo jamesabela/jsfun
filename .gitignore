@@ -4,3 +4,7 @@
 
 # Resource backups
 .resource_backups/
+
+# Python cache
+__pycache__/
+*.pyc

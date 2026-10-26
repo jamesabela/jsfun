@@ -1,7 +1,7 @@
 {
   "$schema": "./usefulresources.schema.json",
   "version": "1.0.0",
-  "updatedAt": "2026-10-23",
+  "updatedAt": "2026-10-26",
   "topics": [
     {
       "id": "general",
@@ -762,18 +762,6 @@
           "isExternal": true
         },
         {
-          "title": "Flock XR — 3D Computing & Game Design",
-          "url": "https://flockxr.com",
-          "desc": "Free, open-source, browser-based 3D spatial computing and block-based programming tool built on Blockly and Babylon.js. Bridges Scratch to 3D engines.",
-          "tag": "KS2 / KS3",
-          "topics": [
-            "computing"
-          ],
-          "author": null,
-          "tutorialVideo": null,
-          "isExternal": true
-        },
-        {
           "title": "LOFI Robot Cardboard",
           "url": "https://cardboard.lofirobot.com",
           "desc": "Free robot designs and STEAM project ideas for education using cardboard, Micro:bit, and Arduino.",
@@ -820,6 +808,79 @@
           "author": "Dave Salt",
           "tutorialVideo": null,
           "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Game Creators",
+      "description": "Block-based and visual logic game engines, retro arcade makers, and creative coding platforms.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Flock XR — 3D Computing & Game Design",
+          "url": "https://flockxr.com",
+          "desc": "Free, open-source, browser-based 3D spatial computing and block-based programming tool built on Blockly and Babylon.js. Bridges Scratch to 3D engines.",
+          "tag": "KS2 / KS3",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Flowlab — Game Creator",
+          "url": "https://flowlab.io/",
+          "desc": "Online game creator and visual logic engine. Design 2D games directly in the browser with node-based logic behaviors, physics, sprite animations, and custom mechanics.",
+          "tag": "KS3 / iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Flowlab",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-10-26"
+        },
+        {
+          "title": "Microsoft MakeCode Arcade",
+          "url": "https://arcade.makecode.com/",
+          "desc": "Develop retro arcade games with block-based coding, JavaScript, or Python. Includes a pixel art sprite editor, game simulator, and step-by-step tutorials.",
+          "tag": "KS2 / KS3",
+          "topics": [
+            "computing"
+          ],
+          "author": "Microsoft",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-10-26"
+        },
+        {
+          "title": "OctoStudio",
+          "url": "https://octostudio.org/",
+          "desc": "Mobile creative coding app by the MIT Lifelong Kindergarten group. Create interactive animations, stories, and games using phone sensors, tilt, microphone, and camera.",
+          "tag": "Primary / KS3",
+          "topics": [
+            "computing",
+            "general"
+          ],
+          "author": "MIT Media Lab",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-10-26"
+        },
+        {
+          "title": "Scratch",
+          "url": "https://scratch.mit.edu/",
+          "desc": "The world's largest creative coding community and block-based programming platform. Create interactive stories, games, animations, and simulations.",
+          "tag": "All ages",
+          "topics": [
+            "computing",
+            "general"
+          ],
+          "author": "MIT Media Lab",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-10-26"
         }
       ]
     },
@@ -2784,6 +2845,41 @@
         ]
       },
       {
+        "category": "Game Creators",
+        "description": "Block-based and visual logic game engines, retro arcade makers, and creative coding platforms.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "OctoStudio",
+            "url": "https://octostudio.org/",
+            "desc": "Mobile creative coding app by the MIT Lifelong Kindergarten group. Create interactive animations, stories, and games using phone sensors, tilt, microphone, and camera.",
+            "tag": "Primary / KS3",
+            "topics": [
+              "computing",
+              "general"
+            ],
+            "author": "MIT Media Lab",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-10-26"
+          },
+          {
+            "title": "Scratch",
+            "url": "https://scratch.mit.edu/",
+            "desc": "The world's largest creative coding community and block-based programming platform. Create interactive stories, games, animations, and simulations.",
+            "tag": "All ages",
+            "topics": [
+              "computing",
+              "general"
+            ],
+            "author": "MIT Media Lab",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-10-26"
+          }
+        ]
+      },
+      {
         "category": "Reading & Writing Tools",
         "description": "Procedural 3D readers, crawl animations, chat simulations, blackout poetry, and story generators.",
         "tutorialVideo": null,
@@ -3122,18 +3218,6 @@
             "isExternal": true
           },
           {
-            "title": "Flock XR — 3D Computing & Game Design",
-            "url": "https://flockxr.com",
-            "desc": "Free, open-source, browser-based 3D spatial computing and block-based programming tool built on Blockly and Babylon.js. Bridges Scratch to 3D engines.",
-            "tag": "KS2 / KS3",
-            "topics": [
-              "computing"
-            ],
-            "author": null,
-            "tutorialVideo": null,
-            "isExternal": true
-          },
-          {
             "title": "LOFI Robot Cardboard",
             "url": "https://cardboard.lofirobot.com",
             "desc": "Free robot designs and STEAM project ideas for education using cardboard, Micro:bit, and Arduino.",
@@ -3180,6 +3264,79 @@
             "author": "Dave Salt",
             "tutorialVideo": null,
             "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Game Creators",
+        "description": "Block-based and visual logic game engines, retro arcade makers, and creative coding platforms.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Flock XR — 3D Computing & Game Design",
+            "url": "https://flockxr.com",
+            "desc": "Free, open-source, browser-based 3D spatial computing and block-based programming tool built on Blockly and Babylon.js. Bridges Scratch to 3D engines.",
+            "tag": "KS2 / KS3",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Flowlab — Game Creator",
+            "url": "https://flowlab.io/",
+            "desc": "Online game creator and visual logic engine. Design 2D games directly in the browser with node-based logic behaviors, physics, sprite animations, and custom mechanics.",
+            "tag": "KS3 / iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Flowlab",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-10-26"
+          },
+          {
+            "title": "Microsoft MakeCode Arcade",
+            "url": "https://arcade.makecode.com/",
+            "desc": "Develop retro arcade games with block-based coding, JavaScript, or Python. Includes a pixel art sprite editor, game simulator, and step-by-step tutorials.",
+            "tag": "KS2 / KS3",
+            "topics": [
+              "computing"
+            ],
+            "author": "Microsoft",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-10-26"
+          },
+          {
+            "title": "OctoStudio",
+            "url": "https://octostudio.org/",
+            "desc": "Mobile creative coding app by the MIT Lifelong Kindergarten group. Create interactive animations, stories, and games using phone sensors, tilt, microphone, and camera.",
+            "tag": "Primary / KS3",
+            "topics": [
+              "computing",
+              "general"
+            ],
+            "author": "MIT Media Lab",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-10-26"
+          },
+          {
+            "title": "Scratch",
+            "url": "https://scratch.mit.edu/",
+            "desc": "The world's largest creative coding community and block-based programming platform. Create interactive stories, games, animations, and simulations.",
+            "tag": "All ages",
+            "topics": [
+              "computing",
+              "general"
+            ],
+            "author": "MIT Media Lab",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-10-26"
           }
         ]
       },
