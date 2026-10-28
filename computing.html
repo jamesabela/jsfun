@@ -116,8 +116,13 @@
       opacity: 1 !important;
     }
 
-    .carousel-arrow.prev { left: 1rem; }
-    .carousel-arrow.next { right: 1rem; }
+    .carousel-arrow.prev {
+      left: 1rem;
+    }
+
+    .carousel-arrow.next {
+      right: 1rem;
+    }
 
     /* Indicator Dots */
     .carousel-dots {
@@ -212,8 +217,12 @@
     /* ───── Main content ───── */
     main {
       max-width: 960px;
-      margin: 2.5rem auto;
+      margin: 0.75rem auto 2.5rem;
       padding: 0 1rem 4rem;
+    }
+
+    details.category-section:first-child .section-heading {
+      margin-top: 1rem;
     }
 
     /* ───── Section heading (Summary) ───── */
@@ -228,10 +237,11 @@
       padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--primary-light);
       cursor: pointer;
-      list-style: none; /* Hide default chevron */
+      list-style: none;
+      /* Hide default chevron */
       position: relative;
     }
-    
+
     .section-heading::-webkit-details-marker {
       display: none;
     }
@@ -278,7 +288,7 @@
     details[open] .section-heading .chevron {
       transform: rotate(180deg);
     }
-    
+
     /* ───── Cards grid ───── */
 
     /* ───── Cards grid ───── */
@@ -443,6 +453,56 @@
       gap: 0.5rem;
     }
 
+    /* ───── View controls (Expand / Close All) ───── */
+    .view-controls-wrap {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      max-width: 960px;
+      margin: 1.25rem auto 0;
+      padding: 0 1rem;
+    }
+
+    .view-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #f8fafc;
+      padding: 0.25rem 0.35rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .view-btn {
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      background: transparent;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .view-btn:hover {
+      background: var(--white);
+      color: var(--primary);
+      border-color: var(--border);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .view-btn.active {
+      background: var(--white);
+      color: var(--primary-dark);
+      border-color: var(--primary-light);
+      box-shadow: 0 2px 8px rgba(26, 106, 255, 0.12);
+    }
+
     .filter-btn {
       font-family: inherit;
       font-size: 0.85rem;
@@ -487,6 +547,11 @@
       .filter-btn {
         padding: 0.35rem 0.8rem;
         font-size: 0.8rem;
+      }
+
+      .view-controls-wrap {
+        justify-content: center;
+        margin-top: 1rem;
       }
     }
 
@@ -540,20 +605,25 @@
     <div class="carousel-track-wrapper">
       <div class="carousel-slides" id="heroCarouselSlides">
         <!-- Slide 1: Python Code Lab -->
-        <a class="carousel-slide active" href="https://jamesabela.github.io/jsfun/pythoncopy" title="Python Code Lab — Interactive code editor, runner and visualizer">
+        <a class="carousel-slide active" href="https://jamesabela.github.io/jsfun/pythoncopy"
+          title="Python Code Lab — Interactive code editor, runner and visualizer">
           <img src="computing%20hero%20images/codelab.jpg" alt="Python Code Lab" width="1024" height="341">
         </a>
         <!-- Slide 2: Python Challenges -->
-        <a class="carousel-slide" href="https://jamesabela.github.io/jsfun/challenge_list.html" title="Python Challenges — Interactive coding quests and drills">
+        <a class="carousel-slide" href="https://jamesabela.github.io/jsfun/challenge_list.html"
+          title="Python Challenges — Interactive coding quests and drills">
           <img src="computing%20hero%20images/challenges.jpg" alt="Python Challenges" width="1024" height="341">
         </a>
         <!-- Slide 3: Python for iGCSE -->
-        <a class="carousel-slide" href="https://www.amazon.com/dp/B086PNZFK5" target="_blank" rel="noopener noreferrer" title="Python for iGCSE on Amazon">
+        <a class="carousel-slide" href="https://www.amazon.com/dp/B086PNZFK5" target="_blank" rel="noopener noreferrer"
+          title="Python for iGCSE on Amazon">
           <img src="computing%20hero%20images/igcse.jpg" alt="Python for iGCSE" width="1024" height="341">
         </a>
         <!-- Slide 4: 21st Century Problem Solving -->
-        <a class="carousel-slide" href="https://www.amazon.com/dp/B0H4BCHRLH" target="_blank" rel="noopener noreferrer" title="21st Century Problem Solving on Amazon">
-          <img src="computing%20hero%20images/probsolving.jpg" alt="21st Century Problem Solving" width="1024" height="341">
+        <a class="carousel-slide" href="https://www.amazon.com/dp/B0H4BCHRLH" target="_blank" rel="noopener noreferrer"
+          title="21st Century Problem Solving on Amazon">
+          <img src="computing%20hero%20images/probsolving.jpg" alt="21st Century Problem Solving" width="1024"
+            height="341">
         </a>
       </div>
 
@@ -586,7 +656,8 @@
   <!-- Search -->
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" class="search-input" placeholder="Search for computing tools (e.g. binary, sort, python)..." oninput="handleSearch(this.value)">
+    <input type="text" id="searchInput" class="search-input"
+      placeholder="Search for computing tools (e.g. binary, sort, python)..." oninput="handleSearch(this.value)">
   </div>
 
   <!-- Filter bar -->
@@ -598,6 +669,20 @@
     <button class="filter-btn" onclick="filterByTag('KS3', this)">KS3</button>
     <button class="filter-btn" onclick="filterByTag('iGCSE', this)">iGCSE</button>
     <button class="filter-btn" onclick="filterByTag('A-Level', this)">A-Level</button>
+  </div>
+
+  <!-- View Controls: Expand / Close All -->
+  <div class="view-controls-wrap">
+    <div class="view-controls" role="group" aria-label="Category expansion controls">
+      <button type="button" id="expandAllBtn" class="view-btn active" onclick="setAllCategoriesOpen(true)"
+        aria-label="Expand all categories">
+        <span aria-hidden="true">📂</span> Expand All
+      </button>
+      <button type="button" id="closeAllBtn" class="view-btn" onclick="setAllCategoriesOpen(false)"
+        aria-label="Close all categories">
+        <span aria-hidden="true">📁</span> Close All
+      </button>
+    </div>
   </div>
 
   <main>
@@ -624,6 +709,25 @@
       initTools('usefulresources.json', 'computing');
       initHeroCarousel();
     });
+
+    // Update Expand / Close All button active states
+    function updateExpandCollapseButtons() {
+      const sections = document.querySelectorAll('#tools-container details.category-section');
+      if (!sections.length) return;
+      const allOpen = Array.from(sections).every(s => s.open);
+      const allClosed = Array.from(sections).every(s => !s.open);
+      const expandBtn = document.getElementById('expandAllBtn');
+      const closeBtn = document.getElementById('closeAllBtn');
+      if (expandBtn) expandBtn.classList.toggle('active', allOpen);
+      if (closeBtn) closeBtn.classList.toggle('active', allClosed);
+    }
+
+    // Capture individual section toggle interactions
+    document.addEventListener('toggle', (e) => {
+      if (e.target && e.target.matches && e.target.matches('#tools-container details.category-section')) {
+        updateExpandCollapseButtons();
+      }
+    }, true);
 
     // Gentle Cycling Hero Carousel
     let currentSlideIndex = 0;

@@ -194,4 +194,20 @@ function renderTools() {
   } else {
     container.innerHTML = html;
   }
+
+  if (typeof updateExpandCollapseButtons === 'function') {
+    updateExpandCollapseButtons();
+  }
+}
+
+function setAllCategoriesOpen(open) {
+  const container = document.getElementById('tools-container');
+  if (!container) return;
+  const sections = container.querySelectorAll('details.category-section');
+  sections.forEach(d => {
+    d.open = open;
+  });
+  if (typeof updateExpandCollapseButtons === 'function') {
+    updateExpandCollapseButtons();
+  }
 }

@@ -1453,27 +1453,39 @@
       ]
     },
     {
-      "category": "Coding Challenges & Problem Solving",
-      "description": "Mini-quests, code challenges, spreadsheet games, and logic puzzles.",
+      "category": "Coding Challenges",
+      "description": "Interactive programming challenges, Python coding practice, and level-based computing quests.",
       "tutorialVideo": null,
       "tools": [
         {
-          "title": "Array Explorer",
-          "url": "https://cie-igcse-array-explorer.lovable.app",
-          "desc": "Learn arrays interactively: memory diagrams, pseudocode, Python, searching, and classroom games. By Hari Denton.",
-          "tag": "iGCSE",
+          "title": "Gandalf AI Challenge",
+          "url": "https://gandalf.lakera.ai/baseline",
+          "desc": "Learn about AI safety and prompt injection by trying to trick the AI into revealing its secret password across levels of increasing difficulty.",
+          "tag": "iGCSE / A-Level",
           "topics": [
             "computing"
           ],
-          "author": "Hari Denton",
+          "author": null,
           "tutorialVideo": null,
           "isExternal": true
         },
         {
-          "title": "Average",
-          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py",
-          "desc": "Calculate the average of a list of numbers.",
-          "tag": "iGCSE",
+          "title": "KS3 Python Practice",
+          "url": "https://mrdavekang.github.io/y8-python/python-practice-ks3.html",
+          "desc": "An interactive Python course designed for Year 8 students. Covers fundamentals like variables, input, and selection. By Dave Kang.",
+          "tag": "KS3",
+          "topics": [
+            "computing"
+          ],
+          "author": "Dave Kang",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Python Challenges",
+          "url": "https://jamesabela.github.io/jsfun/challenge_list.html",
+          "desc": "A collection of 90+ interactive Python programming challenges with progress tracking, achievement badges, and certificate generation.",
+          "tag": "KS3 / iGCSE / A-Level",
           "topics": [
             "computing"
           ],
@@ -1482,17 +1494,25 @@
           "isExternal": false
         },
         {
-          "title": "Bubble Sort",
-          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble",
-          "desc": "Classic bubble sort algorithm implementation.",
-          "tag": "iGCSE",
+          "title": "Red Strings Lab",
+          "url": "https://redstringslab.com/en/",
+          "desc": "Interactive, case-based investigations teaching data literacy, chart analysis, and AI concepts from no-code machine learning to Python.",
+          "tag": "KS3 / iGCSE / A-Level",
           "topics": [
             "computing"
           ],
-          "author": "James Abela",
+          "author": "Red Strings Lab",
           "tutorialVideo": null,
-          "isExternal": false
-        },
+          "isExternal": true,
+          "dateAdded": "2026-10-29"
+        }
+      ]
+    },
+    {
+      "category": "Problem Solving",
+      "description": "Logic puzzles, computational thinking games, system simulations, and interactive challenges.",
+      "tutorialVideo": null,
+      "tools": [
         {
           "title": "Cipher Wheel",
           "url": "https://scratch.mit.edu/projects/427196904",
@@ -1504,18 +1524,6 @@
           "author": null,
           "tutorialVideo": null,
           "isExternal": true
-        },
-        {
-          "title": "Counting",
-          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py",
-          "desc": "Counting algorithm — tallying occurrences.",
-          "tag": "iGCSE",
-          "topics": [
-            "computing"
-          ],
-          "author": "James Abela",
-          "tutorialVideo": null,
-          "isExternal": false
         },
         {
           "title": "Data Representation",
@@ -1556,45 +1564,9 @@
           "isExternal": false
         },
         {
-          "title": "For Loop",
-          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/forloop.py",
-          "desc": "A definite iteration example using a for loop.",
-          "tag": "iGCSE",
-          "topics": [
-            "computing"
-          ],
-          "author": "James Abela",
-          "tutorialVideo": null,
-          "isExternal": false
-        },
-        {
-          "title": "Gandalf AI Challenge",
-          "url": "https://gandalf.lakera.ai/baseline",
-          "desc": "Learn about AI safety and prompt injection by trying to trick the AI into revealing its secret password across levels of increasing difficulty.",
-          "tag": "iGCSE / A-Level",
-          "topics": [
-            "computing"
-          ],
-          "author": null,
-          "tutorialVideo": null,
-          "isExternal": true
-        },
-        {
           "title": "Hardware",
           "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-hardware.json",
           "desc": "Penalty shootout game covering CPU, memory and storage devices.",
-          "tag": "iGCSE",
-          "topics": [
-            "computing"
-          ],
-          "author": "James Abela",
-          "tutorialVideo": null,
-          "isExternal": false
-        },
-        {
-          "title": "If / Else",
-          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py",
-          "desc": "Selection — branching logic with if/else.",
           "tag": "iGCSE",
           "topics": [
             "computing"
@@ -1616,46 +1588,10 @@
           "isExternal": false
         },
         {
-          "title": "KS3 Python Practice",
-          "url": "https://mrdavekang.github.io/y8-python/python-practice-ks3.html",
-          "desc": "An interactive Python course designed for Year 8 students. Covers fundamentals like variables, input, and selection. By Dave Kang.",
-          "tag": "KS3",
-          "topics": [
-            "computing"
-          ],
-          "author": "Dave Kang",
-          "tutorialVideo": null,
-          "isExternal": true
-        },
-        {
-          "title": "Linear Search",
-          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py",
-          "desc": "Search through a list one item at a time.",
-          "tag": "iGCSE",
-          "topics": [
-            "computing"
-          ],
-          "author": "James Abela",
-          "tutorialVideo": null,
-          "isExternal": false
-        },
-        {
           "title": "Linked List Puzzle",
           "url": "https://jamesabela.github.io/jsfun/linkedlist.html",
           "desc": "Master memory addresses and pointers by correctly linking nodes in a chain. Visualise RAM and traversal.",
           "tag": "iGCSE / A-Level",
-          "topics": [
-            "computing"
-          ],
-          "author": "James Abela",
-          "tutorialVideo": null,
-          "isExternal": false
-        },
-        {
-          "title": "Max & Min",
-          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py",
-          "desc": "Find the maximum and minimum in a list.",
-          "tag": "iGCSE",
           "topics": [
             "computing"
           ],
@@ -1676,70 +1612,9 @@
           "isExternal": true
         },
         {
-          "title": "Python Challenges",
-          "url": "https://jamesabela.github.io/jsfun/challenge_list.html",
-          "desc": "A collection of 90+ interactive Python programming challenges with progress tracking, achievement badges, and certificate generation.",
-          "tag": "KS3 / iGCSE / A-Level",
-          "topics": [
-            "computing"
-          ],
-          "author": "James Abela",
-          "tutorialVideo": null,
-          "isExternal": false
-        },
-        {
-          "title": "Red Strings Lab",
-          "url": "https://redstringslab.com/en/",
-          "desc": "Interactive, case-based investigations teaching data literacy, chart analysis, and AI concepts from no-code machine learning to Python.",
-          "tag": "KS3 / iGCSE / A-Level",
-          "topics": [
-            "computing"
-          ],
-          "author": "Red Strings Lab",
-          "tutorialVideo": null,
-          "isExternal": true,
-          "dateAdded": "2026-10-29"
-        },
-        {
-          "title": "Repeat Loop",
-          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py",
-          "desc": "Post-condition loop (repeat…until style).",
-          "tag": "iGCSE",
-          "topics": [
-            "computing"
-          ],
-          "author": "James Abela",
-          "tutorialVideo": null,
-          "isExternal": false
-        },
-        {
-          "title": "Right Hand Rule",
-          "url": "https://scratch.mit.edu/projects/287065173",
-          "desc": "Maze-solving using the right-hand rule algorithm.",
-          "tag": "KS3 / iGCSE",
-          "topics": [
-            "computing"
-          ],
-          "author": null,
-          "tutorialVideo": null,
-          "isExternal": true
-        },
-        {
           "title": "Software",
           "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-software.json",
           "desc": "Penalty shootout game covering operating systems and utility software.",
-          "tag": "iGCSE",
-          "topics": [
-            "computing"
-          ],
-          "author": "James Abela",
-          "tutorialVideo": null,
-          "isExternal": false
-        },
-        {
-          "title": "Totalling",
-          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py",
-          "desc": "Running total / accumulator pattern.",
           "tag": "iGCSE",
           "topics": [
             "computing"
@@ -1771,6 +1646,145 @@
           "author": null,
           "tutorialVideo": null,
           "isExternal": true
+        }
+      ]
+    },
+    {
+      "category": "Algorithms",
+      "description": "Interactive algorithm walkthroughs, loop demonstrators, searching, and sorting visualisations.",
+      "tutorialVideo": null,
+      "tools": [
+        {
+          "title": "Array Explorer",
+          "url": "https://cie-igcse-array-explorer.lovable.app",
+          "desc": "Learn arrays interactively: memory diagrams, pseudocode, Python, searching, and classroom games. By Hari Denton.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "Hari Denton",
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Average",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py",
+          "desc": "Calculate the average of a list of numbers.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Bubble Sort",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble",
+          "desc": "Classic bubble sort algorithm implementation.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Counting",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py",
+          "desc": "Counting algorithm — tallying occurrences.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "For Loop",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/forloop.py",
+          "desc": "A definite iteration example using a for loop.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "If / Else",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py",
+          "desc": "Selection — branching logic with if/else.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Linear Search",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py",
+          "desc": "Search through a list one item at a time.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Max & Min",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py",
+          "desc": "Find the maximum and minimum in a list.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Repeat Loop",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py",
+          "desc": "Post-condition loop (repeat…until style).",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
+        },
+        {
+          "title": "Right Hand Rule",
+          "url": "https://scratch.mit.edu/projects/287065173",
+          "desc": "Maze-solving using the right-hand rule algorithm.",
+          "tag": "KS3 / iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": null,
+          "tutorialVideo": null,
+          "isExternal": true
+        },
+        {
+          "title": "Totalling",
+          "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py",
+          "desc": "Running total / accumulator pattern.",
+          "tag": "iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false
         },
         {
           "title": "While Loop",
@@ -3922,27 +3936,39 @@
         ]
       },
       {
-        "category": "Coding Challenges & Problem Solving",
-        "description": "Mini-quests, code challenges, spreadsheet games, and logic puzzles.",
+        "category": "Coding Challenges",
+        "description": "Interactive programming challenges, Python coding practice, and level-based computing quests.",
         "tutorialVideo": null,
         "tools": [
           {
-            "title": "Array Explorer",
-            "url": "https://cie-igcse-array-explorer.lovable.app",
-            "desc": "Learn arrays interactively: memory diagrams, pseudocode, Python, searching, and classroom games. By Hari Denton.",
-            "tag": "iGCSE",
+            "title": "Gandalf AI Challenge",
+            "url": "https://gandalf.lakera.ai/baseline",
+            "desc": "Learn about AI safety and prompt injection by trying to trick the AI into revealing its secret password across levels of increasing difficulty.",
+            "tag": "iGCSE / A-Level",
             "topics": [
               "computing"
             ],
-            "author": "Hari Denton",
+            "author": null,
             "tutorialVideo": null,
             "isExternal": true
           },
           {
-            "title": "Average",
-            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py",
-            "desc": "Calculate the average of a list of numbers.",
-            "tag": "iGCSE",
+            "title": "KS3 Python Practice",
+            "url": "https://mrdavekang.github.io/y8-python/python-practice-ks3.html",
+            "desc": "An interactive Python course designed for Year 8 students. Covers fundamentals like variables, input, and selection. By Dave Kang.",
+            "tag": "KS3",
+            "topics": [
+              "computing"
+            ],
+            "author": "Dave Kang",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Python Challenges",
+            "url": "https://jamesabela.github.io/jsfun/challenge_list.html",
+            "desc": "A collection of 90+ interactive Python programming challenges with progress tracking, achievement badges, and certificate generation.",
+            "tag": "KS3 / iGCSE / A-Level",
             "topics": [
               "computing"
             ],
@@ -3951,17 +3977,25 @@
             "isExternal": false
           },
           {
-            "title": "Bubble Sort",
-            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble",
-            "desc": "Classic bubble sort algorithm implementation.",
-            "tag": "iGCSE",
+            "title": "Red Strings Lab",
+            "url": "https://redstringslab.com/en/",
+            "desc": "Interactive, case-based investigations teaching data literacy, chart analysis, and AI concepts from no-code machine learning to Python.",
+            "tag": "KS3 / iGCSE / A-Level",
             "topics": [
               "computing"
             ],
-            "author": "James Abela",
+            "author": "Red Strings Lab",
             "tutorialVideo": null,
-            "isExternal": false
-          },
+            "isExternal": true,
+            "dateAdded": "2026-10-29"
+          }
+        ]
+      },
+      {
+        "category": "Problem Solving",
+        "description": "Logic puzzles, computational thinking games, system simulations, and interactive challenges.",
+        "tutorialVideo": null,
+        "tools": [
           {
             "title": "Cipher Wheel",
             "url": "https://scratch.mit.edu/projects/427196904",
@@ -3973,18 +4007,6 @@
             "author": null,
             "tutorialVideo": null,
             "isExternal": true
-          },
-          {
-            "title": "Counting",
-            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py",
-            "desc": "Counting algorithm — tallying occurrences.",
-            "tag": "iGCSE",
-            "topics": [
-              "computing"
-            ],
-            "author": "James Abela",
-            "tutorialVideo": null,
-            "isExternal": false
           },
           {
             "title": "Data Representation",
@@ -4025,45 +4047,9 @@
             "isExternal": false
           },
           {
-            "title": "For Loop",
-            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/forloop.py",
-            "desc": "A definite iteration example using a for loop.",
-            "tag": "iGCSE",
-            "topics": [
-              "computing"
-            ],
-            "author": "James Abela",
-            "tutorialVideo": null,
-            "isExternal": false
-          },
-          {
-            "title": "Gandalf AI Challenge",
-            "url": "https://gandalf.lakera.ai/baseline",
-            "desc": "Learn about AI safety and prompt injection by trying to trick the AI into revealing its secret password across levels of increasing difficulty.",
-            "tag": "iGCSE / A-Level",
-            "topics": [
-              "computing"
-            ],
-            "author": null,
-            "tutorialVideo": null,
-            "isExternal": true
-          },
-          {
             "title": "Hardware",
             "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-hardware.json",
             "desc": "Penalty shootout game covering CPU, memory and storage devices.",
-            "tag": "iGCSE",
-            "topics": [
-              "computing"
-            ],
-            "author": "James Abela",
-            "tutorialVideo": null,
-            "isExternal": false
-          },
-          {
-            "title": "If / Else",
-            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py",
-            "desc": "Selection — branching logic with if/else.",
             "tag": "iGCSE",
             "topics": [
               "computing"
@@ -4085,46 +4071,10 @@
             "isExternal": false
           },
           {
-            "title": "KS3 Python Practice",
-            "url": "https://mrdavekang.github.io/y8-python/python-practice-ks3.html",
-            "desc": "An interactive Python course designed for Year 8 students. Covers fundamentals like variables, input, and selection. By Dave Kang.",
-            "tag": "KS3",
-            "topics": [
-              "computing"
-            ],
-            "author": "Dave Kang",
-            "tutorialVideo": null,
-            "isExternal": true
-          },
-          {
-            "title": "Linear Search",
-            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py",
-            "desc": "Search through a list one item at a time.",
-            "tag": "iGCSE",
-            "topics": [
-              "computing"
-            ],
-            "author": "James Abela",
-            "tutorialVideo": null,
-            "isExternal": false
-          },
-          {
             "title": "Linked List Puzzle",
             "url": "https://jamesabela.github.io/jsfun/linkedlist.html",
             "desc": "Master memory addresses and pointers by correctly linking nodes in a chain. Visualise RAM and traversal.",
             "tag": "iGCSE / A-Level",
-            "topics": [
-              "computing"
-            ],
-            "author": "James Abela",
-            "tutorialVideo": null,
-            "isExternal": false
-          },
-          {
-            "title": "Max & Min",
-            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py",
-            "desc": "Find the maximum and minimum in a list.",
-            "tag": "iGCSE",
             "topics": [
               "computing"
             ],
@@ -4145,70 +4095,9 @@
             "isExternal": true
           },
           {
-            "title": "Python Challenges",
-            "url": "https://jamesabela.github.io/jsfun/challenge_list.html",
-            "desc": "A collection of 90+ interactive Python programming challenges with progress tracking, achievement badges, and certificate generation.",
-            "tag": "KS3 / iGCSE / A-Level",
-            "topics": [
-              "computing"
-            ],
-            "author": "James Abela",
-            "tutorialVideo": null,
-            "isExternal": false
-          },
-          {
-            "title": "Red Strings Lab",
-            "url": "https://redstringslab.com/en/",
-            "desc": "Interactive, case-based investigations teaching data literacy, chart analysis, and AI concepts from no-code machine learning to Python.",
-            "tag": "KS3 / iGCSE / A-Level",
-            "topics": [
-              "computing"
-            ],
-            "author": "Red Strings Lab",
-            "tutorialVideo": null,
-            "isExternal": true,
-            "dateAdded": "2026-10-29"
-          },
-          {
-            "title": "Repeat Loop",
-            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py",
-            "desc": "Post-condition loop (repeat…until style).",
-            "tag": "iGCSE",
-            "topics": [
-              "computing"
-            ],
-            "author": "James Abela",
-            "tutorialVideo": null,
-            "isExternal": false
-          },
-          {
-            "title": "Right Hand Rule",
-            "url": "https://scratch.mit.edu/projects/287065173",
-            "desc": "Maze-solving using the right-hand rule algorithm.",
-            "tag": "KS3 / iGCSE",
-            "topics": [
-              "computing"
-            ],
-            "author": null,
-            "tutorialVideo": null,
-            "isExternal": true
-          },
-          {
             "title": "Software",
             "url": "https://jamesabela.github.io/reading/penalties.html?set=editor/samples/igcse-computing-software.json",
             "desc": "Penalty shootout game covering operating systems and utility software.",
-            "tag": "iGCSE",
-            "topics": [
-              "computing"
-            ],
-            "author": "James Abela",
-            "tutorialVideo": null,
-            "isExternal": false
-          },
-          {
-            "title": "Totalling",
-            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py",
-            "desc": "Running total / accumulator pattern.",
             "tag": "iGCSE",
             "topics": [
               "computing"
@@ -4240,6 +4129,145 @@
             "author": null,
             "tutorialVideo": null,
             "isExternal": true
+          }
+        ]
+      },
+      {
+        "category": "Algorithms",
+        "description": "Interactive algorithm walkthroughs, loop demonstrators, searching, and sorting visualisations.",
+        "tutorialVideo": null,
+        "tools": [
+          {
+            "title": "Array Explorer",
+            "url": "https://cie-igcse-array-explorer.lovable.app",
+            "desc": "Learn arrays interactively: memory diagrams, pseudocode, Python, searching, and classroom games. By Hari Denton.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "Hari Denton",
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Average",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/average.py",
+            "desc": "Calculate the average of a list of numbers.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Bubble Sort",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/bubble",
+            "desc": "Classic bubble sort algorithm implementation.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Counting",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Counting.py",
+            "desc": "Counting algorithm — tallying occurrences.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "For Loop",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/forloop.py",
+            "desc": "A definite iteration example using a for loop.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "If / Else",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/ifelse.py",
+            "desc": "Selection — branching logic with if/else.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Linear Search",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/linear.py",
+            "desc": "Search through a list one item at a time.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Max & Min",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/MaximumandMinimum.py",
+            "desc": "Find the maximum and minimum in a list.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Repeat Loop",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/repeat.py",
+            "desc": "Post-condition loop (repeat…until style).",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
+          },
+          {
+            "title": "Right Hand Rule",
+            "url": "https://scratch.mit.edu/projects/287065173",
+            "desc": "Maze-solving using the right-hand rule algorithm.",
+            "tag": "KS3 / iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": null,
+            "tutorialVideo": null,
+            "isExternal": true
+          },
+          {
+            "title": "Totalling",
+            "url": "https://jamesabela.github.io/jsfun/pythoncopy?url=https://gist.githubusercontent.com/jamesabela/53cc928fd03720c0803839b31bcda287/raw/635a2c7b12a1a6af75623d65d41889e8e1bbce96/Totalling.py",
+            "desc": "Running total / accumulator pattern.",
+            "tag": "iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false
           },
           {
             "title": "While Loop",
@@ -4980,8 +5008,8 @@
     ],
     "sciences": [
       {
-        "category": "Coding Challenges & Problem Solving",
-        "description": "Mini-quests, code challenges, spreadsheet games, and logic puzzles.",
+        "category": "Problem Solving",
+        "description": "Logic puzzles, computational thinking games, system simulations, and interactive challenges.",
         "tutorialVideo": null,
         "tools": [
           {
@@ -5237,8 +5265,8 @@
         ]
       },
       {
-        "category": "Coding Challenges & Problem Solving",
-        "description": "Mini-quests, code challenges, spreadsheet games, and logic puzzles.",
+        "category": "Problem Solving",
+        "description": "Logic puzzles, computational thinking games, system simulations, and interactive challenges.",
         "tutorialVideo": null,
         "tools": [
           {
