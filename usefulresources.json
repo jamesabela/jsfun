@@ -1,7 +1,7 @@
 {
   "$schema": "./usefulresources.schema.json",
   "version": "1.0.0",
-  "updatedAt": "2026-10-26",
+  "updatedAt": "2026-10-29",
   "topics": [
     {
       "id": "general",
@@ -1686,6 +1686,19 @@
           "author": "James Abela",
           "tutorialVideo": null,
           "isExternal": false
+        },
+        {
+          "title": "Red Strings Lab",
+          "url": "https://redstringslab.com/en/",
+          "desc": "Interactive, case-based investigations teaching data literacy, chart analysis, and AI concepts from no-code machine learning to Python.",
+          "tag": "KS3 / iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Red Strings Lab",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-10-29"
         },
         {
           "title": "Repeat Loop",
@@ -4142,6 +4155,19 @@
             "author": "James Abela",
             "tutorialVideo": null,
             "isExternal": false
+          },
+          {
+            "title": "Red Strings Lab",
+            "url": "https://redstringslab.com/en/",
+            "desc": "Interactive, case-based investigations teaching data literacy, chart analysis, and AI concepts from no-code machine learning to Python.",
+            "tag": "KS3 / iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Red Strings Lab",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-10-29"
           },
           {
             "title": "Repeat Loop",
