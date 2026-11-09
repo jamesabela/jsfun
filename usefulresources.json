@@ -1,7 +1,7 @@
 {
   "$schema": "./usefulresources.schema.json",
   "version": "1.0.0",
-  "updatedAt": "2026-10-29",
+  "updatedAt": "2026-11-10",
   "topics": [
     {
       "id": "general",
@@ -572,6 +572,19 @@
       "tutorialVideo": null,
       "tools": [
         {
+          "title": "CAIE Pseudocode Playground",
+          "url": "https://cswithzak.com/tools/pseudocode-runner",
+          "desc": "In-browser CAIE pseudocode interpreter. Run pseudocode, inspect line-by-line errors, and generate trace tables. By Zafar Ali Khan.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
+        },
+        {
           "title": "Diffchecker",
           "url": "https://www.diffchecker.com/",
           "desc": "Online diff tool to compare text, code, images, and files side by side. Very useful to check small differences in student work.",
@@ -695,6 +708,19 @@
           "isExternal": false
         },
         {
+          "title": "SQL Lab",
+          "url": "https://cswithzak.com/tools/sql-lab",
+          "desc": "In-browser SQL and relational database query runner with schema builder and referential integrity checks. By Zafar Ali Khan.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
+        },
+        {
           "title": "Syntax Styler",
           "url": "https://syntaxstyler.sethideclercq.com",
           "desc": "Google Workspace extension to easily format code in Google Docs and Slides. Perfect for creating worksheets and presentations. By Sethi De Clercq.",
@@ -705,6 +731,19 @@
           "author": "Sethi De Clercq",
           "tutorialVideo": null,
           "isExternal": true
+        },
+        {
+          "title": "Trace Table Generator",
+          "url": "https://cswithzak.com/tools/trace-table",
+          "desc": "Paste any pseudocode algorithm to automatically generate the complete Cambridge Paper 2 trace table. By Zafar Ali Khan.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
         }
       ]
     },
@@ -981,6 +1020,19 @@
           "isExternal": true
         },
         {
+          "title": "Boolean Algebra & K-map Lab",
+          "url": "https://cswithzak.com/tools/boolean-algebra",
+          "desc": "Karnaugh maps with optimal loop detection, sum-of-products simplification, Boolean algebra laws, adders, and flip-flops. By Zafar Ali Khan.",
+          "tag": "A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
+        },
+        {
           "title": "Boolean Logic Workbench",
           "url": "https://prayogashaala.com/digitalcircuits",
           "desc": "Enter Boolean expressions to instantly generate truth tables, Karnaugh maps (K-maps), and logic circuit diagrams. By Prayogashaala.",
@@ -1020,6 +1072,19 @@
           "isExternal": true
         },
         {
+          "title": "Logic Gates Lab",
+          "url": "https://cswithzak.com/tools/logic-gates",
+          "desc": "Interactive digital circuit and truth table simulator with logic gate drawing and Boolean expression analysis. By Zafar Ali Khan.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
+        },
+        {
           "title": "Logic.ly Gate Simulator",
           "url": "https://logic.ly/demo/samples",
           "desc": "Interactive logic gate simulator. Design and test digital circuits in your browser with AND, OR, NOT, and other gates.",
@@ -1031,6 +1096,19 @@
           "author": null,
           "tutorialVideo": null,
           "isExternal": true
+        },
+        {
+          "title": "Number Systems Lab",
+          "url": "https://cswithzak.com/tools/number-converter",
+          "desc": "Step-by-step conversions between binary, denary, hex, two's complement, bitwise shifts/masks, and A2 floating-point normalisation with full workings. By Zafar Ali Khan.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
         },
         {
           "title": "Parity Byte",
@@ -1458,6 +1536,19 @@
       "tutorialVideo": null,
       "tools": [
         {
+          "title": "CS with ZAK",
+          "url": "https://cswithzak.com/",
+          "desc": "Comprehensive Cambridge O Level (2210), IGCSE (0478), and A Level (9618) Computer Science hub featuring interactive labs, topical past papers, smart notes, quizzes, and code playgrounds. By Zafar Ali Khan.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
+        },
+        {
           "title": "Gandalf AI Challenge",
           "url": "https://gandalf.lakera.ai/baseline",
           "desc": "Learn about AI safety and prompt injection by trying to trick the AI into revealing its secret password across levels of increasing difficulty.",
@@ -1513,6 +1604,19 @@
       "description": "Logic puzzles, computational thinking games, system simulations, and interactive challenges.",
       "tutorialVideo": null,
       "tools": [
+        {
+          "title": "Assembler & CPU Simulator",
+          "url": "https://cswithzak.com/tools/assembler",
+          "desc": "Two-pass assembler with animated fetch–decode–execute cycles and exam-style register trace tables for AS & A2. By Zafar Ali Khan.",
+          "tag": "A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
+        },
         {
           "title": "Cipher Wheel",
           "url": "https://scratch.mit.edu/projects/427196904",
@@ -1600,6 +1704,19 @@
           "isExternal": false
         },
         {
+          "title": "Networks Lab",
+          "url": "https://cswithzak.com/tools/networks",
+          "desc": "Simulations of parity blocks, checksums, packet switching, IP subnet arithmetic, TCP/IP layers, and TLS/RSA handshakes. By Zafar Ali Khan.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
+        },
+        {
           "title": "Networx",
           "url": "https://milesberry.net/networx",
           "desc": "Network simulator by Miles Berry. Useful for understanding topologies and data flow. Suitable for GCSE and A-level.",
@@ -1655,6 +1772,19 @@
       "tutorialVideo": null,
       "tools": [
         {
+          "title": "Algorithm Lab",
+          "url": "https://cswithzak.com/tools/algorithms",
+          "desc": "Interactive algorithm visualisations: bubble and insertion sort pass by pass, linear and binary search with low/high/mid pointer tables, recursion call-stack tracer, and Dijkstra/A*. By Zafar Ali Khan.",
+          "tag": "iGCSE / A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
+        },
+        {
           "title": "Array Explorer",
           "url": "https://cie-igcse-array-explorer.lovable.app",
           "desc": "Learn arrays interactively: memory diagrams, pseudocode, Python, searching, and classroom games. By Hari Denton.",
@@ -1701,6 +1831,19 @@
           "author": "James Abela",
           "tutorialVideo": null,
           "isExternal": false
+        },
+        {
+          "title": "Data Structures Playground",
+          "url": "https://cswithzak.com/tools/data-structures",
+          "desc": "Interactive visualisations for stacks, circular queues, linked lists with free lists, binary trees, and hash tables with CAIE pseudocode. By Zafar Ali Khan.",
+          "tag": "A-Level",
+          "topics": [
+            "computing"
+          ],
+          "author": "Zafar Ali Khan",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-10"
         },
         {
           "title": "For Loop",
@@ -3055,6 +3198,19 @@
         "tutorialVideo": null,
         "tools": [
           {
+            "title": "CAIE Pseudocode Playground",
+            "url": "https://cswithzak.com/tools/pseudocode-runner",
+            "desc": "In-browser CAIE pseudocode interpreter. Run pseudocode, inspect line-by-line errors, and generate trace tables. By Zafar Ali Khan.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
+          },
+          {
             "title": "Diffchecker",
             "url": "https://www.diffchecker.com/",
             "desc": "Online diff tool to compare text, code, images, and files side by side. Very useful to check small differences in student work.",
@@ -3178,6 +3334,19 @@
             "isExternal": false
           },
           {
+            "title": "SQL Lab",
+            "url": "https://cswithzak.com/tools/sql-lab",
+            "desc": "In-browser SQL and relational database query runner with schema builder and referential integrity checks. By Zafar Ali Khan.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
+          },
+          {
             "title": "Syntax Styler",
             "url": "https://syntaxstyler.sethideclercq.com",
             "desc": "Google Workspace extension to easily format code in Google Docs and Slides. Perfect for creating worksheets and presentations. By Sethi De Clercq.",
@@ -3188,6 +3357,19 @@
             "author": "Sethi De Clercq",
             "tutorialVideo": null,
             "isExternal": true
+          },
+          {
+            "title": "Trace Table Generator",
+            "url": "https://cswithzak.com/tools/trace-table",
+            "desc": "Paste any pseudocode algorithm to automatically generate the complete Cambridge Paper 2 trace table. By Zafar Ali Khan.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
           }
         ]
       },
@@ -3464,6 +3646,19 @@
             "isExternal": true
           },
           {
+            "title": "Boolean Algebra & K-map Lab",
+            "url": "https://cswithzak.com/tools/boolean-algebra",
+            "desc": "Karnaugh maps with optimal loop detection, sum-of-products simplification, Boolean algebra laws, adders, and flip-flops. By Zafar Ali Khan.",
+            "tag": "A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
+          },
+          {
             "title": "Boolean Logic Workbench",
             "url": "https://prayogashaala.com/digitalcircuits",
             "desc": "Enter Boolean expressions to instantly generate truth tables, Karnaugh maps (K-maps), and logic circuit diagrams. By Prayogashaala.",
@@ -3503,6 +3698,19 @@
             "isExternal": true
           },
           {
+            "title": "Logic Gates Lab",
+            "url": "https://cswithzak.com/tools/logic-gates",
+            "desc": "Interactive digital circuit and truth table simulator with logic gate drawing and Boolean expression analysis. By Zafar Ali Khan.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
+          },
+          {
             "title": "Logic.ly Gate Simulator",
             "url": "https://logic.ly/demo/samples",
             "desc": "Interactive logic gate simulator. Design and test digital circuits in your browser with AND, OR, NOT, and other gates.",
@@ -3514,6 +3722,19 @@
             "author": null,
             "tutorialVideo": null,
             "isExternal": true
+          },
+          {
+            "title": "Number Systems Lab",
+            "url": "https://cswithzak.com/tools/number-converter",
+            "desc": "Step-by-step conversions between binary, denary, hex, two's complement, bitwise shifts/masks, and A2 floating-point normalisation with full workings. By Zafar Ali Khan.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
           },
           {
             "title": "Parity Byte",
@@ -3941,6 +4162,19 @@
         "tutorialVideo": null,
         "tools": [
           {
+            "title": "CS with ZAK",
+            "url": "https://cswithzak.com/",
+            "desc": "Comprehensive Cambridge O Level (2210), IGCSE (0478), and A Level (9618) Computer Science hub featuring interactive labs, topical past papers, smart notes, quizzes, and code playgrounds. By Zafar Ali Khan.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
+          },
+          {
             "title": "Gandalf AI Challenge",
             "url": "https://gandalf.lakera.ai/baseline",
             "desc": "Learn about AI safety and prompt injection by trying to trick the AI into revealing its secret password across levels of increasing difficulty.",
@@ -3996,6 +4230,19 @@
         "description": "Logic puzzles, computational thinking games, system simulations, and interactive challenges.",
         "tutorialVideo": null,
         "tools": [
+          {
+            "title": "Assembler & CPU Simulator",
+            "url": "https://cswithzak.com/tools/assembler",
+            "desc": "Two-pass assembler with animated fetch–decode–execute cycles and exam-style register trace tables for AS & A2. By Zafar Ali Khan.",
+            "tag": "A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
+          },
           {
             "title": "Cipher Wheel",
             "url": "https://scratch.mit.edu/projects/427196904",
@@ -4083,6 +4330,19 @@
             "isExternal": false
           },
           {
+            "title": "Networks Lab",
+            "url": "https://cswithzak.com/tools/networks",
+            "desc": "Simulations of parity blocks, checksums, packet switching, IP subnet arithmetic, TCP/IP layers, and TLS/RSA handshakes. By Zafar Ali Khan.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
+          },
+          {
             "title": "Networx",
             "url": "https://milesberry.net/networx",
             "desc": "Network simulator by Miles Berry. Useful for understanding topologies and data flow. Suitable for GCSE and A-level.",
@@ -4138,6 +4398,19 @@
         "tutorialVideo": null,
         "tools": [
           {
+            "title": "Algorithm Lab",
+            "url": "https://cswithzak.com/tools/algorithms",
+            "desc": "Interactive algorithm visualisations: bubble and insertion sort pass by pass, linear and binary search with low/high/mid pointer tables, recursion call-stack tracer, and Dijkstra/A*. By Zafar Ali Khan.",
+            "tag": "iGCSE / A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
+          },
+          {
             "title": "Array Explorer",
             "url": "https://cie-igcse-array-explorer.lovable.app",
             "desc": "Learn arrays interactively: memory diagrams, pseudocode, Python, searching, and classroom games. By Hari Denton.",
@@ -4184,6 +4457,19 @@
             "author": "James Abela",
             "tutorialVideo": null,
             "isExternal": false
+          },
+          {
+            "title": "Data Structures Playground",
+            "url": "https://cswithzak.com/tools/data-structures",
+            "desc": "Interactive visualisations for stacks, circular queues, linked lists with free lists, binary trees, and hash tables with CAIE pseudocode. By Zafar Ali Khan.",
+            "tag": "A-Level",
+            "topics": [
+              "computing"
+            ],
+            "author": "Zafar Ali Khan",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-10"
           },
           {
             "title": "For Loop",
