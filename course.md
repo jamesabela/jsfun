@@ -6,7 +6,8 @@ Each level in a course consists of:
 
 1. A **Python File (`.py`)**: Contains the starter code, automated test cases, navigation commands, and links.
 2. A **Tutorial Page (`.html`)**: A responsive instruction page that is automatically previewed in the panel beside the editor.
-3. **Assets (Images/GIFs)**: Displayed on the tutorial page to visualize the task.
+3. **Data Files (`.txt`, `.csv`, `.tsv`, `.json`)** *(optional)*: External datasets or files pre-loaded into the virtual environment for file-handling exercises.
+4. **Assets (Images/GIFs)**: Displayed on the tutorial page to visualize the task.
 
 ---
 
@@ -35,6 +36,59 @@ Used on the **final level** of a course to mark the end. When all tests pass, th
   ```python
   #End Python: Input, Variables and Output
   ```
+
+### `#load` (Pre-loading Data Files)
+
+Loads external data files (plain text, CSV spreadsheets, TSV tables, JSON datasets, etc.) directly into Python Code Lab's in-browser virtual filesystem (`/home/pyodide/`) before execution starts.
+
+* **Format**: `#load <url>` (or `# load <url>`)
+
+#### How Filenames Are Determined
+
+Python Code Lab resolves and names files in the virtual environment in two ways:
+
+1. **Pre-loaded Files (`#load <url>`) — Trailing Basename**:
+   * Code Lab extracts everything after the final forward slash (`/`) in the URL:
+     ```javascript
+     const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+     ```
+   * The file is saved into Pyodide's virtual filesystem at `/home/pyodide/<filename>`.
+   * In Python, you access the file directly using that exact basename:
+     * `#load https://.../files_course/rudyard.txt` $\rightarrow$ open with `open("rudyard.txt", "r")`
+     * `#load https://.../worldcup_manager/malaysia.csv` $\rightarrow$ open with `open("malaysia.csv", "r")`
+
+2. **Interactive Upload Fallback & Automatic Renaming (No `#load`)**:
+   * If Python code calls `open("scores.csv", "r")` on a file that was not pre-loaded with `#load`, Code Lab intercepts the call and pauses execution.
+   * A popup modal asks the user to upload a file from their local disk to satisfy `scores.csv`.
+   * **Automatic Renaming**: Regardless of what the student's local file is named on their computer (e.g. `download (2).csv` or `my_data.txt`), Code Lab **automatically renames and saves it in virtual memory using the exact filename requested by Python** (`scores.csv`), ensuring the script runs without file-not-found errors.
+
+#### Single File Example
+
+```python
+#load https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/files_course/rudyard.txt
+
+with open("rudyard.txt", "r") as poem_file:
+    first_line = poem_file.readline()
+    print(first_line)
+```
+
+#### Multiple Data Files Example
+
+To pre-load several datasets for one level, provide multiple `#load` directives on separate lines. All files are fetched into virtual memory before execution:
+
+```python
+#load https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/worldcup_manager/malaysia.csv
+#load https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/worldcup_manager/malta.csv
+#load https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/worldcup_manager/england.csv
+
+filename = input("Choose country file (malaysia.csv, malta.csv, england.csv): ")
+with open(filename, "r") as file:
+    for line in file:
+        print(line.strip())
+```
+
+* **Automated Test Compatibility**:
+  Pre-loaded files are available across all test cases defined under `#Input` / `#output`. Virtual file modifications during one test case do not affect the original remote files.
 
 ### `#Input` and `#output` (Automated Tests)
 
@@ -298,6 +352,13 @@ The `teachers.md` provides answers and a guide for teachers running the course. 
 - **Pedagogical/Teacher Notes**: Pedagogical explanations of what each exercise teaches (e.g., "Teaches basic selection using `if` and `else` with string equality checking").
 - **Goals**: A clear summary of the expected outcome for each level.
 - **Correct Solution Codes**: Drop-in Python code solutions for every level. This helps teachers quickly assist stuck students.
+
+### 3. Data Files (`.txt`, `.csv`, `.tsv`, `.json`)
+For courses involving file handling or real-world data processing (e.g., `files_course/`, `dictionaries_course/`, `worldcup_manager/`):
+- Place all dataset files directly in the course folder alongside the `.py` and `.html` files.
+- Reference their raw GitHub URLs in the `#load` line of each relevant `.py` file:
+  `#load https://raw.githubusercontent.com/<user>/<repo>/refs/heads/main/<course-dir>/<data-file>`
+- Note any data files in `README.md` and `teachers.md` so teachers know what datasets each exercise relies upon.
 
 ---
 
