@@ -1,7 +1,7 @@
 {
   "$schema": "./usefulresources.schema.json",
   "version": "1.0.0",
-  "updatedAt": "2026-11-10",
+  "updatedAt": "2026-11-11",
   "topics": [
     {
       "id": "general",
@@ -2411,6 +2411,19 @@
           "author": "James Abela",
           "tutorialVideo": null,
           "isExternal": false
+        },
+        {
+          "title": "Irodov Physics Solutions & Simulations",
+          "url": "https://prayogashaala.com/irodov/",
+          "desc": "Deep walkthroughs of I.E. Irodov's classic physics problems across mechanics, thermodynamics, electromagnetism, and optics, each solved via multiple methods and accompanied by interactive simulations. By Prayogashaala.",
+          "tag": "A-Level",
+          "topics": [
+            "sciences"
+          ],
+          "author": "Prayogashaala",
+          "tutorialVideo": null,
+          "isExternal": true,
+          "dateAdded": "2026-11-11"
         },
         {
           "title": "Sporty Periodic Table",
@@ -5330,6 +5343,19 @@
             "author": "James Abela",
             "tutorialVideo": null,
             "isExternal": false
+          },
+          {
+            "title": "Irodov Physics Solutions & Simulations",
+            "url": "https://prayogashaala.com/irodov/",
+            "desc": "Deep walkthroughs of I.E. Irodov's classic physics problems across mechanics, thermodynamics, electromagnetism, and optics, each solved via multiple methods and accompanied by interactive simulations. By Prayogashaala.",
+            "tag": "A-Level",
+            "topics": [
+              "sciences"
+            ],
+            "author": "Prayogashaala",
+            "tutorialVideo": null,
+            "isExternal": true,
+            "dateAdded": "2026-11-11"
           },
           {
             "title": "Sporty Periodic Table",
