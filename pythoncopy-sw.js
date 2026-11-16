@@ -1,4 +1,4 @@
-const CACHE_NAME = 'python-code-lab-v50';
+const CACHE_NAME = 'python-code-lab-v51';
 const APP_SHELL = [
   './pythoncopy.html',
   './privacy.html',
@@ -6,6 +6,7 @@ const APP_SHELL = [
   './favicon.ico',
   './privacy.js',
   './privacy.css',
+  './privacy-summary.css',
   './pythoncopy.css',
   './pythoncopy.js',
   './pythoncopy-activity.js',

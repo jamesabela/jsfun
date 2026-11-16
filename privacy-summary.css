@@ -1,0 +1,44 @@
+/* Shared, visible privacy statement for JSFun's main pages. */
+.jsfun-privacy-summary {
+  box-sizing: border-box;
+  width: calc(100% - 32px);
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 20px 24px;
+  border: 1px solid #bdd5f5;
+  border-left: 5px solid #1a6aff;
+  border-radius: 12px;
+  background: #eef5ff;
+  color: #17345a;
+  text-align: left;
+  flex-shrink: 0;
+}
+.jsfun-privacy-summary .jsfun-privacy-statement {
+  margin: 0;
+  font-size: clamp(18px, 1.6vw, 23px);
+  font-weight: 700;
+  line-height: 1.5;
+}
+.jsfun-privacy-summary a {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 0;
+  color: #164a9b;
+  font-size: 15px;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.jsfun-privacy-summary a:focus-visible { outline: 3px solid #9a5100; outline-offset: 4px; }
+@media (max-width: 600px) {
+  .jsfun-privacy-summary { padding: 14px 16px; margin: 12px auto; }
+}
+@media (prefers-color-scheme: dark) {
+  .jsfun-privacy-summary { background: #172c48; color: #e7f0ff; border-color: #416798; border-left-color: #83b5ff; }
+  .jsfun-privacy-summary a { color: #b5d5ff; }
+}
+/* Preserve a usable editor on short screens; the notice remains in normal flow. */
+body.jsfun-mobile-privacy { overflow-y: auto; }
+body.jsfun-mobile-privacy > main { flex: 1 0 420px; }
+body.jsfun-mobile-privacy > header,
+body.jsfun-mobile-privacy > .mobile-toolbar { flex-shrink: 0; }

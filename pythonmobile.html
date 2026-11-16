@@ -386,8 +386,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="privacy-summary.css">
 </head>
-<body>
+<body class="jsfun-mobile-privacy">
   <header>
     <div class="brand">PyMobile</div>
     <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch theme">Light</button>
@@ -397,6 +398,12 @@
       </select>
     </div>
   </header>
+
+  <aside class="jsfun-privacy-summary" aria-label="Privacy by design">
+    <p class="jsfun-privacy-statement">Privacy by design. No JSFun accounts. No automatic central collection of student work. Optional analytics, off by default.</p>
+    <a href="privacy.html">Read the Privacy Notice and manage analytics</a>
+  </aside>
+
 
   <div class="mobile-toolbar" aria-label="Python typing shortcuts">
     <button type="button" data-insert="    ">Tab</button>
