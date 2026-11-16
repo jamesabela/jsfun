@@ -46,19 +46,76 @@
       button.setAttribute('aria-pressed', String(button.dataset.analyticsChoice === preference));
     });
   }
+  function choose(choice) {
+    preference = choice === 'allow' ? 'allow' : 'deny';
+    let saved = true;
+    try { localStorage.setItem(KEY, preference); } catch (_) { saved = false; }
+    savedChoice = saved;
+    const banner = document.getElementById('jsfun-analytics-banner');
+    if (banner && typeof banner.remove === 'function') banner.remove();
+    status(saved);
+    count();
+  }
+  function showBanner() {
+    if (!ANALYTICS_ENABLED || savedChoice || restricted() || page === '/privacy.html' ||
+        !document.body || typeof document.body.prepend !== 'function' ||
+        document.getElementById('jsfun-analytics-banner')) return;
+    const srcAttr = script && typeof script.getAttribute === 'function' ? script.getAttribute('src') : '';
+    const noticeHref = srcAttr ? srcAttr.replace(/privacy\.js(?:\?.*)?$/, 'privacy.html#analytics') : 'privacy.html#analytics';
+    const banner = document.createElement('div');
+    banner.id = 'jsfun-analytics-banner';
+    banner.setAttribute('role', 'region');
+    banner.setAttribute('aria-label', 'Analytics preference');
+
+    const style = document.createElement('style');
+    style.textContent =
+      '#jsfun-analytics-banner{box-sizing:border-box;width:100%;padding:10px 16px;background:#f8fafc;color:#1e293b;border-bottom:1px solid #cbd5e1;font:14px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 14px;flex-shrink:0;z-index:1000;}' +
+      '#jsfun-analytics-banner p{margin:0;}' +
+      '#jsfun-analytics-banner .jsfun-banner-actions{display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px;}' +
+      '#jsfun-analytics-banner button{appearance:none;font:inherit;font-size:13px;font-weight:600;line-height:1.2;padding:7px 14px;min-height:34px;border-radius:6px;border:1px solid #64748b;background:#ffffff;color:#0f172a;cursor:pointer;}' +
+      '#jsfun-analytics-banner button:hover{background:#e2e8f0;}' +
+      '#jsfun-analytics-banner button:focus-visible,#jsfun-analytics-banner a:focus-visible{outline:3px solid #9a5100;outline-offset:2px;}' +
+      '#jsfun-analytics-banner a{color:inherit;font-size:13px;text-decoration:underline;text-underline-offset:2px;}' +
+      '@media (prefers-color-scheme:dark){#jsfun-analytics-banner{background:#1e293b;color:#f1f5f9;border-bottom-color:#475569;}#jsfun-analytics-banner button{background:#0f172a;color:#f8fafc;border-color:#94a3b8;}#jsfun-analytics-banner button:hover{background:#334155;}}';
+
+    const text = document.createElement('p');
+    text.textContent = 'Help improve JSFun? Can we count your visit to this page? No cookies, student work, or personal details are saved.';
+
+    const actions = document.createElement('div');
+    actions.className = 'jsfun-banner-actions';
+
+    const allowBtn = document.createElement('button');
+    allowBtn.type = 'button';
+    allowBtn.dataset.analyticsChoice = 'allow';
+    allowBtn.textContent = 'Yes, count my visit';
+    allowBtn.addEventListener('click', () => choose('allow'));
+
+    const denyBtn = document.createElement('button');
+    denyBtn.type = 'button';
+    denyBtn.dataset.analyticsChoice = 'deny';
+    denyBtn.textContent = 'No thanks';
+    denyBtn.addEventListener('click', () => choose('deny'));
+
+    const link = document.createElement('a');
+    link.href = noticeHref;
+    link.textContent = 'Privacy & analytics settings';
+
+    actions.append(allowBtn, denyBtn, link);
+    banner.append(style, text, actions);
+    document.body.prepend(banner);
+  }
   document.querySelectorAll('[data-analytics-choice]').forEach(button => {
-    button.addEventListener('click', () => {
-      preference = button.dataset.analyticsChoice === 'allow' ? 'allow' : 'deny';
-      let saved = true;
-      try { localStorage.setItem(KEY, preference); } catch (_) { saved = false; }
-      savedChoice = saved;
-      status(saved);
-      count();
-    });
+    button.addEventListener('click', () => choose(button.dataset.analyticsChoice));
   });
   window.addEventListener('storage', event => {
     if (event.key === KEY || event.key === null) {
       preference = readPreference();
+      if (savedChoice) {
+        const banner = document.getElementById('jsfun-analytics-banner');
+        if (banner && typeof banner.remove === 'function') banner.remove();
+      } else {
+        showBanner();
+      }
       status();
       // Another tab's opt-in does not trigger a new request on this page.
     }
@@ -78,6 +135,7 @@
       button.remove();
     });
   });
+  showBanner();
   status();
   count();
 })();
