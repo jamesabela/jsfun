@@ -1,41 +1,38 @@
-/* Shared, visible privacy statement for JSFun's main pages. */
+/* Shared, subtle privacy statement for JSFun's main pages. */
 .jsfun-privacy-summary {
   box-sizing: border-box;
   width: calc(100% - 32px);
-  max-width: 1100px;
-  margin: 20px auto;
-  padding: 20px 24px;
-  border: 1px solid #bdd5f5;
-  border-left: 5px solid #1a6aff;
-  border-radius: 12px;
-  background: #eef5ff;
-  color: #17345a;
-  text-align: left;
+  max-width: 900px;
+  margin: 16px auto 8px;
+  padding: 12px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 8px;
+  background: rgba(148, 163, 184, 0.08);
+  color: inherit;
+  text-align: center;
   flex-shrink: 0;
 }
 .jsfun-privacy-summary .jsfun-privacy-statement {
   margin: 0;
-  font-size: clamp(18px, 1.6vw, 23px);
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 400;
   line-height: 1.5;
+  opacity: 0.85;
 }
 .jsfun-privacy-summary a {
   display: inline-block;
-  margin-top: 8px;
-  padding: 4px 0;
-  color: #164a9b;
-  font-size: 15px;
+  margin-top: 4px;
+  padding: 2px 0;
+  color: inherit;
+  font-size: 13px;
   line-height: 1.5;
   text-decoration: underline;
   text-underline-offset: 3px;
+  opacity: 0.9;
 }
 .jsfun-privacy-summary a:focus-visible { outline: 3px solid #9a5100; outline-offset: 4px; }
 @media (max-width: 600px) {
-  .jsfun-privacy-summary { padding: 14px 16px; margin: 12px auto; }
-}
-@media (prefers-color-scheme: dark) {
-  .jsfun-privacy-summary { background: #172c48; color: #e7f0ff; border-color: #416798; border-left-color: #83b5ff; }
-  .jsfun-privacy-summary a { color: #b5d5ff; }
+  .jsfun-privacy-summary { padding: 10px 12px; margin: 12px auto 6px; }
 }
 /* Preserve a usable editor on short screens; the notice remains in normal flow. */
 body.jsfun-mobile-privacy { overflow-y: auto; }
