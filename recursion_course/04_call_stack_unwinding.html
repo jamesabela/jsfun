@@ -60,6 +60,8 @@ button.secondary { background: var(--accent-purple); }
 .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 @media (max-width: 640px) { body { padding: 14px; } header { flex-direction: column; align-items: flex-start; gap: 10px; } .grid2 { grid-template-columns: 1fr; } }
 </style>
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 </head>
 <body>
   <div class="container">
@@ -75,7 +77,8 @@ button.secondary { background: var(--accent-purple); }
   </div>
   <script>let ss=0;let frames=[];const stackSteps=[{a:"push",v:"factorial(3)",t:"Call made: save n = 3"},{a:"push",v:"factorial(2)",t:"Recursive call: save n = 2"},{a:"push",v:"factorial(1)",t:"Base case reached: return 1"},{a:"pop",t:"Unwind: factorial(2) returns 2"},{a:"pop",t:"Unwind: factorial(3) returns 6"},{a:"pop",t:"Back to main program with answer 6"}];function renderStack(t){document.getElementById("stack").innerHTML=frames.map(f=>`<div class="frame">${f}</div>`).join("");document.getElementById("stackText").textContent=t;}function stackStep(){let s=stackSteps[Math.min(ss,stackSteps.length-1)];if(s.a==="push")frames.push(s.v);if(s.a==="pop")frames.pop();renderStack(s.t);if(ss<stackSteps.length-1)ss++;}function stackReset(){ss=0;frames=[];renderStack("Ready. The stack is empty.");}stackReset();</script>
 
-<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<div style="text-align:center;padding:12px;clear:both;"><p class="jsfun-support" style="margin:8px 0;text-align:center;font-size:14px;line-height:1.6;">Made with ❤️ for better thinking. If it helped you, support the project. <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 4px;color:inherit;text-decoration:underline;"><strong>Buy me a tea</strong></a>.</p>
+<a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
 <script src="../privacy.js" data-page="/recursion_course/04_call_stack_unwinding.html" defer></script>
 </body>
 </html>

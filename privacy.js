@@ -6,10 +6,17 @@
   const script = document.currentScript;
   const page = script && script.dataset.page;
   let sent = false;
+  let savedChoice = false;
   let preference = readPreference();
   function readPreference() {
-    try { return localStorage.getItem(KEY) === 'allow' ? 'allow' : 'deny'; }
-    catch (_) { return 'deny'; }
+    try {
+      const value = localStorage.getItem(KEY);
+      savedChoice = value === 'allow' || value === 'deny';
+      return value === 'allow' ? 'allow' : 'deny';
+    } catch (_) {
+      savedChoice = false;
+      return 'deny';
+    }
   }
   function restricted() {
     return navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.globalPrivacyControl === true;
@@ -33,7 +40,8 @@
     const output = document.getElementById('analytics-status');
     if (output) output.textContent = (preference === 'allow' ? 'Your choice: allow basic analytics.' : 'Your choice: analytics off.') +
       (!ANALYTICS_ENABLED ? ' Analytics is disabled for the whole site.' : restricted() ? ' Your browser privacy signal also blocks analytics.' : '') +
-      (!saved ? ' Your browser could not save this choice; it applies to this page only.' : ' This choice is saved in this browser when storage is available.');
+      (!saved ? ' Your browser could not save this choice; it applies to this page only.' : savedChoice ? ' This choice is saved in this browser.' : ' No choice saved yet; analytics stays off unless you allow it.') +
+      (location.hostname !== 'jamesabela.github.io' ? ' Preview mode: no analytics is sent from this address, even if you allow it. Choices here do not change your preference on the live site.' : '');
     document.querySelectorAll('[data-analytics-choice]').forEach(button => {
       button.setAttribute('aria-pressed', String(button.dataset.analyticsChoice === preference));
     });
@@ -43,6 +51,7 @@
       preference = button.dataset.analyticsChoice === 'allow' ? 'allow' : 'deny';
       let saved = true;
       try { localStorage.setItem(KEY, preference); } catch (_) { saved = false; }
+      savedChoice = saved;
       status(saved);
       count();
     });

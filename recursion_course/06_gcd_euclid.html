@@ -60,6 +60,8 @@ button.secondary { background: var(--accent-purple); }
 .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 @media (max-width: 640px) { body { padding: 14px; } header { flex-direction: column; align-items: flex-start; gap: 10px; } .grid2 { grid-template-columns: 1fr; } }
 </style>
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 </head>
 <body>
   <div class="container">
@@ -76,7 +78,8 @@ gcd(a, b) = gcd(b, a % b) otherwise</pre><p class="instruction-text">This is ele
   </div>
   <script>let gs=0;const g=["gcd(48, 18) -> gcd(18, 48 % 18)","gcd(18, 12) -> gcd(12, 18 % 12)","gcd(12, 6) -> gcd(6, 12 % 6)","gcd(6, 0) -> base case answer is 6"];function gcdStep(){document.getElementById("gcd").textContent=g[Math.min(gs,g.length-1)];if(gs<g.length-1)gs++;}function gcdReset(){gs=0;document.getElementById("gcd").textContent="Ready to trace gcd(48, 18).";}gcdReset();</script>
 
-<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<div style="text-align:center;padding:12px;clear:both;"><p class="jsfun-support" style="margin:8px 0;text-align:center;font-size:14px;line-height:1.6;">Made with ❤️ for better thinking. If it helped you, support the project. <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 4px;color:inherit;text-decoration:underline;"><strong>Buy me a tea</strong></a>.</p>
+<a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
 <script src="../privacy.js" data-page="/recursion_course/06_gcd_euclid.html" defer></script>
 </body>
 </html>

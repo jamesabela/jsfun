@@ -80,7 +80,7 @@ These controls reduce unnecessary disclosure. They do not establish that consent
 
 James supplied this [Google Forms contact form](https://docs.google.com/forms/d/e/1FAIpQLSerF3lnj9XmX_upnRCICPi1dcFNdH--okWj6UM2HpFo3W4f2Q/viewform) for privacy enquiries. It is linked in the public notice; no residential address has been added.
 
-Confirm that the form is accessible to intended users, responses are private, access is restricted appropriately, and enquiries are monitored. Define how long correspondence is retained. The form's contents and account settings were not verified during the review.
+Confirm that the form is accessible to intended users, responses are private, access is restricted appropriately, and enquiries are monitored. James selected no fixed deletion schedule: responses remain in Google Forms until manually deleted, and visitors can request deletion. The form's contents and account settings were not verified during the review.
 
 ## Remaining decisions and checks
 
@@ -88,7 +88,7 @@ Confirm that the form is accessible to intended users, responses are private, ac
 - GoatCounter settings have now been reviewed from James’s screenshot: individual pageviews and region collection off, private dashboard, 365-day retention; sessions, referrers, browser/system, screen size and country collection remain on. Inspect historical data and verify the no-session behaviour. See the evidence update in PRIVACY_AUDIT.md.
 - Identify actual provider roles, relevant agreements, processing countries and any required transfer safeguards.
 - Confirm the appropriate lawful bases and applicable children's consent requirements where a law applies. A visitor clicking an analytics button is not automatically sufficient parental consent.
-- Set a practical retention policy for contact responses and any records James receives separately.
+- Contact-form retention is now documented as manual deletion with no fixed schedule, as selected by James. Review necessity periodically; retention of any records received separately still needs consideration.
 - Review remaining remote libraries, images and proxy services; retain licences when hosting replacements locally.
 - Keep the public notice accurate and understandable. Consider additional languages if a legal requirement or audience need is established.
 - Reassess before introducing accounts, centrally stored student records, paid services, advertising, profiling or formal school integrations.
@@ -97,7 +97,7 @@ For detailed request-handling and incident procedures, see [PRIVACY_AUDIT.md](PR
 
 ## Publication status
 
-Changes are local and awaiting review. No site deployment or provider-account changes were made as part of this work. The technical review is not a certification of PDPA, GDPR, UK GDPR or worldwide compliance.
+James reports pushing the privacy changes; the live notice and shared analytics script were subsequently fetched and checked. James also supplied evidence of saved GoatCounter settings. Later notice wording and developer-documentation edits are local until pushed. No deployment or provider-account changes were performed by the assistant. The technical review is not a certification of PDPA, GDPR, UK GDPR or worldwide compliance.
 
 
 ## GoatCounter clarification

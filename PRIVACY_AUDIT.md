@@ -1,6 +1,6 @@
 # JSFun privacy review
 
-Date: 16 November 2026. Local repository review; nothing published or deployed.
+Date: 16 November 2026. Repository review; James subsequently pushed the changes and the live notice/module were fetched successfully. Subsequent edits still require a new push.
 
 ## Scope and limitations
 
@@ -26,11 +26,11 @@ No JSFun registration, central student-submission database or advertising SDK wa
 | Certificate Google Drawings images and other remote images | IP/headers, selected image URL to provider | Display badges/resources | Provider controlled | Medium: remain live dependencies; no-referrer applied. Local copying/licensing review outstanding |
 | pythonmanual.html search forms | Search terms to docs.python.org or Google | Explicit user search | Provider controlled | Medium: external destination retained; never enter student records. Other reviewed forms are local/dialog controls |
 | AI, Classroom, Teams, Wise and other external links in resource JSON/HTML | IP/headers on navigation; anything the user subsequently submits; shared URLs to sharing services | User-selected separate services | Their policies, retention and transfer arrangements | Medium/high for user-submitted work. No first-party direct AI API upload found; links are not equivalent to automatic uploads |
-| Python Code Lab service worker | Local application cache | Offline use | Until cache update/deletion/eviction | Low: v47 caches privacy assets; offline navigation returns cached notice; activation now deletes only this application's old cache versions |
+| Python Code Lab service worker | Local application cache | Offline use | Until cache update/deletion/eviction | Low: v48 caches privacy assets; offline navigation returns cached notice; activation now deletes only this application's old cache versions |
 
 No first-party cookie-setting or IndexedDB workflow was identified by manual review of the matching source; third-party runtime behaviour is outside that assurance. The inventory preserves candidates for further investigation.
 
-Contact enquiries are an additional processing activity: Google Forms receives submitted request details and network information, and James uses responses to handle enquiries. Risk: medium, potentially high if sensitive records are submitted. The notice asks for minimal information. Basis, access controls, response retention and international safeguards require confirmation; no submissions were made during testing.
+Contact enquiries are an additional processing activity: Google Forms receives submitted request details and network information, and James uses responses to handle enquiries. Risk: medium, potentially high if sensitive records are submitted. The notice asks for minimal information. Basis, access controls and international safeguards require confirmation; James selected manual deletion with no fixed response-retention schedule; no submissions were made during testing.
 
 ## Implemented controls
 
@@ -120,3 +120,12 @@ The provider's GDPR guidance argues that consent is probably unnecessary, citing
 James has now saved 365-day retention and disabled Region. Individual pageviews remain off and dashboard access remains private. Sessions, referrers, browser/system, screen size and country remain enabled; Language remains off. These retained settings are not automatically unlawful. The 365-day period is an operational choice, not a statutory limit. The screenshot confirms the configuration, not execution of deletion jobs or removal of historical regional data or exports. The account may cover other pages on jamesabela.github.io, so account-wide changes can affect more than JSFun. Further collection reductions are optional recommendations, not changes made by this review.
 
 The prepared JSFun integration still uses opt-in and omits queries/titles/referrers/screens, while requesting no sessions. This is independent of the broader dashboard capabilities and has not been deployed by this work. No consent setting, provider account or historical data was changed by the assistant; James made the account changes recorded above. Actual acceptance of the no-session parameter and the contents of historical page paths remain unverified.
+
+
+## Notice wording and new-page integration update
+
+James requested removal of unfinished editorial language from the public notice. Its purposes section now describes actual uses without inventing an approved lawful basis. Provider retention/transfer details refer to the linked policies. This copy edit does not resolve the outstanding lawful-basis, children's-consent or contractual assessment; those remain internal actions above. The notice should not be treated as a completed Article 13 assessment solely because draft wording has been removed.
+
+James explicitly chose no fixed deletion schedule for contact-form responses: they remain in Google Forms until manually deleted. The notice explains this and how to request deletion. This records current practice, not a finding that indefinite retention of every message is necessary or justified; periodically review whether messages are still needed.
+
+The analytics interface now distinguishes default-off from a saved choice and explains that local previews send no counts and have a separate browser preference from the live origin. README.md documents the three per-page elements and a nested-folder example. Tests include untracked non-ignored HTML pages, validate fixed page identifiers, and cover preview and preference status messages. Existing analytics policy is unchanged.

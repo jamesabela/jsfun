@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>JSFun puzzle piece</title>
+  <defs>
+    <mask id="piece">
+      <rect x="17" y="22" width="31" height="31" rx="2" fill="white"/>
+      <circle cx="32" cy="18" r="6" fill="white"/>
+      <rect x="29" y="18" width="6" height="8" fill="white"/>
+      <circle cx="14" cy="38" r="7" fill="white"/>
+      <circle cx="49" cy="38" r="7" fill="black"/>
+      <circle cx="32" cy="53" r="6" fill="black"/>
+    </mask>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#1a6aff"/>
+  <rect width="64" height="64" fill="white" mask="url(#piece)"/>
+</svg>
