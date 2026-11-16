@@ -2,14 +2,13 @@
 <html lang="en">
 
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Code Guide</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
-    rel="stylesheet">
+
+
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
     id="prism-theme">
   <style>
@@ -2382,19 +2381,19 @@ print("Worth waiting for!")</code></pre>
         <div class="card">
           <h2>🧵 F-Strings (Formatted String Literals)</h2>
           <p>F-strings provide a concise, readable way to format strings in Python. They allow you to embed variables, numbers, and expressions directly inside a string by prefixing it with an <code>f</code> and wrapping the variables or expressions in curly braces <code>{}</code>.</p>
-          
+
           <div class="code-wrapper">
             <pre><code class="language-python">name = "Aisha"
 print(f"Hello, {name}!")  # Output: Hello, Aisha!</code></pre>
           </div>
-          
+
           <p><strong>Crucial Rule:</strong> Always remember to put the letter <code>f</code> (lowercase or uppercase) right before the opening quote. If you forget the <code>f</code>, Python will treat it as a normal string and print the braces and variable name literally (e.g., <code>"Hello, {name}!"</code>).</p>
         </div>
 
         <div class="card">
           <h2>🧪 Interactive F-String Builder</h2>
           <p>Experiment with how variables and values are dynamically formatted inside f-strings. Change the values below to see the generated code and output immediately:</p>
-          
+
           <div class="manual-interactive">
             <div class="manual-grid">
               <div class="manual-field">
@@ -2410,7 +2409,7 @@ print(f"Hello, {name}!")  # Output: Hello, Aisha!</code></pre>
                 <input class="list-input" type="number" step="0.01" id="fstrPrice" value="5.99" oninput="updateFStrDemo()">
               </div>
             </div>
-            
+
             <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
               <div><strong>Python Code:</strong></div>
               <div class="code-wrapper">
@@ -5893,7 +5892,8 @@ I think the problem is in the total calculation.</code></pre>
             4.0</a> ©
           James Abela 2024
         </p>
-      </footer>
+      <a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
     </main>
   </div>
 
@@ -7621,7 +7621,8 @@ else:
       handleHashChange();
     });
   </script>
-  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script src="privacy.js" data-page="/pythonmanual.html" defer></script>
 </body>
 
 </html>

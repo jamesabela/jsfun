@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>iGCSE Project Sheet: Sports Manager Simulator</title>
-  
+
   <!-- Modern Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+
+
 
   <style>
     /* Design Variables */
@@ -441,7 +442,7 @@
 <body>
 
   <div class="container">
-    
+
     <!-- Controls (For screen view) -->
     <div class="controls no-print">
       <a href="index.html" class="back-link">
@@ -461,7 +462,7 @@
 
     <!-- Main Sheet Contents -->
     <div class="sheet">
-      
+
       <div class="sheet-header">
         <span class="sheet-badge">Syllabus Extension Task</span>
         <h1 class="sheet-title">iGCSE Code Challenge:<br>Build a Sports Manager Simulator</h1>
@@ -486,12 +487,12 @@
 
       <h2>Project Brief</h2>
       <p>Now that you have completed the 12-step World Cup Dream Manager unit, you are ready to design your own tournament manager script in Python. You can build a football simulator, or adapt the mechanics to model another sport with custom scoring rules, team configurations, and tactical choices.</p>
-      
+
       <h2>Step 1: Choose Your Sport & Rules</h2>
       <p>Analyze how your chosen sport structures scoring, positions, and game logic. Review these examples for implementation ideas:</p>
 
       <div class="sport-grid">
-        
+
         <!-- Gaelic Football -->
         <div class="sport-card">
           <h3 class="sport-card-title">Gaelic Football</h3>
@@ -530,7 +531,7 @@
 
       <h2>Core Coding Requirements</h2>
       <p>Your program must implement the following programming constructs aligned with the iGCSE Computer Science syllabus:</p>
-      
+
       <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px;">
         <label class="checklist-item">
           <input type="checkbox" id="req-1" class="task-checkbox">
@@ -560,7 +561,7 @@
 
       <h2>Recommended Development Phases</h2>
       <ol style="list-style: none;">
-        
+
         <li style="margin-bottom: 20px;">
           <span class="phase-badge">Phase 1</span>
           <div class="phase-title">Syllabus Setup & Basic Inputs</div>
@@ -621,7 +622,7 @@
 
       <h2>iGCSE Student Checklist & Peer Review</h2>
       <p>Before submitting your code to your teacher, test the program for these criteria:</p>
-      
+
       <table class="review-table">
         <thead>
           <tr>
@@ -674,7 +675,7 @@
   <!-- Persistence Script -->
   <script>
     const storageKey = "sports-manager-project-sheet";
-    
+
     // Select all interactive input elements
     const inputs = document.querySelectorAll('.meta-input-line, .task-checkbox, .notes-textarea');
 
@@ -686,7 +687,7 @@
       } catch (e) {
         console.error("Failed to parse local storage data:", e);
       }
-      
+
       inputs.forEach(input => {
         if (input.type === 'checkbox') {
           input.checked = !!savedData[input.id];
@@ -772,6 +773,8 @@
     }
   </script>
 
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/worldcup_manager/project_sheet.html" defer></script>
 </body>
 </html>

@@ -3866,7 +3866,7 @@ import sys, builtins
             const parts = parsed.pathname.split('/');
             videoId = parts[parts.indexOf('shorts') + 1];
           } else if (parsed.pathname.includes('/embed/')) {
-            return url;
+            videoId = parsed.pathname.split('/embed/')[1];
           }
         } else if (parsed.hostname.includes('youtu.be')) {
           videoId = parsed.pathname.substring(1);
@@ -3874,7 +3874,7 @@ import sys, builtins
 
         if (videoId) {
           videoId = videoId.split(/[?#&]/)[0];
-          return `https://www.youtube.com/embed/${videoId}`;
+          return `https://www.youtube-nocookie.com/embed/${videoId}`;
         }
       } catch (e) {
         // Ignore URL parsing errors
@@ -4078,7 +4078,20 @@ import sys, builtins
       const transformed = transformYoutubeUrl(url);
 
       title.textContent = `Previewing: ${cleanUrlDisplay(url)}`;
-      iframe.src = transformed;
+      const previousLoad = document.getElementById('privacyPreviewLoad');
+      if (previousLoad) previousLoad.remove();
+      iframe.removeAttribute('src');
+      const loadButton = document.createElement('button');
+      loadButton.id = 'privacyPreviewLoad';
+      loadButton.type = 'button';
+      loadButton.textContent = 'Load external preview — contacts the content provider';
+      loadButton.style.cssText = 'padding:12px;max-width:100%;white-space:normal;';
+      iframe.before(loadButton);
+      loadButton.addEventListener('click', () => {
+        iframe.referrerPolicy = 'no-referrer';
+        iframe.src = transformed;
+        loadButton.remove();
+      });
       iframe.dataset.originalUrl = url;
       iframe.dataset.lastUrl = url;
       fallbackLink.href = url;
@@ -4106,7 +4119,8 @@ import sys, builtins
         return; // Already closed
       }
 
-      iframe.src = '';
+      document.getElementById('privacyPreviewLoad')?.remove();
+      iframe.removeAttribute('src');
       iframe.removeAttribute('data-original-url');
       container.style.display = 'none';
 

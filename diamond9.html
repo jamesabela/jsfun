@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Diamond 9 Generator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --primary: #ffffff;
@@ -89,7 +90,7 @@
       gap: 16px;
       margin-top: 15px;
     }
-    
+
     .button-group button {
       flex: 1;
     }
@@ -111,7 +112,7 @@
       background: rgba(255, 255, 255, 0.25);
       transform: translateY(-2px);
     }
-    
+
     button.randomBtn:active {
       transform: translateY(1px);
     }
@@ -135,7 +136,7 @@
       transform: translateY(-3px);
       box-shadow: 0 7px 14px rgba(0,0,0,0.15);
     }
-    
+
     button.makeBtn:active {
       transform: translateY(1px);
     }
@@ -169,17 +170,17 @@
 
     /* Diamond 9 Absolute Positioning */
     .background-box:nth-child(1) { top: 12%; left: 50%; }
-    
+
     .background-box:nth-child(2) { top: 27%; left: 35%; }
     .background-box:nth-child(3) { top: 27%; left: 65%; }
-    
+
     .background-box:nth-child(4) { top: 42%; left: 20%; }
     .background-box:nth-child(5) { top: 42%; left: 50%; }
     .background-box:nth-child(6) { top: 42%; left: 80%; }
-    
+
     .background-box:nth-child(7) { top: 57%; left: 35%; }
     .background-box:nth-child(8) { top: 57%; left: 65%; }
-    
+
     .background-box:nth-child(9) { top: 72%; left: 50%; }
 
     .label {
@@ -193,7 +194,7 @@
       text-align: center;
       text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
-    
+
     .label.top { top: 4%; }
     .label.bottom { top: 88%; }
 
@@ -244,7 +245,7 @@
     /* Responsive Design */
     @media (max-width: 768px) {
       .inputGrid { grid-template-columns: 1fr; }
-      
+
       .background-box {
         width: 90px;
         height: 50px;
@@ -255,9 +256,9 @@
         font-size: 12px;
         border-radius: 12px;
       }
-      
+
       #container { height: 550px; }
-      
+
       .background-box:nth-child(1) { top: 12%; left: 50%; }
       .background-box:nth-child(2) { top: 26%; left: 32%; }
       .background-box:nth-child(3) { top: 26%; left: 68%; }
@@ -278,7 +279,7 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-      
+
       h1, #generatedTopic {
         color: #000 !important;
         text-shadow: none !important;
@@ -394,13 +395,13 @@
       document.getElementById('outputHeader').style.display = 'none';
       const footerActions = document.getElementById('footerActions');
       if (footerActions) footerActions.style.display = 'none';
-      
+
       const inputContainer = document.getElementById('inputContainer');
       inputContainer.style.display = 'flex';
       inputContainer.style.animation = 'none'; 
       inputContainer.offsetHeight; /* trigger reflow */
       inputContainer.style.animation = 'fadeIn 0.4s ease forwards';
-      
+
       const url = new URL(window.location);
       url.searchParams.delete('words');
       url.searchParams.delete('topic');
@@ -421,7 +422,7 @@
       container.style.display = 'block';
       // Slight animation for container
       container.style.animation = 'fadeIn 0.6s ease forwards';
-      
+
       const width = document.body.clientWidth > 768 ? 140 : 90;
       const height = document.body.clientWidth > 768 ? 70 : 50;
 
@@ -440,10 +441,10 @@
           // Calculate a random initial position within bounds
           const maxX = container.clientWidth - width;
           const maxY = container.clientHeight - height;
-          
+
           div.style.left = `${Math.random() * maxX}px`;
           div.style.top = `${Math.random() * maxY}px`;
-          
+
           // Entry animation
           div.style.opacity = '0';
           div.style.transform = 'scale(0.8)';
@@ -510,9 +511,9 @@
         pointerStartY = e.clientY;
         initialLeft = elmnt.offsetLeft;
         initialTop = elmnt.offsetTop;
-        
+
         elmnt.setPointerCapture(e.pointerId);
-        
+
         elmnt.classList.add('dragging');
 
         elmnt.addEventListener('pointermove', dragMove, { passive: false });
@@ -534,14 +535,14 @@
         const container = document.getElementById('container');
         const containerRect = container.getBoundingClientRect();
         const rect = elmnt.getBoundingClientRect();
-        
+
         // Prevent element from being dragged completely out of bounds
         // allowing half of the element to be outside the container edge at most
         const minLeft = -rect.width / 2;
         const maxLeft = containerRect.width - rect.width / 2;
         const minTop = -rect.height / 2;
         const maxTop = containerRect.height - rect.height / 2;
-        
+
         newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
         newTop = Math.max(minTop, Math.min(newTop, maxTop));
 
@@ -551,12 +552,12 @@
 
       function dragEnd(e) {
         if (!e.isPrimary) return;
-        
+
         elmnt.removeEventListener('pointermove', dragMove);
         elmnt.removeEventListener('pointerup', dragEnd);
         elmnt.removeEventListener('pointercancel', dragEnd);
         elmnt.releasePointerCapture(e.pointerId);
-        
+
         elmnt.classList.remove('dragging');
       }
     }
@@ -564,7 +565,7 @@
     // Auto-populate from URL on load
     window.onload = function () {
       const urlParams = new URLSearchParams(window.location.search);
-      
+
       const topic = urlParams.get('topic');
       if (topic) {
         const topicInput = document.getElementById('topicInput');
@@ -582,7 +583,9 @@
       }
     };
   </script>
-  
-  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="privacy.js" data-page="/diamond9.html" defer></script>
 </body>
 </html>

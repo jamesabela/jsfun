@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Link Two Sides — jsfun by James Abela</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+
   <style>
     body { font-family: 'Outfit', sans-serif; }
     .box { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -78,7 +79,7 @@
     <!-- Puzzle Section (Player) -->
     <div id="puzzle-wrap" class="relative hidden">
       <svg id="svg-canvas" class="absolute inset-0 w-full h-full min-h-[400px]"></svg>
-      
+
       <div class="grid grid-cols-2 gap-20 md:gap-40 lg:gap-60 relative z-20">
         <!-- Left Side -->
         <div id="left-col" class="space-y-4"></div>
@@ -182,7 +183,7 @@
       const rows = document.querySelectorAll('.data-row');
       const leftItems = [];
       const rightItems = [];
-      
+
       rows.forEach(row => {
           const l = row.querySelector('.left-val').value.trim();
           const r = row.querySelector('.right-val').value.trim();
@@ -200,7 +201,7 @@
       const encodedLeft = encodeBase64(leftItems.join('\n'));
       const encodedRight = encodeBase64(rightItems.join('\n'));
       const puzzleUrl = `${window.location.origin}${window.location.pathname}?left=${encodedLeft}&right=${encodedRight}`;
-      
+
       window.open(puzzleUrl, '_blank');
       document.getElementById('share-btn').classList.remove('hidden');
       window.history.replaceState({}, '', puzzleUrl);
@@ -261,7 +262,7 @@
       svg.innerHTML = '';
       const puzzleWrap = document.getElementById('puzzle-wrap');
       if (puzzleWrap.classList.contains('hidden')) return;
-      
+
       svg.style.height = puzzleWrap.offsetHeight + 'px';
       const wrapRect = puzzleWrap.getBoundingClientRect();
 
@@ -365,6 +366,8 @@
       }
     };
   </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="privacy.js" data-page="/linksides.html" defer></script>
 </body>
 </html>

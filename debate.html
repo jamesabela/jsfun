@@ -1,67 +1,68 @@
 <!doctype html>
 <html lang="en" class="h-full">
  <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Debate Arena</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Oswald:wght@400;700&amp;display=swap" rel="stylesheet">
+
   <style>
     body {
       box-sizing: border-box;
     }
-    
+
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
       20%, 40%, 60%, 80% { transform: translateX(5px); }
     }
-    
+
     @keyframes pulse-glow {
       0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.5), 0 0 40px rgba(255, 0, 0, 0.3); }
       50% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.8), 0 0 80px rgba(255, 0, 0, 0.5); }
     }
-    
+
     @keyframes vs-fire {
       0%, 100% { text-shadow: 0 0 20px #ff0000, 0 0 40px #ff6600, 0 0 60px #ff0000; transform: scale(1); }
       50% { text-shadow: 0 0 40px #ff0000, 0 0 80px #ff6600, 0 0 100px #ff0000; transform: scale(1.1); }
     }
-    
+
     @keyframes lightning {
       0%, 100% { opacity: 0; }
       10%, 30% { opacity: 1; }
       20%, 40% { opacity: 0; }
     }
-    
+
     @keyframes slot-spin {
       0% { transform: translateY(0); }
       100% { transform: translateY(-100%); }
     }
-    
+
     .shake { animation: shake 0.5s ease-in-out; }
     .pulse-glow { animation: pulse-glow 1.5s ease-in-out infinite; }
     .vs-fire { animation: vs-fire 0.8s ease-in-out infinite; }
     .lightning { animation: lightning 0.3s ease-in-out infinite; }
-    
+
     .slot-container {
       overflow: hidden;
       position: relative;
     }
-    
+
     .slot-strip {
       transition: transform 0.1s linear;
     }
-    
+
     .slot-strip.spinning {
       animation: slot-spin 0.15s linear infinite;
     }
-    
+
     .debate-card {
       background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
       border: 3px solid #ff0000;
     }
-    
+
     .fighter-box {
       background: linear-gradient(180deg, #2d1810 0%, #1a0f0a 100%);
       border: 2px solid #ff6600;
@@ -269,7 +270,7 @@
       const titleText = config.main_title || defaultConfig.main_title;
       const vsString = config.vs_text || defaultConfig.vs_text;
       const spinText = config.spin_button_text || defaultConfig.spin_button_text;
-      
+
       const primaryColor = config.primary_color || defaultConfig.primary_color;
       const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
       const bgColor = config.background_color || defaultConfig.background_color;
@@ -390,7 +391,7 @@
 
       const spinInterval = setInterval(() => {
         elapsed += intervalTime;
-        
+
         const randomDebate = getRandomDebate();
         leftFighter.innerHTML = `<span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;">🥊 ${randomDebate.sides[0]} 🥊</span>`;
         rightFighter.innerHTML = `<span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;">🥊 ${randomDebate.sides[1]} 🥊</span>`;
@@ -404,9 +405,9 @@
 
         if (elapsed >= spinDuration) {
           clearInterval(spinInterval);
-          
+
           currentDebate = getRandomDebate();
-          
+
           leftFighter.innerHTML = `<span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;">🥊 ${currentDebate.sides[0]} 🥊</span>`;
           rightFighter.innerHTML = `<span class="text-lg md:text-2xl font-bold text-orange-400" style="font-family: 'Oswald', sans-serif;">🥊 ${currentDebate.sides[1]} 🥊</span>`;
 
@@ -416,7 +417,7 @@
           setTimeout(() => {
             topicText.textContent = currentDebate.intro;
             topicArea.style.opacity = '1';
-            
+
             spinBtn.disabled = false;
             spinBtn.classList.remove('opacity-50');
             isSpinning = false;
@@ -438,6 +439,8 @@
       onConfigChange(defaultConfig);
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be1b9e9233b0969',t:'MTc2ODQ0MTg2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9be1b9e9233b0969',t:'MTc2ODQ0MTg2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<div style="text-align:center;padding:12px;clear:both;"><a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="privacy.js" data-page="/debate.html" defer></script>
 </body>
 </html>

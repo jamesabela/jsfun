@@ -2,12 +2,13 @@
 <html lang="en">
 
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>jsfun — Teaching Tools by James Abela</title>
   <meta name="description"
     content="A collection of free classroom tools for computing and general teaching by James Abela.">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     *,
     *::before,
@@ -153,7 +154,7 @@
       list-style: none; /* Hide default chevron */
       position: relative;
     }
-    
+
     .section-heading::-webkit-details-marker {
       display: none;
     }
@@ -200,7 +201,7 @@
     details[open] .section-heading .chevron {
       transform: rotate(180deg);
     }
-    
+
     /* ───── Cards grid ───── */
 
     /* ───── Cards grid ───── */
@@ -605,6 +606,7 @@
   </div>
 
   <main>
+    <p style="text-align:center;padding:0 16px;">Educational tools with no JSFun account required. Your browser can save work locally. <a href="privacy.html">Read our Privacy Notice and choose analytics preferences</a>.</p>
     <div id="tools-container">
       <!-- Tools will be rendered here dynamically from usefulresources.json -->
     </div>
@@ -619,7 +621,8 @@
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
       James Abela 2024
     </p>
-  </footer>
+  <a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
 
   <script src="renderer.js"></script>
   <script>
@@ -648,7 +651,8 @@
     }, true);
   </script>
 
-  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script src="privacy.js" data-page="/index.html" defer></script>
 </body>
 
 </html>

@@ -2,13 +2,14 @@
 <html lang="en">
 
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Code Lab - All Challenges Index</title>
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10 2 6 16'/%3E%3Cpath d='m14 2-6 16'/%3E%3Cpath d='M18 12h-4'/%3E%3Cpath d='M20 9h-4'/%3E%3Cpath d='M22 6h-4'/%3E%3Cpath d='M6 15H2'/%3E%3Cpath d='M4 12H2'/%3E%3Cpath d='M2 9h2'/%3E%3C/svg%3E">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
+    500;600;700&family=JetBrains+Mono:wght@400&display=swap');
 
     :root {
       --primary-color: #3b82f6;
@@ -1075,7 +1076,8 @@
       <a href="#" onclick="resetProgress(event)"
         style="color: #ef4444; text-decoration: underline; font-weight: 600;">Reset All Progress 🔄</a>
     </p>
-  </footer>
+  <a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
 
   <script>
     let challengeData = [];
@@ -1429,15 +1431,15 @@
         // Share actions row
         const baseUrl = window.location.href.split('?')[0].replace('challenge_list.html', '');
         const challengeUrl = baseUrl + getCodeUrl(c);
-        
+
         const shareRow = document.createElement('div');
         shareRow.className = 'share-actions-row';
-        
+
         const shareLabel = document.createElement('span');
         shareLabel.className = 'share-label';
         shareLabel.textContent = 'Share:';
         shareRow.appendChild(shareLabel);
-        
+
         // Teams button
         const teamsBtn = document.createElement('a');
         teamsBtn.className = 'share-action-btn teams-btn';
@@ -1453,7 +1455,7 @@
           Teams
         `;
         shareRow.appendChild(teamsBtn);
-        
+
         // Classroom button
         const classroomBtn = document.createElement('a');
         classroomBtn.className = 'share-action-btn classroom-btn';
@@ -1470,7 +1472,7 @@
           Classroom
         `;
         shareRow.appendChild(classroomBtn);
-        
+
         footer.appendChild(shareRow);
 
         // Checkbox completed wrapper
@@ -1919,13 +1921,13 @@
         document.querySelectorAll('.filter-buttons .filter-btn').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
         currentFilter = e.target.getAttribute('data-filter');
-        
+
         if (currentFilter === 'all') {
           selectedTags = [];
           const searchInput = document.getElementById('searchInput');
           if (searchInput) searchInput.value = '';
         }
-        
+
         syncUrlWithFilters();
         renderTagFilters();
         renderChallenges();
@@ -1947,7 +1949,8 @@
       updateShareFilterBtn();
     });
   </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script src="privacy.js" data-page="/challenge_list.html" defer></script>
 </body>
 
 </html>

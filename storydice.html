@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Story Dice - Simple Universal Vocabulary</title>
@@ -32,21 +33,21 @@
     .mode-selection span { padding: 8px 15px; border-radius: 20px; transition: 0.2s; }
     button { padding: 12px 25px; font-size: 1.2rem; border: none; border-radius: 25px; background: var(--primary-gradient); color: white; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
     button.secondary { background: white; color: #7b1fa2; border: 2px solid #7b1fa2; }
-    
+
     .dice-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1000px; padding: 20px; flex-grow: 1; }
     .dice-container.grid-9 { display: grid; grid-template-columns: repeat(3, 100px); gap: 30px; width: fit-content; margin: 0 auto; }
-    
+
     /* 
       ULTIMATE SAFARI FIX: Completely removed transform-style: preserve-3d and true 3D cubes.
       Using a 2D tile tumble to prevent ALL polygon tearing and pink flashing artifacts.
     */
     .dice-scene { width: 100px; height: 100px; perspective: 800px; position: relative; }
     .dice { width: 100%; height: 100%; position: relative; cursor: pointer; }
-    
+
     .dice-face { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; font-size:60px; box-sizing: border-box; background: #fff; border: 4px solid #ff4081; border-radius: 20px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
-    
+
     .rolling { pointer-events: none; }
-    
+
     .net-layout-container {
         display: grid;
         grid-template-columns: repeat(3, 100px);
@@ -67,7 +68,7 @@
     #frayerEmoji { font-size:60px; line-height:1; }
     #frayerWord { font-size:22px; font-weight:bold; color:#7b1fa2; margin-top:5px; text-transform:uppercase; }
     .close-modal { position:absolute; top:-15px; right:-15px; width:45px; height:45px; background:#f50057; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; }
-    
+
     footer { text-align:center; padding:2rem 1rem; border-top:1px solid #ffc1e3; font-size:0.95rem; color:#7b1fa2; width:100%; max-width:960px; margin-top:40px; }
     footer a { color:#ff4081; font-weight:600; text-decoration:none; }
     footer a.tea { color:#e73c7e; }
@@ -99,7 +100,7 @@
       h1 { font-size: 2rem; margin-top: 0.5rem; text-align: center; }
       .controls { padding: 12px; gap: 10px; border-radius: 20px; width: 100%; box-sizing: border-box; }
       button { padding: 10px 18px; font-size: 1rem; }
-      
+
       .dice-scene, .dice-face, .empty-slot { width: 80px; height: 80px; }
       .dice-face { font-size: 46px; border-width: 3px; border-radius: 16px; }
       .dice-container { gap: 15px; padding: 10px; }
@@ -176,6 +177,7 @@
     <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
     James Abela 2024
   </p>
+<a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -373,16 +375,16 @@
     "🎟️": { word: "Tickets", def: "Paper to enter a show.", char: "Small, paper, allowed in.", ex: "Show pass.", non: "Money." }
   };
   function getFrayerData(symbol) { return frayerData[symbol] || { word: "Object", def: "A story element.", char: "Used in your story.", ex: "Found on this die.", non: "Something else." }; }
-  
+
   async function rollDice() {
     const mode = document.querySelector('input[name="diceMode"]:checked').value;
     const diceContainer = document.getElementById("diceContainer");
     diceContainer.innerHTML = ""; diceContainer.classList.remove("grid-9");
     let generatedDice = [];
-    
+
     // Choose our final symbols
     const selectedSymbols = shuffleAndSlice(mode === "net" ? 6 : parseInt(mode));
-    
+
     if (mode === "net") {
         diceContainer.innerHTML = `<div class="net-layout-container">
             <div class="empty-slot"></div><div id="net-0"></div><div class="empty-slot"></div>
@@ -399,12 +401,12 @@
             generatedDice.push({el: createDiceTile(diceContainer), final: selectedSymbols[i]});
         }
     }
-    
+
     // Trigger animation
     setTimeout(() => {
         generatedDice.forEach(d => applyDiceRoll(d.el, d.final));
     }, 50);
-    
+
     await new Promise(r => setTimeout(r, 1500));
     updateURL(mode === "net" ? "net" : "dice", selectedSymbols);
   }
@@ -412,13 +414,13 @@
   function createDiceTile(container) {
     const scene = document.createElement("div"); scene.className = "dice-scene";
     const dice = document.createElement("div"); dice.className = "dice";
-    
+
     const face = document.createElement("div"); face.className = "dice-face";
     face.textContent = "🎲"; // Initial placeholder until JS scrambles it
     dice.appendChild(face);
-    
+
     dice.onclick = () => openFrayer(face.textContent);
-    
+
     scene.appendChild(dice); container.appendChild(scene); 
     return dice;
   }
@@ -426,7 +428,7 @@
   function applyDiceRoll(diceElement, finalSymbol) {
     const face = diceElement.querySelector('.dice-face');
     diceElement.classList.add('rolling');
-    
+
     let rolls = 0;
     // Fast scrambling of Emojis to simulate rolling chaos
     const interval = setInterval(() => {
@@ -437,7 +439,7 @@
             face.textContent = finalSymbol;
         }
     }, 80);
-    
+
     setTimeout(() => {
         diceElement.classList.remove('rolling');
     }, 1200);
@@ -456,7 +458,7 @@
   }
 
   function closeFrayer() { document.getElementById("modalOverlay").style.display = 'none'; }
-  
+
   function displayDice(mode, diceArray) {
     const diceContainer = document.getElementById("diceContainer");
     diceContainer.innerHTML = ""; diceContainer.classList.remove("grid-9");
@@ -501,6 +503,7 @@
     } else { rollDice(); }
   };
 </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script src="privacy.js" data-page="/storydice.html" defer></script>
 </body>
 </html>

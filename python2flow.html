@@ -2,15 +2,14 @@
 <html lang="en">
 
 <head>
+  <meta name="referrer" content="no-referrer">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PyFlow - Python to Flowchart Visualizer</title>
     <!-- Modern Fonts matching pythoncopy.html -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 
     <style>
@@ -966,7 +965,7 @@
                         break;
                     }
                 }
-                
+
                 const finalFetchUrl = /pastebin\.com/i.test(fetchUrl)
                     ? `https://corsproxy.io/?${encodeURIComponent(fetchUrl)}`
                     : fetchUrl;
@@ -1034,7 +1033,7 @@
                 btnUploadPy.addEventListener('click', () => {
                     uploadPyInput.click();
                 });
-                
+
                 uploadPyInput.addEventListener('change', function (e) {
                     const file = e.target.files[0];
                     if (!file) return;
@@ -1059,17 +1058,17 @@
                         alert('Please select an iGCSE algorithm from the dropdown first.');
                         return;
                     }
-                    
+
                     // Show confirmation warning before overwriting
                     const confirmLoad = confirm('Are you sure you want to load this algorithm? This will overwrite all of your current code in the editor.');
                     if (!confirmLoad) return;
-                    
+
                     // Instant load from local JSON cache if available
                     if (preloadedAlgorithms && preloadedAlgorithms[selectedUrl]) {
                         codeInput.value = preloadedAlgorithms[selectedUrl];
                         syncEditor();
                         parseAndRenderFlowchart();
-                        
+
                         // Update history pushState to include url parameter
                         const isDark = document.getElementById('dark-mode').checked;
                         const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
@@ -1077,7 +1076,7 @@
                         window.history.pushState({}, '', newURL);
                         return;
                     }
-                    
+
                     // Fallback to fetch from web
                     codeInput.value = '# Loading algorithm...';
                     let fetchUrl = selectedUrl;
@@ -1093,7 +1092,7 @@
                             break;
                         }
                     }
-                    
+
                     const finalFetchUrl = /pastebin\.com/i.test(fetchUrl)
                         ? `https://corsproxy.io/?${encodeURIComponent(fetchUrl)}`
                         : fetchUrl;
@@ -1104,7 +1103,7 @@
                             codeInput.value = text;
                             syncEditor();
                             parseAndRenderFlowchart();
-                            
+
                             // Update history pushState to include url parameter
                             const isDark = document.getElementById('dark-mode').checked;
                             const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
@@ -2494,7 +2493,9 @@
                 });
         }
     </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="privacy.js" data-page="/python2flow.html" defer></script>
 </body>
 
 </html>

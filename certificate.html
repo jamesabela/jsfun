@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Code Lab - Badge Achievement Certificate</title>
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m10 2 6 16'/%3E%3Cpath d='m14 2-6 16'/%3E%3Cpath d='M18 12h-4'/%3E%3Cpath d='M20 9h-4'/%3E%3Cpath d='M22 6h-4'/%3E%3Cpath d='M6 15H2'/%3E%3Cpath d='M4 12H2'/%3E%3Cpath d='M2 9h2'/%3E%3C/svg%3E">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap');
+    500;600;700;800&family=JetBrains+Mono:wght@400&display=swap');
 
     :root {
       --primary-color: #3b82f6;
@@ -323,15 +324,15 @@
 
   <div class="certificate-container">
     <div class="glow-overlay"></div>
-    
+
     <!-- Badge Image Display -->
     <div class="badge-display-container">
       <img id="badgeImage" class="badge-image" src="https://docs.google.com/drawings/d/15tMyggMNNo-KdYEfMMzKkCB8r4Zj3DvBA19vo4ETCTg/pub?w=150&h=150" alt="Python Badge">
     </div>
-    
+
     <div class="cert-sub">Python Code Lab Badge</div>
     <h1 class="cert-rank" id="certRank">Python Egg</h1>
-    
+
     <p class="cert-message" id="certMessage">
       Loading achievement...
     </p>
@@ -495,7 +496,7 @@
         document.getElementById('progressText').textContent = total > 0
           ? `${percentage}% Completed (${count} / ${total})`
           : `${count} Completed`;
-        
+
         // Trigger progress bar animation
         setTimeout(() => {
           document.getElementById('progressBarFill').style.width = `${percentage}%`;
@@ -525,7 +526,7 @@
         // List completed challenges
         const completedSet = new Set(completedIds);
         const completedChallenges = challenges.filter(c => completedSet.has(c.id));
-        
+
         if (completedChallenges.length > 0) {
           const section = document.getElementById('completedSection');
           const listEl = document.getElementById('completedList');
@@ -536,19 +537,19 @@
               titleEl.textContent = `${name}'s Completed Challenges (${completedChallenges.length}) 🏆`;
             }
             listEl.innerHTML = '';
-            
+
             completedChallenges.forEach(c => {
               const item = document.createElement('div');
               item.className = 'completed-item';
-              
+
               const titleSpan = document.createElement('span');
               titleSpan.className = 'completed-item-title';
               titleSpan.textContent = `#${c.id} - ${c.title}`;
-              
+
               const diffSpan = document.createElement('span');
               diffSpan.className = 'completed-item-difficulty';
               diffSpan.textContent = c.spice;
-              
+
               item.appendChild(titleSpan);
               item.appendChild(diffSpan);
               listEl.appendChild(item);
@@ -558,7 +559,7 @@
       } else {
         document.getElementById('certMessage').innerHTML = `Take on ${total} programming quests, unlock certificates, and earn levels from Hatchling to Python Grandmaster!`;
         document.getElementById('progressText').textContent = `0% Complete (0 / ${total})`;
-        
+
         const challengesBtn = document.getElementById('btnChallenges');
         if (challengesBtn) {
           challengesBtn.href = 'challenge_list.html';
@@ -567,6 +568,8 @@
       }
     }
   </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="privacy.js" data-page="/certificate.html" defer></script>
 </body>
 </html>

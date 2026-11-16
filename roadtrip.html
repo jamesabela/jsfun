@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Family Conversation Starters — Road Trips, Meals & Fun</title>
@@ -9,9 +10,7 @@
     content="Free mobile-friendly family discussion tools for road trips, family dinners, and game nights. Priority Triangle, Lateral Thinking Puzzles, and Story Dice.">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap"
-    rel="stylesheet">
+
 
   <style>
     :root {
@@ -610,7 +609,7 @@
         <!-- Right Column Spotify Embed Widget -->
         <div class="w-full md:w-[380px] bg-slate-950/80 p-2.5 rounded-3xl border border-emerald-500/30 shadow-2xl">
           <iframe style="border-radius:20px;"
-            src="https://open.spotify.com/embed/show/033OM247EKK2MuLQoLZIMD?utm_source=generator&theme=0" width="100%"
+            data-private-src="https://open.spotify.com/embed/show/033OM247EKK2MuLQoLZIMD?utm_source=generator&theme=0" width="100%"
             height="152" frameBorder="0" allowfullscreen=""
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
@@ -681,7 +680,8 @@
           class="hover:underline">CC BY-NC-SA 4.0</a> © James Abela 2026
       </p>
     </div>
-  </footer>
+  <a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
 
   <script>
     // Emoji pool for dynamic story dice rolling
@@ -812,7 +812,7 @@
                 </div>
                 <h3 class="font-800 text-lg text-slate-900 mb-1">${item.title}</h3>
                 <p class="text-xs text-slate-600 mb-3 font-600">${item.desc}</p>
-                
+
                 <div class="bg-white border border-amber-200 p-3 rounded-xl mb-2 text-center">
                   <span class="text-xs font-800 text-amber-900 block">${item.items.join("  •  ")}</span>
                 </div>
@@ -833,7 +833,7 @@
                 <h3 class="font-800 text-lg text-slate-900 mb-1">${item.title}</h3>
                 <p class="text-xs sm:text-sm font-700 text-slate-800 mb-3 leading-snug">"${item.scenario}"</p>
               </div>
-              
+
               <div class="bg-white border border-blue-200 p-2.5 rounded-xl">
                 <p class="text-[11px] font-700 text-blue-900">💡 <strong>Clue:</strong> ${item.clue}</p>
                 <p class="text-[10px] text-slate-500 mt-1"><strong>Answer:</strong> ${item.solution}</p>
@@ -849,7 +849,7 @@
                   <button onclick="swapSingleCard(${idx})" class="print-card-swap-btn text-xs font-bold text-pink-700 bg-pink-200/60 hover:bg-pink-200 px-2 py-0.5 rounded-md transition-all">🔄 Swap</button>
                 </div>
                 <h3 class="font-800 text-lg text-slate-900 mb-2">${item.title}</h3>
-                
+
                 <div class="flex justify-center gap-1.5 text-2xl mb-3 bg-white border border-pink-200 p-2.5 rounded-xl">
                   ${item.dice.map(d => `<span>${d}</span>`).join('')}
                 </div>
@@ -1059,8 +1059,9 @@
       spinRandomStarter();
     });
   </script>
-  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
+
+<script src="privacy.js" data-page="/roadtrip.html" defer></script>
 </body>
 
 </html>

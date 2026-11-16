@@ -2,16 +2,15 @@
 <html lang="en">
 
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Turtle Graphics Course - Teacher Portal & Student Lessons</title>
 
   <!-- Modern Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet">
+
+
+
 
   <style>
     /* Custom CSS Variables - Turtle Creative Emerald & Mint Theme */
@@ -860,7 +859,7 @@
       background: #111b2d;
       border: 1px solid var(--card-border);
     }
-    
+
     .slide-embed-container iframe {
       position: absolute;
       top: 0;
@@ -869,7 +868,7 @@
       height: 100%;
       border: 0;
     }
-    
+
     /* Coding Cards Carousel styling */
     .carousel-slide {
       min-width: 100%;
@@ -975,9 +974,9 @@
             Lesson Presentation Slides
           </h3>
           <p>Deliver the Python Turtle Graphics unit with these interactive presentation slides.</p>
-          
+
           <div class="slide-embed-container" style="margin-bottom: 12px;">
-            <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQwsoPvSwvKKPAYG7LeyiQdFk9OXffmw7W72S2zEFpqx-kIaqvVsyWC9y7EcKf0cDjVZe6Kiyk6k6oJ/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="100%" height="100%" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+            <iframe data-private-src="https://docs.google.com/presentation/d/e/2PACX-1vQwsoPvSwvKKPAYG7LeyiQdFk9OXffmw7W72S2zEFpqx-kIaqvVsyWC9y7EcKf0cDjVZe6Kiyk6k6oJ/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="100%" height="100%" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
           </div>
 
           <div class="presentation-actions" style="display: grid; grid-template-columns: 1fr; gap: 8px;">
@@ -1020,7 +1019,7 @@
             Turtle Coding Cards
           </h3>
           <p>Task cards for student activities. Download individual cards or get the complete PDF pack.</p>
-          
+
           <!-- Carousel Area -->
           <div class="carousel-container" style="position: relative; overflow: hidden; border-radius: var(--radius-sm); border: 1px solid var(--card-border); background: #ffffff; margin-bottom: 12px;">
             <div class="carousel-track" id="carouselTrack" style="display: flex; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); width: 100%;">
@@ -1029,7 +1028,7 @@
             <!-- Navigation Arrows -->
             <button id="prevCardBtn" class="carousel-arrow" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: var(--transition); font-size: 1.1rem; font-weight: bold;">&larr;</button>
             <button id="nextCardBtn" class="carousel-arrow" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: var(--transition); font-size: 1.1rem; font-weight: bold;">&rarr;</button>
-            
+
             <!-- Card label -->
             <div id="carouselLabel" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; font-size: 0.75rem; padding: 2px 10px; border-radius: 20px; font-weight: 600; z-index: 2;">Card 1 of 10</div>
           </div>
@@ -1065,7 +1064,7 @@
             Turtle Command Reference
           </h3>
           <p>Scaffolding tool for students. Open the central Python Reference Guide in a new window to search commands, view syntax examples, and download task cards!</p>
-          
+
           <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
             <a class="resource-link" style="font-weight: 600;" href="../pythonmanual.html#turtle-movement" target="_blank">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -1168,7 +1167,8 @@
     <p style="margin-top:0.5rem;font-size:0.85rem;">
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> © James Abela 2026
     </p>
-  </footer>
+  <a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
 
   <script>
     // Configuration details
@@ -1590,16 +1590,16 @@ print("Turtle postcard complete")`
     // Set presentation slides links if editable ID is available
     // Replace the string below with your editable Google Slides ID (e.g. '1...') to enable template and download links
     const editableSlidesId = "1shd5Rc-Tk-rvEyUGMLYp2ua0ZZ4ZNiAAjwQVVX0O-1w"; 
-    
+
     const useTemplateBtn = document.getElementById("useTemplateBtn");
     const downloadPptxBtn = document.getElementById("downloadPptxBtn");
     const resourceTemplateBtn = document.getElementById("resourceTemplateBtn");
     const resourcePptxBtn = document.getElementById("resourcePptxBtn");
-    
+
     if (editableSlidesId) {
       const templateLink = `https://docs.google.com/presentation/d/${editableSlidesId}/template/preview`;
       const pptxLink = `https://docs.google.com/presentation/d/${editableSlidesId}/export/pptx`;
-      
+
       useTemplateBtn.href = templateLink;
       resourceTemplateBtn.href = templateLink;
       downloadPptxBtn.href = pptxLink;
@@ -1621,7 +1621,7 @@ print("Turtle postcard complete")`
       "card6.png", "card7.png", "card8.png", "card9.png", "card10.png"
     ];
     let currentCardIndex = 0;
-    
+
     const carouselTrack = document.getElementById("carouselTrack");
     const prevCardBtn = document.getElementById("prevCardBtn");
     const nextCardBtn = document.getElementById("nextCardBtn");
@@ -1686,7 +1686,8 @@ print("Turtle postcard complete")`
       }
     }
   </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script src="../privacy.js" data-page="/turtle_course/index.html" defer></script>
 </body>
 
 </html>

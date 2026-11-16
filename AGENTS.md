@@ -1,0 +1,15 @@
+# JSFun privacy requirements
+
+- Prioritise local processing and minimise data collection, especially for children.
+- Do not add authentication or central storage of student work without explicit authorisation.
+- Avoid collecting personal information; use fictional data in examples.
+- Minimise external network requests. Prefer system fonts and existing licensed local libraries. Preserve licences when vendoring dependencies.
+- Document external services, information sent, trigger, retention uncertainties and risks in PRIVACY_AUDIT.md.
+- Include an accessible relative link to privacy.html on every user-facing page, including mobile layouts, plus an early no-referrer meta policy.
+- Analytics must go through privacy.js, stay optional and off by default, and honour saved preferences and browser privacy signals. Never send student information, dynamic titles, URL queries/fragments, answers or work. Use fixed source-controlled page identifiers only.
+- Keep external embeds click-to-load. Explain remote loading and content-bearing share links at the point of use.
+- Keep local draft deletion understandable; never clear all origin storage automatically. Remember that GitHub Pages projects can share origin storage.
+- Keep the English privacy notice aligned with implemented behaviour. Add translations only when requested or when an applicable requirement has been established. Do not invent contact details, lawful bases, retention periods or contractual safeguards.
+- Update the offline cache version and include privacy assets when changing the Python Code Lab application shell.
+- Run node tests/privacy.mjs and relevant existing tests for privacy changes. Check mobile and offline behaviour for affected applications.
+- Do not describe a technical audit as proof of legal compliance. Publication and external account configuration require the user's authorisation.

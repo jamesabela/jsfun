@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Python Code Lab</title>
@@ -941,6 +942,7 @@
   <div class="input-container" id="inputContainer" style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
     <p style="font-size: 14px; margin: 0 0 8px; font-weight: 600; color: var(--primary-color);">
       Advanced: Load code from a raw Gist URL or GitHub url.
+      <br><small>Loading contacts the file provider; Pastebin links also use corsproxy.io. Use public learning materials, not private student information.</small>
     </p>
     <input type="text" id="urlInput" placeholder="Enter the raw URL here..." />
     <button onclick="updateURL()">Load Code</button>
@@ -961,8 +963,9 @@
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
       James Abela 2024
     </p>
-  </footer>
-  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
+
 
   <!-- File Request Modal Overlay -->
   <div id="fileRequestModal" class="file-modal-overlay">
@@ -983,6 +986,7 @@
       </div>
     </div>
   </div>
+<script src="privacy.js" data-page="/pythoncopy.html" defer></script>
 </body>
 
 </html>

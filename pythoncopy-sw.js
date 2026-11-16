@@ -1,6 +1,9 @@
-const CACHE_NAME = 'python-code-lab-v43';
+const CACHE_NAME = 'python-code-lab-v47';
 const APP_SHELL = [
   './pythoncopy.html',
+  './privacy.html',
+  './privacy.js',
+  './privacy.css',
   './pythoncopy.css',
   './pythoncopy.js',
   './pythoncopy-activity.js',
@@ -27,7 +30,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
       .then(keys => Promise.all(keys
-        .filter(key => key !== CACHE_NAME)
+        .filter(key => key.startsWith('python-code-lab-') && key !== CACHE_NAME)
         .map(key => caches.delete(key))))
       .then(() => self.clients.claim())
   );
@@ -39,7 +42,7 @@ self.addEventListener('fetch', event => {
   if (event.request.mode === 'navigate' && requestUrl.origin === self.location.origin) {
     event.respondWith(
       fetch(event.request)
-        .catch(() => caches.match('./pythoncopy.html'))
+        .catch(() => caches.match(event.request, { ignoreSearch: true }).then(cached => cached || caches.match('./pythoncopy.html')))
     );
     return;
   }

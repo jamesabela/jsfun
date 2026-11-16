@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <meta name="referrer" content="no-referrer">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory & Pointers: Linked List Puzzle</title>
@@ -178,14 +179,14 @@
             document.addEventListener('dragstart', (e) => {
                 const chip = e.target.closest('.address-chip');
                 if (!chip) return;
-                
+
                 draggedData = chip.dataset.addr;
                 chip.classList.add('dragging');
-                
+
                 // Safari compatibility: must set data to transfer
                 e.dataTransfer.setData('text/plain', draggedData);
                 e.dataTransfer.effectAllowed = 'copy';
-                
+
                 // Visual feedback for drop zones
                 document.querySelectorAll('.pointer-drop-zone').forEach(z => {
                     z.classList.add('border-blue-400/50', 'bg-blue-500/5');
@@ -195,7 +196,7 @@
             document.addEventListener('dragend', (e) => {
                 const chip = e.target.closest('.address-chip');
                 if (chip) chip.classList.remove('dragging');
-                
+
                 document.querySelectorAll('.pointer-drop-zone').forEach(z => {
                     z.classList.remove('hover', 'border-blue-400/50', 'bg-blue-500/5');
                 });
@@ -222,14 +223,14 @@
                 const zone = e.target.closest('.pointer-drop-zone');
                 if (zone && draggedData) {
                     e.preventDefault();
-                    
+
                     if (zone.id === 'head-pointer') {
                         state.head = draggedData === 'NULL' ? null : draggedData;
                     } else {
                         const owner = zone.dataset.owner;
                         state.links[owner] = draggedData === 'NULL' ? null : draggedData;
                     }
-                    
+
                     renderNodes();
                     updateLogic();
                 }
@@ -291,7 +292,9 @@
 
         window.onload = init;
     </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="privacy.js" data-page="/linkedlist.html" defer></script>
 </body>
 
 </html>

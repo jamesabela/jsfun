@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connections Grid Maker</title>
     <link rel="icon" href="connections-icon.png" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <script src="vendor/pptxgenjs/pptxgen.bundle.js"></script>
     <style>
         :root {
             --bg-color: #f4f4f9;
@@ -101,14 +102,14 @@
         .timer-pill { background: #f0f4f8; border: 1px solid #d1d5db; color: #374151; font-weight: bold; border-radius: 6px; padding: 6px 12px; cursor: pointer; transition: all 0.2s; }
         .timer-pill:hover { background: #e2e8f0; }
         .timer-pill.active { background: #4a90e2; color: #fff; border-color: #4a90e2; }
-        
+
         #playTimerDisplay { max-width: 400px; margin: 15px auto; text-align: center; }
         #timerBarWrap { background: #e2e8f0; border-radius: 12px; height: 26px; border: 1px solid #cbd5e1; position: relative; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
         #timerBarFill { background: #4a90e2; height: 100%; width: 100%; transition: width 1s linear, background-color 0.5s; }
         #timerText { position: absolute; top: 0; left: 0; right: 0; line-height: 26px; font-size: 0.95em; font-weight: bold; font-family: monospace; color: #1e293b; text-shadow: 0 0 3px rgba(255,255,255,0.8); }
         #timerBarWrap.danger #timerBarFill { animation: pulseWarning 1s infinite alternate; }
         @keyframes pulseWarning { from { opacity: 1; } to { opacity: 0.6; } }
-        
+
         footer { text-align: center; padding: 2rem; color: #666; font-size: 0.9em; margin-top: 40px; border-top: 1px solid #ddd; }
         footer a { color: #4a90e2; text-decoration: none; }
         footer a.tea { color: #e91e63; font-weight: bold; }
@@ -206,15 +207,15 @@
                 <div id="urlStatus" class="url-status">URL Length: <span id="urlLen">0</span> chars</div>
                 <button onclick="copyUrl('urlBox', this)">Copy Teacher Link</button>
             </div>
-            
+
             <div style="margin-bottom: 20px;">
                 <p style="margin: 0 0 5px 0;"><strong>Student Link:</strong> Forces Play Mode on launch.</p>
                 <div id="studentUrlBox" class="url-box" style="border-color: #4a90e2; background: #f0f8ff;"></div>
                 <button onclick="copyUrl('studentUrlBox', this)">Copy Student Link</button>
             </div>
-            
+
             <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
-            
+
             <button onclick="downloadJson()">Download JSON</button>
             <button onclick="document.getElementById('fileUpload').click()">Upload JSON</button>
             <input type="file" id="fileUpload" style="display:none" accept=".json" onchange="uploadJson(event)">
@@ -228,9 +229,9 @@
             <h1 id="playTitle">Title</h1>
             <p id="playInst">Instructions</p>
         </div>
-        
+
         <div class="mistakes" id="mistakesDisplay"></div>
-        
+
         <div id="playTimerDisplay" style="display:none;">
             <div id="timerBarWrap">
                 <div id="timerBarFill"></div>
@@ -240,7 +241,7 @@
                 <button id="btnStartTimer" onclick="startTimer()" style="font-size:0.8em; padding:4px 12px; border-radius:6px;">Start Timer</button>
             </div>
         </div>
-        
+
         <div id="playGrid" class="grid-container">
             <!-- Cards rendered here -->
         </div>
@@ -398,7 +399,7 @@
         appData.allowEdit = document.getElementById('allowEditInput').checked;
         appData.timerMins = parseInt(document.getElementById('timerMinsInput').value) || 0;
         appData.timerAuto = document.getElementById('timerAutoInput').checked;
-        
+
         for (let i = 0; i < 4; i++) {
             appData.groups[i].title = document.getElementById(`g${i}_title`).value;
             for (let j = 0; j < 4; j++) {
@@ -461,9 +462,9 @@
         url.searchParams.delete('play'); // clean teacher url
         const urlStr = url.toString();
         window.history.replaceState({}, '', urlStr);
-        
+
         document.getElementById('urlBox').textContent = urlStr;
-        
+
         // Generate Student Link
         const studentUrl = new URL(urlStr);
         studentUrl.searchParams.set('play', '1');
@@ -472,7 +473,7 @@
         const len = urlStr.length;
         const lenEl = document.getElementById('urlLen');
         lenEl.textContent = len;
-        
+
         // Color code URL length
         lenEl.className = '';
         if (len < 1000) lenEl.classList.add('safe');
@@ -482,7 +483,7 @@
 
     function copyUrl(elementId, btn) {
         var urlText = document.getElementById(elementId).textContent;
-        
+
         const showCopied = () => {
             if (!btn) return;
             const origText = btn.textContent;
@@ -495,7 +496,7 @@
                 btn.style.color = "";
             }, 2000);
         };
-        
+
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(urlText)
                 .then(showCopied)
@@ -533,12 +534,12 @@
             document.getElementById('editSection').classList.remove('active-section');
             document.getElementById('playSection').classList.add('active-section');
             initPlayMode();
-            
+
             // Hide edit button and back link if locked to play mode or student link
             const urlParams = new URLSearchParams(window.location.search);
             const isStudentLink = urlParams.get('play') === '1';
             const showEditTools = appData.allowEdit && !isStudentLink;
-            
+
             document.getElementById('btnEditMode').style.display = showEditTools ? "inline-block" : "none";
             document.getElementById('backLink').style.display = "none";
         }
@@ -570,16 +571,16 @@
         const secs = timerSecondsLeft % 60;
         const text = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
         document.getElementById('timerText').textContent = text;
-        
+
         const wrapEl = document.getElementById('timerBarWrap');
         const fillEl = document.getElementById('timerBarFill');
-        
+
         let pct = 0;
         if (timerTotalSeconds > 0) {
             pct = (timerSecondsLeft / timerTotalSeconds) * 100;
         }
         fillEl.style.width = Math.max(0, pct) + "%";
-        
+
         if (timerSecondsLeft <= 60 && timerSecondsLeft > 0) {
             wrapEl.classList.add('danger');
             fillEl.style.backgroundColor = "#e91e63";
@@ -595,25 +596,25 @@
 
     function initPlayMode() {
         if (timerInterval) clearInterval(timerInterval);
-        
+
         document.getElementById('playTitle').textContent = appData.title || "Connections Grid";
-        
+
         const baseInst = appData.inst || "Find four groups of four related items.";
         const helperText = appData.forPoints 
             ? "Click to select 4 cards, then click Submit to check your group."
             : "Click to select 4 cards, then click Group to link them.";
-            
+
         document.getElementById('playInst').innerHTML = `<strong>${baseInst}</strong><br><span style="font-size:0.9em; color:#666;">${helperText}</span>`;
-        
+
         playState.solvedGroups = [];
         playState.selectedCards = [];
         playState.mistakes = 0;
         updateMistakesDisplay();
-        
+
         // Setup timer
         const timerDisplay = document.getElementById('playTimerDisplay');
         const btnStartTimer = document.getElementById('btnStartTimer');
-        
+
         if (appData.timerMins > 0) {
             timerDisplay.style.display = "block";
             timerTotalSeconds = appData.timerMins * 60;
@@ -629,7 +630,7 @@
         } else {
             timerDisplay.style.display = "none";
         }
-        
+
         // Gather all 16 cards that have content
         let index = 0;
         playState.cards = [];
@@ -644,7 +645,7 @@
                 });
             }
         }
-        
+
         // Shuffle cards
         shuffleArray(playState.cards);
         renderPlayGrid();
@@ -688,7 +689,7 @@
                 words = group.words;
                 color = group.color;
             }
-            
+
             let div = document.createElement('div');
             div.className = 'solved-group';
             div.style.backgroundColor = color;
@@ -701,12 +702,12 @@
         // Render remaining cards
         for (let card of playState.cards) {
             if (isCardSolved(card.id)) continue;
-            
+
             let div = document.createElement('div');
             div.className = 'card';
             if (playState.selectedCards.includes(card.id)) div.classList.add('selected');
             if (!card.text) div.style.opacity = '0.5'; // De-emphasize empty cards
-            
+
             div.textContent = card.text;
             div.onclick = () => toggleCardSelection(card.id);
             grid.appendChild(div);
@@ -751,16 +752,16 @@
 
     function checkConnection() {
         if (playState.selectedCards.length !== 4) return;
-        
+
         // Get the chosen cards
         let chosen = playState.cards.filter(c => playState.selectedCards.includes(c.id));
-        
+
         if (!appData.forPoints) {
             // Discussion Mode
             let defaultName = "Group " + (playState.solvedGroups.length + 1);
             let title = prompt("Enter a connection name for these 4 items (optional):", defaultName);
             if (title === null) return; // Action cancelled
-            
+
             let color = colors[playState.solvedGroups.length % colors.length];
             playState.solvedGroups.push({
                 isCustom: true,
@@ -771,7 +772,7 @@
             });
             playState.selectedCards = [];
             renderPlayGrid();
-            
+
             if (playState.solvedGroups.length === 4) {
                 setTimeout(() => alert('All items grouped!'), 100);
             }
@@ -780,14 +781,14 @@
 
         let gId = chosen[0].groupId;
         let allSame = chosen.every(c => c.groupId === gId);
-        
+
         if (allSame) {
             // Correct!
             playState.solvedGroups.push(gId);
             playState.selectedCards = [];
             // Animation/Highlighting could go here...
             renderPlayGrid();
-            
+
             // Check win
             if (playState.solvedGroups.length === 4) {
                 setTimeout(() => alert('Congratulations! You found all groups!'), 100);
@@ -895,7 +896,7 @@
         // Slide 2: Solutions
         let slideSol = pres.addSlide();
         slideSol.addText("Solutions: " + (appData.title || ""), { x:0.5, y:0.3, w:"90%", fontSize:24, bold:true, align:"center" });
-        
+
         startY = 1.0; cellH = 0.9;
         for (let i = 0; i < 4; i++) {
             let g = appData.groups[i];
@@ -927,7 +928,7 @@
                 appData = decoded;
             }
         }
-        
+
         if (!appData.allowEdit || urlParams.get('play') === '1') {
             setMode('play', true);
         } else {
@@ -946,8 +947,10 @@
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
       James Abela 2024
     </p>
-  </footer>
+  <a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
 
-  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script src="privacy.js" data-page="/connections.html" defer></script>
 </body>
 </html>

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Constructor, self and attributes</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
 :root {
   --bg-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
@@ -78,7 +79,7 @@ button:hover, .links a:hover { filter: brightness(0.97); }
       <div class="card-title">💡 Big idea</div>
       <div class="instruction-text"><p>The constructor is a special method that tells Python how to create a new object. In Python, it is called <code>__init__</code>. It has two underscores before and after <code>init</code>.</p><p>Attributes are the data stored inside an object. In this course, the RPG character stores attributes such as <code>name</code>, <code>attack</code>, <code>defence</code> and <code>health</code>.</p><p><code>self</code> means this object. It lets the class store data inside the object being created.</p></div>
     </div>
-    
+
     <div class="card">
       <div class="card-title">🎬 Interactive model</div>
       <div id="anim3" class="anim"></div>
@@ -100,7 +101,7 @@ print(hero.name)
 print(hero.health)
 </pre>
     </div>
-    
+
   </div>
   <script>
 function setResult(id, msg) { document.getElementById(id).textContent = msg; }
@@ -133,6 +134,8 @@ function checkTerm(inputId, resultId, answer) {
   else setResult(resultId, 'Try again.');
 }
 </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/oop_course/03_constructor_attributes.html" defer></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reorder Tool (Parsons Problem) — jsfun by James Abela</title>
@@ -9,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --primary-color: #3b82f6;
@@ -165,7 +166,7 @@
         body.dark-theme .bg-slate-50 {
             background-color: #151515 !important;
         }
-        
+
         /* Algorithm Grid Buttons */
         .algo-btn {
             background-color: #e0ecff;
@@ -366,19 +367,19 @@
                     <span class="text-xs font-semibold px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full dark-badge">Reorder</span>
                 </h1>
             </div>
-            
+
             <div class="visual-controls flex items-center gap-6 flex-wrap">
                 <div class="theme-toggle flex items-center gap-2 text-sm font-semibold text-slate-500">
                     <label class="cursor-pointer flex items-center gap-1"><input type="radio" id="light-mode" name="mode" value="light" checked> Light</label>
                     <label class="cursor-pointer flex items-center gap-1"><input type="radio" id="dark-mode" name="mode" value="dark"> Dark</label>
                 </div>
-                
+
                 <div class="font-size-control flex items-center gap-2 text-sm font-semibold text-slate-500">
                     <span>A</span>
                     <input type="range" id="fontSizeRange" min="12" max="24" value="16" class="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer">
                     <span class="text-base">A</span>
                 </div>
-                
+
                 <div class="flex items-center gap-3">
                     <a href="parsonsgame.html" class="px-4 py-2 text-sm font-600 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-all">
                         ← All challenges
@@ -411,14 +412,14 @@
                 <span>📝</span> Create Your Parsons Problem
             </h2>
             <p class="text-sm text-slate-500 mb-6">Paste your code or sentences below. Each line will become a draggable block. We will automatically shuffle them for students.</p>
-            
+
             <textarea id="code-input" rows="8" class="w-full p-6 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono text-sm leading-relaxed mb-6" placeholder="Paste your code or correctly ordered sentences here..."></textarea>
-            
+
             <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">iGCSE Algorithms:</p>
             <div id="algo-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
                 <!-- Populated dynamically -->
             </div>
-            
+
             <div class="flex items-center justify-between pt-6 border-t border-slate-100 flex-wrap gap-4">
                 <div class="flex flex-col gap-3 text-sm font-600 text-slate-700">
                     <div class="flex items-center gap-4">
@@ -621,7 +622,7 @@
         function generatePuzzle(data = null) {
             const raw = data || document.getElementById('code-input').value.trim();
             if (!raw) return;
-            
+
             if (!data) { // Only read from UI if generating from UI
                 const is1D = document.getElementById('mode-1d').checked;
                 state.mode = is1D ? '1D' : '2D';
@@ -639,7 +640,7 @@
             const lines = raw.split('\n')
                 .map(l => stripInlineComments(l))
                 .filter(l => l.trim() !== '');
-                
+
             state.originalOrder = lines.map((rawText, i) => {
                 const match = rawText.match(/^\s*/);
                 // Calculate indent assuming 4 spaces = 1 indent level. Let's use 30px per 4 spaces or 1 tab.
@@ -651,20 +652,20 @@
                     correctIndent 
                 };
             });
-            
+
             // Shuffle
             state.currentOrder = [...state.originalOrder].sort(() => Math.random() - 0.5);
-            
+
             resetTimer();
             renderList();
-            
+
             document.getElementById('empty-state').classList.add('hidden');
             document.getElementById('puzzle-wrap').classList.remove('hidden');
             document.getElementById('share-btn').classList.remove('hidden');
             document.getElementById('edit-lab-btn').classList.remove('hidden');
             document.getElementById('print-btn').classList.remove('hidden');
             document.getElementById('ppt-btn').classList.remove('hidden');
-            
+
             if (state.isEditing) toggleEditor();
             updateUrl(raw);
         }
@@ -672,7 +673,7 @@
         function renderList() {
             const container = document.getElementById('item-list');
             container.innerHTML = '';
-            
+
             state.currentOrder.forEach((item, index) => {
                 const el = document.createElement('div');
                 el.className = "line-item p-3 md:p-4 md:px-6 bg-white border-2 border-slate-200 rounded-2xl cursor-grab font-mono text-sm shadow-sm flex items-center gap-3 group";
@@ -691,7 +692,7 @@
                 }
                 el.dataset.id = item.id;
                 el.dataset.index = index;
-                
+
                 if (state.mode === '1D') {
                     el.dataset.indent = item.correctIndent;
                     el.style.marginLeft = (item.correctIndent * 30) + 'px';
@@ -699,9 +700,9 @@
                     el.dataset.indent = 0; // Starts unindented in 2D mode
                     el.style.marginLeft = '0px';
                 }
-                
+
                 el.style.fontSize = document.getElementById('fontSizeRange').value + 'px';
-                
+
                 setupDrag(el);
                 container.appendChild(el);
             });
@@ -734,14 +735,14 @@
                 initialIndent = parseInt(el.dataset.indent || 0);
 
                 startTimer(); // Start timer on first interaction
-                
+
                 // Clear any existing highlights/feedback
                 document.getElementById('feedback').innerText = "";
                 document.querySelectorAll('.line-item').forEach(l => l.classList.remove('correct', 'incorrect', 'highlight'));
 
                 el.setPointerCapture(e.pointerId);
                 el.classList.add('dragging');
-                
+
                 // Create a placeholder to preserve space in the list
                 placeholder = document.createElement('div');
                 placeholder.className = "line-item-placeholder bg-slate-100 border-2 border-dashed border-slate-200 rounded-2xl h-[4.5rem]";
@@ -757,18 +758,18 @@
 
             el.onpointermove = (e) => {
                 if (!isDragging) return;
-                
+
                 const deltaY = e.clientY - startY;
                 const deltaX = state.mode === '1D' ? 0 : (e.clientX - startX);
-                
+
                 el.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
                 // Calculate indent snap
                 const tempIndent = state.mode === '1D' ? initialIndent : Math.max(0, initialIndent + Math.round(deltaX / 30));
-                
+
                 const elRect = el.getBoundingClientRect();
                 const elCenter = elRect.top + elRect.height / 2;
-                
+
                 // Find candidates for swapping from neighbors
                 const items = [...document.querySelectorAll('.line-item:not(.dragging)')];
                 const neighbor = items.find(item => {
@@ -779,14 +780,14 @@
                 if (neighbor) {
                     const parent = neighbor.parentNode;
                     const neighborRect = neighbor.getBoundingClientRect();
-                    
+
                     if (elCenter < neighborRect.top + neighborRect.height / 2) {
                         parent.insertBefore(placeholder, neighbor);
                     } else {
                         parent.insertBefore(placeholder, neighbor.nextSibling);
                     }
                 }
-                
+
                 // Snap placeholder horizontally
                 if (placeholder) {
                     placeholder.style.marginLeft = (tempIndent * 30) + 'px';
@@ -796,7 +797,7 @@
             el.onpointerup = (e) => {
                 if (!isDragging) return;
                 isDragging = false;
-                
+
                 el.classList.remove('dragging');
                 el.releasePointerCapture(e.pointerId);
 
@@ -817,7 +818,7 @@
                 el.style.left = '';
                 el.style.width = '';
                 el.style.transform = '';
-                
+
                 // Re-sync internal state by reading current DOM order
                 syncStateFromDom();
             };
@@ -860,13 +861,13 @@
             state.checkCount++;
             let correct = 0;
             const items = document.querySelectorAll('.line-item');
-            
+
             items.forEach((item, i) => {
                 const isOrderCorrect = state.originalOrder[i].id == item.dataset.id;
                 const isIndentCorrect = state.originalOrder[i].correctIndent == item.dataset.indent;
-                
+
                 const isCorrect = isOrderCorrect && isIndentCorrect;
-                
+
                 if (isCorrect) {
                     correct++;
                     item.classList.add('correct');
@@ -882,10 +883,10 @@
                 const finalScore = calculateScore();
                 const stars = getStars(finalScore);
                 const starStr = '⭐'.repeat(stars);
-                
+
                 f.innerText = `Perfect! The logic is sound. ${starStr} (${finalScore} pts)`;
                 f.className = "text-emerald-600 font-bold h-8 animate-bounce";
-                
+
                 if (typeof confetti === 'function') {
                     confetti({
                         particleCount: 150,
@@ -897,7 +898,7 @@
 
                 if (state.campaignLevel) {
                     localStorage.setItem('parsons_stars_' + state.campaignLevel, stars);
-                    
+
                     const bestTimeKey = 'parsons_time_' + state.campaignLevel;
                     const prevBest = localStorage.getItem(bestTimeKey);
                     if (!prevBest || state.timeElapsed < parseInt(prevBest)) {
@@ -946,7 +947,7 @@
             const urlObj = new URL(window.location.href);
             urlObj.searchParams.delete('edit');
             const url = urlObj.toString();
-            
+
             function performVisualFeedback() {
                 const btn = document.getElementById('share-btn');
                 const old = btn.innerText;
@@ -1149,7 +1150,7 @@
         function formatAlgoName(url) {
             const filename = url.substring(url.lastIndexOf('/') + 1);
             let base = filename.endsWith('.py') ? filename.slice(0, -3) : filename;
-            
+
             const customNames = {
                 'average': 'Average',
                 'bubble': 'Bubble Sort',
@@ -1162,7 +1163,7 @@
                 'Totalling': 'Totalling',
                 'whileloop': 'While Loop'
             };
-            
+
             return customNames[base] || base.charAt(0).toUpperCase() + base.slice(1);
         }
 
@@ -1243,7 +1244,7 @@
                 if (urlLevel) {
                     state.campaignLevel = urlLevel;
                 }
-                
+
                 generatePuzzle(decode(data));
                 lockForStudents(params);
             } else if (legacyUrl) {
@@ -1268,6 +1269,8 @@
             }
         }
     </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="privacy.js" data-page="/reorder.html" defer></script>
 </body>
 </html>

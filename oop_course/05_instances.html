@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Many instances from one class</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
 :root {
   --bg-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
@@ -78,7 +79,7 @@ button:hover, .links a:hover { filter: brightness(0.97); }
       <div class="card-title">💡 Big idea</div>
       <div class="instruction-text"><p>An instance is a specific object made from a class. You can make many objects from one class. In an RPG, <code>Arthur</code>, <code>Merlin</code> and <code>Robin</code> can all be different instances of <code>Character</code>.</p><p>Each instance can store different attribute values.</p></div>
     </div>
-    
+
     <div class="card">
       <div class="card-title">🎬 Interactive model</div>
       <div id="anim5" class="anim"></div>
@@ -101,7 +102,7 @@ print(arthur.name)
 print(___.name)
 </pre>
     </div>
-    
+
   </div>
   <script>
 function setResult(id, msg) { document.getElementById(id).textContent = msg; }
@@ -134,6 +135,8 @@ function checkTerm(inputId, resultId, answer) {
   else setResult(resultId, 'Try again.');
 }
 </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/oop_course/05_instances.html" defer></script>
 </body>
 </html>

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Lollipop Stick Carousel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+
   <style>
     body {
       font-family: 'Outfit', Arial, sans-serif;
@@ -119,13 +120,13 @@
     #remove-btn {
       border: none;
     }
-    
+
     @keyframes popIn {
       0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
       70% { transform: translateX(-50%) scale(1.05); opacity: 1; }
       100% { transform: translateX(-50%) scale(1); opacity: 1; }
     }
-    
+
     #picked-box {
       position: absolute;
       top: 80%;
@@ -212,7 +213,7 @@
     sticks = questions.map((question, index) => ({ text: question, id: index }));
     updateUrl(questions); // Update the URL with the questions
     document.getElementById('picked-box').style.display = 'none';
-    
+
     document.getElementById('question-inputs').style.display = 'none';
     const toggleBtn = document.getElementById('toggle-list-btn');
     if (toggleBtn) toggleBtn.style.display = 'inline-block';
@@ -275,7 +276,7 @@
       const pickedBox = document.getElementById('picked-box');
       pickedBox.textContent = pickedStick.text;
       pickedBox.style.display = 'block';
-      
+
       removeBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
       removeBtn.disabled = false;
       removeBtn.style.cursor = 'pointer';
@@ -314,15 +315,17 @@
       const questions = decodeURIComponent(urlParams.get('questions')).split(',');
       document.getElementById('questions').value = questions.join('\n');
       sticks = questions.map((question, index) => ({ text: question, id: index }));
-      
+
       document.getElementById('question-inputs').style.display = 'none';
       const toggleBtn = document.getElementById('toggle-list-btn');
       if (toggleBtn) toggleBtn.style.display = 'inline-block';
-      
+
       renderCarousel(); // Re-render the carousel with loaded questions
     }
   };
 </script>
-  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="privacy.js" data-page="/lollipop.html" defer></script>
 </body>
 </html>

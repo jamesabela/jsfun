@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Private attributes, getters and setters</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
 :root {
   --bg-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
@@ -78,7 +79,7 @@ button:hover, .links a:hover { filter: brightness(0.97); }
       <div class="card-title">💡 Big idea</div>
       <div class="instruction-text"><p>Cambridge questions often use private attributes with a double underscore, such as <code>self.__health</code>. This means the attribute should not be accessed directly from outside the class.</p><p>A getter returns a private value. A setter changes a private value. This is useful because the class can control how the data is used.</p></div>
     </div>
-    
+
     <div class="card">
       <div class="card-title">⚙️ Your task</div>
       <div class="instruction-text"><p>Complete the getter and setter so the character health can be changed safely.</p></div>
@@ -133,6 +134,8 @@ function checkTerm(inputId, resultId, answer) {
   else setResult(resultId, 'Try again.');
 }
 </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/oop_course/06_getters_setters.html" defer></script>
 </body>
 </html>

@@ -2,16 +2,15 @@
 <html lang="en">
 
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>World Cup Dream Manager - Teacher Portal & Student Lessons</title>
 
   <!-- Modern Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet">
+
+
+
 
   <style>
     /* Custom CSS Variables - Emerald/Gold Football Theme */
@@ -738,7 +737,7 @@
 
           <div class="iframe-container">
             <iframe
-              src="https://docs.google.com/presentation/d/e/2PACX-1vTuTvORvQupQUd94h49R_l6VEZmNVHt5d98vBiTQTMncdMNgDDVHpI6BSaj7OplnVVu27LTKqdchuv7/pubembed?start=false&loop=false&delayms=3000"
+              data-private-src="https://docs.google.com/presentation/d/e/2PACX-1vTuTvORvQupQUd94h49R_l6VEZmNVHt5d98vBiTQTMncdMNgDDVHpI6BSaj7OplnVVu27LTKqdchuv7/pubembed?start=false&loop=false&delayms=3000"
               frameborder="0" width="1280" height="749" allowfullscreen="true" mozallowfullscreen="true"
               webkitallowfullscreen="true"></iframe>
           </div>
@@ -885,7 +884,8 @@
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> ©
       James Abela 2026
     </p>
-  </footer>
+  <a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
 
   <script>
     // Configuration details
@@ -1106,7 +1106,7 @@ with open(filename, "r") as file:
         passing = parts[5]
         defence = parts[6]
         stamina = parts[7]
-        
+
         if name.lower() == search_player.lower():
             found = True
             print(name, "-", team_type, position + ":", "Pace", pace + ",", "Shooting", shooting + ",", "Passing", passing + ",", "Defence", defence + ",", "Stamina", stamina)
@@ -1326,7 +1326,8 @@ print("Dream complete")`
       }
     }
   </script>
-  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script src="../privacy.js" data-page="/worldcup_manager/index.html" defer></script>
 </body>
 
 </html>

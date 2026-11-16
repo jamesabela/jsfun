@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CAIE Exam Guide: File Handling Pseudocode</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
 <style>
   :root {
     --bg-gradient: linear-gradient(135deg, #f8fafc, #ecfeff);
@@ -21,7 +22,7 @@
     --code-bg: #0f172a;
     --code-text: #f8fafc;
   }
-  
+
   body.dark-theme {
     --bg-gradient: linear-gradient(135deg, #0f172a, #022c22);
     --card-bg: #1e293b;
@@ -41,7 +42,7 @@
     margin: 0;
     padding: 0;
   }
-  
+
   body {
     background: var(--bg-gradient);
     color: var(--text-main);
@@ -52,7 +53,7 @@
     justify-content: center;
     align-items: flex-start;
   }
-  
+
   .container {
     width: 100%;
     max-width: 780px;
@@ -60,7 +61,7 @@
     flex-direction: column;
     gap: 20px;
   }
-  
+
   header {
     display: flex;
     justify-content: space-between;
@@ -69,20 +70,20 @@
     padding-bottom: 14px;
     gap: 12px;
   }
-  
+
   .title-group h1 {
     font-family: Outfit, sans-serif;
     font-weight: 800;
     font-size: 1.7rem;
     color: var(--text-main);
   }
-  
+
   .title-group p {
     font-size: 0.95rem;
     color: var(--text-muted);
     margin-top: 4px;
   }
-  
+
   .breadcrumb {
     background: var(--soft);
     color: var(--accent);
@@ -93,7 +94,7 @@
     font-size: 0.82rem;
     white-space: nowrap;
   }
-  
+
   .card {
     background: var(--card-bg);
     border: 1px solid var(--border);
@@ -104,7 +105,7 @@
     flex-direction: column;
     gap: 13px;
   }
-  
+
   .card-title {
     font-family: Outfit, sans-serif;
     font-weight: 800;
@@ -112,13 +113,13 @@
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }
-  
+
   .instruction-text {
     font-size: 0.96rem;
     line-height: 1.55;
     color: var(--text-main);
   }
-  
+
   .banner-info {
     background: var(--soft);
     border-left: 4px solid var(--accent2);
@@ -129,7 +130,7 @@
     line-height: 1.5;
     font-weight: 500;
   }
-  
+
   h3 {
     font-family: Outfit, sans-serif;
     font-weight: 800;
@@ -137,20 +138,20 @@
     font-size: 1.05rem;
     margin-top: 6px;
   }
-  
+
   ul {
     padding-left: 20px;
     display: flex;
     flex-direction: column;
     gap: 6px;
   }
-  
+
   li {
     font-size: 0.96rem;
     line-height: 1.55;
     color: var(--text-main);
   }
-  
+
   pre {
     background: var(--code-bg);
     color: var(--code-text);
@@ -161,7 +162,7 @@
     overflow-x: auto;
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
-  
+
   code {
     background: #e2e8f0;
     color: #1e293b;
@@ -170,12 +171,12 @@
     font-family: "Fira Code", Consolas, Monaco, monospace;
     font-size: 0.9em;
   }
-  
+
   body.dark-theme code {
     background: #334155;
     color: #f1f5f9;
   }
-  
+
   table {
     border-collapse: collapse;
     width: 100%;
@@ -184,24 +185,24 @@
     overflow: hidden;
     margin-top: 6px;
   }
-  
+
   th, td {
     padding: 10px;
     border: 1px solid var(--border);
     text-align: left;
     font-size: 0.9rem;
   }
-  
+
   th {
     background: var(--soft);
     color: var(--accent);
     font-weight: 800;
   }
-  
+
   tr:nth-child(even) td {
     background: rgba(0, 0, 0, 0.015);
   }
-  
+
   body.dark-theme tr:nth-child(even) td {
     background: rgba(255, 255, 255, 0.015);
   }
@@ -354,6 +355,8 @@ CLOSEFILE "database.txt"</pre>
     document.body.classList.add('dark-theme');
   }
 </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/files_course/exams.html" defer></script>
 </body>
 </html>

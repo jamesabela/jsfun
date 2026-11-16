@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Saying Hello</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
@@ -380,7 +381,7 @@
       <p class="instruction-text">Look at the code carefully:</p>
       <pre>name = input("Hi! What's your name? ")
 print("Hi", name)</pre>
-      
+
       <div class="checklist">
         <div class="checklist-item">
           <span class="checklist-icon">💡</span>
@@ -439,7 +440,7 @@ print("Hi", name)</pre>
     function update() {
       const name = inputName.value || "Alice";
       inNameText.textContent = name;
-      
+
       const p = personas[currentPersona];
       consolePrintCode.textContent = p.code;
       consoleOut.textContent = p.out(name);
@@ -458,6 +459,8 @@ print("Hi", name)</pre>
 
     update();
   </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/beginners/hello.html" defer></script>
 </body>
 </html>

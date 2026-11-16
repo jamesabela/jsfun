@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Why objects help in bigger programs</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
 :root {
   --bg-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
@@ -78,7 +79,7 @@ button:hover, .links a:hover { filter: brightness(0.97); }
       <div class="card-title">💡 Big idea</div>
       <div class="instruction-text"><p>Object oriented programming is useful when a program has many related things. A game might have characters, enemies, weapons and rooms. Each object can keep its own data and use its own methods. This is why OOP is a good fit for games, apps, GUI design and larger Python programs.</p><p>In the RPG metaphor, a <code>Character</code> class is the blueprint. Arthur and Merlin are objects created from that blueprint.</p></div>
     </div>
-    
+
     <div class="card">
       <div class="card-title">🎬 Interactive model</div>
       <div id="anim1" class="anim"></div>
@@ -95,7 +96,7 @@ print(&quot;A specific character is an ___&quot;)
 print(&quot;A function inside a class is a ___&quot;)
 </pre>
     </div>
-    
+
   </div>
   <script>
 function setResult(id, msg) { document.getElementById(id).textContent = msg; }
@@ -128,6 +129,8 @@ function checkTerm(inputId, resultId, answer) {
   else setResult(resultId, 'Try again.');
 }
 </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/oop_course/01_why_oop.html" defer></script>
 </body>
 </html>

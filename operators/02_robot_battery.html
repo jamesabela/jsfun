@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Robot Battery Rescue</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #0f172a, #022c22);
@@ -334,7 +335,7 @@
             <!-- Antenna -->
             <rect x="72" y="10" width="6" height="20" fill="#64748b"/>
             <circle id="antenna-light" cx="75" cy="10" r="6" fill="#10b981"/>
-            
+
             <!-- Head -->
             <rect x="40" y="30" width="70" height="50" rx="10" fill="#475569" stroke="#64748b" stroke-width="3"/>
             <!-- Eyes -->
@@ -398,7 +399,7 @@ battery_used = int(input("Battery used: "))
 battery_left = 0
 
 print(battery_left)</pre>
-      
+
       <div class="checklist">
         <div class="checklist-item">
           <span class="checklist-icon">💡</span>
@@ -428,7 +429,7 @@ print(battery_left)</pre>
     function update() {
       let start = parseInt(sliderStart.value);
       let used = parseInt(sliderUsed.value);
-      
+
       // Used battery cannot be higher than starting battery in real simulation
       if (used > start) {
         used = start;
@@ -473,6 +474,8 @@ print(battery_left)</pre>
     sliderUsed.addEventListener('input', update);
     update();
   </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/operators/02_robot_battery.html" defer></script>
 </body>
 </html>

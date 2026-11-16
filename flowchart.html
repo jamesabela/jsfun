@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Draw simple flowcharts with draggable shapes, labelled arrows and image exports. Free, with no sign-in required.">
@@ -97,7 +98,8 @@
         <div id="empty-state"><span aria-hidden="true">◇</span><h2>A little structure for your ideas.</h2><p>Add your first shape, or choose an iGCSE starting point from the left panel.</p></div>
         <div class="canvas-tip" id="canvas-tip">Drag shapes to arrange them · Double-click to edit</div>
       </div>
-      <footer><span id="status" role="status" aria-live="polite">Ready</span><span id="counts">0 shapes · 0 arrows</span></footer>
+      <footer><span id="status" role="status" aria-live="polite">Ready</span><span id="counts">0 shapes · 0 arrows</span><a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
     </section>
   </main>
   <input type="file" id="file-input" accept=".json,application/json" hidden>
@@ -109,6 +111,7 @@
     <textarea id="share-link" rows="4" readonly aria-describedby="copy-link-help"></textarea>
     <form method="dialog"><button>Done</button></form>
   </dialog>
-  <script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script src="privacy.js" data-page="/flowchart.html" defer></script>
 </body>
 </html>

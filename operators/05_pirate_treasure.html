@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Pirate Treasure Split</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #0f172a, #451a03);
@@ -429,7 +430,7 @@ pirates = int(input("Number of pirates: "))
 coins_each = 0
 
 print(coins_each)</pre>
-      
+
       <div class="checklist">
         <div class="checklist-item">
           <span class="checklist-icon">💡</span>
@@ -462,7 +463,7 @@ print(coins_each)</pre>
       formula.textContent = `${coins} // ${pirates} = ${coinsEach} whole coins`;
 
       chestsGrid.innerHTML = '';
-      
+
       // Update grid columns based on pirate count
       chestsGrid.style.gridTemplateColumns = `repeat(${Math.min(3, pirates)}, 1fr)`;
 
@@ -470,10 +471,10 @@ print(coins_each)</pre>
         const slot = document.createElement('div');
         slot.className = 'pirate-slot';
         slot.innerHTML = `Pirate ${i+1}<div>${coinsEach} coins</div>`;
-        
+
         const coinContainer = document.createElement('div');
         coinContainer.className = 'pirate-coins';
-        
+
         // Show up to 10 coins visually to avoid cluttering
         const visualCoins = Math.min(12, coinsEach);
         for (let j = 0; j < visualCoins; j++) {
@@ -488,7 +489,7 @@ print(coins_each)</pre>
           plus.textContent = `+${coinsEach - 12}`;
           coinContainer.appendChild(plus);
         }
-        
+
         slot.appendChild(coinContainer);
         chestsGrid.appendChild(slot);
       }
@@ -498,6 +499,8 @@ print(coins_each)</pre>
     sliderPirates.addEventListener('input', update);
     update();
   </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/operators/05_pirate_treasure.html" defer></script>
 </body>
 </html>

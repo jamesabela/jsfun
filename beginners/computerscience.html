@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Multi-line Output</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #0f172a, #0d9488);
@@ -459,7 +460,7 @@
               <input type="text" id="newline-word3" class="text-input" value="Computer Science" placeholder="Computer Science">
             </div>
           </div>
-          
+
           <div class="code-editor-header">
             <span>newline_demo.py</span>
           </div>
@@ -530,7 +531,7 @@
       <p class="instruction-text">Outputs:</p>
       <div class="output-preview">Hello
 World</div>
-      
+
       <div class="code-comparison" style="margin-top: 12px;">
         <p class="instruction-text"><strong>Starter code:</strong></p>
         <pre>print("I got nothing to say")</pre>
@@ -550,7 +551,7 @@ Computer Science</div>
       currentTab = tab;
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById('tab-btn-' + tab).classList.add('active');
-      
+
       if (tab === 'newline') {
         document.getElementById('tab-content-newline').style.display = 'block';
         document.getElementById('tab-content-joiner').style.display = 'none';
@@ -558,21 +559,21 @@ Computer Science</div>
         document.getElementById('tab-content-newline').style.display = 'none';
         document.getElementById('tab-content-joiner').style.display = 'block';
       }
-      
+
       updateCSLab();
     }
 
     function updateCSLab() {
       const consoleEl = document.getElementById('computerscience-console');
-      
+
       if (currentTab === 'newline') {
         const w1 = document.getElementById('newline-word1').value || "I";
         const w2 = document.getElementById('newline-word2').value || "love";
         const w3 = document.getElementById('newline-word3').value || "Computer Science";
-        
+
         const codeDisplay = document.getElementById('newline-code-display');
         codeDisplay.textContent = `print("${w1}\\n${w2}\\n${w3}")`;
-        
+
         consoleEl.innerHTML = `> python newline_demo.py\n${w1}\n${w2}\n${w3}`.replace(/\n/g, '<br>');
       } else {
         const w1 = document.getElementById('joiner-word1').value || "I";
@@ -598,11 +599,13 @@ Computer Science</div>
     ['newline-word1', 'newline-word2', 'newline-word3', 'joiner-word1', 'joiner-word2', 'joiner-word3'].forEach(id => {
       document.getElementById(id).addEventListener('input', updateCSLab);
     });
-    
+
     document.getElementById('joiner-checkbox').addEventListener('change', updateCSLab);
 
     updateCSLab();
   </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/beginners/computerscience.html" defer></script>
 </body>
 </html>

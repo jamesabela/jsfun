@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Basic Math with Variables</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b);
@@ -413,7 +414,7 @@
     <div class="card">
       <div class="card-title">🔬 Variable Math Lab</div>
       <p class="instruction-text">Experiment with changing the variables <code>num1</code> and <code>num2</code> to see how they calculate! Click the formula cards to run them in the simulator.</p>
-      
+
       <div class="playground-box">
         <div class="math-inputs">
           <div class="input-group">
@@ -503,28 +504,28 @@ print()</pre>
     function updateCalculations() {
       const num1Input = document.getElementById('num1-input');
       const num2Input = document.getElementById('num2-input');
-      
+
       let num1 = parseFloat(num1Input.value);
       let num2 = parseFloat(num2Input.value);
-      
+
       if (isNaN(num1)) num1 = 0;
       if (isNaN(num2)) num2 = 0;
-      
+
       const total1 = num1 + 15;
       const total2 = num2 * 2;
       const total3 = num1 - num2;
-      
+
       // Update displays
       document.getElementById('flow-total1-val').textContent = num1;
       document.getElementById('val-total1').textContent = total1;
-      
+
       document.getElementById('flow-total2-val').textContent = num2;
       document.getElementById('val-total2').textContent = total2;
-      
+
       document.getElementById('flow-total3-val1').textContent = num1;
       document.getElementById('flow-total3-val2').textContent = num2;
       document.getElementById('val-total3').textContent = total3;
-      
+
       // Update badges
       updateBadge('badge-total1', total1);
       updateBadge('badge-total2', total2);
@@ -554,11 +555,11 @@ print()</pre>
       // Remove active classes
       document.querySelectorAll('.formula-card').forEach(c => c.classList.remove('active'));
       document.getElementById('card-total' + num).classList.add('active');
-      
+
       const num1 = parseFloat(document.getElementById('num1-input').value) || 0;
       const num2 = parseFloat(document.getElementById('num2-input').value) || 0;
       const consoleEl = document.getElementById('lab-console');
-      
+
       let resultText = "";
       if (num === 1) {
         const val = num1 + 15;
@@ -570,17 +571,19 @@ print()</pre>
         const val = num1 - num2;
         resultText = `> total3 = num1 - num2\n> total3 = ${num1} - ${num2}\n> print(total3)\n<span style="color: ${val === 15 ? 'var(--success)' : '#fb7185'}">${val}</span>`;
       }
-      
+
       consoleEl.innerHTML = resultText.replace(/\n/g, '<br>');
     }
 
     document.getElementById('num1-input').addEventListener('input', updateCalculations);
     document.getElementById('num2-input').addEventListener('input', updateCalculations);
-    
+
     // Run initial calculations
     updateCalculations();
     runFormula(3); // Start with active formula showing the match
   </script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/beginners/maths.html" defer></script>
 </body>
 </html>

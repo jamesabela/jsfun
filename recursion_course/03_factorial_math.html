@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Factorial as a mathematical pattern</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+
+
   <style>
 :root {
   --bg-gradient: linear-gradient(135deg, #f8fafc, #eef2ff);
@@ -77,6 +78,8 @@ button.secondary { background: var(--accent-purple); }
 1! = 1</pre></div><div class="card "><div class="card-title">Interactive trace</div><div class="demo"><p class="instruction-text">Step through factorial(4). First the calls go down to the base case, then the answers come back up.</p><div class="controls"><button onclick="factStep()">Step</button><button class="secondary" onclick="factReset()">Reset</button></div><div id="fact" class="output"></div></div></div><div class="card "><div class="card-title">Task</div><p class="instruction-text">Complete the function so <code>factorial(5)</code> returns 120.</p></div>
   </div>
   <script>let fs=0;const steps=["factorial(4) needs 4 * factorial(3)","factorial(3) needs 3 * factorial(2)","factorial(2) needs 2 * factorial(1)","factorial(1) is the base case -> 1","return 2 * 1 = 2","return 3 * 2 = 6","return 4 * 6 = 24"];function factStep(){document.getElementById("fact").textContent=steps[Math.min(fs,steps.length-1)]; if(fs<steps.length-1)fs++;}function factReset(){fs=0;document.getElementById("fact").textContent="Ready to trace factorial(4).";}factReset();</script>
-<script data-goatcounter="https://jabela.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<div style="text-align:center;padding:12px;clear:both;"><a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<script src="../privacy.js" data-page="/recursion_course/03_factorial_math.html" defer></script>
 </body>
 </html>
