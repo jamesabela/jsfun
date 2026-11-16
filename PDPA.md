@@ -65,8 +65,9 @@ Sources:
 
 The local changes prepared for review include:
 
-- A central English privacy notice linked from all 450 existing HTML pages.
+- A central English privacy notice linked from all existing HTML pages, plus a subtle bottom privacy summary panel on the main pages (`index.html`, `computing.html`, `whatsnew.html`, `pythoncopy.html`, and `pythonmobile.html`) styled via `privacy-summary.css`.
 - Analytics off by default, with a persistent choice across same-origin JSFun tools.
+- A first-visit opt-in analytics banner injected by `privacy.js` when no choice is saved and Do Not Track / Global Privacy Control are off, using plain-English copy, equal-weight buttons (`Yes, count my visit` and `No thanks`), and zero GoatCounter requests before an explicit opt-in.
 - Fixed analytics page identifiers, excluding student work, live URL queries/fragments, dynamic titles, referrers and screen sizes; no session tracking requested.
 - Respect for Do Not Track and Global Privacy Control signals, plus a central analytics disable switch.
 - Click-to-load external embeds and Code Lab previews, with referrer suppression.
@@ -108,6 +109,8 @@ James supplied the current settings screenshot on 16 November 2026. A subsequent
 ### Message on site
 
 Privacy by design. No JSFun accounts. No automatic central collection of student work. Optional analytics, off by default.
+
+This summary is displayed subtly at the bottom of the main pages above the footer. Separately, `privacy.js` displays a first-visit opt-in banner at the top of pages (except `privacy.html`) until the visitor chooses `Yes, count my visit` or `No thanks`, or if Do Not Track / Global Privacy Control are active.
 
 ### Detailed message
 
