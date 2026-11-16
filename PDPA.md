@@ -99,18 +99,22 @@ For detailed request-handling and incident procedures, see [PRIVACY_AUDIT.md](PR
 
 James reports pushing the privacy changes; the live notice and shared analytics script were subsequently fetched and checked. James also supplied evidence of saved GoatCounter settings. Later notice wording and developer-documentation edits are local until pushed. No deployment or provider-account changes were performed by the assistant. The technical review is not a certification of PDPA, GDPR, UK GDPR or worldwide compliance.
 
-
 ## GoatCounter clarification
 
 James supplied the current settings screenshot on 16 November 2026. A subsequent screenshot shows the Saved confirmation with retention changed to 365 days and Region disabled. The public notice now records the 365-day setting. GoatCounter argues that its aggregate analytics probably does not require GDPR consent; this is relevant provider guidance, not a blanket compliance guarantee. Disabling analytics remains a conservative option rather than an established legal requirement. The prepared code's opt-in policy is unchanged. See [the technical audit](PRIVACY_AUDIT.md) for the settings table, sources and proposed minimisation options.
 
+## public privacy statement
 
-## Prominent public privacy statement
+### Message on site
 
-At James's request, the following exact statement is displayed prominently on the General Teaching homepage (`index.html`), Computing Tools (`computing.html`), What's New (`whatsnew.html`), Python Code Lab (`pythoncopy.html`) and PyMobile (`pythonmobile.html`). It also leads the introduction in `privacy.html`.
+Privacy by design. No JSFun accounts. No automatic central collection of student work. Optional analytics, off by default.
 
-> Privacy by design. No JSFun accounts. No automatic central collection of student work. Optional analytics, off by default.
+### Detailed message
 
-The main-page panels link to the full Privacy Notice and analytics controls. They use a shared local stylesheet, `privacy-summary.css`, and add no external requests. The mobile editor retains usable space beneath the statement and allows scrolling on short screens.
+JSFun is built with privacy by design. Our free educational tools require no JSFun accounts and prioritise processing in your browser, without automatically uploading student work to a central JSFun database. Optional analytics is off by default, excludes entered content and is configured for 365-day retention. Our Privacy Notice explains browser storage, external services and how to raise privacy enquiries.
+
+These safeguards support the data-minimisation, transparency and privacy-by-design principles reflected in GDPR, UK GDPR and Malaysia’s PDPA.
+
+------
 
 This wording describes implemented safeguards, not certification or a finding of full GDPR, UK GDPR or PDPA compliance. It does not mean that hosting providers receive no technical data, that external services never process information, or that users cannot choose to share work. Contact-form submissions, content-bearing share links and exports remain covered by the fuller notice. Keep this statement accurate if accounts, central submissions or the analytics default ever change. These latest page edits require a push before they appear on the live site.
