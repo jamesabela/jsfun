@@ -1,4 +1,4 @@
-const CACHE_NAME = 'python-code-lab-v67';
+const CACHE_NAME = 'python-code-lab-v68';
 const APP_SHELL = [
   './pythoncopy.html',
   './privacy.html',
@@ -18,7 +18,8 @@ const APP_SHELL = [
   './python_edit_run_mode.png',
   './python_trace_mode.png',
   './python_variables_trace.png',
-  './gist.jpg'
+  './gist.jpg',
+  './images/turtlequest/course-cover.jpg'
 ];
 
 self.addEventListener('install', event => {

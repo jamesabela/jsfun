@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turtle Quest — Interactive Python Programming Game</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="turtlepuzzles.css">
+</head>
+<body>
+  <header class="tq-header">
+    <div class="tq-brand">
+      <span class="tq-brand-logo" aria-hidden="true">🐢</span>
+      <div>
+        <h1>Turtle Quest</h1>
+      </div>
+      <span class="tq-world-pill" id="worldPill">🏕️ World 1: Turtle Training</span>
+    </div>
+
+    <div class="tq-header-actions">
+      <button type="button" class="btn btn-sm tq-progress-pill" id="progressPill" title="View rewards, badges, and PDF certificate">⭐ 0/120 • 0/40</button>
+      <button type="button" class="btn btn-sm" id="btnWorldMap">🗺️ World Map</button>
+      <button type="button" class="btn btn-sm" id="btnMute" aria-label="Toggle sound effects">🔊 Sound</button>
+      <button type="button" class="btn btn-sm" id="btnTheme" aria-label="Toggle light or dark mode">🌙 Dark</button>
+      <a class="btn btn-sm" href="pythoncopy.html" target="_blank" rel="noopener noreferrer" title="Open Python Code Lab">🐍 Python Code Lab</a>
+    </div>
+  </header>
+
+  <section class="tq-level-bar" aria-label="Current level">
+    <div class="tq-level-left">
+      <img class="tq-world-thumb" id="worldThumb" src="images/turtlequest/world1-training.jpg" alt="World artwork">
+      <div class="tq-level-info">
+        <h2 id="levelTitle">Level 1: First Steps</h2>
+        <p id="levelObjective">Move forward to reach the flag.</p>
+      </div>
+    </div>
+    <div class="tq-level-nav">
+      <button type="button" class="btn btn-sm" id="btnHint">💡 Hint</button>
+      <button type="button" class="btn btn-sm" id="btnPrevLevel">◀ Prev</button>
+      <button type="button" class="btn btn-sm btn-primary" id="btnNextLevel">Next ▶</button>
+    </div>
+  </section>
+
+  <main class="tq-main">
+    <!-- 1. Game Canvas Area -->
+    <section class="tq-panel" aria-label="Game canvas">
+      <div class="tq-panel-header">
+        <span>🎮 Game Canvas</span>
+        <span style="font-size:0.78rem;color:var(--text-muted);">480×480 Turtle Grid</span>
+      </div>
+      <div class="tq-canvas-wrap">
+        <canvas id="gameCanvas" width="480" height="480" aria-label="Turtle Quest game board"></canvas>
+      </div>
+      <div class="tq-feedback" id="feedbackBox" role="status" aria-live="polite"></div>
+      <div class="tq-run-controls">
+        <button type="button" class="btn btn-success btn-sm" id="btnRun">▶ Run</button>
+        <button type="button" class="btn btn-sm" id="btnStep">⏭ Step</button>
+        <button type="button" class="btn btn-warning btn-sm" id="btnPause" disabled>⏸ Pause</button>
+        <button type="button" class="btn btn-danger btn-sm" id="btnStop" disabled>⏹ Stop</button>
+        <button type="button" class="btn btn-sm" id="btnResetTurtle">🔄 Reset</button>
+        <label class="tq-speed-wrap" for="speedRange">
+          Speed
+          <input type="range" id="speedRange" min="1" max="5" value="3" aria-label="Execution speed">
+        </label>
+      </div>
+      <div class="tq-stats-grid" aria-label="Level statistics">
+        <div class="tq-stat">
+          <span class="tq-stat-label">Lines</span>
+          <span class="tq-stat-val" id="statLines">0</span>
+        </div>
+        <div class="tq-stat">
+          <span class="tq-stat-label">3-Star Target</span>
+          <span class="tq-stat-val" id="statTarget">3</span>
+        </div>
+        <div class="tq-stat">
+          <span class="tq-stat-label">Executed Ops</span>
+          <span class="tq-stat-val" id="statOps">0</span>
+        </div>
+        <div class="tq-stat">
+          <span class="tq-stat-label">Gems</span>
+          <span class="tq-stat-val" id="statGems">—</span>
+        </div>
+        <div class="tq-stat">
+          <span class="tq-stat-label">Best Score</span>
+          <span class="tq-stat-val" id="statBest">—</span>
+        </div>
+        <div class="tq-stat">
+          <span class="tq-stat-label">Stars</span>
+          <span class="tq-stat-val" id="statStars">☆☆☆</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Command Buttons Area -->
+    <section class="tq-panel" aria-label="Command buttons">
+      <div class="tq-panel-header">
+        <span>🎛️ Command Buttons</span>
+      </div>
+      <div class="tq-commands-body">
+        <div class="tq-context-badge" id="contextBadge">📍 Top level (no active loop or function)</div>
+
+        <div class="tq-param-bar" id="paramBar">
+          <label class="tq-param-group">
+            Distance
+            <select id="paramDist"></select>
+          </label>
+          <label class="tq-param-group">
+            Angle
+            <select id="paramAngle"></select>
+          </label>
+          <label class="tq-param-group">
+            Repeat
+            <select id="paramRepeat"></select>
+          </label>
+          <label class="tq-param-group">
+            Colour
+            <select id="paramColor"></select>
+          </label>
+          <label class="tq-param-group">
+            Function Name
+            <input type="text" id="paramFnName" value="my_function" maxlength="20" style="width:110px;">
+          </label>
+        </div>
+
+        <div class="tq-cmd-grid">
+          <button type="button" class="cmd-btn" data-cmd="forward">
+            <span class="cmd-top"><span class="cmd-icon">⬆️</span> Forward</span>
+            <span class="cmd-py">turtle.forward(40)</span>
+          </button>
+          <button type="button" class="cmd-btn" data-cmd="backward">
+            <span class="cmd-top"><span class="cmd-icon">⬇️</span> Backward</span>
+            <span class="cmd-py">turtle.backward(40)</span>
+          </button>
+          <button type="button" class="cmd-btn" data-cmd="left">
+            <span class="cmd-top"><span class="cmd-icon">↶</span> Turn left</span>
+            <span class="cmd-py">turtle.left(90)</span>
+          </button>
+          <button type="button" class="cmd-btn" data-cmd="right">
+            <span class="cmd-top"><span class="cmd-icon">↷</span> Turn right</span>
+            <span class="cmd-py">turtle.right(90)</span>
+          </button>
+          <button type="button" class="cmd-btn cmd-loop" data-cmd="repeat">
+            <span class="cmd-top"><span class="cmd-icon">🔁</span> Repeat</span>
+            <span class="cmd-py">for i in range(4):</span>
+          </button>
+          <button type="button" class="cmd-btn cmd-loop" data-cmd="end_repeat">
+            <span class="cmd-top"><span class="cmd-icon">↵</span> End repeat</span>
+            <span class="cmd-py">End loop indent</span>
+          </button>
+          <button type="button" class="cmd-btn cmd-pen" data-cmd="pendown">
+            <span class="cmd-top"><span class="cmd-icon">⬛</span> Pen down</span>
+            <span class="cmd-py">turtle.pendown()</span>
+          </button>
+          <button type="button" class="cmd-btn cmd-pen" data-cmd="penup">
+            <span class="cmd-top"><span class="cmd-icon">⬜</span> Pen up</span>
+            <span class="cmd-py">turtle.penup()</span>
+          </button>
+          <button type="button" class="cmd-btn cmd-pen" data-cmd="color">
+            <span class="cmd-top"><span class="cmd-icon">🎨</span> Colour</span>
+            <span class="cmd-py">turtle.pencolor("blue")</span>
+          </button>
+          <button type="button" class="cmd-btn cmd-fn" data-cmd="def_fn">
+            <span class="cmd-top"><span class="cmd-icon">🧩</span> Define function</span>
+            <span class="cmd-py">def my_function():</span>
+          </button>
+          <button type="button" class="cmd-btn cmd-fn" data-cmd="end_fn">
+            <span class="cmd-top"><span class="cmd-icon">↵</span> End function</span>
+            <span class="cmd-py">End function body</span>
+          </button>
+          <button type="button" class="cmd-btn cmd-fn" data-cmd="call_fn">
+            <span class="cmd-top"><span class="cmd-icon">▶️</span> Call function</span>
+            <span class="cmd-py">my_function()</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Python Editor Area -->
+    <section class="tq-panel tq-editor-panel" aria-label="Python code editor">
+      <div class="tq-panel-header">
+        <span>🐍 Python Code</span>
+        <button type="button" class="btn btn-sm" id="btnTextMode" style="display:none;">⌨️ Text Mode</button>
+      </div>
+      <div class="tq-editor-toolbar">
+        <button type="button" class="btn btn-sm" id="btnUndo">↩ Undo</button>
+        <button type="button" class="btn btn-sm" id="btnRedo">↪ Redo</button>
+        <button type="button" class="btn btn-sm" id="btnClear">🧹 Clear</button>
+        <button type="button" class="btn btn-sm btn-primary" id="btnCopy" style="margin-left:auto;">📋 Copy Python</button>
+      </div>
+      <div class="tq-code-container" id="codeContainer" tabindex="0" aria-label="Generated Python lines"></div>
+      <textarea class="tq-text-editor" id="textEditor" style="display:none;" spellcheck="false" aria-label="Python text editor"></textarea>
+      <div class="tq-line-actions">
+        <span style="font-size:0.78rem;color:var(--text-muted);margin-right:auto;">Click a line to edit, move, or delete:</span>
+        <button type="button" class="btn btn-sm" id="btnLineUp" disabled>▲ Move Up</button>
+        <button type="button" class="btn btn-sm" id="btnLineDown" disabled>▼ Move Down</button>
+        <button type="button" class="btn btn-sm" id="btnLineEdit" disabled>✏️ Edit</button>
+        <button type="button" class="btn btn-sm btn-danger" id="btnLineDelete" disabled>🗑️ Delete</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared Modal -->
+  <div class="tq-modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="tq-modal">
+      <div class="tq-modal-header">
+        <h2 id="modalTitle">Modal</h2>
+        <button type="button" class="btn btn-sm" id="btnModalClose" aria-label="Close modal">✕</button>
+      </div>
+      <div class="tq-modal-body" id="modalBody"></div>
+      <div class="tq-modal-footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      Made with ❤️ for better thinking. If it helped you, support the project.
+      <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer"><strong>Buy me a tea</strong></a>.
+    </p>
+    <p><a href="privacy.html">Privacy Notice</a></p>
+  </footer>
+
+  <script src="turtlepuzzles-engine.js"></script>
+  <script src="turtlepuzzles-levels.js"></script>
+  <script src="turtlepuzzles.js"></script>
+  <script src="privacy.js" data-page="/turtlepuzzles.html" defer></script>
+</body>
+</html>
