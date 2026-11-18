@@ -4588,6 +4588,11 @@
        Removes modeHeader and non-essential workspace toolbar buttons (Copy, Upload, Download .py/.txt, etc.)
        to give maximum vertical space back to the code editor.
        Preserves Run, Reset, Undo, Redo, Revert, Playback, and the counter. */
+    /* Hide the privacy summary card once the user leaves the home screen for the editor */
+    #starterPanel[style*="display: none"] ~ .jsfun-privacy-summary {
+      display: none;
+    }
+
     html.activity-tracking-mode,
     body.activity-tracking-mode,
     html.minimal-mode,
