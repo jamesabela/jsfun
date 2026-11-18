@@ -259,7 +259,7 @@
         saveState.seenIntros.push(world.id);
       }
       persistSaveState();
-      showHelpModal();
+      showHelpModal('video');
     } else if (showWorldIntro && !saveState.seenIntros.includes(world.id)) {
       saveState.seenIntros.push(world.id);
       persistSaveState();
@@ -1053,15 +1053,17 @@
   }
 
   function closeModal() {
+    const vid = els.modalBody.querySelector('video');
+    if (vid) vid.pause();
     els.modalBackdrop.classList.remove('open');
   }
 
   let helpSlideIdx = 0;
-  let helpGridView = false;
+  let helpViewMode = 'slides'; // 'video' | 'slides' | 'grid'
 
-  function showHelpModal(startIdx = 0) {
+  function showHelpModal(mode = 'slides', startIdx = 0) {
+    helpViewMode = mode;
     helpSlideIdx = startIdx;
-    helpGridView = false;
     renderHelpModal();
   }
 
@@ -1111,7 +1113,26 @@
       }
     ];
 
-    if (helpGridView) {
+    if (helpViewMode === 'video') {
+      openModal(
+        '🐢 Welcome to Turtle Quest!',
+        `<div class="help-video-wrap">
+          <video class="help-video" controls playsinline preload="metadata" poster="images/turtlequest/course-cover.jpg">
+            <source src="images/turtlequest/intro.mp4" type="video/mp4">
+          </video>
+          <p style="margin:0;font-size:0.9rem;color:var(--text-muted);text-align:center;">
+            Press Play to watch the 10-second intro, or jump straight into the 6-step guide!
+          </p>
+        </div>`,
+        [
+          { label: '📖 6-Step Guide ▶', cls: 'btn-primary', onClick: () => { helpViewMode = 'slides'; helpSlideIdx = 0; renderHelpModal(); } },
+          { label: 'Start Playing! ▶', cls: 'btn-success', onClick: closeModal }
+        ]
+      );
+      return;
+    }
+
+    if (helpViewMode === 'grid') {
       const cardsHtml = steps.map((s, i) =>
         `<div class="help-step-card" data-step="${i}">
           <img src="${s.img}" alt="${s.title}">
@@ -1123,13 +1144,14 @@
         '🐢 How to Play Turtle Quest — All 6 Steps',
         `<div class="help-steps-grid">${cardsHtml}</div>`,
         [
-          { label: '◀ Slide View', cls: '', onClick: () => { helpGridView = false; renderHelpModal(); } },
+          { label: '🎬 Intro Video', cls: '', onClick: () => { helpViewMode = 'video'; renderHelpModal(); } },
+          { label: '◀ Slide View', cls: '', onClick: () => { helpViewMode = 'slides'; renderHelpModal(); } },
           { label: 'Let’s Play! ▶', cls: 'btn-success', onClick: closeModal }
         ]
       );
       els.modalBody.querySelectorAll('.help-step-card[data-step]').forEach(card => {
         card.addEventListener('click', () => {
-          helpGridView = false;
+          helpViewMode = 'slides';
           helpSlideIdx = Number(card.getAttribute('data-step'));
           renderHelpModal();
         });
@@ -1156,7 +1178,8 @@
     `;
 
     const footerBtns = [
-      { label: '📋 View All 6', cls: '', onClick: () => { helpGridView = true; renderHelpModal(); } }
+      { label: '🎬 Intro Video', cls: '', onClick: () => { helpViewMode = 'video'; renderHelpModal(); } },
+      { label: '📋 View All 6', cls: '', onClick: () => { helpViewMode = 'grid'; renderHelpModal(); } }
     ];
     if (helpSlideIdx > 0) {
       footerBtns.push({ label: '◀ Back', cls: '', onClick: () => { helpSlideIdx--; renderHelpModal(); } });
@@ -1732,7 +1755,7 @@
   });
 
   els.btnWorldMap.addEventListener('click', showWorldMapModal);
-  els.btnHelp.addEventListener('click', () => showHelpModal(0));
+  els.btnHelp.addEventListener('click', () => showHelpModal('slides', 0));
   els.progressPill.addEventListener('click', showRewardsModal);
   els.btnModalClose.addEventListener('click', closeModal);
   els.modalBackdrop.addEventListener('click', (e) => {
