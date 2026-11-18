@@ -105,6 +105,7 @@
     btnTheme: document.getElementById('btnTheme'),
     btnMute: document.getElementById('btnMute'),
     btnWorldMap: document.getElementById('btnWorldMap'),
+    btnHelp: document.getElementById('btnHelp'),
     btnLineUp: document.getElementById('btnLineUp'),
     btnLineDown: document.getElementById('btnLineDown'),
     btnLineEdit: document.getElementById('btnLineEdit'),
@@ -154,7 +155,8 @@
           skin: parsed.skin || 'classic',
           theme: parsed.theme || 'light',
           muted: Boolean(parsed.muted),
-          seenIntros: parsed.seenIntros || []
+          seenIntros: parsed.seenIntros || [],
+          seenHelp: Boolean(parsed.seenHelp)
         };
       }
     } catch (_) { /* ignore storage errors */ }
@@ -165,7 +167,8 @@
       skin: 'classic',
       theme: 'light',
       muted: false,
-      seenIntros: []
+      seenIntros: [],
+      seenHelp: false
     };
   }
 
@@ -250,7 +253,14 @@
     updateStatsUI();
     clearFeedback();
 
-    if (showWorldIntro && !saveState.seenIntros.includes(world.id)) {
+    if (showWorldIntro && !saveState.seenHelp) {
+      saveState.seenHelp = true;
+      if (!saveState.seenIntros.includes(world.id)) {
+        saveState.seenIntros.push(world.id);
+      }
+      persistSaveState();
+      showHelpModal();
+    } else if (showWorldIntro && !saveState.seenIntros.includes(world.id)) {
       saveState.seenIntros.push(world.id);
       persistSaveState();
       showIntroModal(world);
@@ -1046,6 +1056,127 @@
     els.modalBackdrop.classList.remove('open');
   }
 
+  let helpSlideIdx = 0;
+  let helpGridView = false;
+
+  function showHelpModal(startIdx = 0) {
+    helpSlideIdx = startIdx;
+    helpGridView = false;
+    renderHelpModal();
+  }
+
+  function renderHelpModal() {
+    const steps = [
+      {
+        img: 'images/turtlequest/help-step-1.jpg',
+        badge: 'Step 1 of 6 • Explore',
+        title: 'Spot the Goal & Gems',
+        desc: 'Look at the Game Canvas on the left. Guide your turtle along the open path, pick up any sparkling cyan gems, and stop on the checkered finish flag 🏁!',
+        tip: '<strong>Drawing levels (World 3+):</strong> Follow the faint dashed outline on the canvas!'
+      },
+      {
+        img: 'images/turtlequest/help-step-2.jpg',
+        badge: 'Step 2 of 6 • Build Code',
+        title: 'Press Buttons to Write Python',
+        desc: 'Press ⬆️ Forward, ⬇️ Backward, ↶ Turn left, or ↷ Turn right in the middle panel. Every button immediately adds a real line of Python code on the right!',
+        tip: '<code>turtle.forward(40)</code> moves 1 grid square, and <code>turtle.left(90)</code> turns a corner.'
+      },
+      {
+        img: 'images/turtlequest/help-step-3.jpg',
+        badge: 'Step 3 of 6 • Test It',
+        title: 'Run or Step Through Your Program',
+        desc: 'Click <strong>▶ Run</strong> to animate your turtle, or <strong>⏭ Step</strong> to execute one line at a time while watching the active Python line light up green.',
+        tip: 'Use the <strong>Speed</strong> slider to slow down or speed up your turtle.'
+      },
+      {
+        img: 'images/turtlequest/help-step-4.jpg',
+        badge: 'Step 4 of 6 • Debug',
+        title: 'Mistakes Help You Learn!',
+        desc: 'If your turtle bumps into a wall 💥, the exact Python line that caused it lights up red. You never lose points for experimenting!',
+        tip: 'Click any line in the Python editor to <strong>Edit</strong>, <strong>Move</strong>, or <strong>Delete</strong> it — or press <strong>↩ Undo</strong>.'
+      },
+      {
+        img: 'images/turtlequest/help-step-5.jpg',
+        badge: 'Step 5 of 6 • Level Up',
+        title: 'Use Loops & Functions to Save Lines',
+        desc: 'In World 2 you unlock <strong>🔁 Repeat</strong> to wrap repeated commands in a Python <code>for</code> loop. Later you will unlock colours, nested loops, and functions!',
+        tip: 'Press <strong>↵ End repeat</strong> when you finish adding commands inside a loop.'
+      },
+      {
+        img: 'images/turtlequest/help-step-6.jpg',
+        badge: 'Step 6 of 6 • Adventure',
+        title: 'Earn 3 Stars & Unlock 5 Worlds!',
+        desc: 'Solve levels within the <strong>3-Star Target</strong> line count to earn ⭐⭐⭐, unlock new turtle skins, collect achievement badges, and download your PDF certificate!',
+        tip: 'Open <strong>🗺️ World Map</strong> anytime to jump between all 40 levels, or click <strong>⭐</strong> for your certificate.'
+      }
+    ];
+
+    if (helpGridView) {
+      const cardsHtml = steps.map((s, i) =>
+        `<div class="help-step-card" data-step="${i}">
+          <img src="${s.img}" alt="${s.title}">
+          <strong>${i + 1}. ${s.title}</strong>
+          <span>${s.desc}</span>
+        </div>`
+      ).join('');
+      openModal(
+        '🐢 How to Play Turtle Quest — All 6 Steps',
+        `<div class="help-steps-grid">${cardsHtml}</div>`,
+        [
+          { label: '◀ Slide View', cls: '', onClick: () => { helpGridView = false; renderHelpModal(); } },
+          { label: 'Let’s Play! ▶', cls: 'btn-success', onClick: closeModal }
+        ]
+      );
+      els.modalBody.querySelectorAll('.help-step-card[data-step]').forEach(card => {
+        card.addEventListener('click', () => {
+          helpGridView = false;
+          helpSlideIdx = Number(card.getAttribute('data-step'));
+          renderHelpModal();
+        });
+      });
+      return;
+    }
+
+    const s = steps[helpSlideIdx];
+    const dotsHtml = steps.map((_, i) =>
+      `<button type="button" class="help-dot ${i === helpSlideIdx ? 'active' : ''}" data-dot="${i}" aria-label="Go to step ${i + 1}">${i + 1}</button>`
+    ).join('');
+
+    const bodyHtml = `
+      <div class="help-slide">
+        <img class="help-slide-img" src="${s.img}" alt="${s.title}">
+        <div>
+          <span class="help-slide-badge">${s.badge}</span>
+          <h3 class="help-slide-title">${s.title}</h3>
+          <p class="help-slide-desc">${s.desc}</p>
+          <div class="help-slide-tip">💡 ${s.tip}</div>
+        </div>
+      </div>
+      <div class="help-dots">${dotsHtml}</div>
+    `;
+
+    const footerBtns = [
+      { label: '📋 View All 6', cls: '', onClick: () => { helpGridView = true; renderHelpModal(); } }
+    ];
+    if (helpSlideIdx > 0) {
+      footerBtns.push({ label: '◀ Back', cls: '', onClick: () => { helpSlideIdx--; renderHelpModal(); } });
+    }
+    if (helpSlideIdx < steps.length - 1) {
+      footerBtns.push({ label: 'Next ▶', cls: 'btn-primary', onClick: () => { helpSlideIdx++; renderHelpModal(); } });
+    } else {
+      footerBtns.push({ label: 'Start Playing! ▶', cls: 'btn-success', onClick: closeModal });
+    }
+
+    openModal('🐢 Welcome to Turtle Quest!', bodyHtml, footerBtns);
+
+    els.modalBody.querySelectorAll('.help-dot[data-dot]').forEach(dot => {
+      dot.addEventListener('click', () => {
+        helpSlideIdx = Number(dot.getAttribute('data-dot'));
+        renderHelpModal();
+      });
+    });
+  }
+
   function showIntroModal(world) {
     const imgHtml = world.image
       ? `<img class="intro-hero-img" src="${world.image}" alt="${world.name}">`
@@ -1601,6 +1732,7 @@
   });
 
   els.btnWorldMap.addEventListener('click', showWorldMapModal);
+  els.btnHelp.addEventListener('click', () => showHelpModal(0));
   els.progressPill.addEventListener('click', showRewardsModal);
   els.btnModalClose.addEventListener('click', closeModal);
   els.modalBackdrop.addEventListener('click', (e) => {
