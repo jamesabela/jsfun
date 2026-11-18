@@ -1,647 +1,647 @@
-    window.pythonCopyVersion = 40;
-    let currentURL = '';
-    let executionCancelled = false;
-    let hasUnsavedChanges = false;
-    let savedEditorCode = '';
-    let pasteCount = 0;
-    let hasRunCurrentCode = false;
-    let inputResolver = null;
-    let pyodideReadyPromise = null;
-    let pyodideInstance = null;
-    window.currentAppMode = 'edit';
-    let currentQuizMetadata = {
-      testCases: [],
-      nextUrl: null,
-      isEnd: false,
-      courseTitle: "Python Algorithms",
-      links: []
-    };
-    let loadedMetadataLinks = [];
-    // Shared blockly state is declared on window by pythoncopyblocks.js
-    if (typeof window.updateBlocksButtonState !== 'function') {
-      window.updateBlocksButtonState = function() {};
-    }
+window.pythonCopyVersion = 40;
+let currentURL = '';
+let executionCancelled = false;
+let hasUnsavedChanges = false;
+let savedEditorCode = '';
+let pasteCount = 0;
+let hasRunCurrentCode = false;
+let inputResolver = null;
+let pyodideReadyPromise = null;
+let pyodideInstance = null;
+window.currentAppMode = 'edit';
+let currentQuizMetadata = {
+  testCases: [],
+  nextUrl: null,
+  isEnd: false,
+  courseTitle: "Python Algorithms",
+  links: []
+};
+let loadedMetadataLinks = [];
+// Shared blockly state is declared on window by pythoncopyblocks.js
+if (typeof window.updateBlocksButtonState !== 'function') {
+  window.updateBlocksButtonState = function () { };
+}
 
-    function wrapPythonComment(comment, maxLength = 75) {
-      if (!comment) return '';
-      let text = comment;
-      let prefix = '# instructions: ';
-      
-      if (comment.toLowerCase().startsWith('# instructions:')) {
-        text = comment.slice(15).trim();
-      } else if (comment.startsWith('# ')) {
-        text = comment.slice(2).trim();
-        prefix = '# ';
-      }
-      
-      const words = text.split(/\s+/);
-      const lines = [];
-      let currentLine = prefix;
-      
-      for (const word of words) {
-        if (currentLine.length + word.length + 1 > maxLength && currentLine !== prefix && currentLine !== '# ') {
-          lines.push(currentLine);
-          currentLine = '# ' + word;
-        } else {
-          if (currentLine === prefix || currentLine === '# ') {
-            currentLine += word;
-          } else {
-            currentLine += ' ' + word;
-          }
-        }
-      }
-      
-      if (currentLine) {
-        lines.push(currentLine);
-      }
-      
-      return lines.join('\n');
-    }
+function wrapPythonComment(comment, maxLength = 75) {
+  if (!comment) return '';
+  let text = comment;
+  let prefix = '# instructions: ';
 
-    function getChallengeDescription(comment) {
-      return String(comment || '')
-        .split(/\n#\s*(?:input|output|end)\b/i)[0]
-        .replace(/^#\s*instructions:\s*/i, '')
-        .trim();
-    }
+  if (comment.toLowerCase().startsWith('# instructions:')) {
+    text = comment.slice(15).trim();
+  } else if (comment.startsWith('# ')) {
+    text = comment.slice(2).trim();
+    prefix = '# ';
+  }
 
-    window.parseBlocklyXmlText = function(xmlText) {
-      if (typeof Blockly === 'undefined') {
-        throw new Error('Blockly is not loaded.');
-      }
-      if (typeof xmlText === 'string') {
-        xmlText = xmlText.replace(/^\ufeff/, '').trim();
-      }
-      if (!xmlText) {
-        throw new Error('Empty Blockly XML.');
-      }
+  const words = text.split(/\s+/);
+  const lines = [];
+  let currentLine = prefix;
 
-      if (Blockly.Xml.textToDom) {
-        return Blockly.Xml.textToDom(xmlText);
-      }
-
-      if (Blockly.utils && Blockly.utils.xml && Blockly.utils.xml.textToDom) {
-        return Blockly.utils.xml.textToDom(xmlText);
-      }
-
-      const parsed = new DOMParser().parseFromString(xmlText, 'text/xml');
-      const errorNode = parsed.querySelector('parsererror');
-      if (errorNode) {
-        throw new Error(errorNode.textContent || 'Invalid Blockly XML.');
-      }
-      return parsed.documentElement;
-    };
-
-    let displayTraceLog = [];
-    let displayInputHistory = [];
-    let displayTraceStatus = 'ready'; // ready, tracing, waiting_input, finished, error
-    let displayPendingPrompt = '';
-    let displayFinalOutput = '';
-    let displayCurrentStep = 0;
-    let displayMaxRevealedStep = -1;
-    let displayTimeout = null;
-    let btnPlayStatus = 'idle';
-    let isTracing = false;
-    let isAwaitingDisplayInput = false;
-    let copyButtonTimeout = null;
-
-    // --- Editor Session Playback State ---
-    const activityLog = new PythonCopyActivityLog();
-    let activityPlaybackActive = false;
-    const isMinimalMode = new URLSearchParams(window.location.search).get('min') === '1';
-    const activityReminderEnabled = !isMinimalMode && new URLSearchParams(window.location.search).get('remindDownload') === '1';
-    let activityNeedsDownload = false;
-    let activityNavigationApproved = false;
-    let pendingActivityNavigation = null;
-
-    const MOOD_EMOJIS = {
-      'Excited': '🤩',
-      'Happy': '😊',
-      'Calm': '😌',
-      'Silly': '😜',
-      'Confused': '😕',
-      'Tired': '😴',
-      'Sad': '😢',
-      'Frustrated': '😡',
-      'Surprised': '😮'
-    };
-
-    let frustrationSavedTimeout = null;
-
-    function shouldRemindActivityDownload() {
-      return activityReminderEnabled && activityNeedsDownload && !activityNavigationApproved;
-    }
-
-    function showInitialFeelingModal() {
-      if (!activityReminderEnabled || isMinimalMode) return;
-      const dialog = document.getElementById('initialFeelingDialog');
-      if (dialog && !dialog.open) {
-        dialog.showModal();
+  for (const word of words) {
+    if (currentLine.length + word.length + 1 > maxLength && currentLine !== prefix && currentLine !== '# ') {
+      lines.push(currentLine);
+      currentLine = '# ' + word;
+    } else {
+      if (currentLine === prefix || currentLine === '# ') {
+        currentLine += word;
+      } else {
+        currentLine += ' ' + word;
       }
     }
+  }
 
-    function updateMoodDisplay(mood) {
-      const iconEl = document.getElementById('activityCurrentMoodIcon');
-      const textEl = document.getElementById('activityCurrentMoodText');
-      if (iconEl && textEl) {
-        if (mood) {
-          iconEl.textContent = MOOD_EMOJIS[mood] || '💭';
-          textEl.textContent = mood;
-        } else {
-          iconEl.textContent = '💭';
-          textEl.textContent = 'Set feeling';
-        }
-      }
+  if (currentLine) {
+    lines.push(currentLine);
+  }
+
+  return lines.join('\n');
+}
+
+function getChallengeDescription(comment) {
+  return String(comment || '')
+    .split(/\n#\s*(?:input|output|end)\b/i)[0]
+    .replace(/^#\s*instructions:\s*/i, '')
+    .trim();
+}
+
+window.parseBlocklyXmlText = function (xmlText) {
+  if (typeof Blockly === 'undefined') {
+    throw new Error('Blockly is not loaded.');
+  }
+  if (typeof xmlText === 'string') {
+    xmlText = xmlText.replace(/^\ufeff/, '').trim();
+  }
+  if (!xmlText) {
+    throw new Error('Empty Blockly XML.');
+  }
+
+  if (Blockly.Xml.textToDom) {
+    return Blockly.Xml.textToDom(xmlText);
+  }
+
+  if (Blockly.utils && Blockly.utils.xml && Blockly.utils.xml.textToDom) {
+    return Blockly.utils.xml.textToDom(xmlText);
+  }
+
+  const parsed = new DOMParser().parseFromString(xmlText, 'text/xml');
+  const errorNode = parsed.querySelector('parsererror');
+  if (errorNode) {
+    throw new Error(errorNode.textContent || 'Invalid Blockly XML.');
+  }
+  return parsed.documentElement;
+};
+
+let displayTraceLog = [];
+let displayInputHistory = [];
+let displayTraceStatus = 'ready'; // ready, tracing, waiting_input, finished, error
+let displayPendingPrompt = '';
+let displayFinalOutput = '';
+let displayCurrentStep = 0;
+let displayMaxRevealedStep = -1;
+let displayTimeout = null;
+let btnPlayStatus = 'idle';
+let isTracing = false;
+let isAwaitingDisplayInput = false;
+let copyButtonTimeout = null;
+
+// --- Editor Session Playback State ---
+const activityLog = new PythonCopyActivityLog();
+let activityPlaybackActive = false;
+const isMinimalMode = new URLSearchParams(window.location.search).get('min') === '1';
+const activityReminderEnabled = !isMinimalMode && new URLSearchParams(window.location.search).get('remindDownload') === '1';
+let activityNeedsDownload = false;
+let activityNavigationApproved = false;
+let pendingActivityNavigation = null;
+
+const MOOD_EMOJIS = {
+  'Excited': '🤩',
+  'Happy': '😊',
+  'Calm': '😌',
+  'Silly': '😜',
+  'Confused': '😕',
+  'Tired': '😴',
+  'Sad': '😢',
+  'Frustrated': '😡',
+  'Surprised': '😮'
+};
+
+let frustrationSavedTimeout = null;
+
+function shouldRemindActivityDownload() {
+  return activityReminderEnabled && activityNeedsDownload && !activityNavigationApproved;
+}
+
+function showInitialFeelingModal() {
+  if (!activityReminderEnabled || isMinimalMode) return;
+  const dialog = document.getElementById('initialFeelingDialog');
+  if (dialog && !dialog.open) {
+    dialog.showModal();
+  }
+}
+
+function updateMoodDisplay(mood) {
+  const iconEl = document.getElementById('activityCurrentMoodIcon');
+  const textEl = document.getElementById('activityCurrentMoodText');
+  if (iconEl && textEl) {
+    if (mood) {
+      iconEl.textContent = MOOD_EMOJIS[mood] || '💭';
+      textEl.textContent = mood;
+    } else {
+      iconEl.textContent = '💭';
+      textEl.textContent = 'Set feeling';
     }
+  }
+}
 
-    function setInitialMood(mood) {
-      if (!mood) return;
-      const isInitial = !activityLog.feeling;
-      activityLog.setFeeling(mood);
-      updateMoodDisplay(mood);
-      recordActivity(isInitial ? 'initial_mood' : 'mood_change', activityLog.code, { feeling: mood });
+function setInitialMood(mood) {
+  if (!mood) return;
+  const isInitial = !activityLog.feeling;
+  activityLog.setFeeling(mood);
+  updateMoodDisplay(mood);
+  recordActivity(isInitial ? 'initial_mood' : 'mood_change', activityLog.code, { feeling: mood });
 
-      document.querySelectorAll('#initialFeelingDialog .feeling-card').forEach(btn => {
-        btn.classList.toggle('selected', btn.getAttribute('data-mood') === mood);
+  document.querySelectorAll('#initialFeelingDialog .feeling-card').forEach(btn => {
+    btn.classList.toggle('selected', btn.getAttribute('data-mood') === mood);
+  });
+
+  if (mood === 'Frustrated' && !activityLog.frustration) {
+    setFrustrationLevel('Moderately', false);
+  }
+
+  setTimeout(() => {
+    const dialog = document.getElementById('initialFeelingDialog');
+    if (dialog && dialog.open) dialog.close();
+  }, 220);
+}
+
+function setFrustrationLevel(level, record = true) {
+  if (!level) return;
+  activityLog.setFrustration(level);
+  if (record) {
+    recordActivity('frustration_level', activityLog.code, { frustration: level });
+  }
+
+  document.querySelectorAll('.frustration-scale-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.getAttribute('data-level') === level);
+  });
+
+  const notice = document.getElementById('frustrationSavedNotice');
+  if (notice) {
+    notice.textContent = `✓ Saved: ${level}`;
+    notice.style.opacity = '1';
+    clearTimeout(frustrationSavedTimeout);
+    frustrationSavedTimeout = setTimeout(() => {
+      notice.style.opacity = '0';
+    }, 2200);
+  }
+}
+
+function showActivityReminder(destination = null) {
+  const dialog = document.getElementById('activityReminderDialog');
+  if (!dialog) return;
+  pendingActivityNavigation = destination;
+  const leaveBtn = document.getElementById('activityReminderLeave');
+  if (leaveBtn) leaveBtn.hidden = !destination;
+  const titleEl = document.getElementById('activityReminderTitle');
+  if (titleEl) {
+    titleEl.textContent = destination
+      ? 'Download your activity before leaving?'
+      : 'Download your activity TSV';
+  }
+  if (!dialog.open) dialog.showModal();
+}
+
+function navigateWithActivityReminder(destination) {
+  if (shouldRemindActivityDownload()) {
+    showActivityReminder(destination);
+    return;
+  }
+  window.location.href = destination;
+}
+// Also used by dynamically rendered next-level buttons.
+window.navigateWithActivityReminder = navigateWithActivityReminder;
+
+function initializeActivityReminder() {
+  const banner = document.getElementById('activityReminderBanner');
+  if (banner) {
+    banner.hidden = isMinimalMode || !activityReminderEnabled;
+    banner.style.display = (activityReminderEnabled && !isMinimalMode) ? 'flex' : 'none';
+  }
+
+  if (isMinimalMode) {
+    document.documentElement.classList.add('minimal-mode');
+    document.body.classList.add('minimal-mode');
+    setDistractionFreeMode(true);
+  } else if (activityReminderEnabled) {
+    document.documentElement.classList.add('activity-tracking-mode');
+    document.body.classList.add('activity-tracking-mode');
+  }
+
+  const feelingDialog = document.getElementById('initialFeelingDialog');
+  if (activityReminderEnabled && feelingDialog) {
+    // Automatically ask students initially how they feel when remindDownload=1
+    setTimeout(() => {
+      if (!activityLog.feeling) {
+        showInitialFeelingModal();
+      }
+    }, 350);
+
+    document.querySelectorAll('#initialFeelingDialog .feeling-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const mood = card.getAttribute('data-mood');
+        setInitialMood(mood);
       });
+    });
 
-      if (mood === 'Frustrated' && !activityLog.frustration) {
-        setFrustrationLevel('Moderately', false);
-      }
+    document.getElementById('initialFeelingSkip')?.addEventListener('click', () => {
+      feelingDialog.close();
+    });
 
-      setTimeout(() => {
-        const dialog = document.getElementById('initialFeelingDialog');
-        if (dialog && dialog.open) dialog.close();
-      }, 220);
+    document.getElementById('activityChangeMoodBtn')?.addEventListener('click', () => {
+      showInitialFeelingModal();
+    });
+  }
+
+  document.querySelectorAll('.frustration-scale-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const level = btn.getAttribute('data-level');
+      setFrustrationLevel(level);
+    });
+  });
+
+  document.querySelectorAll('.challenge-feeling-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.challenge-feeling-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  document.getElementById('activityReminderOpen')?.addEventListener('click', () => showActivityReminder());
+  const dialog = document.getElementById('activityReminderDialog');
+  document.getElementById('activityReminderStay')?.addEventListener('click', () => dialog?.close());
+
+  document.getElementById('activityReminderDownload')?.addEventListener('click', () => {
+    const selectedBtn = document.querySelector('.challenge-feeling-btn.selected');
+    const notesInput = document.getElementById('challengeNotesInput');
+    const notes = notesInput ? notesInput.value.trim() : '';
+    let challengeFeedback = selectedBtn ? selectedBtn.getAttribute('data-feeling') : '';
+    if (challengeFeedback && notes) {
+      challengeFeedback = `${challengeFeedback}: ${notes}`;
+    } else if (!challengeFeedback && notes) {
+      challengeFeedback = notes;
     }
 
-    function setFrustrationLevel(level, record = true) {
-      if (!level) return;
-      activityLog.setFrustration(level);
-      if (record) {
-        recordActivity('frustration_level', activityLog.code, { frustration: level });
-      }
-
-      document.querySelectorAll('.frustration-scale-btn').forEach(btn => {
-        btn.classList.toggle('selected', btn.getAttribute('data-level') === level);
-      });
-
-      const notice = document.getElementById('frustrationSavedNotice');
-      if (notice) {
-        notice.textContent = `✓ Saved: ${level}`;
-        notice.style.opacity = '1';
-        clearTimeout(frustrationSavedTimeout);
-        frustrationSavedTimeout = setTimeout(() => {
-          notice.style.opacity = '0';
-        }, 2200);
-      }
+    if (challengeFeedback) {
+      activityLog.setChallengeFeeling(challengeFeedback);
+      recordActivity('challenge_feeling', activityLog.code, { challengeFeeling: challengeFeedback });
     }
 
-    function showActivityReminder(destination = null) {
-      const dialog = document.getElementById('activityReminderDialog');
-      if (!dialog) return;
-      pendingActivityNavigation = destination;
-      const leaveBtn = document.getElementById('activityReminderLeave');
-      if (leaveBtn) leaveBtn.hidden = !destination;
-      const titleEl = document.getElementById('activityReminderTitle');
-      if (titleEl) {
-        titleEl.textContent = destination
-          ? 'Download your activity before leaving?'
-          : 'Download your activity TSV';
-      }
-      if (!dialog.open) dialog.showModal();
+    downloadActivityTSV();
+    const statusEl = document.getElementById('activityReminderStatus');
+    if (statusEl) {
+      statusEl.textContent = '✅ Activity TSV downloaded! You can share it with your teacher.';
     }
+  });
 
-    function navigateWithActivityReminder(destination) {
-      if (shouldRemindActivityDownload()) {
-        showActivityReminder(destination);
-        return;
-      }
-      window.location.href = destination;
+  document.getElementById('activityReminderLeave')?.addEventListener('click', () => {
+    const destination = pendingActivityNavigation;
+    dialog?.close();
+    if (!destination) return;
+    activityNavigationApproved = true;
+    window.location.href = destination;
+    // If the existing unsaved-code warning cancels navigation, re-arm this reminder.
+    setTimeout(() => { activityNavigationApproved = false; }, 0);
+  });
+
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href]');
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+      || !link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
+    const target = new URL(link.href, window.location.href);
+    if (!['http:', 'https:'].includes(target.protocol)) return;
+    if (target.origin === window.location.origin && target.pathname === window.location.pathname
+      && target.search === window.location.search && target.hash) return;
+    if (shouldRemindActivityDownload()) {
+      event.preventDefault();
+      showActivityReminder(target.href);
     }
-    // Also used by dynamically rendered next-level buttons.
-    window.navigateWithActivityReminder = navigateWithActivityReminder;
+  });
+}
 
-    function initializeActivityReminder() {
-      const banner = document.getElementById('activityReminderBanner');
-      if (banner) {
-        banner.hidden = isMinimalMode || !activityReminderEnabled;
-        banner.style.display = (activityReminderEnabled && !isMinimalMode) ? 'flex' : 'none';
-      }
+function recordActivity(type, code = activityLog.code, options = {}) {
+  const opts = typeof options === 'boolean' ? { newFile: options } : options;
+  const { newFile = false, feeling, frustration, challengeFeeling } = opts;
+  if ((!newFile && code !== activityLog.code) || ['run_code', 'paste', 'save_file_py', 'save_file_txt', 'save_blocks', 'frustration_level', 'initial_mood', 'mood_change', 'challenge_feeling'].includes(type)) {
+    activityNeedsDownload = true;
+  }
+  return activityLog.record(type, code, { newFile, visible: !document.hidden, feeling, frustration, challengeFeeling });
+}
 
-      if (isMinimalMode) {
-        document.documentElement.classList.add('minimal-mode');
-        document.body.classList.add('minimal-mode');
-        setDistractionFreeMode(true);
-      } else if (activityReminderEnabled) {
-        document.documentElement.classList.add('activity-tracking-mode');
-        document.body.classList.add('activity-tracking-mode');
-      }
+function downloadActivityTSV() {
+  // The editor can currently show an old playback revision. Export the live
+  // session state, not whichever revision the student is inspecting.
+  recordActivity('export', activityPlaybackActive ? originalCodeBeforePlayback : editor.value);
+  const blob = new Blob([activityLog.toTSV()], { type: 'text/tab-separated-values;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'python-activity.tsv';
+  document.body.appendChild(link);
+  link.click();
+  activityNeedsDownload = false;
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
-      const feelingDialog = document.getElementById('initialFeelingDialog');
-      if (activityReminderEnabled && feelingDialog) {
-        // Automatically ask students initially how they feel when remindDownload=1
-        setTimeout(() => {
-          if (!activityLog.feeling) {
-            showInitialFeelingModal();
-          }
-        }, 350);
+let playbackHistory = [];
+let playbackIndex = -1;
+let playbackInterval = null;
+let isPlaybackPlaying = false;
+let originalCodeBeforePlayback = '';
+let saveHistoryTimeout = null;
 
-        document.querySelectorAll('#initialFeelingDialog .feeling-card').forEach(card => {
-          card.addEventListener('click', () => {
-            const mood = card.getAttribute('data-mood');
-            setInitialMood(mood);
-          });
-        });
+// --- Turtle Graphics JS State & Bridge ---
+let turtleCommands = [];
+let turtleX = 0;
+let turtleY = 0;
+let turtleHeading = 0;
+let turtleVisible = true;
+let turtleBgColor = '#ffffff';
 
-        document.getElementById('initialFeelingSkip')?.addEventListener('click', () => {
-          feelingDialog.close();
-        });
+let drawPending = false;
+function queueDraw() {
+  if (!drawPending) {
+    drawPending = true;
+    requestAnimationFrame(() => {
+      drawEverything();
+      drawPending = false;
+    });
+  }
+}
 
-        document.getElementById('activityChangeMoodBtn')?.addEventListener('click', () => {
-          showInitialFeelingModal();
-        });
-      }
+window.addTurtleLine = function (x1, y1, x2, y2, color, width) {
+  turtleCommands.push({ type: 'line', x1, y1, x2, y2, color, width });
+  queueDraw();
+};
 
-      document.querySelectorAll('.frustration-scale-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const level = btn.getAttribute('data-level');
-          setFrustrationLevel(level);
-        });
-      });
+window.addTurtleFill = function (pathJson, color) {
+  try {
+    const path = JSON.parse(pathJson);
+    turtleCommands.push({ type: 'fill', path, color });
+    queueDraw();
+  } catch (e) {
+    console.error('Error parsing fill path:', e);
+  }
+};
 
-      document.querySelectorAll('.challenge-feeling-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.challenge-feeling-btn').forEach(b => b.classList.remove('selected'));
-          btn.classList.add('selected');
-        });
-      });
+window.addTurtleWrite = function (text, x, y, color, align, font) {
+  turtleCommands.push({ type: 'write', text, x, y, color, align, font });
+  queueDraw();
+};
 
-      document.getElementById('activityReminderOpen')?.addEventListener('click', () => showActivityReminder());
-      const dialog = document.getElementById('activityReminderDialog');
-      document.getElementById('activityReminderStay')?.addEventListener('click', () => dialog?.close());
+window.addTurtleDot = function (x, y, radius, color) {
+  turtleCommands.push({ type: 'dot', x, y, radius, color });
+  queueDraw();
+};
 
-      document.getElementById('activityReminderDownload')?.addEventListener('click', () => {
-        const selectedBtn = document.querySelector('.challenge-feeling-btn.selected');
-        const notesInput = document.getElementById('challengeNotesInput');
-        const notes = notesInput ? notesInput.value.trim() : '';
-        let challengeFeedback = selectedBtn ? selectedBtn.getAttribute('data-feeling') : '';
-        if (challengeFeedback && notes) {
-          challengeFeedback = `${challengeFeedback}: ${notes}`;
-        } else if (!challengeFeedback && notes) {
-          challengeFeedback = notes;
+window.updateTurtleState = function (x, y, heading, visible) {
+  turtleX = x;
+  turtleY = y;
+  turtleHeading = heading;
+  turtleVisible = visible;
+  queueDraw();
+};
+
+window.clearTurtleCanvas = function () {
+  turtleCommands = [];
+  queueDraw();
+};
+
+window.setTurtleBgColor = function (color) {
+  turtleBgColor = color;
+  queueDraw();
+};
+
+window.setupTurtleCanvas = function (width, height) {
+  const canvas = document.getElementById('turtleCanvas');
+  if (canvas) {
+    canvas.width = width || 400;
+    canvas.height = height || 400;
+    drawEverything();
+  }
+};
+
+let turtleShape = 'classic'; // classic, turtle, circle, square, triangle
+
+window.setTurtleShape = function (shapeName) {
+  turtleShape = shapeName || 'classic';
+  queueDraw();
+};
+
+window.getTurtleShape = function () {
+  return turtleShape;
+};
+
+window.resetTurtleCanvas = function () {
+  turtleCommands = [];
+  turtleX = 0;
+  turtleY = 0;
+  turtleHeading = 0;
+  turtleVisible = true;
+  turtleBgColor = '#ffffff';
+  turtleShape = 'classic';
+  queueDraw();
+};
+
+window.getTurtleSnapshot = function () {
+  return JSON.stringify({
+    commands: turtleCommands,
+    x: turtleX,
+    y: turtleY,
+    heading: turtleHeading,
+    visible: turtleVisible,
+    bgColor: turtleBgColor,
+    shape: turtleShape
+  });
+};
+
+window.downloadCanvasImage = function () {
+  if (drawPending) {
+    drawEverything();
+  }
+  const canvas = document.getElementById('turtleCanvas');
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.download = 'turtle_drawing.png';
+  link.href = canvas.toDataURL();
+  link.click();
+};
+
+function drawEverything() {
+  const canvas = document.getElementById('turtleCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+
+  // Clear and fill background
+  ctx.fillStyle = turtleBgColor;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Coordinate translators
+  function tx(x) { return cx + x; }
+  function ty(y) { return cy - y; } // mathematical Y goes up, canvas Y goes down
+
+  // Draw all commands
+  for (const cmd of turtleCommands) {
+    if (cmd.type === 'line') {
+      ctx.beginPath();
+      ctx.moveTo(tx(cmd.x1), ty(cmd.y1));
+      ctx.lineTo(tx(cmd.x2), ty(cmd.y2));
+      ctx.strokeStyle = cmd.color;
+      ctx.lineWidth = cmd.width;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    } else if (cmd.type === 'fill') {
+      ctx.beginPath();
+      const path = cmd.path;
+      if (path.length > 0) {
+        ctx.moveTo(tx(path[0][0]), ty(path[0][1]));
+        for (let i = 1; i < path.length; i++) {
+          ctx.lineTo(tx(path[i][0]), ty(path[i][1]));
         }
-
-        if (challengeFeedback) {
-          activityLog.setChallengeFeeling(challengeFeedback);
-          recordActivity('challenge_feeling', activityLog.code, { challengeFeeling: challengeFeedback });
-        }
-
-        downloadActivityTSV();
-        const statusEl = document.getElementById('activityReminderStatus');
-        if (statusEl) {
-          statusEl.textContent = '✅ Activity TSV downloaded! You can share it with your teacher.';
-        }
-      });
-
-      document.getElementById('activityReminderLeave')?.addEventListener('click', () => {
-        const destination = pendingActivityNavigation;
-        dialog?.close();
-        if (!destination) return;
-        activityNavigationApproved = true;
-        window.location.href = destination;
-        // If the existing unsaved-code warning cancels navigation, re-arm this reminder.
-        setTimeout(() => { activityNavigationApproved = false; }, 0);
-      });
-
-      document.addEventListener('click', event => {
-        const link = event.target.closest('a[href]');
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
-          || !link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
-        const target = new URL(link.href, window.location.href);
-        if (!['http:', 'https:'].includes(target.protocol)) return;
-        if (target.origin === window.location.origin && target.pathname === window.location.pathname
-          && target.search === window.location.search && target.hash) return;
-        if (shouldRemindActivityDownload()) {
-          event.preventDefault();
-          showActivityReminder(target.href);
-        }
-      });
+        ctx.closePath();
+        ctx.fillStyle = cmd.color;
+        ctx.fill();
+      }
+    } else if (cmd.type === 'write') {
+      ctx.fillStyle = cmd.color;
+      ctx.font = cmd.font;
+      ctx.textAlign = cmd.align === 'left' ? 'left' : (cmd.align === 'right' ? 'right' : 'center');
+      ctx.fillText(cmd.text, tx(cmd.x), ty(cmd.y));
+    } else if (cmd.type === 'dot') {
+      ctx.beginPath();
+      ctx.arc(tx(cmd.x), ty(cmd.y), cmd.radius, 0, 2 * Math.PI);
+      ctx.fillStyle = cmd.color;
+      ctx.fill();
     }
+  }
 
-    function recordActivity(type, code = activityLog.code, options = {}) {
-      const opts = typeof options === 'boolean' ? { newFile: options } : options;
-      const { newFile = false, feeling, frustration, challengeFeeling } = opts;
-      if ((!newFile && code !== activityLog.code) || ['run_code', 'paste', 'save_file_py', 'save_file_txt', 'save_blocks', 'frustration_level', 'initial_mood', 'mood_change', 'challenge_feeling'].includes(type)) {
-        activityNeedsDownload = true;
-      }
-      return activityLog.record(type, code, { newFile, visible: !document.hidden, feeling, frustration, challengeFeeling });
+  // Draw turtle cursor
+  if (turtleVisible) {
+    if (turtleShape === 'turtle') {
+      ctx.save();
+      ctx.translate(tx(turtleX), ty(turtleY));
+      ctx.rotate(-turtleHeading * Math.PI / 180);
+
+      // Draw legs
+      ctx.fillStyle = '#34d399';
+      ctx.strokeStyle = '#047857';
+      ctx.lineWidth = 1;
+
+      // Front-left leg
+      ctx.beginPath();
+      ctx.ellipse(5, -5, 3, 1.5, Math.PI / 4, 0, 2 * Math.PI);
+      ctx.fill(); ctx.stroke();
+
+      // Front-right leg
+      ctx.beginPath();
+      ctx.ellipse(5, 5, 3, 1.5, -Math.PI / 4, 0, 2 * Math.PI);
+      ctx.fill(); ctx.stroke();
+
+      // Back-left leg
+      ctx.beginPath();
+      ctx.ellipse(-4, -4, 2.5, 1.2, -Math.PI / 4, 0, 2 * Math.PI);
+      ctx.fill(); ctx.stroke();
+
+      // Back-right leg
+      ctx.beginPath();
+      ctx.ellipse(-4, 4, 2.5, 1.2, Math.PI / 4, 0, 2 * Math.PI);
+      ctx.fill(); ctx.stroke();
+
+      // Tail
+      ctx.beginPath();
+      ctx.moveTo(-7, 0);
+      ctx.lineTo(-10, 0);
+      ctx.strokeStyle = '#34d399';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Shell/body
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 7, 5, 0, 0, 2 * Math.PI);
+      ctx.fillStyle = '#10b981';
+      ctx.strokeStyle = '#047857';
+      ctx.lineWidth = 1;
+      ctx.fill(); ctx.stroke();
+
+      // Head
+      ctx.beginPath();
+      ctx.arc(9, 0, 2.5, 0, 2 * Math.PI);
+      ctx.fillStyle = '#34d399';
+      ctx.fill(); ctx.stroke();
+
+      ctx.restore();
+    } else if (turtleShape === 'circle') {
+      ctx.save();
+      ctx.translate(tx(turtleX), ty(turtleY));
+      ctx.beginPath();
+      ctx.arc(0, 0, 6, 0, 2 * Math.PI);
+      ctx.fillStyle = '#ec4899';
+      ctx.fill();
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
+    } else if (turtleShape === 'square') {
+      ctx.save();
+      ctx.translate(tx(turtleX), ty(turtleY));
+      ctx.rotate(-turtleHeading * Math.PI / 180);
+      ctx.beginPath();
+      ctx.rect(-5, -5, 10, 10);
+      ctx.fillStyle = '#ec4899';
+      ctx.fill();
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
+    } else if (turtleShape === 'triangle') {
+      ctx.save();
+      ctx.translate(tx(turtleX), ty(turtleY));
+      ctx.rotate(-turtleHeading * Math.PI / 180);
+      ctx.beginPath();
+      ctx.moveTo(8, 0);
+      ctx.lineTo(-6, -6);
+      ctx.lineTo(-6, 6);
+      ctx.closePath();
+      ctx.fillStyle = '#ec4899';
+      ctx.fill();
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
+    } else { // classic or arrow
+      ctx.save();
+      ctx.translate(tx(turtleX), ty(turtleY));
+      ctx.rotate(-turtleHeading * Math.PI / 180);
+      ctx.beginPath();
+      ctx.moveTo(10, 0);
+      ctx.lineTo(-6, -6);
+      ctx.lineTo(-3, 0);
+      ctx.lineTo(-6, 6);
+      ctx.closePath();
+      ctx.fillStyle = '#ec4899'; // nice modern pink/magenta color
+      ctx.fill();
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
     }
+  }
+}
 
-    function downloadActivityTSV() {
-      // The editor can currently show an old playback revision. Export the live
-      // session state, not whichever revision the student is inspecting.
-      recordActivity('export', activityPlaybackActive ? originalCodeBeforePlayback : editor.value);
-      const blob = new Blob([activityLog.toTSV()], { type: 'text/tab-separated-values;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'python-activity.tsv';
-      document.body.appendChild(link);
-      link.click();
-      activityNeedsDownload = false;
-      link.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }
-
-    let playbackHistory = [];
-    let playbackIndex = -1;
-    let playbackInterval = null;
-    let isPlaybackPlaying = false;
-    let originalCodeBeforePlayback = '';
-    let saveHistoryTimeout = null;
-
-    // --- Turtle Graphics JS State & Bridge ---
-    let turtleCommands = [];
-    let turtleX = 0;
-    let turtleY = 0;
-    let turtleHeading = 0;
-    let turtleVisible = true;
-    let turtleBgColor = '#ffffff';
-
-    let drawPending = false;
-    function queueDraw() {
-      if (!drawPending) {
-        drawPending = true;
-        requestAnimationFrame(() => {
-          drawEverything();
-          drawPending = false;
-        });
-      }
-    }
-
-    window.addTurtleLine = function (x1, y1, x2, y2, color, width) {
-      turtleCommands.push({ type: 'line', x1, y1, x2, y2, color, width });
-      queueDraw();
-    };
-
-    window.addTurtleFill = function (pathJson, color) {
-      try {
-        const path = JSON.parse(pathJson);
-        turtleCommands.push({ type: 'fill', path, color });
-        queueDraw();
-      } catch (e) {
-        console.error('Error parsing fill path:', e);
-      }
-    };
-
-    window.addTurtleWrite = function (text, x, y, color, align, font) {
-      turtleCommands.push({ type: 'write', text, x, y, color, align, font });
-      queueDraw();
-    };
-
-    window.addTurtleDot = function (x, y, radius, color) {
-      turtleCommands.push({ type: 'dot', x, y, radius, color });
-      queueDraw();
-    };
-
-    window.updateTurtleState = function (x, y, heading, visible) {
-      turtleX = x;
-      turtleY = y;
-      turtleHeading = heading;
-      turtleVisible = visible;
-      queueDraw();
-    };
-
-    window.clearTurtleCanvas = function () {
-      turtleCommands = [];
-      queueDraw();
-    };
-
-    window.setTurtleBgColor = function (color) {
-      turtleBgColor = color;
-      queueDraw();
-    };
-
-    window.setupTurtleCanvas = function (width, height) {
-      const canvas = document.getElementById('turtleCanvas');
-      if (canvas) {
-        canvas.width = width || 400;
-        canvas.height = height || 400;
-        drawEverything();
-      }
-    };
-
-    let turtleShape = 'classic'; // classic, turtle, circle, square, triangle
-
-    window.setTurtleShape = function (shapeName) {
-      turtleShape = shapeName || 'classic';
-      queueDraw();
-    };
-
-    window.getTurtleShape = function () {
-      return turtleShape;
-    };
-
-    window.resetTurtleCanvas = function () {
-      turtleCommands = [];
-      turtleX = 0;
-      turtleY = 0;
-      turtleHeading = 0;
-      turtleVisible = true;
-      turtleBgColor = '#ffffff';
-      turtleShape = 'classic';
-      queueDraw();
-    };
-
-    window.getTurtleSnapshot = function () {
-      return JSON.stringify({
-        commands: turtleCommands,
-        x: turtleX,
-        y: turtleY,
-        heading: turtleHeading,
-        visible: turtleVisible,
-        bgColor: turtleBgColor,
-        shape: turtleShape
-      });
-    };
-
-     window.downloadCanvasImage = function () {
-      if (drawPending) {
-        drawEverything();
-      }
-      const canvas = document.getElementById('turtleCanvas');
-      if (!canvas) return;
-      const link = document.createElement('a');
-      link.download = 'turtle_drawing.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    };
-
-    function drawEverything() {
-      const canvas = document.getElementById('turtleCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
-
-      // Clear and fill background
-      ctx.fillStyle = turtleBgColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Coordinate translators
-      function tx(x) { return cx + x; }
-      function ty(y) { return cy - y; } // mathematical Y goes up, canvas Y goes down
-
-      // Draw all commands
-      for (const cmd of turtleCommands) {
-        if (cmd.type === 'line') {
-          ctx.beginPath();
-          ctx.moveTo(tx(cmd.x1), ty(cmd.y1));
-          ctx.lineTo(tx(cmd.x2), ty(cmd.y2));
-          ctx.strokeStyle = cmd.color;
-          ctx.lineWidth = cmd.width;
-          ctx.lineCap = 'round';
-          ctx.stroke();
-        } else if (cmd.type === 'fill') {
-          ctx.beginPath();
-          const path = cmd.path;
-          if (path.length > 0) {
-            ctx.moveTo(tx(path[0][0]), ty(path[0][1]));
-            for (let i = 1; i < path.length; i++) {
-              ctx.lineTo(tx(path[i][0]), ty(path[i][1]));
-            }
-            ctx.closePath();
-            ctx.fillStyle = cmd.color;
-            ctx.fill();
-          }
-        } else if (cmd.type === 'write') {
-          ctx.fillStyle = cmd.color;
-          ctx.font = cmd.font;
-          ctx.textAlign = cmd.align === 'left' ? 'left' : (cmd.align === 'right' ? 'right' : 'center');
-          ctx.fillText(cmd.text, tx(cmd.x), ty(cmd.y));
-        } else if (cmd.type === 'dot') {
-          ctx.beginPath();
-          ctx.arc(tx(cmd.x), ty(cmd.y), cmd.radius, 0, 2 * Math.PI);
-          ctx.fillStyle = cmd.color;
-          ctx.fill();
-        }
-      }
-
-      // Draw turtle cursor
-      if (turtleVisible) {
-        if (turtleShape === 'turtle') {
-          ctx.save();
-          ctx.translate(tx(turtleX), ty(turtleY));
-          ctx.rotate(-turtleHeading * Math.PI / 180);
-
-          // Draw legs
-          ctx.fillStyle = '#34d399';
-          ctx.strokeStyle = '#047857';
-          ctx.lineWidth = 1;
-
-          // Front-left leg
-          ctx.beginPath();
-          ctx.ellipse(5, -5, 3, 1.5, Math.PI / 4, 0, 2 * Math.PI);
-          ctx.fill(); ctx.stroke();
-
-          // Front-right leg
-          ctx.beginPath();
-          ctx.ellipse(5, 5, 3, 1.5, -Math.PI / 4, 0, 2 * Math.PI);
-          ctx.fill(); ctx.stroke();
-
-          // Back-left leg
-          ctx.beginPath();
-          ctx.ellipse(-4, -4, 2.5, 1.2, -Math.PI / 4, 0, 2 * Math.PI);
-          ctx.fill(); ctx.stroke();
-
-          // Back-right leg
-          ctx.beginPath();
-          ctx.ellipse(-4, 4, 2.5, 1.2, Math.PI / 4, 0, 2 * Math.PI);
-          ctx.fill(); ctx.stroke();
-
-          // Tail
-          ctx.beginPath();
-          ctx.moveTo(-7, 0);
-          ctx.lineTo(-10, 0);
-          ctx.strokeStyle = '#34d399';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          // Shell/body
-          ctx.beginPath();
-          ctx.ellipse(0, 0, 7, 5, 0, 0, 2 * Math.PI);
-          ctx.fillStyle = '#10b981';
-          ctx.strokeStyle = '#047857';
-          ctx.lineWidth = 1;
-          ctx.fill(); ctx.stroke();
-
-          // Head
-          ctx.beginPath();
-          ctx.arc(9, 0, 2.5, 0, 2 * Math.PI);
-          ctx.fillStyle = '#34d399';
-          ctx.fill(); ctx.stroke();
-
-          ctx.restore();
-        } else if (turtleShape === 'circle') {
-          ctx.save();
-          ctx.translate(tx(turtleX), ty(turtleY));
-          ctx.beginPath();
-          ctx.arc(0, 0, 6, 0, 2 * Math.PI);
-          ctx.fillStyle = '#ec4899';
-          ctx.fill();
-          ctx.strokeStyle = '#1e293b';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.restore();
-        } else if (turtleShape === 'square') {
-          ctx.save();
-          ctx.translate(tx(turtleX), ty(turtleY));
-          ctx.rotate(-turtleHeading * Math.PI / 180);
-          ctx.beginPath();
-          ctx.rect(-5, -5, 10, 10);
-          ctx.fillStyle = '#ec4899';
-          ctx.fill();
-          ctx.strokeStyle = '#1e293b';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.restore();
-        } else if (turtleShape === 'triangle') {
-          ctx.save();
-          ctx.translate(tx(turtleX), ty(turtleY));
-          ctx.rotate(-turtleHeading * Math.PI / 180);
-          ctx.beginPath();
-          ctx.moveTo(8, 0);
-          ctx.lineTo(-6, -6);
-          ctx.lineTo(-6, 6);
-          ctx.closePath();
-          ctx.fillStyle = '#ec4899';
-          ctx.fill();
-          ctx.strokeStyle = '#1e293b';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.restore();
-        } else { // classic or arrow
-          ctx.save();
-          ctx.translate(tx(turtleX), ty(turtleY));
-          ctx.rotate(-turtleHeading * Math.PI / 180);
-          ctx.beginPath();
-          ctx.moveTo(10, 0);
-          ctx.lineTo(-6, -6);
-          ctx.lineTo(-3, 0);
-          ctx.lineTo(-6, 6);
-          ctx.closePath();
-          ctx.fillStyle = '#ec4899'; // nice modern pink/magenta color
-          ctx.fill();
-          ctx.strokeStyle = '#1e293b';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.restore();
-        }
-      }
-    }
-
-    const turtleShimPythonCode = `
+const turtleShimPythonCode = `
 import js
 import json
 import math
@@ -969,189 +969,174 @@ exitonclick = done
 
 
 
-    // Global Error Handler for debugging
-    window.onerror = function (msg, url, lineNo, columnNo, error) {
-      console.error('Window Error:', msg, lineNo, columnNo, error);
-      // Only show alert for real script errors
-      if (msg.toLowerCase().indexOf('script error') === -1) {
-        setRunnerStatus('JS Error: ' + msg + ' (Line ' + lineNo + ')');
+// Global Error Handler for debugging
+window.onerror = function (msg, url, lineNo, columnNo, error) {
+  console.error('Window Error:', msg, lineNo, columnNo, error);
+  // Only show alert for real script errors
+  if (msg.toLowerCase().indexOf('script error') === -1) {
+    setRunnerStatus('JS Error: ' + msg + ' (Line ' + lineNo + ')');
+  }
+  return false;
+};
+
+
+// Pyodide initialization
+if (typeof loadPyodide !== "undefined") {
+  let outputScrollTimer = null;
+  const deferOutputScroll = () => {
+    if (!outputScrollTimer) {
+      outputScrollTimer = requestAnimationFrame(() => {
+        outputEl.scrollTop = outputEl.scrollHeight;
+        outputScrollTimer = null;
+      });
+    }
+  };
+
+  pyodideReadyPromise = loadPyodide({
+    stdout: (text) => {
+      if (currentAppMode !== 'display') {
+        outputEl.appendChild(document.createTextNode(text + '\n'));
+        deferOutputScroll();
       }
-      return false;
-    };
+    },
+    stderr: (text) => {
+      if (currentAppMode !== 'display') {
+        outputEl.appendChild(document.createTextNode(text + '\n'));
+        deferOutputScroll();
+      }
+    }
+  }).then(p => {
 
-
-    // Pyodide initialization
-    if (typeof loadPyodide !== "undefined") {
-      let outputScrollTimer = null;
-      const deferOutputScroll = () => {
-        if (!outputScrollTimer) {
-          outputScrollTimer = requestAnimationFrame(() => {
-            outputEl.scrollTop = outputEl.scrollHeight;
-            outputScrollTimer = null;
-          });
-        }
-      };
-
-      pyodideReadyPromise = loadPyodide({
-        stdout: (text) => {
-          if (currentAppMode !== 'display') {
-            outputEl.appendChild(document.createTextNode(text + '\n'));
-            deferOutputScroll();
-          }
-        },
-        stderr: (text) => {
-          if (currentAppMode !== 'display') {
-            outputEl.appendChild(document.createTextNode(text + '\n'));
-            deferOutputScroll();
-          }
-        }
-      }).then(p => {
-
-        pyodideInstance = p;
-        p.runPython(`
+    pyodideInstance = p;
+    p.runPython(`
 import sys, builtins
 # Initialization complete
         `);
 
-        // Write custom virtual turtle module to VFS
-        p.FS.writeFile('/home/pyodide/turtle.py', turtleShimPythonCode);
+    // Write custom virtual turtle module to VFS
+    p.FS.writeFile('/home/pyodide/turtle.py', turtleShimPythonCode);
 
-        return p;
-      });
+    return p;
+  });
+}
+
+const editor = document.getElementById('editor');
+const lineNumbers = document.getElementById('lineNumbers');
+const outputEl = document.getElementById('output');
+const runnerMessage = document.getElementById('runnerMessage');
+const runnerStatus = document.getElementById('runnerStatus');
+const pasteCounter = document.getElementById('pasteCounter');
+const detectionLabel = document.getElementById('detectionLabel');
+const runnerLayout = document.getElementById('runnerLayout');
+const runnerToggle = document.getElementById('runnerToggle');
+const fullscreenButton = document.getElementById('fullscreenButton');
+const openNewTabButton = document.getElementById('openNewTabButton');
+const openPhoneEditorButton = document.getElementById('openPhoneEditorButton');
+const undoEditorButton = document.getElementById('undoEditorButton');
+const redoEditorButton = document.getElementById('redoEditorButton');
+const revertEditorButton = document.getElementById('revertEditorButton');
+
+const btnEditMode = document.getElementById('btnEditMode');
+const btnDisplayMode = document.getElementById('btnDisplayMode');
+const btnTurtleMode = document.getElementById('btnTurtleMode');
+const btnBlocksMode = document.getElementById('btnBlocksMode');
+const teacherControlsRow = document.getElementById('teacherControlsRow');
+const teachControlsRow = document.getElementById('teachControlsRow');
+
+const callTracePanel = document.getElementById('callTracePanel');
+const callTraceList = document.getElementById('callTraceList');
+const variablePanel = document.getElementById('variablePanel');
+const variableList = document.getElementById('variableList');
+const highlightLayer = document.getElementById('highlightLayer');
+const editorBg = document.getElementById('editorBg');
+const displayEditor = document.getElementById('displayEditor');
+const displayCode = document.getElementById('displayCode');
+const blocksCodePreview = document.getElementById('blocksCodePreview');
+const blocksCodePreviewText = document.getElementById('blocksCodePreviewText');
+const blocksCodePreviewCode = document.getElementById('blocksCodePreviewCode');
+const blocksPreviewTextColors = document.getElementById('blocksPreviewTextColors');
+const blocksPreviewBlockColors = document.getElementById('blocksPreviewBlockColors');
+
+function updateBlocksCodePreview(code) {
+  if (!blocksCodePreviewCode) return;
+
+  const generatedCode = code !== undefined
+    ? code
+    : (typeof getWorkspacePythonCode === 'function' ? getWorkspacePythonCode() : '');
+  blocksCodePreviewCode.dataset.rawCode = generatedCode.trim() ? generatedCode : '# Build blocks to generate Python here.';
+  applyBlocksPreviewColorMode();
+}
+window.updateBlocksCodePreview = updateBlocksCodePreview;
+
+function markCurrentEditorCodeSaved(code) {
+  savedEditorCode = code !== undefined ? code : editor.value;
+  hasUnsavedChanges = false;
+  updateEditorActionButtons();
+}
+
+function refreshEditorAfterProgrammaticChange(statusMessage) {
+  updateLineNumbers();
+  analyseCodeAndUpdateMessage(true);
+  updateBlocksButtonState();
+  if (currentAppMode === 'blocks') {
+    updateBlocksCodePreview(editor.value);
+  }
+  if (statusMessage) {
+    setRunnerStatus(statusMessage);
+  }
+  updateEditorActionButtons();
+}
+
+function updateEditorActionButtons() {
+  if (revertEditorButton) {
+    revertEditorButton.disabled = editor.value === savedEditorCode;
+  }
+  if (currentAppMode === 'blocks' && window.blocklyWorkspace) {
+    if (undoEditorButton) {
+      undoEditorButton.disabled = !window.blocklyWorkspace.undoStack_ || window.blocklyWorkspace.undoStack_.length === 0;
     }
-
-    const editor = document.getElementById('editor');
-    const lineNumbers = document.getElementById('lineNumbers');
-    const outputEl = document.getElementById('output');
-    const runnerMessage = document.getElementById('runnerMessage');
-    const runnerStatus = document.getElementById('runnerStatus');
-    const pasteCounter = document.getElementById('pasteCounter');
-    const detectionLabel = document.getElementById('detectionLabel');
-    const runnerLayout = document.getElementById('runnerLayout');
-    const runnerToggle = document.getElementById('runnerToggle');
-    const fullscreenButton = document.getElementById('fullscreenButton');
-    const openNewTabButton = document.getElementById('openNewTabButton');
-    const openPhoneEditorButton = document.getElementById('openPhoneEditorButton');
-    const undoEditorButton = document.getElementById('undoEditorButton');
-    const redoEditorButton = document.getElementById('redoEditorButton');
-    const revertEditorButton = document.getElementById('revertEditorButton');
-
-    const btnEditMode = document.getElementById('btnEditMode');
-    const btnDisplayMode = document.getElementById('btnDisplayMode');
-    const btnTurtleMode = document.getElementById('btnTurtleMode');
-    const btnBlocksMode = document.getElementById('btnBlocksMode');
-    const teacherControlsRow = document.getElementById('teacherControlsRow');
-    const teachControlsRow = document.getElementById('teachControlsRow');
-
-    const callTracePanel = document.getElementById('callTracePanel');
-    const callTraceList = document.getElementById('callTraceList');
-    const variablePanel = document.getElementById('variablePanel');
-    const variableList = document.getElementById('variableList');
-      const highlightLayer = document.getElementById('highlightLayer');
-      const editorBg = document.getElementById('editorBg');
-      const displayEditor = document.getElementById('displayEditor');
-      const displayCode = document.getElementById('displayCode');
-      const blocksCodePreview = document.getElementById('blocksCodePreview');
-      const blocksCodePreviewText = document.getElementById('blocksCodePreviewText');
-      const blocksCodePreviewCode = document.getElementById('blocksCodePreviewCode');
-      const blocksPreviewTextColors = document.getElementById('blocksPreviewTextColors');
-      const blocksPreviewBlockColors = document.getElementById('blocksPreviewBlockColors');
-
-    function updateBlocksCodePreview(code) {
-      if (!blocksCodePreviewCode) return;
-
-      const generatedCode = code !== undefined
-        ? code
-        : (typeof getWorkspacePythonCode === 'function' ? getWorkspacePythonCode() : '');
-      blocksCodePreviewCode.dataset.rawCode = generatedCode.trim() ? generatedCode : '# Build blocks to generate Python here.';
-      applyBlocksPreviewColorMode();
+    if (redoEditorButton) {
+      redoEditorButton.disabled = !window.blocklyWorkspace.redoStack_ || window.blocklyWorkspace.redoStack_.length === 0;
     }
-    window.updateBlocksCodePreview = updateBlocksCodePreview;
+  } else {
+    if (undoEditorButton) undoEditorButton.disabled = false;
+    if (redoEditorButton) redoEditorButton.disabled = false;
+  }
 
-    function markCurrentEditorCodeSaved(code) {
-      savedEditorCode = code !== undefined ? code : editor.value;
-      hasUnsavedChanges = false;
-      updateEditorActionButtons();
+  const flowchartBtn = document.getElementById('createFlowchartButton');
+  if (flowchartBtn) {
+    const codeText = editor.value || '';
+    const lineCount = codeText.split('\n').length;
+    if (codeText.trim() !== '' && lineCount <= 30) {
+      flowchartBtn.style.display = 'inline-block';
+    } else {
+      flowchartBtn.style.display = 'none';
     }
+  }
 
-    function refreshEditorAfterProgrammaticChange(statusMessage) {
-      updateLineNumbers();
-      analyseCodeAndUpdateMessage(true);
-      updateBlocksButtonState();
-      if (currentAppMode === 'blocks') {
-        updateBlocksCodePreview(editor.value);
-      }
-      if (statusMessage) {
-        setRunnerStatus(statusMessage);
-      }
-      updateEditorActionButtons();
-    }
+  updatePuzzleButtonVisibility();
+}
 
-    function updateEditorActionButtons() {
-      if (revertEditorButton) {
-        revertEditorButton.disabled = editor.value === savedEditorCode;
-      }
-      if (currentAppMode === 'blocks' && window.blocklyWorkspace) {
-        if (undoEditorButton) {
-          undoEditorButton.disabled = !window.blocklyWorkspace.undoStack_ || window.blocklyWorkspace.undoStack_.length === 0;
-        }
-        if (redoEditorButton) {
-          redoEditorButton.disabled = !window.blocklyWorkspace.redoStack_ || window.blocklyWorkspace.redoStack_.length === 0;
-        }
-      } else {
-        if (undoEditorButton) undoEditorButton.disabled = false;
-        if (redoEditorButton) redoEditorButton.disabled = false;
-      }
+function updatePasteCounter() {
+  if (pasteCounter) {
+    pasteCounter.textContent = String(pasteCount);
+  }
+}
 
-      const flowchartBtn = document.getElementById('createFlowchartButton');
-      if (flowchartBtn) {
-        const codeText = editor.value || '';
-        const lineCount = codeText.split('\n').length;
-        if (codeText.trim() !== '' && lineCount <= 30) {
-          flowchartBtn.style.display = 'inline-block';
-        } else {
-          flowchartBtn.style.display = 'none';
-        }
-      }
+function incrementPasteCounter() {
+  pasteCount += 1;
+  updatePasteCounter();
+}
 
-      updatePuzzleButtonVisibility();
-    }
-
-    function updatePasteCounter() {
-      if (pasteCounter) {
-        pasteCounter.textContent = String(pasteCount);
-      }
-    }
-
-    function incrementPasteCounter() {
-      pasteCount += 1;
-      updatePasteCounter();
-    }
-
-    function runEditorHistoryCommand(command) {
-      if (currentAppMode === 'blocks') {
-        if (window.blocklyWorkspace) {
-          const before = editor.value;
-          if (command === 'undo') {
-            window.blocklyWorkspace.undo(false);
-          } else if (command === 'redo') {
-            window.blocklyWorkspace.undo(true);
-          }
-          window.setTimeout(() => {
-            if (editor.value !== before) {
-              hasUnsavedChanges = editor.value !== savedEditorCode;
-              refreshEditorAfterProgrammaticChange(command === 'undo' ? 'Undo applied.' : 'Redo applied.');
-            } else {
-              updateEditorActionButtons();
-            }
-          }, 0);
-        }
-        return;
-      }
-      if (!editor) return;
+function runEditorHistoryCommand(command) {
+  if (currentAppMode === 'blocks') {
+    if (window.blocklyWorkspace) {
       const before = editor.value;
-      editor.focus();
-      document.execCommand(command);
+      if (command === 'undo') {
+        window.blocklyWorkspace.undo(false);
+      } else if (command === 'redo') {
+        window.blocklyWorkspace.undo(true);
+      }
       window.setTimeout(() => {
         if (editor.value !== before) {
           hasUnsavedChanges = editor.value !== savedEditorCode;
@@ -1161,2324 +1146,927 @@ import sys, builtins
         }
       }, 0);
     }
+    return;
+  }
+  if (!editor) return;
+  const before = editor.value;
+  editor.focus();
+  document.execCommand(command);
+  window.setTimeout(() => {
+    if (editor.value !== before) {
+      hasUnsavedChanges = editor.value !== savedEditorCode;
+      refreshEditorAfterProgrammaticChange(command === 'undo' ? 'Undo applied.' : 'Redo applied.');
+    } else {
+      updateEditorActionButtons();
+    }
+  }, 0);
+}
 
-    function revertEditorToSavedFile() {
-      if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
-        exitPlaybackMode(true);
-      }
-      if (editor.value === savedEditorCode) {
-        setRunnerStatus('Already matches the saved file.');
-        updateEditorActionButtons();
+function revertEditorToSavedFile() {
+  if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+    exitPlaybackMode(true);
+  }
+  if (editor.value === savedEditorCode) {
+    setRunnerStatus('Already matches the saved file.');
+    updateEditorActionButtons();
+    return;
+  }
+
+  if (hasUnsavedChanges && !confirm('Revert to the last loaded or downloaded file? Unsaved edits will be lost.')) {
+    return;
+  }
+
+  editor.value = savedEditorCode;
+  hasUnsavedChanges = false;
+
+  if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
+    isUpdatingBlocklyFromText = true;
+    if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
+    try {
+      blocklyWorkspace.clear();
+      convertPythonToWorkspace(editor.value, blocklyWorkspace);
+      lastGeneratedBlocklyPython = typeof getWorkspacePythonCode === 'function' ? getWorkspacePythonCode() : editor.value;
+      resizeBlocklyWorkspaceSoon();
+    } catch (err) {
+      console.warn('Could not sync reverted code to Blocks:', err);
+    } finally {
+      if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
+      isUpdatingBlocklyFromText = false;
+    }
+  }
+
+  clearRunner();
+  refreshEditorAfterProgrammaticChange('Reverted to saved file.');
+  recordPlaybackSnapshot('Revert', true, 'save');
+  editor.focus();
+}
+
+function refreshEditorAfterEdit() {
+  hasUnsavedChanges = editor.value !== savedEditorCode;
+  updateLineNumbers();
+  analyseCodeAndUpdateMessage(true);
+  updateBlocksButtonState();
+  updateEditorActionButtons();
+}
+
+function handleProgrammaticEdit(reason = 'Typing') {
+  const highlightLayer = document.getElementById('highlightLayer');
+  if (highlightLayer) highlightLayer.innerHTML = '';
+  refreshEditorAfterEdit();
+  recordPlaybackSnapshot(reason, false);
+}
+
+function handleEditorTabKey(event) {
+  if (event.key !== 'Tab') return;
+
+  event.preventDefault();
+  const indent = '    ';
+  const value = editor.value;
+  const start = editor.selectionStart;
+  const end = editor.selectionEnd;
+  const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+  const lineEnd = end > start
+    ? (value.indexOf('\n', end) === -1 ? value.length : value.indexOf('\n', end))
+    : end;
+
+  if (!event.shiftKey) {
+    if (start === end) {
+      editor.setRangeText(indent, start, end, 'end');
+    } else {
+      const selectedBlock = value.slice(lineStart, lineEnd);
+      const indentedBlock = selectedBlock.replace(/^/gm, indent);
+      editor.setRangeText(indentedBlock, lineStart, lineEnd, 'select');
+      editor.selectionStart = start + indent.length;
+      editor.selectionEnd = end + (indentedBlock.length - selectedBlock.length);
+    }
+    handleProgrammaticEdit('Typing');
+    return;
+  }
+
+  if (start === end) {
+    const beforeCursor = value.slice(lineStart, start);
+    const spacesToRemove = Math.min(4, beforeCursor.match(/ *$/)[0].length);
+    if (spacesToRemove > 0) {
+      editor.setRangeText('', start - spacesToRemove, start, 'end');
+    }
+    handleProgrammaticEdit('Typing');
+    return;
+  }
+
+  const selectedBlock = value.slice(lineStart, lineEnd);
+  let removedBeforeSelection = 0;
+  let totalRemoved = 0;
+  const outdentedBlock = selectedBlock.replace(/^( {1,4}|\t)/gm, (match, removed, offset) => {
+    const removeLength = removed.length;
+    totalRemoved += removeLength;
+    if (lineStart + offset < start) {
+      removedBeforeSelection += removeLength;
+    }
+    return '';
+  });
+
+  if (totalRemoved > 0) {
+    editor.setRangeText(outdentedBlock, lineStart, lineEnd, 'select');
+    editor.selectionStart = Math.max(lineStart, start - removedBeforeSelection);
+    editor.selectionEnd = Math.max(editor.selectionStart, end - totalRemoved);
+  }
+  handleProgrammaticEdit('Typing');
+}
+
+function handleEditorEnterKey(event) {
+  if (event.key !== 'Enter') return;
+
+  const value = editor.value;
+  const start = editor.selectionStart;
+  const end = editor.selectionEnd;
+
+  // Find current line context
+  const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+  const currentLine = value.slice(lineStart, start);
+
+  // Extract leading spaces or tabs
+  const leadingWhitespaceMatch = currentLine.match(/^[ \t]*/);
+  const leadingWhitespace = leadingWhitespaceMatch ? leadingWhitespaceMatch[0] : "";
+
+  // Check for colon ending (ignoring comments/spaces)
+  const cleaned = currentLine.replace(/#.*$/, '').trim();
+  const endsWithColon = cleaned.endsWith(':');
+
+  const extraIndent = endsWithColon ? '    ' : '';
+  const insertText = '\n' + leadingWhitespace + extraIndent;
+
+  event.preventDefault();
+  editor.setRangeText(insertText, start, end, 'end');
+  handleProgrammaticEdit('Typing');
+}
+
+function applyBlocksPreviewColorMode() {
+  if (!blocksCodePreviewText) return;
+  const useBlocksColors = blocksPreviewBlockColors && blocksPreviewBlockColors.checked;
+  blocksCodePreviewText.classList.toggle('blocks-colors', Boolean(useBlocksColors));
+
+  const rawCode = blocksCodePreviewCode ? blocksCodePreviewCode.dataset.rawCode || '' : '';
+  if (!blocksCodePreviewCode) return;
+
+  if (useBlocksColors) {
+    renderBlocksColoredCode(rawCode);
+    return;
+  }
+
+  blocksCodePreviewCode.textContent = rawCode;
+  if (typeof Prism !== 'undefined') {
+    Prism.highlightElement(blocksCodePreviewCode);
+  }
+}
+
+function renderBlocksColoredCode(code) {
+  blocksCodePreviewCode.innerHTML = '';
+  const lines = code.split('\n');
+  for (const line of lines) {
+    const lineEl = document.createElement('span');
+    lineEl.className = 'blocks-code-line ' + getBlocksLineClass(line);
+    lineEl.textContent = line || ' ';
+    blocksCodePreviewCode.appendChild(lineEl);
+  }
+}
+
+function getBlocksLineClass(line) {
+  const trimmed = line.trim();
+  if (!trimmed) return 'blocks-line-empty';
+  if (trimmed.startsWith('#')) return 'blocks-line-comment';
+  if (trimmed.startsWith('import ') || trimmed.startsWith('from ')) return 'blocks-line-import';
+  if (/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|fillcolor|begin_fill|end_fill|penup|up|pu|pendown|down|pd)\(/.test(trimmed)) return 'blocks-line-turtle';
+  if (/^(?:time\.)?sleep\(/.test(trimmed)) return 'blocks-line-loop';
+  if (/^(for|while)\b/.test(trimmed)) return 'blocks-line-loop';
+  if (/^(if|elif|else)\b/.test(trimmed)) return 'blocks-line-logic';
+  if (/^print\(/.test(trimmed)) return 'blocks-line-text';
+  if (/input\(/.test(trimmed)) return 'blocks-line-input';
+  if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*=/.test(trimmed)) return 'blocks-line-variable';
+  return 'blocks-line-default';
+}
+
+function setAppMode(mode) {
+  if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+    exitPlaybackMode(true);
+  }
+  if (mode === 'blocks' && currentAppMode !== 'blocks') {
+    if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(editor.value)) {
+      const proceed = confirm("This program contains lines of code that cannot be fully converted to blocks. Switching to Blocks Mode may lose some code. Do you want to proceed?");
+      if (!proceed) {
+        btnEditMode.classList.toggle('active', currentAppMode === 'edit');
+        btnDisplayMode.classList.toggle('active', currentAppMode === 'display');
+        btnTurtleMode.classList.toggle('active', currentAppMode === 'turtle');
+        if (btnBlocksMode) btnBlocksMode.classList.toggle('active', currentAppMode === 'blocks');
         return;
       }
+    }
+  }
 
-      if (hasUnsavedChanges && !confirm('Revert to the last loaded or downloaded file? Unsaved edits will be lost.')) {
-        return;
-      }
+  currentAppMode = mode;
+  if (mode === 'edit') {
+    document.body.classList.add('edit-mode-active');
+  } else {
+    document.body.classList.remove('edit-mode-active');
+    // Distraction-free mode applies when in edit mode
+    setDistractionFreeMode(false);
+  }
+  btnEditMode.classList.toggle('active', mode === 'edit');
+  btnDisplayMode.classList.toggle('active', mode === 'display');
+  btnTurtleMode.classList.toggle('active', mode === 'turtle');
+  if (btnBlocksMode) btnBlocksMode.classList.toggle('active', mode === 'blocks');
+  updateAppMode();
+  updatePuzzleButtonVisibility();
+}
 
-      editor.value = savedEditorCode;
-      hasUnsavedChanges = false;
+function restoreTextEditorToolbar() {
+  const blocksTabHeader = document.getElementById('blocksTabHeader');
+  if (blocksTabHeader) blocksTabHeader.style.display = 'none';
 
-      if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
+  const workspaceToolbar = document.querySelector('.workspace-toolbar');
+  if (workspaceToolbar && !activityReminderEnabled && !isMinimalMode) workspaceToolbar.style.display = 'flex';
+
+  const modeTogglePill = document.getElementById('modeTogglePill');
+  if (modeTogglePill) modeTogglePill.style.display = '';
+}
+
+function showBlocksEditorToolbar() {
+  const workspaceToolbar = document.querySelector('.workspace-toolbar');
+  if (workspaceToolbar) workspaceToolbar.style.display = 'none';
+
+  const modeTogglePill = document.getElementById('modeTogglePill');
+  if (modeTogglePill) modeTogglePill.style.display = 'none';
+
+  const blocksTabHeader = document.getElementById('blocksTabHeader');
+  if (blocksTabHeader) blocksTabHeader.style.display = 'flex';
+}
+
+function startBlankBlocksFile() {
+  if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+    exitPlaybackMode(true);
+  }
+  currentURL = '';
+  editor.value = '';
+  updatePuzzleButtonVisibility();
+  markCurrentEditorCodeSaved('');
+  displayCode.textContent = '';
+  document.getElementById('urlInput').value = '';
+  document.getElementById('workspace').style.display = 'grid';
+  document.getElementById('inputContainer').style.display = 'none';
+  document.getElementById('starterPanel').style.display = 'none';
+  document.getElementById('instructionsPanel').style.display = 'none';
+  window.history.pushState({}, '', window.location.pathname + '?blocks=true&blank=true');
+
+  if (blocklyWorkspace && typeof Blockly !== 'undefined') {
+    blocklyWorkspace.clear();
+    if (typeof blocklyWorkspace.clearUndo === 'function') {
+      blocklyWorkspace.clearUndo();
+    }
+    lastGeneratedBlocklyPython = '';
+  }
+
+  showBlocksEditorToolbar();
+  setAppMode('blocks');
+  playbackHistory = [];
+  recordPlaybackSnapshot('Blank Blocks', true, 'save');
+}
+
+function updateAppMode() {
+  // Hide all badges first
+  const editBadge = document.querySelector('.edit-badge');
+  const displayBadge = document.querySelector('.display-badge');
+  const turtleBadge = document.querySelector('.turtle-badge');
+  const blocksBadge = document.querySelector('.blocks-badge');
+  if (editBadge) editBadge.style.display = 'none';
+  if (displayBadge) displayBadge.style.display = 'none';
+  if (turtleBadge) turtleBadge.style.display = 'none';
+  if (blocksBadge) blocksBadge.style.display = 'none';
+
+  const turtleContainer = document.getElementById('turtleCanvasContainer');
+  const blocklyArea = document.getElementById('blocklyArea');
+  const editorSplitResizer = document.getElementById('editorSplitResizer');
+
+  if (currentAppMode === 'blocks') {
+    ensureRunnerExpanded();
+    document.body.classList.remove('display-mode-active');
+    document.body.classList.remove('turtle-mode-active');
+    document.body.classList.remove('edit-mode-active');
+    document.body.classList.add('blocks-mode-active');
+    showBlocksEditorToolbar();
+    if (blocksBadge) blocksBadge.style.display = 'inline-block';
+
+    // Hide text editor elements in blocks mode, but keep the runner beside the blocks.
+    editor.style.display = 'none';
+    displayEditor.style.display = 'none';
+    if (editorBg) editorBg.style.display = 'none';
+    if (editorSplitResizer) editorSplitResizer.style.display = 'none';
+    if (turtleContainer) turtleContainer.style.display = 'none';
+
+    if (runnerLayout) runnerLayout.style.display = '';
+    const workspace = document.getElementById('workspace');
+    if (workspace) workspace.style.gridTemplateColumns = '';
+
+    teacherControlsRow.style.display = 'none';
+    teachControlsRow.style.display = 'none';
+    const dbgPanel = document.getElementById('displayDebuggerPanel');
+    if (dbgPanel) dbgPanel.style.display = 'none';
+    if (blocksCodePreview) blocksCodePreview.style.display = 'block';
+
+    // Show Blockly Area taking full height
+    if (blocklyArea) {
+      blocklyArea.style.display = 'block';
+      blocklyArea.style.height = '640px';
+    }
+
+    // Initialize and sync Blockly
+    if (typeof Blockly !== 'undefined') {
+      initBlockly();
+      Blockly.svgResize(blocklyWorkspace);
+
+      if (editor.value !== lastGeneratedBlocklyPython) {
         isUpdatingBlocklyFromText = true;
         if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
         try {
-          blocklyWorkspace.clear();
           convertPythonToWorkspace(editor.value, blocklyWorkspace);
-          lastGeneratedBlocklyPython = typeof getWorkspacePythonCode === 'function' ? getWorkspacePythonCode() : editor.value;
-          resizeBlocklyWorkspaceSoon();
-        } catch (err) {
-          console.warn('Could not sync reverted code to Blocks:', err);
+          lastGeneratedBlocklyPython = getWorkspacePythonCode();
+        } catch (e) {
+          console.error("Error parsing python code to blocks:", e);
         } finally {
           if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
           isUpdatingBlocklyFromText = false;
         }
+      }
+
+      resizeBlocklyWorkspaceSoon();
+      updateBlocksCodePreview();
+    }
+
+    clearTeachHighlight();
+    clearRunner();
+    setRunnerStatus('Blocks Mode Ready.');
+  } else {
+    restoreTextEditorToolbar();
+    document.body.classList.remove('blocks-mode-active');
+    if (blocklyArea) blocklyArea.style.display = 'none';
+    if (editorSplitResizer) editorSplitResizer.style.display = 'none';
+
+    if (runnerLayout) runnerLayout.style.display = '';
+    if (blocksCodePreview) blocksCodePreview.style.display = 'none';
+    const workspace = document.getElementById('workspace');
+    if (workspace) workspace.style.gridTemplateColumns = '';
+
+    if (editorBg) {
+      editorBg.style.display = '';
+      editorBg.style.height = '';
+    }
+
+    if (currentAppMode === 'display') {
+      ensureRunnerExpanded();
+      document.body.classList.add('display-mode-active');
+      document.body.classList.remove('turtle-mode-active');
+      document.body.classList.remove('edit-mode-active');
+      if (displayBadge) displayBadge.style.display = 'inline-block';
+
+      editor.style.display = 'none';
+      displayEditor.style.display = 'block';
+
+      displayCode.textContent = editor.value;
+      Prism.highlightElement(displayCode);
+
+      teacherControlsRow.style.display = 'none';
+      teachControlsRow.style.display = 'flex';
+      const dbgPanel = document.getElementById('displayDebuggerPanel');
+      if (dbgPanel) dbgPanel.style.display = 'block';
+
+      // Show turtle canvas in display mode if turtle is imported
+      const imports = extractImports(editor.value);
+      if (imports.includes('turtle')) {
+        if (turtleContainer) turtleContainer.style.display = 'flex';
+      } else {
+        if (turtleContainer) turtleContainer.style.display = 'none';
       }
 
       clearRunner();
-      refreshEditorAfterProgrammaticChange('Reverted to saved file.');
-      recordPlaybackSnapshot('Revert', true, 'save');
-      editor.focus();
-    }
+      setRunnerStatus('Display Mode Ready. Click Play to trace code.');
+    } else if (currentAppMode === 'turtle') {
+      ensureRunnerExpanded();
+      document.body.classList.remove('display-mode-active');
+      document.body.classList.add('turtle-mode-active');
+      document.body.classList.remove('edit-mode-active');
+      if (turtleBadge) turtleBadge.style.display = 'inline-block';
 
-    function refreshEditorAfterEdit() {
-      hasUnsavedChanges = editor.value !== savedEditorCode;
-      updateLineNumbers();
-      analyseCodeAndUpdateMessage(true);
-      updateBlocksButtonState();
-      updateEditorActionButtons();
-    }
+      editor.style.display = 'block';
+      displayEditor.style.display = 'block';
 
-    function handleProgrammaticEdit(reason = 'Typing') {
-      const highlightLayer = document.getElementById('highlightLayer');
-      if (highlightLayer) highlightLayer.innerHTML = '';
-      refreshEditorAfterEdit();
-      recordPlaybackSnapshot(reason, false);
-    }
+      displayCode.textContent = editor.value;
+      Prism.highlightElement(displayCode);
 
-    function handleEditorTabKey(event) {
-      if (event.key !== 'Tab') return;
+      teacherControlsRow.style.display = 'flex';
+      teachControlsRow.style.display = 'none';
+      const dbgPanel = document.getElementById('displayDebuggerPanel');
+      if (dbgPanel) dbgPanel.style.display = 'none';
 
-      event.preventDefault();
-      const indent = '    ';
-      const value = editor.value;
-      const start = editor.selectionStart;
-      const end = editor.selectionEnd;
-      const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-      const lineEnd = end > start
-        ? (value.indexOf('\n', end) === -1 ? value.length : value.indexOf('\n', end))
-        : end;
-
-      if (!event.shiftKey) {
-        if (start === end) {
-          editor.setRangeText(indent, start, end, 'end');
-        } else {
-          const selectedBlock = value.slice(lineStart, lineEnd);
-          const indentedBlock = selectedBlock.replace(/^/gm, indent);
-          editor.setRangeText(indentedBlock, lineStart, lineEnd, 'select');
-          editor.selectionStart = start + indent.length;
-          editor.selectionEnd = end + (indentedBlock.length - selectedBlock.length);
-        }
-        handleProgrammaticEdit('Typing');
-        return;
+      if (turtleContainer) {
+        turtleContainer.style.display = 'flex';
+        setupTurtleCanvas(400, 400);
       }
 
-      if (start === end) {
-        const beforeCursor = value.slice(lineStart, start);
-        const spacesToRemove = Math.min(4, beforeCursor.match(/ *$/)[0].length);
-        if (spacesToRemove > 0) {
-          editor.setRangeText('', start - spacesToRemove, start, 'end');
-        }
-        handleProgrammaticEdit('Typing');
-        return;
-      }
+      clearTeachHighlight();
+      clearRunner();
+      setRunnerStatus('Turtle Mode Ready. Write turtle code and click Run.');
+    } else {
+      document.body.classList.remove('display-mode-active');
+      document.body.classList.remove('turtle-mode-active');
+      document.body.classList.add('edit-mode-active');
+      if (editBadge) editBadge.style.display = 'inline-block';
 
-      const selectedBlock = value.slice(lineStart, lineEnd);
-      let removedBeforeSelection = 0;
-      let totalRemoved = 0;
-      const outdentedBlock = selectedBlock.replace(/^( {1,4}|\t)/gm, (match, removed, offset) => {
-        const removeLength = removed.length;
-        totalRemoved += removeLength;
-        if (lineStart + offset < start) {
-          removedBeforeSelection += removeLength;
-        }
-        return '';
+      editor.style.display = 'block';
+      displayEditor.style.display = 'block';
+
+      displayCode.textContent = editor.value;
+      Prism.highlightElement(displayCode);
+
+      teacherControlsRow.style.display = 'flex';
+      teachControlsRow.style.display = 'none';
+      const dbgPanel = document.getElementById('displayDebuggerPanel');
+      if (dbgPanel) dbgPanel.style.display = 'none';
+
+      if (turtleContainer) turtleContainer.style.display = 'none';
+
+      const previewIsOpen = document.getElementById('webPreviewContainer').style.display === 'block';
+      if (!previewIsOpen) ensureRunnerCollapsed();
+
+      clearTeachHighlight();
+      clearRunner();
+      setRunnerStatus('Edit Mode Ready.');
+    }
+  }
+  applyTheme();
+  updateEditorActionButtons();
+}
+
+function applyTheme() {
+  const isDark = document.getElementById('dark-mode').checked;
+  document.documentElement.classList.toggle('dark-theme', isDark);
+  document.body.classList.toggle('dark-theme', isDark);
+  document.body.style.backgroundColor = '';
+  document.body.style.color = '';
+  editorBg.style.backgroundColor = '';
+  editorBg.style.background = '';
+  editor.style.backgroundColor = '';
+  editor.style.color = '';
+  lineNumbers.style.backgroundColor = '';
+  lineNumbers.style.color = '';
+  document.getElementById('prism-theme').href = isDark
+    ? 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css'
+    : 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css';
+
+  const turtleContainer = document.getElementById('turtleCanvasContainer');
+  const turtleHeader = document.getElementById('turtleHeader');
+  const turtleCanvasWrapper = document.getElementById('turtleCanvasWrapper');
+  if (turtleContainer && turtleHeader && turtleCanvasWrapper) {
+    if (isDark) {
+      turtleContainer.style.borderColor = '#3f3f46';
+      turtleContainer.style.background = '#202020';
+      turtleHeader.style.background = '#2a2a2a';
+      turtleHeader.style.color = '#f4f4f5';
+      turtleHeader.style.borderColor = '#3f3f46';
+      turtleCanvasWrapper.style.background = '#151515';
+    } else {
+      turtleContainer.style.borderColor = '#cbd5e1';
+      turtleContainer.style.background = '#ffffff';
+      turtleHeader.style.background = '#f1f5f9';
+      turtleHeader.style.color = '#1e293b';
+      turtleHeader.style.borderColor = '#cbd5e1';
+      turtleCanvasWrapper.style.background = '#f8fafc';
+    }
+  }
+
+  if (currentAppMode === 'display') {
+    Prism.highlightElement(displayCode);
+  }
+
+  if (typeof applyBlocklyTheme === 'function') {
+    applyBlocklyTheme(isDark);
+  }
+}
+
+
+function showStartScreen() {
+  document.getElementById('inputContainer').style.display = 'flex';
+  document.getElementById('starterPanel').style.display = 'block';
+  document.getElementById('instructionsPanel').style.display = 'block';
+  document.getElementById('workspace').style.display = 'none';
+  window.history.pushState({}, '', window.location.pathname);
+}
+
+let currentInstructionSlide = 0;
+let totalInstructionSlides = 0;
+let instructionSlideTimer = null;
+
+function getInstructionImages() {
+  return document.querySelectorAll('.pythoncopy-hero-carousel img');
+}
+
+function updateInstructionCarousel() {
+  const images = getInstructionImages();
+  images.forEach((image, index) => {
+    image.classList.toggle('active', index === currentInstructionSlide);
+  });
+
+  const dots = document.querySelectorAll('#carouselDots .dot');
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentInstructionSlide);
+    dot.setAttribute('aria-current', index === currentInstructionSlide ? 'true' : 'false');
+  });
+}
+
+function scheduleInstructionAutoFade() {
+  window.clearInterval(instructionSlideTimer);
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || totalInstructionSlides <= 1) return;
+  instructionSlideTimer = window.setInterval(() => nextInstructionSlide(true), 5000);
+}
+
+function prevInstructionSlide(fromAuto = false) {
+  if (!totalInstructionSlides) return;
+  currentInstructionSlide = (currentInstructionSlide - 1 + totalInstructionSlides) % totalInstructionSlides;
+  updateInstructionCarousel();
+  if (!fromAuto) scheduleInstructionAutoFade();
+}
+
+function nextInstructionSlide(fromAuto = false) {
+  if (!totalInstructionSlides) return;
+  currentInstructionSlide = (currentInstructionSlide + 1) % totalInstructionSlides;
+  updateInstructionCarousel();
+  if (!fromAuto) scheduleInstructionAutoFade();
+}
+
+function goToInstructionSlide(index) {
+  if (index < 0 || index >= totalInstructionSlides) return;
+  currentInstructionSlide = index;
+  updateInstructionCarousel();
+  scheduleInstructionAutoFade();
+}
+
+window.prevInstructionSlide = prevInstructionSlide;
+window.nextInstructionSlide = nextInstructionSlide;
+window.goToInstructionSlide = goToInstructionSlide;
+
+let playbackZoomLevel = 1;
+
+function recordPlaybackSnapshot(reason = 'Edit', isCheckpoint = false, checkpointType = '') {
+  if (activityPlaybackActive) return;
+  const code = editor.value;
+  if (reason === 'Last Edit' && code !== activityLog.code) recordActivity('edit', code);
+  if (reason !== 'Last Edit' && !(reason === 'Typing' && isCheckpoint)) {
+    const type = reason === 'Typing' ? 'edit' : reason.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_$/, '');
+    recordActivity(type, code, playbackHistory.length === 0);
+  }
+
+  if (playbackHistory.length > 0 && playbackHistory[playbackHistory.length - 1].code === code) {
+    if (isCheckpoint) {
+      playbackHistory[playbackHistory.length - 1].isCheckpoint = true;
+      playbackHistory[playbackHistory.length - 1].reason = reason;
+      if (checkpointType) {
+        playbackHistory[playbackHistory.length - 1].checkpointType = checkpointType;
+      }
+    }
+    return;
+  }
+
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  playbackHistory.push({
+    code: code,
+    revisionId: activityLog.revision,
+    timestamp: timeStr,
+    reason: reason,
+    isCheckpoint: isCheckpoint,
+    checkpointType: checkpointType
+  });
+
+  if (playbackHistory.length > 1000) {
+    playbackHistory.shift();
+  }
+}
+
+function scheduleRecordHistoryDebounced(reason = 'Typing') {
+  if (saveHistoryTimeout) {
+    clearTimeout(saveHistoryTimeout);
+  }
+  saveHistoryTimeout = setTimeout(() => {
+    recordPlaybackSnapshot(reason, true, 'save');
+  }, 1500);
+}
+
+function startPlaybackMode() {
+  if (saveHistoryTimeout) {
+    clearTimeout(saveHistoryTimeout);
+    saveHistoryTimeout = null;
+  }
+  recordPlaybackSnapshot('Last Edit', true, 'save');
+
+  if (playbackHistory.length === 0) {
+    alert('No editing history recorded yet in this session.');
+    return;
+  }
+
+  originalCodeBeforePlayback = editor.value;
+  activityPlaybackActive = true;
+
+  const pbBar = document.getElementById('playbackControlsBar');
+  if (pbBar) pbBar.style.display = 'flex';
+
+  editor.readOnly = true;
+  editor.classList.add('playback-readonly');
+
+  if (currentAppMode === 'blocks' && window.blocklyWorkspace) {
+    const blocklyDiv = document.getElementById('blocklyDiv');
+    if (blocklyDiv) {
+      blocklyDiv.style.pointerEvents = 'none';
+      blocklyDiv.style.opacity = '0.8';
+    }
+  }
+
+  renderTimelineMarkers();
+
+  const timeline = document.getElementById('playbackTimeline');
+  if (timeline) {
+    timeline.min = 0;
+    timeline.max = playbackHistory.length - 1;
+    timeline.value = playbackHistory.length - 1;
+  }
+
+  playbackIndex = playbackHistory.length - 1;
+  updatePlaybackUI();
+}
+
+function renderTimelineMarkers() {
+  const markersContainer = document.getElementById('playbackMarkersContainer');
+  if (!markersContainer) return;
+  markersContainer.innerHTML = '';
+
+  if (playbackHistory.length <= 1) return;
+
+  playbackHistory.forEach((state, idx) => {
+    if (state.isCheckpoint) {
+      const marker = document.createElement('div');
+      const pct = (idx / (playbackHistory.length - 1)) * 100;
+      marker.className = 'playback-marker';
+
+      const type = state.checkpointType ||
+        (state.reason.toLowerCase().includes('run') ? 'play' :
+          (state.reason.toLowerCase().includes('paste') ? 'paste' : 'save'));
+      marker.classList.add(`checkpoint-${type}`);
+
+      marker.style.left = `${pct}%`;
+      marker.title = `${state.reason} at ${state.timestamp}`;
+
+      marker.addEventListener('click', (e) => {
+        e.stopPropagation();
+        playbackIndex = idx;
+        updatePlaybackUI();
       });
 
-      if (totalRemoved > 0) {
-        editor.setRangeText(outdentedBlock, lineStart, lineEnd, 'select');
-        editor.selectionStart = Math.max(lineStart, start - removedBeforeSelection);
-        editor.selectionEnd = Math.max(editor.selectionStart, end - totalRemoved);
-      }
-      handleProgrammaticEdit('Typing');
+      markersContainer.appendChild(marker);
     }
+  });
+}
 
-    function handleEditorEnterKey(event) {
-      if (event.key !== 'Enter') return;
+function updatePlaybackUI() {
+  if (playbackIndex < 0 || playbackIndex >= playbackHistory.length) return;
 
-      const value = editor.value;
-      const start = editor.selectionStart;
-      const end = editor.selectionEnd;
+  const state = playbackHistory[playbackIndex];
+  editor.value = state.code;
+  updateLineNumbers();
+  analyseCodeAndUpdateMessage(true);
 
-      // Find current line context
-      const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-      const currentLine = value.slice(lineStart, start);
-
-      // Extract leading spaces or tabs
-      const leadingWhitespaceMatch = currentLine.match(/^[ \t]*/);
-      const leadingWhitespace = leadingWhitespaceMatch ? leadingWhitespaceMatch[0] : "";
-
-      // Check for colon ending (ignoring comments/spaces)
-      const cleaned = currentLine.replace(/#.*$/, '').trim();
-      const endsWithColon = cleaned.endsWith(':');
-
-      const extraIndent = endsWithColon ? '    ' : '';
-      const insertText = '\n' + leadingWhitespace + extraIndent;
-
-      event.preventDefault();
-      editor.setRangeText(insertText, start, end, 'end');
-      handleProgrammaticEdit('Typing');
+  if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
+    isUpdatingBlocklyFromText = true;
+    if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
+    try {
+      blocklyWorkspace.clear();
+      convertPythonToWorkspace(state.code, blocklyWorkspace);
+    } catch (err) {
+      console.warn('Could not sync playback code to blocks:', err);
+    } finally {
+      if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
+      isUpdatingBlocklyFromText = false;
     }
-
-    function applyBlocksPreviewColorMode() {
-      if (!blocksCodePreviewText) return;
-      const useBlocksColors = blocksPreviewBlockColors && blocksPreviewBlockColors.checked;
-      blocksCodePreviewText.classList.toggle('blocks-colors', Boolean(useBlocksColors));
-
-      const rawCode = blocksCodePreviewCode ? blocksCodePreviewCode.dataset.rawCode || '' : '';
-      if (!blocksCodePreviewCode) return;
-
-      if (useBlocksColors) {
-        renderBlocksColoredCode(rawCode);
-        return;
-      }
-
-      blocksCodePreviewCode.textContent = rawCode;
-      if (typeof Prism !== 'undefined') {
-        Prism.highlightElement(blocksCodePreviewCode);
-      }
-    }
-
-    function renderBlocksColoredCode(code) {
-      blocksCodePreviewCode.innerHTML = '';
-      const lines = code.split('\n');
-      for (const line of lines) {
-        const lineEl = document.createElement('span');
-        lineEl.className = 'blocks-code-line ' + getBlocksLineClass(line);
-        lineEl.textContent = line || ' ';
-        blocksCodePreviewCode.appendChild(lineEl);
-      }
-    }
-
-    function getBlocksLineClass(line) {
-      const trimmed = line.trim();
-      if (!trimmed) return 'blocks-line-empty';
-      if (trimmed.startsWith('#')) return 'blocks-line-comment';
-      if (trimmed.startsWith('import ') || trimmed.startsWith('from ')) return 'blocks-line-import';
-      if (/^(?:turtle\.)?(forward|fd|backward|bk|left|lt|right|rt|circle|pencolor|fillcolor|begin_fill|end_fill|penup|up|pu|pendown|down|pd)\(/.test(trimmed)) return 'blocks-line-turtle';
-      if (/^(?:time\.)?sleep\(/.test(trimmed)) return 'blocks-line-loop';
-      if (/^(for|while)\b/.test(trimmed)) return 'blocks-line-loop';
-      if (/^(if|elif|else)\b/.test(trimmed)) return 'blocks-line-logic';
-      if (/^print\(/.test(trimmed)) return 'blocks-line-text';
-      if (/input\(/.test(trimmed)) return 'blocks-line-input';
-      if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*=/.test(trimmed)) return 'blocks-line-variable';
-      return 'blocks-line-default';
-    }
-
-    function setAppMode(mode) {
-      if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
-        exitPlaybackMode(true);
-      }
-      if (mode === 'blocks' && currentAppMode !== 'blocks') {
-        if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(editor.value)) {
-          const proceed = confirm("This program contains lines of code that cannot be fully converted to blocks. Switching to Blocks Mode may lose some code. Do you want to proceed?");
-          if (!proceed) {
-            btnEditMode.classList.toggle('active', currentAppMode === 'edit');
-            btnDisplayMode.classList.toggle('active', currentAppMode === 'display');
-            btnTurtleMode.classList.toggle('active', currentAppMode === 'turtle');
-            if (btnBlocksMode) btnBlocksMode.classList.toggle('active', currentAppMode === 'blocks');
-            return;
-          }
-        }
-      }
-
-      currentAppMode = mode;
-      if (mode === 'edit') {
-        document.body.classList.add('edit-mode-active');
-      } else {
-        document.body.classList.remove('edit-mode-active');
-        // Distraction-free mode applies when in edit mode
-        setDistractionFreeMode(false);
-      }
-      btnEditMode.classList.toggle('active', mode === 'edit');
-      btnDisplayMode.classList.toggle('active', mode === 'display');
-      btnTurtleMode.classList.toggle('active', mode === 'turtle');
-      if (btnBlocksMode) btnBlocksMode.classList.toggle('active', mode === 'blocks');
-      updateAppMode();
-      updatePuzzleButtonVisibility();
-    }
-
-    function restoreTextEditorToolbar() {
-      const blocksTabHeader = document.getElementById('blocksTabHeader');
-      if (blocksTabHeader) blocksTabHeader.style.display = 'none';
-
-      const workspaceToolbar = document.querySelector('.workspace-toolbar');
-      if (workspaceToolbar && !activityReminderEnabled && !isMinimalMode) workspaceToolbar.style.display = 'flex';
-
-      const modeTogglePill = document.getElementById('modeTogglePill');
-      if (modeTogglePill) modeTogglePill.style.display = '';
-    }
-
-    function showBlocksEditorToolbar() {
-      const workspaceToolbar = document.querySelector('.workspace-toolbar');
-      if (workspaceToolbar) workspaceToolbar.style.display = 'none';
-
-      const modeTogglePill = document.getElementById('modeTogglePill');
-      if (modeTogglePill) modeTogglePill.style.display = 'none';
-
-      const blocksTabHeader = document.getElementById('blocksTabHeader');
-      if (blocksTabHeader) blocksTabHeader.style.display = 'flex';
-    }
-
-    function startBlankBlocksFile() {
-      if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
-        exitPlaybackMode(true);
-      }
-      currentURL = '';
-      editor.value = '';
-      updatePuzzleButtonVisibility();
-      markCurrentEditorCodeSaved('');
-      displayCode.textContent = '';
-      document.getElementById('urlInput').value = '';
-      document.getElementById('workspace').style.display = 'grid';
-      document.getElementById('inputContainer').style.display = 'none';
-      document.getElementById('starterPanel').style.display = 'none';
-      document.getElementById('instructionsPanel').style.display = 'none';
-      window.history.pushState({}, '', window.location.pathname + '?blocks=true&blank=true');
-
-      if (blocklyWorkspace && typeof Blockly !== 'undefined') {
-        blocklyWorkspace.clear();
-        if (typeof blocklyWorkspace.clearUndo === 'function') {
-          blocklyWorkspace.clearUndo();
-        }
-        lastGeneratedBlocklyPython = '';
-      }
-
-      showBlocksEditorToolbar();
-      setAppMode('blocks');
-      playbackHistory = [];
-      recordPlaybackSnapshot('Blank Blocks', true, 'save');
-    }
-
-    function updateAppMode() {
-      // Hide all badges first
-      const editBadge = document.querySelector('.edit-badge');
-      const displayBadge = document.querySelector('.display-badge');
-      const turtleBadge = document.querySelector('.turtle-badge');
-      const blocksBadge = document.querySelector('.blocks-badge');
-      if (editBadge) editBadge.style.display = 'none';
-      if (displayBadge) displayBadge.style.display = 'none';
-      if (turtleBadge) turtleBadge.style.display = 'none';
-      if (blocksBadge) blocksBadge.style.display = 'none';
-
-      const turtleContainer = document.getElementById('turtleCanvasContainer');
-      const blocklyArea = document.getElementById('blocklyArea');
-      const editorSplitResizer = document.getElementById('editorSplitResizer');
-
-      if (currentAppMode === 'blocks') {
-        ensureRunnerExpanded();
-        document.body.classList.remove('display-mode-active');
-        document.body.classList.remove('turtle-mode-active');
-        document.body.classList.remove('edit-mode-active');
-        document.body.classList.add('blocks-mode-active');
-        showBlocksEditorToolbar();
-        if (blocksBadge) blocksBadge.style.display = 'inline-block';
-
-        // Hide text editor elements in blocks mode, but keep the runner beside the blocks.
-        editor.style.display = 'none';
-        displayEditor.style.display = 'none';
-        if (editorBg) editorBg.style.display = 'none';
-        if (editorSplitResizer) editorSplitResizer.style.display = 'none';
-        if (turtleContainer) turtleContainer.style.display = 'none';
-
-        if (runnerLayout) runnerLayout.style.display = '';
-        const workspace = document.getElementById('workspace');
-        if (workspace) workspace.style.gridTemplateColumns = '';
-
-        teacherControlsRow.style.display = 'none';
-        teachControlsRow.style.display = 'none';
-        const dbgPanel = document.getElementById('displayDebuggerPanel');
-        if (dbgPanel) dbgPanel.style.display = 'none';
-        if (blocksCodePreview) blocksCodePreview.style.display = 'block';
-
-        // Show Blockly Area taking full height
-        if (blocklyArea) {
-          blocklyArea.style.display = 'block';
-          blocklyArea.style.height = '640px';
-        }
-
-        // Initialize and sync Blockly
-        if (typeof Blockly !== 'undefined') {
-          initBlockly();
-          Blockly.svgResize(blocklyWorkspace);
-
-          if (editor.value !== lastGeneratedBlocklyPython) {
-            isUpdatingBlocklyFromText = true;
-            if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
-            try {
-              convertPythonToWorkspace(editor.value, blocklyWorkspace);
-              lastGeneratedBlocklyPython = getWorkspacePythonCode();
-            } catch (e) {
-              console.error("Error parsing python code to blocks:", e);
-            } finally {
-              if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
-              isUpdatingBlocklyFromText = false;
-            }
-          }
-
-          resizeBlocklyWorkspaceSoon();
-          updateBlocksCodePreview();
-        }
-
-        clearTeachHighlight();
-        clearRunner();
-        setRunnerStatus('Blocks Mode Ready.');
-      } else {
-        restoreTextEditorToolbar();
-        document.body.classList.remove('blocks-mode-active');
-        if (blocklyArea) blocklyArea.style.display = 'none';
-        if (editorSplitResizer) editorSplitResizer.style.display = 'none';
-
-        if (runnerLayout) runnerLayout.style.display = '';
-        if (blocksCodePreview) blocksCodePreview.style.display = 'none';
-        const workspace = document.getElementById('workspace');
-        if (workspace) workspace.style.gridTemplateColumns = '';
-
-        if (editorBg) {
-          editorBg.style.display = '';
-          editorBg.style.height = '';
-        }
-
-        if (currentAppMode === 'display') {
-          ensureRunnerExpanded();
-          document.body.classList.add('display-mode-active');
-          document.body.classList.remove('turtle-mode-active');
-          document.body.classList.remove('edit-mode-active');
-          if (displayBadge) displayBadge.style.display = 'inline-block';
-
-          editor.style.display = 'none';
-          displayEditor.style.display = 'block';
-
-          displayCode.textContent = editor.value;
-          Prism.highlightElement(displayCode);
-
-          teacherControlsRow.style.display = 'none';
-          teachControlsRow.style.display = 'flex';
-          const dbgPanel = document.getElementById('displayDebuggerPanel');
-          if (dbgPanel) dbgPanel.style.display = 'block';
-
-          // Show turtle canvas in display mode if turtle is imported
-          const imports = extractImports(editor.value);
-          if (imports.includes('turtle')) {
-            if (turtleContainer) turtleContainer.style.display = 'flex';
-          } else {
-            if (turtleContainer) turtleContainer.style.display = 'none';
-          }
-
-          clearRunner();
-          setRunnerStatus('Display Mode Ready. Click Play to trace code.');
-        } else if (currentAppMode === 'turtle') {
-          ensureRunnerExpanded();
-          document.body.classList.remove('display-mode-active');
-          document.body.classList.add('turtle-mode-active');
-          document.body.classList.remove('edit-mode-active');
-          if (turtleBadge) turtleBadge.style.display = 'inline-block';
-
-          editor.style.display = 'block';
-          displayEditor.style.display = 'block';
-
-          displayCode.textContent = editor.value;
-          Prism.highlightElement(displayCode);
-
-          teacherControlsRow.style.display = 'flex';
-          teachControlsRow.style.display = 'none';
-          const dbgPanel = document.getElementById('displayDebuggerPanel');
-          if (dbgPanel) dbgPanel.style.display = 'none';
-
-          if (turtleContainer) {
-            turtleContainer.style.display = 'flex';
-            setupTurtleCanvas(400, 400);
-          }
-
-          clearTeachHighlight();
-          clearRunner();
-          setRunnerStatus('Turtle Mode Ready. Write turtle code and click Run.');
-        } else {
-          document.body.classList.remove('display-mode-active');
-          document.body.classList.remove('turtle-mode-active');
-          document.body.classList.add('edit-mode-active');
-          if (editBadge) editBadge.style.display = 'inline-block';
-
-          editor.style.display = 'block';
-          displayEditor.style.display = 'block';
-
-          displayCode.textContent = editor.value;
-          Prism.highlightElement(displayCode);
-
-          teacherControlsRow.style.display = 'flex';
-          teachControlsRow.style.display = 'none';
-          const dbgPanel = document.getElementById('displayDebuggerPanel');
-          if (dbgPanel) dbgPanel.style.display = 'none';
-
-          if (turtleContainer) turtleContainer.style.display = 'none';
-
-          const previewIsOpen = document.getElementById('webPreviewContainer').style.display === 'block';
-          if (!previewIsOpen) ensureRunnerCollapsed();
-
-          clearTeachHighlight();
-          clearRunner();
-          setRunnerStatus('Edit Mode Ready.');
-        }
-      }
-      applyTheme();
-      updateEditorActionButtons();
-    }
-
-    function applyTheme() {
-      const isDark = document.getElementById('dark-mode').checked;
-      document.documentElement.classList.toggle('dark-theme', isDark);
-      document.body.classList.toggle('dark-theme', isDark);
-      document.body.style.backgroundColor = '';
-      document.body.style.color = '';
-      editorBg.style.backgroundColor = '';
-      editorBg.style.background = '';
-      editor.style.backgroundColor = '';
-      editor.style.color = '';
-      lineNumbers.style.backgroundColor = '';
-      lineNumbers.style.color = '';
-      document.getElementById('prism-theme').href = isDark
-        ? 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css'
-        : 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css';
-
-      const turtleContainer = document.getElementById('turtleCanvasContainer');
-      const turtleHeader = document.getElementById('turtleHeader');
-      const turtleCanvasWrapper = document.getElementById('turtleCanvasWrapper');
-      if (turtleContainer && turtleHeader && turtleCanvasWrapper) {
-        if (isDark) {
-          turtleContainer.style.borderColor = '#3f3f46';
-          turtleContainer.style.background = '#202020';
-          turtleHeader.style.background = '#2a2a2a';
-          turtleHeader.style.color = '#f4f4f5';
-          turtleHeader.style.borderColor = '#3f3f46';
-          turtleCanvasWrapper.style.background = '#151515';
-        } else {
-          turtleContainer.style.borderColor = '#cbd5e1';
-          turtleContainer.style.background = '#ffffff';
-          turtleHeader.style.background = '#f1f5f9';
-          turtleHeader.style.color = '#1e293b';
-          turtleHeader.style.borderColor = '#cbd5e1';
-          turtleCanvasWrapper.style.background = '#f8fafc';
-        }
-      }
-
-      if (currentAppMode === 'display') {
-        Prism.highlightElement(displayCode);
-      }
-
-      if (typeof applyBlocklyTheme === 'function') {
-        applyBlocklyTheme(isDark);
-      }
-    }
-
-
-    function showStartScreen() {
-      document.getElementById('inputContainer').style.display = 'flex';
-      document.getElementById('starterPanel').style.display = 'block';
-      document.getElementById('instructionsPanel').style.display = 'block';
-      document.getElementById('workspace').style.display = 'none';
-      window.history.pushState({}, '', window.location.pathname);
-    }
-
-    let currentInstructionSlide = 0;
-    let totalInstructionSlides = 0;
-    let instructionSlideTimer = null;
-
-    function getInstructionImages() {
-      return document.querySelectorAll('.pythoncopy-hero-carousel img');
-    }
-
-    function updateInstructionCarousel() {
-      const images = getInstructionImages();
-      images.forEach((image, index) => {
-        image.classList.toggle('active', index === currentInstructionSlide);
-      });
-
-      const dots = document.querySelectorAll('#carouselDots .dot');
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentInstructionSlide);
-        dot.setAttribute('aria-current', index === currentInstructionSlide ? 'true' : 'false');
-      });
-    }
-
-    function scheduleInstructionAutoFade() {
-      window.clearInterval(instructionSlideTimer);
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduceMotion || totalInstructionSlides <= 1) return;
-      instructionSlideTimer = window.setInterval(() => nextInstructionSlide(true), 5000);
-    }
-
-    function prevInstructionSlide(fromAuto = false) {
-      if (!totalInstructionSlides) return;
-      currentInstructionSlide = (currentInstructionSlide - 1 + totalInstructionSlides) % totalInstructionSlides;
-      updateInstructionCarousel();
-      if (!fromAuto) scheduleInstructionAutoFade();
-    }
-
-    function nextInstructionSlide(fromAuto = false) {
-      if (!totalInstructionSlides) return;
-      currentInstructionSlide = (currentInstructionSlide + 1) % totalInstructionSlides;
-      updateInstructionCarousel();
-      if (!fromAuto) scheduleInstructionAutoFade();
-    }
-
-    function goToInstructionSlide(index) {
-      if (index < 0 || index >= totalInstructionSlides) return;
-      currentInstructionSlide = index;
-      updateInstructionCarousel();
-      scheduleInstructionAutoFade();
-    }
-
-    window.prevInstructionSlide = prevInstructionSlide;
-    window.nextInstructionSlide = nextInstructionSlide;
-    window.goToInstructionSlide = goToInstructionSlide;
-
-    let playbackZoomLevel = 1;
-
-    function recordPlaybackSnapshot(reason = 'Edit', isCheckpoint = false, checkpointType = '') {
-      if (activityPlaybackActive) return;
-      const code = editor.value;
-      if (reason === 'Last Edit' && code !== activityLog.code) recordActivity('edit', code);
-      if (reason !== 'Last Edit' && !(reason === 'Typing' && isCheckpoint)) {
-        const type = reason === 'Typing' ? 'edit' : reason.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_$/, '');
-        recordActivity(type, code, playbackHistory.length === 0);
-      }
-      
-      if (playbackHistory.length > 0 && playbackHistory[playbackHistory.length - 1].code === code) {
-        if (isCheckpoint) {
-          playbackHistory[playbackHistory.length - 1].isCheckpoint = true;
-          playbackHistory[playbackHistory.length - 1].reason = reason;
-          if (checkpointType) {
-            playbackHistory[playbackHistory.length - 1].checkpointType = checkpointType;
-          }
-        }
-        return;
-      }
-      
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      
-      playbackHistory.push({
-        code: code,
-        revisionId: activityLog.revision,
-        timestamp: timeStr,
-        reason: reason,
-        isCheckpoint: isCheckpoint,
-        checkpointType: checkpointType
-      });
-      
-      if (playbackHistory.length > 1000) {
-        playbackHistory.shift();
-      }
-    }
-
-    function scheduleRecordHistoryDebounced(reason = 'Typing') {
-      if (saveHistoryTimeout) {
-        clearTimeout(saveHistoryTimeout);
-      }
-      saveHistoryTimeout = setTimeout(() => {
-        recordPlaybackSnapshot(reason, true, 'save');
-      }, 1500);
-    }
-
-    function startPlaybackMode() {
-      if (saveHistoryTimeout) {
-        clearTimeout(saveHistoryTimeout);
-        saveHistoryTimeout = null;
-      }
-      recordPlaybackSnapshot('Last Edit', true, 'save');
-
-      if (playbackHistory.length === 0) {
-        alert('No editing history recorded yet in this session.');
-        return;
-      }
-
-      originalCodeBeforePlayback = editor.value;
-      activityPlaybackActive = true;
-
-      const pbBar = document.getElementById('playbackControlsBar');
-      if (pbBar) pbBar.style.display = 'flex';
-
-      editor.readOnly = true;
-      editor.classList.add('playback-readonly');
-
-      if (currentAppMode === 'blocks' && window.blocklyWorkspace) {
-        const blocklyDiv = document.getElementById('blocklyDiv');
-        if (blocklyDiv) {
-          blocklyDiv.style.pointerEvents = 'none';
-          blocklyDiv.style.opacity = '0.8';
-        }
-      }
-
-      renderTimelineMarkers();
-
-      const timeline = document.getElementById('playbackTimeline');
-      if (timeline) {
-        timeline.min = 0;
-        timeline.max = playbackHistory.length - 1;
-        timeline.value = playbackHistory.length - 1;
-      }
-
-      playbackIndex = playbackHistory.length - 1;
+  }
+
+  const timeline = document.getElementById('playbackTimeline');
+  if (timeline) {
+    timeline.value = playbackIndex;
+  }
+
+  const statusLabel = document.getElementById('playbackStatusLabel');
+  if (statusLabel) {
+    statusLabel.textContent = `Revision ${playbackIndex + 1} / ${playbackHistory.length} (${state.timestamp} - ${state.reason})`;
+  }
+
+  const pbFirst = document.getElementById('pbFirst');
+  const pbPrev = document.getElementById('pbPrev');
+  const pbNext = document.getElementById('pbNext');
+  const pbLast = document.getElementById('pbLast');
+
+  if (pbFirst) pbFirst.disabled = playbackIndex === 0;
+  if (pbPrev) pbPrev.disabled = playbackIndex === 0;
+  if (pbNext) pbNext.disabled = playbackIndex === playbackHistory.length - 1;
+  if (pbLast) pbLast.disabled = playbackIndex === playbackHistory.length - 1;
+}
+
+function togglePlaybackPlay() {
+  const playBtn = document.getElementById('pbPlay');
+  if (isPlaybackPlaying) {
+    clearInterval(playbackInterval);
+    playbackInterval = null;
+    isPlaybackPlaying = false;
+    if (playBtn) playBtn.textContent = '⏯️ Play';
+  } else {
+    if (playbackIndex === playbackHistory.length - 1) {
+      playbackIndex = 0;
       updatePlaybackUI();
     }
+    isPlaybackPlaying = true;
+    if (playBtn) playBtn.textContent = '⏸️ Pause';
 
-    function renderTimelineMarkers() {
-      const markersContainer = document.getElementById('playbackMarkersContainer');
-      if (!markersContainer) return;
-      markersContainer.innerHTML = '';
-      
-      if (playbackHistory.length <= 1) return;
-      
-      playbackHistory.forEach((state, idx) => {
-        if (state.isCheckpoint) {
-          const marker = document.createElement('div');
-          const pct = (idx / (playbackHistory.length - 1)) * 100;
-          marker.className = 'playback-marker';
-          
-          const type = state.checkpointType || 
-                       (state.reason.toLowerCase().includes('run') ? 'play' : 
-                       (state.reason.toLowerCase().includes('paste') ? 'paste' : 'save'));
-          marker.classList.add(`checkpoint-${type}`);
-          
-          marker.style.left = `${pct}%`;
-          marker.title = `${state.reason} at ${state.timestamp}`;
-          
-          marker.addEventListener('click', (e) => {
-            e.stopPropagation();
-            playbackIndex = idx;
-            updatePlaybackUI();
-          });
-          
-          markersContainer.appendChild(marker);
-        }
-      });
-    }
+    playbackInterval = setInterval(() => {
+      if (playbackIndex < playbackHistory.length - 1) {
+        playbackIndex++;
+        updatePlaybackUI();
 
-    function updatePlaybackUI() {
-      if (playbackIndex < 0 || playbackIndex >= playbackHistory.length) return;
+        const nextState = playbackHistory[playbackIndex];
+        if (nextState && nextState.isCheckpoint && playbackIndex < playbackHistory.length - 1) {
+          clearInterval(playbackInterval);
+          playbackInterval = null;
+          isPlaybackPlaying = false;
+          if (playBtn) playBtn.textContent = '⏯️ Play';
 
-      const state = playbackHistory[playbackIndex];
-      editor.value = state.code;
-      updateLineNumbers();
-      analyseCodeAndUpdateMessage(true);
-
-      if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
-        isUpdatingBlocklyFromText = true;
-        if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
-        try {
-          blocklyWorkspace.clear();
-          convertPythonToWorkspace(state.code, blocklyWorkspace);
-        } catch (err) {
-          console.warn('Could not sync playback code to blocks:', err);
-        } finally {
-          if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
-          isUpdatingBlocklyFromText = false;
-        }
-      }
-
-      const timeline = document.getElementById('playbackTimeline');
-      if (timeline) {
-        timeline.value = playbackIndex;
-      }
-
-      const statusLabel = document.getElementById('playbackStatusLabel');
-      if (statusLabel) {
-        statusLabel.textContent = `Revision ${playbackIndex + 1} / ${playbackHistory.length} (${state.timestamp} - ${state.reason})`;
-      }
-
-      const pbFirst = document.getElementById('pbFirst');
-      const pbPrev = document.getElementById('pbPrev');
-      const pbNext = document.getElementById('pbNext');
-      const pbLast = document.getElementById('pbLast');
-
-      if (pbFirst) pbFirst.disabled = playbackIndex === 0;
-      if (pbPrev) pbPrev.disabled = playbackIndex === 0;
-      if (pbNext) pbNext.disabled = playbackIndex === playbackHistory.length - 1;
-      if (pbLast) pbLast.disabled = playbackIndex === playbackHistory.length - 1;
-    }
-
-    function togglePlaybackPlay() {
-      const playBtn = document.getElementById('pbPlay');
-      if (isPlaybackPlaying) {
-        clearInterval(playbackInterval);
-        playbackInterval = null;
-        isPlaybackPlaying = false;
-        if (playBtn) playBtn.textContent = '⏯️ Play';
-      } else {
-        if (playbackIndex === playbackHistory.length - 1) {
-          playbackIndex = 0;
-          updatePlaybackUI();
-        }
-        isPlaybackPlaying = true;
-        if (playBtn) playBtn.textContent = '⏸️ Pause';
-        
-        playbackInterval = setInterval(() => {
-          if (playbackIndex < playbackHistory.length - 1) {
-            playbackIndex++;
-            updatePlaybackUI();
-            
-            const nextState = playbackHistory[playbackIndex];
-            if (nextState && nextState.isCheckpoint && playbackIndex < playbackHistory.length - 1) {
-              clearInterval(playbackInterval);
-              playbackInterval = null;
-              isPlaybackPlaying = false;
-              if (playBtn) playBtn.textContent = '⏯️ Play';
-              
-              const statusLabel = document.getElementById('playbackStatusLabel');
-              if (statusLabel) {
-                statusLabel.textContent = `Stopped: ${nextState.reason} (Press Play to continue)`;
-              }
-            }
-          } else {
-            togglePlaybackPlay();
-          }
-        }, 80);
-      }
-    }
-
-    function restorePlaybackVersion() {
-      if (playbackIndex < 0 || playbackIndex >= playbackHistory.length) return;
-      const chosenCode = playbackHistory[playbackIndex].code;
-      if (isPlaybackPlaying) togglePlaybackPlay();
-      exitPlaybackMode(true, chosenCode);
-    }
-
-    function exitPlaybackMode(keepChanges = false, codeToKeep = null) {
-      if (isPlaybackPlaying) {
-        clearInterval(playbackInterval);
-        playbackInterval = null;
-        isPlaybackPlaying = false;
-        const playBtn = document.getElementById('pbPlay');
-        if (playBtn) playBtn.textContent = '⏯️ Play';
-      }
-
-      const pbBar = document.getElementById('playbackControlsBar');
-      if (pbBar) pbBar.style.display = 'none';
-
-      activityPlaybackActive = false;
-      editor.readOnly = false;
-      editor.classList.remove('playback-readonly');
-
-      if (window.blocklyWorkspace) {
-        const blocklyDiv = document.getElementById('blocklyDiv');
-        if (blocklyDiv) {
-          blocklyDiv.style.pointerEvents = 'auto';
-          blocklyDiv.style.opacity = '1';
-        }
-      }
-
-      if (keepChanges) {
-        const finalCode = codeToKeep !== null ? codeToKeep : editor.value;
-        editor.value = finalCode;
-        hasUnsavedChanges = finalCode !== savedEditorCode;
-        recordPlaybackSnapshot('Restored Revision', true, 'save');
-      } else {
-        editor.value = originalCodeBeforePlayback;
-      }
-
-      updateLineNumbers();
-      analyseCodeAndUpdateMessage(true);
-      updateEditorActionButtons();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // Build instruction carousel (from pre-rendered DOM or fallback fragment fetch)
-      function initInstructionCarousel() {
-        const slides = getInstructionImages();
-        totalInstructionSlides = slides.length;
-        if (!totalInstructionSlides) return;
-
-        const dotsContainer = document.getElementById('carouselDots');
-        if (dotsContainer) {
-          dotsContainer.innerHTML = '';
-          for (let i = 0; i < totalInstructionSlides; i++) {
-            const dot = document.createElement('button');
-            dot.type = 'button';
-            dot.className = 'dot' + (i === 0 ? ' active' : '');
-            dot.setAttribute('aria-label', `Show screenshot ${i + 1}`);
-            dot.onclick = () => goToInstructionSlide(i);
-            dotsContainer.appendChild(dot);
+          const statusLabel = document.getElementById('playbackStatusLabel');
+          if (statusLabel) {
+            statusLabel.textContent = `Stopped: ${nextState.reason} (Press Play to continue)`;
           }
         }
-        currentInstructionSlide = 0;
-        updateInstructionCarousel();
-        scheduleInstructionAutoFade();
+      } else {
+        togglePlaybackPlay();
       }
+    }, 80);
+  }
+}
 
-      const track = document.getElementById('carouselTrack');
-      if (track && track.querySelector('.pythoncopy-hero-carousel')) {
+function restorePlaybackVersion() {
+  if (playbackIndex < 0 || playbackIndex >= playbackHistory.length) return;
+  const chosenCode = playbackHistory[playbackIndex].code;
+  if (isPlaybackPlaying) togglePlaybackPlay();
+  exitPlaybackMode(true, chosenCode);
+}
+
+function exitPlaybackMode(keepChanges = false, codeToKeep = null) {
+  if (isPlaybackPlaying) {
+    clearInterval(playbackInterval);
+    playbackInterval = null;
+    isPlaybackPlaying = false;
+    const playBtn = document.getElementById('pbPlay');
+    if (playBtn) playBtn.textContent = '⏯️ Play';
+  }
+
+  const pbBar = document.getElementById('playbackControlsBar');
+  if (pbBar) pbBar.style.display = 'none';
+
+  activityPlaybackActive = false;
+  editor.readOnly = false;
+  editor.classList.remove('playback-readonly');
+
+  if (window.blocklyWorkspace) {
+    const blocklyDiv = document.getElementById('blocklyDiv');
+    if (blocklyDiv) {
+      blocklyDiv.style.pointerEvents = 'auto';
+      blocklyDiv.style.opacity = '1';
+    }
+  }
+
+  if (keepChanges) {
+    const finalCode = codeToKeep !== null ? codeToKeep : editor.value;
+    editor.value = finalCode;
+    hasUnsavedChanges = finalCode !== savedEditorCode;
+    recordPlaybackSnapshot('Restored Revision', true, 'save');
+  } else {
+    editor.value = originalCodeBeforePlayback;
+  }
+
+  updateLineNumbers();
+  analyseCodeAndUpdateMessage(true);
+  updateEditorActionButtons();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Build instruction carousel (from pre-rendered DOM or fallback fragment fetch)
+  function initInstructionCarousel() {
+    const slides = getInstructionImages();
+    totalInstructionSlides = slides.length;
+    if (!totalInstructionSlides) return;
+
+    const dotsContainer = document.getElementById('carouselDots');
+    if (dotsContainer) {
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < totalInstructionSlides; i++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Show screenshot ${i + 1}`);
+        dot.onclick = () => goToInstructionSlide(i);
+        dotsContainer.appendChild(dot);
+      }
+    }
+    currentInstructionSlide = 0;
+    updateInstructionCarousel();
+    scheduleInstructionAutoFade();
+  }
+
+  const track = document.getElementById('carouselTrack');
+  if (track && track.querySelector('.pythoncopy-hero-carousel')) {
+    initInstructionCarousel();
+  } else if (track) {
+    fetch('pythoncopycarousel.fragment')
+      .then(response => response.text())
+      .then(html => {
+        track.innerHTML = html;
         initInstructionCarousel();
-      } else if (track) {
-        fetch('pythoncopycarousel.fragment')
-          .then(response => response.text())
-          .then(html => {
-            track.innerHTML = html;
-            initInstructionCarousel();
-          })
-          .catch(err => console.error('Error loading instruction carousel:', err));
-      }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const isBlocksTab = urlParams.has('blocks');
-
-      // Set initial theme based on URL query parameter if present
-      const themeParam = urlParams.get('theme');
-      if (themeParam === 'dark') {
-        document.getElementById('dark-mode').checked = true;
-        document.getElementById('light-mode').checked = false;
-      } else if (themeParam === 'light') {
-        document.getElementById('dark-mode').checked = false;
-        document.getElementById('light-mode').checked = true;
-      }
-      applyTheme();
-
-      function getInitialBlocksCode(params) {
-        if (params.has('blank')) return '';
-
-        const syncKey = params.get('blocksKey');
-        if (syncKey) {
-          try {
-            const keyedCode = localStorage.getItem(syncKey);
-            if (keyedCode !== null) return keyedCode;
-          } catch (err) {
-            console.warn('Could not read keyed blocks code:', err);
-          }
-        }
-
-        try {
-          const savedCode = localStorage.getItem('blockly_sync_code');
-          if (savedCode !== null) return savedCode;
-        } catch (err) {
-          console.warn('Could not read saved blocks code:', err);
-        }
-
-        try {
-          if (window.opener && !window.opener.closed) {
-            const openerEditor = window.opener.document.getElementById('editor');
-            if (openerEditor) return openerEditor.value;
-          }
-        } catch (err) {
-          console.warn('Could not read code from opener tab:', err);
-        }
-
-        return '';
-      }
-
-      const url = urlParams.get('url');
-      const codeParam = urlParams.get('code');
-      if (codeParam) {
-        try {
-          const binary = atob(codeParam);
-          const bytes = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-            bytes[i] = binary.charCodeAt(i);
-          }
-          let decodedCode = new TextDecoder().decode(bytes);
-
-          // Dynamically wrap challenge instructions comment on load to 35 characters for optimal readability
-          if (decodedCode.trim().startsWith('# Challenge:') && decodedCode.includes('# instructions:')) {
-            const maxLength = 35;
-            const lines = decodedCode.split('\n');
-            const instIndex = lines.findIndex(l => l.toLowerCase().startsWith('# instructions:'));
-            if (instIndex !== -1) {
-              const wrapped = wrapPythonComment(lines[instIndex], maxLength);
-              lines[instIndex] = wrapped;
-              decodedCode = lines.join('\n');
-            }
-          }
-
-          if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
-            exitPlaybackMode(true);
-          }
-          currentURL = '';
-          currentQuizMetadata = {
-            testCases: [],
-            nextUrl: null,
-            isEnd: false,
-            courseTitle: "Python Algorithms",
-            links: []
-          };
-          const parsedRes = parseAndStripMetadata(decodedCode);
-          currentQuizMetadata = parsedRes.metadata;
-          loadedMetadataLinks = currentQuizMetadata.links || [];
-          const strippedDecodedCode = parsedRes.strippedCode;
-
-          editor.value = strippedDecodedCode;
-          markCurrentEditorCodeSaved(strippedDecodedCode);
-          displayCode.textContent = '';
-          document.getElementById('urlInput').value = '';
-          document.getElementById('workspace').style.display = 'grid';
-          document.getElementById('inputContainer').style.display = 'none';
-          document.getElementById('starterPanel').style.display = 'none';
-          document.getElementById('instructionsPanel').style.display = 'none';
-
-          updateLineNumbers();
-          analyseCodeAndUpdateMessage();
-          clearRunner();
-          setRunnerStatus('Code loaded from manual.');
-          updateBlocksButtonState();
-          updatePuzzleButtonVisibility();
-          playbackHistory = [];
-          if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
-            window.blocklyWorkspace.clearUndo();
-          }
-          recordPlaybackSnapshot('Code Loaded', true, 'save');
-          editor.focus();
-        } catch (err) {
-          console.error('Failed to load code parameter:', err);
-          setRunnerStatus('Error loading code from URL.');
-        }
-      } else if (url) {
-        document.getElementById('urlInput').value = url;
-        document.getElementById('inputContainer').style.display = 'none';
-        document.getElementById('starterPanel').style.display = 'none';
-        document.getElementById('instructionsPanel').style.display = 'none';
-        fetchCode(url);
-      } else if (isBlocksTab) {
-        document.getElementById('workspace').style.display = 'grid';
-        document.getElementById('inputContainer').style.display = 'none';
-        document.getElementById('starterPanel').style.display = 'none';
-        document.getElementById('instructionsPanel').style.display = 'none';
-
-        const brandBadgeContainer = document.querySelector('.brand');
-        if (brandBadgeContainer) {
-          brandBadgeContainer.querySelectorAll('.mode-badge').forEach(el => el.style.display = 'none');
-        }
-        showBlocksEditorToolbar();
-
-        const initialCode = getInitialBlocksCode(urlParams);
-        editor.value = initialCode;
-        markCurrentEditorCodeSaved(initialCode);
-
-        // Force initialize Blocks
-        setAppMode('blocks');
-        updatePuzzleButtonVisibility();
-      } else if (urlParams.has('blank') || isMinimalMode) {
-        startBlankFile();
-      }
-
-      document.querySelectorAll('.starter-button').forEach(button => {
-        button.addEventListener('click', function () {
-          if (button.tagName === 'A' && button.getAttribute('href')) {
-            return;
-          }
-          if (button.dataset.action === 'blank') {
-            startBlankFile();
-            return;
-          }
-          if (button.dataset.action === 'blocks') {
-            startBlankBlocksFile();
-            return;
-          }
-          if (button.dataset.action === 'flowchart') {
-            const isDark = document.getElementById('dark-mode').checked;
-            const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
-            const starterUrl = button.dataset.url;
-            const query = starterUrl
-              ? `?url=${encodeURIComponent(starterUrl)}&${themeSuffix}`
-              : `?${themeSuffix}`;
-            navigateWithActivityReminder(`python2flow.html${query}`);
-            return;
-          }
-          if (button.dataset.action === 'parsons') {
-            const isDark = document.getElementById('dark-mode').checked;
-            const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
-            const starterUrl = button.dataset.url;
-            const query = starterUrl
-              ? `?url=${encodeURIComponent(starterUrl)}&${themeSuffix}`
-              : `?${themeSuffix}`;
-            navigateWithActivityReminder(`reorder.html${query}`);
-            return;
-          }
-          if (button.dataset.action === 'create-list') {
-            const isDark = document.getElementById('dark-mode').checked;
-            const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
-            navigateWithActivityReminder(`to_list.html?${themeSuffix}`);
-            return;
-          }
-          if (button.dataset.action === 'phone-editor') {
-            openCurrentCodeInMobileEditor();
-            return;
-          }
-
-          const starterUrl = button.dataset.url;
-          document.getElementById('urlInput').value = starterUrl;
-          document.getElementById('inputContainer').style.display = 'none';
-          document.getElementById('starterPanel').style.display = 'none';
-          document.getElementById('instructionsPanel').style.display = 'none';
-          const newURL = `${window.location.pathname}?url=${encodeURIComponent(starterUrl)}`;
-          window.history.pushState({}, '', newURL);
-          fetchCode(starterUrl);
-        });
-      });
-
-      document.getElementById('light-mode').addEventListener('change', function () {
-        applyTheme();
-      });
-
-      document.getElementById('dark-mode').addEventListener('change', function () {
-        applyTheme();
-      });
-
-
-
-      document.getElementById('font-size').addEventListener('input', function () {
-        applyCodeFontSize(this.value);
-      });
-
-      document.getElementById('copyButton').addEventListener('click', async function () {
-        const code = editor.value;
-        try {
-          await copyTextToClipboard(code);
-          showCopyButtonCopied();
-          setRunnerStatus('Code copied to clipboard.');
-        } catch (err) {
-          setRunnerStatus('Copy failed. Select the code and copy manually.');
-          alert('Copy failed. Please select the code and copy manually.');
-        }
-      });
-
-      const shareLinkBtn = document.getElementById('shareLinkButton');
-      if (shareLinkBtn) {
-        shareLinkBtn.addEventListener('click', copyShareLink);
-      }
-
-      const flowchartBtn = document.getElementById('createFlowchartButton');
-      if (flowchartBtn) {
-        flowchartBtn.addEventListener('click', function () {
-          const codeText = editor.value;
-          let base64 = '';
-          try {
-            const utf8Bytes = new TextEncoder().encode(codeText);
-            let binary = '';
-            for (let i = 0; i < utf8Bytes.length; i++) {
-              binary += String.fromCharCode(utf8Bytes[i]);
-            }
-            base64 = btoa(binary);
-          } catch (err) {
-            console.error('Failed to encode code for flowchart:', err);
-            return;
-          }
-          const isDark = document.getElementById('dark-mode').checked;
-          const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
-          const targetUrl = `python2flow.html?code=${encodeURIComponent(base64)}${themeSuffix}`;
-          window.open(targetUrl, '_blank');
-        });
-      }
-
-      [undoEditorButton, redoEditorButton, revertEditorButton].forEach(button => {
-        if (!button) return;
-        button.addEventListener('mousedown', event => event.preventDefault());
-      });
-      if (undoEditorButton) {
-        undoEditorButton.addEventListener('click', () => runEditorHistoryCommand('undo'));
-      }
-      if (redoEditorButton) {
-        redoEditorButton.addEventListener('click', () => runEditorHistoryCommand('redo'));
-      }
-      if (revertEditorButton) {
-        revertEditorButton.addEventListener('click', revertEditorToSavedFile);
-      }
-      if (openPhoneEditorButton) {
-        openPhoneEditorButton.addEventListener('click', openCurrentCodeInMobileEditor);
-      }
-
-      document.getElementById('downloadActivityButton')?.addEventListener('click', () => {
-        if (activityReminderEnabled) {
-          showActivityReminder();
-        } else {
-          downloadActivityTSV();
-        }
-      });
-      document.addEventListener('visibilitychange', () => recordActivity(document.hidden ? 'page_hidden' : 'page_visible'));
-      // Capture timing before Tab/Enter handlers make programmatic edits.
-      editor.addEventListener('keydown', () => {
-        if (!activityPlaybackActive) recordActivity('editor_key');
-      }, true);
-
-      initializeActivityReminder();
-
-      // Playback event listeners
-      const pbBtn = document.getElementById('playbackButton');
-      if (pbBtn) {
-        pbBtn.addEventListener('click', startPlaybackMode);
-      }
-
-      const pbFirst = document.getElementById('pbFirst');
-      if (pbFirst) {
-        pbFirst.addEventListener('click', () => {
-          let targetIndex = -1;
-          for (let i = playbackIndex - 1; i >= 0; i--) {
-            if (playbackHistory[i].isCheckpoint) {
-              targetIndex = i;
-              break;
-            }
-          }
-          playbackIndex = targetIndex !== -1 ? targetIndex : 0;
-          updatePlaybackUI();
-        });
-      }
-
-      const pbPrev = document.getElementById('pbPrev');
-      if (pbPrev) {
-        pbPrev.addEventListener('click', () => {
-          if (playbackIndex > 0) {
-            playbackIndex--;
-            updatePlaybackUI();
-          }
-        });
-      }
-
-      const pbPlay = document.getElementById('pbPlay');
-      if (pbPlay) {
-        pbPlay.addEventListener('click', togglePlaybackPlay);
-      }
-
-      const pbNext = document.getElementById('pbNext');
-      if (pbNext) {
-        pbNext.addEventListener('click', () => {
-          if (playbackIndex < playbackHistory.length - 1) {
-            playbackIndex++;
-            updatePlaybackUI();
-          }
-        });
-      }
-
-      const pbLast = document.getElementById('pbLast');
-      if (pbLast) {
-        pbLast.addEventListener('click', () => {
-          let targetIndex = -1;
-          for (let i = playbackIndex + 1; i < playbackHistory.length; i++) {
-            if (playbackHistory[i].isCheckpoint) {
-              targetIndex = i;
-              break;
-            }
-          }
-          playbackIndex = targetIndex !== -1 ? targetIndex : playbackHistory.length - 1;
-          updatePlaybackUI();
-        });
-      }
-
-      const timeline = document.getElementById('playbackTimeline');
-      if (timeline) {
-        timeline.addEventListener('input', (e) => {
-          playbackIndex = parseInt(e.target.value, 10);
-          updatePlaybackUI();
-        });
-      }
-
-      const pbRestore = document.getElementById('pbRestore');
-      if (pbRestore) {
-        pbRestore.addEventListener('click', restorePlaybackVersion);
-      }
-
-      const pbClose = document.getElementById('pbClose');
-      if (pbClose) {
-        pbClose.addEventListener('click', () => exitPlaybackMode(false));
-      }
-
-
-      const blocklyRunBtn = document.getElementById('blocklyRunButton');
-      if (blocklyRunBtn) {
-        blocklyRunBtn.addEventListener('click', () => {
-          if (typeof getWorkspacePythonCode === 'function') {
-            editor.value = getWorkspacePythonCode();
-            updateBlocksCodePreview(editor.value);
-          }
-          runCurrentCode({ preserveBlocksMode: true });
-        });
-      }
-
-      const copyBlocksCodeBtn = document.getElementById('copyBlocksCodeButton');
-      if (copyBlocksCodeBtn) {
-        copyBlocksCodeBtn.addEventListener('click', async () => {
-          const code = getCurrentEditorCode();
-          try {
-            await copyTextToClipboard(code);
-            setRunnerStatus('Generated Python copied to clipboard.');
-          } catch (err) {
-            setRunnerStatus('Copy failed. Select the generated Python and copy manually.');
-          }
-        });
-      }
-
-      if (blocksPreviewTextColors) {
-        blocksPreviewTextColors.addEventListener('change', () => {
-          applyBlocksPreviewColorMode();
-        });
-      }
-
-      if (blocksPreviewBlockColors) {
-        blocksPreviewBlockColors.addEventListener('change', () => {
-          applyBlocksPreviewColorMode();
-        });
-      }
-
-      const tryBlocksBtn = document.getElementById('tryBlocksButton');
-      if (tryBlocksBtn) {
-        tryBlocksBtn.addEventListener('click', () => {
-          startBlankBlocksFile();
-        });
-      }
-
-      const applyBlocksBtn = document.getElementById('applyBlocksButton');
-      if (applyBlocksBtn) {
-        applyBlocksBtn.addEventListener('click', () => {
-          const code = getWorkspacePythonCode();
-          if (window.opener && !window.opener.closed) {
-            window.opener.updateCodeFromChild(code);
-            window.opener.focus();
-            window.close();
-            return;
-          }
-          editor.value = code;
-          hasUnsavedChanges = editor.value !== savedEditorCode;
-          updateEditorActionButtons();
-          recordPlaybackSnapshot('Apply Blocks', true, 'save');
-          setAppMode('edit');
-        });
-      }
-
-      function getCurrentEditorCode() {
-        if (currentAppMode === 'blocks' && typeof getWorkspacePythonCode === 'function') {
-          const code = getWorkspacePythonCode();
-          editor.value = code;
-          updateBlocksCodePreview(code);
-          return code;
-        }
-        return editor.value;
-      }
-
-      function isLikelyMobilePhone() {
-        const shortSide = Math.min(window.innerWidth, window.innerHeight);
-        const longSide = Math.max(window.innerWidth, window.innerHeight);
-        const coarsePointer = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
-        return coarsePointer && shortSide <= 600 && longSide <= 950;
-      }
-
-      function openCurrentCodeInMobileEditor() {
-        const code = getCurrentEditorCode();
-        localStorage.setItem('pymobileDraft', code);
-        localStorage.setItem('pymobileTheme', document.getElementById('dark-mode').checked ? 'dark' : 'light');
-        navigateWithActivityReminder('pythonmobile.html');
-      }
-
-      function showMobilePhoneEditorOffer() {
-        const params = new URLSearchParams(window.location.search);
-        if (params.has('desktop') || params.has('nomobile')) return;
-        if (!isLikelyMobilePhone()) return;
-        if (sessionStorage.getItem('pythoncopyMobileOfferDismissed') === '1') return;
-        if (document.getElementById('mobileEditorOffer')) return;
-
-        const code = getCurrentEditorCode();
-        const imports = extractImports(code);
-        const hasDesktopOnlyMode = currentAppMode === 'blocks' || imports.includes('turtle');
-        const offer = document.createElement('div');
-        offer.id = 'mobileEditorOffer';
-        offer.setAttribute('role', 'dialog');
-        offer.setAttribute('aria-label', 'Open mobile editor');
-        offer.style.cssText = [
-          'position:fixed',
-          'left:12px',
-          'right:12px',
-          'bottom:12px',
-          'z-index:9999',
-          'display:flex',
-          'gap:10px',
-          'align-items:center',
-          'padding:12px',
-          'border-radius:10px',
-          'background:#111827',
-          'color:#f9fafb',
-          'box-shadow:0 12px 32px rgba(0,0,0,0.28)',
-          'font:14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif'
-        ].join(';');
-
-        const message = document.createElement('div');
-        message.style.cssText = 'flex:1;min-width:0;line-height:1.35';
-        message.textContent = hasDesktopOnlyMode
-          ? 'Phone detected. Open text code in PyMobile? Turtle, Blocks, and Trace stay here.'
-          : 'Phone detected. Open this code in PyMobile?';
-
-        const openButton = document.createElement('button');
-        openButton.type = 'button';
-        openButton.textContent = 'Open';
-        openButton.style.cssText = 'border:0;border-radius:8px;background:#10b981;color:white;font-weight:700;padding:10px 12px';
-        openButton.addEventListener('click', openCurrentCodeInMobileEditor);
-
-        const stayButton = document.createElement('button');
-        stayButton.type = 'button';
-        stayButton.textContent = 'Stay';
-        stayButton.style.cssText = 'border:1px solid rgba(255,255,255,0.28);border-radius:8px;background:transparent;color:white;font-weight:700;padding:10px 12px';
-        stayButton.addEventListener('click', () => {
-          sessionStorage.setItem('pythoncopyMobileOfferDismissed', '1');
-          offer.remove();
-        });
-
-        offer.append(message, openButton, stayButton);
-        document.body.appendChild(offer);
-      }
-
-      function loadCodeIntoCurrentEditor(code) {
-        if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
-          exitPlaybackMode(true);
-        }
-        currentURL = '';
-        if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
-          if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(code)) {
-            setRunnerStatus('This file contains Python code that cannot be converted to blocks.');
-            alert('This file contains Python code that cannot be converted to blocks. Please upload a simpler Blocks-compatible Python file.');
-            return;
-          }
-
-          const previousCode = editor.value;
-          const previousBlocksDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-          isUpdatingBlocklyFromText = true;
-          if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
-          try {
-            const converted = convertPythonToWorkspace(code, blocklyWorkspace);
-            const hasCodeLines = code.split('\n').some(line => {
-              const trimmed = line.trim();
-              return trimmed && !trimmed.startsWith('#') && !trimmed.startsWith('import ') && !trimmed.startsWith('from ');
-            });
-
-            if (!converted && hasCodeLines) {
-              blocklyWorkspace.clear();
-              Blockly.Xml.domToWorkspace(previousBlocksDom, blocklyWorkspace);
-              editor.value = previousCode;
-              setRunnerStatus('Upload cancelled: this file could not be converted to blocks.');
-              alert('This file could not be converted into Blocks. Your current Blocks file was left unchanged.');
-              return;
-            }
-
-            editor.value = code;
-            lastGeneratedBlocklyPython = getWorkspacePythonCode();
-            resizeBlocklyWorkspaceSoon();
-          } catch (ex) {
-            console.error("Error parsing uploaded code to blocks:", ex);
-            blocklyWorkspace.clear();
-            Blockly.Xml.domToWorkspace(previousBlocksDom, blocklyWorkspace);
-            editor.value = previousCode;
-            setRunnerStatus('Upload cancelled: this file could not be converted to blocks.');
-            alert('This file could not be converted into Blocks. Your current Blocks file was left unchanged.');
-            return;
-          } finally {
-            if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
-            isUpdatingBlocklyFromText = false;
-          }
-        } else {
-          editor.value = code;
-        }
-
-        markCurrentEditorCodeSaved(code);
-        updateLineNumbers();
-        analyseCodeAndUpdateMessage();
-        clearRunner();
-        setRunnerStatus('File loaded successfully.');
-        autoPreviewFirstLink();
-        updateBlocksButtonState();
-        updatePuzzleButtonVisibility();
-        playbackHistory = [];
-        if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
-          window.blocklyWorkspace.clearUndo();
-        }
-        recordPlaybackSnapshot('Load File', true, 'save');
-      }
-
-      function downloadBlocksFile() {
-        if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
-
-        const xmlDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        let xmlText = Blockly.Xml.domToPrettyText
-          ? Blockly.Xml.domToPrettyText(xmlDom)
-          : Blockly.Xml.domToText(xmlDom);
-        if (!xmlText || !xmlText.trim()) {
-          xmlText = new XMLSerializer().serializeToString(xmlDom);
-        }
-        if (!xmlText || !xmlText.trim()) {
-          setRunnerStatus('No Blocks data was available to download.');
-          return;
-        }
-        downloadText(xmlText, 'blocks.blocks', 'application/xml');
-        markCurrentEditorCodeSaved(getCurrentEditorCode());
-        recordPlaybackSnapshot('Save Blocks', true, 'save');
-      }
-
-      function uploadBlocksFile(xmlText) {
-        if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
-
-        if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
-          exitPlaybackMode(true);
-        }
-        currentURL = '';
-
-        const previousDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
-        try {
-          const xmlDom = parseBlocklyXmlText(xmlText);
-          blocklyWorkspace.clear();
-          Blockly.Xml.domToWorkspace(xmlDom, blocklyWorkspace);
-          resizeBlocklyWorkspaceSoon();
-          editor.value = getWorkspacePythonCode();
-          markCurrentEditorCodeSaved(editor.value);
-          updateLineNumbers();
-          analyseCodeAndUpdateMessage();
-          clearRunner();
-          setRunnerStatus('Blocks file loaded successfully.');
-          updatePuzzleButtonVisibility();
-          playbackHistory = [];
-          if (blocklyWorkspace && typeof blocklyWorkspace.clearUndo === 'function') {
-            blocklyWorkspace.clearUndo();
-          }
-          recordPlaybackSnapshot('Load Blocks', true, 'save');
-        } catch (err) {
-          console.error('Error loading Blocks file:', err);
-          blocklyWorkspace.clear();
-          Blockly.Xml.domToWorkspace(previousDom, blocklyWorkspace);
-          resizeBlocklyWorkspaceSoon();
-          alert('This Blocks file could not be loaded. Please choose a valid .blocks or .xml file.');
-          setRunnerStatus('Blocks upload failed.');
-        } finally {
-          if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
-        }
-      }
-
-      function parseBlocklyXmlText(xmlText) {
-        return window.parseBlocklyXmlText(xmlText);
-      }
-
-      const blankFileBtn = document.getElementById('blankFileButton');
-      if (blankFileBtn) {
-        blankFileBtn.addEventListener('click', startBlankFile);
-      }
-
-      document.getElementById('copyForDocsButton').addEventListener('click', copyForDocs);
-
-      function openUploadPicker() {
-        document.getElementById('uploadPyInput').click();
-      }
-
-      document.getElementById('uploadPyButton').addEventListener('click', openUploadPicker);
-
-      const uploadBlocksInput = document.getElementById('uploadBlocksInput');
-      const blocksUploadFileBtn = document.getElementById('blocksUploadFileButton');
-      if (blocksUploadFileBtn && uploadBlocksInput) {
-        blocksUploadFileBtn.addEventListener('click', () => uploadBlocksInput.click());
-      }
-
-      if (uploadBlocksInput) {
-        uploadBlocksInput.addEventListener('change', function (e) {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = function (event) {
-            incrementPasteCounter();
-            uploadBlocksFile(event.target.result);
-          };
-          reader.readAsText(file);
-          e.target.value = '';
-        });
-      }
-
-      document.getElementById('uploadPyInput').addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          incrementPasteCounter();
-          loadCodeIntoCurrentEditor(event.target.result);
-        };
-        reader.readAsText(file);
-        e.target.value = '';
-      });
-
-      function downloadCurrentPy() {
-        const code = getCurrentEditorCode();
-        markCurrentEditorCodeSaved(code);
-        downloadText(code, 'code.py', 'text/x-python');
-        recordPlaybackSnapshot('Save File (py)', true, 'save');
-      }
-
-      function downloadCurrentTxt() {
-        const code = getCurrentEditorCode();
-        markCurrentEditorCodeSaved(code);
-        downloadText(code, 'code.txt', 'text/plain');
-        recordPlaybackSnapshot('Save File (txt)', true, 'save');
-      }
-
-      document.getElementById('downloadPyButton').addEventListener('click', downloadCurrentPy);
-      document.getElementById('downloadTxtButton').addEventListener('click', downloadCurrentTxt);
-
-      const blocksDownloadFileBtn = document.getElementById('blocksDownloadFileButton');
-      if (blocksDownloadFileBtn) {
-        blocksDownloadFileBtn.addEventListener('click', downloadBlocksFile);
-      }
-
-      fullscreenButton.addEventListener('click', function () {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(err => {
-            alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-          });
-        } else {
-          document.exitFullscreen();
-        }
-      });
-
-      const distractionFreeButton = document.getElementById('distractionFreeButton');
-      if (distractionFreeButton) {
-        distractionFreeButton.addEventListener('click', toggleDistractionFreeMode);
-      }
-
-      document.addEventListener('fullscreenchange', function () {
-        if (fullscreenButton) {
-          if (document.fullscreenElement) {
-            fullscreenButton.classList.add('active');
-            fullscreenButton.title = 'Exit Full Screen';
-            fullscreenButton.setAttribute('aria-label', 'Exit Full Screen');
-          } else {
-            fullscreenButton.classList.remove('active');
-            fullscreenButton.title = 'Full Screen';
-            fullscreenButton.setAttribute('aria-label', 'Full Screen');
-          }
-        }
-      });
-
-      openNewTabButton.addEventListener('click', function () {
-        window.open(window.location.href, '_blank', 'noopener');
-      });
-
-      document.getElementById('makePuzzleButton').addEventListener('click', function () {
-        const codeText = editor.value;
-        if (codeText.trim()) {
-          let base64 = '';
-          try {
-            base64 = btoa(unescape(encodeURIComponent(codeText)));
-          } catch (err) {
-            console.error('Failed to encode code for puzzle:', err);
-            return;
-          }
-          const puzzleURL = `reorder.html?data=${encodeURIComponent(base64)}`;
-          window.open(puzzleURL, '_blank');
-        } else {
-          alert('Please enter some code to create a puzzle.');
-        }
-      });
-
-      // Teacher Mode binds
-      document.getElementById('runButton').addEventListener('click', runCurrentCode);
-      setTimeout(showMobilePhoneEditorOffer, 1200);
-      const quizBtn = document.getElementById('quizButton');
-      if (quizBtn) {
-        quizBtn.addEventListener('click', runQuizTests);
-      }
-      const creativeNextBtn = document.getElementById('creativeNextButton');
-      if (creativeNextBtn) {
-        creativeNextBtn.addEventListener('click', () => {
-          if (!hasRunCurrentCode) {
-            alert("You must run your code at least once before proceeding to test it.");
-            return;
-          }
-          if (currentQuizMetadata.nextUrl) {
-            navigateWithActivityReminder(window.location.pathname + '?url=' + encodeURIComponent(currentQuizMetadata.nextUrl));
-          }
-        });
-      }
-      const creativeEndBtn = document.getElementById('creativeEndButton');
-      if (creativeEndBtn) {
-        creativeEndBtn.addEventListener('click', () => {
-          if (!hasRunCurrentCode) {
-            alert("You must run your code at least once before completing this course to test it.");
-            return;
-          }
-          if (currentQuizMetadata.isEnd) {
-            renderQuizResults([], 0, 0, null, true, currentQuizMetadata.courseTitle);
-            const runnerLayout = document.getElementById('runnerLayout');
-            if (runnerLayout && runnerLayout.classList.contains('collapsed')) {
-              toggleRunner();
-            }
-          }
-        });
-      }
-      document.getElementById('consoleSubmitButton').addEventListener('click', submitConsoleInput);
-
-
-      // Display Mode binds
-      document.getElementById('playPauseButton').addEventListener('click', displayPlayPause);
-      document.getElementById('stepBackButton').addEventListener('click', displayStepBack);
-      document.getElementById('stepButton').addEventListener('click', displayStep);
-      document.getElementById('resetButton').addEventListener('click', displayReset);
-
-      document.getElementById('consoleInputField').addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          submitConsoleInput();
-        }
-      });
-
-      editor.addEventListener('input', (event) => {
-        hasRunCurrentCode = false;
-        hasUnsavedChanges = editor.value !== savedEditorCode;
-        const highlightLayer = document.getElementById('highlightLayer');
-        if (highlightLayer) highlightLayer.innerHTML = '';
-        updateLineNumbers();
-        if (currentAppMode === 'edit' || currentAppMode === 'turtle') {
-          displayCode.textContent = editor.value;
-          Prism.highlightElement(displayCode);
-        }
-        analyseCodeAndUpdateMessage(true);
-        updateBlocksButtonState();
-        updateEditorActionButtons();
-        updatePuzzleButtonVisibility();
-        const reason = currentAppMode === 'blocks' ? 'Blocks Edit'
-          : event.inputType === 'insertFromPaste' ? 'Paste' : 'Typing';
-        recordPlaybackSnapshot(reason, reason === 'Paste', reason === 'Paste' ? 'paste' : '');
-        scheduleRecordHistoryDebounced('Typing');
-      });
-
-      editor.addEventListener('paste', () => {
-        hasRunCurrentCode = false;
-        incrementPasteCounter();
-        // The input event records the resulting code after the paste.
-      });
-
-      editor.addEventListener('keydown', (event) => {
-        handleEditorTabKey(event);
-        handleEditorEnterKey(event);
-      });
-      editor.addEventListener('scroll', syncLineNumberScroll);
-      displayEditor.addEventListener('scroll', syncLineNumberScroll);
-
-      // On desktop the divider between the editor and the instructions can be
-      // dragged left and right. It deliberately has no click/pop behaviour.
-      const workspace = document.getElementById('workspace');
-      const editorPanel = document.querySelector('.editor-panel');
-
-      let isResizingRunner = false;
-      let resizeStartX = 0;
-      let resizeStartWidth = 0;
-      let resizedThisGesture = false;
-
-      runnerToggle.addEventListener('pointerdown', (event) => {
-        if (event.button !== 0 || window.matchMedia('(max-width: 720px)').matches ||
-          runnerLayout.classList.contains('collapsed')) return;
-
-        isResizingRunner = true;
-        resizedThisGesture = false;
-        resizeStartX = event.clientX;
-        resizeStartWidth = editorPanel.getBoundingClientRect().width;
-        workspace.classList.add('pane-resizing');
-        runnerToggle.setPointerCapture(event.pointerId);
-      });
-
-      runnerToggle.addEventListener('pointermove', (event) => {
-        if (!isResizingRunner) return;
-
-        const delta = event.clientX - resizeStartX;
-        if (Math.abs(delta) > 3) resizedThisGesture = true;
-
-        const bounds = workspace.getBoundingClientRect();
-        const minEditorWidth = 420;
-        const minInstructionsWidth = 280;
-        const dividerWidth = 14;
-        const maxEditorWidth = Math.max(minEditorWidth, bounds.width - minInstructionsWidth - dividerWidth);
-        const nextWidth = Math.max(minEditorWidth, Math.min(maxEditorWidth, resizeStartWidth + delta));
-        workspace.style.setProperty('--editor-pane-width', `${Math.round(nextWidth)}px`);
-      });
-
-      const finishRunnerResize = (event) => {
-        if (!isResizingRunner) return;
-        isResizingRunner = false;
-        workspace.classList.remove('pane-resizing');
-
-        if (resizedThisGesture) {
-          workspace.classList.add('pane-resized');
-        }
-
-        if (runnerToggle.hasPointerCapture(event.pointerId)) {
-          runnerToggle.releasePointerCapture(event.pointerId);
-        }
-      };
-
-      runnerToggle.addEventListener('pointerup', finishRunnerResize);
-      runnerToggle.addEventListener('pointercancel', finishRunnerResize);
-
-      const terminalResizer = document.getElementById('terminalResizer');
-      const outputPanel = document.querySelector('.output-panel');
-      const savedTerminalHeight = Number(localStorage.getItem('pythonCopyTerminalHeight'));
-      if (Number.isFinite(savedTerminalHeight) && savedTerminalHeight >= 180) {
-        workspace.style.setProperty('--terminal-height', `${savedTerminalHeight}px`);
-      }
-
-      let isResizingTerminal = false;
-      let terminalStartY = 0;
-      let terminalStartHeight = 0;
-      let terminalMovedThisGesture = false;
-      let ignoreTerminalToggleClick = false;
-
-      terminalResizer.addEventListener('pointerdown', (event) => {
-        if (event.button !== 0 || !workspace.classList.contains('terminal-open')) return;
-        isResizingTerminal = true;
-        terminalMovedThisGesture = false;
-        terminalStartY = event.clientY;
-        terminalStartHeight = outputPanel.getBoundingClientRect().height;
-        terminalResizer.setPointerCapture(event.pointerId);
-        event.preventDefault();
-      });
-
-      terminalResizer.addEventListener('pointermove', (event) => {
-        if (!isResizingTerminal) return;
-        if (Math.abs(event.clientY - terminalStartY) > 3) terminalMovedThisGesture = true;
-        const maxHeight = Math.max(180, window.innerHeight * 0.75);
-        const nextHeight = Math.max(180, Math.min(maxHeight, terminalStartHeight - (event.clientY - terminalStartY)));
-        workspace.style.setProperty('--terminal-height', `${Math.round(nextHeight)}px`);
-      });
-
-      const finishTerminalResize = (event) => {
-        if (!isResizingTerminal) return;
-        isResizingTerminal = false;
-        const height = Math.round(outputPanel.getBoundingClientRect().height);
-        localStorage.setItem('pythonCopyTerminalHeight', String(height));
-        if (terminalMovedThisGesture) {
-          ignoreTerminalToggleClick = true;
-          window.setTimeout(() => { ignoreTerminalToggleClick = false; }, 0);
-        }
-        if (terminalResizer.hasPointerCapture(event.pointerId)) {
-          terminalResizer.releasePointerCapture(event.pointerId);
-        }
-      };
-
-      terminalResizer.addEventListener('pointerup', finishTerminalResize);
-      terminalResizer.addEventListener('pointercancel', finishTerminalResize);
-      terminalResizer.addEventListener('click', (event) => {
-        if (ignoreTerminalToggleClick) {
-          event.preventDefault();
-          ignoreTerminalToggleClick = false;
-          return;
-        }
-        if (workspace.classList.contains('terminal-open')) hideTerminal();
-        else showTerminal();
-      });
-      window.addEventListener('resize', () => updateRunnerToggleLabel());
-
-      document.getElementById('toggleGlobalPreviewBtn').addEventListener('click', () => {
-        const container = document.getElementById('webPreviewContainer');
-        const isCurrentlyOpen = container.style.display === 'block';
-        if (isCurrentlyOpen) {
-          closeWebPreview();
-        } else {
-          const code = editor.value;
-          const links = extractLinksFromCode(code);
-          if (links.length > 0) {
-            const iframe = document.getElementById('webPreviewIframe');
-            const lastUrl = iframe.dataset.lastUrl || links[0].url;
-            previewWebLink(lastUrl);
-          }
-        }
-      });
-      document.getElementById('openNewTabFromPreview').addEventListener('click', () => {
-        const iframe = document.getElementById('webPreviewIframe');
-        if (iframe && iframe.src) {
-          window.open(iframe.src, '_blank');
-        }
-      });
-      editor.addEventListener('focus', () => {
-        if (currentAppMode === 'edit') {
-          const highlightLayer = document.getElementById('highlightLayer');
-          if (highlightLayer) highlightLayer.innerHTML = '';
-        }
-      });
-
-      updateFullscreenAvailability();
-      if (isMinimalMode) {
-        setDistractionFreeMode(true);
-      }
-      updateLineNumbers();
-      applyCodeFontSize(document.getElementById('font-size').value);
-      updateRunnerToggleLabel();
-      updateAppMode();
-      updateBlocksButtonState();
-      updateEditorActionButtons();
-      updatePasteCounter();
-      updatePuzzleButtonVisibility();
-      initializeDailyChallenge();
-
-      // Record initial load state
-      recordPlaybackSnapshot('Initial Load', true, 'save');
-
-      window.addEventListener('beforeunload', function (e) {
-        if (hasUnsavedChanges || shouldRemindActivityDownload()) {
-          e.preventDefault();
-          e.returnValue = '';
-        }
-      });
-    });
-
-    function updateFullscreenAvailability() {
-      const isEmbedded = window.self !== window.top;
-      openNewTabButton.style.display = isEmbedded ? 'inline-block' : 'none';
-      if (document.fullscreenEnabled) return;
-      fullscreenButton.style.display = 'none';
-    }
-
-    function isDistractionFreeActive() {
-      if (typeof document === 'undefined' || !document.documentElement) return false;
-      return document.documentElement.classList.contains('distraction-free-mode') ||
-             (document.body && document.body.classList.contains('distraction-free-mode')) ||
-             document.documentElement.classList.contains('minimal-mode') ||
-             (document.body && document.body.classList.contains('minimal-mode'));
-    }
-
-    function setDistractionFreeMode(enable) {
-      if (typeof document === 'undefined' || !document.documentElement) return;
-
-      // Distraction-free mode applies when in edit mode
-      if (enable && currentAppMode !== 'edit') {
-        setAppMode('edit');
-      }
-
-      const docEl = document.documentElement;
-      const bodyEl = document.body;
-      const btn = document.getElementById('distractionFreeButton');
-      const chevronPath = document.getElementById('distractionChevronPath');
-      const workspace = document.getElementById('workspace');
-
-      if (enable) {
-        docEl.classList.add('distraction-free-mode');
-        if (bodyEl) bodyEl.classList.add('distraction-free-mode');
-
-        if (workspace && (workspace.style.display === 'none' || (window.getComputedStyle && window.getComputedStyle(workspace).display === 'none'))) {
-          workspace.style.display = 'grid';
-          const starter = document.getElementById('starterPanel');
-          if (starter) starter.style.display = 'none';
-          const instr = document.getElementById('instructionsPanel');
-          if (instr) instr.style.display = 'none';
-        }
-
-        if (chevronPath) {
-          // Chevron points DOWN (V) to signify "expand / enable the rest of the buttons"
-          chevronPath.setAttribute('d', 'm6 9 6 6 6-6');
-        }
-        if (btn) {
-          btn.title = 'Show all buttons (Exit Distraction-Free)';
-          btn.setAttribute('aria-label', 'Show all buttons (Exit Distraction-Free)');
-          btn.setAttribute('aria-expanded', 'false');
-        }
-      } else {
-        docEl.classList.remove('distraction-free-mode', 'minimal-mode');
-        if (bodyEl) bodyEl.classList.remove('distraction-free-mode', 'minimal-mode');
-
-        const workspaceToolbar = document.querySelector('.workspace-toolbar');
-        if (workspaceToolbar && currentAppMode !== 'blocks') {
-          workspaceToolbar.style.display = '';
-        }
-
-        if (chevronPath) {
-          // Chevron points UP (Λ) to signify "collapse into distraction-free mode"
-          chevronPath.setAttribute('d', 'm18 15-6-6-6 6');
-        }
-        if (btn) {
-          btn.title = 'Distraction-Free Mode (Hide header & toolbars)';
-          btn.setAttribute('aria-label', 'Toggle Distraction-Free Mode');
-          btn.setAttribute('aria-expanded', 'true');
-        }
-      }
-
-      window.dispatchEvent(new Event('resize'));
-    }
-
-    function toggleDistractionFreeMode() {
-      setDistractionFreeMode(!isDistractionFreeActive());
-    }
-
-    function applyCodeFontSize(sizeValue) {
-      const fontSize = Number(sizeValue) || 16;
-      const lineHeight = Math.round(fontSize * 1.5);
-
-      editor.style.fontSize = fontSize + 'px';
-      editor.style.lineHeight = lineHeight + 'px';
-      displayEditor.style.fontSize = fontSize + 'px';
-      displayEditor.style.lineHeight = lineHeight + 'px';
-      displayCode.style.fontSize = 'inherit';
-      displayCode.style.lineHeight = 'inherit';
-      lineNumbers.style.fontSize = fontSize + 'px';
-      lineNumbers.style.lineHeight = lineHeight + 'px';
-      updateLineNumbers();
-
-      if (blocklyWorkspace && typeof Blockly !== 'undefined') {
-        blocklyWorkspace.setScale(fontSize / 16);
-      }
-    }
-
-    function getCodeLineHeight() {
-      const activeView = currentAppMode === 'display' ? displayEditor : editor;
-      const parsed = parseFloat(window.getComputedStyle(activeView).lineHeight);
-      return Number.isFinite(parsed) ? parsed : 24;
-    }
-
-    function updateLineNumbers() {
-      // The textarea is transparent; keep its visible code layer in sync after
-      // URL loads and other programmatic edits that do not fire input events.
-      if (displayCode.textContent !== editor.value) {
-        displayCode.textContent = editor.value;
-        if (typeof Prism !== 'undefined') {
-          Prism.highlightElement(displayCode);
-        }
-      }
-      const lines = Math.max(1, editor.value.split('\n').length);
-      let nums = '';
-      for (let i = 1; i <= lines; i++) {
-        nums += i + (i < lines ? '\n' : '');
-      }
-      lineNumbers.textContent = nums;
-      syncLineNumberScroll();
-    }
-
-    function syncLineNumberScroll(event) {
-      if (event && event.target) {
-        const target = event.target;
-        if (target === editor) {
-          displayEditor.scrollTop = editor.scrollTop;
-          displayEditor.scrollLeft = editor.scrollLeft;
-        } else if (target === displayEditor) {
-          editor.scrollTop = displayEditor.scrollTop;
-          editor.scrollLeft = displayEditor.scrollLeft;
-        }
-      }
-      const scrollTop = currentAppMode === 'display' ? displayEditor.scrollTop : editor.scrollTop;
-      const scrollLeft = currentAppMode === 'display' ? displayEditor.scrollLeft : editor.scrollLeft;
-      lineNumbers.scrollTop = scrollTop;
-      highlightLayer.style.top = (14 - scrollTop) + 'px';
-      highlightLayer.style.left = (64 - scrollLeft) + 'px';
-    }
-
-    function toggleRunner() {
-      const collapsed = runnerLayout.classList.toggle('collapsed');
-      document.getElementById('workspace').classList.toggle('runner-collapsed', collapsed);
-      updateRunnerToggleLabel(collapsed);
-      runnerToggle.title = 'Drag left or right to resize the panes.';
-      resizeBlocklyWorkspaceSoon();
-    }
-
-    function ensureRunnerExpanded() {
-      if (runnerLayout.classList.contains('collapsed')) toggleRunner();
-    }
-
-    function ensureRunnerCollapsed() {
-      if (!runnerLayout.classList.contains('collapsed')) toggleRunner();
-    }
-
-    function updateRunnerToggleLabel() {
-      runnerToggle.textContent = '⋮';
-    }
-
-    function resizeBlocklyWorkspaceSoon() {
-      if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
-
-      Blockly.svgResize(blocklyWorkspace);
-      window.setTimeout(() => Blockly.svgResize(blocklyWorkspace), 100);
-      window.setTimeout(() => Blockly.svgResize(blocklyWorkspace), 300);
-    }
-
-    function downloadText(text, filename, mimeType) {
-      const blob = new Blob([text], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      downloadUrl(url, filename, true);
-    }
-
-    function downloadUrl(url, filename, shouldRevoke = false) {
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      if (shouldRevoke) {
-        window.setTimeout(() => URL.revokeObjectURL(url), 30000);
-      }
-    }
-
-    async function copyForDocs() {
-      const code = editor.value;
-      const isDarkMode = document.body.classList.contains('dark-theme');
-
-      // Define theme colors for the pasted document
-      const theme = isDarkMode ? {
-        bg: '#1e1e1e',
-        text: '#d4d4d4',
-        gutterBg: '#2d2d2d',
-        gutterText: '#858585',
-        comment: '#6a9955',
-        keyword: '#569cd6',
-        string: '#ce9178',
-        function: '#dcdcaa',
-        number: '#b5cea8',
-        operator: '#d4d4d4'
-      } : {
-        bg: '#ffffff',
-        text: '#333333',
-        gutterBg: '#f0f0f0',
-        gutterText: '#999999',
-        comment: '#008000',
-        keyword: '#0000ff',
-        string: '#a31515',
-        function: '#795e26',
-        number: '#098658',
-        operator: '#333333'
-      };
-
-      const lines = code.split('\n');
-      // Remove width: 100% to prevent "squeezing" in Google Docs
-      let tableHtml = `<div style="background-color: ${theme.bg}; padding: 15px; border-radius: 10px; border: 1px solid #ccc; display: inline-block; min-width: 100%;">`;
-      tableHtml += `<table cellspacing="0" cellpadding="0" style="border-collapse: collapse; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 11pt; background: ${theme.bg}; color: ${theme.text};">`;
-
-      for (let i = 0; i < lines.length; i++) {
-        const lineNum = i + 1;
-        const lineCode = lines[i] || ' ';
-
-        let highlighted = lineCode;
-        try {
-          highlighted = Prism.highlight(lineCode, Prism.languages.python || Prism.languages.javascript, 'python');
-        } catch (e) {
-          highlighted = lineCode.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
-        const styledCode = highlighted
-          .replace(/class="token comment"/g, `style="color: ${theme.comment}; font-style: italic;"`)
-          .replace(/class="token keyword"/g, `style="color: ${theme.keyword}; font-weight: bold;"`)
-          .replace(/class="token string"/g, `style="color: ${theme.string};"`)
-          .replace(/class="token function"/g, `style="color: ${theme.function};"`)
-          .replace(/class="token number"/g, `style="color: ${theme.number};"`)
-          .replace(/class="token (punctuation|operator)"/g, `style="color: ${theme.operator};"`);
-
-        // Using inline styles with zero margin/padding to prevent Word from adding massive paragraph spacing
-        // and avoiding literal newlines in the HTML string which Word interprets as empty paragraphs.
-        tableHtml += `<tr style="padding:0; margin:0; line-height:1.2;"><td width="60" style="width:60px; padding:0 10px 0 0; margin:0; background-color:${theme.gutterBg}; color:${theme.gutterText}; text-align:right; border-right:3px solid #007bff; vertical-align:top; font-size:10pt; font-weight:bold; white-space:nowrap; line-height:1.2;">${lineNum}</td><td style="padding:0 0 0 15px; margin:0; white-space:pre; vertical-align:top; line-height:1.2; font-family:'Consolas', 'Monaco', 'Courier New', monospace;">${styledCode}</td></tr>`;
-      }
-      tableHtml += '</table></div>';
-
+      })
+      .catch(err => console.error('Error loading instruction carousel:', err));
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const isBlocksTab = urlParams.has('blocks');
+
+  // Set initial theme based on URL query parameter if present
+  const themeParam = urlParams.get('theme');
+  if (themeParam === 'dark') {
+    document.getElementById('dark-mode').checked = true;
+    document.getElementById('light-mode').checked = false;
+  } else if (themeParam === 'light') {
+    document.getElementById('dark-mode').checked = false;
+    document.getElementById('light-mode').checked = true;
+  }
+  applyTheme();
+
+  function getInitialBlocksCode(params) {
+    if (params.has('blank')) return '';
+
+    const syncKey = params.get('blocksKey');
+    if (syncKey) {
       try {
-        if (navigator.clipboard && window.ClipboardItem) {
-          const blob = new Blob([tableHtml], { type: 'text/html' });
-          const plainBlob = new Blob([code], { type: 'text/plain' });
-          const data = [new ClipboardItem({
-            'text/html': blob,
-            'text/plain': plainBlob
-          })];
-          await navigator.clipboard.write(data);
-        } else {
-          // Fallback for browsers that don't support ClipboardItem
-          const div = document.createElement('div');
-          div.innerHTML = tableHtml;
-          div.style.position = 'fixed';
-          div.style.left = '-9999px';
-          document.body.appendChild(div);
-
-          const range = document.createRange();
-          range.selectNode(div);
-          window.getSelection().removeAllRanges();
-          window.getSelection().addRange(range);
-          document.execCommand('copy');
-          document.body.removeChild(div);
-        }
-
-        const originalText = runnerStatus.textContent;
-        setRunnerStatus('✓ Copied with line numbers!');
-        setTimeout(() => setRunnerStatus(originalText), 3000);
+        const keyedCode = localStorage.getItem(syncKey);
+        if (keyedCode !== null) return keyedCode;
       } catch (err) {
-        console.error('Failed to copy rich text:', err);
-        setRunnerStatus('Clipboard error. Try again?');
+        console.warn('Could not read keyed blocks code:', err);
       }
     }
 
-    async function copyTextToClipboard(text) {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        return;
-      }
-
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.setAttribute('readonly', '');
-      textArea.style.position = 'fixed';
-      textArea.style.top = '0';
-      textArea.style.left = '-9999px';
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      textArea.setSelectionRange(0, textArea.value.length);
-
-      try {
-        const copied = document.execCommand('copy');
-        if (!copied) throw new Error('Copy command failed.');
-      } finally {
-        document.body.removeChild(textArea);
-      }
+    try {
+      const savedCode = localStorage.getItem('blockly_sync_code');
+      if (savedCode !== null) return savedCode;
+    } catch (err) {
+      console.warn('Could not read saved blocks code:', err);
     }
 
-    function showCopyButtonCopied() {
-      const button = document.getElementById('copyButton');
-      button.textContent = 'Copied';
-      if (copyButtonTimeout) clearTimeout(copyButtonTimeout);
-      copyButtonTimeout = setTimeout(() => {
-        button.textContent = 'Copy';
-        copyButtonTimeout = null;
-      }, 5000);
+    try {
+      if (window.opener && !window.opener.closed) {
+        const openerEditor = window.opener.document.getElementById('editor');
+        if (openerEditor) return openerEditor.value;
+      }
+    } catch (err) {
+      console.warn('Could not read code from opener tab:', err);
     }
 
-    let shareButtonTimeout = null;
+    return '';
+  }
 
-    function updateShareLinkButton() {
-      const shareBtn = document.getElementById('shareLinkButton');
-      if (!shareBtn) return;
-      
-      const codeText = editor.value;
-      if (!codeText.trim()) {
-        shareBtn.disabled = true;
-        shareBtn.title = 'Write some code first to generate a link.';
-        return;
+  const url = urlParams.get('url');
+  const codeParam = urlParams.get('code');
+  if (codeParam) {
+    try {
+      const binary = atob(codeParam);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
       }
-      
-      let base64 = '';
-      try {
-        const utf8Bytes = new TextEncoder().encode(codeText);
-        let binary = '';
-        for (let i = 0; i < utf8Bytes.length; i++) {
-          binary += String.fromCharCode(utf8Bytes[i]);
-        }
-        base64 = btoa(binary);
-      } catch (err) {
-        console.error('Failed to encode code for share link:', err);
-      }
-      
-      const baseUrl = window.location.href.split('?')[0];
-      const shareUrl = `${baseUrl}?code=${encodeURIComponent(base64)}`;
-      
-      // Standard safe limit for URLs is 2048 characters
-      if (shareUrl.length > 2048) {
-        shareBtn.disabled = true;
-        shareBtn.title = `Code is too long to share via link (${shareUrl.length} / 2048 characters).`;
-      } else {
-        shareBtn.disabled = false;
-        shareBtn.title = 'Copy a shareable link that loads this code directly in Python Code Lab';
-      }
-    }
+      let decodedCode = new TextDecoder().decode(bytes);
 
-    function copyShareLink() {
-      const shareBtn = document.getElementById('shareLinkButton');
-      if (!shareBtn || shareBtn.disabled) return;
-      
-      const codeText = editor.value;
-      let base64 = '';
-      try {
-        const utf8Bytes = new TextEncoder().encode(codeText);
-        let binary = '';
-        for (let i = 0; i < utf8Bytes.length; i++) {
-          binary += String.fromCharCode(utf8Bytes[i]);
-        }
-        base64 = btoa(binary);
-      } catch (err) {
-        console.error('Failed to encode code for share link:', err);
-        return;
-      }
-      
-      const baseUrl = window.location.href.split('?')[0];
-      const isDark = document.getElementById('dark-mode').checked;
-      const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
-      const shareUrl = `${baseUrl}?code=${encodeURIComponent(base64)}${themeSuffix}`;
-      
-      copyTextToClipboard(shareUrl).then(() => {
-        shareBtn.textContent = 'Link Copied';
-        if (shareButtonTimeout) clearTimeout(shareButtonTimeout);
-        shareButtonTimeout = setTimeout(() => {
-          shareBtn.textContent = 'Copy Link';
-          shareButtonTimeout = null;
-        }, 3000);
-        setRunnerStatus('Share link copied to clipboard.');
-      }).catch(err => {
-        console.error('Could not copy share link:', err);
-        alert('Failed to copy link. Please manually copy the URL.');
-      });
-    }
-
-    function initializeDailyChallenge() {
-      fetch('challenges.json')
-        .then(response => response.json())
-        .then(challenges => {
-          if (!challenges || challenges.length === 0) return;
-
-          function getDayOfYear(date) {
-            const startOfYear = new Date(date.getFullYear(), 0, 1);
-            const difference = date - startOfYear;
-            const oneDay = 1000 * 60 * 60 * 24;
-            return Math.round(difference / oneDay) + 1;
-          }
-
-          const today = new Date();
-          const dayOfYear = getDayOfYear(today);
-          const index = (dayOfYear - 1) % challenges.length;
-          const challenge = challenges[index];
-
-          const pythonCode = `# Challenge: ${challenge.title} (${challenge.spice})\n${challenge.comment}\n`;
-          const utf8Bytes = new TextEncoder().encode(pythonCode);
-          let binary = '';
-          for (let i = 0; i < utf8Bytes.length; i++) {
-            binary += String.fromCharCode(utf8Bytes[i]);
-          }
-          const base64 = btoa(binary);
-          const challengeUrl = `pythoncopy.html?code=${encodeURIComponent(base64)}`;
-
-          const titleEl = document.getElementById('dailyChallengeTitle');
-          const spiceEl = document.getElementById('dailyChallengeSpice');
-          const descEl = document.getElementById('dailyChallengeDesc');
-          const btnEl = document.getElementById('dailyChallengeBtn');
-
-          if (titleEl) titleEl.textContent = challenge.title;
-          if (spiceEl) spiceEl.textContent = challenge.spice;
-          if (descEl) {
-            descEl.textContent = getChallengeDescription(challenge.comment);
-          }
-          if (btnEl) {
-            btnEl.href = challengeUrl;
-          }
-        })
-        .catch(err => {
-          console.error('Failed to load daily challenge:', err);
-          const titleEl = document.getElementById('dailyChallengeTitle');
-          if (titleEl) titleEl.textContent = 'Daily Challenge Unavailable';
-          const descEl = document.getElementById('dailyChallengeDesc');
-          if (descEl) descEl.textContent = 'Could not load challenges. You can still use the blank editor or standard quick starts.';
-          const btnEl = document.getElementById('dailyChallengeBtn');
-          if (btnEl) btnEl.style.display = 'none';
-        });
-    }
-
-    function updateURL() {
-      const inputURL = document.getElementById('urlInput').value.trim();
-      if (inputURL === '') {
-        alert('Please enter a valid URL.');
-        return;
-      }
-      const newURL = `${window.location.pathname}?url=${encodeURIComponent(inputURL)}`;
-      window.history.pushState({}, '', newURL);
-      fetchCode(inputURL);
-    }
-
-    function normalizeCodeUrl(url) {
-      if (!url) return url;
-      let normalizedUrl = String(url).trim().replace(/\\\)/g, ')');
-
-      try {
-        const parsedUrl = new URL(normalizedUrl, window.location.href);
-        if (parsedUrl.hostname === 'github.com') {
-          const parts = parsedUrl.pathname.split('/').filter(Boolean);
-          const markerIndex = parts.findIndex(part => part === 'blob' || part === 'raw');
-          if (parts.length >= 5 && markerIndex === 2) {
-            const [owner, repo] = parts;
-            const branch = parts[3];
-            const filePath = parts.slice(4).join('/');
-            normalizedUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`;
-          }
-        }
-      } catch (err) {
-        console.warn('Could not normalize URL:', err);
-      }
-
-      const githubPrefixes = [
-        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
-        "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
-        "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
-        "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
-      ];
-      for (const prefix of githubPrefixes) {
-        if (normalizedUrl.startsWith(prefix)) {
-          return normalizedUrl.substring(prefix.length);
+      // Dynamically wrap challenge instructions comment on load to 35 characters for optimal readability
+      if (decodedCode.trim().startsWith('# Challenge:') && decodedCode.includes('# instructions:')) {
+        const maxLength = 35;
+        const lines = decodedCode.split('\n');
+        const instIndex = lines.findIndex(l => l.toLowerCase().startsWith('# instructions:'));
+        if (instIndex !== -1) {
+          const wrapped = wrapPythonComment(lines[instIndex], maxLength);
+          lines[instIndex] = wrapped;
+          decodedCode = lines.join('\n');
         }
       }
 
-      return normalizedUrl;
-    }
-
-    function startBlankFile() {
       if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
         exitPlaybackMode(true);
       }
@@ -3490,1091 +2078,2503 @@ import sys, builtins
         courseTitle: "Python Algorithms",
         links: []
       };
-      loadedMetadataLinks = [];
-      editor.value = '';
-      updatePuzzleButtonVisibility();
-      markCurrentEditorCodeSaved('');
+      const parsedRes = parseAndStripMetadata(decodedCode);
+      currentQuizMetadata = parsedRes.metadata;
+      loadedMetadataLinks = currentQuizMetadata.links || [];
+      const strippedDecodedCode = parsedRes.strippedCode;
+
+      editor.value = strippedDecodedCode;
+      markCurrentEditorCodeSaved(strippedDecodedCode);
       displayCode.textContent = '';
       document.getElementById('urlInput').value = '';
       document.getElementById('workspace').style.display = 'grid';
       document.getElementById('inputContainer').style.display = 'none';
       document.getElementById('starterPanel').style.display = 'none';
       document.getElementById('instructionsPanel').style.display = 'none';
-      window.history.pushState({}, '', window.location.pathname + '?blank');
-
-      if (blocklyWorkspace && typeof Blockly !== 'undefined') {
-        blocklyWorkspace.clear();
-      }
 
       updateLineNumbers();
       analyseCodeAndUpdateMessage();
       clearRunner();
-      ensureRunnerCollapsed();
-      setRunnerStatus('Blank file ready.');
+      setRunnerStatus('Code loaded from manual.');
       updateBlocksButtonState();
+      updatePuzzleButtonVisibility();
       playbackHistory = [];
-      recordPlaybackSnapshot('Blank File', true, 'save');
+      if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
+        window.blocklyWorkspace.clearUndo();
+      }
+      recordPlaybackSnapshot('Code Loaded', true, 'save');
       editor.focus();
+    } catch (err) {
+      console.error('Failed to load code parameter:', err);
+      setRunnerStatus('Error loading code from URL.');
     }
+  } else if (url) {
+    document.getElementById('urlInput').value = url;
+    document.getElementById('inputContainer').style.display = 'none';
+    document.getElementById('starterPanel').style.display = 'none';
+    document.getElementById('instructionsPanel').style.display = 'none';
+    fetchCode(url);
+  } else if (isBlocksTab) {
+    document.getElementById('workspace').style.display = 'grid';
+    document.getElementById('inputContainer').style.display = 'none';
+    document.getElementById('starterPanel').style.display = 'none';
+    document.getElementById('instructionsPanel').style.display = 'none';
 
-    function fetchCode(url) {
-      if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
-        exitPlaybackMode(true);
-      }
-      
-      url = normalizeCodeUrl(url);
-
-      const isPastebin = /pastebin\.com/i.test(url);
-      if (isPastebin && typeof window.confirm === 'function') {
-        const proceed = window.confirm(
-          'Loading from Pastebin routes this URL through corsproxy.io (a third-party proxy). Use public learning materials only, not private student information. Continue?'
-        );
-        if (!proceed) {
-          setRunnerStatus('Pastebin load cancelled.');
-          return;
-        }
-      }
-
-      currentURL = url;
-      updatePuzzleButtonVisibility();
-      const fetchURL = isPastebin
-        ? `https://corsproxy.io/?${encodeURIComponent(url)}`
-        : url;
-
-      fetch(fetchURL)
-        .then(response => response.text())
-        .then(data => {
-          const trimmedData = data && typeof data === 'string' ? data.replace(/^\ufeff/, '').trim() : '';
-          const isBlocks = (url && (url.toLowerCase().endsWith('.blocks') || url.toLowerCase().endsWith('.xml'))) ||
-                           trimmedData.startsWith('<xml') ||
-                           trimmedData.startsWith('<?xml');
-
-          if (isBlocks) {
-            currentQuizMetadata = {
-              testCases: [],
-              nextUrl: null,
-              isEnd: false,
-              courseTitle: "Python Algorithms",
-              links: []
-            };
-            loadedMetadataLinks = [];
-            editor.value = '';
-            setAppMode('blocks');
-            if (window.blocklyWorkspace && typeof Blockly !== 'undefined') {
-              try {
-                const xmlDom = window.parseBlocklyXmlText(data);
-                window.blocklyWorkspace.clear();
-                Blockly.Xml.domToWorkspace(xmlDom, window.blocklyWorkspace);
-                resizeBlocklyWorkspaceSoon();
-
-                const code = getWorkspacePythonCode();
-                editor.value = code;
-                markCurrentEditorCodeSaved(code);
-                updateLineNumbers();
-
-                document.getElementById('workspace').style.display = 'grid';
-                document.getElementById('inputContainer').style.display = 'none';
-                document.getElementById('starterPanel').style.display = 'none';
-                document.getElementById('instructionsPanel').style.display = 'none';
-
-                analyseCodeAndUpdateMessage();
-                clearRunner();
-                autoPreviewFirstLink();
-                updateBlocksButtonState();
-                updatePuzzleButtonVisibility();
-                playbackHistory = [];
-                recordPlaybackSnapshot('Load Blocks Gist', true, 'save');
-
-                lastGeneratedBlocklyPython = code;
-                if (typeof updateBlocksCodePreview === 'function') {
-                  updateBlocksCodePreview(code);
-                }
-                setRunnerStatus('Blocks file loaded successfully.');
-                return;
-              } catch (err) {
-                console.error('Error loading Blocks file:', err);
-                alert('Failed to parse blocks XML: ' + err.message + '\nLoading as plain text instead.');
-                setAppMode('edit');
-              }
-            } else {
-              setAppMode('edit');
-            }
-          }
-
-          const parsedRes = parseAndStripMetadata(data);
-          currentQuizMetadata = parsedRes.metadata;
-          loadedMetadataLinks = currentQuizMetadata.links || [];
-          const strippedData = parsedRes.strippedCode;
-
-          editor.value = strippedData;
-          markCurrentEditorCodeSaved(strippedData);
-          updateLineNumbers();
-          document.getElementById('workspace').style.display = 'grid';
-          document.getElementById('inputContainer').style.display = 'none';
-          document.getElementById('starterPanel').style.display = 'none';
-          document.getElementById('instructionsPanel').style.display = 'none';
-          analyseCodeAndUpdateMessage();
-          clearRunner();
-          autoPreviewFirstLink();
-          updateBlocksButtonState();
-          updatePuzzleButtonVisibility();
-          playbackHistory = [];
-          if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
-            window.blocklyWorkspace.clearUndo();
-          }
-          recordPlaybackSnapshot('Load Gist', true, 'save');
-
-          if (currentAppMode === 'blocks') {
-            if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(editor.value)) {
-              alert("This loaded program contains statements that cannot be fully converted to blocks. Switching to Edit Mode.");
-              setAppMode('edit');
-            } else if (window.blocklyWorkspace) {
-              isUpdatingBlocklyFromText = true;
-              if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
-              try {
-                convertPythonToWorkspace(editor.value, window.blocklyWorkspace);
-                lastGeneratedBlocklyPython = getWorkspacePythonCode();
-              } catch (ex) {
-                console.error("Error parsing python code to blocks:", ex);
-              } finally {
-                if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
-                isUpdatingBlocklyFromText = false;
-              }
-            }
-          }
-        })
-        .catch(error => {
-          alert('Failed to load code. Please ensure the URL is correct and points to a raw Python or Blocks file.');
-          console.error('Error fetching code:', error);
-          currentURL = '';
-          updatePuzzleButtonVisibility();
-        });
+    const brandBadgeContainer = document.querySelector('.brand');
+    if (brandBadgeContainer) {
+      brandBadgeContainer.querySelectorAll('.mode-badge').forEach(el => el.style.display = 'none');
     }
+    showBlocksEditorToolbar();
 
-    function extractImports(source) {
-      const imports = new Set();
-      const lines = source.split('\n');
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (trimmed.startsWith('import ')) {
-          const parts = trimmed.replace('import ', '').split(',');
-          for (const part of parts) {
-            const moduleName = part.trim().split(' as ')[0].split('.')[0];
-            if (moduleName) imports.add(moduleName);
-          }
-        } else if (trimmed.startsWith('from ')) {
-          const afterFrom = trimmed.replace('from ', '');
-          const moduleName = afterFrom.split(' import ')[0].trim().split('.')[0];
-          if (moduleName) imports.add(moduleName);
-        }
+    const initialCode = getInitialBlocksCode(urlParams);
+    editor.value = initialCode;
+    markCurrentEditorCodeSaved(initialCode);
+
+    // Force initialize Blocks
+    setAppMode('blocks');
+    updatePuzzleButtonVisibility();
+  } else if (urlParams.has('blank') || isMinimalMode) {
+    startBlankFile();
+  }
+
+  document.querySelectorAll('.starter-button').forEach(button => {
+    button.addEventListener('click', function () {
+      if (button.tagName === 'A' && button.getAttribute('href')) {
+        return;
       }
-      return [...imports];
-    }
-
-    function classifyCode(source) {
-      const imports = extractImports(source);
-      const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle', 'time']);
-      const localOnlyImports = imports.filter(moduleName => !browserSafeImports.has(moduleName));
-      const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
-
-      const hasSleep = /time\.sleep\b|sleep\s*\(/.test(source);
-      const sleepWarning = hasSleep ? ' ⚠️ Note: time.sleep() blocks browser rendering, meaning all prints will output at once. Instead, try using input("Press Enter to continue...") to pause execution.' : '';
-
-      if (localOnlyImports.length > 0) {
-        return {
-          ok: false,
-          mode: 'download',
-          message: `Local-only imports detected: ${localOnlyImports.join(', ')}. Please download and run this program on a local Python installation.`
-        };
+      if (button.dataset.action === 'blank') {
+        startBlankFile();
+        return;
       }
-
-      return {
-        ok: true,
-        mode: 'normal',
-        message: (allowedImports.length > 0
-          ? `Browser-safe imports detected: ${allowedImports.join(', ')}. This code looks suitable for browser running.`
-          : 'No imports detected. This code looks suitable for browser running.') + sleepWarning
-      };
-    }
-
-    let hasWarnedAboutImports = false;
-
-    function analyseCodeAndUpdateMessage(isTyping = false) {
-      const analysis = classifyCode(editor.value);
-      const imports = extractImports(editor.value);
-      const hasTurtle = imports.includes('turtle');
-
-      if (isTyping) {
-        // When typing, do not generate errors or block execution
-        document.getElementById('runButton').disabled = false;
-        hasWarnedAboutImports = false;
-
-        // Show status based only on browser-safe imports
-        const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle', 'time']);
-        const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
-
-        const hasSleep = /time\.sleep\b|sleep\s*\(/.test(editor.value);
-        const sleepWarning = hasSleep ? ' ⚠️ Note: time.sleep() blocks browser rendering, meaning all prints will output at once. Instead, try using input("Press Enter to continue...") to pause execution.' : '';
-
-        runnerMessage.style.display = 'block';
-        runnerMessage.textContent = (allowedImports.length > 0
-          ? `Browser-safe imports detected: ${allowedImports.join(', ')}. This code looks suitable for browser running.`
-          : 'No imports detected. This code looks suitable for browser running.') + sleepWarning;
-
-        if (hasTurtle || currentAppMode === 'turtle') {
-          detectionLabel.textContent = 'Detection: Turtle graphics mode.';
-        } else {
-          detectionLabel.textContent = 'Detection: normal Python mode.';
-        }
-      } else {
-        // Original behavior when entering the page (loading code) or running/tracing
-        runnerMessage.style.display = 'block';
-        runnerMessage.textContent = analysis.message;
-
-        if (!analysis.ok) {
-          detectionLabel.textContent = 'Detection: download required.';
-          document.getElementById('runButton').disabled = true;
-          if (!hasWarnedAboutImports) {
-            alert('Warning: Complex or local imports detected. Python Code Lab cannot run this code in the browser. Please download the .py file to run it locally.');
-            hasWarnedAboutImports = true;
-          }
-        } else {
-          if (hasTurtle || currentAppMode === 'turtle') {
-            detectionLabel.textContent = 'Detection: Turtle graphics mode.';
-          } else {
-            detectionLabel.textContent = 'Detection: normal Python mode.';
-          }
-          document.getElementById('runButton').disabled = false;
-          hasWarnedAboutImports = false;
-        }
+      if (button.dataset.action === 'blocks') {
+        startBlankBlocksFile();
+        return;
       }
-      if (hasTurtle && currentAppMode === 'edit') {
-        setAppMode('turtle');
+      if (button.dataset.action === 'flowchart') {
+        const isDark = document.getElementById('dark-mode').checked;
+        const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
+        const starterUrl = button.dataset.url;
+        const query = starterUrl
+          ? `?url=${encodeURIComponent(starterUrl)}&${themeSuffix}`
+          : `?${themeSuffix}`;
+        navigateWithActivityReminder(`python2flow.html${query}`);
+        return;
       }
-      updateReferenceLinks();
-      updateQuizDetection();
-      updateShareLinkButton();
-      updatePuzzleButtonVisibility();
-    }
-
-    function updateQuizDetection() {
-      const testCases = currentQuizMetadata.testCases || [];
-      const quizBtn = document.getElementById('quizButton');
-      const creativeNextBtn = document.getElementById('creativeNextButton');
-      const creativeEndBtn = document.getElementById('creativeEndButton');
-
-      if (quizBtn) quizBtn.style.display = 'none';
-      if (creativeNextBtn) creativeNextBtn.style.display = 'none';
-      if (creativeEndBtn) creativeEndBtn.style.display = 'none';
-
-      if (testCases.length > 0) {
-        if (quizBtn) {
-          quizBtn.style.display = 'inline-block';
-          quizBtn.textContent = `Run Tests (${testCases.length})`;
-        }
-        const currentText = detectionLabel.textContent;
-        if (!currentText.includes('Coding Quiz')) {
-          detectionLabel.textContent = currentText.split(' | ')[0] + ` | Coding Quiz (${testCases.length} test${testCases.length > 1 ? 's' : ''})`;
-        }
-      } else if (currentQuizMetadata.nextUrl || currentQuizMetadata.isEnd) {
-        if (currentQuizMetadata.nextUrl) {
-          if (creativeNextBtn) creativeNextBtn.style.display = 'inline-block';
-        } else if (currentQuizMetadata.isEnd) {
-          if (creativeEndBtn) creativeEndBtn.style.display = 'inline-block';
-        }
-        const currentText = detectionLabel.textContent;
-        if (!currentText.includes('Creative Assignment')) {
-          detectionLabel.textContent = currentText.split(' | ')[0] + ` | Creative Assignment (No tests)`;
-        }
+      if (button.dataset.action === 'parsons') {
+        const isDark = document.getElementById('dark-mode').checked;
+        const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
+        const starterUrl = button.dataset.url;
+        const query = starterUrl
+          ? `?url=${encodeURIComponent(starterUrl)}&${themeSuffix}`
+          : `?${themeSuffix}`;
+        navigateWithActivityReminder(`reorder.html${query}`);
+        return;
       }
-    }
-
-    function extractLinksFromCode(code) {
-      const lines = code.split('\n');
-      const links = [];
-      const seen = new Set();
-      const urlRegex = /https?:\/\/[^\s'"`()]+/g;
-      let mode = null;
-
-      if (typeof loadedMetadataLinks !== 'undefined' && Array.isArray(loadedMetadataLinks)) {
-        loadedMetadataLinks.forEach(link => {
-          if (!seen.has(link.url)) {
-            seen.add(link.url);
-            links.push(link);
-          }
-        });
+      if (button.dataset.action === 'create-list') {
+        const isDark = document.getElementById('dark-mode').checked;
+        const themeSuffix = isDark ? 'theme=dark' : 'theme=light';
+        navigateWithActivityReminder(`to_list.html?${themeSuffix}`);
+        return;
       }
-
-      lines.forEach((line, index) => {
-        const trimmed = line.trim();
-        let isNextLine = false;
-
-        if (trimmed.startsWith('#')) {
-          const commentContent = trimmed.substring(1).trim();
-          if (/^next\b/i.test(commentContent)) {
-            isNextLine = true;
-            const rest = commentContent.substring(4).trim();
-            const match = rest.match(/https?:\/\/[^\s'"`()]+/);
-            if (!match) {
-              mode = 'next';
-            }
-          } else if (mode === 'next') {
-            isNextLine = true;
-            mode = null;
-          } else if (/^(input|output|end)\b/i.test(commentContent)) {
-            mode = null;
-          }
-        } else {
-          mode = null;
-        }
-
-        if (isNextLine) {
-          return;
-        }
-
-        let match;
-        urlRegex.lastIndex = 0;
-        while ((match = urlRegex.exec(line)) !== null) {
-          let url = match[0];
-          url = url.replace(/[.,;:?!~)]+$/, '');
-          if (url && !seen.has(url)) {
-            seen.add(url);
-            links.push({
-              url: url,
-              line: index + 1
-            });
-          }
-        }
-      });
-      return links;
-    }
-
-    function cleanUrlDisplay(url) {
-      try {
-        const parsed = new URL(url);
-        let display = parsed.hostname;
-        if (display.startsWith('www.')) {
-          display = display.substring(4);
-        }
-        if (parsed.pathname && parsed.pathname !== '/') {
-          display += parsed.pathname;
-        }
-        if (display.length > 35) {
-          display = display.substring(0, 32) + '...';
-        }
-        return display;
-      } catch (e) {
-        return url.length > 35 ? url.substring(0, 32) + '...' : url;
-      }
-    }
-
-    function transformYoutubeUrl(url) {
-      try {
-        const parsed = new URL(url);
-        let videoId = '';
-
-        if (parsed.hostname.includes('youtube.com')) {
-          if (parsed.pathname.includes('/watch')) {
-            videoId = parsed.searchParams.get('v');
-          } else if (parsed.pathname.includes('/shorts/')) {
-            const parts = parsed.pathname.split('/');
-            videoId = parts[parts.indexOf('shorts') + 1];
-          } else if (parsed.pathname.includes('/embed/')) {
-            videoId = parsed.pathname.split('/embed/')[1];
-          }
-        } else if (parsed.hostname.includes('youtu.be')) {
-          videoId = parsed.pathname.substring(1);
-        }
-
-        if (videoId) {
-          videoId = videoId.split(/[?#&]/)[0];
-          return `https://www.youtube-nocookie.com/embed/${videoId}`;
-        }
-      } catch (e) {
-        // Ignore URL parsing errors
-      }
-      return url;
-    }
-
-    function scrollToCodeLine(lineNum) {
-      const activeView = currentAppMode === 'display' ? displayEditor : editor;
-      const lines = editor.value.split('\n');
-      if (lineNum < 1 || lineNum > lines.length) return;
-
-      if (currentAppMode === 'edit') {
-        let charIndex = 0;
-        for (let i = 0; i < lineNum - 1; i++) {
-          charIndex += lines[i].length + 1;
-        }
-        editor.focus();
-        editor.setSelectionRange(charIndex, charIndex + lines[lineNum - 1].length);
-      }
-
-      const lineHeight = getCodeLineHeight();
-      const yPos = (lineNum - 1) * lineHeight;
-      const viewRect = activeView.getBoundingClientRect();
-      activeView.scrollTop = Math.max(0, yPos - viewRect.height / 3);
-
-      highlightLine(lineNum);
-    }
-
-    function canPreviewUrl(url) {
-      try {
-        const parsed = new URL(url);
-        const host = parsed.hostname.toLowerCase();
-        
-        // YouTube is embeddable after transformation
-        if (host.includes('youtube.com') || host.includes('youtu.be')) {
-          return true;
-        }
-
-        // List of domains known to block iframe embedding via X-Frame-Options or CSP ancestors
-        const blockedDomains = [
-          'github.com',
-          'githubusercontent.com',
-          'google.com',
-          'wikipedia.org',
-          'stackoverflow.com',
-          'w3schools.com',
-          'replit.com',
-          'twitter.com',
-          'x.com',
-          'facebook.com',
-          'instagram.com',
-          'linkedin.com',
-          'medium.com'
-        ];
-        
-        return !blockedDomains.some(domain => host === domain || host.endsWith('.' + domain));
-      } catch (e) {
-        return false;
-      }
-    }
-
-    function updateReferenceLinks() {
-      const code = editor.value;
-      const links = extractLinksFromCode(code);
-      const linksPanel = document.getElementById('linksPanel');
-      const linksList = document.getElementById('linksList');
-
-      if (links.length === 0) {
-        linksPanel.style.display = 'none';
-        closeWebPreview(false);
+      if (button.dataset.action === 'phone-editor') {
+        openCurrentCodeInMobileEditor();
         return;
       }
 
-      linksPanel.style.display = 'block';
+      const starterUrl = button.dataset.url;
+      document.getElementById('urlInput').value = starterUrl;
+      document.getElementById('inputContainer').style.display = 'none';
+      document.getElementById('starterPanel').style.display = 'none';
+      document.getElementById('instructionsPanel').style.display = 'none';
+      const newURL = `${window.location.pathname}?url=${encodeURIComponent(starterUrl)}`;
+      window.history.pushState({}, '', newURL);
+      fetchCode(starterUrl);
+    });
+  });
 
-      const activeIframe = document.getElementById('webPreviewIframe');
-      const previewContainer = document.getElementById('webPreviewContainer');
-      const previewingUrl = previewContainer.style.display === 'block' ? activeIframe.dataset.originalUrl : '';
+  document.getElementById('light-mode').addEventListener('change', function () {
+    applyTheme();
+  });
 
-      linksList.innerHTML = '';
-      let isPreviewingUrlStillAvailable = false;
+  document.getElementById('dark-mode').addEventListener('change', function () {
+    applyTheme();
+  });
 
-      links.forEach(link => {
-        const isPreviewed = (link.url === previewingUrl);
-        if (isPreviewed) {
-          isPreviewingUrlStillAvailable = true;
-        }
 
-        const item = document.createElement('div');
-        item.className = 'link-item';
 
-        const leftSide = document.createElement('div');
-        leftSide.style.display = 'flex';
-        leftSide.style.alignItems = 'center';
-        leftSide.style.gap = '8px';
-        leftSide.style.minWidth = '0';
-        leftSide.style.flex = '1';
+  document.getElementById('font-size').addEventListener('input', function () {
+    applyCodeFontSize(this.value);
+  });
 
-        if (link.line) {
-          const badge = document.createElement('span');
-          badge.className = 'link-item-badge';
-          badge.textContent = `Ln ${link.line}`;
-          badge.title = `Click to scroll to line ${link.line}`;
-          badge.onclick = () => scrollToCodeLine(link.line);
-          leftSide.appendChild(badge);
-        }
-
-        const anchor = document.createElement('a');
-        anchor.className = 'link-item-anchor';
-        anchor.href = link.url;
-        anchor.target = '_blank';
-        anchor.textContent = cleanUrlDisplay(link.url);
-        anchor.title = link.url;
-
-        leftSide.appendChild(anchor);
-
-        const rightSide = document.createElement('div');
-        rightSide.style.display = 'flex';
-        rightSide.style.gap = '6px';
-        rightSide.style.flexShrink = '0';
-
-        const showPreview = canPreviewUrl(link.url);
-        if (showPreview) {
-          const previewBtn = document.createElement('button');
-          if (isPreviewed) {
-            previewBtn.className = 'link-item-btn-preview';
-            previewBtn.style.background = '#ef4444'; // Red
-            previewBtn.textContent = 'Close';
-            previewBtn.onclick = () => closeWebPreview();
-            previewBtn.onmouseenter = () => { previewBtn.style.background = '#dc2626'; };
-            previewBtn.onmouseleave = () => { previewBtn.style.background = '#ef4444'; };
-          } else {
-            previewBtn.className = 'link-item-btn-preview';
-            previewBtn.textContent = 'Preview';
-            previewBtn.onclick = () => previewWebLink(link.url);
-          }
-          rightSide.appendChild(previewBtn);
-        }
-
-        const openBtn = document.createElement('a');
-        openBtn.className = 'link-item-btn-open';
-        openBtn.href = link.url;
-        openBtn.target = '_blank';
-        openBtn.textContent = 'Open';
-
-        rightSide.appendChild(openBtn);
-
-        item.appendChild(leftSide);
-        item.appendChild(rightSide);
-
-        linksList.appendChild(item);
-      });
-
-      if (!isPreviewingUrlStillAvailable && previewingUrl) {
-        closeWebPreview(false);
-      }
+  document.getElementById('copyButton').addEventListener('click', async function () {
+    const code = editor.value;
+    try {
+      await copyTextToClipboard(code);
+      showCopyButtonCopied();
+      setRunnerStatus('Code copied to clipboard.');
+    } catch (err) {
+      setRunnerStatus('Copy failed. Select the code and copy manually.');
+      alert('Copy failed. Please select the code and copy manually.');
     }
+  });
 
-    function setGlobalPreviewButtonState(isOn) {
-      const toggleBtn = document.getElementById('toggleGlobalPreviewBtn');
-      if (!toggleBtn) return;
-      if (isOn) {
-        toggleBtn.style.background = '#10b981'; // Green
-        toggleBtn.textContent = 'Preview: On';
-      } else {
-        toggleBtn.style.background = '#ef4444'; // Red
-        toggleBtn.textContent = 'Preview: Off';
-      }
-    }
+  const shareLinkBtn = document.getElementById('shareLinkButton');
+  if (shareLinkBtn) {
+    shareLinkBtn.addEventListener('click', copyShareLink);
+  }
 
-    function isDataFile(url) {
+  const flowchartBtn = document.getElementById('createFlowchartButton');
+  if (flowchartBtn) {
+    flowchartBtn.addEventListener('click', function () {
+      const codeText = editor.value;
+      let base64 = '';
       try {
-        const parsed = new URL(url);
-        const pathname = parsed.pathname.toLowerCase();
-        return pathname.endsWith('.txt') || 
-               pathname.endsWith('.tsv') || 
-               pathname.endsWith('.csv') || 
-               pathname.endsWith('.json') || 
-               pathname.endsWith('.py');
-      } catch (e) {
-        return false;
-      }
-    }
-
-    function autoPreviewFirstLink() {
-      const code = editor.value;
-      const links = extractLinksFromCode(code);
-      const firstPreviewable = links.find(link => canPreviewUrl(link.url) && !isDataFile(link.url));
-      if (firstPreviewable) {
-        previewWebLink(firstPreviewable.url);
-      }
-    }
-
-    function previewWebLink(url) {
-      const container = document.getElementById('webPreviewContainer');
-      const iframe = document.getElementById('webPreviewIframe');
-      const title = document.getElementById('previewUrlTitle');
-      const fallbackLink = document.getElementById('iframeFallbackLink');
-
-      const transformed = transformYoutubeUrl(url);
-
-      title.textContent = `Previewing: ${cleanUrlDisplay(url)}`;
-      const previousLoad = document.getElementById('privacyPreviewLoad');
-      if (previousLoad) previousLoad.remove();
-      iframe.removeAttribute('src');
-
-      let previewSrc = transformed;
-      let isSameOrigin = false;
-      try {
-        const parsedPreview = new URL(transformed, window.location.href);
-        if (parsedPreview.origin === 'https://jamesabela.github.io' && parsedPreview.pathname.startsWith('/jsfun/')) {
-          const relPath = parsedPreview.pathname.slice('/jsfun/'.length) + parsedPreview.search + parsedPreview.hash;
-          previewSrc = new URL(relPath, window.location.href).href;
-          isSameOrigin = true;
-        } else {
-          isSameOrigin = parsedPreview.origin === window.location.origin;
+        const utf8Bytes = new TextEncoder().encode(codeText);
+        let binary = '';
+        for (let i = 0; i < utf8Bytes.length; i++) {
+          binary += String.fromCharCode(utf8Bytes[i]);
         }
-      } catch (e) {
-        isSameOrigin = false;
+        base64 = btoa(binary);
+      } catch (err) {
+        console.error('Failed to encode code for flowchart:', err);
+        return;
+      }
+      const isDark = document.getElementById('dark-mode').checked;
+      const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
+      const targetUrl = `python2flow.html?code=${encodeURIComponent(base64)}${themeSuffix}`;
+      window.open(targetUrl, '_blank');
+    });
+  }
+
+  [undoEditorButton, redoEditorButton, revertEditorButton].forEach(button => {
+    if (!button) return;
+    button.addEventListener('mousedown', event => event.preventDefault());
+  });
+  if (undoEditorButton) {
+    undoEditorButton.addEventListener('click', () => runEditorHistoryCommand('undo'));
+  }
+  if (redoEditorButton) {
+    redoEditorButton.addEventListener('click', () => runEditorHistoryCommand('redo'));
+  }
+  if (revertEditorButton) {
+    revertEditorButton.addEventListener('click', revertEditorToSavedFile);
+  }
+  if (openPhoneEditorButton) {
+    openPhoneEditorButton.addEventListener('click', openCurrentCodeInMobileEditor);
+  }
+
+  document.getElementById('downloadActivityButton')?.addEventListener('click', () => {
+    if (activityReminderEnabled) {
+      showActivityReminder();
+    } else {
+      downloadActivityTSV();
+    }
+  });
+  document.addEventListener('visibilitychange', () => recordActivity(document.hidden ? 'page_hidden' : 'page_visible'));
+  // Capture timing before Tab/Enter handlers make programmatic edits.
+  editor.addEventListener('keydown', () => {
+    if (!activityPlaybackActive) recordActivity('editor_key');
+  }, true);
+
+  initializeActivityReminder();
+
+  // Playback event listeners
+  const pbBtn = document.getElementById('playbackButton');
+  if (pbBtn) {
+    pbBtn.addEventListener('click', startPlaybackMode);
+  }
+
+  const pbFirst = document.getElementById('pbFirst');
+  if (pbFirst) {
+    pbFirst.addEventListener('click', () => {
+      let targetIndex = -1;
+      for (let i = playbackIndex - 1; i >= 0; i--) {
+        if (playbackHistory[i].isCheckpoint) {
+          targetIndex = i;
+          break;
+        }
+      }
+      playbackIndex = targetIndex !== -1 ? targetIndex : 0;
+      updatePlaybackUI();
+    });
+  }
+
+  const pbPrev = document.getElementById('pbPrev');
+  if (pbPrev) {
+    pbPrev.addEventListener('click', () => {
+      if (playbackIndex > 0) {
+        playbackIndex--;
+        updatePlaybackUI();
+      }
+    });
+  }
+
+  const pbPlay = document.getElementById('pbPlay');
+  if (pbPlay) {
+    pbPlay.addEventListener('click', togglePlaybackPlay);
+  }
+
+  const pbNext = document.getElementById('pbNext');
+  if (pbNext) {
+    pbNext.addEventListener('click', () => {
+      if (playbackIndex < playbackHistory.length - 1) {
+        playbackIndex++;
+        updatePlaybackUI();
+      }
+    });
+  }
+
+  const pbLast = document.getElementById('pbLast');
+  if (pbLast) {
+    pbLast.addEventListener('click', () => {
+      let targetIndex = -1;
+      for (let i = playbackIndex + 1; i < playbackHistory.length; i++) {
+        if (playbackHistory[i].isCheckpoint) {
+          targetIndex = i;
+          break;
+        }
+      }
+      playbackIndex = targetIndex !== -1 ? targetIndex : playbackHistory.length - 1;
+      updatePlaybackUI();
+    });
+  }
+
+  const timeline = document.getElementById('playbackTimeline');
+  if (timeline) {
+    timeline.addEventListener('input', (e) => {
+      playbackIndex = parseInt(e.target.value, 10);
+      updatePlaybackUI();
+    });
+  }
+
+  const pbRestore = document.getElementById('pbRestore');
+  if (pbRestore) {
+    pbRestore.addEventListener('click', restorePlaybackVersion);
+  }
+
+  const pbClose = document.getElementById('pbClose');
+  if (pbClose) {
+    pbClose.addEventListener('click', () => exitPlaybackMode(false));
+  }
+
+
+  const blocklyRunBtn = document.getElementById('blocklyRunButton');
+  if (blocklyRunBtn) {
+    blocklyRunBtn.addEventListener('click', () => {
+      if (typeof getWorkspacePythonCode === 'function') {
+        editor.value = getWorkspacePythonCode();
+        updateBlocksCodePreview(editor.value);
+      }
+      runCurrentCode({ preserveBlocksMode: true });
+    });
+  }
+
+  const copyBlocksCodeBtn = document.getElementById('copyBlocksCodeButton');
+  if (copyBlocksCodeBtn) {
+    copyBlocksCodeBtn.addEventListener('click', async () => {
+      const code = getCurrentEditorCode();
+      try {
+        await copyTextToClipboard(code);
+        setRunnerStatus('Generated Python copied to clipboard.');
+      } catch (err) {
+        setRunnerStatus('Copy failed. Select the generated Python and copy manually.');
+      }
+    });
+  }
+
+  if (blocksPreviewTextColors) {
+    blocksPreviewTextColors.addEventListener('change', () => {
+      applyBlocksPreviewColorMode();
+    });
+  }
+
+  if (blocksPreviewBlockColors) {
+    blocksPreviewBlockColors.addEventListener('change', () => {
+      applyBlocksPreviewColorMode();
+    });
+  }
+
+  const tryBlocksBtn = document.getElementById('tryBlocksButton');
+  if (tryBlocksBtn) {
+    tryBlocksBtn.addEventListener('click', () => {
+      startBlankBlocksFile();
+    });
+  }
+
+  const applyBlocksBtn = document.getElementById('applyBlocksButton');
+  if (applyBlocksBtn) {
+    applyBlocksBtn.addEventListener('click', () => {
+      const code = getWorkspacePythonCode();
+      if (window.opener && !window.opener.closed) {
+        window.opener.updateCodeFromChild(code);
+        window.opener.focus();
+        window.close();
+        return;
+      }
+      editor.value = code;
+      hasUnsavedChanges = editor.value !== savedEditorCode;
+      updateEditorActionButtons();
+      recordPlaybackSnapshot('Apply Blocks', true, 'save');
+      setAppMode('edit');
+    });
+  }
+
+  function getCurrentEditorCode() {
+    if (currentAppMode === 'blocks' && typeof getWorkspacePythonCode === 'function') {
+      const code = getWorkspacePythonCode();
+      editor.value = code;
+      updateBlocksCodePreview(code);
+      return code;
+    }
+    return editor.value;
+  }
+
+  function isLikelyMobilePhone() {
+    const shortSide = Math.min(window.innerWidth, window.innerHeight);
+    const longSide = Math.max(window.innerWidth, window.innerHeight);
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+    return coarsePointer && shortSide <= 600 && longSide <= 950;
+  }
+
+  function openCurrentCodeInMobileEditor() {
+    const code = getCurrentEditorCode();
+    localStorage.setItem('pymobileDraft', code);
+    localStorage.setItem('pymobileTheme', document.getElementById('dark-mode').checked ? 'dark' : 'light');
+    navigateWithActivityReminder('pythonmobile.html');
+  }
+
+  function showMobilePhoneEditorOffer() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('desktop') || params.has('nomobile')) return;
+    if (!isLikelyMobilePhone()) return;
+    if (sessionStorage.getItem('pythoncopyMobileOfferDismissed') === '1') return;
+    if (document.getElementById('mobileEditorOffer')) return;
+
+    const code = getCurrentEditorCode();
+    const imports = extractImports(code);
+    const hasDesktopOnlyMode = currentAppMode === 'blocks' || imports.includes('turtle');
+    const offer = document.createElement('div');
+    offer.id = 'mobileEditorOffer';
+    offer.setAttribute('role', 'dialog');
+    offer.setAttribute('aria-label', 'Open mobile editor');
+    offer.style.cssText = [
+      'position:fixed',
+      'left:12px',
+      'right:12px',
+      'bottom:12px',
+      'z-index:9999',
+      'display:flex',
+      'gap:10px',
+      'align-items:center',
+      'padding:12px',
+      'border-radius:10px',
+      'background:#111827',
+      'color:#f9fafb',
+      'box-shadow:0 12px 32px rgba(0,0,0,0.28)',
+      'font:14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif'
+    ].join(';');
+
+    const message = document.createElement('div');
+    message.style.cssText = 'flex:1;min-width:0;line-height:1.35';
+    message.textContent = hasDesktopOnlyMode
+      ? 'Phone detected. Open text code in PyMobile? Turtle, Blocks, and Trace stay here.'
+      : 'Phone detected. Open this code in PyMobile?';
+
+    const openButton = document.createElement('button');
+    openButton.type = 'button';
+    openButton.textContent = 'Open';
+    openButton.style.cssText = 'border:0;border-radius:8px;background:#10b981;color:white;font-weight:700;padding:10px 12px';
+    openButton.addEventListener('click', openCurrentCodeInMobileEditor);
+
+    const stayButton = document.createElement('button');
+    stayButton.type = 'button';
+    stayButton.textContent = 'Stay';
+    stayButton.style.cssText = 'border:1px solid rgba(255,255,255,0.28);border-radius:8px;background:transparent;color:white;font-weight:700;padding:10px 12px';
+    stayButton.addEventListener('click', () => {
+      sessionStorage.setItem('pythoncopyMobileOfferDismissed', '1');
+      offer.remove();
+    });
+
+    offer.append(message, openButton, stayButton);
+    document.body.appendChild(offer);
+  }
+
+  function loadCodeIntoCurrentEditor(code) {
+    if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+      exitPlaybackMode(true);
+    }
+    currentURL = '';
+    if (currentAppMode === 'blocks' && blocklyWorkspace && typeof convertPythonToWorkspace === 'function') {
+      if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(code)) {
+        setRunnerStatus('This file contains Python code that cannot be converted to blocks.');
+        alert('This file contains Python code that cannot be converted to blocks. Please upload a simpler Blocks-compatible Python file.');
+        return;
       }
 
-      if (isSameOrigin) {
-        iframe.referrerPolicy = 'no-referrer';
-        iframe.src = previewSrc;
-      } else {
-        const loadButton = document.createElement('button');
-        loadButton.id = 'privacyPreviewLoad';
-        loadButton.type = 'button';
-        loadButton.textContent = 'Load external preview — contacts the content provider';
-        loadButton.style.cssText = 'margin:12px;padding:10px 16px;max-width:calc(100% - 24px);white-space:normal;background:#2563eb;color:#ffffff;border:none;border-radius:8px;font-weight:600;cursor:pointer;';
-        iframe.before(loadButton);
-        loadButton.addEventListener('click', () => {
-          iframe.referrerPolicy = 'no-referrer';
-          iframe.src = previewSrc;
-          loadButton.remove();
+      const previousCode = editor.value;
+      const previousBlocksDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+      isUpdatingBlocklyFromText = true;
+      if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
+      try {
+        const converted = convertPythonToWorkspace(code, blocklyWorkspace);
+        const hasCodeLines = code.split('\n').some(line => {
+          const trimmed = line.trim();
+          return trimmed && !trimmed.startsWith('#') && !trimmed.startsWith('import ') && !trimmed.startsWith('from ');
         });
-      }
-      iframe.dataset.originalUrl = url;
-      iframe.dataset.lastUrl = url;
-      fallbackLink.href = url;
-      container.style.display = 'block';
-      ensureRunnerExpanded();
 
-      setGlobalPreviewButtonState(true);
-      updateReferenceLinks();
-
-      // Auto scroll runner panel down to make sure preview is visible
-      const runnerPanel = document.querySelector('.runner-panel');
-      if (runnerPanel) {
-        setTimeout(() => {
-          container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
-      }
-    }
-
-    function closeWebPreview(shouldUpdateLinks = true) {
-      const container = document.getElementById('webPreviewContainer');
-      const iframe = document.getElementById('webPreviewIframe');
-      
-      const originalUrl = iframe.dataset.originalUrl;
-      if (!originalUrl && container.style.display === 'none') {
-        return; // Already closed
-      }
-
-      document.getElementById('privacyPreviewLoad')?.remove();
-      iframe.removeAttribute('src');
-      iframe.removeAttribute('data-original-url');
-      container.style.display = 'none';
-
-      setGlobalPreviewButtonState(false);
-      
-      if (shouldUpdateLinks) {
-        updateReferenceLinks();
-      }
-    }
-
-    function setRunnerStatus(text) {
-      runnerStatus.textContent = text;
-    }
-
-    function showConsoleInput(promptText) {
-      const panel = document.getElementById('consoleInputPanel');
-      const help = document.getElementById('consoleInputHelp');
-      const field = document.getElementById('consoleInputField');
-      help.textContent = promptText && promptText.trim()
-        ? `Input needed: ${promptText}`
-        : 'This program is waiting for input.';
-      panel.style.display = 'block';
-      field.value = '';
-      field.focus();
-    }
-
-    function hideConsoleInput() {
-      document.getElementById('consoleInputPanel').style.display = 'none';
-      document.getElementById('consoleInputField').value = '';
-    }
-
-    function submitConsoleInput() {
-      const field = document.getElementById('consoleInputField');
-      if (!inputResolver) return;
-      const value = field.value;
-      const resolver = inputResolver;
-      inputResolver = null;
-      hideConsoleInput();
-      resolver(value);
-    }
-
-    function showTerminal() {
-      document.getElementById('workspace').classList.add('terminal-open');
-      document.querySelectorAll('.terminal-toggle-icon').forEach(icon => { icon.textContent = '▼'; });
-    }
-
-    function hideTerminal() {
-      document.getElementById('workspace').classList.remove('terminal-open');
-      document.querySelectorAll('.terminal-toggle-icon').forEach(icon => { icon.textContent = '▲'; });
-    }
-
-    function clearRunner() {
-      executionCancelled = true;
-      outputEl.textContent = '';
-      hideConsoleInput();
-      hideTerminal();
-      clearTeachHighlight();
-
-      displayCurrentStep = 0;
-      displayMaxRevealedStep = -1;
-      displayTraceLog = [];
-      displayInputHistory = [];
-      displayTraceStatus = 'ready';
-      displayPendingPrompt = '';
-      displayFinalOutput = '';
-      isAwaitingDisplayInput = false;
-      document.getElementById('playPauseButton').textContent = 'Play';
-      if (displayTimeout) clearTimeout(displayTimeout);
-
-      const traceTableContainer = document.getElementById('traceTableContainer');
-      if (traceTableContainer) traceTableContainer.innerHTML = '';
-
-      // Reset display debugger tab to the first tab (Variables & Stack)
-      switchDisplayTab('state');
-
-      resetTurtleCanvas();
-
-      if (inputResolver) {
-        const resolver = inputResolver;
-        inputResolver = null;
-        resolver('');
-      }
-
-
-
-      setRunnerStatus('System reset.');
-    }
-
-    function requestFileUpload(filename) {
-      return new Promise((resolve) => {
-        const modal = document.getElementById('fileRequestModal');
-        const nameEl = document.getElementById('fileRequestName');
-        const inputEl = document.getElementById('fileRequestInput');
-        const cancelBtn = document.getElementById('fileRequestCancelBtn');
-
-        if (!modal || !nameEl || !inputEl || !cancelBtn) {
-          resolve(null);
+        if (!converted && hasCodeLines) {
+          blocklyWorkspace.clear();
+          Blockly.Xml.domToWorkspace(previousBlocksDom, blocklyWorkspace);
+          editor.value = previousCode;
+          setRunnerStatus('Upload cancelled: this file could not be converted to blocks.');
+          alert('This file could not be converted into Blocks. Your current Blocks file was left unchanged.');
           return;
         }
 
-        nameEl.textContent = filename;
-        inputEl.value = ''; // Clear file input
-
-        const onFileChange = (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            cleanup();
-            resolve({ name: filename, data: new Uint8Array(event.target.result) });
-          };
-          reader.readAsArrayBuffer(file);
-        };
-
-        const onCancel = () => {
-          cleanup();
-          resolve(null);
-        };
-
-        const cleanup = () => {
-          inputEl.removeEventListener('change', onFileChange);
-          cancelBtn.removeEventListener('click', onCancel);
-          modal.classList.remove('active');
-        };
-
-        inputEl.addEventListener('change', onFileChange);
-        cancelBtn.addEventListener('click', onCancel);
-        modal.classList.add('active');
-      });
+        editor.value = code;
+        lastGeneratedBlocklyPython = getWorkspacePythonCode();
+        resizeBlocklyWorkspaceSoon();
+      } catch (ex) {
+        console.error("Error parsing uploaded code to blocks:", ex);
+        blocklyWorkspace.clear();
+        Blockly.Xml.domToWorkspace(previousBlocksDom, blocklyWorkspace);
+        editor.value = previousCode;
+        setRunnerStatus('Upload cancelled: this file could not be converted to blocks.');
+        alert('This file could not be converted into Blocks. Your current Blocks file was left unchanged.');
+        return;
+      } finally {
+        if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
+        isUpdatingBlocklyFromText = false;
+      }
+    } else {
+      editor.value = code;
     }
 
-    window.toggleFilePreview = (filename, btnId, previewId) => {
-      const btn = document.getElementById(btnId);
-      const pre = document.getElementById(previewId);
-      if (!btn || !pre) return;
-
-      if (pre.style.display === 'none') {
-        try {
-          const content = pyodideInstance.FS.readFile(`/home/pyodide/${filename}`, { encoding: 'utf8' });
-          pre.textContent = content;
-          pre.style.display = 'block';
-          btn.textContent = 'Hide Preview';
-        } catch (e) {
-          pre.textContent = "Error reading file contents (binary file?).";
-          pre.style.display = 'block';
-          btn.textContent = 'Hide Preview';
-        }
-      } else {
-        pre.style.display = 'none';
-        btn.textContent = 'Show Preview';
-      }
-    };
-
-    function requestDisplayInput(promptText) {
-      showConsoleInput(promptText);
-      return new Promise(resolve => {
-        inputResolver = function (value) {
-          resolve(value);
-        };
-      });
+    markCurrentEditorCodeSaved(code);
+    updateLineNumbers();
+    analyseCodeAndUpdateMessage();
+    clearRunner();
+    setRunnerStatus('File loaded successfully.');
+    autoPreviewFirstLink();
+    updateBlocksButtonState();
+    updatePuzzleButtonVisibility();
+    playbackHistory = [];
+    if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
+      window.blocklyWorkspace.clearUndo();
     }
+    recordPlaybackSnapshot('Load File', true, 'save');
+  }
 
-    function parseQuizTests(code) {
-      const lines = code.split('\n');
-      const inputsList = [];
-      const outputsList = [];
-      let nextUrl = null;
-      let isEnd = false;
-      let courseTitle = "Python Algorithms";
-      let mode = null;
+  function downloadBlocksFile() {
+    if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
 
-      const isHelpText = /entered|seperator|separator|speech\s+marks|between|expected|same\s+format|how\s+to|example/i;
+    const xmlDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+    let xmlText = Blockly.Xml.domToPrettyText
+      ? Blockly.Xml.domToPrettyText(xmlDom)
+      : Blockly.Xml.domToText(xmlDom);
+    if (!xmlText || !xmlText.trim()) {
+      xmlText = new XMLSerializer().serializeToString(xmlDom);
+    }
+    if (!xmlText || !xmlText.trim()) {
+      setRunnerStatus('No Blocks data was available to download.');
+      return;
+    }
+    downloadText(xmlText, 'blocks.blocks', 'application/xml');
+    markCurrentEditorCodeSaved(getCurrentEditorCode());
+    recordPlaybackSnapshot('Save Blocks', true, 'save');
+  }
 
-      for (let line of lines) {
-        const trimmed = line.trim();
-        if (trimmed.startsWith('#')) {
-          const commentContent = trimmed.substring(1).trim();
-          
-          if (/^input\b/i.test(commentContent)) {
-            mode = 'input';
-          } else if (/^output\b/i.test(commentContent)) {
-            mode = 'output';
-          } else if (/^next\b/i.test(commentContent)) {
-            const rest = commentContent.substring(4).trim();
-            const match = rest.match(/https?:\/\/[^\s'"`()]+/);
-            if (match) {
-              nextUrl = match[0];
-              mode = null;
-            } else {
-              mode = 'next';
-            }
-          } else if (/^end\b/i.test(commentContent)) {
-            isEnd = true;
-            const rest = commentContent.substring(3).trim();
-            if (rest !== '') {
-              courseTitle = rest;
-              mode = null;
-            } else {
-              mode = 'end';
-            }
-          } else {
-            if (commentContent !== '' && !isHelpText.test(commentContent)) {
-              if (mode === 'input' || mode === 'output') {
-                const parts = commentContent.split(',').map(part => {
-                  let p = part.trim();
-                  if ((p.startsWith('"') && p.endsWith('"')) || (p.startsWith("'") && p.endsWith("'"))) {
-                    p = p.substring(1, p.length - 1);
-                  }
-                  return p;
-                });
-                if (mode === 'input') {
-                  inputsList.push(parts);
-                } else {
-                  outputsList.push(parts);
-                }
-              } else if (mode === 'next') {
-                const match = commentContent.match(/https?:\/\/[^\s'"`()]+/);
-                if (match) {
-                  nextUrl = match[0];
-                }
-                mode = null;
-              } else if (mode === 'end') {
-                courseTitle = commentContent;
-                mode = null;
-              }
-            }
-          }
-        }
+  function uploadBlocksFile(xmlText) {
+    if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
+
+    if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+      exitPlaybackMode(true);
+    }
+    currentURL = '';
+
+    const previousDom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+    if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
+    try {
+      const xmlDom = parseBlocklyXmlText(xmlText);
+      blocklyWorkspace.clear();
+      Blockly.Xml.domToWorkspace(xmlDom, blocklyWorkspace);
+      resizeBlocklyWorkspaceSoon();
+      editor.value = getWorkspacePythonCode();
+      markCurrentEditorCodeSaved(editor.value);
+      updateLineNumbers();
+      analyseCodeAndUpdateMessage();
+      clearRunner();
+      setRunnerStatus('Blocks file loaded successfully.');
+      updatePuzzleButtonVisibility();
+      playbackHistory = [];
+      if (blocklyWorkspace && typeof blocklyWorkspace.clearUndo === 'function') {
+        blocklyWorkspace.clearUndo();
       }
+      recordPlaybackSnapshot('Load Blocks', true, 'save');
+    } catch (err) {
+      console.error('Error loading Blocks file:', err);
+      blocklyWorkspace.clear();
+      Blockly.Xml.domToWorkspace(previousDom, blocklyWorkspace);
+      resizeBlocklyWorkspaceSoon();
+      alert('This Blocks file could not be loaded. Please choose a valid .blocks or .xml file.');
+      setRunnerStatus('Blocks upload failed.');
+    } finally {
+      if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
+    }
+  }
 
-      const testCases = [];
-      const count = Math.min(inputsList.length, outputsList.length);
-      for (let i = 0; i < count; i++) {
-        testCases.push({
-          inputs: inputsList[i],
-          expected: outputsList[i]
-        });
-      }
-      return {
-        testCases: testCases,
-        nextUrl: nextUrl,
-        isEnd: isEnd,
-        courseTitle: courseTitle
+  function parseBlocklyXmlText(xmlText) {
+    return window.parseBlocklyXmlText(xmlText);
+  }
+
+  const blankFileBtn = document.getElementById('blankFileButton');
+  if (blankFileBtn) {
+    blankFileBtn.addEventListener('click', startBlankFile);
+  }
+
+  document.getElementById('copyForDocsButton').addEventListener('click', copyForDocs);
+
+  function openUploadPicker() {
+    document.getElementById('uploadPyInput').click();
+  }
+
+  document.getElementById('uploadPyButton').addEventListener('click', openUploadPicker);
+
+  const uploadBlocksInput = document.getElementById('uploadBlocksInput');
+  const blocksUploadFileBtn = document.getElementById('blocksUploadFileButton');
+  if (blocksUploadFileBtn && uploadBlocksInput) {
+    blocksUploadFileBtn.addEventListener('click', () => uploadBlocksInput.click());
+  }
+
+  if (uploadBlocksInput) {
+    uploadBlocksInput.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        incrementPasteCounter();
+        uploadBlocksFile(event.target.result);
       };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+  }
+
+  document.getElementById('uploadPyInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      incrementPasteCounter();
+      loadCodeIntoCurrentEditor(event.target.result);
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  function downloadCurrentPy() {
+    const code = getCurrentEditorCode();
+    markCurrentEditorCodeSaved(code);
+    downloadText(code, 'code.py', 'text/x-python');
+    recordPlaybackSnapshot('Save File (py)', true, 'save');
+  }
+
+  function downloadCurrentTxt() {
+    const code = getCurrentEditorCode();
+    markCurrentEditorCodeSaved(code);
+    downloadText(code, 'code.txt', 'text/plain');
+    recordPlaybackSnapshot('Save File (txt)', true, 'save');
+  }
+
+  document.getElementById('downloadPyButton').addEventListener('click', downloadCurrentPy);
+  document.getElementById('downloadTxtButton').addEventListener('click', downloadCurrentTxt);
+
+  const blocksDownloadFileBtn = document.getElementById('blocksDownloadFileButton');
+  if (blocksDownloadFileBtn) {
+    blocksDownloadFileBtn.addEventListener('click', downloadBlocksFile);
+  }
+
+  fullscreenButton.addEventListener('click', function () {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  const distractionFreeButton = document.getElementById('distractionFreeButton');
+  if (distractionFreeButton) {
+    distractionFreeButton.addEventListener('click', toggleDistractionFreeMode);
+  }
+
+  document.addEventListener('fullscreenchange', function () {
+    if (fullscreenButton) {
+      if (document.fullscreenElement) {
+        fullscreenButton.classList.add('active');
+        fullscreenButton.title = 'Exit Full Screen';
+        fullscreenButton.setAttribute('aria-label', 'Exit Full Screen');
+      } else {
+        fullscreenButton.classList.remove('active');
+        fullscreenButton.title = 'Full Screen';
+        fullscreenButton.setAttribute('aria-label', 'Full Screen');
+      }
+    }
+  });
+
+  openNewTabButton.addEventListener('click', function () {
+    window.open(window.location.href, '_blank', 'noopener');
+  });
+
+  document.getElementById('makePuzzleButton').addEventListener('click', function () {
+    const codeText = editor.value;
+    if (codeText.trim()) {
+      let base64 = '';
+      try {
+        base64 = btoa(unescape(encodeURIComponent(codeText)));
+      } catch (err) {
+        console.error('Failed to encode code for puzzle:', err);
+        return;
+      }
+      const puzzleURL = `reorder.html?data=${encodeURIComponent(base64)}`;
+      window.open(puzzleURL, '_blank');
+    } else {
+      alert('Please enter some code to create a puzzle.');
+    }
+  });
+
+  // Teacher Mode binds
+  document.getElementById('runButton').addEventListener('click', runCurrentCode);
+  setTimeout(showMobilePhoneEditorOffer, 1200);
+  const quizBtn = document.getElementById('quizButton');
+  if (quizBtn) {
+    quizBtn.addEventListener('click', runQuizTests);
+  }
+  const creativeNextBtn = document.getElementById('creativeNextButton');
+  if (creativeNextBtn) {
+    creativeNextBtn.addEventListener('click', () => {
+      if (!hasRunCurrentCode) {
+        alert("You must run your code at least once before proceeding to test it.");
+        return;
+      }
+      if (currentQuizMetadata.nextUrl) {
+        navigateWithActivityReminder(window.location.pathname + '?url=' + encodeURIComponent(currentQuizMetadata.nextUrl));
+      }
+    });
+  }
+  const creativeEndBtn = document.getElementById('creativeEndButton');
+  if (creativeEndBtn) {
+    creativeEndBtn.addEventListener('click', () => {
+      if (!hasRunCurrentCode) {
+        alert("You must run your code at least once before completing this course to test it.");
+        return;
+      }
+      if (currentQuizMetadata.isEnd) {
+        renderQuizResults([], 0, 0, null, true, currentQuizMetadata.courseTitle);
+        const runnerLayout = document.getElementById('runnerLayout');
+        if (runnerLayout && runnerLayout.classList.contains('collapsed')) {
+          toggleRunner();
+        }
+      }
+    });
+  }
+  document.getElementById('consoleSubmitButton').addEventListener('click', submitConsoleInput);
+
+
+  // Display Mode binds
+  document.getElementById('playPauseButton').addEventListener('click', displayPlayPause);
+  document.getElementById('stepBackButton').addEventListener('click', displayStepBack);
+  document.getElementById('stepButton').addEventListener('click', displayStep);
+  document.getElementById('resetButton').addEventListener('click', displayReset);
+
+  document.getElementById('consoleInputField').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      submitConsoleInput();
+    }
+  });
+
+  editor.addEventListener('input', (event) => {
+    hasRunCurrentCode = false;
+    hasUnsavedChanges = editor.value !== savedEditorCode;
+    const highlightLayer = document.getElementById('highlightLayer');
+    if (highlightLayer) highlightLayer.innerHTML = '';
+    updateLineNumbers();
+    if (currentAppMode === 'edit' || currentAppMode === 'turtle') {
+      displayCode.textContent = editor.value;
+      Prism.highlightElement(displayCode);
+    }
+    analyseCodeAndUpdateMessage(true);
+    updateBlocksButtonState();
+    updateEditorActionButtons();
+    updatePuzzleButtonVisibility();
+    const reason = currentAppMode === 'blocks' ? 'Blocks Edit'
+      : event.inputType === 'insertFromPaste' ? 'Paste' : 'Typing';
+    recordPlaybackSnapshot(reason, reason === 'Paste', reason === 'Paste' ? 'paste' : '');
+    scheduleRecordHistoryDebounced('Typing');
+  });
+
+  editor.addEventListener('paste', () => {
+    hasRunCurrentCode = false;
+    incrementPasteCounter();
+    // The input event records the resulting code after the paste.
+  });
+
+  editor.addEventListener('keydown', (event) => {
+    handleEditorTabKey(event);
+    handleEditorEnterKey(event);
+  });
+  editor.addEventListener('scroll', syncLineNumberScroll);
+  displayEditor.addEventListener('scroll', syncLineNumberScroll);
+
+  // On desktop the divider between the editor and the instructions can be
+  // dragged left and right. It deliberately has no click/pop behaviour.
+  const workspace = document.getElementById('workspace');
+  const editorPanel = document.querySelector('.editor-panel');
+
+  let isResizingRunner = false;
+  let resizeStartX = 0;
+  let resizeStartWidth = 0;
+  let resizedThisGesture = false;
+
+  runnerToggle.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 || window.matchMedia('(max-width: 720px)').matches ||
+      runnerLayout.classList.contains('collapsed')) return;
+
+    isResizingRunner = true;
+    resizedThisGesture = false;
+    resizeStartX = event.clientX;
+    resizeStartWidth = editorPanel.getBoundingClientRect().width;
+    workspace.classList.add('pane-resizing');
+    runnerToggle.setPointerCapture(event.pointerId);
+  });
+
+  runnerToggle.addEventListener('pointermove', (event) => {
+    if (!isResizingRunner) return;
+
+    const delta = event.clientX - resizeStartX;
+    if (Math.abs(delta) > 3) resizedThisGesture = true;
+
+    const bounds = workspace.getBoundingClientRect();
+    const minEditorWidth = 420;
+    const minInstructionsWidth = 280;
+    const dividerWidth = 14;
+    const maxEditorWidth = Math.max(minEditorWidth, bounds.width - minInstructionsWidth - dividerWidth);
+    const nextWidth = Math.max(minEditorWidth, Math.min(maxEditorWidth, resizeStartWidth + delta));
+    workspace.style.setProperty('--editor-pane-width', `${Math.round(nextWidth)}px`);
+  });
+
+  const finishRunnerResize = (event) => {
+    if (!isResizingRunner) return;
+    isResizingRunner = false;
+    workspace.classList.remove('pane-resizing');
+
+    if (resizedThisGesture) {
+      workspace.classList.add('pane-resized');
     }
 
-    function parseAndStripMetadata(code) {
-      if (typeof code !== 'string') {
-        return {
-          strippedCode: code,
-          metadata: { testCases: [], nextUrl: null, isEnd: false, courseTitle: "Python Algorithms", links: [] }
-        };
+    if (runnerToggle.hasPointerCapture(event.pointerId)) {
+      runnerToggle.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  runnerToggle.addEventListener('pointerup', finishRunnerResize);
+  runnerToggle.addEventListener('pointercancel', finishRunnerResize);
+
+  const terminalResizer = document.getElementById('terminalResizer');
+  const outputPanel = document.querySelector('.output-panel');
+  const savedTerminalHeight = Number(localStorage.getItem('pythonCopyTerminalHeight'));
+  if (Number.isFinite(savedTerminalHeight) && savedTerminalHeight >= 180) {
+    workspace.style.setProperty('--terminal-height', `${savedTerminalHeight}px`);
+  }
+
+  let isResizingTerminal = false;
+  let terminalStartY = 0;
+  let terminalStartHeight = 0;
+  let terminalMovedThisGesture = false;
+  let ignoreTerminalToggleClick = false;
+
+  terminalResizer.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 || !workspace.classList.contains('terminal-open')) return;
+    isResizingTerminal = true;
+    terminalMovedThisGesture = false;
+    terminalStartY = event.clientY;
+    terminalStartHeight = outputPanel.getBoundingClientRect().height;
+    terminalResizer.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  });
+
+  terminalResizer.addEventListener('pointermove', (event) => {
+    if (!isResizingTerminal) return;
+    if (Math.abs(event.clientY - terminalStartY) > 3) terminalMovedThisGesture = true;
+    const maxHeight = Math.max(180, window.innerHeight * 0.75);
+    const nextHeight = Math.max(180, Math.min(maxHeight, terminalStartHeight - (event.clientY - terminalStartY)));
+    workspace.style.setProperty('--terminal-height', `${Math.round(nextHeight)}px`);
+  });
+
+  const finishTerminalResize = (event) => {
+    if (!isResizingTerminal) return;
+    isResizingTerminal = false;
+    const height = Math.round(outputPanel.getBoundingClientRect().height);
+    localStorage.setItem('pythonCopyTerminalHeight', String(height));
+    if (terminalMovedThisGesture) {
+      ignoreTerminalToggleClick = true;
+      window.setTimeout(() => { ignoreTerminalToggleClick = false; }, 0);
+    }
+    if (terminalResizer.hasPointerCapture(event.pointerId)) {
+      terminalResizer.releasePointerCapture(event.pointerId);
+    }
+  };
+
+  terminalResizer.addEventListener('pointerup', finishTerminalResize);
+  terminalResizer.addEventListener('pointercancel', finishTerminalResize);
+  terminalResizer.addEventListener('click', (event) => {
+    if (ignoreTerminalToggleClick) {
+      event.preventDefault();
+      ignoreTerminalToggleClick = false;
+      return;
+    }
+    if (workspace.classList.contains('terminal-open')) hideTerminal();
+    else showTerminal();
+  });
+  window.addEventListener('resize', () => updateRunnerToggleLabel());
+
+  document.getElementById('toggleGlobalPreviewBtn').addEventListener('click', () => {
+    const container = document.getElementById('webPreviewContainer');
+    const isCurrentlyOpen = container.style.display === 'block';
+    if (isCurrentlyOpen) {
+      closeWebPreview();
+    } else {
+      const code = editor.value;
+      const links = extractLinksFromCode(code);
+      if (links.length > 0) {
+        const iframe = document.getElementById('webPreviewIframe');
+        const lastUrl = iframe.dataset.lastUrl || links[0].url;
+        previewWebLink(lastUrl);
       }
-      
-      const lines = code.split(/\r?\n/);
-      const inputsList = [];
-      const outputsList = [];
-      let nextUrl = null;
-      let isEnd = false;
-      let courseTitle = "Python Algorithms";
-      let mode = null;
-      const links = [];
+    }
+  });
+  document.getElementById('openNewTabFromPreview').addEventListener('click', () => {
+    const iframe = document.getElementById('webPreviewIframe');
+    if (iframe && iframe.src) {
+      window.open(iframe.src, '_blank');
+    }
+  });
+  editor.addEventListener('focus', () => {
+    if (currentAppMode === 'edit') {
+      const highlightLayer = document.getElementById('highlightLayer');
+      if (highlightLayer) highlightLayer.innerHTML = '';
+    }
+  });
 
-      const isHelpText = /entered|seperator|separator|speech\s+marks|between|expected|same\s+format|how\s+to|example/i;
-      const metadataLineIndices = new Set();
+  updateFullscreenAvailability();
+  if (isMinimalMode) {
+    setDistractionFreeMode(true);
+  }
+  updateLineNumbers();
+  applyCodeFontSize(document.getElementById('font-size').value);
+  updateRunnerToggleLabel();
+  updateAppMode();
+  updateBlocksButtonState();
+  updateEditorActionButtons();
+  updatePasteCounter();
+  updatePuzzleButtonVisibility();
+  initializeDailyChallenge();
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const trimmed = line.trim();
-        
-        if (trimmed.startsWith('#')) {
-          const commentContent = trimmed.substring(1).trim();
-          
-          if (/^learn\s+more\b/i.test(commentContent)) {
-            metadataLineIndices.add(i);
-            const match = commentContent.match(/https?:\/\/[^\s'"`()]+/);
-            if (match) {
-              links.push({ url: match[0], line: 0 });
-            }
-            continue;
-          }
+  // Record initial load state
+  recordPlaybackSnapshot('Initial Load', true, 'save');
 
-          if (/^input\b/i.test(commentContent)) {
-            mode = 'input';
-            metadataLineIndices.add(i);
-          } else if (/^output\b/i.test(commentContent)) {
-            mode = 'output';
-            metadataLineIndices.add(i);
-          } else if (/^next\b/i.test(commentContent)) {
-            metadataLineIndices.add(i);
-            const rest = commentContent.substring(4).trim();
-            const match = rest.match(/https?:\/\/[^\s'"`()]+/);
-            if (match) {
-              nextUrl = match[0];
-              mode = null;
-            } else {
-              mode = 'next';
+  window.addEventListener('beforeunload', function (e) {
+    if (hasUnsavedChanges || shouldRemindActivityDownload()) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+});
+
+function updateFullscreenAvailability() {
+  const isEmbedded = window.self !== window.top;
+  openNewTabButton.style.display = isEmbedded ? 'inline-block' : 'none';
+  if (document.fullscreenEnabled) return;
+  fullscreenButton.style.display = 'none';
+}
+
+function isDistractionFreeActive() {
+  if (typeof document === 'undefined' || !document.documentElement) return false;
+  return document.documentElement.classList.contains('distraction-free-mode') ||
+    (document.body && document.body.classList.contains('distraction-free-mode')) ||
+    document.documentElement.classList.contains('minimal-mode') ||
+    (document.body && document.body.classList.contains('minimal-mode'));
+}
+
+function setDistractionFreeMode(enable) {
+  if (typeof document === 'undefined' || !document.documentElement) return;
+
+  // Distraction-free mode applies when in edit mode
+  if (enable && currentAppMode !== 'edit') {
+    setAppMode('edit');
+  }
+
+  const docEl = document.documentElement;
+  const bodyEl = document.body;
+  const btn = document.getElementById('distractionFreeButton');
+  const chevronPath = document.getElementById('distractionChevronPath');
+  const workspace = document.getElementById('workspace');
+
+  if (enable) {
+    docEl.classList.add('distraction-free-mode');
+    if (bodyEl) bodyEl.classList.add('distraction-free-mode');
+
+    if (workspace && (workspace.style.display === 'none' || (window.getComputedStyle && window.getComputedStyle(workspace).display === 'none'))) {
+      workspace.style.display = 'grid';
+      const starter = document.getElementById('starterPanel');
+      if (starter) starter.style.display = 'none';
+      const instr = document.getElementById('instructionsPanel');
+      if (instr) instr.style.display = 'none';
+    }
+
+    if (chevronPath) {
+      // Chevron points DOWN (V) to signify "expand / enable the rest of the buttons"
+      chevronPath.setAttribute('d', 'm6 9 6 6 6-6');
+    }
+    if (btn) {
+      btn.title = 'Show all buttons (Exit Distraction-Free)';
+      btn.setAttribute('aria-label', 'Show all buttons (Exit Distraction-Free)');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  } else {
+    docEl.classList.remove('distraction-free-mode', 'minimal-mode');
+    if (bodyEl) bodyEl.classList.remove('distraction-free-mode', 'minimal-mode');
+
+    const workspaceToolbar = document.querySelector('.workspace-toolbar');
+    if (workspaceToolbar && currentAppMode !== 'blocks') {
+      workspaceToolbar.style.display = '';
+    }
+
+    if (chevronPath) {
+      // Chevron points UP (Λ) to signify "collapse into distraction-free mode"
+      chevronPath.setAttribute('d', 'm18 15-6-6-6 6');
+    }
+    if (btn) {
+      btn.title = 'Distraction-Free Mode (Hide header & toolbars)';
+      btn.setAttribute('aria-label', 'Toggle Distraction-Free Mode');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  window.dispatchEvent(new Event('resize'));
+}
+
+function toggleDistractionFreeMode() {
+  setDistractionFreeMode(!isDistractionFreeActive());
+}
+
+function applyCodeFontSize(sizeValue) {
+  const fontSize = Number(sizeValue) || 16;
+  const lineHeight = Math.round(fontSize * 1.5);
+
+  editor.style.fontSize = fontSize + 'px';
+  editor.style.lineHeight = lineHeight + 'px';
+  displayEditor.style.fontSize = fontSize + 'px';
+  displayEditor.style.lineHeight = lineHeight + 'px';
+  displayCode.style.fontSize = 'inherit';
+  displayCode.style.lineHeight = 'inherit';
+  lineNumbers.style.fontSize = fontSize + 'px';
+  lineNumbers.style.lineHeight = lineHeight + 'px';
+  updateLineNumbers();
+
+  if (blocklyWorkspace && typeof Blockly !== 'undefined') {
+    blocklyWorkspace.setScale(fontSize / 16);
+  }
+}
+
+function getCodeLineHeight() {
+  const activeView = currentAppMode === 'display' ? displayEditor : editor;
+  const parsed = parseFloat(window.getComputedStyle(activeView).lineHeight);
+  return Number.isFinite(parsed) ? parsed : 24;
+}
+
+function updateLineNumbers() {
+  // The textarea is transparent; keep its visible code layer in sync after
+  // URL loads and other programmatic edits that do not fire input events.
+  if (displayCode.textContent !== editor.value) {
+    displayCode.textContent = editor.value;
+    if (typeof Prism !== 'undefined') {
+      Prism.highlightElement(displayCode);
+    }
+  }
+  const lines = Math.max(1, editor.value.split('\n').length);
+  let nums = '';
+  for (let i = 1; i <= lines; i++) {
+    nums += i + (i < lines ? '\n' : '');
+  }
+  lineNumbers.textContent = nums;
+  syncLineNumberScroll();
+}
+
+function syncLineNumberScroll(event) {
+  if (event && event.target) {
+    const target = event.target;
+    if (target === editor) {
+      displayEditor.scrollTop = editor.scrollTop;
+      displayEditor.scrollLeft = editor.scrollLeft;
+    } else if (target === displayEditor) {
+      editor.scrollTop = displayEditor.scrollTop;
+      editor.scrollLeft = displayEditor.scrollLeft;
+    }
+  }
+  const scrollTop = currentAppMode === 'display' ? displayEditor.scrollTop : editor.scrollTop;
+  const scrollLeft = currentAppMode === 'display' ? displayEditor.scrollLeft : editor.scrollLeft;
+  lineNumbers.scrollTop = scrollTop;
+  highlightLayer.style.top = (14 - scrollTop) + 'px';
+  highlightLayer.style.left = (64 - scrollLeft) + 'px';
+}
+
+function toggleRunner() {
+  const collapsed = runnerLayout.classList.toggle('collapsed');
+  document.getElementById('workspace').classList.toggle('runner-collapsed', collapsed);
+  updateRunnerToggleLabel(collapsed);
+  runnerToggle.title = 'Drag left or right to resize the panes.';
+  resizeBlocklyWorkspaceSoon();
+}
+
+function ensureRunnerExpanded() {
+  if (runnerLayout.classList.contains('collapsed')) toggleRunner();
+}
+
+function ensureRunnerCollapsed() {
+  if (!runnerLayout.classList.contains('collapsed')) toggleRunner();
+}
+
+function updateRunnerToggleLabel() {
+  runnerToggle.textContent = '⋮';
+}
+
+function resizeBlocklyWorkspaceSoon() {
+  if (!blocklyWorkspace || typeof Blockly === 'undefined') return;
+
+  Blockly.svgResize(blocklyWorkspace);
+  window.setTimeout(() => Blockly.svgResize(blocklyWorkspace), 100);
+  window.setTimeout(() => Blockly.svgResize(blocklyWorkspace), 300);
+}
+
+function downloadText(text, filename, mimeType) {
+  const blob = new Blob([text], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  downloadUrl(url, filename, true);
+}
+
+function downloadUrl(url, filename, shouldRevoke = false) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  if (shouldRevoke) {
+    window.setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+}
+
+async function copyForDocs() {
+  const code = editor.value;
+  const isDarkMode = document.body.classList.contains('dark-theme');
+
+  // Define theme colors for the pasted document
+  const theme = isDarkMode ? {
+    bg: '#1e1e1e',
+    text: '#d4d4d4',
+    gutterBg: '#2d2d2d',
+    gutterText: '#858585',
+    comment: '#6a9955',
+    keyword: '#569cd6',
+    string: '#ce9178',
+    function: '#dcdcaa',
+    number: '#b5cea8',
+    operator: '#d4d4d4'
+  } : {
+    bg: '#ffffff',
+    text: '#333333',
+    gutterBg: '#f0f0f0',
+    gutterText: '#999999',
+    comment: '#008000',
+    keyword: '#0000ff',
+    string: '#a31515',
+    function: '#795e26',
+    number: '#098658',
+    operator: '#333333'
+  };
+
+  const lines = code.split('\n');
+  // Remove width: 100% to prevent "squeezing" in Google Docs
+  let tableHtml = `<div style="background-color: ${theme.bg}; padding: 15px; border-radius: 10px; border: 1px solid #ccc; display: inline-block; min-width: 100%;">`;
+  tableHtml += `<table cellspacing="0" cellpadding="0" style="border-collapse: collapse; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 11pt; background: ${theme.bg}; color: ${theme.text};">`;
+
+  for (let i = 0; i < lines.length; i++) {
+    const lineNum = i + 1;
+    const lineCode = lines[i] || ' ';
+
+    let highlighted = lineCode;
+    try {
+      highlighted = Prism.highlight(lineCode, Prism.languages.python || Prism.languages.javascript, 'python');
+    } catch (e) {
+      highlighted = lineCode.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    const styledCode = highlighted
+      .replace(/class="token comment"/g, `style="color: ${theme.comment}; font-style: italic;"`)
+      .replace(/class="token keyword"/g, `style="color: ${theme.keyword}; font-weight: bold;"`)
+      .replace(/class="token string"/g, `style="color: ${theme.string};"`)
+      .replace(/class="token function"/g, `style="color: ${theme.function};"`)
+      .replace(/class="token number"/g, `style="color: ${theme.number};"`)
+      .replace(/class="token (punctuation|operator)"/g, `style="color: ${theme.operator};"`);
+
+    // Using inline styles with zero margin/padding to prevent Word from adding massive paragraph spacing
+    // and avoiding literal newlines in the HTML string which Word interprets as empty paragraphs.
+    tableHtml += `<tr style="padding:0; margin:0; line-height:1.2;"><td width="60" style="width:60px; padding:0 10px 0 0; margin:0; background-color:${theme.gutterBg}; color:${theme.gutterText}; text-align:right; border-right:3px solid #007bff; vertical-align:top; font-size:10pt; font-weight:bold; white-space:nowrap; line-height:1.2;">${lineNum}</td><td style="padding:0 0 0 15px; margin:0; white-space:pre; vertical-align:top; line-height:1.2; font-family:'Consolas', 'Monaco', 'Courier New', monospace;">${styledCode}</td></tr>`;
+  }
+  tableHtml += '</table></div>';
+
+  try {
+    if (navigator.clipboard && window.ClipboardItem) {
+      const blob = new Blob([tableHtml], { type: 'text/html' });
+      const plainBlob = new Blob([code], { type: 'text/plain' });
+      const data = [new ClipboardItem({
+        'text/html': blob,
+        'text/plain': plainBlob
+      })];
+      await navigator.clipboard.write(data);
+    } else {
+      // Fallback for browsers that don't support ClipboardItem
+      const div = document.createElement('div');
+      div.innerHTML = tableHtml;
+      div.style.position = 'fixed';
+      div.style.left = '-9999px';
+      document.body.appendChild(div);
+
+      const range = document.createRange();
+      range.selectNode(div);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand('copy');
+      document.body.removeChild(div);
+    }
+
+    const originalText = runnerStatus.textContent;
+    setRunnerStatus('✓ Copied with line numbers!');
+    setTimeout(() => setRunnerStatus(originalText), 3000);
+  } catch (err) {
+    console.error('Failed to copy rich text:', err);
+    setRunnerStatus('Clipboard error. Try again?');
+  }
+}
+
+async function copyTextToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.setAttribute('readonly', '');
+  textArea.style.position = 'fixed';
+  textArea.style.top = '0';
+  textArea.style.left = '-9999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  textArea.setSelectionRange(0, textArea.value.length);
+
+  try {
+    const copied = document.execCommand('copy');
+    if (!copied) throw new Error('Copy command failed.');
+  } finally {
+    document.body.removeChild(textArea);
+  }
+}
+
+function showCopyButtonCopied() {
+  const button = document.getElementById('copyButton');
+  button.textContent = 'Copied';
+  if (copyButtonTimeout) clearTimeout(copyButtonTimeout);
+  copyButtonTimeout = setTimeout(() => {
+    button.textContent = 'Copy';
+    copyButtonTimeout = null;
+  }, 5000);
+}
+
+let shareButtonTimeout = null;
+
+function updateShareLinkButton() {
+  const shareBtn = document.getElementById('shareLinkButton');
+  if (!shareBtn) return;
+
+  const codeText = editor.value;
+  if (!codeText.trim()) {
+    shareBtn.disabled = true;
+    shareBtn.title = 'Write some code first to generate a link.';
+    return;
+  }
+
+  let base64 = '';
+  try {
+    const utf8Bytes = new TextEncoder().encode(codeText);
+    let binary = '';
+    for (let i = 0; i < utf8Bytes.length; i++) {
+      binary += String.fromCharCode(utf8Bytes[i]);
+    }
+    base64 = btoa(binary);
+  } catch (err) {
+    console.error('Failed to encode code for share link:', err);
+  }
+
+  const baseUrl = window.location.href.split('?')[0];
+  const shareUrl = `${baseUrl}?code=${encodeURIComponent(base64)}`;
+
+  // Standard safe limit for URLs is 2048 characters
+  if (shareUrl.length > 2048) {
+    shareBtn.disabled = true;
+    shareBtn.title = `Code is too long to share via link (${shareUrl.length} / 2048 characters).`;
+  } else {
+    shareBtn.disabled = false;
+    shareBtn.title = 'Copy a shareable link that loads this code directly in Python Code Lab';
+  }
+}
+
+function copyShareLink() {
+  const shareBtn = document.getElementById('shareLinkButton');
+  if (!shareBtn || shareBtn.disabled) return;
+
+  const codeText = editor.value;
+  let base64 = '';
+  try {
+    const utf8Bytes = new TextEncoder().encode(codeText);
+    let binary = '';
+    for (let i = 0; i < utf8Bytes.length; i++) {
+      binary += String.fromCharCode(utf8Bytes[i]);
+    }
+    base64 = btoa(binary);
+  } catch (err) {
+    console.error('Failed to encode code for share link:', err);
+    return;
+  }
+
+  const baseUrl = window.location.href.split('?')[0];
+  const isDark = document.getElementById('dark-mode').checked;
+  const themeSuffix = isDark ? '&theme=dark' : '&theme=light';
+  const shareUrl = `${baseUrl}?code=${encodeURIComponent(base64)}${themeSuffix}`;
+
+  copyTextToClipboard(shareUrl).then(() => {
+    shareBtn.textContent = 'Link Copied';
+    if (shareButtonTimeout) clearTimeout(shareButtonTimeout);
+    shareButtonTimeout = setTimeout(() => {
+      shareBtn.textContent = 'Copy Link';
+      shareButtonTimeout = null;
+    }, 3000);
+    setRunnerStatus('Share link copied to clipboard.');
+  }).catch(err => {
+    console.error('Could not copy share link:', err);
+    alert('Failed to copy link. Please manually copy the URL.');
+  });
+}
+
+function initializeDailyChallenge() {
+  fetch('challenges.json')
+    .then(response => response.json())
+    .then(challenges => {
+      if (!challenges || challenges.length === 0) return;
+
+      function getDayOfYear(date) {
+        const startOfYear = new Date(date.getFullYear(), 0, 1);
+        const difference = date - startOfYear;
+        const oneDay = 1000 * 60 * 60 * 24;
+        return Math.round(difference / oneDay) + 1;
+      }
+
+      const today = new Date();
+      const dayOfYear = getDayOfYear(today);
+      const index = (dayOfYear - 1) % challenges.length;
+      const challenge = challenges[index];
+
+      const pythonCode = `# Challenge: ${challenge.title} (${challenge.spice})\n${challenge.comment}\n`;
+      const utf8Bytes = new TextEncoder().encode(pythonCode);
+      let binary = '';
+      for (let i = 0; i < utf8Bytes.length; i++) {
+        binary += String.fromCharCode(utf8Bytes[i]);
+      }
+      const base64 = btoa(binary);
+      const challengeUrl = `pythoncopy.html?code=${encodeURIComponent(base64)}`;
+
+      const titleEl = document.getElementById('dailyChallengeTitle');
+      const spiceEl = document.getElementById('dailyChallengeSpice');
+      const descEl = document.getElementById('dailyChallengeDesc');
+      const btnEl = document.getElementById('dailyChallengeBtn');
+
+      if (titleEl) titleEl.textContent = challenge.title;
+      if (spiceEl) spiceEl.textContent = challenge.spice;
+      if (descEl) {
+        descEl.textContent = getChallengeDescription(challenge.comment);
+      }
+      if (btnEl) {
+        btnEl.href = challengeUrl;
+      }
+    })
+    .catch(err => {
+      console.error('Failed to load daily challenge:', err);
+      const titleEl = document.getElementById('dailyChallengeTitle');
+      if (titleEl) titleEl.textContent = 'Daily Challenge Unavailable';
+      const descEl = document.getElementById('dailyChallengeDesc');
+      if (descEl) descEl.textContent = 'Could not load challenges. You can still use the blank editor or standard quick starts.';
+      const btnEl = document.getElementById('dailyChallengeBtn');
+      if (btnEl) btnEl.style.display = 'none';
+    });
+}
+
+function updateURL() {
+  const inputURL = document.getElementById('urlInput').value.trim();
+  if (inputURL === '') {
+    alert('Please enter a valid URL.');
+    return;
+  }
+  const newURL = `${window.location.pathname}?url=${encodeURIComponent(inputURL)}`;
+  window.history.pushState({}, '', newURL);
+  fetchCode(inputURL);
+}
+
+function normalizeCodeUrl(url) {
+  if (!url) return url;
+  let normalizedUrl = String(url).trim().replace(/\\\)/g, ')');
+
+  try {
+    const parsedUrl = new URL(normalizedUrl, window.location.href);
+    if (parsedUrl.hostname === 'github.com') {
+      const parts = parsedUrl.pathname.split('/').filter(Boolean);
+      const markerIndex = parts.findIndex(part => part === 'blob' || part === 'raw');
+      if (parts.length >= 5 && markerIndex === 2) {
+        const [owner, repo] = parts;
+        const branch = parts[3];
+        const filePath = parts.slice(4).join('/');
+        normalizedUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`;
+      }
+    }
+  } catch (err) {
+    console.warn('Could not normalize URL:', err);
+  }
+
+  const githubPrefixes = [
+    "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/",
+    "https://raw.githubusercontent.com/jamesabela/jsfun/main/",
+    "https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/master/",
+    "https://raw.githubusercontent.com/jamesabela/jsfun/master/"
+  ];
+  for (const prefix of githubPrefixes) {
+    if (normalizedUrl.startsWith(prefix)) {
+      return normalizedUrl.substring(prefix.length);
+    }
+  }
+
+  return normalizedUrl;
+}
+
+function startBlankFile() {
+  if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+    exitPlaybackMode(true);
+  }
+  currentURL = '';
+  currentQuizMetadata = {
+    testCases: [],
+    nextUrl: null,
+    isEnd: false,
+    courseTitle: "Python Algorithms",
+    links: []
+  };
+  loadedMetadataLinks = [];
+  editor.value = '';
+  updatePuzzleButtonVisibility();
+  markCurrentEditorCodeSaved('');
+  displayCode.textContent = '';
+  document.getElementById('urlInput').value = '';
+  document.getElementById('workspace').style.display = 'grid';
+  document.getElementById('inputContainer').style.display = 'none';
+  document.getElementById('starterPanel').style.display = 'none';
+  document.getElementById('instructionsPanel').style.display = 'none';
+  window.history.pushState({}, '', window.location.pathname + '?blank');
+
+  if (blocklyWorkspace && typeof Blockly !== 'undefined') {
+    blocklyWorkspace.clear();
+  }
+
+  updateLineNumbers();
+  analyseCodeAndUpdateMessage();
+  clearRunner();
+  ensureRunnerCollapsed();
+  setRunnerStatus('Blank file ready.');
+  updateBlocksButtonState();
+  playbackHistory = [];
+  recordPlaybackSnapshot('Blank File', true, 'save');
+  editor.focus();
+}
+
+function fetchCode(url) {
+  if (document.getElementById('playbackControlsBar') && document.getElementById('playbackControlsBar').style.display !== 'none') {
+    exitPlaybackMode(true);
+  }
+
+  url = normalizeCodeUrl(url);
+
+  const isPastebin = /pastebin\.com/i.test(url);
+  if (isPastebin && typeof window.confirm === 'function') {
+    const proceed = window.confirm(
+      'Loading from Pastebin routes this URL through corsproxy.io (a third-party proxy). Use public learning materials only, not private student information. Continue?'
+    );
+    if (!proceed) {
+      setRunnerStatus('Pastebin load cancelled.');
+      return;
+    }
+  }
+
+  currentURL = url;
+  updatePuzzleButtonVisibility();
+  const fetchURL = isPastebin
+    ? `https://corsproxy.io/?${encodeURIComponent(url)}`
+    : url;
+
+  fetch(fetchURL)
+    .then(response => response.text())
+    .then(data => {
+      const trimmedData = data && typeof data === 'string' ? data.replace(/^\ufeff/, '').trim() : '';
+      const isBlocks = (url && (url.toLowerCase().endsWith('.blocks') || url.toLowerCase().endsWith('.xml'))) ||
+        trimmedData.startsWith('<xml') ||
+        trimmedData.startsWith('<?xml');
+
+      if (isBlocks) {
+        currentQuizMetadata = {
+          testCases: [],
+          nextUrl: null,
+          isEnd: false,
+          courseTitle: "Python Algorithms",
+          links: []
+        };
+        loadedMetadataLinks = [];
+        editor.value = '';
+        setAppMode('blocks');
+        if (window.blocklyWorkspace && typeof Blockly !== 'undefined') {
+          try {
+            const xmlDom = window.parseBlocklyXmlText(data);
+            window.blocklyWorkspace.clear();
+            Blockly.Xml.domToWorkspace(xmlDom, window.blocklyWorkspace);
+            resizeBlocklyWorkspaceSoon();
+
+            const code = getWorkspacePythonCode();
+            editor.value = code;
+            markCurrentEditorCodeSaved(code);
+            updateLineNumbers();
+
+            document.getElementById('workspace').style.display = 'grid';
+            document.getElementById('inputContainer').style.display = 'none';
+            document.getElementById('starterPanel').style.display = 'none';
+            document.getElementById('instructionsPanel').style.display = 'none';
+
+            analyseCodeAndUpdateMessage();
+            clearRunner();
+            autoPreviewFirstLink();
+            updateBlocksButtonState();
+            updatePuzzleButtonVisibility();
+            playbackHistory = [];
+            recordPlaybackSnapshot('Load Blocks Gist', true, 'save');
+
+            lastGeneratedBlocklyPython = code;
+            if (typeof updateBlocksCodePreview === 'function') {
+              updateBlocksCodePreview(code);
             }
-          } else if (/^end\b/i.test(commentContent)) {
-            metadataLineIndices.add(i);
-            isEnd = true;
-            const rest = commentContent.substring(3).trim();
-            if (rest !== '') {
-              courseTitle = rest;
-              mode = null;
-            } else {
-              mode = 'end';
-            }
-          } else {
-            if (commentContent !== '' && !isHelpText.test(commentContent)) {
-              if (mode === 'input' || mode === 'output') {
-                const parts = commentContent.split(',').map(part => {
-                  let p = part.trim();
-                  if ((p.startsWith('"') && p.endsWith('"')) || (p.startsWith("'") && p.endsWith("'"))) {
-                    p = p.substring(1, p.length - 1);
-                  }
-                  return p;
-                });
-                if (mode === 'input') {
-                  inputsList.push(parts);
-                  metadataLineIndices.add(i);
-                } else if (mode === 'output') {
-                  outputsList.push(parts);
-                  metadataLineIndices.add(i);
-                }
-              } else if (mode === 'next') {
-                const match = commentContent.match(/https?:\/\/[^\s'"`()]+/);
-                if (match) {
-                  nextUrl = match[0];
-                }
-                metadataLineIndices.add(i);
-                mode = null;
-              } else if (mode === 'end') {
-                courseTitle = commentContent;
-                metadataLineIndices.add(i);
-                mode = null;
-              }
-            } else if (commentContent !== '' && isHelpText.test(commentContent) && (mode === 'input' || mode === 'output')) {
-              metadataLineIndices.add(i);
-            }
+            setRunnerStatus('Blocks file loaded successfully.');
+            return;
+          } catch (err) {
+            console.error('Error loading Blocks file:', err);
+            alert('Failed to parse blocks XML: ' + err.message + '\nLoading as plain text instead.');
+            setAppMode('edit');
           }
         } else {
-          if (trimmed !== '') {
+          setAppMode('edit');
+        }
+      }
+
+      const parsedRes = parseAndStripMetadata(data);
+      currentQuizMetadata = parsedRes.metadata;
+      loadedMetadataLinks = currentQuizMetadata.links || [];
+      const strippedData = parsedRes.strippedCode;
+
+      editor.value = strippedData;
+      markCurrentEditorCodeSaved(strippedData);
+      updateLineNumbers();
+      document.getElementById('workspace').style.display = 'grid';
+      document.getElementById('inputContainer').style.display = 'none';
+      document.getElementById('starterPanel').style.display = 'none';
+      document.getElementById('instructionsPanel').style.display = 'none';
+      analyseCodeAndUpdateMessage();
+      clearRunner();
+      autoPreviewFirstLink();
+      updateBlocksButtonState();
+      updatePuzzleButtonVisibility();
+      playbackHistory = [];
+      if (window.blocklyWorkspace && typeof window.blocklyWorkspace.clearUndo === 'function') {
+        window.blocklyWorkspace.clearUndo();
+      }
+      recordPlaybackSnapshot('Load Gist', true, 'save');
+
+      if (currentAppMode === 'blocks') {
+        if (typeof checkCodeConvertibility === 'function' && !checkCodeConvertibility(editor.value)) {
+          alert("This loaded program contains statements that cannot be fully converted to blocks. Switching to Edit Mode.");
+          setAppMode('edit');
+        } else if (window.blocklyWorkspace) {
+          isUpdatingBlocklyFromText = true;
+          if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.disable();
+          try {
+            convertPythonToWorkspace(editor.value, window.blocklyWorkspace);
+            lastGeneratedBlocklyPython = getWorkspacePythonCode();
+          } catch (ex) {
+            console.error("Error parsing python code to blocks:", ex);
+          } finally {
+            if (typeof Blockly !== 'undefined' && Blockly.Events) Blockly.Events.enable();
+            isUpdatingBlocklyFromText = false;
+          }
+        }
+      }
+    })
+    .catch(error => {
+      alert('Failed to load code. Please ensure the URL is correct and points to a raw Python or Blocks file.');
+      console.error('Error fetching code:', error);
+      currentURL = '';
+      updatePuzzleButtonVisibility();
+    });
+}
+
+function extractImports(source) {
+  const imports = new Set();
+  const lines = source.split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('import ')) {
+      const parts = trimmed.replace('import ', '').split(',');
+      for (const part of parts) {
+        const moduleName = part.trim().split(' as ')[0].split('.')[0];
+        if (moduleName) imports.add(moduleName);
+      }
+    } else if (trimmed.startsWith('from ')) {
+      const afterFrom = trimmed.replace('from ', '');
+      const moduleName = afterFrom.split(' import ')[0].trim().split('.')[0];
+      if (moduleName) imports.add(moduleName);
+    }
+  }
+  return [...imports];
+}
+
+function classifyCode(source) {
+  const imports = extractImports(source);
+  const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle', 'time']);
+  const localOnlyImports = imports.filter(moduleName => !browserSafeImports.has(moduleName));
+  const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
+
+  const hasSleep = /time\.sleep\b|sleep\s*\(/.test(source);
+  const sleepWarning = hasSleep ? ' ⚠️ Note: time.sleep() blocks browser rendering, meaning all prints will output at once. Instead, try using input("Press Enter to continue...") to pause execution.' : '';
+
+  if (localOnlyImports.length > 0) {
+    return {
+      ok: false,
+      mode: 'download',
+      message: `Local-only imports detected: ${localOnlyImports.join(', ')}. Please download and run this program on a local Python installation.`
+    };
+  }
+
+  return {
+    ok: true,
+    mode: 'normal',
+    message: (allowedImports.length > 0
+      ? `Browser-safe imports detected: ${allowedImports.join(', ')}. This code looks suitable for browser running.`
+      : 'No imports detected. This code looks suitable for browser running.') + sleepWarning
+  };
+}
+
+let hasWarnedAboutImports = false;
+
+function analyseCodeAndUpdateMessage(isTyping = false) {
+  const analysis = classifyCode(editor.value);
+  const imports = extractImports(editor.value);
+  const hasTurtle = imports.includes('turtle');
+
+  if (isTyping) {
+    // When typing, do not generate errors or block execution
+    document.getElementById('runButton').disabled = false;
+    hasWarnedAboutImports = false;
+
+    // Show status based only on browser-safe imports
+    const browserSafeImports = new Set(['random', 'math', 'statistics', 'datetime', 'string', 'turtle', 'time']);
+    const allowedImports = imports.filter(moduleName => browserSafeImports.has(moduleName));
+
+    const hasSleep = /time\.sleep\b|sleep\s*\(/.test(editor.value);
+    const sleepWarning = hasSleep ? ' ⚠️ Note: time.sleep() blocks browser rendering, meaning all prints will output at once. Instead, try using input("Press Enter to continue...") to pause execution.' : '';
+
+    runnerMessage.style.display = 'block';
+    runnerMessage.textContent = (allowedImports.length > 0
+      ? `Browser-safe imports detected: ${allowedImports.join(', ')}. This code looks suitable for browser running.`
+      : 'No imports detected. This code looks suitable for browser running.') + sleepWarning;
+
+    if (hasTurtle || currentAppMode === 'turtle') {
+      detectionLabel.textContent = 'Detection: Turtle graphics mode.';
+    } else {
+      detectionLabel.textContent = 'Detection: normal Python mode.';
+    }
+  } else {
+    // Original behavior when entering the page (loading code) or running/tracing
+    runnerMessage.style.display = 'block';
+    runnerMessage.textContent = analysis.message;
+
+    if (!analysis.ok) {
+      detectionLabel.textContent = 'Detection: download required.';
+      document.getElementById('runButton').disabled = true;
+      if (!hasWarnedAboutImports) {
+        alert('Warning: Complex or local imports detected. Python Code Lab cannot run this code in the browser. Please download the .py file to run it locally.');
+        hasWarnedAboutImports = true;
+      }
+    } else {
+      if (hasTurtle || currentAppMode === 'turtle') {
+        detectionLabel.textContent = 'Detection: Turtle graphics mode.';
+      } else {
+        detectionLabel.textContent = 'Detection: normal Python mode.';
+      }
+      document.getElementById('runButton').disabled = false;
+      hasWarnedAboutImports = false;
+    }
+  }
+  if (hasTurtle && currentAppMode === 'edit') {
+    setAppMode('turtle');
+  }
+  updateReferenceLinks();
+  updateQuizDetection();
+  updateShareLinkButton();
+  updatePuzzleButtonVisibility();
+}
+
+function updateQuizDetection() {
+  const testCases = currentQuizMetadata.testCases || [];
+  const quizBtn = document.getElementById('quizButton');
+  const creativeNextBtn = document.getElementById('creativeNextButton');
+  const creativeEndBtn = document.getElementById('creativeEndButton');
+
+  if (quizBtn) quizBtn.style.display = 'none';
+  if (creativeNextBtn) creativeNextBtn.style.display = 'none';
+  if (creativeEndBtn) creativeEndBtn.style.display = 'none';
+
+  if (testCases.length > 0) {
+    if (quizBtn) {
+      quizBtn.style.display = 'inline-block';
+      quizBtn.textContent = `Run Tests (${testCases.length})`;
+    }
+    const currentText = detectionLabel.textContent;
+    if (!currentText.includes('Coding Quiz')) {
+      detectionLabel.textContent = currentText.split(' | ')[0] + ` | Coding Quiz (${testCases.length} test${testCases.length > 1 ? 's' : ''})`;
+    }
+  } else if (currentQuizMetadata.nextUrl || currentQuizMetadata.isEnd) {
+    if (currentQuizMetadata.nextUrl) {
+      if (creativeNextBtn) creativeNextBtn.style.display = 'inline-block';
+    } else if (currentQuizMetadata.isEnd) {
+      if (creativeEndBtn) creativeEndBtn.style.display = 'inline-block';
+    }
+    const currentText = detectionLabel.textContent;
+    if (!currentText.includes('Creative Assignment')) {
+      detectionLabel.textContent = currentText.split(' | ')[0] + ` | Creative Assignment (No tests)`;
+    }
+  }
+}
+
+function extractLinksFromCode(code) {
+  const lines = code.split('\n');
+  const links = [];
+  const seen = new Set();
+  const urlRegex = /https?:\/\/[^\s'"`()]+/g;
+  let mode = null;
+
+  if (typeof loadedMetadataLinks !== 'undefined' && Array.isArray(loadedMetadataLinks)) {
+    loadedMetadataLinks.forEach(link => {
+      if (!seen.has(link.url)) {
+        seen.add(link.url);
+        links.push(link);
+      }
+    });
+  }
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    let isNextLine = false;
+
+    if (trimmed.startsWith('#')) {
+      const commentContent = trimmed.substring(1).trim();
+      if (/^next\b/i.test(commentContent)) {
+        isNextLine = true;
+        const rest = commentContent.substring(4).trim();
+        const match = rest.match(/https?:\/\/[^\s'"`()]+/);
+        if (!match) {
+          mode = 'next';
+        }
+      } else if (mode === 'next') {
+        isNextLine = true;
+        mode = null;
+      } else if (/^(input|output|end)\b/i.test(commentContent)) {
+        mode = null;
+      }
+    } else {
+      mode = null;
+    }
+
+    if (isNextLine) {
+      return;
+    }
+
+    let match;
+    urlRegex.lastIndex = 0;
+    while ((match = urlRegex.exec(line)) !== null) {
+      let url = match[0];
+      url = url.replace(/[.,;:?!~)]+$/, '');
+      if (url && !seen.has(url)) {
+        seen.add(url);
+        links.push({
+          url: url,
+          line: index + 1
+        });
+      }
+    }
+  });
+  return links;
+}
+
+function cleanUrlDisplay(url) {
+  try {
+    const parsed = new URL(url);
+    let display = parsed.hostname;
+    if (display.startsWith('www.')) {
+      display = display.substring(4);
+    }
+    if (parsed.pathname && parsed.pathname !== '/') {
+      display += parsed.pathname;
+    }
+    if (display.length > 35) {
+      display = display.substring(0, 32) + '...';
+    }
+    return display;
+  } catch (e) {
+    return url.length > 35 ? url.substring(0, 32) + '...' : url;
+  }
+}
+
+function transformYoutubeUrl(url) {
+  try {
+    const parsed = new URL(url);
+    let videoId = '';
+
+    if (parsed.hostname.includes('youtube.com')) {
+      if (parsed.pathname.includes('/watch')) {
+        videoId = parsed.searchParams.get('v');
+      } else if (parsed.pathname.includes('/shorts/')) {
+        const parts = parsed.pathname.split('/');
+        videoId = parts[parts.indexOf('shorts') + 1];
+      } else if (parsed.pathname.includes('/embed/')) {
+        videoId = parsed.pathname.split('/embed/')[1];
+      }
+    } else if (parsed.hostname.includes('youtu.be')) {
+      videoId = parsed.pathname.substring(1);
+    }
+
+    if (videoId) {
+      videoId = videoId.split(/[?#&]/)[0];
+      return `https://www.youtube-nocookie.com/embed/${videoId}`;
+    }
+  } catch (e) {
+    // Ignore URL parsing errors
+  }
+  return url;
+}
+
+function scrollToCodeLine(lineNum) {
+  const activeView = currentAppMode === 'display' ? displayEditor : editor;
+  const lines = editor.value.split('\n');
+  if (lineNum < 1 || lineNum > lines.length) return;
+
+  if (currentAppMode === 'edit') {
+    let charIndex = 0;
+    for (let i = 0; i < lineNum - 1; i++) {
+      charIndex += lines[i].length + 1;
+    }
+    editor.focus();
+    editor.setSelectionRange(charIndex, charIndex + lines[lineNum - 1].length);
+  }
+
+  const lineHeight = getCodeLineHeight();
+  const yPos = (lineNum - 1) * lineHeight;
+  const viewRect = activeView.getBoundingClientRect();
+  activeView.scrollTop = Math.max(0, yPos - viewRect.height / 3);
+
+  highlightLine(lineNum);
+}
+
+function canPreviewUrl(url) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+
+    // YouTube is embeddable after transformation
+    if (host.includes('youtube.com') || host.includes('youtu.be')) {
+      return true;
+    }
+
+    // List of domains known to block iframe embedding via X-Frame-Options or CSP ancestors
+    const blockedDomains = [
+      'github.com',
+      'githubusercontent.com',
+      'google.com',
+      'wikipedia.org',
+      'stackoverflow.com',
+      'w3schools.com',
+      'replit.com',
+      'twitter.com',
+      'x.com',
+      'facebook.com',
+      'instagram.com',
+      'linkedin.com',
+      'medium.com'
+    ];
+
+    return !blockedDomains.some(domain => host === domain || host.endsWith('.' + domain));
+  } catch (e) {
+    return false;
+  }
+}
+
+function updateReferenceLinks() {
+  const code = editor.value;
+  const links = extractLinksFromCode(code);
+  const linksPanel = document.getElementById('linksPanel');
+  const linksList = document.getElementById('linksList');
+
+  if (links.length === 0) {
+    linksPanel.style.display = 'none';
+    closeWebPreview(false);
+    return;
+  }
+
+  linksPanel.style.display = 'block';
+
+  const activeIframe = document.getElementById('webPreviewIframe');
+  const previewContainer = document.getElementById('webPreviewContainer');
+  const previewingUrl = previewContainer.style.display === 'block' ? activeIframe.dataset.originalUrl : '';
+
+  linksList.innerHTML = '';
+  let isPreviewingUrlStillAvailable = false;
+
+  links.forEach(link => {
+    const isPreviewed = (link.url === previewingUrl);
+    if (isPreviewed) {
+      isPreviewingUrlStillAvailable = true;
+    }
+
+    const item = document.createElement('div');
+    item.className = 'link-item';
+
+    const leftSide = document.createElement('div');
+    leftSide.style.display = 'flex';
+    leftSide.style.alignItems = 'center';
+    leftSide.style.gap = '8px';
+    leftSide.style.minWidth = '0';
+    leftSide.style.flex = '1';
+
+    if (link.line) {
+      const badge = document.createElement('span');
+      badge.className = 'link-item-badge';
+      badge.textContent = `Ln ${link.line}`;
+      badge.title = `Click to scroll to line ${link.line}`;
+      badge.onclick = () => scrollToCodeLine(link.line);
+      leftSide.appendChild(badge);
+    }
+
+    const anchor = document.createElement('a');
+    anchor.className = 'link-item-anchor';
+    anchor.href = link.url;
+    anchor.target = '_blank';
+    anchor.textContent = cleanUrlDisplay(link.url);
+    anchor.title = link.url;
+
+    leftSide.appendChild(anchor);
+
+    const rightSide = document.createElement('div');
+    rightSide.style.display = 'flex';
+    rightSide.style.gap = '6px';
+    rightSide.style.flexShrink = '0';
+
+    const showPreview = canPreviewUrl(link.url);
+    if (showPreview) {
+      const previewBtn = document.createElement('button');
+      if (isPreviewed) {
+        previewBtn.className = 'link-item-btn-preview';
+        previewBtn.style.background = '#ef4444'; // Red
+        previewBtn.textContent = 'Close';
+        previewBtn.onclick = () => closeWebPreview();
+        previewBtn.onmouseenter = () => { previewBtn.style.background = '#dc2626'; };
+        previewBtn.onmouseleave = () => { previewBtn.style.background = '#ef4444'; };
+      } else {
+        previewBtn.className = 'link-item-btn-preview';
+        previewBtn.textContent = 'Preview';
+        previewBtn.onclick = () => previewWebLink(link.url);
+      }
+      rightSide.appendChild(previewBtn);
+    }
+
+    const openBtn = document.createElement('a');
+    openBtn.className = 'link-item-btn-open';
+    openBtn.href = link.url;
+    openBtn.target = '_blank';
+    openBtn.textContent = 'Open';
+
+    rightSide.appendChild(openBtn);
+
+    item.appendChild(leftSide);
+    item.appendChild(rightSide);
+
+    linksList.appendChild(item);
+  });
+
+  if (!isPreviewingUrlStillAvailable && previewingUrl) {
+    closeWebPreview(false);
+  }
+}
+
+function setGlobalPreviewButtonState(isOn) {
+  const toggleBtn = document.getElementById('toggleGlobalPreviewBtn');
+  if (!toggleBtn) return;
+  if (isOn) {
+    toggleBtn.style.background = '#10b981'; // Green
+    toggleBtn.textContent = 'Preview: On';
+  } else {
+    toggleBtn.style.background = '#ef4444'; // Red
+    toggleBtn.textContent = 'Preview: Off';
+  }
+}
+
+function isDataFile(url) {
+  try {
+    const parsed = new URL(url);
+    const pathname = parsed.pathname.toLowerCase();
+    return pathname.endsWith('.txt') ||
+      pathname.endsWith('.tsv') ||
+      pathname.endsWith('.csv') ||
+      pathname.endsWith('.json') ||
+      pathname.endsWith('.py');
+  } catch (e) {
+    return false;
+  }
+}
+
+function autoPreviewFirstLink() {
+  const code = editor.value;
+  const links = extractLinksFromCode(code);
+  const firstPreviewable = links.find(link => canPreviewUrl(link.url) && !isDataFile(link.url));
+  if (firstPreviewable) {
+    previewWebLink(firstPreviewable.url);
+  }
+}
+
+function previewWebLink(url) {
+  const container = document.getElementById('webPreviewContainer');
+  const iframe = document.getElementById('webPreviewIframe');
+  const title = document.getElementById('previewUrlTitle');
+  const fallbackLink = document.getElementById('iframeFallbackLink');
+
+  const transformed = transformYoutubeUrl(url);
+
+  title.textContent = `Previewing: ${cleanUrlDisplay(url)}`;
+  const previousLoad = document.getElementById('privacyPreviewLoad');
+  if (previousLoad) previousLoad.remove();
+  iframe.removeAttribute('src');
+
+  let previewSrc = transformed;
+  let isSameOrigin = false;
+  try {
+    const parsedPreview = new URL(transformed, window.location.href);
+    if (parsedPreview.origin === 'https://jamesabela.github.io' && parsedPreview.pathname.startsWith('/jsfun/')) {
+      const relPath = parsedPreview.pathname.slice('/jsfun/'.length) + parsedPreview.search + parsedPreview.hash;
+      previewSrc = new URL(relPath, window.location.href).href;
+      isSameOrigin = true;
+    } else {
+      isSameOrigin = parsedPreview.origin === window.location.origin;
+    }
+  } catch (e) {
+    isSameOrigin = false;
+  }
+
+  if (isSameOrigin) {
+    iframe.referrerPolicy = 'no-referrer';
+    iframe.src = previewSrc;
+  } else {
+    const loadButton = document.createElement('button');
+    loadButton.id = 'privacyPreviewLoad';
+    loadButton.type = 'button';
+    loadButton.textContent = 'Load external preview — contacts the content provider';
+    loadButton.style.cssText = 'margin:12px;padding:10px 16px;max-width:calc(100% - 24px);white-space:normal;background:#2563eb;color:#ffffff;border:none;border-radius:8px;font-weight:600;cursor:pointer;';
+    iframe.before(loadButton);
+    loadButton.addEventListener('click', () => {
+      iframe.referrerPolicy = 'no-referrer';
+      iframe.src = previewSrc;
+      loadButton.remove();
+    });
+  }
+  iframe.dataset.originalUrl = url;
+  iframe.dataset.lastUrl = url;
+  fallbackLink.href = url;
+  container.style.display = 'block';
+  ensureRunnerExpanded();
+
+  setGlobalPreviewButtonState(true);
+  updateReferenceLinks();
+
+  // Auto scroll runner panel down to make sure preview is visible
+  const runnerPanel = document.querySelector('.runner-panel');
+  if (runnerPanel) {
+    setTimeout(() => {
+      container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  }
+}
+
+function closeWebPreview(shouldUpdateLinks = true) {
+  const container = document.getElementById('webPreviewContainer');
+  const iframe = document.getElementById('webPreviewIframe');
+
+  const originalUrl = iframe.dataset.originalUrl;
+  if (!originalUrl && container.style.display === 'none') {
+    return; // Already closed
+  }
+
+  document.getElementById('privacyPreviewLoad')?.remove();
+  iframe.removeAttribute('src');
+  iframe.removeAttribute('data-original-url');
+  container.style.display = 'none';
+
+  setGlobalPreviewButtonState(false);
+
+  if (shouldUpdateLinks) {
+    updateReferenceLinks();
+  }
+}
+
+function setRunnerStatus(text) {
+  runnerStatus.textContent = text;
+}
+
+function showConsoleInput(promptText) {
+  const panel = document.getElementById('consoleInputPanel');
+  const help = document.getElementById('consoleInputHelp');
+  const field = document.getElementById('consoleInputField');
+  help.textContent = promptText && promptText.trim()
+    ? `Input needed: ${promptText}`
+    : 'This program is waiting for input.';
+  panel.style.display = 'block';
+  field.value = '';
+  field.focus();
+}
+
+function hideConsoleInput() {
+  document.getElementById('consoleInputPanel').style.display = 'none';
+  document.getElementById('consoleInputField').value = '';
+}
+
+function submitConsoleInput() {
+  const field = document.getElementById('consoleInputField');
+  if (!inputResolver) return;
+  const value = field.value;
+  const resolver = inputResolver;
+  inputResolver = null;
+  hideConsoleInput();
+  resolver(value);
+}
+
+function showTerminal() {
+  document.getElementById('workspace').classList.add('terminal-open');
+  document.querySelectorAll('.terminal-toggle-icon').forEach(icon => { icon.textContent = '▼'; });
+}
+
+function hideTerminal() {
+  document.getElementById('workspace').classList.remove('terminal-open');
+  document.querySelectorAll('.terminal-toggle-icon').forEach(icon => { icon.textContent = '▲'; });
+}
+
+function clearRunner() {
+  executionCancelled = true;
+  outputEl.textContent = '';
+  hideConsoleInput();
+  hideTerminal();
+  clearTeachHighlight();
+
+  displayCurrentStep = 0;
+  displayMaxRevealedStep = -1;
+  displayTraceLog = [];
+  displayInputHistory = [];
+  displayTraceStatus = 'ready';
+  displayPendingPrompt = '';
+  displayFinalOutput = '';
+  isAwaitingDisplayInput = false;
+  document.getElementById('playPauseButton').textContent = 'Play';
+  if (displayTimeout) clearTimeout(displayTimeout);
+
+  const traceTableContainer = document.getElementById('traceTableContainer');
+  if (traceTableContainer) traceTableContainer.innerHTML = '';
+
+  // Reset display debugger tab to the first tab (Variables & Stack)
+  switchDisplayTab('state');
+
+  resetTurtleCanvas();
+
+  if (inputResolver) {
+    const resolver = inputResolver;
+    inputResolver = null;
+    resolver('');
+  }
+
+
+
+  setRunnerStatus('System reset.');
+}
+
+function requestFileUpload(filename) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('fileRequestModal');
+    const nameEl = document.getElementById('fileRequestName');
+    const inputEl = document.getElementById('fileRequestInput');
+    const cancelBtn = document.getElementById('fileRequestCancelBtn');
+
+    if (!modal || !nameEl || !inputEl || !cancelBtn) {
+      resolve(null);
+      return;
+    }
+
+    nameEl.textContent = filename;
+    inputEl.value = ''; // Clear file input
+
+    const onFileChange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        cleanup();
+        resolve({ name: filename, data: new Uint8Array(event.target.result) });
+      };
+      reader.readAsArrayBuffer(file);
+    };
+
+    const onCancel = () => {
+      cleanup();
+      resolve(null);
+    };
+
+    const cleanup = () => {
+      inputEl.removeEventListener('change', onFileChange);
+      cancelBtn.removeEventListener('click', onCancel);
+      modal.classList.remove('active');
+    };
+
+    inputEl.addEventListener('change', onFileChange);
+    cancelBtn.addEventListener('click', onCancel);
+    modal.classList.add('active');
+  });
+}
+
+window.toggleFilePreview = (filename, btnId, previewId) => {
+  const btn = document.getElementById(btnId);
+  const pre = document.getElementById(previewId);
+  if (!btn || !pre) return;
+
+  if (pre.style.display === 'none') {
+    try {
+      const content = pyodideInstance.FS.readFile(`/home/pyodide/${filename}`, { encoding: 'utf8' });
+      pre.textContent = content;
+      pre.style.display = 'block';
+      btn.textContent = 'Hide Preview';
+    } catch (e) {
+      pre.textContent = "Error reading file contents (binary file?).";
+      pre.style.display = 'block';
+      btn.textContent = 'Hide Preview';
+    }
+  } else {
+    pre.style.display = 'none';
+    btn.textContent = 'Show Preview';
+  }
+};
+
+function requestDisplayInput(promptText) {
+  showConsoleInput(promptText);
+  return new Promise(resolve => {
+    inputResolver = function (value) {
+      resolve(value);
+    };
+  });
+}
+
+function parseQuizTests(code) {
+  const lines = code.split('\n');
+  const inputsList = [];
+  const outputsList = [];
+  let nextUrl = null;
+  let isEnd = false;
+  let courseTitle = "Python Algorithms";
+  let mode = null;
+
+  const isHelpText = /entered|seperator|separator|speech\s+marks|between|expected|same\s+format|how\s+to|example/i;
+
+  for (let line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('#')) {
+      const commentContent = trimmed.substring(1).trim();
+
+      if (/^input\b/i.test(commentContent)) {
+        mode = 'input';
+      } else if (/^output\b/i.test(commentContent)) {
+        mode = 'output';
+      } else if (/^next\b/i.test(commentContent)) {
+        const rest = commentContent.substring(4).trim();
+        const match = rest.match(/https?:\/\/[^\s'"`()]+/);
+        if (match) {
+          nextUrl = match[0];
+          mode = null;
+        } else {
+          mode = 'next';
+        }
+      } else if (/^end\b/i.test(commentContent)) {
+        isEnd = true;
+        const rest = commentContent.substring(3).trim();
+        if (rest !== '') {
+          courseTitle = rest;
+          mode = null;
+        } else {
+          mode = 'end';
+        }
+      } else {
+        if (commentContent !== '' && !isHelpText.test(commentContent)) {
+          if (mode === 'input' || mode === 'output') {
+            const parts = commentContent.split(',').map(part => {
+              let p = part.trim();
+              if ((p.startsWith('"') && p.endsWith('"')) || (p.startsWith("'") && p.endsWith("'"))) {
+                p = p.substring(1, p.length - 1);
+              }
+              return p;
+            });
+            if (mode === 'input') {
+              inputsList.push(parts);
+            } else {
+              outputsList.push(parts);
+            }
+          } else if (mode === 'next') {
+            const match = commentContent.match(/https?:\/\/[^\s'"`()]+/);
+            if (match) {
+              nextUrl = match[0];
+            }
+            mode = null;
+          } else if (mode === 'end') {
+            courseTitle = commentContent;
             mode = null;
           }
         }
       }
-
-      // Add empty lines adjacent to metadata to metadataLineIndices
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i].trim() === '') {
-          let beforeIsMetadata = true;
-          for (let j = 0; j < i; j++) {
-            if (lines[j].trim() !== '' && !metadataLineIndices.has(j)) {
-              beforeIsMetadata = false;
-              break;
-            }
-          }
-          let afterIsMetadata = false;
-          for (let j = i + 1; j < lines.length; j++) {
-            if (lines[j].trim() !== '') {
-              if (metadataLineIndices.has(j)) {
-                afterIsMetadata = true;
-              }
-              break;
-            }
-          }
-          if (beforeIsMetadata || afterIsMetadata) {
-            metadataLineIndices.add(i);
-          }
-        }
-      }
-
-      const strippedLines = [];
-      for (let i = 0; i < lines.length; i++) {
-        if (!metadataLineIndices.has(i)) {
-          strippedLines.push(lines[i]);
-        }
-      }
-
-      // Trim leading/trailing blank lines
-      let startIdx = 0;
-      while (startIdx < strippedLines.length && strippedLines[startIdx].trim() === '') {
-        startIdx++;
-      }
-      let endIdx = strippedLines.length - 1;
-      while (endIdx >= startIdx && strippedLines[endIdx].trim() === '') {
-        endIdx--;
-      }
-      
-      const strippedCode = strippedLines.slice(startIdx, endIdx + 1).join('\n');
-
-      const testCases = [];
-      const count = Math.min(inputsList.length, outputsList.length);
-      for (let i = 0; i < count; i++) {
-        testCases.push({
-          inputs: inputsList[i],
-          expected: outputsList[i]
-        });
-      }
-
-      return {
-        strippedCode: strippedCode,
-        metadata: {
-          testCases: testCases,
-          nextUrl: nextUrl,
-          isEnd: isEnd,
-          courseTitle: courseTitle,
-          links: links
-        }
-      };
     }
+  }
 
-    async function runSingleTestCase(source, inputs) {
-      if (!pyodideInstance && pyodideReadyPromise) {
-        await pyodideReadyPromise;
+  const testCases = [];
+  const count = Math.min(inputsList.length, outputsList.length);
+  for (let i = 0; i < count; i++) {
+    testCases.push({
+      inputs: inputsList[i],
+      expected: outputsList[i]
+    });
+  }
+  return {
+    testCases: testCases,
+    nextUrl: nextUrl,
+    isEnd: isEnd,
+    courseTitle: courseTitle
+  };
+}
+
+function parseAndStripMetadata(code) {
+  if (typeof code !== 'string') {
+    return {
+      strippedCode: code,
+      metadata: { testCases: [], nextUrl: null, isEnd: false, courseTitle: "Python Algorithms", links: [] }
+    };
+  }
+
+  const lines = code.split(/\r?\n/);
+  const inputsList = [];
+  const outputsList = [];
+  let nextUrl = null;
+  let isEnd = false;
+  let courseTitle = "Python Algorithms";
+  let mode = null;
+  const links = [];
+
+  const isHelpText = /entered|seperator|separator|speech\s+marks|between|expected|same\s+format|how\s+to|example/i;
+  const metadataLineIndices = new Set();
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (trimmed.startsWith('#')) {
+      const commentContent = trimmed.substring(1).trim();
+
+      if (/^learn\s+more\b/i.test(commentContent)) {
+        metadataLineIndices.add(i);
+        const match = commentContent.match(/https?:\/\/[^\s'"`()]+/);
+        if (match) {
+          links.push({ url: match[0], line: 0 });
+        }
+        continue;
       }
 
-      const setupCode = `
+      if (/^input\b/i.test(commentContent)) {
+        mode = 'input';
+        metadataLineIndices.add(i);
+      } else if (/^output\b/i.test(commentContent)) {
+        mode = 'output';
+        metadataLineIndices.add(i);
+      } else if (/^next\b/i.test(commentContent)) {
+        metadataLineIndices.add(i);
+        const rest = commentContent.substring(4).trim();
+        const match = rest.match(/https?:\/\/[^\s'"`()]+/);
+        if (match) {
+          nextUrl = match[0];
+          mode = null;
+        } else {
+          mode = 'next';
+        }
+      } else if (/^end\b/i.test(commentContent)) {
+        metadataLineIndices.add(i);
+        isEnd = true;
+        const rest = commentContent.substring(3).trim();
+        if (rest !== '') {
+          courseTitle = rest;
+          mode = null;
+        } else {
+          mode = 'end';
+        }
+      } else {
+        if (commentContent !== '' && !isHelpText.test(commentContent)) {
+          if (mode === 'input' || mode === 'output') {
+            const parts = commentContent.split(',').map(part => {
+              let p = part.trim();
+              if ((p.startsWith('"') && p.endsWith('"')) || (p.startsWith("'") && p.endsWith("'"))) {
+                p = p.substring(1, p.length - 1);
+              }
+              return p;
+            });
+            if (mode === 'input') {
+              inputsList.push(parts);
+              metadataLineIndices.add(i);
+            } else if (mode === 'output') {
+              outputsList.push(parts);
+              metadataLineIndices.add(i);
+            }
+          } else if (mode === 'next') {
+            const match = commentContent.match(/https?:\/\/[^\s'"`()]+/);
+            if (match) {
+              nextUrl = match[0];
+            }
+            metadataLineIndices.add(i);
+            mode = null;
+          } else if (mode === 'end') {
+            courseTitle = commentContent;
+            metadataLineIndices.add(i);
+            mode = null;
+          }
+        } else if (commentContent !== '' && isHelpText.test(commentContent) && (mode === 'input' || mode === 'output')) {
+          metadataLineIndices.add(i);
+        }
+      }
+    } else {
+      if (trimmed !== '') {
+        mode = null;
+      }
+    }
+  }
+
+  // Add empty lines adjacent to metadata to metadataLineIndices
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].trim() === '') {
+      let beforeIsMetadata = true;
+      for (let j = 0; j < i; j++) {
+        if (lines[j].trim() !== '' && !metadataLineIndices.has(j)) {
+          beforeIsMetadata = false;
+          break;
+        }
+      }
+      let afterIsMetadata = false;
+      for (let j = i + 1; j < lines.length; j++) {
+        if (lines[j].trim() !== '') {
+          if (metadataLineIndices.has(j)) {
+            afterIsMetadata = true;
+          }
+          break;
+        }
+      }
+      if (beforeIsMetadata || afterIsMetadata) {
+        metadataLineIndices.add(i);
+      }
+    }
+  }
+
+  const strippedLines = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (!metadataLineIndices.has(i)) {
+      strippedLines.push(lines[i]);
+    }
+  }
+
+  // Trim leading/trailing blank lines
+  let startIdx = 0;
+  while (startIdx < strippedLines.length && strippedLines[startIdx].trim() === '') {
+    startIdx++;
+  }
+  let endIdx = strippedLines.length - 1;
+  while (endIdx >= startIdx && strippedLines[endIdx].trim() === '') {
+    endIdx--;
+  }
+
+  const strippedCode = strippedLines.slice(startIdx, endIdx + 1).join('\n');
+
+  const testCases = [];
+  const count = Math.min(inputsList.length, outputsList.length);
+  for (let i = 0; i < count; i++) {
+    testCases.push({
+      inputs: inputsList[i],
+      expected: outputsList[i]
+    });
+  }
+
+  return {
+    strippedCode: strippedCode,
+    metadata: {
+      testCases: testCases,
+      nextUrl: nextUrl,
+      isEnd: isEnd,
+      courseTitle: courseTitle,
+      links: links
+    }
+  };
+}
+
+async function runSingleTestCase(source, inputs) {
+  if (!pyodideInstance && pyodideReadyPromise) {
+    await pyodideReadyPromise;
+  }
+
+  const setupCode = `
 import sys, io, builtins, json
 
 # Save originals
@@ -4616,7 +4616,7 @@ if 'turtle' in sys.modules:
         pass
 `;
 
-      const runCode = `
+  const runCode = `
 _test_error = None
 import time, sys
 _test_start = time.time()
@@ -4657,33 +4657,33 @@ import json
 json.dumps(_test_result)
 `;
 
-      try {
-        pyodideInstance.globals.set("source_code", source);
-        pyodideInstance.globals.set("_test_inputs_raw", JSON.stringify(inputs));
-        await pyodideInstance.runPythonAsync(setupCode);
-        const resultJson = await pyodideInstance.runPythonAsync(runCode);
-        return JSON.parse(resultJson);
-      } catch (err) {
-        return {
-          output: "",
-          error: String(err)
-        };
-      }
-    }
+  try {
+    pyodideInstance.globals.set("source_code", source);
+    pyodideInstance.globals.set("_test_inputs_raw", JSON.stringify(inputs));
+    await pyodideInstance.runPythonAsync(setupCode);
+    const resultJson = await pyodideInstance.runPythonAsync(runCode);
+    return JSON.parse(resultJson);
+  } catch (err) {
+    return {
+      output: "",
+      error: String(err)
+    };
+  }
+}
 
-    async function runQuizTests() {
-      switchModeFromBlocks();
-      const code = editor.value;
-      const testCases = currentQuizMetadata.testCases || [];
-      if (testCases.length === 0) return;
+async function runQuizTests() {
+  switchModeFromBlocks();
+  const code = editor.value;
+  const testCases = currentQuizMetadata.testCases || [];
+  if (testCases.length === 0) return;
 
-      executionCancelled = false;
-      outputEl.textContent = '';
-      hideConsoleInput();
-      showTerminal();
+  executionCancelled = false;
+  outputEl.textContent = '';
+  hideConsoleInput();
+  showTerminal();
 
-      setRunnerStatus('Running quiz tests...');
-      outputEl.innerHTML = `
+  setRunnerStatus('Running quiz tests...');
+  outputEl.innerHTML = `
         <div style="padding: 12px; font-family: sans-serif; color: #475569;">
           <div style="font-weight: 600; font-size: 15px; margin-bottom: 8px;">Running ${testCases.length} tests...</div>
           <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow:hidden;">
@@ -4692,210 +4692,210 @@ json.dumps(_test_result)
         </div>
       `;
 
-      if (!pyodideInstance && pyodideReadyPromise) {
-        setRunnerStatus('Loading Python engine...');
-        await pyodideReadyPromise;
-      }
+  if (!pyodideInstance && pyodideReadyPromise) {
+    setRunnerStatus('Loading Python engine...');
+    await pyodideReadyPromise;
+  }
 
-      // 1. Clean up transient files in /home/pyodide from previous runs
-      if (pyodideInstance) {
-        try {
-          const files = pyodideInstance.FS.readdir('/home/pyodide');
-          for (const file of files) {
-            if (file !== '.' && file !== '..' && file !== 'turtle.py') {
-              try {
-                pyodideInstance.FS.unlink(`/home/pyodide/${file}`);
-              } catch (e) {
-                try { pyodideInstance.FS.rmdir(`/home/pyodide/${file}`); } catch (e2) {}
-              }
-            }
-          }
-        } catch (e) {
-          console.error("Error clearing VFS:", e);
-        }
-      }
-
-      // 2. Scan and pre-load '#load <url>' directives
-      const loadedFilesSnapshot = {};
-      const loadRegex = /^\s*#\s*load\s+(https?:\/\/\S+|[^\s#]+)/gim;
-      let loadMatch;
-      const loadPromises = [];
-      const preLoadWarnings = [];
-      while ((loadMatch = loadRegex.exec(code)) !== null) {
-        let fileUrl = normalizeCodeUrl(loadMatch[1]);
-
-        try {
-          const resolvedUrl = new URL(fileUrl, window.location.href).href;
-          const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-          setRunnerStatus(`Loading remote file: ${filename}...`);
-          loadPromises.push(
-            fetch(resolvedUrl)
-              .then(res => {
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                return res.arrayBuffer();
-              })
-              .then(buf => {
-                const data = new Uint8Array(buf);
-                pyodideInstance.FS.writeFile(`/home/pyodide/${filename}`, data);
-                try {
-                  const stat = pyodideInstance.FS.stat(`/home/pyodide/${filename}`);
-                  loadedFilesSnapshot[filename] = stat.mtime.getTime();
-                } catch (e) {}
-              })
-              .catch(err => {
-                preLoadWarnings.push(`Failed to load ${fileUrl} (${err.message})`);
-              })
-          );
-        } catch (e) {
-          preLoadWarnings.push(`Invalid load URL: ${fileUrl}`);
-        }
-      }
-      if (loadPromises.length > 0) {
-        await Promise.all(loadPromises);
-        setRunnerStatus('Running quiz tests...');
-      }
-
-      const results = [];
-      let passedCount = 0;
-
-      for (let i = 0; i < testCases.length; i++) {
-        if (executionCancelled) {
-          setRunnerStatus('Tests cancelled.');
-          return;
-        }
-
-        const tc = testCases[i];
-        setRunnerStatus(`Running test ${i + 1} of ${testCases.length}...`);
-
-        const runRes = await runSingleTestCase(code, tc.inputs);
-
-        // Evaluate outputs
-        const actualOutput = runRes.output || "";
-        const error = runRes.error;
-
-        const expectedChecks = [];
-        let isPass = true;
-
-        if (error) {
-          isPass = false;
-          expectedChecks.push({
-            expected: tc.expected.join(', '),
-            matched: false,
-            msg: `Error: ${error}`
-          });
-        } else {
-          // Check each expected output string, taking into account duplicate expected items
-          const expectedCounts = {};
-          for (let expectedItem of tc.expected) {
-            const cleanExpected = expectedItem.trim().toLowerCase();
-            expectedCounts[cleanExpected] = (expectedCounts[cleanExpected] || 0) + 1;
-          }
-
-          const matchedCounts = {};
-          for (let cleanExpected of Object.keys(expectedCounts)) {
-            let count = 0;
-            if (cleanExpected !== "") {
-              let pos = 0;
-              const lowerActual = actualOutput.toLowerCase();
-              while ((pos = lowerActual.indexOf(cleanExpected, pos)) !== -1) {
-                count++;
-                pos += cleanExpected.length;
-              }
-            }
-            matchedCounts[cleanExpected] = count;
-          }
-
-          for (let expectedItem of tc.expected) {
-            const cleanExpected = expectedItem.trim();
-            const lowerExpected = cleanExpected.toLowerCase();
-            const matched = (matchedCounts[lowerExpected] >= expectedCounts[lowerExpected]);
-            if (!matched) {
-              isPass = false;
-            }
-            expectedChecks.push({
-              expected: cleanExpected + (expectedCounts[lowerExpected] > 1 ? ` (x${expectedCounts[lowerExpected]})` : ''),
-              matched: matched
-            });
+  // 1. Clean up transient files in /home/pyodide from previous runs
+  if (pyodideInstance) {
+    try {
+      const files = pyodideInstance.FS.readdir('/home/pyodide');
+      for (const file of files) {
+        if (file !== '.' && file !== '..' && file !== 'turtle.py') {
+          try {
+            pyodideInstance.FS.unlink(`/home/pyodide/${file}`);
+          } catch (e) {
+            try { pyodideInstance.FS.rmdir(`/home/pyodide/${file}`); } catch (e2) { }
           }
         }
-
-        if (isPass) {
-          passedCount++;
-        }
-
-        results.push({
-          index: i + 1,
-          inputs: tc.inputs,
-          expected: tc.expected,
-          actual: actualOutput,
-          error: error,
-          isPass: isPass,
-          checks: expectedChecks
-        });
-
-        // Update progress bar
-        const progressFill = document.getElementById('quizProgressBar');
-        if (progressFill) {
-          progressFill.style.width = `${((i + 1) / testCases.length) * 100}%`;
-        }
       }
+    } catch (e) {
+      console.error("Error clearing VFS:", e);
+    }
+  }
 
-      renderQuizResults(results, passedCount, testCases.length, currentQuizMetadata.nextUrl, currentQuizMetadata.isEnd, currentQuizMetadata.courseTitle, loadedFilesSnapshot, preLoadWarnings);
+  // 2. Scan and pre-load '#load <url>' directives
+  const loadedFilesSnapshot = {};
+  const loadRegex = /^\s*#\s*load\s+(https?:\/\/\S+|[^\s#]+)/gim;
+  let loadMatch;
+  const loadPromises = [];
+  const preLoadWarnings = [];
+  while ((loadMatch = loadRegex.exec(code)) !== null) {
+    let fileUrl = normalizeCodeUrl(loadMatch[1]);
+
+    try {
+      const resolvedUrl = new URL(fileUrl, window.location.href).href;
+      const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+      setRunnerStatus(`Loading remote file: ${filename}...`);
+      loadPromises.push(
+        fetch(resolvedUrl)
+          .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.arrayBuffer();
+          })
+          .then(buf => {
+            const data = new Uint8Array(buf);
+            pyodideInstance.FS.writeFile(`/home/pyodide/${filename}`, data);
+            try {
+              const stat = pyodideInstance.FS.stat(`/home/pyodide/${filename}`);
+              loadedFilesSnapshot[filename] = stat.mtime.getTime();
+            } catch (e) { }
+          })
+          .catch(err => {
+            preLoadWarnings.push(`Failed to load ${fileUrl} (${err.message})`);
+          })
+      );
+    } catch (e) {
+      preLoadWarnings.push(`Invalid load URL: ${fileUrl}`);
+    }
+  }
+  if (loadPromises.length > 0) {
+    await Promise.all(loadPromises);
+    setRunnerStatus('Running quiz tests...');
+  }
+
+  const results = [];
+  let passedCount = 0;
+
+  for (let i = 0; i < testCases.length; i++) {
+    if (executionCancelled) {
+      setRunnerStatus('Tests cancelled.');
+      return;
     }
 
-    function renderQuizResults(results, passedCount, totalCount, nextUrl = null, isEnd = false, courseTitle = "", loadedFilesSnapshot = {}, preLoadWarnings = []) {
-      const isCreative = (totalCount === 0);
-      const isAllPassed = isCreative || (passedCount === totalCount);
-      const isNonePassed = !isCreative && (passedCount === 0);
-      const badgeClass = isAllPassed ? 'pass' : 'fail';
-      const badgeText = isCreative ? 'Completed 🎉' : `${passedCount} / ${totalCount} Passed`;
-      const fillClass = isAllPassed ? 'pass' : 'fail';
-      const percentage = isCreative ? 100 : ((passedCount / totalCount) * 100);
+    const tc = testCases[i];
+    setRunnerStatus(`Running test ${i + 1} of ${testCases.length}...`);
 
-      if (!window.toggleTestCaseDetails) {
-        window.toggleTestCaseDetails = function(index) {
-          const el = document.getElementById(`test-case-details-${index}`);
-          const btn = document.getElementById(`toggle-btn-${index}`);
-          if (el) {
-            if (el.style.display === 'none') {
-              el.style.display = 'block';
-              btn.textContent = 'Hide Details';
-            } else {
-              el.style.display = 'none';
-              btn.textContent = 'Details';
-            }
-          }
-        };
+    const runRes = await runSingleTestCase(code, tc.inputs);
+
+    // Evaluate outputs
+    const actualOutput = runRes.output || "";
+    const error = runRes.error;
+
+    const expectedChecks = [];
+    let isPass = true;
+
+    if (error) {
+      isPass = false;
+      expectedChecks.push({
+        expected: tc.expected.join(', '),
+        matched: false,
+        msg: `Error: ${error}`
+      });
+    } else {
+      // Check each expected output string, taking into account duplicate expected items
+      const expectedCounts = {};
+      for (let expectedItem of tc.expected) {
+        const cleanExpected = expectedItem.trim().toLowerCase();
+        expectedCounts[cleanExpected] = (expectedCounts[cleanExpected] || 0) + 1;
       }
 
-      let bannerHtml = '';
-      const loadedFiles = Object.keys(loadedFilesSnapshot || {});
-      const hasWarnings = (preLoadWarnings && preLoadWarnings.length > 0);
-      const isDark = document.body.classList.contains('dark-theme');
-      if (loadedFiles.length > 0 || hasWarnings) {
-        let bannerStyle = '';
-        if (hasWarnings) {
-          if (isDark) {
-            bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #7f1d1d; border: 1px solid #b91c1c; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #fecaca; display: flex; flex-direction: column; gap: 8px;';
-          } else {
-            bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #991b1b; display: flex; flex-direction: column; gap: 8px;';
-          }
-        } else {
-          if (isDark) {
-            bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #064e3b; border: 1px solid #047857; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #d1fae5; display: flex; flex-direction: column; gap: 8px;';
-          } else {
-            bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #166534; display: flex; flex-direction: column; gap: 8px;';
+      const matchedCounts = {};
+      for (let cleanExpected of Object.keys(expectedCounts)) {
+        let count = 0;
+        if (cleanExpected !== "") {
+          let pos = 0;
+          const lowerActual = actualOutput.toLowerCase();
+          while ((pos = lowerActual.indexOf(cleanExpected, pos)) !== -1) {
+            count++;
+            pos += cleanExpected.length;
           }
         }
-        
-        bannerHtml = `<div class="loaded-files-banner" style="${bannerStyle}">`;
-        for (let i = 0; i < loadedFiles.length; i++) {
-          const filename = loadedFiles[i];
-          const rowId = `btn-prev-quiz-${i}`;
-          const preId = `pre-prev-quiz-${i}`;
-          const btnBg = hasWarnings ? '#ef4444' : '#10b981';
-          
-          bannerHtml += `
+        matchedCounts[cleanExpected] = count;
+      }
+
+      for (let expectedItem of tc.expected) {
+        const cleanExpected = expectedItem.trim();
+        const lowerExpected = cleanExpected.toLowerCase();
+        const matched = (matchedCounts[lowerExpected] >= expectedCounts[lowerExpected]);
+        if (!matched) {
+          isPass = false;
+        }
+        expectedChecks.push({
+          expected: cleanExpected + (expectedCounts[lowerExpected] > 1 ? ` (x${expectedCounts[lowerExpected]})` : ''),
+          matched: matched
+        });
+      }
+    }
+
+    if (isPass) {
+      passedCount++;
+    }
+
+    results.push({
+      index: i + 1,
+      inputs: tc.inputs,
+      expected: tc.expected,
+      actual: actualOutput,
+      error: error,
+      isPass: isPass,
+      checks: expectedChecks
+    });
+
+    // Update progress bar
+    const progressFill = document.getElementById('quizProgressBar');
+    if (progressFill) {
+      progressFill.style.width = `${((i + 1) / testCases.length) * 100}%`;
+    }
+  }
+
+  renderQuizResults(results, passedCount, testCases.length, currentQuizMetadata.nextUrl, currentQuizMetadata.isEnd, currentQuizMetadata.courseTitle, loadedFilesSnapshot, preLoadWarnings);
+}
+
+function renderQuizResults(results, passedCount, totalCount, nextUrl = null, isEnd = false, courseTitle = "", loadedFilesSnapshot = {}, preLoadWarnings = []) {
+  const isCreative = (totalCount === 0);
+  const isAllPassed = isCreative || (passedCount === totalCount);
+  const isNonePassed = !isCreative && (passedCount === 0);
+  const badgeClass = isAllPassed ? 'pass' : 'fail';
+  const badgeText = isCreative ? 'Completed 🎉' : `${passedCount} / ${totalCount} Passed`;
+  const fillClass = isAllPassed ? 'pass' : 'fail';
+  const percentage = isCreative ? 100 : ((passedCount / totalCount) * 100);
+
+  if (!window.toggleTestCaseDetails) {
+    window.toggleTestCaseDetails = function (index) {
+      const el = document.getElementById(`test-case-details-${index}`);
+      const btn = document.getElementById(`toggle-btn-${index}`);
+      if (el) {
+        if (el.style.display === 'none') {
+          el.style.display = 'block';
+          btn.textContent = 'Hide Details';
+        } else {
+          el.style.display = 'none';
+          btn.textContent = 'Details';
+        }
+      }
+    };
+  }
+
+  let bannerHtml = '';
+  const loadedFiles = Object.keys(loadedFilesSnapshot || {});
+  const hasWarnings = (preLoadWarnings && preLoadWarnings.length > 0);
+  const isDark = document.body.classList.contains('dark-theme');
+  if (loadedFiles.length > 0 || hasWarnings) {
+    let bannerStyle = '';
+    if (hasWarnings) {
+      if (isDark) {
+        bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #7f1d1d; border: 1px solid #b91c1c; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #fecaca; display: flex; flex-direction: column; gap: 8px;';
+      } else {
+        bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #991b1b; display: flex; flex-direction: column; gap: 8px;';
+      }
+    } else {
+      if (isDark) {
+        bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #064e3b; border: 1px solid #047857; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #d1fae5; display: flex; flex-direction: column; gap: 8px;';
+      } else {
+        bannerStyle = 'margin-bottom: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #166534; display: flex; flex-direction: column; gap: 8px;';
+      }
+    }
+
+    bannerHtml = `<div class="loaded-files-banner" style="${bannerStyle}">`;
+    for (let i = 0; i < loadedFiles.length; i++) {
+      const filename = loadedFiles[i];
+      const rowId = `btn-prev-quiz-${i}`;
+      const preId = `pre-prev-quiz-${i}`;
+      const btnBg = hasWarnings ? '#ef4444' : '#10b981';
+
+      bannerHtml += `
             <div style="display: flex; flex-direction: column; gap: 4px;">
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <span style="display: flex; align-items: center; gap: 6px;">
@@ -4906,21 +4906,21 @@ json.dumps(_test_result)
               <pre id="${preId}" style="display: none; margin: 4px 0 0; padding: 8px; background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 6px; font-family: 'JetBrains Mono', Consolas, Monaco, monospace; font-size: 11px; white-space: pre-wrap; max-height: 120px; overflow-y: auto; color: inherit; width: 100%; box-sizing: border-box;"></pre>
             </div>
           `;
-        }
-        if (hasWarnings) {
-          for (let i = 0; i < preLoadWarnings.length; i++) {
-            const warningText = preLoadWarnings[i];
-            bannerHtml += `
+    }
+    if (hasWarnings) {
+      for (let i = 0; i < preLoadWarnings.length; i++) {
+        const warningText = preLoadWarnings[i];
+        bannerHtml += `
               <div style="display: flex; align-items: center; gap: 6px; font-weight: 500;">
                 ⚠️ ${escapeHtml(warningText)}
               </div>
             `;
-          }
-        }
-        bannerHtml += `</div>`;
       }
+    }
+    bannerHtml += `</div>`;
+  }
 
-      let html = `
+  let html = `
         <div class="test-results-container">
           ${bannerHtml}
           <div class="test-results-header">
@@ -4933,14 +4933,14 @@ json.dumps(_test_result)
           <div class="test-case-list">
       `;
 
-      results.forEach(res => {
-        const icon = res.isPass ? '✔' : '❌';
-        const statusText = res.isPass ? 'Pass' : 'Fail';
-        const statusClass = res.isPass ? 'pass' : 'fail';
+  results.forEach(res => {
+    const icon = res.isPass ? '✔' : '❌';
+    const statusText = res.isPass ? 'Pass' : 'Fail';
+    const statusClass = res.isPass ? 'pass' : 'fail';
 
-        const inputsDisplay = res.inputs.join(', ') || '(no input)';
+    const inputsDisplay = res.inputs.join(', ') || '(no input)';
 
-        html += `
+    html += `
           <div class="test-case-item">
             <div class="test-case-summary" onclick="toggleTestCaseDetails(${res.index})">
               <span class="status-icon ${statusClass}">${icon}</span>
@@ -4960,17 +4960,17 @@ json.dumps(_test_result)
                     <ul class="expected-check-list">
         `;
 
-        res.checks.forEach(chk => {
-          const chkIcon = chk.matched ? '✔' : '❌';
-          const chkClass = chk.matched ? 'pass' : 'fail';
-          if (chk.msg) {
-            html += `<li class="expected-check-item ${chkClass}"><span>${chkIcon}</span> <span>${escapeHtml(chk.msg)}</span></li>`;
-          } else {
-            html += `<li class="expected-check-item ${chkClass}"><span>${chkIcon}</span> <span>Contains: "${escapeHtml(chk.expected)}"</span></li>`;
-          }
-        });
+    res.checks.forEach(chk => {
+      const chkIcon = chk.matched ? '✔' : '❌';
+      const chkClass = chk.matched ? 'pass' : 'fail';
+      if (chk.msg) {
+        html += `<li class="expected-check-item ${chkClass}"><span>${chkIcon}</span> <span>${escapeHtml(chk.msg)}</span></li>`;
+      } else {
+        html += `<li class="expected-check-item ${chkClass}"><span>${chkIcon}</span> <span>Contains: "${escapeHtml(chk.expected)}"</span></li>`;
+      }
+    });
 
-        html += `
+    html += `
                     </ul>
                   </div>
                 </div>
@@ -4982,23 +4982,23 @@ json.dumps(_test_result)
             </div>
           </div>
         `;
-      });
+  });
 
-      html += `
+  html += `
           </div>
       `;
 
-      if (isAllPassed) {
-        if (nextUrl) {
-          html += `
+  if (isAllPassed) {
+    if (nextUrl) {
+      html += `
             <div class="quiz-completion-panel pass">
               <h4>🎉 Level Passed!</h4>
               <p>You have successfully completed all tests for this level.</p>
               <button class="next-level-btn" onclick="window.navigateWithActivityReminder(window.location.pathname + '?url=' + encodeURIComponent('${nextUrl}'))">Next Level ➔</button>
             </div>
           `;
-        } else if (isEnd) {
-          html += `
+    } else if (isEnd) {
+      html += `
             <div class="quiz-completion-panel end">
               <h4>🏆 Course Completed!</h4>
               <p>Outstanding! You have completed the final level of: <strong>${escapeHtml(courseTitle)}</strong></p>
@@ -5008,397 +5008,397 @@ json.dumps(_test_result)
               </div>
             </div>
           `;
-        }
-      }
+    }
+  }
 
-      html += `
+  html += `
         </div>
       `;
 
-      outputEl.innerHTML = html;
-      setRunnerStatus(isAllPassed ? 'All tests passed!' : `${totalCount - passedCount} test(s) failed.`);
+  outputEl.innerHTML = html;
+  setRunnerStatus(isAllPassed ? 'All tests passed!' : `${totalCount - passedCount} test(s) failed.`);
+}
+
+function generateCertificatePNG(studentName, courseTitle) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1200;
+  canvas.height = 800;
+  const ctx = canvas.getContext('2d');
+
+  // Helper to draw the ReadySetCompute Laptop Icon
+  function drawLaptopIcon(c, x, y, size) {
+    c.save();
+    c.fillStyle = '#0f172a';
+    c.strokeStyle = '#0f172a';
+    c.lineJoin = 'round';
+    c.lineCap = 'round';
+
+    const w = size;
+    const h = size * 0.6;
+    const sx = x - w / 2;
+    const sy = y - h / 2 - size * 0.05;
+
+    // Screen frame
+    c.lineWidth = size * 0.08;
+    c.strokeRect(sx + w * 0.1, sy, w * 0.8, h);
+
+    // Base keyboard with built-in center notch (transparent vector path)
+    c.beginPath();
+    c.moveTo(sx, sy + h);
+    c.lineTo(x - w * 0.12, sy + h);
+    c.lineTo(x - w * 0.12, sy + h + size * 0.03);
+    c.lineTo(x + w * 0.12, sy + h + size * 0.03);
+    c.lineTo(x + w * 0.12, sy + h);
+    c.lineTo(sx + w, sy + h);
+    c.lineTo(sx + w * 0.95, sy + h + size * 0.08);
+    c.lineTo(sx + w * 0.05, sy + h + size * 0.08);
+    c.closePath();
+    c.fill();
+
+    // Code characters <>
+    c.font = `bold ${Math.round(size * 0.22)}px sans-serif`;
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillText('<>', x, sy + h / 2);
+
+    c.restore();
+  }
+
+  // Background Gradient (Matches ReadySetCompute soft background mesh gradient)
+  const grad = ctx.createLinearGradient(0, 800, 1200, 0); // Diagonal bottom-left to top-right
+  grad.addColorStop(0, '#f0fdf4');   // Soft mint green
+  grad.addColorStop(0.35, '#eff6ff'); // Soft sky blue
+  grad.addColorStop(0.7, '#f5f3ff');  // Soft violet/purple
+  grad.addColorStop(1, '#fdf2f8');   // Soft pink
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Outer Border (Vibrant diagonal brand gradient to match the website)
+  const borderGrad = ctx.createLinearGradient(0, 800, 1200, 0);
+  borderGrad.addColorStop(0, '#4ade80');   // Mint Green
+  borderGrad.addColorStop(0.35, '#3b82f6'); // Sky Blue
+  borderGrad.addColorStop(0.7, '#8b5cf6');  // Violet/Purple
+  borderGrad.addColorStop(1, '#ec4899');   // Hot Pink
+  ctx.strokeStyle = borderGrad;
+  ctx.lineWidth = 14;
+  ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(55, 55, canvas.width - 110, canvas.height - 110);
+
+  // Corner Ornaments
+  ctx.fillStyle = '#3b82f6';
+  ctx.fillRect(60, 60, 20, 20);
+  ctx.fillRect(canvas.width - 80, 60, 20, 20);
+  ctx.fillRect(60, canvas.height - 80, 20, 20);
+  ctx.fillRect(canvas.width - 80, canvas.height - 80, 20, 20);
+
+  ctx.textBaseline = 'middle';
+
+  // 1. Draw ReadySetCompute Logo Centered at Top
+  ctx.font = 'bold 36px "Segoe UI", sans-serif';
+  const textWidth = ctx.measureText('ReadySetCompute').width;
+  const iconSize = 44;
+  const gap = 12;
+  const totalWidth = iconSize + gap + textWidth;
+  const startX = 600 - totalWidth / 2;
+
+  // Draw Icon
+  drawLaptopIcon(ctx, startX + iconSize / 2, 110, iconSize);
+
+  // Draw Brand Text
+  ctx.fillStyle = '#0f172a'; // Navy
+  ctx.textAlign = 'left';
+  ctx.fillText('ReadySetCompute', startX + iconSize + gap, 110);
+
+  // 2. Draw Certificate Info
+  ctx.textAlign = 'center';
+
+  // Main title
+  ctx.font = 'bold 44px "Segoe UI", sans-serif';
+  ctx.fillStyle = '#0f172a';
+  ctx.fillText('CERTIFICATE OF COMPLETION', 600, 200);
+
+  // Subtitle
+  ctx.font = 'italic 20px "Segoe UI", Georgia, serif';
+  ctx.fillStyle = '#475569';
+  ctx.fillText('This certifies that', 600, 270);
+
+  // Student Name
+  ctx.font = 'bold 44px Georgia, serif';
+  ctx.fillStyle = '#2563eb'; // Brand Blue Name
+  ctx.fillText(studentName.toUpperCase(), 600, 340);
+
+  // Underline (Vibrant Gradient line)
+  ctx.strokeStyle = borderGrad;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(350, 380);
+  ctx.lineTo(850, 380);
+  ctx.stroke();
+
+  // Text
+  ctx.font = '18px "Segoe UI", sans-serif';
+  ctx.fillStyle = '#475569';
+  ctx.fillText('has successfully completed the programming lab course', 600, 430);
+
+  // Course Name
+  ctx.font = 'bold 32px "Segoe UI", sans-serif';
+  ctx.fillStyle = '#0f172a';
+  ctx.fillText(courseTitle, 600, 490);
+
+  // 3. Date / Certification stamp line
+  ctx.font = '16px "Segoe UI", sans-serif';
+  ctx.fillStyle = '#64748b';
+
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  ctx.fillText('Date: ' + today, 350, 610);
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(250, 590);
+  ctx.lineTo(450, 590);
+  ctx.stroke();
+
+  ctx.fillText('ReadySetCompute Certified', 850, 610);
+  ctx.beginPath();
+  ctx.moveTo(750, 590);
+  ctx.lineTo(950, 590);
+  ctx.stroke();
+
+  // 4. Seal Badge
+  // Gradient Outer (Vibrant mesh color matches border)
+  ctx.fillStyle = borderGrad;
+  ctx.beginPath();
+  ctx.arc(600, 630, 44, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Navy Center
+  ctx.fillStyle = '#0f172a';
+  ctx.beginPath();
+  ctx.arc(600, 630, 34, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Text
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 15px "Segoe UI", sans-serif';
+  ctx.fillText('PASSED', 600, 630);
+
+  return canvas.toDataURL('image/png');
+}
+
+window.updateCodeFromChild = function (code) {
+  const editor = document.getElementById('editor');
+  if (editor) {
+    editor.value = code;
+    hasUnsavedChanges = editor.value !== savedEditorCode;
+    document.getElementById('workspace').style.display = 'grid';
+    document.getElementById('inputContainer').style.display = 'none';
+    document.getElementById('starterPanel').style.display = 'none';
+    document.getElementById('instructionsPanel').style.display = 'none';
+    window.history.pushState({}, '', window.location.pathname + '?blank');
+    updateLineNumbers();
+    analyseCodeAndUpdateMessage();
+    updateBlocksButtonState();
+    updateEditorActionButtons();
+    updatePuzzleButtonVisibility();
+    setAppMode('edit');
+    editor.focus();
+  }
+};
+
+window.triggerCertDownload = function (courseTitle) {
+  const nameInput = document.getElementById('studentCertName');
+  const name = nameInput ? nameInput.value.trim() : "";
+  if (!name) {
+    alert("Please enter your name to claim your certificate.");
+    return;
+  }
+
+  const dataUrl = generateCertificatePNG(name, courseTitle);
+  const link = document.createElement('a');
+  link.download = `${name.replace(/\s+/g, '_')}_python_certificate.png`;
+  link.href = dataUrl;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+async function runCurrentCode(options = {}) {
+  if (saveHistoryTimeout) {
+    clearTimeout(saveHistoryTimeout);
+    saveHistoryTimeout = null;
+  }
+  recordPlaybackSnapshot('Run Code', true, 'play');
+
+  if (!options.preserveBlocksMode) {
+    switchModeFromBlocks();
+  }
+  const source = editor.value;
+  const analysis = classifyCode(source);
+
+  executionCancelled = false;
+  hasRunCurrentCode = true;
+  outputEl.textContent = '';
+  hideConsoleInput();
+
+  if (!analysis.ok) {
+    analyseCodeAndUpdateMessage(false);
+    setRunnerStatus('Cannot run this code in the browser.');
+    return;
+  }
+
+  const imports = extractImports(source);
+  const usesTurtle = imports.includes('turtle');
+  if (usesTurtle && !options.preserveBlocksMode && currentAppMode !== 'turtle') {
+    setAppMode('turtle');
+  }
+
+  showTerminal();
+
+  const turtleContainer = document.getElementById('turtleCanvasContainer');
+
+  if (usesTurtle || currentAppMode === 'turtle') {
+    if (turtleContainer) {
+      turtleContainer.style.display = 'flex';
+      setupTurtleCanvas(400, 400);
+      resetTurtleCanvas();
     }
-
-    function generateCertificatePNG(studentName, courseTitle) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1200;
-      canvas.height = 800;
-      const ctx = canvas.getContext('2d');
-
-      // Helper to draw the ReadySetCompute Laptop Icon
-      function drawLaptopIcon(c, x, y, size) {
-        c.save();
-        c.fillStyle = '#0f172a';
-        c.strokeStyle = '#0f172a';
-        c.lineJoin = 'round';
-        c.lineCap = 'round';
-
-        const w = size;
-        const h = size * 0.6;
-        const sx = x - w/2;
-        const sy = y - h/2 - size * 0.05;
-
-        // Screen frame
-        c.lineWidth = size * 0.08;
-        c.strokeRect(sx + w*0.1, sy, w*0.8, h);
-        
-        // Base keyboard with built-in center notch (transparent vector path)
-        c.beginPath();
-        c.moveTo(sx, sy + h);
-        c.lineTo(x - w * 0.12, sy + h);
-        c.lineTo(x - w * 0.12, sy + h + size * 0.03);
-        c.lineTo(x + w * 0.12, sy + h + size * 0.03);
-        c.lineTo(x + w * 0.12, sy + h);
-        c.lineTo(sx + w, sy + h);
-        c.lineTo(sx + w * 0.95, sy + h + size * 0.08);
-        c.lineTo(sx + w * 0.05, sy + h + size * 0.08);
-        c.closePath();
-        c.fill();
-
-        // Code characters <>
-        c.font = `bold ${Math.round(size * 0.22)}px sans-serif`;
-        c.textAlign = 'center';
-        c.textBaseline = 'middle';
-        c.fillText('<>', x, sy + h/2);
-
-        c.restore();
-      }
-
-      // Background Gradient (Matches ReadySetCompute soft background mesh gradient)
-      const grad = ctx.createLinearGradient(0, 800, 1200, 0); // Diagonal bottom-left to top-right
-      grad.addColorStop(0, '#f0fdf4');   // Soft mint green
-      grad.addColorStop(0.35, '#eff6ff'); // Soft sky blue
-      grad.addColorStop(0.7, '#f5f3ff');  // Soft violet/purple
-      grad.addColorStop(1, '#fdf2f8');   // Soft pink
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Outer Border (Vibrant diagonal brand gradient to match the website)
-      const borderGrad = ctx.createLinearGradient(0, 800, 1200, 0);
-      borderGrad.addColorStop(0, '#4ade80');   // Mint Green
-      borderGrad.addColorStop(0.35, '#3b82f6'); // Sky Blue
-      borderGrad.addColorStop(0.7, '#8b5cf6');  // Violet/Purple
-      borderGrad.addColorStop(1, '#ec4899');   // Hot Pink
-      ctx.strokeStyle = borderGrad;
-      ctx.lineWidth = 14;
-      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
-
-      ctx.strokeStyle = '#cbd5e1';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(55, 55, canvas.width - 110, canvas.height - 110);
-
-      // Corner Ornaments
-      ctx.fillStyle = '#3b82f6';
-      ctx.fillRect(60, 60, 20, 20);
-      ctx.fillRect(canvas.width - 80, 60, 20, 20);
-      ctx.fillRect(60, canvas.height - 80, 20, 20);
-      ctx.fillRect(canvas.width - 80, canvas.height - 80, 20, 20);
-
-      ctx.textBaseline = 'middle';
-
-      // 1. Draw ReadySetCompute Logo Centered at Top
-      ctx.font = 'bold 36px "Segoe UI", sans-serif';
-      const textWidth = ctx.measureText('ReadySetCompute').width;
-      const iconSize = 44;
-      const gap = 12;
-      const totalWidth = iconSize + gap + textWidth;
-      const startX = 600 - totalWidth / 2;
-
-      // Draw Icon
-      drawLaptopIcon(ctx, startX + iconSize / 2, 110, iconSize);
-
-      // Draw Brand Text
-      ctx.fillStyle = '#0f172a'; // Navy
-      ctx.textAlign = 'left';
-      ctx.fillText('ReadySetCompute', startX + iconSize + gap, 110);
-
-      // 2. Draw Certificate Info
-      ctx.textAlign = 'center';
-
-      // Main title
-      ctx.font = 'bold 44px "Segoe UI", sans-serif';
-      ctx.fillStyle = '#0f172a';
-      ctx.fillText('CERTIFICATE OF COMPLETION', 600, 200);
-
-      // Subtitle
-      ctx.font = 'italic 20px "Segoe UI", Georgia, serif';
-      ctx.fillStyle = '#475569';
-      ctx.fillText('This certifies that', 600, 270);
-
-      // Student Name
-      ctx.font = 'bold 44px Georgia, serif';
-      ctx.fillStyle = '#2563eb'; // Brand Blue Name
-      ctx.fillText(studentName.toUpperCase(), 600, 340);
-
-      // Underline (Vibrant Gradient line)
-      ctx.strokeStyle = borderGrad;
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(350, 380);
-      ctx.lineTo(850, 380);
-      ctx.stroke();
-
-      // Text
-      ctx.font = '18px "Segoe UI", sans-serif';
-      ctx.fillStyle = '#475569';
-      ctx.fillText('has successfully completed the programming lab course', 600, 430);
-
-      // Course Name
-      ctx.font = 'bold 32px "Segoe UI", sans-serif';
-      ctx.fillStyle = '#0f172a';
-      ctx.fillText(courseTitle, 600, 490);
-
-      // 3. Date / Certification stamp line
-      ctx.font = '16px "Segoe UI", sans-serif';
-      ctx.fillStyle = '#64748b';
-      
-      const today = new Date().toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-      ctx.fillText('Date: ' + today, 350, 610);
-      ctx.strokeStyle = '#cbd5e1';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(250, 590);
-      ctx.lineTo(450, 590);
-      ctx.stroke();
-
-      ctx.fillText('ReadySetCompute Certified', 850, 610);
-      ctx.beginPath();
-      ctx.moveTo(750, 590);
-      ctx.lineTo(950, 590);
-      ctx.stroke();
-
-      // 4. Seal Badge
-      // Gradient Outer (Vibrant mesh color matches border)
-      ctx.fillStyle = borderGrad;
-      ctx.beginPath();
-      ctx.arc(600, 630, 44, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Navy Center
-      ctx.fillStyle = '#0f172a';
-      ctx.beginPath();
-      ctx.arc(600, 630, 34, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Text
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 15px "Segoe UI", sans-serif';
-      ctx.fillText('PASSED', 600, 630);
-
-      return canvas.toDataURL('image/png');
+  } else {
+    if (turtleContainer && currentAppMode !== 'turtle') {
+      turtleContainer.style.display = 'none';
     }
+  }
 
-    window.updateCodeFromChild = function (code) {
-      const editor = document.getElementById('editor');
-      if (editor) {
-        editor.value = code;
-        hasUnsavedChanges = editor.value !== savedEditorCode;
-        document.getElementById('workspace').style.display = 'grid';
-        document.getElementById('inputContainer').style.display = 'none';
-        document.getElementById('starterPanel').style.display = 'none';
-        document.getElementById('instructionsPanel').style.display = 'none';
-        window.history.pushState({}, '', window.location.pathname + '?blank');
-        updateLineNumbers();
-        analyseCodeAndUpdateMessage();
-        updateBlocksButtonState();
-        updateEditorActionButtons();
-        updatePuzzleButtonVisibility();
-        setAppMode('edit');
-        editor.focus();
+  runnerMessage.style.display = 'block';
+  runnerMessage.textContent = analysis.message;
+  setRunnerStatus('Running...');
+
+  if (!pyodideInstance && pyodideReadyPromise) {
+    setRunnerStatus('Loading Python engine...');
+    await pyodideReadyPromise;
+  }
+
+  // 1. Clean up transient files in /home/pyodide from previous runs
+  if (pyodideInstance) {
+    try {
+      const files = pyodideInstance.FS.readdir('/home/pyodide');
+      for (const file of files) {
+        if (file !== '.' && file !== '..' && file !== 'turtle.py') {
+          try {
+            pyodideInstance.FS.unlink(`/home/pyodide/${file}`);
+          } catch (e) {
+            try { pyodideInstance.FS.rmdir(`/home/pyodide/${file}`); } catch (e2) { }
+          }
+        }
       }
-    };
+    } catch (e) {
+      console.error("Error clearing VFS:", e);
+    }
+  }
 
-    window.triggerCertDownload = function(courseTitle) {
-      const nameInput = document.getElementById('studentCertName');
-      const name = nameInput ? nameInput.value.trim() : "";
-      if (!name) {
-        alert("Please enter your name to claim your certificate.");
-        return;
-      }
+  // 2. Scan and pre-load '#load <url>' directives
+  const loadedFilesSnapshot = {};
+  const loadRegex = /^\s*#\s*load\s+(https?:\/\/\S+|[^\s#]+)/gim;
+  let loadMatch;
+  const loadPromises = [];
+  const preLoadWarnings = [];
+  while ((loadMatch = loadRegex.exec(source)) !== null) {
+    let fileUrl = normalizeCodeUrl(loadMatch[1]);
 
-      const dataUrl = generateCertificatePNG(name, courseTitle);
-      const link = document.createElement('a');
-      link.download = `${name.replace(/\s+/g, '_')}_python_certificate.png`;
-      link.href = dataUrl;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    };
+    try {
+      const resolvedUrl = new URL(fileUrl, window.location.href).href;
+      const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+      setRunnerStatus(`Loading remote file: ${filename}...`);
+      loadPromises.push(
+        fetch(resolvedUrl)
+          .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.arrayBuffer();
+          })
+          .then(buf => {
+            const data = new Uint8Array(buf);
+            pyodideInstance.FS.writeFile(`/home/pyodide/${filename}`, data);
+            try {
+              const stat = pyodideInstance.FS.stat(`/home/pyodide/${filename}`);
+              loadedFilesSnapshot[filename] = stat.mtime.getTime();
+            } catch (e) { }
+          })
+          .catch(err => {
+            preLoadWarnings.push(`Failed to load ${fileUrl} (${err.message})`);
+          })
+      );
+    } catch (e) {
+      preLoadWarnings.push(`Invalid load URL: ${fileUrl}`);
+    }
+  }
+  if (loadPromises.length > 0) {
+    await Promise.all(loadPromises);
+    setRunnerStatus('Running...');
+  }
 
-    async function runCurrentCode(options = {}) {
-      if (saveHistoryTimeout) {
-        clearTimeout(saveHistoryTimeout);
-        saveHistoryTimeout = null;
-      }
-      recordPlaybackSnapshot('Run Code', true, 'play');
+  // 3. Take a snapshot of files in the virtual filesystem before execution
+  const filesBefore = {};
+  try {
+    const list = pyodideInstance.FS.readdir('/home/pyodide');
+    for (const name of list) {
+      if (name === '.' || name === '..' || name === 'turtle.py') continue;
+      try {
+        const stat = pyodideInstance.FS.stat(`/home/pyodide/${name}`);
+        filesBefore[name] = stat.mtime.getTime();
+      } catch (e) { }
+    }
+  } catch (e) { }
 
-      if (!options.preserveBlocksMode) {
-        switchModeFromBlocks();
-      }
-      const source = editor.value;
-      const analysis = classifyCode(source);
+  const sessionSeed = Math.floor(Math.random() * 1000000);
+  let runInputHistory = [];
+  let executionFinished = false;
 
-      executionCancelled = false;
-      hasRunCurrentCode = true;
-      outputEl.textContent = '';
-      hideConsoleInput();
+  while (!executionFinished && !executionCancelled) {
+    let runInputCount = 0;
+    let pendingPrompt = "";
 
-      if (!analysis.ok) {
-        analyseCodeAndUpdateMessage(false);
-        setRunnerStatus('Cannot run this code in the browser.');
-        return;
-      }
+    outputEl.innerHTML = '';
 
-      const imports = extractImports(source);
-      const usesTurtle = imports.includes('turtle');
-      if (usesTurtle && !options.preserveBlocksMode && currentAppMode !== 'turtle') {
-        setAppMode('turtle');
-      }
+    // Show banner for files loaded/uploaded during this session
+    const loadedFiles = Object.keys(loadedFilesSnapshot);
+    if (loadedFiles.length > 0 || (typeof preLoadWarnings !== 'undefined' && preLoadWarnings.length > 0)) {
+      const banner = document.createElement('div');
+      banner.className = 'loaded-files-banner';
 
-      showTerminal();
-
-      const turtleContainer = document.getElementById('turtleCanvasContainer');
-
-      if (usesTurtle || currentAppMode === 'turtle') {
-        if (turtleContainer) {
-          turtleContainer.style.display = 'flex';
-          setupTurtleCanvas(400, 400);
-          resetTurtleCanvas();
+      const hasWarnings = typeof preLoadWarnings !== 'undefined' && preLoadWarnings.length > 0;
+      if (hasWarnings) {
+        banner.style.cssText = 'margin-bottom: 12px; padding: 12px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #991b1b; display: flex; flex-direction: column; gap: 8px;';
+        if (document.body.classList.contains('dark-theme')) {
+          banner.style.backgroundColor = '#7f1d1d';
+          banner.style.borderColor = '#b91c1c';
+          banner.style.color = '#fecaca';
         }
       } else {
-        if (turtleContainer && currentAppMode !== 'turtle') {
-          turtleContainer.style.display = 'none';
+        banner.style.cssText = 'margin-bottom: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #166534; display: flex; flex-direction: column; gap: 8px;';
+        if (document.body.classList.contains('dark-theme')) {
+          banner.style.backgroundColor = '#064e3b';
+          banner.style.borderColor = '#047857';
+          banner.style.color = '#d1fae5';
         }
       }
 
-      runnerMessage.style.display = 'block';
-      runnerMessage.textContent = analysis.message;
-      setRunnerStatus('Running...');
+      for (let i = 0; i < loadedFiles.length; i++) {
+        const filename = loadedFiles[i];
+        const item = document.createElement('div');
+        item.style.cssText = 'display: flex; flex-direction: column; gap: 4px;';
 
-      if (!pyodideInstance && pyodideReadyPromise) {
-        setRunnerStatus('Loading Python engine...');
-        await pyodideReadyPromise;
-      }
+        const rowId = `btn-prev-${i}`;
+        const preId = `pre-prev-${i}`;
 
-      // 1. Clean up transient files in /home/pyodide from previous runs
-      if (pyodideInstance) {
-        try {
-          const files = pyodideInstance.FS.readdir('/home/pyodide');
-          for (const file of files) {
-            if (file !== '.' && file !== '..' && file !== 'turtle.py') {
-              try {
-                pyodideInstance.FS.unlink(`/home/pyodide/${file}`);
-              } catch (e) {
-                try { pyodideInstance.FS.rmdir(`/home/pyodide/${file}`); } catch (e2) {}
-              }
-            }
-          }
-        } catch (e) {
-          console.error("Error clearing VFS:", e);
-        }
-      }
+        const btnBg = hasWarnings ? '#ef4444' : '#10b981';
 
-      // 2. Scan and pre-load '#load <url>' directives
-      const loadedFilesSnapshot = {};
-      const loadRegex = /^\s*#\s*load\s+(https?:\/\/\S+|[^\s#]+)/gim;
-      let loadMatch;
-      const loadPromises = [];
-      const preLoadWarnings = [];
-      while ((loadMatch = loadRegex.exec(source)) !== null) {
-        let fileUrl = normalizeCodeUrl(loadMatch[1]);
-
-        try {
-          const resolvedUrl = new URL(fileUrl, window.location.href).href;
-          const filename = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-          setRunnerStatus(`Loading remote file: ${filename}...`);
-          loadPromises.push(
-            fetch(resolvedUrl)
-              .then(res => {
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                return res.arrayBuffer();
-              })
-              .then(buf => {
-                const data = new Uint8Array(buf);
-                pyodideInstance.FS.writeFile(`/home/pyodide/${filename}`, data);
-                try {
-                  const stat = pyodideInstance.FS.stat(`/home/pyodide/${filename}`);
-                  loadedFilesSnapshot[filename] = stat.mtime.getTime();
-                } catch (e) {}
-              })
-              .catch(err => {
-                preLoadWarnings.push(`Failed to load ${fileUrl} (${err.message})`);
-              })
-          );
-        } catch (e) {
-          preLoadWarnings.push(`Invalid load URL: ${fileUrl}`);
-        }
-      }
-      if (loadPromises.length > 0) {
-        await Promise.all(loadPromises);
-        setRunnerStatus('Running...');
-      }
-
-      // 3. Take a snapshot of files in the virtual filesystem before execution
-      const filesBefore = {};
-      try {
-        const list = pyodideInstance.FS.readdir('/home/pyodide');
-        for (const name of list) {
-          if (name === '.' || name === '..' || name === 'turtle.py') continue;
-          try {
-            const stat = pyodideInstance.FS.stat(`/home/pyodide/${name}`);
-            filesBefore[name] = stat.mtime.getTime();
-          } catch (e) {}
-        }
-      } catch (e) {}
-
-      const sessionSeed = Math.floor(Math.random() * 1000000);
-      let runInputHistory = [];
-      let executionFinished = false;
-
-      while (!executionFinished && !executionCancelled) {
-        let runInputCount = 0;
-        let pendingPrompt = "";
-        
-        outputEl.innerHTML = '';
-        
-        // Show banner for files loaded/uploaded during this session
-        const loadedFiles = Object.keys(loadedFilesSnapshot);
-        if (loadedFiles.length > 0 || (typeof preLoadWarnings !== 'undefined' && preLoadWarnings.length > 0)) {
-          const banner = document.createElement('div');
-          banner.className = 'loaded-files-banner';
-          
-          const hasWarnings = typeof preLoadWarnings !== 'undefined' && preLoadWarnings.length > 0;
-          if (hasWarnings) {
-            banner.style.cssText = 'margin-bottom: 12px; padding: 12px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #991b1b; display: flex; flex-direction: column; gap: 8px;';
-            if (document.body.classList.contains('dark-theme')) {
-              banner.style.backgroundColor = '#7f1d1d';
-              banner.style.borderColor = '#b91c1c';
-              banner.style.color = '#fecaca';
-            }
-          } else {
-            banner.style.cssText = 'margin-bottom: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; color: #166534; display: flex; flex-direction: column; gap: 8px;';
-            if (document.body.classList.contains('dark-theme')) {
-              banner.style.backgroundColor = '#064e3b';
-              banner.style.borderColor = '#047857';
-              banner.style.color = '#d1fae5';
-            }
-          }
-          
-          for (let i = 0; i < loadedFiles.length; i++) {
-            const filename = loadedFiles[i];
-            const item = document.createElement('div');
-            item.style.cssText = 'display: flex; flex-direction: column; gap: 4px;';
-            
-            const rowId = `btn-prev-${i}`;
-            const preId = `pre-prev-${i}`;
-            
-            const btnBg = hasWarnings ? '#ef4444' : '#10b981';
-            
-            item.innerHTML = `
+        item.innerHTML = `
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <span style="display: flex; align-items: center; gap: 6px;">
                   📄 File <strong>${escapeHtml(filename)}</strong> is loaded and available to use.
@@ -5407,38 +5407,38 @@ json.dumps(_test_result)
               </div>
               <pre id="${preId}" style="display: none; margin: 4px 0 0; padding: 8px; background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 6px; font-family: 'JetBrains Mono', Consolas, Monaco, monospace; font-size: 11px; white-space: pre-wrap; max-height: 120px; overflow-y: auto; color: inherit; width: 100%; box-sizing: border-box;"></pre>
             `;
-            banner.appendChild(item);
-          }
-          
-          if (hasWarnings) {
-            for (let i = 0; i < preLoadWarnings.length; i++) {
-              const warningText = preLoadWarnings[i];
-              const item = document.createElement('div');
-              item.style.cssText = 'display: flex; align-items: center; gap: 6px; font-weight: 500;';
-              item.innerHTML = `⚠️ ${escapeHtml(warningText)}`;
-              banner.appendChild(item);
-            }
-          }
-          outputEl.appendChild(banner);
-        }
-        
-        pyodideInstance.globals.set("user_code", source);
-        pyodideInstance.globals.set("runInputHistoryJson", JSON.stringify(runInputHistory));
-        pyodideInstance.globals.set("session_seed", sessionSeed);
-        
-        window.getRunInput = (promptMsg) => {
-          if (runInputCount < runInputHistory.length) {
-            const val = runInputHistory[runInputCount];
-            runInputCount++;
-            return val;
-          } else {
-            pendingPrompt = promptMsg;
-            return null;
-          }
-        };
+        banner.appendChild(item);
+      }
 
-        try {
-          await pyodideInstance.runPythonAsync(`
+      if (hasWarnings) {
+        for (let i = 0; i < preLoadWarnings.length; i++) {
+          const warningText = preLoadWarnings[i];
+          const item = document.createElement('div');
+          item.style.cssText = 'display: flex; align-items: center; gap: 6px; font-weight: 500;';
+          item.innerHTML = `⚠️ ${escapeHtml(warningText)}`;
+          banner.appendChild(item);
+        }
+      }
+      outputEl.appendChild(banner);
+    }
+
+    pyodideInstance.globals.set("user_code", source);
+    pyodideInstance.globals.set("runInputHistoryJson", JSON.stringify(runInputHistory));
+    pyodideInstance.globals.set("session_seed", sessionSeed);
+
+    window.getRunInput = (promptMsg) => {
+      if (runInputCount < runInputHistory.length) {
+        const val = runInputHistory[runInputCount];
+        runInputCount++;
+        return val;
+      } else {
+        pendingPrompt = promptMsg;
+        return null;
+      }
+    };
+
+    try {
+      await pyodideInstance.runPythonAsync(`
 import sys, builtins, json, time, js
 
 class InputInterrupt(BaseException):
@@ -5535,247 +5535,247 @@ finally:
         if var in globals():
             del globals()[var]
           `);
-          
-          executionFinished = true;
-          hideConsoleInput();
-          setRunnerStatus('Finished successfully.');
-        } catch (err) {
-          // Check if this was an input interrupt
-          if (err.message && err.message.includes("InputInterrupt")) {
-            setRunnerStatus('Waiting for input...');
-            const ans = await requestDisplayInput(pendingPrompt || "Input required:");
-            if (executionCancelled) return;
-            runInputHistory.push(ans);
-          } else if (err.message && err.message.includes("__FILE_INTERRUPT__")) {
-            const parts = err.message.split("__FILE_INTERRUPT__:");
-            const filename = parts[1] ? parts[1].trim() : "file.txt";
-            setRunnerStatus(`Waiting for file: ${filename}...`);
-            const fileData = await requestFileUpload(filename);
-            if (executionCancelled || !fileData) {
-              setRunnerStatus('Execution cancelled (file upload required).');
-              return;
-            }
-            pyodideInstance.FS.writeFile(`/home/pyodide/${filename}`, fileData.data);
-            try {
-              const stat = pyodideInstance.FS.stat(`/home/pyodide/${filename}`);
-              loadedFilesSnapshot[filename] = stat.mtime.getTime();
-            } catch (e) {}
-          } else {
-            executionFinished = true;
-            hideConsoleInput();
-            handlePythonError(err);
-          }
-        }
-      }
 
-      // 4. Post-run scan for newly created or modified files to trigger auto-downloads
-      if (pyodideInstance && !executionCancelled) {
+      executionFinished = true;
+      hideConsoleInput();
+      setRunnerStatus('Finished successfully.');
+    } catch (err) {
+      // Check if this was an input interrupt
+      if (err.message && err.message.includes("InputInterrupt")) {
+        setRunnerStatus('Waiting for input...');
+        const ans = await requestDisplayInput(pendingPrompt || "Input required:");
+        if (executionCancelled) return;
+        runInputHistory.push(ans);
+      } else if (err.message && err.message.includes("__FILE_INTERRUPT__")) {
+        const parts = err.message.split("__FILE_INTERRUPT__:");
+        const filename = parts[1] ? parts[1].trim() : "file.txt";
+        setRunnerStatus(`Waiting for file: ${filename}...`);
+        const fileData = await requestFileUpload(filename);
+        if (executionCancelled || !fileData) {
+          setRunnerStatus('Execution cancelled (file upload required).');
+          return;
+        }
+        pyodideInstance.FS.writeFile(`/home/pyodide/${filename}`, fileData.data);
         try {
-          const list = pyodideInstance.FS.readdir('/home/pyodide');
-          for (const name of list) {
-            if (name === '.' || name === '..' || name === 'turtle.py') continue;
-            try {
-              const stat = pyodideInstance.FS.stat(`/home/pyodide/${name}`);
-              const currentMtime = stat.mtime.getTime();
-              
-              let shouldDownload = false;
-              if (!filesBefore.hasOwnProperty(name) && !loadedFilesSnapshot.hasOwnProperty(name)) {
-                shouldDownload = true; // New file written by Python
-              } else if (filesBefore.hasOwnProperty(name) && currentMtime > filesBefore[name]) {
-                shouldDownload = true; // Existing file modified by Python
-              } else if (loadedFilesSnapshot.hasOwnProperty(name) && currentMtime > loadedFilesSnapshot[name]) {
-                shouldDownload = true; // User-uploaded file modified by Python
-              }
-              
-              if (shouldDownload) {
-                const content = pyodideInstance.FS.readFile(`/home/pyodide/${name}`);
-                const blob = new Blob([content], { type: 'application/octet-stream' });
-                const url = URL.createObjectURL(blob);
-                downloadUrl(url, name, true);
-              }
-            } catch (e) {
-              console.error("Error reading file for download:", e);
-            }
+          const stat = pyodideInstance.FS.stat(`/home/pyodide/${filename}`);
+          loadedFilesSnapshot[filename] = stat.mtime.getTime();
+        } catch (e) { }
+      } else {
+        executionFinished = true;
+        hideConsoleInput();
+        handlePythonError(err);
+      }
+    }
+  }
+
+  // 4. Post-run scan for newly created or modified files to trigger auto-downloads
+  if (pyodideInstance && !executionCancelled) {
+    try {
+      const list = pyodideInstance.FS.readdir('/home/pyodide');
+      for (const name of list) {
+        if (name === '.' || name === '..' || name === 'turtle.py') continue;
+        try {
+          const stat = pyodideInstance.FS.stat(`/home/pyodide/${name}`);
+          const currentMtime = stat.mtime.getTime();
+
+          let shouldDownload = false;
+          if (!filesBefore.hasOwnProperty(name) && !loadedFilesSnapshot.hasOwnProperty(name)) {
+            shouldDownload = true; // New file written by Python
+          } else if (filesBefore.hasOwnProperty(name) && currentMtime > filesBefore[name]) {
+            shouldDownload = true; // Existing file modified by Python
+          } else if (loadedFilesSnapshot.hasOwnProperty(name) && currentMtime > loadedFilesSnapshot[name]) {
+            shouldDownload = true; // User-uploaded file modified by Python
+          }
+
+          if (shouldDownload) {
+            const content = pyodideInstance.FS.readFile(`/home/pyodide/${name}`);
+            const blob = new Blob([content], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            downloadUrl(url, name, true);
           }
         } catch (e) {
-          console.error("Error diffing files:", e);
+          console.error("Error reading file for download:", e);
         }
       }
+    } catch (e) {
+      console.error("Error diffing files:", e);
     }
+  }
+}
 
-    function handlePythonError(err) {
-      const errStr = String(err);
-      
-      // Clear outputEl but preserve the files loaded banner if it exists
-      const banner = outputEl.querySelector('.loaded-files-banner');
-      outputEl.innerHTML = '';
-      if (banner) {
-        outputEl.appendChild(banner);
-      }
-      
-      const errPre = document.createElement('pre');
-      errPre.style.cssText = 'color: #ef4444; font-family: inherit; margin: 0; white-space: pre-wrap; font-size: inherit; line-height: 1.5;';
-      errPre.textContent = errStr;
-      outputEl.appendChild(errPre);
-      
-      setRunnerStatus('There was an error while running the code.');
+function handlePythonError(err) {
+  const errStr = String(err);
 
-      const lineMatch = errStr.match(/File\s+"[^"]+",\s+line\s+(\d+)/i) || 
-                        errStr.match(/line\s+(\d+)/i);
-      
-      let lineNum = null;
-      if (lineMatch) {
-        lineNum = parseInt(lineMatch[1], 10);
-        if (!isNaN(lineNum)) {
-          highlightErrorLine(lineNum);
-        }
-      }
+  // Clear outputEl but preserve the files loaded banner if it exists
+  const banner = outputEl.querySelector('.loaded-files-banner');
+  outputEl.innerHTML = '';
+  if (banner) {
+    outputEl.appendChild(banner);
+  }
 
-      let tipTitle = "💡 Python Tip";
-      let tipBody = "";
+  const errPre = document.createElement('pre');
+  errPre.style.cssText = 'color: #ef4444; font-family: inherit; margin: 0; white-space: pre-wrap; font-size: inherit; line-height: 1.5;';
+  errPre.textContent = errStr;
+  outputEl.appendChild(errPre);
 
-      if (errStr.includes("SyntaxError")) {
-        tipTitle = "💡 Syntax Error Tip";
-        if (errStr.includes("was never closed") || errStr.includes("unmatched")) {
-          tipBody = "It looks like you opened a parenthesis <code>(</code>, square bracket <code>[</code>, or curly brace <code>{</code>, but forgot to close it. Check the line containing the error and ensure all brackets/quotes match up.";
-        } else if (errStr.includes("expected ':'") || errStr.includes("expected inline block") || /invalid syntax/i.test(errStr)) {
-          let isMissingColon = false;
-          let isComparisonError = false;
-          if (lineNum !== null) {
-            const lines = editor.value.split('\n');
-            const targetLine = lines[lineNum - 1] ? lines[lineNum - 1].trim() : "";
-            if (targetLine) {
-              const startsControl = /^(if|elif|else|for|while|def|class)\b/.test(targetLine);
-              if (startsControl && !targetLine.endsWith(':')) {
-                isMissingColon = true;
-              }
-              if (/^(if|elif|while)\b/.test(targetLine) && /\s+=\s+/.test(targetLine) && !/\s+==\s+/.test(targetLine)) {
-                isComparisonError = true;
-              }
-            }
+  setRunnerStatus('There was an error while running the code.');
+
+  const lineMatch = errStr.match(/File\s+"[^"]+",\s+line\s+(\d+)/i) ||
+    errStr.match(/line\s+(\d+)/i);
+
+  let lineNum = null;
+  if (lineMatch) {
+    lineNum = parseInt(lineMatch[1], 10);
+    if (!isNaN(lineNum)) {
+      highlightErrorLine(lineNum);
+    }
+  }
+
+  let tipTitle = "💡 Python Tip";
+  let tipBody = "";
+
+  if (errStr.includes("SyntaxError")) {
+    tipTitle = "💡 Syntax Error Tip";
+    if (errStr.includes("was never closed") || errStr.includes("unmatched")) {
+      tipBody = "It looks like you opened a parenthesis <code>(</code>, square bracket <code>[</code>, or curly brace <code>{</code>, but forgot to close it. Check the line containing the error and ensure all brackets/quotes match up.";
+    } else if (errStr.includes("expected ':'") || errStr.includes("expected inline block") || /invalid syntax/i.test(errStr)) {
+      let isMissingColon = false;
+      let isComparisonError = false;
+      if (lineNum !== null) {
+        const lines = editor.value.split('\n');
+        const targetLine = lines[lineNum - 1] ? lines[lineNum - 1].trim() : "";
+        if (targetLine) {
+          const startsControl = /^(if|elif|else|for|while|def|class)\b/.test(targetLine);
+          if (startsControl && !targetLine.endsWith(':')) {
+            isMissingColon = true;
           }
-          
-          if (isMissingColon) {
-            tipBody = "Did you forget a colon <code>:</code> at the end of your statement? Statements starting with <code>if</code>, <code>elif</code>, <code>else</code>, <code>for</code>, <code>while</code>, or <code>def</code> must end with a colon.";
-          } else if (isComparisonError) {
-            tipBody = "It looks like you used a single equals sign <code>=</code> inside a condition. In Python, use double equals <code>==</code> for comparing values, and a single equals <code>=</code> only when assigning values to variables.";
-          } else {
-            tipBody = "Check this line for typos or extra characters. Ensure all statements are written correctly and end with colons if they define loops, functions, or conditionals.";
+          if (/^(if|elif|while)\b/.test(targetLine) && /\s+=\s+/.test(targetLine) && !/\s+==\s+/.test(targetLine)) {
+            isComparisonError = true;
           }
-        } else {
-          tipBody = "Check this line for typos, missing characters, or incorrect formatting. Double-check that loops, functions, and conditional blocks end with a colon <code>:</code>.";
         }
-      } else if (errStr.includes("IndentationError") || errStr.includes("TabError")) {
-        tipTitle = "💡 Indentation Error Tip";
-        tipBody = "Python is very strict about spaces (indentation). Make sure that the code inside your functions, loops, or <code>if</code> blocks is indented with exactly the same number of spaces (usually 4 spaces). Avoid mixing tabs and spaces.";
-      } else if (errStr.includes("NameError")) {
-        tipTitle = "💡 Name Error Tip";
-        const nameMatch = errStr.match(/name\s+'([^']+)'\s+is\s+not\s+defined/i);
-        const name = nameMatch ? nameMatch[1] : null;
-        if (name) {
-          tipBody = `You tried to use <code>${name}</code>, but Python doesn't know what that is. Check if you spelled it correctly, or if you forgot to define/assign it first (e.g., <code>${name} = ...</code>).`;
-        } else {
-          tipBody = "You used a variable or function name that has not been defined. Check for spelling typos, capitalization, or missing assignments.";
-        }
-      } else if (errStr.includes("ZeroDivisionError")) {
-        tipTitle = "💡 Zero Division Tip";
-        tipBody = "You're trying to divide a number by zero. Mathematically this is not defined, so make sure the denominator is not zero.";
-      } else if (errStr.includes("TypeError")) {
-        tipTitle = "💡 Type Error Tip";
-        if (errStr.includes("can only concatenate") || errStr.includes("must be str, not int") || errStr.includes("unsupported operand type")) {
-          tipBody = "You're trying to combine different types of data (like adding text and numbers together). Use the <code>str()</code> function to convert numbers to text first (e.g., <code>\"Age: \" + str(age)</code>).";
-        } else {
-          tipBody = "You are trying to perform an operation on incompatible types of data. Double-check the types of variables you are combining or passing to functions.";
-        }
-      } else if (errStr.includes("ModuleNotFoundError")) {
-        tipTitle = "💡 Module Not Found Tip";
-        tipBody = "You're trying to import a module that isn't supported in this browser environment. Stick to standard browser-safe modules: <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>, <code>turtle</code>, and <code>time</code>.";
-      } else if (errStr.includes("IndexError")) {
-        tipTitle = "💡 Index Error Tip";
-        tipBody = "You're trying to access a list element that doesn't exist. Remember that Python list indexes start at <code>0</code>, so the last element of a list of length <code>N</code> is at index <code>N - 1</code>.";
-      } else if (errStr.includes("KeyError")) {
-        tipTitle = "💡 Key Error Tip";
-        tipBody = "You're trying to look up a key in a dictionary that doesn't exist. Make sure the key exists or use the dictionary's <code>.get()</code> method to provide a default value.";
-      } else if (errStr.includes("TimeoutException") || errStr.includes("InfiniteLoopTimeout") || /timeout/i.test(errStr)) {
-        tipTitle = "💡 Infinite Loop Warning";
-        tipBody = "Your code took too long to run and was stopped. This usually happens when you have an **infinite loop** (like a <code>while</code> loop that never ends) or a function calling itself forever. Check your loop conditions and ensure they eventually become false!";
       }
 
-      if (tipBody) {
-        const tipContainer = document.createElement('div');
-        tipContainer.className = 'friendly-error-tip';
-        
-        const header = document.createElement('div');
-        header.className = 'friendly-error-header';
-        header.innerHTML = tipTitle;
-        
-        const body = document.createElement('div');
-        body.className = 'friendly-error-body';
-        body.innerHTML = tipBody;
-        
-        tipContainer.appendChild(header);
-        tipContainer.appendChild(body);
-        
-        outputEl.appendChild(tipContainer);
-      }
-    }
-
-    function highlightErrorLine(lineNum) {
-      clearTeachHighlight();
-      const lineHeight = getCodeLineHeight();
-      const yPos = (lineNum - 1) * lineHeight;
-      const hl = document.createElement('div');
-      hl.className = 'highlight-line-error';
-      hl.style.top = yPos + 'px';
-      hl.style.height = lineHeight + 'px';
-      highlightLayer.appendChild(hl);
-
-      const activeView = currentAppMode === 'display' ? displayEditor : editor;
-      const viewRect = activeView.getBoundingClientRect();
-      if (yPos < activeView.scrollTop || yPos > activeView.scrollTop + viewRect.height - 40) {
-        activeView.scrollTop = Math.max(0, yPos - viewRect.height / 2);
-      }
-    }
-
-
-    // --- Robust Display Mode Tracing Logic ---
-    async function prepareDisplayTrace() {
-      if (isTracing) return false;
-      isTracing = true;
-
-      const analysis = classifyCode(editor.value);
-      if (!analysis.ok) {
-        analyseCodeAndUpdateMessage(false);
-        displayTraceStatus = 'error';
-        outputEl.textContent = '';
-        setRunnerStatus('Cannot trace imported code in the browser.');
-        isTracing = false;
-        return false;
-      }
-
-      const source = editor.value;
-      const imports = extractImports(source);
-      const usesTurtle = imports.includes('turtle');
-      const turtleContainer = document.getElementById('turtleCanvasContainer');
-
-      if (usesTurtle || currentAppMode === 'turtle') {
-        if (turtleContainer) {
-          turtleContainer.style.display = 'flex';
-          setupTurtleCanvas(400, 400);
-          resetTurtleCanvas();
-        }
+      if (isMissingColon) {
+        tipBody = "Did you forget a colon <code>:</code> at the end of your statement? Statements starting with <code>if</code>, <code>elif</code>, <code>else</code>, <code>for</code>, <code>while</code>, or <code>def</code> must end with a colon.";
+      } else if (isComparisonError) {
+        tipBody = "It looks like you used a single equals sign <code>=</code> inside a condition. In Python, use double equals <code>==</code> for comparing values, and a single equals <code>=</code> only when assigning values to variables.";
       } else {
-        if (turtleContainer && currentAppMode !== 'turtle') {
-          turtleContainer.style.display = 'none';
-        }
+        tipBody = "Check this line for typos or extra characters. Ensure all statements are written correctly and end with colons if they define loops, functions, or conditionals.";
       }
+    } else {
+      tipBody = "Check this line for typos, missing characters, or incorrect formatting. Double-check that loops, functions, and conditional blocks end with a colon <code>:</code>.";
+    }
+  } else if (errStr.includes("IndentationError") || errStr.includes("TabError")) {
+    tipTitle = "💡 Indentation Error Tip";
+    tipBody = "Python is very strict about spaces (indentation). Make sure that the code inside your functions, loops, or <code>if</code> blocks is indented with exactly the same number of spaces (usually 4 spaces). Avoid mixing tabs and spaces.";
+  } else if (errStr.includes("NameError")) {
+    tipTitle = "💡 Name Error Tip";
+    const nameMatch = errStr.match(/name\s+'([^']+)'\s+is\s+not\s+defined/i);
+    const name = nameMatch ? nameMatch[1] : null;
+    if (name) {
+      tipBody = `You tried to use <code>${name}</code>, but Python doesn't know what that is. Check if you spelled it correctly, or if you forgot to define/assign it first (e.g., <code>${name} = ...</code>).`;
+    } else {
+      tipBody = "You used a variable or function name that has not been defined. Check for spelling typos, capitalization, or missing assignments.";
+    }
+  } else if (errStr.includes("ZeroDivisionError")) {
+    tipTitle = "💡 Zero Division Tip";
+    tipBody = "You're trying to divide a number by zero. Mathematically this is not defined, so make sure the denominator is not zero.";
+  } else if (errStr.includes("TypeError")) {
+    tipTitle = "💡 Type Error Tip";
+    if (errStr.includes("can only concatenate") || errStr.includes("must be str, not int") || errStr.includes("unsupported operand type")) {
+      tipBody = "You're trying to combine different types of data (like adding text and numbers together). Use the <code>str()</code> function to convert numbers to text first (e.g., <code>\"Age: \" + str(age)</code>).";
+    } else {
+      tipBody = "You are trying to perform an operation on incompatible types of data. Double-check the types of variables you are combining or passing to functions.";
+    }
+  } else if (errStr.includes("ModuleNotFoundError")) {
+    tipTitle = "💡 Module Not Found Tip";
+    tipBody = "You're trying to import a module that isn't supported in this browser environment. Stick to standard browser-safe modules: <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>, <code>turtle</code>, and <code>time</code>.";
+  } else if (errStr.includes("IndexError")) {
+    tipTitle = "💡 Index Error Tip";
+    tipBody = "You're trying to access a list element that doesn't exist. Remember that Python list indexes start at <code>0</code>, so the last element of a list of length <code>N</code> is at index <code>N - 1</code>.";
+  } else if (errStr.includes("KeyError")) {
+    tipTitle = "💡 Key Error Tip";
+    tipBody = "You're trying to look up a key in a dictionary that doesn't exist. Make sure the key exists or use the dictionary's <code>.get()</code> method to provide a default value.";
+  } else if (errStr.includes("TimeoutException") || errStr.includes("InfiniteLoopTimeout") || /timeout/i.test(errStr)) {
+    tipTitle = "💡 Infinite Loop Warning";
+    tipBody = "Your code took too long to run and was stopped. This usually happens when you have an **infinite loop** (like a <code>while</code> loop that never ends) or a function calling itself forever. Check your loop conditions and ensure they eventually become false!";
+  }
 
-      if (!pyodideInstance && pyodideReadyPromise) {
-        setRunnerStatus('Loading Python engine...');
-        await pyodideReadyPromise;
-      }
+  if (tipBody) {
+    const tipContainer = document.createElement('div');
+    tipContainer.className = 'friendly-error-tip';
 
-      const setupCode = `
+    const header = document.createElement('div');
+    header.className = 'friendly-error-header';
+    header.innerHTML = tipTitle;
+
+    const body = document.createElement('div');
+    body.className = 'friendly-error-body';
+    body.innerHTML = tipBody;
+
+    tipContainer.appendChild(header);
+    tipContainer.appendChild(body);
+
+    outputEl.appendChild(tipContainer);
+  }
+}
+
+function highlightErrorLine(lineNum) {
+  clearTeachHighlight();
+  const lineHeight = getCodeLineHeight();
+  const yPos = (lineNum - 1) * lineHeight;
+  const hl = document.createElement('div');
+  hl.className = 'highlight-line-error';
+  hl.style.top = yPos + 'px';
+  hl.style.height = lineHeight + 'px';
+  highlightLayer.appendChild(hl);
+
+  const activeView = currentAppMode === 'display' ? displayEditor : editor;
+  const viewRect = activeView.getBoundingClientRect();
+  if (yPos < activeView.scrollTop || yPos > activeView.scrollTop + viewRect.height - 40) {
+    activeView.scrollTop = Math.max(0, yPos - viewRect.height / 2);
+  }
+}
+
+
+// --- Robust Display Mode Tracing Logic ---
+async function prepareDisplayTrace() {
+  if (isTracing) return false;
+  isTracing = true;
+
+  const analysis = classifyCode(editor.value);
+  if (!analysis.ok) {
+    analyseCodeAndUpdateMessage(false);
+    displayTraceStatus = 'error';
+    outputEl.textContent = '';
+    setRunnerStatus('Cannot trace imported code in the browser.');
+    isTracing = false;
+    return false;
+  }
+
+  const source = editor.value;
+  const imports = extractImports(source);
+  const usesTurtle = imports.includes('turtle');
+  const turtleContainer = document.getElementById('turtleCanvasContainer');
+
+  if (usesTurtle || currentAppMode === 'turtle') {
+    if (turtleContainer) {
+      turtleContainer.style.display = 'flex';
+      setupTurtleCanvas(400, 400);
+      resetTurtleCanvas();
+    }
+  } else {
+    if (turtleContainer && currentAppMode !== 'turtle') {
+      turtleContainer.style.display = 'none';
+    }
+  }
+
+  if (!pyodideInstance && pyodideReadyPromise) {
+    setRunnerStatus('Loading Python engine...');
+    await pyodideReadyPromise;
+  }
+
+  const setupCode = `
 import sys, io, builtins, json, ast, time
 
 class TimeoutInterrupt(BaseException):
@@ -6028,649 +6028,649 @@ def _run_trace():
         builtins.input = getattr(builtins, '_original_input', builtins.input)
     return {"log": _trace_log, "output": _trace_output, "status": status, "pending_prompt": pending_prompt}
 `;
-      try {
-        pyodideInstance.globals.set("source_code", source);
-        pyodideInstance.globals.set("displayInputHistoryJson", JSON.stringify(displayInputHistory));
+  try {
+    pyodideInstance.globals.set("source_code", source);
+    pyodideInstance.globals.set("displayInputHistoryJson", JSON.stringify(displayInputHistory));
 
-        pyodideInstance.runPython(setupCode);
-        const resProxy = pyodideInstance.runPython("_run_trace()");
-        let res;
-        try {
-          res = resProxy.toJs({ dict_converter: Object.fromEntries });
-        } finally {
-          resProxy.destroy();
-        }
+    pyodideInstance.runPython(setupCode);
+    const resProxy = pyodideInstance.runPython("_run_trace()");
+    let res;
+    try {
+      res = resProxy.toJs({ dict_converter: Object.fromEntries });
+    } finally {
+      resProxy.destroy();
+    }
 
-        displayTraceLog = res.log || [];
-        displayTraceStatus = res.status;
-        displayPendingPrompt = res.pending_prompt;
-        displayMaxRevealedStep = -1;
+    displayTraceLog = res.log || [];
+    displayTraceStatus = res.status;
+    displayPendingPrompt = res.pending_prompt;
+    displayMaxRevealedStep = -1;
 
-        const outputArr = res.output || [];
-        displayFinalOutput = outputArr.join('');
-        displayTraceLog.forEach(step => {
-          const outLen = step.output_len || 0;
-          let outPart = '';
-          for (let i = 0; i < outLen && i < outputArr.length; i++) {
-            outPart += outputArr[i];
-          }
-          step.full_output = outPart;
-        });
-        if (displayTraceStatus === 'finished' && displayTraceLog.length > 0) {
-          displayTraceLog[displayTraceLog.length - 1].full_output = displayFinalOutput;
-        }
-
-
-
-        if (displayTraceStatus === 'error') {
-          setRunnerStatus('Trace Error.');
-          // Add error details to the output window for better debugging
-          const lastOut = outputArr.length > 0 ? outputArr[outputArr.length - 1] : "";
-          if (lastOut) {
-            outputEl.textContent += "\n--- Error ---\n" + lastOut;
-          }
-          const traceTableContainer = document.getElementById('traceTableContainer');
-          if (traceTableContainer) traceTableContainer.innerHTML = '';
-        } else {
-          setRunnerStatus(displayTraceStatus === 'waiting_input' ? 'Ready (Input needed)' : 'Trace updated.');
-          buildTraceTable();
-        }
-
-        isTracing = false;
-        return true;
-      } catch (err) {
-        console.error('Trace Generation Error:', err);
-        handlePythonError(err);
-        displayTraceStatus = 'error';
-        isTracing = false;
-        return false;
+    const outputArr = res.output || [];
+    displayFinalOutput = outputArr.join('');
+    displayTraceLog.forEach(step => {
+      const outLen = step.output_len || 0;
+      let outPart = '';
+      for (let i = 0; i < outLen && i < outputArr.length; i++) {
+        outPart += outputArr[i];
       }
+      step.full_output = outPart;
+    });
+    if (displayTraceStatus === 'finished' && displayTraceLog.length > 0) {
+      displayTraceLog[displayTraceLog.length - 1].full_output = displayFinalOutput;
     }
 
 
 
-
-
-    function renderDisplayStep(stepIndex) {
-      if (stepIndex >= displayTraceLog.length) return;
-      const step = displayTraceLog[stepIndex];
-      if (!step) return;
-
-      // Restore turtle snapshot if available
-      if (step.turtle_snapshot) {
-        try {
-          const snap = JSON.parse(step.turtle_snapshot);
-          turtleCommands = snap.commands || [];
-          turtleX = snap.x || 0;
-          turtleY = snap.y || 0;
-          turtleHeading = snap.heading || 0;
-          turtleVisible = snap.visible !== undefined ? snap.visible : true;
-          turtleBgColor = snap.bgColor || '#ffffff';
-          turtleShape = snap.shape || 'classic';
-          drawEverything();
-        } catch (e) {
-          console.error("Error restoring turtle snapshot:", e);
-        }
+    if (displayTraceStatus === 'error') {
+      setRunnerStatus('Trace Error.');
+      // Add error details to the output window for better debugging
+      const lastOut = outputArr.length > 0 ? outputArr[outputArr.length - 1] : "";
+      if (lastOut) {
+        outputEl.textContent += "\n--- Error ---\n" + lastOut;
       }
+      const traceTableContainer = document.getElementById('traceTableContainer');
+      if (traceTableContainer) traceTableContainer.innerHTML = '';
+    } else {
+      setRunnerStatus(displayTraceStatus === 'waiting_input' ? 'Ready (Input needed)' : 'Trace updated.');
+      buildTraceTable();
+    }
 
-      const lineNum = step.line;
-      if (lineNum !== undefined) highlightLine(lineNum);
-      renderCallTrace(step);
+    isTracing = false;
+    return true;
+  } catch (err) {
+    console.error('Trace Generation Error:', err);
+    handlePythonError(err);
+    displayTraceStatus = 'error';
+    isTracing = false;
+    return false;
+  }
+}
 
-      const locs = step.locals || {};
-      let tableHtml = '<table style="width: 100%; border-collapse: collapse; margin-top: 8px;">';
-      tableHtml += '<tr style="border-bottom: 2px solid #cbd5e1;"><th style="text-align: left; padding: 4px; font-size: 12px; color: #64748b;">Variable</th><th style="text-align: left; padding: 4px; font-size: 12px; color: #64748b;">Value</th></tr>';
 
-      const keys = Object.keys(locs);
-      if (keys.length > 0) {
-        keys.forEach(k => {
-          tableHtml += `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 6px 4px; font-weight: 600; color: #0f172a;">${k}</td><td style="padding: 6px 4px; color: #059669;">${locs[k]}</td></tr>`;
-        });
-        tableHtml += '</table>';
-        variableList.innerHTML = tableHtml;
+
+
+
+function renderDisplayStep(stepIndex) {
+  if (stepIndex >= displayTraceLog.length) return;
+  const step = displayTraceLog[stepIndex];
+  if (!step) return;
+
+  // Restore turtle snapshot if available
+  if (step.turtle_snapshot) {
+    try {
+      const snap = JSON.parse(step.turtle_snapshot);
+      turtleCommands = snap.commands || [];
+      turtleX = snap.x || 0;
+      turtleY = snap.y || 0;
+      turtleHeading = snap.heading || 0;
+      turtleVisible = snap.visible !== undefined ? snap.visible : true;
+      turtleBgColor = snap.bgColor || '#ffffff';
+      turtleShape = snap.shape || 'classic';
+      drawEverything();
+    } catch (e) {
+      console.error("Error restoring turtle snapshot:", e);
+    }
+  }
+
+  const lineNum = step.line;
+  if (lineNum !== undefined) highlightLine(lineNum);
+  renderCallTrace(step);
+
+  const locs = step.locals || {};
+  let tableHtml = '<table style="width: 100%; border-collapse: collapse; margin-top: 8px;">';
+  tableHtml += '<tr style="border-bottom: 2px solid #cbd5e1;"><th style="text-align: left; padding: 4px; font-size: 12px; color: #64748b;">Variable</th><th style="text-align: left; padding: 4px; font-size: 12px; color: #64748b;">Value</th></tr>';
+
+  const keys = Object.keys(locs);
+  if (keys.length > 0) {
+    keys.forEach(k => {
+      tableHtml += `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 6px 4px; font-weight: 600; color: #0f172a;">${k}</td><td style="padding: 6px 4px; color: #059669;">${locs[k]}</td></tr>`;
+    });
+    tableHtml += '</table>';
+    variableList.innerHTML = tableHtml;
+  } else {
+    variableList.textContent = 'No variables.';
+  }
+
+  const out = step.full_output || '';
+  if (out !== undefined) outputEl.textContent = out;
+
+  syncLineNumberScroll();
+
+  // Show/hide trace table rows dynamically based on the current step
+  displayMaxRevealedStep = Math.max(displayMaxRevealedStep, stepIndex);
+  updateTraceTableRowsVisibility();
+  highlightTraceTableRow(stepIndex);
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function renderCallTrace(step) {
+  const stack = step.call_stack || [];
+  const label = step.call_label || '';
+  const note = step.call_note || '';
+
+  if (!stack.length && !label && !note) {
+    callTraceList.textContent = 'No function call yet.';
+    return;
+  }
+
+  let html = '';
+  if (label || note) {
+    html += `<div style="margin-bottom: 8px;"><strong>${escapeHtml(label)}</strong>`;
+    if (note) {
+      html += `<div style="margin-top: 4px;">${escapeHtml(note)}</div>`;
+    }
+    html += '</div>';
+  }
+
+  if (stack.length) {
+    html += '<div><strong>Call stack:</strong></div>';
+    html += '<div style="margin-top: 4px;">';
+    stack.forEach((call, index) => {
+      const indent = '&nbsp;'.repeat(index * 4);
+      const isCurrent = index === stack.length - 1;
+      html += `<div>${indent}${isCurrent ? '-> ' : '   '}${escapeHtml(call)}</div>`;
+    });
+    html += '</div>';
+  }
+
+  callTraceList.innerHTML = html;
+}
+
+window.switchDisplayTab = function (tab) {
+  const btnState = document.getElementById('tabBtnState');
+  const btnTrace = document.getElementById('tabBtnTraceTable');
+  const contentState = document.getElementById('tabContentState');
+  const contentTrace = document.getElementById('tabContentTraceTable');
+
+  if (tab === 'state') {
+    if (btnState) btnState.classList.add('active');
+    if (btnTrace) btnTrace.classList.remove('active');
+    if (contentState) contentState.style.display = 'block';
+    if (contentTrace) contentTrace.style.display = 'none';
+  } else {
+    if (btnState) btnState.classList.remove('active');
+    if (btnTrace) btnTrace.classList.add('active');
+    if (contentState) contentState.style.display = 'none';
+    if (contentTrace) contentTrace.style.display = 'block';
+  }
+};
+
+function updateTraceTableRowsVisibility() {
+  const rows = document.querySelectorAll('.trace-table-row');
+  rows.forEach((row, idx) => {
+    if (idx <= displayMaxRevealedStep) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
+window.jumpToTraceStep = function (idx) {
+  if (idx < 0 || idx >= displayTraceLog.length) return;
+  displayCurrentStep = idx;
+  renderDisplayStep(displayCurrentStep);
+  displayCurrentStep++;
+  setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
+};
+
+function highlightTraceTableRow(idx) {
+  const rows = document.querySelectorAll('.trace-table-row');
+  rows.forEach(r => {
+    r.classList.remove('active-trace-row');
+  });
+  const currentRow = document.getElementById(`trace-row-${idx}`);
+  if (currentRow) {
+    currentRow.classList.add('active-trace-row');
+    const container = document.getElementById('traceTableContainer');
+    if (container) {
+      if (typeof btnPlayStatus !== 'undefined' && btnPlayStatus === 'playing') {
+        container.scrollTop = container.scrollHeight;
       } else {
-        variableList.textContent = 'No variables.';
+        currentRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
-
-      const out = step.full_output || '';
-      if (out !== undefined) outputEl.textContent = out;
-
-      syncLineNumberScroll();
-
-      // Show/hide trace table rows dynamically based on the current step
-      displayMaxRevealedStep = Math.max(displayMaxRevealedStep, stepIndex);
-      updateTraceTableRowsVisibility();
-      highlightTraceTableRow(stepIndex);
     }
+  }
+}
 
-    function escapeHtml(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
+function buildTraceTable() {
+  const container = document.getElementById('traceTableContainer');
+  if (!container) return;
 
-    function renderCallTrace(step) {
-      const stack = step.call_stack || [];
-      const label = step.call_label || '';
-      const note = step.call_note || '';
+  if (!displayTraceLog || displayTraceLog.length === 0) {
+    container.innerHTML = '<div style="padding: 10px; color: #64748b; font-size: 13px; text-align: center;">No trace table generated. Click Play or Step to trace.</div>';
+    return;
+  }
 
-      if (!stack.length && !label && !note) {
-        callTraceList.textContent = 'No function call yet.';
-        return;
-      }
-
-      let html = '';
-      if (label || note) {
-        html += `<div style="margin-bottom: 8px;"><strong>${escapeHtml(label)}</strong>`;
-        if (note) {
-          html += `<div style="margin-top: 4px;">${escapeHtml(note)}</div>`;
-        }
-        html += '</div>';
-      }
-
-      if (stack.length) {
-        html += '<div><strong>Call stack:</strong></div>';
-        html += '<div style="margin-top: 4px;">';
-        stack.forEach((call, index) => {
-          const indent = '&nbsp;'.repeat(index * 4);
-          const isCurrent = index === stack.length - 1;
-          html += `<div>${indent}${isCurrent ? '-> ' : '   '}${escapeHtml(call)}</div>`;
-        });
-        html += '</div>';
-      }
-
-      callTraceList.innerHTML = html;
-    }
-
-    window.switchDisplayTab = function(tab) {
-      const btnState = document.getElementById('tabBtnState');
-      const btnTrace = document.getElementById('tabBtnTraceTable');
-      const contentState = document.getElementById('tabContentState');
-      const contentTrace = document.getElementById('tabContentTraceTable');
-
-      if (tab === 'state') {
-        if (btnState) btnState.classList.add('active');
-        if (btnTrace) btnTrace.classList.remove('active');
-        if (contentState) contentState.style.display = 'block';
-        if (contentTrace) contentTrace.style.display = 'none';
-      } else {
-        if (btnState) btnState.classList.remove('active');
-        if (btnTrace) btnTrace.classList.add('active');
-        if (contentState) contentState.style.display = 'none';
-        if (contentTrace) contentTrace.style.display = 'block';
-      }
-    };
-
-    function updateTraceTableRowsVisibility() {
-      const rows = document.querySelectorAll('.trace-table-row');
-      rows.forEach((row, idx) => {
-        if (idx <= displayMaxRevealedStep) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
+  // Gather variables in order of first appearance
+  const varColumns = [];
+  displayTraceLog.forEach(step => {
+    if (step.locals) {
+      Object.keys(step.locals).forEach(v => {
+        if (!varColumns.includes(v)) {
+          varColumns.push(v);
         }
       });
     }
+  });
 
-    window.jumpToTraceStep = function(idx) {
-      if (idx < 0 || idx >= displayTraceLog.length) return;
-      displayCurrentStep = idx;
+  let html = `<table class="trace-table-grid">`;
+  html += `<thead><tr>`;
+  html += `<th style="text-align: center; min-width: 50px;">Line</th>`;
+  varColumns.forEach(v => {
+    html += `<th style="min-width: 80px;">${v}</th>`;
+  });
+  html += `<th style="min-width: 100px;">OUTPUT</th>`;
+  html += `</tr></thead><tbody>`;
+
+  let lastValues = {};
+  displayTraceLog.forEach((step, idx) => {
+    const lineNum = step.line || '';
+    const locs = step.locals || {};
+
+    html += `<tr id="trace-row-${idx}" class="trace-table-row" onclick="jumpToTraceStep(${idx})">`;
+    html += `<td>${lineNum}</td>`;
+
+    varColumns.forEach(v => {
+      const val = locs[v];
+      let displayVal = '';
+      if (val !== undefined) {
+        if (lastValues[v] === undefined || lastValues[v] !== val) {
+          displayVal = val;
+          lastValues[v] = val;
+        }
+      }
+      html += `<td>${escapeHtml(displayVal)}</td>`;
+    });
+
+    // Output printed in this step
+    let stepOutput = '';
+    const prevStep = idx > 0 ? displayTraceLog[idx - 1] : null;
+    const currentFullOut = step.full_output || '';
+    const prevFullOut = prevStep ? (prevStep.full_output || '') : '';
+    if (currentFullOut.length > prevFullOut.length) {
+      stepOutput = currentFullOut.slice(prevFullOut.length);
+    }
+    const displayOutput = stepOutput.replace(/\r?\n$/, '');
+
+    html += `<td>${escapeHtml(displayOutput)}</td>`;
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table>`;
+  container.innerHTML = html;
+
+  // Initially update rows visibility
+  updateTraceTableRowsVisibility();
+}
+
+window.copyTraceTableToClipboard = function () {
+  if (!displayTraceLog || displayTraceLog.length === 0) {
+    alert('No trace table data available to copy. Please run the program first.');
+    return;
+  }
+
+  const varColumns = [];
+  displayTraceLog.forEach(step => {
+    if (step.locals) {
+      Object.keys(step.locals).forEach(v => {
+        if (!varColumns.includes(v)) varColumns.push(v);
+      });
+    }
+  });
+
+  // HTML Table for Clipboard
+  let html = `<table border="1" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:11pt;">`;
+  html += `<thead><tr style="background-color:#f2f2f2;">`;
+  html += `<th style="padding:6px 8px;border:1px solid #ccc;font-weight:bold;text-align:center;">Line</th>`;
+  varColumns.forEach(v => {
+    html += `<th style="padding:6px 8px;border:1px solid #ccc;font-weight:bold;text-align:left;">${v}</th>`;
+  });
+  html += `<th style="padding:6px 8px;border:1px solid #ccc;font-weight:bold;text-align:left;">OUTPUT</th>`;
+  html += `</tr></thead><tbody>`;
+
+  let text = `Line\t${varColumns.join('\t')}\tOUTPUT\n`;
+  let lastValues = {};
+
+  displayTraceLog.forEach((step, idx) => {
+    const lineNum = step.line || '';
+    const locs = step.locals || {};
+
+    let rowCellsHtml = `<td style="padding:6px 8px;border:1px solid #ccc;text-align:center;">${lineNum}</td>`;
+    let rowText = `${lineNum}`;
+
+    varColumns.forEach(v => {
+      const val = locs[v];
+      let displayVal = '';
+      if (val !== undefined) {
+        if (lastValues[v] === undefined || lastValues[v] !== val) {
+          displayVal = val;
+          lastValues[v] = val;
+        }
+      }
+      rowCellsHtml += `<td style="padding:6px 8px;border:1px solid #ccc;">${escapeHtml(displayVal)}</td>`;
+      rowText += `\t${displayVal}`;
+    });
+
+    let stepOutput = '';
+    const prevStep = idx > 0 ? displayTraceLog[idx - 1] : null;
+    const currentFullOut = step.full_output || '';
+    const prevFullOut = prevStep ? (prevStep.full_output || '') : '';
+    if (currentFullOut.length > prevFullOut.length) {
+      stepOutput = currentFullOut.slice(prevFullOut.length);
+    }
+    const cleanOutput = stepOutput.replace(/\r?\n$/, '');
+
+    rowCellsHtml += `<td style="padding:6px 8px;border:1px solid #ccc;">${escapeHtml(cleanOutput)}</td>`;
+    rowText += `\t${cleanOutput}\n`;
+
+    html += `<tr>${rowCellsHtml}</tr>`;
+  });
+  html += `</tbody></table>`;
+
+  function fallbackTextCopy(textContent) {
+    copyTextToClipboard(textContent).then(() => {
+      alert('Trace table copied to clipboard as tab-separated values!');
+    }).catch(err => {
+      console.error('Failed to copy text fallback:', err);
+      alert('Failed to copy trace table.');
+    });
+  }
+
+  function fallbackHtmlCopy(htmlContent, textContent) {
+    try {
+      const div = document.createElement('div');
+      div.innerHTML = htmlContent;
+      div.style.position = 'fixed';
+      div.style.left = '-9999px';
+      document.body.appendChild(div);
+
+      const range = document.createRange();
+      range.selectNode(div);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      const success = document.execCommand('copy');
+      document.body.removeChild(div);
+      window.getSelection().removeAllRanges();
+
+      if (success) {
+        alert('Trace table copied to clipboard! You can now paste it directly into Word, Google Docs, or Excel.');
+      } else {
+        throw new Error('execCommand returned false');
+      }
+    } catch (err) {
+      console.error('execCommand HTML copy failed, trying plain text fallback:', err);
+      fallbackTextCopy(textContent);
+    }
+  }
+
+  // Copying logic
+  if (navigator.clipboard && window.ClipboardItem) {
+    const htmlBlob = new Blob([html], { type: 'text/html' });
+    const textBlob = new Blob([text], { type: 'text/plain' });
+    try {
+      const data = [new ClipboardItem({
+        'text/html': htmlBlob,
+        'text/plain': textBlob
+      })];
+      navigator.clipboard.write(data).then(() => {
+        alert('Trace table copied to clipboard! You can now paste it directly into Word, Google Docs, or Excel.');
+      }).catch(err => {
+        console.error('Failed to copy trace table via Clipboard write:', err);
+        fallbackTextCopy(text);
+      });
+    } catch (err) {
+      console.error('Synchronous ClipboardItem error, falling back:', err);
+      fallbackHtmlCopy(html, text);
+    }
+  } else {
+    fallbackHtmlCopy(html, text);
+  }
+};
+
+
+
+
+function clearTeachHighlight() {
+  highlightLayer.innerHTML = '';
+  callTraceList.textContent = '';
+  variableList.textContent = '';
+}
+
+function highlightLine(lineNum) {
+  clearTeachHighlight();
+  const lineHeight = getCodeLineHeight();
+  const yPos = (lineNum - 1) * lineHeight;
+  const hl = document.createElement('div');
+  hl.className = 'highlight-line';
+  hl.style.top = yPos + 'px';
+  hl.style.height = lineHeight + 'px';
+  highlightLayer.appendChild(hl);
+
+  // Auto-scroll logic
+  const activeView = currentAppMode === 'display' ? displayEditor : editor;
+  const viewRect = activeView.getBoundingClientRect();
+  if (yPos < activeView.scrollTop || yPos > activeView.scrollTop + viewRect.height - 40) {
+    activeView.scrollTop = Math.max(0, yPos - viewRect.height / 2);
+  }
+}
+
+async function displayStep() {
+  if (displayTraceStatus === 'error') return;
+  if (isTracing || isAwaitingDisplayInput) return;
+
+  if (displayTraceLog.length === 0) {
+    const success = await prepareDisplayTrace();
+    if (!success) return;
+    if (displayTraceLog.length > 0 && displayCurrentStep === 0) {
       renderDisplayStep(displayCurrentStep);
       displayCurrentStep++;
       setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
-    };
-
-    function highlightTraceTableRow(idx) {
-      const rows = document.querySelectorAll('.trace-table-row');
-      rows.forEach(r => {
-        r.classList.remove('active-trace-row');
-      });
-      const currentRow = document.getElementById(`trace-row-${idx}`);
-      if (currentRow) {
-        currentRow.classList.add('active-trace-row');
-        const container = document.getElementById('traceTableContainer');
-        if (container) {
-          if (typeof btnPlayStatus !== 'undefined' && btnPlayStatus === 'playing') {
-            container.scrollTop = container.scrollHeight;
-          } else {
-            currentRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-          }
-        }
-      }
     }
+    return;
+  }
 
-    function buildTraceTable() {
-      const container = document.getElementById('traceTableContainer');
-      if (!container) return;
+  if (displayCurrentStep < displayTraceLog.length) {
+    renderDisplayStep(displayCurrentStep);
+    displayCurrentStep++;
+    setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
+  } else if (displayTraceStatus === 'waiting_input') {
+    const wasPlaying = btnPlayStatus === 'playing';
+    if (displayTimeout) clearTimeout(displayTimeout);
+    isAwaitingDisplayInput = true;
+    setRunnerStatus('Waiting for input.');
 
-      if (!displayTraceLog || displayTraceLog.length === 0) {
-        container.innerHTML = '<div style="padding: 10px; color: #64748b; font-size: 13px; text-align: center;">No trace table generated. Click Play or Step to trace.</div>';
-        return;
-      }
+    try {
+      const ans = await requestDisplayInput(displayPendingPrompt || "Input required:");
+      if (!isAwaitingDisplayInput || displayTraceStatus === 'ready') return;
+      displayInputHistory.push(ans);
+      hideConsoleInput();
 
-      // Gather variables in order of first appearance
-      const varColumns = [];
-      displayTraceLog.forEach(step => {
-        if (step.locals) {
-          Object.keys(step.locals).forEach(v => {
-            if (!varColumns.includes(v)) {
-              varColumns.push(v);
-            }
-          });
-        }
-      });
-
-      let html = `<table class="trace-table-grid">`;
-      html += `<thead><tr>`;
-      html += `<th style="text-align: center; min-width: 50px;">Line</th>`;
-      varColumns.forEach(v => {
-        html += `<th style="min-width: 80px;">${v}</th>`;
-      });
-      html += `<th style="min-width: 100px;">OUTPUT</th>`;
-      html += `</tr></thead><tbody>`;
-
-      let lastValues = {};
-      displayTraceLog.forEach((step, idx) => {
-        const lineNum = step.line || '';
-        const locs = step.locals || {};
-
-        html += `<tr id="trace-row-${idx}" class="trace-table-row" onclick="jumpToTraceStep(${idx})">`;
-        html += `<td>${lineNum}</td>`;
-
-        varColumns.forEach(v => {
-          const val = locs[v];
-          let displayVal = '';
-          if (val !== undefined) {
-            if (lastValues[v] === undefined || lastValues[v] !== val) {
-              displayVal = val;
-              lastValues[v] = val;
-            }
-          }
-          html += `<td>${escapeHtml(displayVal)}</td>`;
-        });
-
-        // Output printed in this step
-        let stepOutput = '';
-        const prevStep = idx > 0 ? displayTraceLog[idx - 1] : null;
-        const currentFullOut = step.full_output || '';
-        const prevFullOut = prevStep ? (prevStep.full_output || '') : '';
-        if (currentFullOut.length > prevFullOut.length) {
-          stepOutput = currentFullOut.slice(prevFullOut.length);
-        }
-        const displayOutput = stepOutput.replace(/\r?\n$/, '');
-
-        html += `<td>${escapeHtml(displayOutput)}</td>`;
-        html += `</tr>`;
-      });
-
-      html += `</tbody></table>`;
-      container.innerHTML = html;
-
-      // Initially update rows visibility
-      updateTraceTableRowsVisibility();
-    }
-
-    window.copyTraceTableToClipboard = function() {
-      if (!displayTraceLog || displayTraceLog.length === 0) {
-        alert('No trace table data available to copy. Please run the program first.');
-        return;
-      }
-
-      const varColumns = [];
-      displayTraceLog.forEach(step => {
-        if (step.locals) {
-          Object.keys(step.locals).forEach(v => {
-            if (!varColumns.includes(v)) varColumns.push(v);
-          });
-        }
-      });
-
-      // HTML Table for Clipboard
-      let html = `<table border="1" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:11pt;">`;
-      html += `<thead><tr style="background-color:#f2f2f2;">`;
-      html += `<th style="padding:6px 8px;border:1px solid #ccc;font-weight:bold;text-align:center;">Line</th>`;
-      varColumns.forEach(v => {
-        html += `<th style="padding:6px 8px;border:1px solid #ccc;font-weight:bold;text-align:left;">${v}</th>`;
-      });
-      html += `<th style="padding:6px 8px;border:1px solid #ccc;font-weight:bold;text-align:left;">OUTPUT</th>`;
-      html += `</tr></thead><tbody>`;
-
-      let text = `Line\t${varColumns.join('\t')}\tOUTPUT\n`;
-      let lastValues = {};
-
-      displayTraceLog.forEach((step, idx) => {
-        const lineNum = step.line || '';
-        const locs = step.locals || {};
-
-        let rowCellsHtml = `<td style="padding:6px 8px;border:1px solid #ccc;text-align:center;">${lineNum}</td>`;
-        let rowText = `${lineNum}`;
-
-        varColumns.forEach(v => {
-          const val = locs[v];
-          let displayVal = '';
-          if (val !== undefined) {
-            if (lastValues[v] === undefined || lastValues[v] !== val) {
-              displayVal = val;
-              lastValues[v] = val;
-            }
-          }
-          rowCellsHtml += `<td style="padding:6px 8px;border:1px solid #ccc;">${escapeHtml(displayVal)}</td>`;
-          rowText += `\t${displayVal}`;
-        });
-
-        let stepOutput = '';
-        const prevStep = idx > 0 ? displayTraceLog[idx - 1] : null;
-        const currentFullOut = step.full_output || '';
-        const prevFullOut = prevStep ? (prevStep.full_output || '') : '';
-        if (currentFullOut.length > prevFullOut.length) {
-          stepOutput = currentFullOut.slice(prevFullOut.length);
-        }
-        const cleanOutput = stepOutput.replace(/\r?\n$/, '');
-
-        rowCellsHtml += `<td style="padding:6px 8px;border:1px solid #ccc;">${escapeHtml(cleanOutput)}</td>`;
-        rowText += `\t${cleanOutput}\n`;
-
-        html += `<tr>${rowCellsHtml}</tr>`;
-      });
-      html += `</tbody></table>`;
-
-      function fallbackTextCopy(textContent) {
-        copyTextToClipboard(textContent).then(() => {
-          alert('Trace table copied to clipboard as tab-separated values!');
-        }).catch(err => {
-          console.error('Failed to copy text fallback:', err);
-          alert('Failed to copy trace table.');
-        });
-      }
-
-      function fallbackHtmlCopy(htmlContent, textContent) {
-        try {
-          const div = document.createElement('div');
-          div.innerHTML = htmlContent;
-          div.style.position = 'fixed';
-          div.style.left = '-9999px';
-          document.body.appendChild(div);
-
-          const range = document.createRange();
-          range.selectNode(div);
-          window.getSelection().removeAllRanges();
-          window.getSelection().addRange(range);
-          const success = document.execCommand('copy');
-          document.body.removeChild(div);
-          window.getSelection().removeAllRanges();
-
-          if (success) {
-            alert('Trace table copied to clipboard! You can now paste it directly into Word, Google Docs, or Excel.');
-          } else {
-            throw new Error('execCommand returned false');
-          }
-        } catch (err) {
-          console.error('execCommand HTML copy failed, trying plain text fallback:', err);
-          fallbackTextCopy(textContent);
-        }
-      }
-
-      // Copying logic
-      if (navigator.clipboard && window.ClipboardItem) {
-        const htmlBlob = new Blob([html], { type: 'text/html' });
-        const textBlob = new Blob([text], { type: 'text/plain' });
-        try {
-          const data = [new ClipboardItem({
-            'text/html': htmlBlob,
-            'text/plain': textBlob
-          })];
-          navigator.clipboard.write(data).then(() => {
-            alert('Trace table copied to clipboard! You can now paste it directly into Word, Google Docs, or Excel.');
-          }).catch(err => {
-            console.error('Failed to copy trace table via Clipboard write:', err);
-            fallbackTextCopy(text);
-          });
-        } catch (err) {
-          console.error('Synchronous ClipboardItem error, falling back:', err);
-          fallbackHtmlCopy(html, text);
-        }
-      } else {
-        fallbackHtmlCopy(html, text);
-      }
-    };
-
-
-
-
-    function clearTeachHighlight() {
-      highlightLayer.innerHTML = '';
-      callTraceList.textContent = '';
-      variableList.textContent = '';
-    }
-
-    function highlightLine(lineNum) {
-      clearTeachHighlight();
-      const lineHeight = getCodeLineHeight();
-      const yPos = (lineNum - 1) * lineHeight;
-      const hl = document.createElement('div');
-      hl.className = 'highlight-line';
-      hl.style.top = yPos + 'px';
-      hl.style.height = lineHeight + 'px';
-      highlightLayer.appendChild(hl);
-
-      // Auto-scroll logic
-      const activeView = currentAppMode === 'display' ? displayEditor : editor;
-      const viewRect = activeView.getBoundingClientRect();
-      if (yPos < activeView.scrollTop || yPos > activeView.scrollTop + viewRect.height - 40) {
-        activeView.scrollTop = Math.max(0, yPos - viewRect.height / 2);
-      }
-    }
-
-    async function displayStep() {
-      if (displayTraceStatus === 'error') return;
-      if (isTracing || isAwaitingDisplayInput) return;
-
-      if (displayTraceLog.length === 0) {
-        const success = await prepareDisplayTrace();
-        if (!success) return;
-        if (displayTraceLog.length > 0 && displayCurrentStep === 0) {
-          renderDisplayStep(displayCurrentStep);
-          displayCurrentStep++;
-          setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
-        }
-        return;
-      }
-
-      if (displayCurrentStep < displayTraceLog.length) {
+      const success = await prepareDisplayTrace();
+      if (success && displayCurrentStep < displayTraceLog.length) {
         renderDisplayStep(displayCurrentStep);
         displayCurrentStep++;
         setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
-      } else if (displayTraceStatus === 'waiting_input') {
-        const wasPlaying = btnPlayStatus === 'playing';
-        if (displayTimeout) clearTimeout(displayTimeout);
-        isAwaitingDisplayInput = true;
-        setRunnerStatus('Waiting for input.');
-
-        try {
-          const ans = await requestDisplayInput(displayPendingPrompt || "Input required:");
-          if (!isAwaitingDisplayInput || displayTraceStatus === 'ready') return;
-          displayInputHistory.push(ans);
-          hideConsoleInput();
-
-          const success = await prepareDisplayTrace();
-          if (success && displayCurrentStep < displayTraceLog.length) {
-            renderDisplayStep(displayCurrentStep);
-            displayCurrentStep++;
-            setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}${displayTraceStatus === 'waiting_input' ? ' (input pending)' : ''}`);
-          } else if (success && displayTraceStatus !== 'waiting_input') {
-            setRunnerStatus('Execution finished.');
-          }
-
-          if (success && wasPlaying && btnPlayStatus === 'playing' && displayTraceStatus !== 'error') {
-            startDisplayAutoPlay();
-          }
-        } finally {
-          isAwaitingDisplayInput = false;
-        }
-      } else {
-        if (displayTraceStatus === 'finished') {
-          outputEl.textContent = displayFinalOutput;
-        }
+      } else if (success && displayTraceStatus !== 'waiting_input') {
         setRunnerStatus('Execution finished.');
-        stopDisplayAutoPlay();
-      }
-    }
-
-
-    function startDisplayAutoPlay() {
-      const btn = document.getElementById('playPauseButton');
-      if (btn) btn.textContent = 'Pause';
-      btnPlayStatus = 'playing';
-
-      function next() {
-        if (btnPlayStatus !== 'playing') return;
-
-        if (displayCurrentStep < displayTraceLog.length) {
-          displayStep();
-          displayTimeout = setTimeout(next, 800);
-        } else if (displayTraceStatus === 'waiting_input') {
-          // Pause auto-play for input
-          displayStep();
-        } else {
-          stopDisplayAutoPlay();
-        }
       }
 
-      if (displayTimeout) clearTimeout(displayTimeout);
-      displayTimeout = setTimeout(next, 800);
-    }
-
-    function stopDisplayAutoPlay() {
-      const btn = document.getElementById('playPauseButton');
-      if (btn) btn.textContent = 'Play';
-      btnPlayStatus = 'idle';
-      if (displayTimeout) clearTimeout(displayTimeout);
-    }
-
-
-    async function displayPlayPause() {
-      if (btnPlayStatus === 'playing') {
-        stopDisplayAutoPlay();
-      } else {
-        if (displayTraceLog.length === 0) {
-          const success = await prepareDisplayTrace();
-          if (!success) return;
-        }
-        if (displayCurrentStep >= displayTraceLog.length && displayTraceStatus !== 'waiting_input') {
-          displayReset();
-        }
+      if (success && wasPlaying && btnPlayStatus === 'playing' && displayTraceStatus !== 'error') {
         startDisplayAutoPlay();
       }
-    }
-
-    function displayStepBack() {
-      if (displayTraceLog.length === 0 || displayCurrentStep <= 1) return;
-      displayCurrentStep -= 2;
-      if (displayCurrentStep < 0) displayCurrentStep = 0;
-      renderDisplayStep(displayCurrentStep);
-      displayCurrentStep++;
-      setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}`);
-    }
-
-    function displayReset() {
-      displayInputHistory = [];
-      displayTraceStatus = 'ready';
+    } finally {
       isAwaitingDisplayInput = false;
-      stopDisplayAutoPlay();
-      clearRunner();
     }
+  } else {
+    if (displayTraceStatus === 'finished') {
+      outputEl.textContent = displayFinalOutput;
+    }
+    setRunnerStatus('Execution finished.');
+    stopDisplayAutoPlay();
+  }
+}
 
-    // --- Blockly Integration Support (Moved to pythoncopyblocks.js) ---
-    document.addEventListener('DOMContentLoaded', () => {
-      const resizer = document.getElementById('editorSplitResizer');
-      const blocklyArea = document.getElementById('blocklyArea');
-      const editorBg = document.getElementById('editorBg');
 
-      if (resizer && blocklyArea && editorBg) {
-        let isDragging = false;
-        let startY, startBlocklyHeight, startEditorBgHeight;
+function startDisplayAutoPlay() {
+  const btn = document.getElementById('playPauseButton');
+  if (btn) btn.textContent = 'Pause';
+  btnPlayStatus = 'playing';
 
-        const startDrag = (e) => {
-          isDragging = true;
-          startY = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
-          startBlocklyHeight = blocklyArea.offsetHeight;
-          startEditorBgHeight = editorBg.offsetHeight;
-          document.body.style.cursor = 'ns-resize';
-          e.preventDefault();
-        };
+  function next() {
+    if (btnPlayStatus !== 'playing') return;
 
-        const onDrag = (e) => {
-          if (!isDragging) return;
-          const clientY = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
-          if (clientY === undefined) return;
-          const deltaY = clientY - startY;
+    if (displayCurrentStep < displayTraceLog.length) {
+      displayStep();
+      displayTimeout = setTimeout(next, 800);
+    } else if (displayTraceStatus === 'waiting_input') {
+      // Pause auto-play for input
+      displayStep();
+    } else {
+      stopDisplayAutoPlay();
+    }
+  }
 
-          let newBlocklyHeight = startBlocklyHeight + deltaY;
-          let newEditorBgHeight = startEditorBgHeight - deltaY;
+  if (displayTimeout) clearTimeout(displayTimeout);
+  displayTimeout = setTimeout(next, 800);
+}
 
-          if (newBlocklyHeight < 100) {
-            newBlocklyHeight = 100;
-            newEditorBgHeight = startBlocklyHeight + startEditorBgHeight - 100;
-          }
-          if (newEditorBgHeight < 100) {
-            newEditorBgHeight = 100;
-            newBlocklyHeight = startBlocklyHeight + startEditorBgHeight - 100;
-          }
+function stopDisplayAutoPlay() {
+  const btn = document.getElementById('playPauseButton');
+  if (btn) btn.textContent = 'Play';
+  btnPlayStatus = 'idle';
+  if (displayTimeout) clearTimeout(displayTimeout);
+}
 
-          blocklyArea.style.height = newBlocklyHeight + 'px';
-          editorBg.style.height = newEditorBgHeight + 'px';
 
-          if (blocklyWorkspace && typeof Blockly !== 'undefined') {
-            Blockly.svgResize(blocklyWorkspace);
-          }
-        };
+async function displayPlayPause() {
+  if (btnPlayStatus === 'playing') {
+    stopDisplayAutoPlay();
+  } else {
+    if (displayTraceLog.length === 0) {
+      const success = await prepareDisplayTrace();
+      if (!success) return;
+    }
+    if (displayCurrentStep >= displayTraceLog.length && displayTraceStatus !== 'waiting_input') {
+      displayReset();
+    }
+    startDisplayAutoPlay();
+  }
+}
 
-        const endDrag = () => {
-          if (isDragging) {
-            isDragging = false;
-            document.body.style.cursor = '';
-          }
-        };
+function displayStepBack() {
+  if (displayTraceLog.length === 0 || displayCurrentStep <= 1) return;
+  displayCurrentStep -= 2;
+  if (displayCurrentStep < 0) displayCurrentStep = 0;
+  renderDisplayStep(displayCurrentStep);
+  displayCurrentStep++;
+  setRunnerStatus(`Step ${displayCurrentStep} of ${displayTraceLog.length}`);
+}
 
-        resizer.addEventListener('mousedown', startDrag);
-        resizer.addEventListener('touchstart', startDrag);
-        document.addEventListener('mousemove', onDrag);
-        document.addEventListener('touchmove', onDrag);
-        document.addEventListener('mouseup', endDrag);
-        document.addEventListener('touchend', endDrag);
+function displayReset() {
+  displayInputHistory = [];
+  displayTraceStatus = 'ready';
+  isAwaitingDisplayInput = false;
+  stopDisplayAutoPlay();
+  clearRunner();
+}
+
+// --- Blockly Integration Support (Moved to pythoncopyblocks.js) ---
+document.addEventListener('DOMContentLoaded', () => {
+  const resizer = document.getElementById('editorSplitResizer');
+  const blocklyArea = document.getElementById('blocklyArea');
+  const editorBg = document.getElementById('editorBg');
+
+  if (resizer && blocklyArea && editorBg) {
+    let isDragging = false;
+    let startY, startBlocklyHeight, startEditorBgHeight;
+
+    const startDrag = (e) => {
+      isDragging = true;
+      startY = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
+      startBlocklyHeight = blocklyArea.offsetHeight;
+      startEditorBgHeight = editorBg.offsetHeight;
+      document.body.style.cursor = 'ns-resize';
+      e.preventDefault();
+    };
+
+    const onDrag = (e) => {
+      if (!isDragging) return;
+      const clientY = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
+      if (clientY === undefined) return;
+      const deltaY = clientY - startY;
+
+      let newBlocklyHeight = startBlocklyHeight + deltaY;
+      let newEditorBgHeight = startEditorBgHeight - deltaY;
+
+      if (newBlocklyHeight < 100) {
+        newBlocklyHeight = 100;
+        newEditorBgHeight = startBlocklyHeight + startEditorBgHeight - 100;
       }
-    });
+      if (newEditorBgHeight < 100) {
+        newEditorBgHeight = 100;
+        newBlocklyHeight = startBlocklyHeight + startEditorBgHeight - 100;
+      }
 
-    window.addEventListener('resize', () => {
-      if (currentAppMode === 'blocks' && blocklyWorkspace && typeof Blockly !== 'undefined') {
+      blocklyArea.style.height = newBlocklyHeight + 'px';
+      editorBg.style.height = newEditorBgHeight + 'px';
+
+      if (blocklyWorkspace && typeof Blockly !== 'undefined') {
         Blockly.svgResize(blocklyWorkspace);
       }
-    });
+    };
 
-    function switchModeFromBlocks() {
-      if (currentAppMode === 'blocks') {
-        const source = editor.value;
-        const imports = extractImports(source);
-        const usesTurtle = imports.includes('turtle');
-        setAppMode(usesTurtle ? 'turtle' : 'edit');
+    const endDrag = () => {
+      if (isDragging) {
+        isDragging = false;
+        document.body.style.cursor = '';
       }
-    }
+    };
 
-    function updatePuzzleButtonVisibility() {
-      const makePuzzleBtn = document.getElementById('makePuzzleButton');
-      if (makePuzzleBtn) {
-        const editorEl = typeof editor !== 'undefined' ? editor : document.getElementById('editor');
-        const codeText = editorEl ? editorEl.value : '';
-        const trimmedCode = codeText.trim();
-        const lines = trimmedCode ? trimmedCode.split('\n') : [];
-        const hasContent = trimmedCode.length > 0;
-        if (hasContent && lines.length <= 20) {
-          makePuzzleBtn.style.display = '';
-        } else {
-          makePuzzleBtn.style.display = 'none';
-        }
-      }
+    resizer.addEventListener('mousedown', startDrag);
+    resizer.addEventListener('touchstart', startDrag);
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('touchmove', onDrag);
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (currentAppMode === 'blocks' && blocklyWorkspace && typeof Blockly !== 'undefined') {
+    Blockly.svgResize(blocklyWorkspace);
+  }
+});
+
+function switchModeFromBlocks() {
+  if (currentAppMode === 'blocks') {
+    const source = editor.value;
+    const imports = extractImports(source);
+    const usesTurtle = imports.includes('turtle');
+    setAppMode(usesTurtle ? 'turtle' : 'edit');
+  }
+}
+
+function updatePuzzleButtonVisibility() {
+  const makePuzzleBtn = document.getElementById('makePuzzleButton');
+  if (makePuzzleBtn) {
+    const editorEl = typeof editor !== 'undefined' ? editor : document.getElementById('editor');
+    const codeText = editorEl ? editorEl.value : '';
+    const trimmedCode = codeText.trim();
+    const lines = trimmedCode ? trimmedCode.split('\n') : [];
+    const hasContent = trimmedCode.length > 0;
+    if (hasContent && lines.length <= 20) {
+      makePuzzleBtn.style.display = '';
+    } else {
+      makePuzzleBtn.style.display = 'none';
     }
+  }
+}

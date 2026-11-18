@@ -1,8 +1,3 @@
-    500;
-    600;
-    700&family=JetBrains+Mono:wght@400&display=swap');
-
-
     :root {
       --primary-color: #3b82f6;
       --teacher-bg: #f8fafc;
@@ -552,7 +547,7 @@
       color: #e0f2fe;
     }
 
-    body.dark-theme .starter-button:hover {
+    body.dark-theme .starter-button:not([class*="action-"]):hover {
       background: #334155;
     }
 
@@ -932,7 +927,7 @@
       text-align: left;
     }
 
-    .starter-button:hover {
+    .starter-button:not([class*="action-"]):hover {
       background: #dbeafe;
     }
 
@@ -987,6 +982,14 @@
 
     .action-manual {
       background: #475569;
+    }
+
+    .starter-button[class*="action-"] {
+      transition: filter 0.15s ease;
+    }
+
+    .starter-button[class*="action-"]:hover {
+      filter: brightness(0.92);
     }
 
     .igcse-lab {
