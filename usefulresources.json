@@ -1,7 +1,7 @@
 {
   "$schema": "./usefulresources.schema.json",
   "version": "1.0.0",
-  "updatedAt": "2026-11-12",
+  "updatedAt": "2026-11-18",
   "topics": [
     {
       "id": "general",
@@ -744,6 +744,19 @@
           "tutorialVideo": null,
           "isExternal": true,
           "dateAdded": "2026-11-10"
+        },
+        {
+          "title": "Turtle Quest",
+          "url": "https://jamesabela.github.io/jsfun/turtlepuzzles.html",
+          "desc": "An interactive 40-level Python Turtle programming game across 5 worlds. Press command buttons to generate real Python code with loops, nested loops, and functions.",
+          "tag": "KS2 / KS3 / iGCSE",
+          "topics": [
+            "computing"
+          ],
+          "author": "James Abela",
+          "tutorialVideo": null,
+          "isExternal": false,
+          "dateAdded": "2026-11-18"
         }
       ]
     },
@@ -3411,6 +3424,19 @@
             "tutorialVideo": null,
             "isExternal": true,
             "dateAdded": "2026-11-10"
+          },
+          {
+            "title": "Turtle Quest",
+            "url": "https://jamesabela.github.io/jsfun/turtlepuzzles.html",
+            "desc": "An interactive 40-level Python Turtle programming game across 5 worlds. Press command buttons to generate real Python code with loops, nested loops, and functions.",
+            "tag": "KS2 / KS3 / iGCSE",
+            "topics": [
+              "computing"
+            ],
+            "author": "James Abela",
+            "tutorialVideo": null,
+            "isExternal": false,
+            "dateAdded": "2026-11-18"
           }
         ]
       },
