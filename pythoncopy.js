@@ -5253,10 +5253,14 @@ json.dumps(_test_result)
         return;
       }
 
-      showTerminal();
-
       const imports = extractImports(source);
       const usesTurtle = imports.includes('turtle');
+      if (usesTurtle && !options.preserveBlocksMode && currentAppMode !== 'turtle') {
+        setAppMode('turtle');
+      }
+
+      showTerminal();
+
       const turtleContainer = document.getElementById('turtleCanvasContainer');
 
       if (usesTurtle || currentAppMode === 'turtle') {
