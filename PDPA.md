@@ -1,6 +1,6 @@
 # JSFun: PDPA and international privacy considerations
 
-Last updated: 16 November 2026
+Last updated: 18 November 2026
 
 This is an internal working document for James Abela. It records the project's circumstances, technical safeguards and questions about applicable privacy law. It is not legal advice or a declaration of compliance.
 
@@ -16,7 +16,7 @@ This does not mean that no information is processed anywhere:
 
 - GitHub Pages receives network requests to deliver the site.
 - External libraries, images, remote files and loaded embeds contact their providers.
-- Optional GoatCounter analytics receives a limited page-count request when enabled by the visitor.
+- First-party analytics (GoatCounter) has been completely removed; no analytics or tracking requests are sent by JSFun.
 - James receives information that people choose to submit through the Google Forms contact route.
 - Shared links and exported activity logs can contain work or personal information, depending on what the user enters and shares.
 
@@ -65,12 +65,10 @@ Sources:
 
 The local changes prepared for review include:
 
-- A central English privacy notice linked from all existing HTML pages, plus a subtle bottom privacy summary panel on the main pages (`index.html`, `computing.html`, `whatsnew.html`, `pythoncopy.html`, and `pythonmobile.html`) styled via `privacy-summary.css`.
-- Analytics off by default, with a persistent choice across same-origin JSFun tools.
-- A first-visit opt-in analytics banner injected by `privacy.js` when no choice is saved and Do Not Track / Global Privacy Control are off, using plain-English copy, equal-weight buttons (`Yes, count my visit` and `No thanks`), and zero GoatCounter requests before an explicit opt-in.
-- Fixed analytics page identifiers, excluding student work, live URL queries/fragments, dynamic titles, referrers and screen sizes; no session tracking requested.
-- Respect for Do Not Track and Global Privacy Control signals, plus a central analytics disable switch.
-- Click-to-load external embeds and Code Lab previews, with referrer suppression.
+- A central English privacy notice linked from all existing HTML pages, plus a subtle bottom privacy summary panel on the main pages (`index.html`, `computing.html`, `whatsnew.html`, and `pythonmobile.html`, plus the home screen of `pythoncopy.html`, hidden when the code editor is open) styled via `privacy-summary.css`.
+- Complete removal of GoatCounter and any analytics/tracking scripts or opt-in banners from `privacy.js`, `privacy.html`, and all site pages.
+- Click-to-load external embeds (`iframe[data-private-src]`) rendered as a centred placeholder card identifying the provider (`Google Slides`, `YouTube Video`, or `Spotify Audio`) with a direct link to the provider's privacy policy (Google Privacy Policy or Spotify Privacy Policy) before any external request is made, plus referrer suppression.
+- Click-to-load external Code Lab previews (`previewWebLink` in `pythoncopy.js`), while same-site JSFun tutorial pages load directly without an external request.
 - Removal of Google Fonts requests and reuse of an existing licensed local presentation library.
 - Explanations of browser storage, shared devices, content-bearing links and activity-log downloads.
 - Offline access to the notice through the updated Python Code Lab cache.
@@ -86,9 +84,9 @@ Confirm that the form is accessible to intended users, responses are private, ac
 ## Remaining decisions and checks
 
 - Confirm territorial scope and any commercial connection before making categorical legal claims.
-- GoatCounter settings have now been reviewed from James’s screenshot: individual pageviews and region collection off, private dashboard, 365-day retention; sessions, referrers, browser/system, screen size and country collection remain on. Inspect historical data and verify the no-session behaviour. See the evidence update in PRIVACY_AUDIT.md.
+- GoatCounter has now been completely removed from the site (and no opt-in banner or analytics storage key is used). Previously recorded GoatCounter settings notes in `PRIVACY_AUDIT.md` remain as historical context only.
 - Identify actual provider roles, relevant agreements, processing countries and any required transfer safeguards.
-- Confirm the appropriate lawful bases and applicable children's consent requirements where a law applies. A visitor clicking an analytics button is not automatically sufficient parental consent.
+- Confirm the appropriate lawful bases and applicable children's consent requirements where a law applies (for example, when a visitor chooses to load an external Google Slides, YouTube, or Spotify embed or submit the Google Forms contact form).
 - Contact-form retention is now documented as manual deletion with no fixed schedule, as selected by James. Review necessity periodically; retention of any records received separately still needs consideration.
 - Review remaining remote libraries, images and proxy services; retain licences when hosting replacements locally.
 - Keep the public notice accurate and understandable. Consider additional languages if a legal requirement or audience need is established.
@@ -100,21 +98,21 @@ For detailed request-handling and incident procedures, see [PRIVACY_AUDIT.md](PR
 
 James reports pushing the privacy changes; the live notice and shared analytics script were subsequently fetched and checked. James also supplied evidence of saved GoatCounter settings. Later notice wording and developer-documentation edits are local until pushed. No deployment or provider-account changes were performed by the assistant. The technical review is not a certification of PDPA, GDPR, UK GDPR or worldwide compliance.
 
-## GoatCounter clarification
+## Analytics status
 
-James supplied the current settings screenshot on 16 November 2026. A subsequent screenshot shows the Saved confirmation with retention changed to 365 days and Region disabled. The public notice now records the 365-day setting. GoatCounter argues that its aggregate analytics probably does not require GDPR consent; this is relevant provider guidance, not a blanket compliance guarantee. Disabling analytics remains a conservative option rather than an established legal requirement. The prepared code's opt-in policy is unchanged. See [the technical audit](PRIVACY_AUDIT.md) for the settings table, sources and proposed minimisation options.
+GoatCounter and all first-party/third-party analytics scripts have been removed across all pages as of 18 November 2026. No analytics requests are sent and no analytics opt-in banner or `localStorage` analytics preference is used. Earlier GoatCounter configuration notes in [PRIVACY_AUDIT.md](PRIVACY_AUDIT.md) are retained for historical audit context only.
 
 ## public privacy statement
 
 ### Message on site
 
-Privacy by design. No JSFun accounts. No automatic central collection of student work. Optional analytics, off by default.
+Privacy by design. No JSFun accounts. No analytics or tracking. No automatic central collection of student work.
 
-This summary is displayed subtly at the bottom of the main pages above the footer. Separately, `privacy.js` displays a first-visit opt-in banner at the top of pages (except `privacy.html`) until the visitor chooses `Yes, count my visit` or `No thanks`, or if Do Not Track / Global Privacy Control are active.
+This summary is displayed subtly at the bottom of the main pages above the footer (and on the home screen of `pythoncopy.html`, hidden while editing). There is no analytics opt-in banner.
 
 ### Detailed message
 
-JSFun is built with privacy by design. Our free educational tools require no JSFun accounts and prioritise processing in your browser, without automatically uploading student work to a central JSFun database. Optional analytics is off by default, excludes entered content and is configured for 365-day retention. Our Privacy Notice explains browser storage, external services and how to raise privacy enquiries.
+JSFun is built with privacy by design. Our free educational tools require no JSFun accounts, use no analytics or tracking, and prioritise processing in your browser without automatically uploading student work to a central JSFun database. External embeds (such as Google Slides, YouTube videos, and Spotify audio) are click-to-load and link to the provider's privacy policy before loading. Our Privacy Notice explains browser storage, external services and how to raise privacy enquiries.
 
 These safeguards support the data-minimisation, transparency and privacy-by-design principles reflected in GDPR, UK GDPR and Malaysia’s PDPA.
 
