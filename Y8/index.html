@@ -23,52 +23,6 @@
       --border: #e2e8f0;
       --code-bg: #0f172a;
     }
-    body.dark {
-      --bg: #0b1120;
-      --card: #111827;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --blue: #60a5fa;
-      --blue-dark: #3b82f6;
-      --blue-soft: #1e293b;
-      --green: #34d399;
-      --green-soft: #064e3b;
-      --amber: #fbbf24;
-      --amber-soft: #451a03;
-      --border: #1f2937;
-      --code-bg: #020617;
-    }
-    body.dark .filter-btn { background: #1e293b; color: var(--text); }
-    body.dark .filter-btn.active { background: var(--blue-dark); color: #ffffff; }
-    body.dark .search-input { background: #1e293b; color: var(--text); }
-    body.dark .pill { background: #1e293b; }
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .header-actions { display: flex; gap: 8px; }
-    .hdr-btn {
-      background: rgba(255, 255, 255, 0.14);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 0.84rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .hdr-btn:hover { background: rgba(255, 255, 255, 0.24); }
-    @media print {
-      .controls, .actions, details, .header-actions { display: none !important; }
-      body { background: #ffffff; color: #000000; }
-      header { background: #ffffff !important; color: #000000 !important; border-bottom: 2px solid #000; padding: 12px 0; }
-      header p, .teacher-pill { color: #333333 !important; }
-      .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-      .card { break-inside: avoid; box-shadow: none; border: 1px solid #999; }
-    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--bg);
@@ -171,9 +125,6 @@
     .tier-core { background: #dcfce7; color: #166534; }
     .tier-standard { background: #fef3c7; color: #92400e; }
     .tier-extension { background: #fee2e2; color: #991b1b; }
-    body.dark .tier-core { background: #064e3b; color: #6ee7b7; }
-    body.dark .tier-standard { background: #451a03; color: #fcd34d; }
-    body.dark .tier-extension { background: #450a0a; color: #fca5a5; }
     .unit-section { margin-bottom: 32px; }
     .unit-header {
       display: flex;
@@ -240,11 +191,6 @@
       align-items: center;
       gap: 4px;
     }
-    body.dark .btn-gclass {
-      background: #064e3b;
-      color: #a7f3d0;
-      border-color: #047857;
-    }
     .card h2 { font-size: 1.08rem; font-weight: 800; }
     .card p { font-size: 0.88rem; color: var(--muted); }
     .actions {
@@ -300,16 +246,8 @@
 <body>
   <header>
     <div class="wrap">
-      <div class="header-top">
-        <div>
-          <div class="teacher-pill">TEACHER RESOURCE • SHARE 1 TASK AT A TIME</div>
-          <h1>Year 8 Python — Teacher Hub</h1>
-        </div>
-        <div class="header-actions">
-          <button class="hdr-btn" id="themeBtn" type="button">🌙 Dark Mode</button>
-          <button class="hdr-btn" id="printBtn" type="button">🖨️ Print Worksheet</button>
-        </div>
-      </div>
+      <div class="teacher-pill">TEACHER RESOURCE • SHARE 1 TASK AT A TIME</div>
+      <h1>Year 8 Python — Teacher Hub</h1>
       <p>
         Browse examples, PRIMM mini-courses, and challenges mapped to the 5 Year 8 units.
         Use <strong>Copy Student Link</strong> to share a single task in Google Classroom or Teams — students will not see the whole course or teacher answers.
@@ -1127,18 +1065,6 @@
 
     searchBox.addEventListener('input', render);
     render();
-
-    const themeBtn = document.getElementById('themeBtn');
-    if (localStorage.getItem('y8TeacherTheme') === 'dark') {
-      document.body.classList.add('dark');
-      themeBtn.textContent = '☀️ Light Mode';
-    }
-    themeBtn.addEventListener('click', () => {
-      const isDark = document.body.classList.toggle('dark');
-      localStorage.setItem('y8TeacherTheme', isDark ? 'dark' : 'light');
-      themeBtn.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-    });
-    document.getElementById('printBtn').addEventListener('click', () => window.print());
   </script>
   <script src="../privacy.js" data-page="/Y8/index.html" defer></script>
 </body>
