@@ -9,16 +9,30 @@
   <script src="privacy.js" data-page="/privacy.html" defer></script>
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    .tab-bar{margin:20px 0 24px}
+    .school-table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:.95rem}
+    .school-table th,.school-table td{border:1px solid #cbd5e1;padding:10px 12px;text-align:left;vertical-align:top}
+    .school-table th{background:rgba(148,163,184,.14);font-weight:700;width:28%}
+    @media(prefers-color-scheme:dark){.school-table th,.school-table td{border-color:#53637b}}
+  </style>
 </head>
 <body><main>
 <a href="index.html">← JSFun tools</a>
 <header><p class="eyebrow">JSFUN · YOUR PRIVACY</p><h1>Privacy Notice</h1><p class="muted">Last updated: 18 November 2026</p></header>
 <div class="intro"><strong>Privacy by design. No JSFun accounts. No analytics or tracking. No automatic central collection of student work.</strong><p>JSFun prioritises processing in your browser and minimising information sent elsewhere. Some tools save work on your device. Hosting, external libraries, remote files and embedded content still involve network requests.</p></div>
+
+<nav class="actions tab-bar" aria-label="Privacy page sections">
+  <button type="button" id="tab-notice" aria-pressed="true" aria-controls="panel-notice">Privacy Notice</button>
+  <button type="button" id="tab-schools" aria-pressed="false" aria-controls="panel-schools">For Schools &amp; DPOs</button>
+</nav>
+
+<section id="panel-notice" aria-labelledby="tab-notice">
 <h2>Who runs JSFun?</h2>
 <p>JSFun is a free educational project maintained by James Abela. For questions about privacy or to make a data protection request, use the <a href="https://docs.google.com/forms/d/e/1FAIpQLSerF3lnj9XmX_upnRCICPi1dcFNdH--okWj6UM2HpFo3W4f2Q/viewform">contact form (Google Forms)</a>.</p>
 <h2>Information and student work</h2>
 <p>JSFun does not require registration or provide a central database for student submissions. Text, code, answers, names entered into classroom tools and uploaded files may be processed in the browser. Avoid entering real names, sensitive information or identifiable student records when they are unnecessary.</p>
-<p>Python Code Lab can keep an activity history, including code changes, timings and optional feeling or frustration responses, in page memory. Downloaded activity logs contain this information. They are not automatically sent to James; sharing an export with a teacher or another service is a separate action. Downloaded files remain wherever you save them.</p>
+<p>Python Code Lab can keep an activity history, including code changes, timings and optional feeling or frustration responses, in page memory. Downloaded activity logs contain this information. They are not automatically sent to James; sharing an export with a teacher or another service is separate action. Downloaded files remain wherever you save them.</p>
 <h2>Browser storage and shared devices</h2>
 <p>Tools use localStorage and sessionStorage for features such as drafts, progress, preferences and transferring work between tools. Python Code Lab also caches application files for offline use. Local storage can survive closing the browser; session storage normally ends when the tab’s session ends. Browser eviction or private browsing can remove data sooner. Other people using the same browser profile may see saved work.</p>
 <p>Use a tool’s delete or reset option where available. To remove remaining saved data, first download anything you need, then open your browser’s site-data settings and clear data for <strong>jamesabela.github.io</strong>. This can remove work, preferences and offline files for other projects on the same origin. It does not delete downloads or copies shared elsewhere.</p>
@@ -38,8 +52,60 @@
 <p>Use fictional names and non-sensitive examples. On shared devices, save needed files and remove local work after use. Teachers and parents should check external resources and sharing destinations before children use them, and agree how exported learning records will be handled.</p>
 <h2>Your rights, contact and complaints</h2>
 <p>Depending on the law that applies, you may have rights to access, correct or delete personal information, restrict or object to processing, receive portable data, and withdraw consent. These rights have conditions and exceptions. Information kept only in your browser cannot be retrieved remotely by James.</p>
-<p>Contact James using the <a href="https://docs.google.com/forms/d/e/1FAIpQLSerF3lnj9XmX_upnRCICPi1dcFNdH--okWj6UM2HpFo3W4f2Q/viewform">privacy enquiry form (Google Forms)</a>. The form opens a separate Google service; <a href="https://policies.google.com/privacy">Google’s privacy policy</a> applies. Provide only the information needed to explain your request. James uses the details you submit to respond to your enquiry. Contact-form responses have no fixed deletion schedule and remain in Google Forms until James manually deletes them. You can use the same form to request deletion of your earlier message; include only enough information to identify it. Do not put student data or private requests into public GitHub issues. For general project information, see <a href="https://github.com/jamesabela/jsfun">the JSFun repository</a>.</p>
+<p>Contact James using the <a href="https://docs.google.com/forms/d/e/1FAIpQLSerF3lnj9XmX_upnRCICPi1dcFNdH--okWj6UM2HpFo3W4f2Q/viewform">privacy enquiry form (Google Forms)</a>. The form opens a separate Google service; <a href="https://policies.google.com/privacy">Google’s privacy policy</a> applies. Provide only the information needed to explain your request. James uses the details you submit to respond to your enquiry. Contact-form responses are reviewed and deleted within 6–12 months after an enquiry is resolved, unless a longer period is needed. You can use the same form to request deletion of your earlier message; include only enough information to identify it. Do not put student data or private requests into public GitHub issues. For general project information, see <a href="https://github.com/jamesabela/jsfun">the JSFun repository</a>.</p>
 <p>You can complain to the relevant supervisory authority, such as the <a href="https://ico.org.uk/make-a-complaint/">UK Information Commissioner’s Office</a>, your EEA data protection authority or <a href="https://www.pdp.gov.my/en/public/">Malaysia’s Personal Data Protection Commissioner</a>. You do not have to use a public project forum to exercise your rights.</p>
+</section>
+
+<section id="panel-schools" aria-labelledby="tab-schools" hidden>
+<h2>For Schools, IT Teams &amp; DPOs</h2>
+<p>This summary helps schools and Data Protection Officers review how JSFun works technically. It summarises the implemented architecture and does not constitute a formal compliance certification or Data Processing Agreement.</p>
+<table class="school-table">
+  <tbody>
+    <tr><th>Accounts &amp; Logins</th><td>None. Students and teachers do not create JSFun accounts or sign in.</td></tr>
+    <tr><th>Central Student Database</th><td>None. Code execution (including Pyodide Python), quizzes, and drafts run locally in the browser.</td></tr>
+    <tr><th>Analytics &amp; Tracking</th><td>None. JSFun loads no GoatCounter, Google Analytics, or advertising/tracking scripts, and sets no analytics cookies.</td></tr>
+    <tr><th>Static Hosting</th><td>Served via GitHub Pages (<code>jamesabela.github.io</code>), which receives standard HTTP request metadata (IP address, user-agent, requested URL).</td></tr>
+    <tr><th>Client-Side Libraries (CDNs)</th><td>Some tools load scripts or stylesheets from <code>cdn.jsdelivr.net</code>, <code>cdnjs.cloudflare.com</code>, or <code>unpkg.com</code>.</td></tr>
+    <tr><th>Embedded Media</th><td>Google Slides (<code>docs.google.com</code>), YouTube (<code>youtube-nocookie.com</code>), and Spotify (<code>open.spotify.com</code>) embeds stay unloaded behind a click-to-load card linking to the provider's privacy policy.</td></tr>
+    <tr><th>Remote Code &amp; Pastebin</th><td>Loading code from a URL contacts the chosen host (e.g. GitHub/Gist). Pastebin URLs require an explicit confirmation prompt before routing through <code>corsproxy.io</code>.</td></tr>
+    <tr><th>Referrer Policy</th><td>Pages set <code>&lt;meta name="referrer" content="no-referrer"&gt;</code> so outbound clicks and loaded embeds suppress referrer headers where supported.</td></tr>
+    <tr><th>Offline &amp; Browser Storage</th><td>Tools may store drafts/preferences in <code>localStorage</code> or <code>sessionStorage</code>; Python Code Lab also caches its app shell via a service worker for offline use.</td></tr>
+  </tbody>
+</table>
+<h2>Practical classroom guidance</h2>
+<ul>
+  <li><strong>Avoid personal data:</strong> Ask students to use fictional names or initials in classroom tools (such as spinners, debate tools, or Python input exercises).</li>
+  <li><strong>Shared school devices:</strong> Use guest/incognito profiles or clear browser site data for <code>jamesabela.github.io</code> after a lesson if students leave local drafts behind.</li>
+  <li><strong>Exports &amp; share links:</strong> Downloaded Python Code Lab activity TSVs and content-bearing share links stay on the user's device unless a student or teacher chooses to upload or share them via your school's LMS.</li>
+  <li><strong>Contact &amp; enquiries:</strong> Privacy questions can be sent via the <a href="https://docs.google.com/forms/d/e/1FAIpQLSerF3lnj9XmX_upnRCICPi1dcFNdH--okWj6UM2HpFo3W4f2Q/viewform">Google Forms enquiry route</a> (reviewed and deleted within 6–12 months after resolution, unless a longer period is needed).</li>
+</ul>
+</section>
+
+<script>
+(() => {
+  const noticeTab = document.getElementById('tab-notice');
+  const schoolsTab = document.getElementById('tab-schools');
+  const noticePanel = document.getElementById('panel-notice');
+  const schoolsPanel = document.getElementById('panel-schools');
+  function showTab(which) {
+    const isSchools = which === 'schools';
+    noticeTab.setAttribute('aria-pressed', String(!isSchools));
+    schoolsTab.setAttribute('aria-pressed', String(isSchools));
+    noticePanel.hidden = isSchools;
+    schoolsPanel.hidden = !isSchools;
+  }
+  noticeTab.addEventListener('click', () => {
+    showTab('notice');
+    if (history.replaceState) history.replaceState(null, '', '#notice');
+  });
+  schoolsTab.addEventListener('click', () => {
+    showTab('schools');
+    if (history.replaceState) history.replaceState(null, '', '#schools');
+  });
+  if (location.hash === '#schools') showTab('schools');
+})();
+</script>
+
 <footer>
 <p class="jsfun-support" style="margin:8px 0;text-align:center;font-size:14px;line-height:1.6;">Made with ❤️ for better thinking. If it helped you, support the project. <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 4px;color:inherit;text-decoration:underline;"><strong>Buy me a tea</strong></a>.</p>
 <a href="index.html">All tools</a> · <a href="pythoncopy.html">Python Code Lab</a></footer>

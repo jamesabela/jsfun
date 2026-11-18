@@ -3524,9 +3524,20 @@ import sys, builtins
       
       url = normalizeCodeUrl(url);
 
+      const isPastebin = /pastebin\.com/i.test(url);
+      if (isPastebin && typeof window.confirm === 'function') {
+        const proceed = window.confirm(
+          'Loading from Pastebin routes this URL through corsproxy.io (a third-party proxy). Use public learning materials only, not private student information. Continue?'
+        );
+        if (!proceed) {
+          setRunnerStatus('Pastebin load cancelled.');
+          return;
+        }
+      }
+
       currentURL = url;
       updatePuzzleButtonVisibility();
-      const fetchURL = /pastebin\.com/i.test(url)
+      const fetchURL = isPastebin
         ? `https://corsproxy.io/?${encodeURIComponent(url)}`
         : url;
 

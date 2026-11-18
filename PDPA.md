@@ -79,7 +79,7 @@ These controls reduce unnecessary disclosure. They do not establish that consent
 
 James supplied this [Google Forms contact form](https://docs.google.com/forms/d/e/1FAIpQLSerF3lnj9XmX_upnRCICPi1dcFNdH--okWj6UM2HpFo3W4f2Q/viewform) for privacy enquiries. It is linked in the public notice; no residential address has been added.
 
-Confirm that the form is accessible to intended users, responses are private, access is restricted appropriately, and enquiries are monitored. James selected no fixed deletion schedule: responses remain in Google Forms until manually deleted, and visitors can request deletion. The form's contents and account settings were not verified during the review.
+Confirm that the form is accessible to intended users, responses are private, access is restricted appropriately, and enquiries are monitored. James's target retention practice is to review and delete contact-form responses within 6–12 months after an enquiry is resolved, unless a longer period is needed, and visitors can request earlier deletion. The form's contents and account settings were not verified during the review.
 
 ## Remaining decisions and checks
 
@@ -87,7 +87,7 @@ Confirm that the form is accessible to intended users, responses are private, ac
 - GoatCounter has now been completely removed from the site (and no opt-in banner or analytics storage key is used). Previously recorded GoatCounter settings notes in `PRIVACY_AUDIT.md` remain as historical context only.
 - Identify actual provider roles, relevant agreements, processing countries and any required transfer safeguards.
 - Confirm the appropriate lawful bases and applicable children's consent requirements where a law applies (for example, when a visitor chooses to load an external Google Slides, YouTube, or Spotify embed or submit the Google Forms contact form).
-- Contact-form retention is now documented as manual deletion with no fixed schedule, as selected by James. Review necessity periodically; retention of any records received separately still needs consideration.
+- Contact-form retention is documented as reviewed and deleted within 6–12 months after an enquiry is resolved, unless a longer period is needed, as selected by James. Review necessity periodically; retention of any records received separately still needs consideration.
 - Review remaining remote libraries, images and proxy services; retain licences when hosting replacements locally.
 - Keep the public notice accurate and understandable. Consider additional languages if a legal requirement or audience need is established.
 - Reassess before introducing accounts, centrally stored student records, paid services, advertising, profiling or formal school integrations.
