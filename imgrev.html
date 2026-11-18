@@ -4,121 +4,165 @@
   <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotlight Image Tool</title>
-  <style>
-    #image-container {
-      position: relative;
-      width: 800px;
-      height: 600px;
-      background: black;
-      overflow: hidden;
-    }
-    #image {
-      display: none;
-      width: 100%;
-      height: 100%;
-    }
-    #spotlight {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      cursor: none;
-      background: black;
-    }
-    #spotlight div {
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0);
-      position: absolute;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    #spotlight div img {
-      position: absolute;
-      width: 800px;
-      height: 600px;
-    }
-    #controls {
-      margin-bottom: 20px;
-    }
-  </style>
+  <title>Mystery Spotlight Reveal</title>
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="imgreveal.css">
 </head>
-<body>
-<div id="controls">
-  <label for="image-url">Enter Image URL:</label>
-  <input type="text" id="image-url" placeholder="Enter image URL" />
-  <button onclick="loadImage()">Load Image</button>
-  <label for="spotlight-size">Spotlight Size:</label>
-  <input type="range" id="spotlight-size" min="50" max="300" value="150" />
-</div>
-<div id="image-container">
-  <img id="image" src="" alt="Interactive Image">
-  <div id="spotlight">
-    <div id="spotlight-area"><img src="" id="spotlight-image"></div>
+<body data-default-mode="spotlight">
+  <main class="app">
+    <header class="hero">
+      <div class="title-row">
+        <div id="logo-badge" class="logo-badge spotlight-badge" aria-hidden="true">
+          <svg id="logo-tiles" width="30" height="30" viewBox="0 0 32 32" fill="none" hidden>
+            <rect x="2" y="2" width="12" height="12" rx="3.5" fill="#ef476f"/>
+            <rect x="18" y="2" width="12" height="12" rx="3.5" fill="#f77f00"/>
+            <rect x="2" y="18" width="12" height="12" rx="3.5" fill="#06a77d"/>
+            <rect x="18" y="18" width="12" height="12" rx="3.5" fill="#118ab2"/>
+          </svg>
+          <svg id="logo-spotlight" width="30" height="30" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="10" fill="#fde047" fill-opacity="0.25"/>
+            <circle cx="16" cy="16" r="6" fill="#fde047"/>
+            <path d="M16 3V6M16 26V29M3 16H6M26 16H29M6.8 6.8L9 9M23 23L25.2 25.2M25.2 6.8L23 9M9 23L6.8 25.2" stroke="#fde047" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h1 id="hero-title">Mystery Spotlight Reveal</h1>
+      </div>
+      <p id="hero-subtitle" class="subtitle">Hide a picture in the dark, shine your magic torch around, and guess what's hiding!</p>
+    </header>
+
+    <div class="mode-switcher" role="group" aria-label="Choose reveal mode">
+      <button type="button" class="mode-btn" data-mode="tiles" aria-pressed="false">🧩 Tile Reveal</button>
+      <button type="button" class="mode-btn active" data-mode="spotlight" aria-pressed="true">🔦 Spotlight Reveal</button>
+    </div>
+
+    <section id="setup-card" class="setup-card" aria-label="Choose a picture">
+      <div id="drop-zone" class="drop-zone" role="button" tabindex="0" aria-label="Drop a picture here or click to choose a file from your device">
+        <div class="drop-icon" aria-hidden="true">
+          <svg width="38" height="38" viewBox="0 0 40 40" fill="none">
+            <rect x="4" y="7" width="32" height="26" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+            <circle cx="14" cy="16" r="3.5" fill="#f59e0b"/>
+            <path d="M8 29L16.5 20.5L22.5 26L27 21.5L32 29H8Z" fill="#10b981"/>
+          </svg>
+        </div>
+        <p class="drop-title">Drop a picture right here!</p>
+        <p class="drop-sub">Drag any photo from your computer, or tap the button below.</p>
+        <button type="button" id="choose-file-btn" class="btn btn-primary">Choose a Picture</button>
+        <p class="drop-privacy">🔒 Your picture will <strong>NOT</strong> be uploaded to a server, is only used whilst on this page, and stops working if you leave or refresh.</p>
+        <input type="file" id="file-input" class="sr-only" accept="image/*" aria-label="Choose an image file">
+      </div>
+
+      <div id="setup-tile-options" hidden>
+        <span class="section-label">Choose how many tiles:</span>
+        <div class="size-options" role="group" aria-label="Grid size">
+          <button type="button" class="size-btn" data-cols="4" data-rows="3">
+            <strong>12 Tiles</strong>
+            <span>4 × 3 (Easy)</span>
+          </button>
+          <button type="button" class="size-btn" data-cols="6" data-rows="4">
+            <strong>24 Tiles</strong>
+            <span>6 × 4 (Medium)</span>
+          </button>
+          <button type="button" class="size-btn active" data-cols="8" data-rows="6">
+            <strong>48 Tiles</strong>
+            <span>8 × 6 (Classic)</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="setup-spotlight-options" class="slider-card">
+        <label for="setup-spotlight-size" class="slider-label">
+          <span aria-hidden="true">🔦</span>
+          Torch Size
+        </label>
+        <div class="slider-wrap">
+          <input type="range" id="setup-spotlight-size" min="60" max="320" value="160">
+          <span id="setup-size-value" class="size-pill">160px</span>
+        </div>
+        <div class="torch-preview" aria-hidden="true">
+          <span class="torch-preview-dot"></span>
+        </div>
+      </div>
+
+      <div class="divider">or paste a picture link</div>
+
+      <div>
+        <form id="url-form" class="url-form">
+          <label for="image-url" class="sr-only">Image web link</label>
+          <input type="url" id="image-url" class="url-input" placeholder="https://example.com/picture.jpg" autocomplete="off">
+          <button type="submit" class="btn btn-amber">Load Link</button>
+        </form>
+        <p class="url-hint">Web links load the picture directly from that website and add the link to the page address so you can share the game.</p>
+      </div>
+
+      <div id="error-banner" class="error-banner" role="alert" hidden></div>
+    </section>
+
+    <section id="game-area" class="game-area" aria-label="Picture reveal board" hidden>
+      <div id="tiles-toolbar" class="toolbar" hidden>
+        <div class="progress-pill" aria-live="polite">
+          <span aria-hidden="true">🧩</span>
+          <span id="progress-text">0 / 48 tiles revealed</span>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" id="random-btn" class="btn btn-fun">Reveal Random</button>
+          <button type="button" id="reveal-all-btn" class="btn btn-success">Reveal All</button>
+          <button type="button" id="hide-all-btn" class="btn btn-soft">Hide All</button>
+          <button type="button" class="btn btn-primary fullscreen-btn">⛶ Full Screen</button>
+          <button type="button" class="btn btn-amber new-pic-btn">New Picture</button>
+        </div>
+      </div>
+
+      <div id="spotlight-toolbar" class="toolbar">
+        <div class="toolbar-slider">
+          <label for="game-spotlight-size" class="slider-label">
+            <span aria-hidden="true">🔦</span>
+            Torch
+          </label>
+          <input type="range" id="game-spotlight-size" min="60" max="320" value="160">
+          <span id="game-size-value" class="size-pill">160px</span>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" id="lights-btn" class="btn btn-sun">💡 Turn Lights On</button>
+          <button type="button" class="btn btn-primary fullscreen-btn">⛶ Full Screen</button>
+          <button type="button" class="btn btn-amber new-pic-btn">New Picture</button>
+        </div>
+      </div>
+
+      <div id="status-banner" class="status-banner" role="status" aria-live="polite" hidden>
+        🎉 All tiles revealed! Great guessing!
+      </div>
+
+      <div class="board-frame">
+        <div id="stage" class="stage spotlight-mode">
+          <img id="mystery-image" alt="Mystery picture hidden in the reveal game" referrerpolicy="no-referrer">
+          <div id="tile-grid" role="group" aria-label="Mystery tiles" hidden></div>
+          <div id="spotlight-layer">
+            <div class="spotlight-curtain" aria-hidden="true"></div>
+            <div class="spotlight-ring" aria-hidden="true"></div>
+            <div id="stage-hint" class="stage-hint">Move your mouse or finger to shine the torch!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="drag-overlay" class="drag-overlay" aria-hidden="true">
+    <div class="drag-overlay-box">
+      <h2>Drop your picture!</h2>
+      <p>Let go to start a new Mystery Picture Reveal game.</p>
+    </div>
   </div>
-</div>
 
-<script>
-  const spotlight = document.getElementById('spotlight');
-  const spotlightArea = document.getElementById('spotlight-area');
-  const spotlightImage = document.getElementById('spotlight-image');
-  const spotlightSizeSlider = document.getElementById('spotlight-size');
-  const controls = document.getElementById('controls');
-  let spotlightSize = spotlightSizeSlider.value;
+  <footer>
+    <p class="jsfun-support">
+      Made with ❤️ for better thinking. If it helped you, support the project.
+      <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer"><strong>Buy me a tea</strong></a>.
+    </p>
+    <p><a href="privacy.html">Privacy Notice</a></p>
+  </footer>
 
-  spotlightSizeSlider.addEventListener('input', function() {
-    spotlightSize = spotlightSizeSlider.value;
-    spotlightArea.style.width = `${spotlightSize}px`;
-    spotlightArea.style.height = `${spotlightSize}px`;
-  });
-
-  function loadImage() {
-    const imageUrl = document.getElementById('image-url').value;
-    const image = document.getElementById('image');
-    spotlightImage.src = imageUrl;
-    image.src = imageUrl;
-    image.onload = function() {
-      spotlightArea.style.width = `${spotlightSize}px`;
-      spotlightArea.style.height = `${spotlightSize}px`;
-      controls.style.display = 'none';  // Hide controls once the image is loaded
-      updateURL();
-    };
-  }
-
-  function updateURL() {
-    const imageUrl = document.getElementById('image-url').value;
-    const newUrl = `${window.location.origin}${window.location.pathname}?image=${encodeURIComponent(imageUrl)}`;
-    history.pushState(null, '', newUrl);
-  }
-
-  spotlight.addEventListener('mousemove', function(e) {
-    const rect = spotlight.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    spotlightArea.style.left = `${x - spotlightSize / 2}px`; // Center the spotlight
-    spotlightArea.style.top = `${y - spotlightSize / 2}px`;
-
-    spotlightImage.style.left = `-${x - spotlightSize / 2}px`;
-    spotlightImage.style.top = `-${y - spotlightSize / 2}px`;
-  });
-
-  // Load image and mode from URL on page load
-  window.onload = function() {
-    const params = new URLSearchParams(window.location.search);
-    const imageUrl = params.get('image');
-    if (imageUrl) {
-      document.getElementById('image-url').value = imageUrl;
-      loadImage();
-    }
-  };
-</script>
-
-<div style="text-align:center;padding:12px;clear:both;"><p class="jsfun-support" style="margin:8px 0;text-align:center;font-size:14px;line-height:1.6;">Made with ❤️ for better thinking. If it helped you, support the project. <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 4px;color:inherit;text-decoration:underline;"><strong>Buy me a tea</strong></a>.</p>
-<a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
-<script src="privacy.js" data-page="/imgrev.html" defer></script>
+  <script src="imgreveal.js" defer></script>
+  <script src="privacy.js" data-page="/imgrev.html" defer></script>
 </body>
 </html>
