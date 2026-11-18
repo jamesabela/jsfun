@@ -1567,5 +1567,86 @@
       "Self Marking"
     ],
     "helpUrl": "pythonmanual.html#recursion"
+  },
+  {
+    "title": "Concert Ticket Calculator",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user how many concert tickets they want to buy at £12 each, add a £3 booking handling fee, and print the total price.\n#Input\n# 3\n# 5\n\n#output\n# 39\n# 63\n\n#End Concert Ticket Calculator",
+    "tags": [
+      "maths",
+      "Self Marking"
+    ],
+    "helpUrl": "pythonmanual.html#operators",
+    "id": 128
+  },
+  {
+    "title": "Theme Park Budget Planner",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask for the number of people in the group and how much spending money each person has. Subtract £25 per person for entry passes and a £5 parking fee, then print how much money is left for food.\n#Input\n# 4, 30\n# 3, 40\n\n#output\n# 15\n# 40\n\n#End Theme Park Budget Planner",
+    "tags": [
+      "maths",
+      "Self Marking"
+    ],
+    "helpUrl": "pythonmanual.html#operators",
+    "id": 129
+  },
+  {
+    "title": "Retirement Countdown",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user for their name and current age. Assuming a retirement age of 67, calculate and print how many years they have left until they can retire.\n#Input\n# Sam, 13\n# Lee, 27\n\n#output\n# Sam, 54\n# Lee, 40\n\n#End Retirement Countdown",
+    "tags": [
+      "maths",
+      "Self Marking"
+    ],
+    "helpUrl": "pythonmanual.html#operators",
+    "id": 130
+  },
+  {
+    "title": "Screen Time Checker",
+    "spice": "🌶️",
+    "comment": "# instructions: Ask the user how many hours of TV they watch each day. Print \"That should be ok\" if under 2 hours, \"That will rot your brain\" if 2 to 4 hours, or \"That is too much TV!\" if more than 4 hours.\n#Input\n# 1\n# 3\n# 6\n\n#output\n# That should be ok\n# That will rot your brain\n# That is too much TV\n\n#End Screen Time Checker",
+    "tags": [
+      "selection",
+      "Self Marking"
+    ],
+    "helpUrl": "pythonmanual.html#selection",
+    "id": 131
+  },
+  {
+    "title": "Holiday Allowance Calculator",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Full-time employees working 5 days a week get 28 days of holiday a year. Ask how many days a week the employee works (1 to 5) and output their pro-rata holiday allowance.\n#Input\n# 5\n# 1\n# 3\n\n#output\n# 28\n# 5.6\n# 16.8\n\n#End Holiday Allowance Calculator",
+    "tags": [
+      "selection",
+      "maths",
+      "Self Marking"
+    ],
+    "helpUrl": "pythonmanual.html#selection",
+    "id": 132
+  },
+  {
+    "title": "Running Total to 100",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Start with total = 0. Use a while loop to keep asking the user for numbers, adding each to total and printing the running total, until total exceeds 100.\n#Input\n# 40, 35, 30\n# 60, 50\n\n#output\n# 75, 105\n# 110\n\n#End Running Total to 100",
+    "tags": [
+      "repetition",
+      "totalling",
+      "Self Marking"
+    ],
+    "helpUrl": "pythonmanual.html#while-loops",
+    "id": 133
+  },
+  {
+    "title": "Username and Password Validator",
+    "spice": "🌶️🌶️",
+    "comment": "# instructions: Ask for a username until it is at least 8 characters long, printing \"Your username has been accepted\". Then ask for a password until it is between 8 and 15 characters long, printing \"Your password has been accepted\".\n#Input\n# abc, superuser, 123, secretpass\n\n#output\n# username has been accepted, password has been accepted\n\n#End Username and Password Validator",
+    "tags": [
+      "repetition",
+      "selection",
+      "strings",
+      "Self Marking"
+    ],
+    "helpUrl": "pythonmanual.html#validation",
+    "id": 134
   }
 ]

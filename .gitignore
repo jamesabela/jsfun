@@ -8,3 +8,7 @@
 # Python cache
 __pycache__/
 *.pyc
+
+# Local Year 8 source slides & docs (not uploaded to server)
+Y8/**/*.pptx
+Y8/**/*.docx

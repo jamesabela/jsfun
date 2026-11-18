@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Year 8 Python Teacher Hub — Examples, Mini-Courses &amp; Challenges</title>
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --blue-soft: #dbeafe;
+      --green: #047857;
+      --green-soft: #d1fae5;
+      --amber: #b45309;
+      --amber-soft: #fef3c7;
+      --border: #e2e8f0;
+      --code-bg: #0f172a;
+    }
+    body.dark {
+      --bg: #0b1120;
+      --card: #111827;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --blue: #60a5fa;
+      --blue-dark: #3b82f6;
+      --blue-soft: #1e293b;
+      --green: #34d399;
+      --green-soft: #064e3b;
+      --amber: #fbbf24;
+      --amber-soft: #451a03;
+      --border: #1f2937;
+      --code-bg: #020617;
+    }
+    body.dark .filter-btn { background: #1e293b; color: var(--text); }
+    body.dark .filter-btn.active { background: var(--blue-dark); color: #ffffff; }
+    body.dark .search-input { background: #1e293b; color: var(--text); }
+    body.dark .pill { background: #1e293b; }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .header-actions { display: flex; gap: 8px; }
+    .hdr-btn {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .hdr-btn:hover { background: rgba(255, 255, 255, 0.24); }
+    @media print {
+      .controls, .actions, details, .header-actions { display: none !important; }
+      body { background: #ffffff; color: #000000; }
+      header { background: #ffffff !important; color: #000000 !important; border-bottom: 2px solid #000; padding: 12px 0; }
+      header p, .teacher-pill { color: #333333 !important; }
+      .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .card { break-inside: avoid; box-shadow: none; border: 1px solid #999; }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.5;
+    }
+    header {
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      color: #ffffff;
+      padding: 28px 20px;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; }
+    .teacher-pill {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.16);
+      color: #fef08a;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    header h1 { font-size: 1.85rem; font-weight: 800; margin-bottom: 6px; }
+    header p { color: #cbd5e1; max-width: 760px; font-size: 0.96rem; }
+    .controls {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .controls-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .filter-group { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filter-btn {
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-btn.active {
+      background: var(--blue);
+      color: #ffffff;
+      border-color: var(--blue);
+    }
+    .search-input {
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      min-width: 220px;
+    }
+    main { padding: 24px 20px 48px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: var(--muted);
+    }
+    .pill.auto { background: var(--green-soft); color: var(--green); }
+    .pill.chain { background: var(--amber-soft); color: var(--amber); }
+    .card h2 { font-size: 1.08rem; font-weight: 800; }
+    .card p { font-size: 0.88rem; color: var(--muted); }
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 6px;
+    }
+    .btn {
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .btn-primary { background: var(--blue); color: #ffffff; }
+    .btn-primary:hover { background: var(--blue-dark); }
+    .btn-secondary { background: var(--blue-soft); color: var(--blue-dark); }
+    details {
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+      font-size: 0.84rem;
+    }
+    summary { cursor: pointer; font-weight: 700; color: var(--text); }
+    details pre {
+      margin-top: 8px;
+      background: var(--code-bg);
+      color: #f8fafc;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.78rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .note { margin-top: 6px; color: var(--muted); }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    footer a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="header-top">
+        <div>
+          <div class="teacher-pill">TEACHER RESOURCE • SHARE 1 TASK AT A TIME</div>
+          <h1>Year 8 Python — Teacher Hub</h1>
+        </div>
+        <div class="header-actions">
+          <button class="hdr-btn" id="themeBtn" type="button">🌙 Dark Mode</button>
+          <button class="hdr-btn" id="printBtn" type="button">🖨️ Print Worksheet</button>
+        </div>
+      </div>
+      <p>
+        Browse examples, PRIMM mini-courses, and challenges mapped to the 5 Year 8 units.
+        Use <strong>Copy Student Link</strong> to share a single task in Google Classroom or Teams — students will not see the whole course or teacher answers.
+      </p>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="wrap controls-inner">
+      <div class="filter-group" id="unitFilters">
+        <button class="filter-btn active" data-unit="all">All Units (29)</button>
+        <button class="filter-btn" data-unit="1">Unit 1: Variables</button>
+        <button class="filter-btn" data-unit="2">Unit 2: If/Else</button>
+        <button class="filter-btn" data-unit="3">Unit 3: While</button>
+        <button class="filter-btn" data-unit="4">Unit 4: For &amp; Turtle</button>
+        <button class="filter-btn" data-unit="5">Unit 5: Functions</button>
+      </div>
+      <input type="search" id="searchBox" class="search-input" placeholder="Search tasks (e.g. turtle, password, budget)...">
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="grid" id="cardsGrid"></div>
+  </main>
+
+  <footer>
+    <p>
+      Made with ❤️ for better thinking. If it helped you, support the project.
+      <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer"><strong>Buy me a tea</strong></a>.
+    </p>
+    <p><a href="../privacy.html">Privacy Notice</a></p>
+  </footer>
+
+  <script>
+    const LESSONS = [
+  {
+    "slug": "u1_01_fix_greeting",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "Fix the Greeting (Syntax Errors)",
+    "kind": "Mini-Course 1A",
+    "step": "Step 1 of 4",
+    "primm": [
+      "Predict",
+      "Run",
+      "Investigate",
+      "Modify"
+    ],
+    "summary": "Spot and fix a missing bracket SyntaxError, then ask for the user's name and favourite hobby.",
+    "next_slug": "u1_02_streaming_profile",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "print(\"Hello World\")\nprint(\"Happy Monday... Year 8!\")\n\nname = input(\"What is your name: \")\nhobby = input(\"What is your favourite hobby: \")\nprint(\"Nice to meet you,\", name, \"- enjoy\", hobby)",
+    "teacher_note": "From Y8 Code 1.1 & Task 1.1. Emphasise reading the line number in the SyntaxError traceback and matching parentheses.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_01_fix_greeting.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_01_fix_greeting.py"
+  },
+  {
+    "slug": "u1_02_streaming_profile",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "Streaming Profile Tracker",
+    "kind": "Mini-Course 1A",
+    "step": "Step 2 of 4",
+    "primm": [
+      "Predict",
+      "Run",
+      "Investigate",
+      "Modify"
+    ],
+    "summary": "See how variables work like saved profile slots in a streaming app, then update the episode counter.",
+    "next_slug": "u1_03_video_dashboard",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "profile_name = \"Sam\"\ncurrent_episode = 4\ncurrent_episode = current_episode + 3\n\nprint(\"Welcome back,\", profile_name)\nprint(\"Next up is Episode:\", current_episode)",
+    "teacher_note": "From Y8 Python 1.2 Variables. Reinforce why strings need quotes and integers do not, and why descriptive names like current_episode beat single letters.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_02_streaming_profile.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_02_streaming_profile.py"
+  },
+  {
+    "slug": "u1_03_video_dashboard",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "Video Dashboard Counter",
+    "kind": "Mini-Course 1A",
+    "step": "Step 3 of 4",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Build a video app dashboard that stores a title and 99 likes, then adds 1 like and prints the update.",
+    "next_slug": "u1_04_silly_story",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "video_title = \"Python Tutorial\"\nlikes = 99\nprint(\"Video:\", video_title, \"has\", likes, \"likes.\")\nlikes = likes + 1\nprint(\"Video:\", video_title, \"has\", likes, \"likes.\")",
+    "teacher_note": "From Y8 Python 1.2 Task B. Checks that students can update an integer variable and print both before and after states.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_03_video_dashboard.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_03_video_dashboard.py"
+  },
+  {
+    "slug": "u1_04_silly_story",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "Silly Story Bug Hunt",
+    "kind": "Mini-Course 1A",
+    "step": "Step 4 of 4",
+    "primm": [
+      "Predict",
+      "Modify",
+      "Make"
+    ],
+    "summary": "Fix a broken print statement that mixes strings and variables, then extend the story with two new inputs.",
+    "next_slug": null,
+    "end_title": "Year 8 Python: Printing & Variables",
+    "self_marking": true,
+    "solution": "animal = input(\"Name an animal: \")\nplace = input(\"Name a place: \")\naction = input(\"What are they doing? \")\nname = input(\"Enter a person's name: \")\nfavourite_food = input(\"What is their favourite food? \")\n\nprint(\"The\", animal, \"went to\", place, \"to\", action)\nprint(name, \"brought some\", favourite_food, \"along for the trip!\")",
+    "teacher_note": "From Y8 Practical Task 1.1. Completes Mini-Course 1A with a certificate.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_04_silly_story.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_04_silly_story.py"
+  },
+  {
+    "slug": "u1_05_casting_basket",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "The Shopping Basket Trap (str vs int)",
+    "kind": "Mini-Course 1B",
+    "step": "Step 1 of 6",
+    "primm": [
+      "Predict",
+      "Run",
+      "Investigate",
+      "Modify"
+    ],
+    "summary": "Discover why 10 + 20 + 5 becomes '10205' without int(), and fix the casting.",
+    "next_slug": "u1_06_concert_tickets",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "item1 = int(input(\"Enter cost for Item 1: \"))\nitem2 = int(input(\"Enter cost for Item 2: \"))\nitem3 = int(input(\"Enter cost for Item 3: \"))\n\ntotal = item1 + item2 + item3\nprint(\"The total cost is\", total)",
+    "teacher_note": "From Y8 Python 1.2 PRIMM Challenge 1 & 2. Classic str vs int misconception.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_05_casting_basket.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_05_casting_basket.py"
+  },
+  {
+    "slug": "u1_06_concert_tickets",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "Concert Ticket Calculator",
+    "kind": "Mini-Course 1B",
+    "step": "Step 2 of 6",
+    "primm": [
+      "Predict",
+      "Modify"
+    ],
+    "summary": "Calculate ticket costs at \u00a312 each, then add a fixed \u00a33 booking handling fee.",
+    "next_slug": "u1_07_pet_age",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "print(\"--- Welcome to concert bookings! ---\")\ntickets = int(input(\"How many tickets would you like to buy? \"))\nprice_per_ticket = 12\nhandling_charge = 3\n\ntotal_cost = (tickets * price_per_ticket) + handling_charge\nprint(\"Your total price comes to: \u00a3\", total_cost)",
+    "teacher_note": "From Y8 Practical Task 1.2. Great opportunity to show that string * int repeats text in Python.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_06_concert_tickets.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_06_concert_tickets.py"
+  },
+  {
+    "slug": "u1_07_pet_age",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "Pet Age Calculator",
+    "kind": "Mini-Course 1B",
+    "step": "Step 3 of 6",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Ask for a dog's age in human years, multiply by 7, and display the result in dog years.",
+    "next_slug": "u1_08_theme_park",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "human_years = int(input(\"How old is your dog in human years? \"))\ndog_years = human_years * 7\nprint(\"Your dog is\", dog_years, \"years old in dog years!\")",
+    "teacher_note": "From Y8 Practical Task 1.2 Make challenge.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_07_pet_age.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_07_pet_age.py"
+  },
+  {
+    "slug": "u1_08_theme_park",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "Theme Park Budget Planner",
+    "kind": "Mini-Course 1B",
+    "step": "Step 4 of 6",
+    "primm": [
+      "Investigate",
+      "Modify"
+    ],
+    "summary": "Trace a group trip budget, then deduct a \u00a35 parking fee from the remaining food money.",
+    "next_slug": "u1_09_retirement",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "group_size = int(input(\"How many people are coming? \"))\npocket_money = int(input(\"How much spending money does each person have (\u00a3)? \"))\nparking_fee = 5\n\ntotal_budget = group_size * pocket_money\nentry_pass_total = group_size * 25\nmoney_left = total_budget - entry_pass_total - parking_fee\nprint(\"After buying entry passes and parking, your group has \u00a3\", money_left, \"left for food!\")",
+    "teacher_note": "From Y8 Practical Task 1.3. Good dry-run tracing practice.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_08_theme_park.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_08_theme_park.py"
+  },
+  {
+    "slug": "u1_09_retirement",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "Retirement Countdown",
+    "kind": "Mini-Course 1B",
+    "step": "Step 5 of 6",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Ask for a person's name and current age, then calculate years left until retirement at 67.",
+    "next_slug": "u1_10_calculator",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "name = input(\"What is your name? \")\ncurrent_age = int(input(\"How old are you currently? \"))\nretirement_age = 67\nyears_left = retirement_age - current_age\nprint(\"Hello\", name, \"you have\", years_left, \"years left until you can retire!\")",
+    "teacher_note": "From Y8 Practical Task 1.3 Make challenge. Connects to Rubric Level 3 (avoiding hardcoded magic numbers).",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_09_retirement.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_09_retirement.py"
+  },
+  {
+    "slug": "u1_10_calculator",
+    "unit": 1,
+    "unit_name": "Unit 1: Printing, Variables & Operators",
+    "title": "Two-Number Calculator",
+    "kind": "Mini-Course 1B",
+    "step": "Step 6 of 6",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Build a mini calculator that takes two numbers and an operator (+, -, *, /) and displays the result.",
+    "next_slug": null,
+    "end_title": "Year 8 Python: Casting & Calculators",
+    "self_marking": true,
+    "solution": "num1 = int(input(\"Enter first number: \"))\nnum2 = int(input(\"Enter second number: \"))\nop = input(\"Choose operator (+, -, *, /): \")\n\nif op == \"+\":\n    print(\"Result:\", num1 + num2)\nelif op == \"-\":\n    print(\"Result:\", num1 - num2)\nelif op == \"*\":\n    print(\"Result:\", num1 * num2)\nelif op == \"/\":\n    print(\"Result:\", num1 / num2)\nelse:\n    print(\"Unknown operator\")",
+    "teacher_note": "From Y8 Python 1.3 Task 1.3.2. Bridges Unit 1 operators into Unit 2 selection.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_10_calculator.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u1_10_calculator.py"
+  },
+  {
+    "slug": "u2_01_compare_numbers",
+    "unit": 2,
+    "unit_name": "Unit 2: Conditional Statements",
+    "title": "Comparing Two Numbers (Example)",
+    "kind": "Mini-Course 2",
+    "step": "Step 1 of 5",
+    "primm": [
+      "Predict",
+      "Run",
+      "Modify"
+    ],
+    "summary": "Learn why an else branch alone fails when two numbers are equal, and upgrade it with elif.",
+    "next_slug": "u2_02_alphabet_quiz",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "num1 = int(input(\"Enter first number: \"))\nnum2 = int(input(\"Enter second number: \"))\n\nif num1 > num2:\n    print(\"Larger number:\", num1)\nelif num2 > num1:\n    print(\"Larger number:\", num2)\nelse:\n    print(\"Values are the same\")",
+    "teacher_note": "From Y8 2.1 Conditional Statements slide 2 & Problem 2.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_01_compare_numbers.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_01_compare_numbers.py"
+  },
+  {
+    "slug": "u2_02_alphabet_quiz",
+    "unit": 2,
+    "unit_name": "Unit 2: Conditional Statements",
+    "title": "Alphabet Quiz",
+    "kind": "Mini-Course 2",
+    "step": "Step 2 of 5",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Ask the user how many letters are in the English alphabet and output Correct or Incorrect.",
+    "next_slug": "u2_03_tv_time",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "guess = int(input(\"How many letters are in the alphabet? \"))\nif guess == 26:\n    print(\"Correct\")\nelse:\n    print(\"Incorrect\")",
+    "teacher_note": "From Y8 2.1 Problem 1.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_02_alphabet_quiz.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_02_alphabet_quiz.py"
+  },
+  {
+    "slug": "u2_03_tv_time",
+    "unit": 2,
+    "unit_name": "Unit 2: Conditional Statements",
+    "title": "Screen Time & TV Checker",
+    "kind": "Mini-Course 2",
+    "step": "Step 3 of 5",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Use if / elif / else with range comparisons (< 2, 2 to 4, > 4) to give screen-time advice.",
+    "next_slug": "u2_04_holiday_allowance",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "tv_time = int(input(\"How many hours of TV do you watch each day? \"))\n\nif tv_time < 2:\n    print(\"That should be ok\")\nelif tv_time >= 2 and tv_time <= 4:\n    print(\"That will rot your brain\")\nelse:\n    print(\"That is too much TV!\")",
+    "teacher_note": "From Y8 2.1 Problem 3.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_03_tv_time.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_03_tv_time.py"
+  },
+  {
+    "slug": "u2_04_holiday_allowance",
+    "unit": 2,
+    "unit_name": "Unit 2: Conditional Statements",
+    "title": "Holiday Allowance Calculator",
+    "kind": "Mini-Course 2",
+    "step": "Step 4 of 5",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Calculate pro-rata holiday days out of 28 based on how many days a week someone works (1\u20135).",
+    "next_slug": "u2_05_guess_number",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "days_worked = int(input(\"How many days a week do you work (1-5)? \"))\n\nif days_worked == 5:\n    holidays = 28\nelse:\n    holidays = (28 / 5) * days_worked\n\nprint(\"Days holiday are:\", holidays)",
+    "teacher_note": "From Y8 2.1 Problem 4. Shows how a single formula in else avoids repeating 4 identical elif blocks.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_04_holiday_allowance.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_04_holiday_allowance.py"
+  },
+  {
+    "slug": "u2_05_guess_number",
+    "unit": 2,
+    "unit_name": "Unit 2: Conditional Statements",
+    "title": "Guess the Secret Number (1\u201310)",
+    "kind": "Mini-Course 2",
+    "step": "Step 5 of 5",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Generate a random number between 1 and 10, let the user guess, and print Correct or Not what I was thinking.",
+    "next_slug": null,
+    "end_title": "Year 8 Python: Conditional Statements",
+    "self_marking": false,
+    "solution": "import random\n\nnumber = random.randint(1, 10)\nguess = int(input(\"Enter a guess between 1 and 10: \"))\n\nif guess == number:\n    print(\"Correct\")\nelse:\n    print(\"Not what I was thinking\")",
+    "teacher_note": "From Y8 2.1 Problem 5. Uses random.randint so no fixed I/O test is attached; students test interactively.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_05_guess_number.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u2_05_guess_number.py"
+  },
+  {
+    "slug": "u3_01_while_counter",
+    "unit": 3,
+    "unit_name": "Unit 3: Conditional Loops (while)",
+    "title": "WHILE Loop Counter & Countdown (Example)",
+    "kind": "Example",
+    "step": "Worked Example",
+    "primm": [
+      "Predict",
+      "Run",
+      "Investigate"
+    ],
+    "summary": "See a while loop count up in 2s from 0 to 10, then explore a nested validation + countdown loop.",
+    "next_slug": null,
+    "end_title": null,
+    "self_marking": true,
+    "solution": "counter = 0\nwhile counter <= 10:\n    print(\"The counter is\", counter)\n    counter = counter + 2",
+    "teacher_note": "From Y8 WHILE demo.py. Use this as a live teacher demo before starting Mini-Course 3A.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_01_while_counter.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_01_while_counter.py"
+  },
+  {
+    "slug": "u3_02_count_to_100",
+    "unit": 3,
+    "unit_name": "Unit 3: Conditional Loops (while)",
+    "title": "Count Up to 100",
+    "kind": "Mini-Course 3A",
+    "step": "Step 1 of 3",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Ask the user for a starting number below 100 and use a while loop to add 1 and print each number up to 100.",
+    "next_slug": "u3_03_two_times_table",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "number = int(input(\"Enter a number below 100: \"))\nwhile number < 100:\n    number = number + 1\n    print(number)",
+    "teacher_note": "From Y8 3. Creating conditional loops slide 5 Problem 1.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_02_count_to_100.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_02_count_to_100.py"
+  },
+  {
+    "slug": "u3_03_two_times_table",
+    "unit": 3,
+    "unit_name": "Unit 3: Conditional Loops (while)",
+    "title": "2 Times Table up to 100",
+    "kind": "Mini-Course 3A",
+    "step": "Step 2 of 3",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Use a while loop to print multiples of 2 up to 100, then print 'You have finished'.",
+    "next_slug": "u3_04_running_total",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "number = 0\nprint(\"***Multiplying by 2***\")\nwhile number <= 100:\n    print(\"The number is:\", number)\n    number = number + 2\nprint(\"You have finished\")",
+    "teacher_note": "From Y8 Problem 2 - multiples by 2.py.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_03_two_times_table.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_03_two_times_table.py"
+  },
+  {
+    "slug": "u3_04_running_total",
+    "unit": 3,
+    "unit_name": "Unit 3: Conditional Loops (while)",
+    "title": "Running Total to 100",
+    "kind": "Mini-Course 3A",
+    "step": "Step 3 of 3",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Keep asking the user for numbers and adding them to a running total until the total exceeds 100.",
+    "next_slug": null,
+    "end_title": "Year 8 Python: While Loops & Accumulators",
+    "self_marking": true,
+    "solution": "total = 0\nwhile total <= 100:\n    number = int(input(\"Please enter a number: \"))\n    total = total + number\n    print(\"Running total:\", total)\nprint(\"Total has exceeded 100!\")",
+    "teacher_note": "From Y8 Problem 1 & Problem 5. Highlights accumulator initialisation before the loop.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_04_running_total.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_04_running_total.py"
+  },
+  {
+    "slug": "u3_05_password_gatekeeper",
+    "unit": 3,
+    "unit_name": "Unit 3: Conditional Loops (while)",
+    "title": "Password Gatekeeper",
+    "kind": "Mini-Course 3B",
+    "step": "Step 1 of 2",
+    "primm": [
+      "Predict",
+      "Make"
+    ],
+    "summary": "Use a Boolean flag variable (accepted = False) to keep asking for a password until it matches.",
+    "next_slug": "u3_06_username_password",
+    "end_title": null,
+    "self_marking": true,
+    "solution": "accepted = False\nsecret = \"GISKLumpur\"\n\nwhile accepted == False:\n    attempt = input(\"Enter password: \")\n    if attempt == secret:\n        print(\"Correct password\")\n        accepted = True\n    else:\n        print(\"Incorrect password\")",
+    "teacher_note": "From Y8 Problem 3 & Problem 4.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_05_password_gatekeeper.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_05_password_gatekeeper.py"
+  },
+  {
+    "slug": "u3_06_username_password",
+    "unit": 3,
+    "unit_name": "Unit 3: Conditional Loops (while)",
+    "title": "Username & Password Length Validator",
+    "kind": "Mini-Course 3B",
+    "step": "Step 2 of 2",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Validate a username (at least 8 characters) and a password (8 to 15 characters) using len() and while loops.",
+    "next_slug": null,
+    "end_title": "Year 8 Python: Passwords & Validation",
+    "self_marking": true,
+    "solution": "username = input(\"Enter username: \")\nwhile len(username) < 8:\n    username = input(\"Invalid username, enter another username: \")\nprint(\"Your username has been accepted\")\n\npassword = input(\"Enter a password: \")\nwhile len(password) < 8 or len(password) > 15:\n    password = input(\"Invalid password, enter another password: \")\nprint(\"Your password has been accepted\")",
+    "teacher_note": "From Y8 Problem 6 - password.py. Great moment to discuss 'and' vs 'or' in range validation.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_06_username_password.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u3_06_username_password.py"
+  },
+  {
+    "slug": "u4_01_while_vs_for",
+    "unit": 4,
+    "unit_name": "Unit 4: Count-Controlled Loops (for & Turtle)",
+    "title": "WHILE vs FOR & List Sum (Example)",
+    "kind": "Example",
+    "step": "Worked Example",
+    "primm": [
+      "Predict",
+      "Run",
+      "Investigate"
+    ],
+    "summary": "Compare a while loop with a for loop, then loop over a list of numbers to calculate their total.",
+    "next_slug": null,
+    "end_title": null,
+    "self_marking": true,
+    "solution": "for count in range(1, 11):\n    print(\"Count is:\", count)",
+    "teacher_note": "From Y8 4. Creating count controlled loops slides 1 & 9. Watch out for range(start, stop) off-by-one!",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u4_01_while_vs_for.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u4_01_while_vs_for.py"
+  },
+  {
+    "slug": "u4_02_turtle_square",
+    "unit": 4,
+    "unit_name": "Unit 4: Count-Controlled Loops (for & Turtle)",
+    "title": "Turtle Square with a FOR Loop",
+    "kind": "Mini-Course 4",
+    "step": "Step 1 of 3",
+    "primm": [
+      "Predict",
+      "Run",
+      "Modify"
+    ],
+    "summary": "Draw a square in 3 lines using for i in range(4), then adapt it to draw a triangle or pentagon.",
+    "next_slug": "u4_03_two_squares",
+    "end_title": null,
+    "self_marking": false,
+    "solution": "import turtle\n# Triangle example:\nfor i in range(3):\n    turtle.forward(100)\n    turtle.right(120)",
+    "teacher_note": "From Y8 4. Creating count controlled loops slides 6 & 11.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u4_02_turtle_square.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u4_02_turtle_square.py"
+  },
+  {
+    "slug": "u4_03_two_squares",
+    "unit": 4,
+    "unit_name": "Unit 4: Count-Controlled Loops (for & Turtle)",
+    "title": "Two Squares with penup() & pendown()",
+    "kind": "Mini-Course 4",
+    "step": "Step 2 of 3",
+    "primm": [
+      "Predict",
+      "Run",
+      "Modify"
+    ],
+    "summary": "Use penup() and pendown() to move the turtle without drawing a connecting line between shapes.",
+    "next_slug": "u4_04_user_polygon",
+    "end_title": null,
+    "self_marking": false,
+    "solution": "import turtle\n# Students add a third square or change pencolor(\"blue\") before the second loop.",
+    "teacher_note": "From Y8 4. Creating count controlled loops slide 12.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u4_03_two_squares.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u4_03_two_squares.py"
+  },
+  {
+    "slug": "u4_04_user_polygon",
+    "unit": 4,
+    "unit_name": "Unit 4: Count-Controlled Loops (for & Turtle)",
+    "title": "User-Defined Polygon",
+    "kind": "Mini-Course 4",
+    "step": "Step 3 of 3",
+    "primm": [
+      "Investigate",
+      "Modify",
+      "Make"
+    ],
+    "summary": "Ask the user for the number of sides and pen colour, and calculate angle = 360 / sides to draw any polygon.",
+    "next_slug": null,
+    "end_title": "Year 8 Python: For Loops & Turtle",
+    "self_marking": false,
+    "solution": "import turtle\n\nsides = int(input(\"How many sides would you like? \"))\ncolour = input(\"What pen colour would you like? \")\nangle = 360 / sides\n\nturtle.pencolor(colour)\nfor i in range(sides):\n    turtle.forward(60)\n    turtle.right(angle)",
+    "teacher_note": "From Y8 4.2 User-defined count controlled loops slides 1-3.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u4_04_user_polygon.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u4_04_user_polygon.py"
+  },
+  {
+    "slug": "u5_01_draw_square_def",
+    "unit": 5,
+    "unit_name": "Unit 5: Subroutines (def)",
+    "title": "Your First Subroutine: draw_square()",
+    "kind": "Mini-Course 5",
+    "step": "Step 1 of 4",
+    "primm": [
+      "Predict",
+      "Run",
+      "Investigate"
+    ],
+    "summary": "See how def draw_square(): packages a repeated block of code into a reusable named instruction.",
+    "next_slug": "u5_02_draw_triangle_def",
+    "end_title": null,
+    "self_marking": false,
+    "solution": "import turtle\ndef draw_square():\n    for i in range(4):\n        turtle.forward(80)\n        turtle.right(90)\ndraw_square()",
+    "teacher_note": "From Y8 5. Subroutines slides 3-4.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u5_01_draw_square_def.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u5_01_draw_square_def.py"
+  },
+  {
+    "slug": "u5_02_draw_triangle_def",
+    "unit": 5,
+    "unit_name": "Unit 5: Subroutines (def)",
+    "title": "Fill in the Blanks: draw_triangle()",
+    "kind": "Mini-Course 5",
+    "step": "Step 2 of 4",
+    "primm": [
+      "Modify"
+    ],
+    "summary": "Complete a subroutine called draw_triangle() and call it twice to draw two separate triangles.",
+    "next_slug": "u5_03_polygon_params",
+    "end_title": null,
+    "self_marking": false,
+    "solution": "import turtle\n\ndef draw_triangle():\n    for i in range(3):\n        turtle.forward(80)\n        turtle.right(120)\n\ndraw_triangle()\nturtle.penup()\nturtle.forward(120)\nturtle.pendown()\ndraw_triangle()",
+    "teacher_note": "From Y8 5. Subroutines slide 5.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u5_02_draw_triangle_def.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u5_02_draw_triangle_def.py"
+  },
+  {
+    "slug": "u5_03_polygon_params",
+    "unit": 5,
+    "unit_name": "Unit 5: Subroutines (def)",
+    "title": "Adding Parameters: draw_shape(sides, length)",
+    "kind": "Mini-Course 5",
+    "step": "Step 3 of 4",
+    "primm": [
+      "Predict",
+      "Run",
+      "Modify"
+    ],
+    "summary": "Pass parameters (sides, length) into one flexible subroutine so it can draw any regular polygon at any size.",
+    "next_slug": "u5_04_village_stars",
+    "end_title": null,
+    "self_marking": false,
+    "solution": "import turtle\n\ndef draw_shape(sides, length):\n    angle = 360 / sides\n    for i in range(sides):\n        turtle.forward(length)\n        turtle.right(angle)\n\ns = int(input(\"How many sides? \"))\nl = int(input(\"How big should each side be? \"))\ndraw_shape(s, l)",
+    "teacher_note": "From Y8 5. Subroutines slides 7 & 10 (Polygon Picker).",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u5_03_polygon_params.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u5_03_polygon_params.py"
+  },
+  {
+    "slug": "u5_04_village_stars",
+    "unit": 5,
+    "unit_name": "Unit 5: Subroutines (def)",
+    "title": "Capstone: The House & Village Builder",
+    "kind": "Mini-Course 5",
+    "step": "Step 4 of 4",
+    "primm": [
+      "Make"
+    ],
+    "summary": "Combine draw_square() and draw_triangle() subroutines to draw a house, then repeat it to build a village!",
+    "next_slug": null,
+    "end_title": "Year 8 Python: Subroutines & Functions",
+    "self_marking": false,
+    "solution": "import turtle\n\ndef draw_square():\n    for i in range(4):\n        turtle.forward(60)\n        turtle.right(90)\n\ndef draw_triangle():\n    for i in range(3):\n        turtle.forward(60)\n        turtle.left(120)\n\nturtle.penup()\nturtle.backward(150)\nturtle.pendown()\n\nfor house in range(3):\n    draw_square()\n    draw_triangle()\n    turtle.penup()\n    turtle.forward(100)\n    turtle.pendown()",
+    "teacher_note": "From Y8 5. Subroutines slides 8 & 10. Completes Mini-Course 5 with a certificate.",
+    "launch_rel": "../pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u5_04_village_stars.py",
+    "share_url": "https://jamesabela.github.io/jsfun/pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/u5_04_village_stars.py"
+  }
+];
+    let activeUnit = 'all';
+    const grid = document.getElementById('cardsGrid');
+    const searchBox = document.getElementById('searchBox');
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function render() {
+      const q = searchBox.value.trim().toLowerCase();
+      const filtered = LESSONS.filter(l => {
+        const unitOk = activeUnit === 'all' || String(l.unit) === activeUnit;
+        const textOk = !q || (l.title + ' ' + l.summary + ' ' + l.kind + ' ' + l.primm.join(' ')).toLowerCase().includes(q);
+        return unitOk && textOk;
+      });
+
+      grid.innerHTML = filtered.map(l => `
+        <article class="card">
+          <div class="card-meta">
+            <span>Unit ${l.unit} • ${escapeHtml(l.kind)}</span>
+            <span>${escapeHtml(l.step)}</span>
+          </div>
+          <h2>${escapeHtml(l.title)}</h2>
+          <p>${escapeHtml(l.summary)}</p>
+          <div class="tag-row">
+            ${l.primm.map(p => `<span class="pill">${escapeHtml(p)}</span>`).join('')}
+            ${l.self_marking ? '<span class="pill auto">Self-Marking</span>' : ''}
+            ${l.next_slug ? '<span class="pill chain">Has Next Step</span>' : (l.end_title ? '<span class="pill chain">Certificate End</span>' : '')}
+          </div>
+          <div class="actions">
+            <a class="btn btn-primary" href="${l.launch_rel}" target="_blank" rel="noopener noreferrer">Open in Code Lab</a>
+            <button class="btn btn-secondary" type="button" data-copy="${l.share_url}">Copy Student Link</button>
+          </div>
+          <details>
+            <summary>Teacher Answer &amp; Notes</summary>
+            <pre>${escapeHtml(l.solution)}</pre>
+            <p class="note">${escapeHtml(l.teacher_note)}</p>
+          </details>
+        </article>
+      `).join('');
+
+      grid.querySelectorAll('button[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const url = btn.getAttribute('data-copy');
+          try {
+            await navigator.clipboard.writeText(url);
+            const old = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(() => { btn.textContent = old; }, 1400);
+          } catch {
+            prompt('Copy this student link:', url);
+          }
+        });
+      });
+    }
+
+    document.getElementById('unitFilters').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeUnit = btn.dataset.unit;
+      render();
+    });
+
+    searchBox.addEventListener('input', render);
+    render();
+
+    const themeBtn = document.getElementById('themeBtn');
+    if (localStorage.getItem('y8TeacherTheme') === 'dark') {
+      document.body.classList.add('dark');
+      themeBtn.textContent = '☀️ Light Mode';
+    }
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('y8TeacherTheme', isDark ? 'dark' : 'light');
+      themeBtn.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+  </script>
+  <script src="../privacy.js" data-page="/Y8/index.html" defer></script>
+</body>
+</html>

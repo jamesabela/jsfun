@@ -160,12 +160,10 @@ The tutorial files are clean, responsive HTML documents loaded in the side ifram
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial: Lesson Title</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #f8fafc, #eff6ff);
@@ -194,7 +192,7 @@ The tutorial files are clean, responsive HTML documents loaded in the side ifram
     body {
       background: var(--bg-gradient);
       color: var(--text-main);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       min-height: 100vh;
       padding: 24px;
       display: flex;
@@ -219,7 +217,7 @@ The tutorial files are clean, responsive HTML documents loaded in the side ifram
     }
 
     .title-group h1 {
-      font-family: 'Outfit', sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-weight: 800;
       font-size: 1.6rem;
       letter-spacing: -0.02em;
@@ -247,7 +245,7 @@ The tutorial files are clean, responsive HTML documents loaded in the side ifram
     }
 
     .card-title {
-      font-family: 'Outfit', sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 1.15rem;
       font-weight: 700;
       display: flex;
@@ -299,7 +297,7 @@ The tutorial files are clean, responsive HTML documents loaded in the side ifram
       color: var(--code-text);
       padding: 14px;
       border-radius: 8px;
-      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.85rem;
       overflow-x: auto;
       border: 1px solid rgba(255, 255, 255, 0.05);

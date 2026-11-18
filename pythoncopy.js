@@ -3748,6 +3748,9 @@ import sys, builtins
           hasWarnedAboutImports = false;
         }
       }
+      if (hasTurtle && currentAppMode === 'edit') {
+        setAppMode('turtle');
+      }
       updateReferenceLinks();
       updateQuizDetection();
       updateShareLinkButton();

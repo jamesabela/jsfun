@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capstone: The House &amp; Village Builder — Year 8 Python</title>
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #f8fafc, #eff6ff);
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --blue: #2563eb;
+      --blue-soft: #dbeafe;
+      --gold: #b45309;
+      --gold-soft: #fef3c7;
+      --green: #047857;
+      --green-soft: #d1fae5;
+      --purple: #6d28d9;
+      --purple-soft: #ede9fe;
+      --border: #e2e8f0;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.55;
+      padding: 20px 20px 44px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+    .primm-predict { background: var(--purple-soft); color: var(--purple); }
+    .primm-run { background: var(--blue-soft); color: var(--blue); }
+    .primm-investigate { background: var(--gold-soft); color: var(--gold); }
+    .primm-modify { background: #ffedd5; color: #c2410c; }
+    .primm-make { background: var(--green-soft); color: var(--green); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--blue);
+    }
+    .hook {
+      background: #eff6ff;
+      border-left: 4px solid var(--blue);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.94rem;
+    }
+    ol, ul { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: #f1f5f9;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+    details {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: #f8fafc;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    details p { margin-top: 8px; font-size: 0.9rem; color: var(--muted); }
+    .cheat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+      font-size: 0.88rem;
+    }
+    .svg-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      padding: 6px 0;
+    }
+    .svg-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #f8fafc;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    footer {
+      margin-top: 12px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    footer a { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="eyebrow">Unit 5: Subroutines (def) • Mini-Course 5 (Step 4 of 4)</div>
+      <h1>Capstone: The House &amp; Village Builder</h1>
+      <div class="badges"><span class="badge primm-make">Make</span></div>
+    </header>
+
+    <section class="card">
+      <div class="hook">Final Year 8 Boss Level: combine your subroutines to build a whole street of houses (or a sky of growing stars)!</div>
+      <div class="card-title">Your Mission</div>
+      <ol><li><strong>Challenge 1 (House &amp; Village):</strong> Write <code>draw_square()</code> and <code>draw_triangle()</code> (tip: turn <strong>left</strong> 120° for the roof so it sits on top of the square!), then use a loop to draw 3 houses in a row.</li><li><strong>Bonus Challenge (Variable Star):</strong> Write <code>draw_star(size)</code> (5 points, turning 144°) and loop it 5 times making <code>size</code> bigger each time.</li></ol>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Key Pattern</div>
+      <pre>def draw_house():
+    draw_square()
+    draw_triangle()</pre>
+      <details>
+        <summary>👀 Predict First! Click to check what happens</summary>
+        <p>Calling <code>draw_square()</code> then <code>draw_triangle()</code> (turning left) places a neat pitched roof right on top of the square!</p>
+      </details>
+      <details>
+        <summary>💡 Stuck? Common Bug Hint</summary>
+        <p>Remember to use <code>penup()</code>, move forward, and <code>pendown()</code> between houses in your village loop.</p>
+      </details>
+    </section>
+    
+    <section class="card">
+      <div class="card-title">🐢 Target Shapes &amp; Angle Cheat-Sheet</div>
+      
+      <div class="svg-row">
+        <div class="svg-box"><svg viewBox="0 0 240 100" width="210" height="86" aria-label="Village of three houses"><g fill="none" stroke="#2563eb" stroke-width="3"><rect x="15" y="45" width="45" height="45"/><polygon points="15,45 37.5,15 60,45"/><rect x="90" y="45" width="45" height="45"/><polygon points="90,45 112.5,15 135,45"/><rect x="165" y="45" width="45" height="45"/><polygon points="165,45 187.5,15 210,45"/></g></svg><span>Village Builder (3 Houses)</span></div>
+        <div class="svg-box"><svg viewBox="0 0 100 100" width="84" height="86" aria-label="5-point star"><polygon points="50,10 61,38 92,38 67,56 76,86 50,68 24,86 33,56 8,38 39,38" fill="none" stroke="#d97706" stroke-width="3.5"/></svg><span>Bonus Star (144° turns)</span></div>
+      </div>
+      <div class="cheat-grid">
+        <div><strong>Triangle (3):</strong> 120°</div>
+        <div><strong>Square (4):</strong> 90°</div>
+        <div><strong>Pentagon (5):</strong> 72°</div>
+        <div><strong>Hexagon (6):</strong> 60°</div>
+        <div><strong>Octagon (8):</strong> 45°</div>
+        <div><strong>Rule:</strong> <code>360 / sides</code></div>
+      </div>
+    </section>
+    <footer>
+      <p>
+        Made with ❤️ for better thinking. If it helped you, support the project.
+        <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer"><strong>Buy me a tea</strong></a>.
+      </p>
+      <p><a href="../../privacy.html">Privacy Notice</a></p>
+    </footer>
+  </div>
+  <script src="../../privacy.js" data-page="/Y8/lessons/u5_04_village_stars.html" defer></script>
+</body>
+</html>
