@@ -4081,17 +4081,38 @@ import sys, builtins
       const previousLoad = document.getElementById('privacyPreviewLoad');
       if (previousLoad) previousLoad.remove();
       iframe.removeAttribute('src');
-      const loadButton = document.createElement('button');
-      loadButton.id = 'privacyPreviewLoad';
-      loadButton.type = 'button';
-      loadButton.textContent = 'Load external preview — contacts the content provider';
-      loadButton.style.cssText = 'padding:12px;max-width:100%;white-space:normal;';
-      iframe.before(loadButton);
-      loadButton.addEventListener('click', () => {
+
+      let previewSrc = transformed;
+      let isSameOrigin = false;
+      try {
+        const parsedPreview = new URL(transformed, window.location.href);
+        if (parsedPreview.origin === 'https://jamesabela.github.io' && parsedPreview.pathname.startsWith('/jsfun/')) {
+          const relPath = parsedPreview.pathname.slice('/jsfun/'.length) + parsedPreview.search + parsedPreview.hash;
+          previewSrc = new URL(relPath, window.location.href).href;
+          isSameOrigin = true;
+        } else {
+          isSameOrigin = parsedPreview.origin === window.location.origin;
+        }
+      } catch (e) {
+        isSameOrigin = false;
+      }
+
+      if (isSameOrigin) {
         iframe.referrerPolicy = 'no-referrer';
-        iframe.src = transformed;
-        loadButton.remove();
-      });
+        iframe.src = previewSrc;
+      } else {
+        const loadButton = document.createElement('button');
+        loadButton.id = 'privacyPreviewLoad';
+        loadButton.type = 'button';
+        loadButton.textContent = 'Load external preview — contacts the content provider';
+        loadButton.style.cssText = 'margin:12px;padding:10px 16px;max-width:calc(100% - 24px);white-space:normal;background:#2563eb;color:#ffffff;border:none;border-radius:8px;font-weight:600;cursor:pointer;';
+        iframe.before(loadButton);
+        loadButton.addEventListener('click', () => {
+          iframe.referrerPolicy = 'no-referrer';
+          iframe.src = previewSrc;
+          loadButton.remove();
+        });
+      }
       iframe.dataset.originalUrl = url;
       iframe.dataset.lastUrl = url;
       fallbackLink.href = url;
