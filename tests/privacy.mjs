@@ -6,41 +6,50 @@ import { execFileSync } from 'node:child_process';
 const source = fs.readFileSync('privacy.js', 'utf8');
 assert.doesNotMatch(source, /goatcounter\.com|gc\.zgo\.at|jsfun\.analytics/i, 'privacy.js must not contain GoatCounter or analytics tracking');
 
-function embedHarness() {
+function embedHarness(privateSrc = 'https://docs.google.com/presentation/d/demo/embed') {
   const requests = [];
   const prepended = [];
   const listeners = {};
   const frame = {
-    dataset: { privateSrc: 'https://example.org/embed' },
+    dataset: { privateSrc },
     hidden: false,
     src: '',
     referrerPolicy: '',
     before(el) {
-      this.button = el;
+      this.card = el;
     },
   };
-  const button = {
-    type: '',
-    textContent: '',
-    style: { cssText: '' },
-    listeners: {},
-    removed: false,
-    addEventListener(ev, fn) {
-      this.listeners[ev] = fn;
-    },
-    remove() {
-      this.removed = true;
-    },
-  };
+  function makeEl(tag) {
+    return {
+      tag,
+      type: '',
+      className: '',
+      textContent: '',
+      href: '',
+      target: '',
+      rel: '',
+      style: { cssText: '' },
+      children: [],
+      listeners: {},
+      removed: false,
+      append(...nodes) {
+        this.children.push(...nodes);
+      },
+      addEventListener(ev, fn) {
+        this.listeners[ev] = fn;
+      },
+      remove() {
+        this.removed = true;
+      },
+    };
+  }
   const context = {
     URL,
     document: {
       querySelectorAll(sel) {
         return sel === 'iframe[data-private-src]' ? [frame] : [];
       },
-      createElement(tag) {
-        return tag === 'button' ? button : {};
-      },
+      createElement: makeEl,
       body: {
         prepend(el) { prepended.push(el); },
         appendChild(el) { requests.push(el); },
@@ -51,21 +60,33 @@ function embedHarness() {
     },
   };
   vm.runInNewContext(source, context);
-  return { frame, button, requests, prepended };
+  const button = frame.card.children.find(c => c.tag === 'button');
+  const meta = frame.card.children.find(c => c.tag === 'p');
+  const privacyLink = meta ? meta.children.find(c => c.tag === 'a') : null;
+  return { frame, card: frame.card, button, privacyLink, requests, prepended };
 }
 
-const h = embedHarness();
+const h = embedHarness('https://docs.google.com/presentation/d/demo/embed');
 assert.equal(h.requests.length, 0, 'No analytics requests should be made');
 assert.equal(h.prepended.length, 0, 'No opt-in analytics banner should be shown');
 assert.equal(h.frame.hidden, true, 'External embed iframe should be hidden until clicked');
 assert.equal(h.frame.src, '', 'External embed iframe should not load before click');
-assert.match(h.button.textContent, /example\.org/);
+assert.match(h.button.textContent, /Google Slides/);
+assert.equal(h.privacyLink.href, 'https://policies.google.com/privacy');
 
 h.button.listeners.click();
 assert.equal(h.frame.referrerPolicy, 'no-referrer');
-assert.equal(h.frame.src, 'https://example.org/embed');
+assert.equal(h.frame.src, 'https://docs.google.com/presentation/d/demo/embed');
 assert.equal(h.frame.hidden, false);
-assert.equal(h.button.removed, true);
+assert.equal(h.card.removed, true);
+
+const yt = embedHarness('https://www.youtube-nocookie.com/embed/demo');
+assert.match(yt.button.textContent, /YouTube Video/);
+assert.equal(yt.privacyLink.href, 'https://policies.google.com/privacy');
+
+const sp = embedHarness('https://open.spotify.com/embed/show/demo');
+assert.match(sp.button.textContent, /Spotify Player/);
+assert.equal(sp.privacyLink.href, 'https://www.spotify.com/legal/privacy-policy/');
 
 const files = [...new Set(execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard', '*.html'], { encoding: 'utf8' }).trim().split('\n'))]
   .filter(file => !/^google[a-f0-9]+\.html$/i.test(file));
