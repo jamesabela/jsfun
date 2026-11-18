@@ -1,6 +1,6 @@
 # Year 8 Python — Teacher Guide & Solutions
 
-This guide accompanies `Y8/index.html` and the 25 PRIMM lessons in `Y8/lessons/`.
+This guide accompanies `Y8/index.html` and the 29 PRIMM lessons in `Y8/lessons/`.
 
 Teachers can share any single lesson via `pythoncopy.html?url=https://raw.githubusercontent.com/jamesabela/jsfun/refs/heads/main/Y8/lessons/<slug>.py`.
 

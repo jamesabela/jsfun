@@ -168,6 +168,83 @@
     }
     .pill.auto { background: var(--green-soft); color: var(--green); }
     .pill.chain { background: var(--amber-soft); color: var(--amber); }
+    .tier-core { background: #dcfce7; color: #166534; }
+    .tier-standard { background: #fef3c7; color: #92400e; }
+    .tier-extension { background: #fee2e2; color: #991b1b; }
+    body.dark .tier-core { background: #064e3b; color: #6ee7b7; }
+    body.dark .tier-standard { background: #451a03; color: #fcd34d; }
+    body.dark .tier-extension { background: #450a0a; color: #fca5a5; }
+    .unit-section { margin-bottom: 32px; }
+    .unit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+    }
+    .unit-header h2 { font-size: 1.25rem; font-weight: 800; }
+    .trail-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .trail-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .trail-title { font-weight: 800; font-size: 0.92rem; color: var(--blue); }
+    .trail-steps {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+    }
+    .trail-step {
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--text);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .trail-arrow { color: var(--muted); font-weight: 700; }
+    .gclass-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .btn-gclass {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    body.dark .btn-gclass {
+      background: #064e3b;
+      color: #a7f3d0;
+      border-color: #047857;
+    }
     .card h2 { font-size: 1.08rem; font-weight: 800; }
     .card p { font-size: 0.88rem; color: var(--muted); }
     .actions {
@@ -250,13 +327,17 @@
         <button class="filter-btn" data-unit="4">Unit 4: For &amp; Turtle</button>
         <button class="filter-btn" data-unit="5">Unit 5: Functions</button>
       </div>
+      <div class="filter-group" id="tierFilters">
+        <button class="filter-btn active" data-tier="all">All Tiers</button>
+        <button class="filter-btn" data-tier="Core">🟢 Core</button>
+        <button class="filter-btn" data-tier="Standard">🟡 Standard</button>
+        <button class="filter-btn" data-tier="Extension">🔴 Extension</button>
+      </div>
       <input type="search" id="searchBox" class="search-input" placeholder="Search tasks (e.g. turtle, password, budget)...">
     </div>
   </div>
 
-  <main class="wrap">
-    <div class="grid" id="cardsGrid"></div>
-  </main>
+  <main class="wrap" id="unitsContainer"></main>
 
   <footer>
     <p>
@@ -275,6 +356,7 @@
     "title": "Fix the Greeting (Syntax Errors)",
     "kind": "Mini-Course 1A",
     "step": "Step 1 of 4",
+    "tier": "Core",
     "primm": [
       "Predict",
       "Run",
@@ -297,6 +379,7 @@
     "title": "Streaming Profile Tracker",
     "kind": "Mini-Course 1A",
     "step": "Step 2 of 4",
+    "tier": "Core",
     "primm": [
       "Predict",
       "Run",
@@ -319,6 +402,7 @@
     "title": "Video Dashboard Counter",
     "kind": "Mini-Course 1A",
     "step": "Step 3 of 4",
+    "tier": "Standard",
     "primm": [
       "Make"
     ],
@@ -338,6 +422,7 @@
     "title": "Silly Story Bug Hunt",
     "kind": "Mini-Course 1A",
     "step": "Step 4 of 4",
+    "tier": "Standard",
     "primm": [
       "Predict",
       "Modify",
@@ -359,6 +444,7 @@
     "title": "The Shopping Basket Trap (str vs int)",
     "kind": "Mini-Course 1B",
     "step": "Step 1 of 6",
+    "tier": "Core",
     "primm": [
       "Predict",
       "Run",
@@ -381,6 +467,7 @@
     "title": "Concert Ticket Calculator",
     "kind": "Mini-Course 1B",
     "step": "Step 2 of 6",
+    "tier": "Standard",
     "primm": [
       "Predict",
       "Modify"
@@ -401,6 +488,7 @@
     "title": "Pet Age Calculator",
     "kind": "Mini-Course 1B",
     "step": "Step 3 of 6",
+    "tier": "Standard",
     "primm": [
       "Make"
     ],
@@ -420,6 +508,7 @@
     "title": "Theme Park Budget Planner",
     "kind": "Mini-Course 1B",
     "step": "Step 4 of 6",
+    "tier": "Extension",
     "primm": [
       "Investigate",
       "Modify"
@@ -440,6 +529,7 @@
     "title": "Retirement Countdown",
     "kind": "Mini-Course 1B",
     "step": "Step 5 of 6",
+    "tier": "Extension",
     "primm": [
       "Make"
     ],
@@ -459,6 +549,7 @@
     "title": "Two-Number Calculator",
     "kind": "Mini-Course 1B",
     "step": "Step 6 of 6",
+    "tier": "Extension",
     "primm": [
       "Make"
     ],
@@ -478,6 +569,7 @@
     "title": "Comparing Two Numbers (Example)",
     "kind": "Mini-Course 2",
     "step": "Step 1 of 5",
+    "tier": "Core",
     "primm": [
       "Predict",
       "Run",
@@ -499,6 +591,7 @@
     "title": "Alphabet Quiz",
     "kind": "Mini-Course 2",
     "step": "Step 2 of 5",
+    "tier": "Core",
     "primm": [
       "Make"
     ],
@@ -518,6 +611,7 @@
     "title": "Screen Time & TV Checker",
     "kind": "Mini-Course 2",
     "step": "Step 3 of 5",
+    "tier": "Standard",
     "primm": [
       "Make"
     ],
@@ -537,6 +631,7 @@
     "title": "Holiday Allowance Calculator",
     "kind": "Mini-Course 2",
     "step": "Step 4 of 5",
+    "tier": "Standard",
     "primm": [
       "Make"
     ],
@@ -556,6 +651,7 @@
     "title": "Guess the Secret Number (1\u201310)",
     "kind": "Mini-Course 2",
     "step": "Step 5 of 5",
+    "tier": "Extension",
     "primm": [
       "Make"
     ],
@@ -575,6 +671,7 @@
     "title": "WHILE Loop Counter & Countdown (Example)",
     "kind": "Example",
     "step": "Worked Example",
+    "tier": "Core",
     "primm": [
       "Predict",
       "Run",
@@ -596,6 +693,7 @@
     "title": "Count Up to 100",
     "kind": "Mini-Course 3A",
     "step": "Step 1 of 3",
+    "tier": "Core",
     "primm": [
       "Make"
     ],
@@ -615,6 +713,7 @@
     "title": "2 Times Table up to 100",
     "kind": "Mini-Course 3A",
     "step": "Step 2 of 3",
+    "tier": "Standard",
     "primm": [
       "Make"
     ],
@@ -634,6 +733,7 @@
     "title": "Running Total to 100",
     "kind": "Mini-Course 3A",
     "step": "Step 3 of 3",
+    "tier": "Extension",
     "primm": [
       "Make"
     ],
@@ -653,6 +753,7 @@
     "title": "Password Gatekeeper",
     "kind": "Mini-Course 3B",
     "step": "Step 1 of 2",
+    "tier": "Standard",
     "primm": [
       "Predict",
       "Make"
@@ -673,6 +774,7 @@
     "title": "Username & Password Length Validator",
     "kind": "Mini-Course 3B",
     "step": "Step 2 of 2",
+    "tier": "Extension",
     "primm": [
       "Make"
     ],
@@ -692,6 +794,7 @@
     "title": "WHILE vs FOR & List Sum (Example)",
     "kind": "Example",
     "step": "Worked Example",
+    "tier": "Core",
     "primm": [
       "Predict",
       "Run",
@@ -713,6 +816,7 @@
     "title": "Turtle Square with a FOR Loop",
     "kind": "Mini-Course 4",
     "step": "Step 1 of 3",
+    "tier": "Core",
     "primm": [
       "Predict",
       "Run",
@@ -734,6 +838,7 @@
     "title": "Two Squares with penup() & pendown()",
     "kind": "Mini-Course 4",
     "step": "Step 2 of 3",
+    "tier": "Standard",
     "primm": [
       "Predict",
       "Run",
@@ -755,6 +860,7 @@
     "title": "User-Defined Polygon",
     "kind": "Mini-Course 4",
     "step": "Step 3 of 3",
+    "tier": "Extension",
     "primm": [
       "Investigate",
       "Modify",
@@ -776,6 +882,7 @@
     "title": "Your First Subroutine: draw_square()",
     "kind": "Mini-Course 5",
     "step": "Step 1 of 4",
+    "tier": "Core",
     "primm": [
       "Predict",
       "Run",
@@ -797,6 +904,7 @@
     "title": "Fill in the Blanks: draw_triangle()",
     "kind": "Mini-Course 5",
     "step": "Step 2 of 4",
+    "tier": "Core",
     "primm": [
       "Modify"
     ],
@@ -816,6 +924,7 @@
     "title": "Adding Parameters: draw_shape(sides, length)",
     "kind": "Mini-Course 5",
     "step": "Step 3 of 4",
+    "tier": "Standard",
     "primm": [
       "Predict",
       "Run",
@@ -837,6 +946,7 @@
     "title": "Capstone: The House & Village Builder",
     "kind": "Mini-Course 5",
     "step": "Step 4 of 4",
+    "tier": "Extension",
     "primm": [
       "Make"
     ],
@@ -851,37 +961,57 @@
   }
 ];
     let activeUnit = 'all';
-    const grid = document.getElementById('cardsGrid');
+    let activeTier = 'all';
+    const container = document.getElementById('unitsContainer');
     const searchBox = document.getElementById('searchBox');
 
     function escapeHtml(str) {
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
-    function render() {
-      const q = searchBox.value.trim().toLowerCase();
-      const filtered = LESSONS.filter(l => {
-        const unitOk = activeUnit === 'all' || String(l.unit) === activeUnit;
-        const textOk = !q || (l.title + ' ' + l.summary + ' ' + l.kind + ' ' + l.primm.join(' ')).toLowerCase().includes(q);
-        return unitOk && textOk;
-      });
+    function tierBadge(tier) {
+      const icon = tier === 'Core' ? '🟢' : (tier === 'Standard' ? '🟡' : '🔴');
+      return `<span class="pill tier-${tier.toLowerCase()}">${icon} ${tier}</span>`;
+    }
 
-      grid.innerHTML = filtered.map(l => `
+    function gclassShareUrl(lesson) {
+      const title = encodeURIComponent(`Year 8 Python (${lesson.tier}): ${lesson.title}`);
+      const url = encodeURIComponent(lesson.share_url);
+      return `https://classroom.google.com/share?url=${url}&title=${title}`;
+    }
+
+    function gclassPostText(lesson, isMiniCourseStart = false) {
+      const modeNote = isMiniCourseStart
+        ? 'Complete this step and click "Next Level" when prompted to continue through the mini-course.'
+        : 'Open the link below, read the instructions on the right, and test your code in Python Code Lab.';
+      const checkNote = lesson.self_marking
+        ? 'Run the self-marking check and take a screenshot (or paste your code) when all tests pass.'
+        : 'Run your code, check the output/turtle drawing, and attach a screenshot when finished.';
+      return `Assignment: ${lesson.title} [${lesson.tier}]\n${lesson.summary}\n\n${modeNote}\n${checkNote}\n\nStudent Link: ${lesson.share_url}`;
+    }
+
+    function renderCard(l) {
+      const post = escapeHtml(gclassPostText(l, false)).replace(/"/g, '&quot;');
+      return `
         <article class="card">
           <div class="card-meta">
-            <span>Unit ${l.unit} • ${escapeHtml(l.kind)}</span>
-            <span>${escapeHtml(l.step)}</span>
+            <span>${escapeHtml(l.kind)} • ${escapeHtml(l.step)}</span>
+            ${tierBadge(l.tier)}
           </div>
           <h2>${escapeHtml(l.title)}</h2>
           <p>${escapeHtml(l.summary)}</p>
           <div class="tag-row">
             ${l.primm.map(p => `<span class="pill">${escapeHtml(p)}</span>`).join('')}
             ${l.self_marking ? '<span class="pill auto">Self-Marking</span>' : ''}
-            ${l.next_slug ? '<span class="pill chain">Has Next Step</span>' : (l.end_title ? '<span class="pill chain">Certificate End</span>' : '')}
+            ${l.next_slug ? '<span class="pill chain">→ Next Step</span>' : (l.end_title ? '<span class="pill chain">🏆 Certificate</span>' : '')}
           </div>
           <div class="actions">
             <a class="btn btn-primary" href="${l.launch_rel}" target="_blank" rel="noopener noreferrer">Open in Code Lab</a>
-            <button class="btn btn-secondary" type="button" data-copy="${l.share_url}">Copy Student Link</button>
+            <button class="btn btn-secondary" type="button" data-copy="${l.share_url}">Copy Link</button>
+          </div>
+          <div class="gclass-row">
+            <button class="btn-gclass" type="button" data-copy-post="${post}">📋 Copy GClassroom Post</button>
+            <a class="btn-gclass" href="${gclassShareUrl(l)}" target="_blank" rel="noopener noreferrer">🎓 Share to GClassroom</a>
           </div>
           <details>
             <summary>Teacher Answer &amp; Notes</summary>
@@ -889,9 +1019,66 @@
             <p class="note">${escapeHtml(l.teacher_note)}</p>
           </details>
         </article>
-      `).join('');
+      `;
+    }
 
-      grid.querySelectorAll('button[data-copy]').forEach(btn => {
+    function render() {
+      const q = searchBox.value.trim().toLowerCase();
+      const filtered = LESSONS.filter(l => {
+        const unitOk = activeUnit === 'all' || String(l.unit) === activeUnit;
+        const tierOk = activeTier === 'all' || l.tier === activeTier;
+        const textOk = !q || (l.title + ' ' + l.summary + ' ' + l.kind + ' ' + l.tier + ' ' + l.primm.join(' ')).toLowerCase().includes(q);
+        return unitOk && tierOk && textOk;
+      });
+
+      const units = [...new Set(filtered.map(l => l.unit))];
+      if (units.length === 0) {
+        container.innerHTML = '<p style="color:var(--muted);padding:24px 0;">No tasks match your current filters.</p>';
+        return;
+      }
+
+      container.innerHTML = units.map(u => {
+        const unitLessons = filtered.filter(l => l.unit === u);
+        const unitName = unitLessons[0].unit_name;
+        const allUnitLessons = LESSONS.filter(l => l.unit === u);
+        const miniCourseNames = [...new Set(allUnitLessons.filter(l => l.kind.startsWith('Mini-Course')).map(l => l.kind))];
+
+        const trailsHtml = miniCourseNames.map(mc => {
+          const steps = allUnitLessons.filter(l => l.kind === mc);
+          const first = steps[0];
+          const mcPost = escapeHtml(gclassPostText(first, true)).replace(/"/g, '&quot;');
+          const stepsHtml = steps.map((s, idx) =>
+            `<a class="trail-step" href="${s.launch_rel}" target="_blank" rel="noopener noreferrer">${idx + 1}. ${escapeHtml(s.title)} (${s.tier})</a>`
+          ).join('<span class="trail-arrow">→</span>');
+          return `
+            <div class="trail-box">
+              <div class="trail-top">
+                <span class="trail-title">🗺️ ${escapeHtml(mc)} (${steps.length} linked steps → 🏆 Certificate)</span>
+                <div class="gclass-row">
+                  <button class="btn-gclass" type="button" data-copy-post="${mcPost}">📋 Copy GClassroom Mini-Course Post</button>
+                  <a class="btn-gclass" href="${gclassShareUrl(first)}" target="_blank" rel="noopener noreferrer">🎓 Share Step 1 to GClassroom</a>
+                </div>
+              </div>
+              <div class="trail-steps">${stepsHtml}</div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <section class="unit-section">
+            <div class="unit-header">
+              <h2>${escapeHtml(unitName)}</h2>
+              <span style="font-size:0.84rem;color:var(--muted);font-weight:600;">${unitLessons.length} task(s) shown</span>
+            </div>
+            ${trailsHtml}
+            <div class="grid">
+              ${unitLessons.map(renderCard).join('')}
+            </div>
+          </section>
+        `;
+      }).join('');
+
+      container.querySelectorAll('button[data-copy]').forEach(btn => {
         btn.addEventListener('click', async () => {
           const url = btn.getAttribute('data-copy');
           try {
@@ -904,14 +1091,37 @@
           }
         });
       });
+
+      container.querySelectorAll('button[data-copy-post]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const text = btn.getAttribute('data-copy-post');
+          try {
+            await navigator.clipboard.writeText(text);
+            const old = btn.textContent;
+            btn.textContent = 'Copied Post!';
+            setTimeout(() => { btn.textContent = old; }, 1400);
+          } catch {
+            prompt('Copy this Google Classroom post:', text);
+          }
+        });
+      });
     }
 
     document.getElementById('unitFilters').addEventListener('click', e => {
       const btn = e.target.closest('.filter-btn');
       if (!btn) return;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#unitFilters .filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeUnit = btn.dataset.unit;
+      render();
+    });
+
+    document.getElementById('tierFilters').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('#tierFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTier = btn.dataset.tier;
       render();
     });
 
