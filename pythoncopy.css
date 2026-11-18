@@ -27,7 +27,7 @@
     body {
       margin: 0;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      padding-top: var(--header-height);
+      padding-top: 0;
       background: #ffffff;
       color: #111827;
       min-height: 100vh;
@@ -36,17 +36,16 @@
 
     /* Mode Switching Banner */
     #modeHeader {
-      position: fixed;
+      position: sticky;
       top: 0;
-      left: 0;
-      right: 0;
-      height: var(--header-height);
+      min-height: var(--header-height);
+      height: auto;
       background: #ffffff;
       border-bottom: 1px solid #e2e8f0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      padding: 8px 24px;
       z-index: 1000;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
@@ -4423,6 +4422,13 @@
     body.distraction-free-mode {
       --header-height: 0px !important;
       padding-top: 0 !important;
+    }
+
+    html.distraction-free-mode #jsfun-analytics-banner,
+    body.distraction-free-mode #jsfun-analytics-banner,
+    html.minimal-mode #jsfun-analytics-banner,
+    body.minimal-mode #jsfun-analytics-banner {
+      padding-right: 112px;
     }
 
     html.activity-tracking-mode:not(.distraction-free-mode) #modeHeader,
