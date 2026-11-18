@@ -1182,7 +1182,7 @@
       <p style="margin:0 0 8px;font-size:0.85rem;color:var(--text-muted);">Enter your name to generate a printable PDF certificate of your Turtle Quest progress (generated locally on your device).</p>
       <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
         <input type="text" id="certNameInput" placeholder="Enter your name..." maxlength="60" aria-label="Student name for certificate"
-          style="flex:1;min-width:180px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit;font-size:0.9rem;">
+          style="flex:1;min-width:180px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit;font-size:16px;">
         <button type="button" class="btn btn-success" id="btnDownloadCert">⬇️ Download PDF</button>
       </div>
       <div id="certStatus" style="margin-top:6px;font-size:0.82rem;color:var(--danger);"></div>
@@ -1465,11 +1465,30 @@
   els.btnCopy.addEventListener('click', async () => {
     const code = getCodeString();
     try {
-      await navigator.clipboard.writeText(code);
-      showFeedback('✅ Python code copied to clipboard! You can paste it into Python Code Lab.', 'success');
-    } catch (_) {
-      showFeedback('Select the code in Text Mode to copy it.', 'info');
-    }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(code);
+        showFeedback('✅ Python code copied to clipboard! You can paste it into Python Code Lab.', 'success');
+        return;
+      }
+    } catch (_) { /* fall through to textarea fallback */ }
+
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = code;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      const ok = document.execCommand('copy');
+      ta.remove();
+      if (ok) {
+        showFeedback('✅ Python code copied to clipboard! You can paste it into Python Code Lab.', 'success');
+        return;
+      }
+    } catch (_) { /* ignore */ }
+    showFeedback('Switch to Text Mode to select and copy your Python code.', 'info');
   });
 
   function showHintModal() {

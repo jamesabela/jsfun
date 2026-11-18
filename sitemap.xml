@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://jamesabela.github.io/jsfun/</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/advent.html</loc>
@@ -34,7 +34,7 @@
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/computing.html</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/connections.html</loc>
@@ -126,7 +126,7 @@
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/privacy.html</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/python2blocks.html</loc>
@@ -142,7 +142,7 @@
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/pythoncopy.html</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/pythonmanual.html</loc>
@@ -150,7 +150,7 @@
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/pythonmobile.html</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/reorder.html</loc>
@@ -181,8 +181,12 @@
     <lastmod>2026-11-16</lastmod>
   </url>
   <url>
+    <loc>https://jamesabela.github.io/jsfun/turtlepuzzles.html</loc>
+    <lastmod>2026-11-18</lastmod>
+  </url>
+  <url>
     <loc>https://jamesabela.github.io/jsfun/whatsnew.html</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://jamesabela.github.io/jsfun/widget_builder.html</loc>
