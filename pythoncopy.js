@@ -1,4 +1,4 @@
-window.pythonCopyVersion = 40;
+window.pythonCopyVersion = 42;
 let currentURL = '';
 let executionCancelled = false;
 let hasUnsavedChanges = false;
@@ -1013,6 +1013,10 @@ import sys, builtins
 # Initialization complete
         `);
 
+    if (window.PythonCopyErrors && window.PythonCopyErrors.PYTHON_ERROR_ANALYZER_CODE) {
+      p.runPython(window.PythonCopyErrors.PYTHON_ERROR_ANALYZER_CODE);
+    }
+
     // Write custom virtual turtle module to VFS
     p.FS.writeFile('/home/pyodide/turtle.py', turtleShimPythonCode);
 
@@ -1270,6 +1274,71 @@ function handleEditorTabKey(event) {
     editor.selectionStart = Math.max(lineStart, start - removedBeforeSelection);
     editor.selectionEnd = Math.max(editor.selectionStart, end - totalRemoved);
   }
+  handleProgrammaticEdit('Typing');
+}
+
+function handleEditorCommentKey(event) {
+  if (!(event.metaKey || event.ctrlKey) || event.altKey) return;
+  if (event.key !== '/' && event.code !== 'Slash') return;
+  if (editor.readOnly) return;
+
+  event.preventDefault();
+  const value = editor.value;
+  const start = editor.selectionStart;
+  const end = editor.selectionEnd;
+
+  const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+  const effectiveEnd = end > start && value[end - 1] === '\n' ? end - 1 : end;
+  const nextNewline = value.indexOf('\n', effectiveEnd);
+  const lineEnd = nextNewline === -1 ? value.length : nextNewline;
+
+  const selectedBlock = value.slice(lineStart, lineEnd);
+  const lines = selectedBlock.split('\n');
+  const nonEmptyLines = lines.filter(line => line.trim().length > 0);
+  const targetLines = nonEmptyLines.length > 0 ? nonEmptyLines : lines;
+  const allCommented = targetLines.every(line => /^[ \t]*#/.test(line));
+
+  let firstLineDelta = 0;
+  let totalDelta = 0;
+  let updatedLines;
+
+  if (allCommented) {
+    updatedLines = lines.map((line, idx) => {
+      const match = line.match(/^([ \t]*)#( ?)/);
+      if (!match) return line;
+      const removedLen = 1 + match[2].length;
+      if (idx === 0) firstLineDelta = -removedLen;
+      totalDelta -= removedLen;
+      return match[1] + line.slice(match[0].length);
+    });
+  } else {
+    let minIndent = Infinity;
+    for (const line of targetLines) {
+      const indentLen = line.match(/^[ \t]*/)[0].length;
+      if (indentLen < minIndent) minIndent = indentLen;
+    }
+    if (!isFinite(minIndent)) minIndent = 0;
+
+    updatedLines = lines.map((line, idx) => {
+      if (nonEmptyLines.length > 0 && line.trim().length === 0) return line;
+      if (idx === 0) firstLineDelta = 2;
+      totalDelta += 2;
+      return line.slice(0, minIndent) + '# ' + line.slice(minIndent);
+    });
+  }
+
+  const updatedBlock = updatedLines.join('\n');
+  editor.setRangeText(updatedBlock, lineStart, lineEnd, 'select');
+
+  if (start === end) {
+    const newPos = Math.max(lineStart, start + firstLineDelta);
+    editor.selectionStart = newPos;
+    editor.selectionEnd = newPos;
+  } else {
+    editor.selectionStart = Math.max(lineStart, start + firstLineDelta);
+    editor.selectionEnd = Math.max(editor.selectionStart, end + totalDelta);
+  }
+
   handleProgrammaticEdit('Typing');
 }
 
@@ -2822,6 +2891,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   editor.addEventListener('keydown', (event) => {
+    handleEditorCommentKey(event);
     handleEditorTabKey(event);
     handleEditorEnterKey(event);
   });
@@ -5438,7 +5508,7 @@ async function runCurrentCode(options = {}) {
     };
 
     try {
-      await pyodideInstance.runPythonAsync(`
+      const runResultJson = await pyodideInstance.runPythonAsync(`
 import sys, builtins, json, time, js
 
 class InputInterrupt(BaseException):
@@ -5522,23 +5592,39 @@ if '/home/pyodide' not in sys.path:
     sys.path.insert(0, '/home/pyodide')
 importlib.invalidate_caches()
 
+_user_ns = {"__name__": "__main__"}
+_run_result = {"ok": True}
 sys.settrace(_timeout_trace)
 try:
-    exec(compile(user_code, '<user_code>', 'exec'), globals())
+    exec(compile(user_code, '<user_code>', 'exec'), _user_ns)
+except (InputInterrupt, FileInterrupt):
+    raise
+except BaseException as _exc:
+    sys.settrace(None)
+    if hasattr(builtins, '_jsfun_analyze_error'):
+        _run_result = {"ok": False, "error": builtins._jsfun_analyze_error(_exc, user_code, _user_ns)}
+    else:
+        raise
 finally:
     sys.settrace(None)
     # Restore original input and open
     builtins.input = builtins._original_run_input
     builtins.open = builtins._original_run_open
     # Clean globals
-    for var in ['_start_time', '_limit', '_timeout_trace', '_timeout_raised', '_step_count', 'TimeoutInterrupt', 'user_code', 'custom_run_input', 'InputInterrupt', 'FileInterrupt', 'custom_run_open']:
+    for var in ['_start_time', '_limit', '_timeout_trace', '_timeout_raised', '_step_count', 'TimeoutInterrupt', 'user_code', 'custom_run_input', 'InputInterrupt', 'FileInterrupt', 'custom_run_open', '_user_ns']:
         if var in globals():
             del globals()[var]
+json.dumps(_run_result)
           `);
 
+      const runResult = runResultJson ? JSON.parse(runResultJson) : { ok: true };
       executionFinished = true;
       hideConsoleInput();
-      setRunnerStatus('Finished successfully.');
+      if (runResult && runResult.ok === false && runResult.error) {
+        handlePythonError(runResult.error);
+      } else {
+        setRunnerStatus('Finished successfully.');
+      }
     } catch (err) {
       // Check if this was an input interrupt
       if (err.message && err.message.includes("InputInterrupt")) {
@@ -5603,120 +5689,81 @@ finally:
   }
 }
 
-function handlePythonError(err) {
-  const errStr = String(err);
+function jumpToEditorLine(lineNum, colNum) {
+  if (!lineNum || isNaN(lineNum)) return;
+  highlightErrorLine(lineNum);
+  if (currentAppMode === 'display' || !editor) return;
 
-  // Clear outputEl but preserve the files loaded banner if it exists
-  const banner = outputEl.querySelector('.loaded-files-banner');
-  outputEl.innerHTML = '';
-  if (banner) {
-    outputEl.appendChild(banner);
+  const lines = editor.value.split('\n');
+  const clampedLine = Math.max(1, Math.min(lineNum, lines.length));
+  let offset = 0;
+  for (let i = 0; i < clampedLine - 1; i++) {
+    offset += lines[i].length + 1;
+  }
+  const lineText = lines[clampedLine - 1] || '';
+  const colOffset = colNum && colNum > 1 ? Math.min(colNum - 1, lineText.length) : 0;
+  const cursorPos = offset + colOffset;
+
+  editor.focus();
+  editor.setSelectionRange(cursorPos, cursorPos);
+}
+
+function handlePythonError(errOrInfo, options) {
+  const opts = options || {};
+  const errorHelper = window.PythonCopyErrors;
+
+  let errorInfo;
+  if (errOrInfo && typeof errOrInfo === 'object' && typeof errOrInfo.title === 'string') {
+    errorInfo = errOrInfo;
+  } else if (errorHelper) {
+    errorInfo = errorHelper.analyzeFallbackError(errOrInfo, editor ? editor.value : '');
+  } else {
+    errorInfo = {
+      errorType: 'Error',
+      rawMessage: String(errOrInfo),
+      cleanTraceback: String(errOrInfo),
+      line: null,
+      column: null,
+      endColumn: null,
+      codeLine: '',
+      title: 'There was an error while running the code.',
+      explanation: String(errOrInfo),
+      hint: '',
+    };
   }
 
-  const errPre = document.createElement('pre');
-  errPre.style.cssText = 'color: #ef4444; font-family: inherit; margin: 0; white-space: pre-wrap; font-size: inherit; line-height: 1.5;';
-  errPre.textContent = errStr;
-  outputEl.appendChild(errPre);
-
-  setRunnerStatus('There was an error while running the code.');
-
-  const lineMatch = errStr.match(/File\s+"[^"]+",\s+line\s+(\d+)/i) ||
-    errStr.match(/line\s+(\d+)/i);
-
-  let lineNum = null;
-  if (lineMatch) {
-    lineNum = parseInt(lineMatch[1], 10);
-    if (!isNaN(lineNum)) {
-      highlightErrorLine(lineNum);
+  // Clear outputEl unless caller wants to keep prior output, preserving loaded-files banner
+  if (!opts.preserveOutput) {
+    const banner = outputEl.querySelector('.loaded-files-banner');
+    outputEl.innerHTML = '';
+    if (banner) {
+      outputEl.appendChild(banner);
     }
   }
 
-  let tipTitle = "💡 Python Tip";
-  let tipBody = "";
-
-  if (errStr.includes("SyntaxError")) {
-    tipTitle = "💡 Syntax Error Tip";
-    if (errStr.includes("was never closed") || errStr.includes("unmatched")) {
-      tipBody = "It looks like you opened a parenthesis <code>(</code>, square bracket <code>[</code>, or curly brace <code>{</code>, but forgot to close it. Check the line containing the error and ensure all brackets/quotes match up.";
-    } else if (errStr.includes("expected ':'") || errStr.includes("expected inline block") || /invalid syntax/i.test(errStr)) {
-      let isMissingColon = false;
-      let isComparisonError = false;
-      if (lineNum !== null) {
-        const lines = editor.value.split('\n');
-        const targetLine = lines[lineNum - 1] ? lines[lineNum - 1].trim() : "";
-        if (targetLine) {
-          const startsControl = /^(if|elif|else|for|while|def|class)\b/.test(targetLine);
-          if (startsControl && !targetLine.endsWith(':')) {
-            isMissingColon = true;
-          }
-          if (/^(if|elif|while)\b/.test(targetLine) && /\s+=\s+/.test(targetLine) && !/\s+==\s+/.test(targetLine)) {
-            isComparisonError = true;
-          }
-        }
-      }
-
-      if (isMissingColon) {
-        tipBody = "Did you forget a colon <code>:</code> at the end of your statement? Statements starting with <code>if</code>, <code>elif</code>, <code>else</code>, <code>for</code>, <code>while</code>, or <code>def</code> must end with a colon.";
-      } else if (isComparisonError) {
-        tipBody = "It looks like you used a single equals sign <code>=</code> inside a condition. In Python, use double equals <code>==</code> for comparing values, and a single equals <code>=</code> only when assigning values to variables.";
-      } else {
-        tipBody = "Check this line for typos or extra characters. Ensure all statements are written correctly and end with colons if they define loops, functions, or conditionals.";
-      }
-    } else {
-      tipBody = "Check this line for typos, missing characters, or incorrect formatting. Double-check that loops, functions, and conditional blocks end with a colon <code>:</code>.";
-    }
-  } else if (errStr.includes("IndentationError") || errStr.includes("TabError")) {
-    tipTitle = "💡 Indentation Error Tip";
-    tipBody = "Python is very strict about spaces (indentation). Make sure that the code inside your functions, loops, or <code>if</code> blocks is indented with exactly the same number of spaces (usually 4 spaces). Avoid mixing tabs and spaces.";
-  } else if (errStr.includes("NameError")) {
-    tipTitle = "💡 Name Error Tip";
-    const nameMatch = errStr.match(/name\s+'([^']+)'\s+is\s+not\s+defined/i);
-    const name = nameMatch ? nameMatch[1] : null;
-    if (name) {
-      tipBody = `You tried to use <code>${name}</code>, but Python doesn't know what that is. Check if you spelled it correctly, or if you forgot to define/assign it first (e.g., <code>${name} = ...</code>).`;
-    } else {
-      tipBody = "You used a variable or function name that has not been defined. Check for spelling typos, capitalization, or missing assignments.";
-    }
-  } else if (errStr.includes("ZeroDivisionError")) {
-    tipTitle = "💡 Zero Division Tip";
-    tipBody = "You're trying to divide a number by zero. Mathematically this is not defined, so make sure the denominator is not zero.";
-  } else if (errStr.includes("TypeError")) {
-    tipTitle = "💡 Type Error Tip";
-    if (errStr.includes("can only concatenate") || errStr.includes("must be str, not int") || errStr.includes("unsupported operand type")) {
-      tipBody = "You're trying to combine different types of data (like adding text and numbers together). Use the <code>str()</code> function to convert numbers to text first (e.g., <code>\"Age: \" + str(age)</code>).";
-    } else {
-      tipBody = "You are trying to perform an operation on incompatible types of data. Double-check the types of variables you are combining or passing to functions.";
-    }
-  } else if (errStr.includes("ModuleNotFoundError")) {
-    tipTitle = "💡 Module Not Found Tip";
-    tipBody = "You're trying to import a module that isn't supported in this browser environment. Stick to standard browser-safe modules: <code>random</code>, <code>math</code>, <code>statistics</code>, <code>datetime</code>, <code>string</code>, <code>turtle</code>, and <code>time</code>.";
-  } else if (errStr.includes("IndexError")) {
-    tipTitle = "💡 Index Error Tip";
-    tipBody = "You're trying to access a list element that doesn't exist. Remember that Python list indexes start at <code>0</code>, so the last element of a list of length <code>N</code> is at index <code>N - 1</code>.";
-  } else if (errStr.includes("KeyError")) {
-    tipTitle = "💡 Key Error Tip";
-    tipBody = "You're trying to look up a key in a dictionary that doesn't exist. Make sure the key exists or use the dictionary's <code>.get()</code> method to provide a default value.";
-  } else if (errStr.includes("TimeoutException") || errStr.includes("InfiniteLoopTimeout") || /timeout/i.test(errStr)) {
-    tipTitle = "💡 Infinite Loop Warning";
-    tipBody = "Your code took too long to run and was stopped. This usually happens when you have an **infinite loop** (like a <code>while</code> loop that never ends) or a function calling itself forever. Check your loop conditions and ensure they eventually become false!";
+  const lineNum = typeof errorInfo.line === 'number' && !isNaN(errorInfo.line) ? errorInfo.line : null;
+  if (lineNum !== null) {
+    highlightErrorLine(lineNum);
   }
 
-  if (tipBody) {
-    const tipContainer = document.createElement('div');
-    tipContainer.className = 'friendly-error-tip';
+  if (errorHelper) {
+    const mode = errorHelper.getErrorDisplayMode(window.location.search);
+    const rendered = errorHelper.renderErrorElement(errorInfo, {
+      mode,
+      onJumpToLine: jumpToEditorLine,
+    });
+    outputEl.appendChild(rendered);
+  } else {
+    const errPre = document.createElement('pre');
+    errPre.style.cssText = 'color: #ef4444; font-family: inherit; margin: 0; white-space: pre-wrap; font-size: inherit; line-height: 1.5;';
+    errPre.textContent = errorInfo.cleanTraceback || errorInfo.rawMessage;
+    outputEl.appendChild(errPre);
+  }
 
-    const header = document.createElement('div');
-    header.className = 'friendly-error-header';
-    header.innerHTML = tipTitle;
-
-    const body = document.createElement('div');
-    body.className = 'friendly-error-body';
-    body.innerHTML = tipBody;
-
-    tipContainer.appendChild(header);
-    tipContainer.appendChild(body);
-
-    outputEl.appendChild(tipContainer);
+  if (lineNum !== null) {
+    setRunnerStatus(`Error on line ${lineNum}.`);
+  } else {
+    setRunnerStatus('There was an error while running the code.');
   }
 }
 
@@ -6014,19 +6061,25 @@ def _run_trace():
     sys.settrace(_trace_hook)
     status = "finished"
     pending_prompt = ""
+    error_info = None
+    _trace_ns = {"__name__": "__main__"}
     try:
-        exec(compile(source_code, '<user_code>', 'exec'), {"__name__": "__main__"})
+        exec(compile(source_code, '<user_code>', 'exec'), _trace_ns)
     except TraceInterrupt as ti:
         status = "waiting_input"
         pending_prompt = ti.prompt_text
     except BaseException as e:
-        _trace_output.append(str(e) + '\\n')
+        sys.settrace(None)
+        if hasattr(builtins, '_jsfun_analyze_error'):
+            error_info = builtins._jsfun_analyze_error(e, source_code, _trace_ns)
+        else:
+            _trace_output.append(str(e) + '\\n')
         status = "error"
     finally:
         sys.settrace(None)
         builtins.print = getattr(builtins, '_original_print', builtins.print)
         builtins.input = getattr(builtins, '_original_input', builtins.input)
-    return {"log": _trace_log, "output": _trace_output, "status": status, "pending_prompt": pending_prompt}
+    return {"log": _trace_log, "output": _trace_output, "status": status, "pending_prompt": pending_prompt, "error_info": error_info}
 `;
   try {
     pyodideInstance.globals.set("source_code", source);
@@ -6063,11 +6116,15 @@ def _run_trace():
 
 
     if (displayTraceStatus === 'error') {
-      setRunnerStatus('Trace Error.');
-      // Add error details to the output window for better debugging
-      const lastOut = outputArr.length > 0 ? outputArr[outputArr.length - 1] : "";
-      if (lastOut) {
-        outputEl.textContent += "\n--- Error ---\n" + lastOut;
+      if (res.error_info) {
+        outputEl.textContent = displayFinalOutput;
+        handlePythonError(res.error_info, { preserveOutput: Boolean(displayFinalOutput) });
+      } else {
+        setRunnerStatus('Trace Error.');
+        const lastOut = outputArr.length > 0 ? outputArr[outputArr.length - 1] : "";
+        if (lastOut) {
+          outputEl.textContent += "\n--- Error ---\n" + lastOut;
+        }
       }
       const traceTableContainer = document.getElementById('traceTableContainer');
       if (traceTableContainer) traceTableContainer.innerHTML = '';
