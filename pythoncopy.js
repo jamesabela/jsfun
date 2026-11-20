@@ -1,4 +1,4 @@
-window.pythonCopyVersion = 42;
+window.pythonCopyVersion = 43;
 let currentURL = '';
 let executionCancelled = false;
 let hasUnsavedChanges = false;
@@ -1367,6 +1367,7 @@ function handleEditorEnterKey(event) {
   event.preventDefault();
   editor.setRangeText(insertText, start, end, 'end');
   handleProgrammaticEdit('Typing');
+  requestAnimationFrame(() => syncLineNumberScroll());
 }
 
 function applyBlocksPreviewColorMode() {
@@ -1477,7 +1478,7 @@ function startBlankBlocksFile() {
   editor.value = '';
   updatePuzzleButtonVisibility();
   markCurrentEditorCodeSaved('');
-  displayCode.textContent = '';
+  displayCode.textContent = ''; displayCode.dataset.renderedRaw = '';
   document.getElementById('urlInput').value = '';
   document.getElementById('workspace').style.display = 'grid';
   document.getElementById('inputContainer').style.display = 'none';
@@ -1598,8 +1599,8 @@ function updateAppMode() {
       editor.style.display = 'none';
       displayEditor.style.display = 'block';
 
-      displayCode.textContent = editor.value;
-      Prism.highlightElement(displayCode);
+      renderHighlightedEditorCode(true);
+      syncLineNumberScroll();
 
       teacherControlsRow.style.display = 'none';
       teachControlsRow.style.display = 'flex';
@@ -1626,8 +1627,8 @@ function updateAppMode() {
       editor.style.display = 'block';
       displayEditor.style.display = 'block';
 
-      displayCode.textContent = editor.value;
-      Prism.highlightElement(displayCode);
+      renderHighlightedEditorCode(true);
+      syncLineNumberScroll();
 
       teacherControlsRow.style.display = 'flex';
       teachControlsRow.style.display = 'none';
@@ -1651,8 +1652,8 @@ function updateAppMode() {
       editor.style.display = 'block';
       displayEditor.style.display = 'block';
 
-      displayCode.textContent = editor.value;
-      Prism.highlightElement(displayCode);
+      renderHighlightedEditorCode(true);
+      syncLineNumberScroll();
 
       teacherControlsRow.style.display = 'flex';
       teachControlsRow.style.display = 'none';
@@ -2154,7 +2155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       editor.value = strippedDecodedCode;
       markCurrentEditorCodeSaved(strippedDecodedCode);
-      displayCode.textContent = '';
+      displayCode.textContent = ''; displayCode.dataset.renderedRaw = '';
       document.getElementById('urlInput').value = '';
       document.getElementById('workspace').style.display = 'grid';
       document.getElementById('inputContainer').style.display = 'none';
@@ -2870,10 +2871,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const highlightLayer = document.getElementById('highlightLayer');
     if (highlightLayer) highlightLayer.innerHTML = '';
     updateLineNumbers();
-    if (currentAppMode === 'edit' || currentAppMode === 'turtle') {
-      displayCode.textContent = editor.value;
-      Prism.highlightElement(displayCode);
-    }
+    requestAnimationFrame(() => syncLineNumberScroll());
     analyseCodeAndUpdateMessage(true);
     updateBlocksButtonState();
     updateEditorActionButtons();
@@ -3165,15 +3163,22 @@ function getCodeLineHeight() {
   return Number.isFinite(parsed) ? parsed : 24;
 }
 
+function renderHighlightedEditorCode(force) {
+  const raw = editor.value;
+  if (!force && displayCode.dataset.renderedRaw === raw) return;
+  displayCode.dataset.renderedRaw = raw;
+  // HTML <pre><code> collapses a trailing newline, whereas <textarea> renders
+  // that empty last line. Appending a space keeps scrollHeight identical.
+  displayCode.textContent = raw.endsWith('\n') ? raw + ' ' : raw;
+  if (typeof Prism !== 'undefined') {
+    Prism.highlightElement(displayCode);
+  }
+}
+
 function updateLineNumbers() {
   // The textarea is transparent; keep its visible code layer in sync after
   // URL loads and other programmatic edits that do not fire input events.
-  if (displayCode.textContent !== editor.value) {
-    displayCode.textContent = editor.value;
-    if (typeof Prism !== 'undefined') {
-      Prism.highlightElement(displayCode);
-    }
-  }
+  renderHighlightedEditorCode(false);
   const lines = Math.max(1, editor.value.split('\n').length);
   let nums = '';
   for (let i = 1; i <= lines; i++) {
@@ -3184,18 +3189,33 @@ function updateLineNumbers() {
 }
 
 function syncLineNumberScroll(event) {
-  if (event && event.target) {
-    const target = event.target;
-    if (target === editor) {
-      displayEditor.scrollTop = editor.scrollTop;
-      displayEditor.scrollLeft = editor.scrollLeft;
-    } else if (target === displayEditor) {
-      editor.scrollTop = displayEditor.scrollTop;
-      editor.scrollLeft = displayEditor.scrollLeft;
+  // Match bottom padding to any horizontal scrollbar in the textarea so
+  // displayEditor and lineNumbers can always scroll to the exact same maxScrollTop.
+  if (currentAppMode !== 'display') {
+    const hScrollbarHeight = Math.max(0, editor.offsetHeight - editor.clientHeight);
+    const syncedBottomPadding = (14 + hScrollbarHeight) + 'px';
+    if (displayEditor.style.paddingBottom !== syncedBottomPadding) {
+      displayEditor.style.paddingBottom = syncedBottomPadding;
+    }
+    if (lineNumbers.style.paddingBottom !== syncedBottomPadding) {
+      lineNumbers.style.paddingBottom = syncedBottomPadding;
     }
   }
-  const scrollTop = currentAppMode === 'display' ? displayEditor.scrollTop : editor.scrollTop;
-  const scrollLeft = currentAppMode === 'display' ? displayEditor.scrollLeft : editor.scrollLeft;
+
+  const source = (event && event.target)
+    ? event.target
+    : (currentAppMode === 'display' ? displayEditor : editor);
+
+  if (source === editor) {
+    displayEditor.scrollTop = editor.scrollTop;
+    displayEditor.scrollLeft = editor.scrollLeft;
+  } else if (source === displayEditor) {
+    editor.scrollTop = displayEditor.scrollTop;
+    editor.scrollLeft = displayEditor.scrollLeft;
+  }
+
+  const scrollTop = source === displayEditor ? displayEditor.scrollTop : editor.scrollTop;
+  const scrollLeft = source === displayEditor ? displayEditor.scrollLeft : editor.scrollLeft;
   lineNumbers.scrollTop = scrollTop;
   highlightLayer.style.top = (14 - scrollTop) + 'px';
   highlightLayer.style.left = (64 - scrollLeft) + 'px';
@@ -3564,7 +3584,7 @@ function startBlankFile() {
   editor.value = '';
   updatePuzzleButtonVisibility();
   markCurrentEditorCodeSaved('');
-  displayCode.textContent = '';
+  displayCode.textContent = ''; displayCode.dataset.renderedRaw = '';
   document.getElementById('urlInput').value = '';
   document.getElementById('workspace').style.display = 'grid';
   document.getElementById('inputContainer').style.display = 'none';
@@ -5782,6 +5802,7 @@ function highlightErrorLine(lineNum) {
   if (yPos < activeView.scrollTop || yPos > activeView.scrollTop + viewRect.height - 40) {
     activeView.scrollTop = Math.max(0, yPos - viewRect.height / 2);
   }
+  syncLineNumberScroll();
 }
 
 
@@ -6519,6 +6540,7 @@ function highlightLine(lineNum) {
   if (yPos < activeView.scrollTop || yPos > activeView.scrollTop + viewRect.height - 40) {
     activeView.scrollTop = Math.max(0, yPos - viewRect.height / 2);
   }
+  syncLineNumberScroll();
 }
 
 async function displayStep() {

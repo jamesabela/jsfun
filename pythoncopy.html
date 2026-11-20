@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-title" content="Python Code Lab">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
     id="prism-theme">
-  <link rel="stylesheet" href="pythoncopy.css?v=42">
+  <link rel="stylesheet" href="pythoncopy.css?v=43">
   <style id="dynamicLinksStyle">
     /* Extra dynamic overrides if needed */
   </style>
@@ -26,7 +26,7 @@
       document.documentElement.classList.add('activity-tracking-mode');
     }
     window.addEventListener('load', () => {
-      if (window.pythonCopyVersion !== 42) {
+      if (window.pythonCopyVersion !== 43) {
         console.warn('Stale pythoncopy.js version detected. Cleaning cache and reloading...');
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -74,7 +74,7 @@
         <path d="M4 12H2" />
         <path d="M2 9h2" />
       </svg>
-      Python Code Lab 5.0
+      Python Code Lab 5.0.1
       <span class="mode-badge edit-badge">Edit</span>
       <span class="mode-badge display-badge">Display</span>
       <span class="mode-badge turtle-badge">Turtle</span>
@@ -940,8 +940,8 @@
   <script src="https://unpkg.com/@blockly/plugin-workspace-search@10.1.1/dist/index.js"></script>
   <script src="pythoncopyblocks.js"></script>
   <script src="pythoncopy-activity.js"></script>
-  <script src="pythoncopy-errors.js?v=42"></script>
-  <script src="pythoncopy.js?v=42"></script>
+  <script src="pythoncopy-errors.js?v=43"></script>
+  <script src="pythoncopy.js?v=43"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
