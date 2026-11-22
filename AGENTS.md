@@ -14,5 +14,6 @@
 - Keep local draft deletion understandable; never clear all origin storage automatically. Remember that GitHub Pages projects can share origin storage.
 - Keep the English privacy notice aligned with implemented behaviour. Add translations only when requested or when an applicable requirement has been established. Do not invent contact details, lawful bases, retention periods or contractual safeguards.
 - Update the offline cache version and include privacy assets when changing the Python Code Lab application shell.
+- Keep Python Code Lab's transparent `#editor`, `#displayEditor`, and `.line-numbers` layers aligned via the shared `--editor-*` CSS variables and `renderHighlightedEditorCode()`/`syncLineNumberScroll()`; run `node tests/pythoncopy-editor-sync.mjs` and `node tests/pythoncopy-errors.mjs` after Python Code Lab changes.
 - Run node tests/privacy.mjs and relevant existing tests for privacy changes. Check mobile and offline behaviour for affected applications.
 - Do not describe a technical audit as proof of legal compliance. Publication and external account configuration require the user's authorisation.

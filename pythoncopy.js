@@ -1,4 +1,4 @@
-window.pythonCopyVersion = 43;
+window.pythonCopyVersion = 44;
 let currentURL = '';
 let executionCancelled = false;
 let hasUnsavedChanges = false;

@@ -1390,13 +1390,20 @@
     }
 
     .editor-shell {
+      --editor-gutter-width: 64px;
+      --editor-pad-y: 14px;
+      --editor-pad-x: 14px;
+      --editor-font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+      --editor-font-size: 16px;
+      --editor-line-height: 24px;
+      --editor-tab-size: 4;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
       overflow: hidden;
       background: #ffffff;
       height: 640px;
       display: grid;
-      grid-template-columns: 64px 1fr;
+      grid-template-columns: var(--editor-gutter-width) 1fr;
       position: relative;
     }
 
@@ -1434,23 +1441,23 @@
       display: none;
       width: auto;
       height: 100%;
-      padding: 14px;
+      padding: var(--editor-pad-y) var(--editor-pad-x);
       margin: 0;
       box-sizing: border-box;
-      font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
-      font-size: 16px;
-      line-height: 24px;
+      font-family: var(--editor-font-family);
+      font-size: var(--editor-font-size);
+      line-height: var(--editor-line-height);
       letter-spacing: normal;
       word-spacing: normal;
-      tab-size: 4;
-      -moz-tab-size: 4;
+      tab-size: var(--editor-tab-size);
+      -moz-tab-size: var(--editor-tab-size);
       overflow: hidden;
       white-space: pre;
       word-break: normal;
       background: transparent;
       position: absolute;
       top: 0;
-      left: 64px;
+      left: var(--editor-gutter-width);
       right: 0;
       bottom: 0;
       z-index: 1;
@@ -1474,11 +1481,11 @@
       background: #f1f5f9;
       color: #64748b;
       border-right: 1px solid #cbd5e1;
-      padding: 14px 8px 14px 0;
+      padding: var(--editor-pad-y) 8px var(--editor-pad-y) 0;
       text-align: right;
-      font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
-      font-size: 16px;
-      line-height: 24px;
+      font-family: var(--editor-font-family);
+      font-size: var(--editor-font-size);
+      line-height: var(--editor-line-height);
       overflow: hidden;
       user-select: none;
       white-space: pre;
@@ -1501,11 +1508,11 @@
       height: 100%;
       resize: none;
       border: none;
-      padding: 14px;
+      padding: var(--editor-pad-y) var(--editor-pad-x);
       box-sizing: border-box;
-      font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
-      font-size: 16px;
-      line-height: 24px;
+      font-family: var(--editor-font-family);
+      font-size: var(--editor-font-size);
+      line-height: var(--editor-line-height);
       letter-spacing: normal;
       word-spacing: normal;
       background: transparent;
@@ -1514,8 +1521,8 @@
       outline: none;
       overflow: auto;
       white-space: pre;
-      tab-size: 4;
-      -moz-tab-size: 4;
+      tab-size: var(--editor-tab-size);
+      -moz-tab-size: var(--editor-tab-size);
       position: relative;
       z-index: 2;
     }
@@ -2027,26 +2034,18 @@
       }
 
       .editor-shell {
+        --editor-gutter-width: 48px;
+        --editor-pad-x: 10px;
         height: 52vh;
         min-height: 300px;
-        grid-template-columns: 48px 1fr;
       }
 
       .line-numbers {
         padding-right: 6px;
       }
 
-      #displayEditor {
-        left: 48px;
-        padding: 14px 10px;
-      }
-
-      #editor {
-        padding: 14px 10px;
-      }
-
       #highlightLayer {
-        left: 48px !important;
+        left: var(--editor-gutter-width) !important;
       }
 
       .runner-layout {
