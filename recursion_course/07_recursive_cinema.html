@@ -27,7 +27,7 @@
   --code-text: #f8fafc;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg-gradient); color: var(--text-main); font-family: 'Inter', system-ui, -apple-system, sans-serif; min-height: 100vh; padding: 24px; display: flex; justify-content: center; align-items: flex-start; }
+body { background: var(--bg-gradient); color: var(--text-main); font-family: 'Inter', system-ui, -apple-system, sans-serif; min-height: 100vh; padding: 24px; display:flex;flex-direction:column;align-items:center;   }
 .container { width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 20px; }
 header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }
 .title-group h1 { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.65rem; letter-spacing: -0.02em; background: linear-gradient(to right, var(--text-main), var(--accent-gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
@@ -77,8 +77,7 @@ button.secondary { background: var(--accent-purple); }
   </div>
   <script>let cr=0;function cinemaStep(){if(cr>=5)return;let row=document.createElement("div");row.className="row";for(let i=0;i<5+cr;i++){let s=document.createElement("span");s.className="seat";s.textContent="";row.appendChild(s);}document.getElementById("cinema").appendChild(row);cr++;}function cinemaReset(){cr=0;document.getElementById("cinema").innerHTML="";}cinemaReset();</script>
 
-<div style="text-align:center;padding:12px;clear:both;"><p class="jsfun-support" style="margin:8px 0;text-align:center;font-size:14px;line-height:1.6;">Made with ❤️ for better thinking. If it helped you, support the project. <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 4px;color:inherit;text-decoration:underline;"><strong>Buy me a tea</strong></a>.</p>
-<a href="../privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
+<div style="width:100%;max-width:800px;margin:8px auto 0;text-align:right;"><a href="../privacy.html" style="color:#64748b;text-decoration:underline;font-size:12px;padding:4px 0;display:inline-block;">Privacy Notice</a></div>
 <script src="../privacy.js" data-page="/recursion_course/07_recursive_cinema.html" defer></script>
 </body>
 </html>
