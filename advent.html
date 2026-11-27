@@ -4,33 +4,459 @@
   <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Computing Advent Calendar</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <title>2026 Classroom Advent Calendar House</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
+    :root {
+      --gold: #f7cf75;
+      --gold-soft: rgba(247, 207, 117, 0.48);
+      --gold-bright: #fff0c2;
+      --cream: #fff9ef;
+      --warm-ink: #2c1810;
+      --muted: #f3dfc6;
+      --crimson-1: #a42430;
+      --crimson-2: #6d121d;
+      --spruce-1: #205c3d;
+      --spruce-2: #123b26;
+      --plum-1: #7a2e43;
+      --plum-2: #4c1929;
+      --wood-dark: #432116;
+      --wood-mid: #5e3120;
+      --wood-trim: #8c5230;
+      --accent-btn: #a42430;
+      --accent-btn-hover: #7f1722;
+      --serif: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body.grinch-mode {
+      --gold: #bef264;
+      --gold-soft: rgba(190, 242, 100, 0.5);
+      --gold-bright: #ecfccb;
+      --muted: #d9f99d;
+      --wood-dark: #153118;
+      --wood-mid: #1e4722;
+      --wood-trim: #3b7a35;
+      --accent-btn: #15803d;
+      --accent-btn-hover: #166534;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+
     body {
-      font-family: 'Nunito', sans-serif;
-      background-color: #1a202c;
-      color: white;
+      font-family: var(--sans);
+      color: var(--cream);
+      background-color: #361920;
+      background-image:
+        linear-gradient(180deg, rgba(44, 18, 24, 0.42) 0%, rgba(52, 24, 20, 0.24) 42%, rgba(44, 21, 16, 0.52) 100%),
+        url('images/advent-house-bg.jpg');
+      background-size: cover;
+      background-position: center top;
+      background-attachment: fixed;
       overflow-x: hidden;
+      transition: filter 0.5s ease;
     }
 
-    h1, h2, .festive-font {
-      font-family: 'Mountains of Christmas', cursive;
+    body.grinch-mode {
+      background-color: #0f2913;
+      background-image:
+        linear-gradient(180deg, rgba(10, 42, 16, 0.68) 0%, rgba(16, 56, 22, 0.52) 45%, rgba(10, 38, 15, 0.72) 100%),
+        url('images/advent-house-bg.jpg');
     }
 
-    /* 3D Door Flip Styles */
-    .perspective-container {
-      perspective: 1000px;
+    /* Snow Canvas */
+    #snow-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Main Container */
+    .page-wrap {
+      position: relative;
+      z-index: 10;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px 36px;
+    }
+
+    /* Hero Header over the warm twilight sky */
+    .hero {
+      text-align: center;
+      margin-bottom: 18px;
+      padding: 20px 22px 18px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(56, 22, 27, 0.72) 0%, rgba(72, 33, 24, 0.62) 100%);
+      border: 1px solid var(--gold-soft);
+      box-shadow: 0 14px 36px rgba(24, 8, 6, 0.42);
+      backdrop-filter: blur(8px);
+    }
+
+    body.grinch-mode .hero {
+      background: linear-gradient(180deg, rgba(14, 48, 20, 0.78) 0%, rgba(20, 64, 26, 0.68) 100%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 15px;
+      border-radius: 999px;
+      background: rgba(255, 245, 220, 0.12);
+      border: 1px solid var(--gold-soft);
+      color: var(--gold-bright);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4.6vw, 3.3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin: 0 0 10px;
+      color: var(--cream);
+      text-shadow: 0 3px 16px rgba(30, 10, 6, 0.6);
+    }
+
+    h1 .gold-accent {
+      color: var(--gold);
+    }
+
+    .subtitle {
+      max-width: 640px;
+      margin: 0 auto 16px;
+      font-size: clamp(0.95rem, 1.7vw, 1.06rem);
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px 14px;
+      margin-bottom: 16px;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      background: rgba(255, 243, 214, 0.14);
+      border: 1px solid rgba(255, 232, 180, 0.35);
+      color: var(--cream);
+      font-weight: 700;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: transform 0.18s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    .btn-grinch {
+      background: linear-gradient(135deg, #2f8f3b 0%, #1b5e20 100%);
+      color: #f7fee7;
+      border-color: rgba(190, 242, 100, 0.6);
+      box-shadow: 0 6px 18px rgba(21, 128, 61, 0.35);
+    }
+
+    .btn-grinch:hover {
+      background: linear-gradient(135deg, #3da84a 0%, #227328 100%);
+      box-shadow: 0 8px 22px rgba(132, 204, 22, 0.42);
+    }
+
+    body.grinch-mode .btn-grinch {
+      background: linear-gradient(135deg, #b4232d 0%, #7d141d 100%);
+      border-color: rgba(254, 202, 202, 0.55);
+      box-shadow: 0 6px 18px rgba(180, 35, 45, 0.35);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 244, 224, 0.12);
+      color: var(--cream);
+      border-color: rgba(255, 232, 186, 0.32);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 244, 224, 0.22);
+      border-color: var(--gold);
+    }
+
+    .grinch-banner {
+      display: none;
+      max-width: 700px;
+      margin: 14px auto 0;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: rgba(132, 204, 22, 0.18);
+      border: 1px solid rgba(190, 242, 100, 0.55);
+      color: #ecfccb;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    body.grinch-mode .grinch-banner {
+      display: block;
+    }
+
+    /* =========================================
+       STORYBOOK WOODEN ADVENT CALENDAR HOUSE
+       ========================================= */
+    .advent-house {
+      position: relative;
+      margin: 0 auto;
+      max-width: 1080px;
+      filter: drop-shadow(0 22px 44px rgba(28, 10, 6, 0.55));
+    }
+
+    /* Gabled Snowy Roof */
+    .house-roof-wrap {
+      position: relative;
+      margin: 0 -10px -2px;
+      line-height: 0;
+      z-index: 4;
+    }
+
+    .house-roof-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Fairy lights tucked under the eaves */
+    .eave-lights {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      justify-content: space-around;
+      padding: 0 24px;
+      margin-top: -8px;
+      margin-bottom: -10px;
+      pointer-events: none;
+    }
+
+    .bulb {
+      width: 11px;
+      height: 15px;
+      border-radius: 50% 50% 55% 55%;
+      position: relative;
+      animation: twinkle 2.6s ease-in-out infinite;
+    }
+
+    .bulb::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 3px;
+      width: 5px;
+      height: 4px;
+      background: #432116;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .bulb:nth-child(4n+1) { background: #fde68a; box-shadow: 0 0 12px #fbbf24; animation-delay: 0s; }
+    .bulb:nth-child(4n+2) { background: #fda4af; box-shadow: 0 0 12px #f43f5e; animation-delay: 0.65s; }
+    .bulb:nth-child(4n+3) { background: #6ee7b7; box-shadow: 0 0 12px #10b981; animation-delay: 1.3s; }
+    .bulb:nth-child(4n+4) { background: #fed7aa; box-shadow: 0 0 12px #fb923c; animation-delay: 1.95s; }
+
+    body.grinch-mode .bulb:nth-child(3n+1) { background: #a3e635; box-shadow: 0 0 14px #a3e635; }
+    body.grinch-mode .bulb:nth-child(3n+2) { background: #facc15; box-shadow: 0 0 14px #facc15; }
+    body.grinch-mode .bulb:nth-child(3n+3) { background: #4ade80; box-shadow: 0 0 14px #4ade80; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.92); }
+    }
+
+    /* Timber-Framed Chalet Facade */
+    .house-body {
+      position: relative;
+      z-index: 3;
+      padding: 26px 22px 24px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255, 224, 178, 0.03) 0px,
+          rgba(255, 224, 178, 0.03) 2px,
+          transparent 2px,
+          transparent 48px
+        ),
+        linear-gradient(180deg, rgba(84, 40, 26, 0.9) 0%, rgba(62, 29, 20, 0.92) 100%);
+      border-left: 8px solid var(--wood-trim);
+      border-right: 8px solid var(--wood-trim);
+      border-top: 4px solid #a86a3d;
+      box-shadow:
+        inset 0 0 40px rgba(255, 196, 110, 0.14),
+        inset 0 6px 16px rgba(24, 9, 5, 0.45);
+      backdrop-filter: blur(6px);
+    }
+
+    body.grinch-mode .house-body {
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(190, 242, 100, 0.03) 0px,
+          rgba(190, 242, 100, 0.03) 2px,
+          transparent 2px,
+          transparent 48px
+        ),
+        linear-gradient(180deg, rgba(24, 62, 28, 0.92) 0%, rgba(16, 44, 19, 0.94) 100%);
+      border-top-color: #4d9144;
+    }
+
+    /* Legend strip inside chalet eaves */
+    .house-legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 20px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed rgba(247, 207, 117, 0.3);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+      border: 1px solid rgba(255, 243, 214, 0.5);
+    }
+
+    .swatch-regular { background: var(--crimson-1); }
+    .swatch-computing { background: linear-gradient(135deg, #f7cf75, #b46d11); }
+
+    /* Snowy Porch / Foundation */
+    .house-base {
+      height: 22px;
+      margin: 0 -6px;
+      border-radius: 0 0 14px 14px;
+      background: linear-gradient(180deg, #fffdf9 0%, #f1e3d3 52%, #7c4729 52%, #4a2617 100%);
+      border: 2px solid rgba(255, 240, 214, 0.55);
+      border-top: none;
+      box-shadow: 0 10px 24px rgba(24, 10, 6, 0.45);
+    }
+
+    body.grinch-mode .house-base {
+      background: linear-gradient(180deg, #f7fee7 0%, #d9f99d 52%, #2b6127 52%, #163616 100%);
+    }
+
+    /* Calendar Grid */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    @media (max-width: 1000px) {
+      .calendar-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .house-body {
+        padding: 18px 12px 18px;
+        border-left-width: 5px;
+        border-right-width: 5px;
+      }
+      .calendar-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+      }
+    }
+
+    /* 3D Advent Window / Shutter Card */
+    .door-slot {
+      perspective: 1100px;
+      height: 228px;
+      position: relative;
+      border-radius: 14px;
+      /* Recessed wooden window frame */
+      background: radial-gradient(circle at center, rgba(255, 200, 105, 0.25) 0%, rgba(28, 12, 8, 0.72) 100%);
+      padding: 3px;
+      box-shadow:
+        inset 0 2px 10px rgba(0, 0, 0, 0.55),
+        0 1px 0 rgba(255, 224, 170, 0.22);
+    }
+
+    @media (max-width: 640px) {
+      .door-slot {
+        height: 218px;
+      }
     }
 
     .door-card {
       position: relative;
       width: 100%;
       height: 100%;
-      transition: transform 0.8s;
       transform-style: preserve-3d;
+      transition: transform 0.78s cubic-bezier(0.22, 1, 0.36, 1);
       cursor: pointer;
+    }
+
+    .door-slot:not(.is-locked):hover .door-card:not(.open) {
+      transform: translateY(-4px) rotateY(-10deg);
     }
 
     .door-card.open {
@@ -40,260 +466,987 @@
 
     .door-face {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      -webkit-backface-visibility: hidden; /* Safari */
+      inset: 0;
+      -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
-
-    /* Front of the door (The Number) */
-    .door-front {
-      background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
-      border: 2px solid #fbbf24;
-      color: #fff;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Pattern on door front */
-    .door-front::before {
-      content: '';
-      position: absolute;
-      top: 5px; left: 5px; right: 5px; bottom: 5px;
-      border: 1px dashed rgba(255,255,255,0.5);
-      border-radius: 0.25rem;
-      pointer-events: none;
-    }
-
-    /* Back of the door (The Content) */
-    .door-back {
-      background-color: #f7fafc;
-      color: #2d3748;
-      transform: rotateY(180deg);
-      border: 4px solid #38a169;
-      text-align: center;
-      padding: 0.5rem;
+      border-radius: 11px;
       overflow: hidden;
     }
 
-    .locked {
-      filter: grayscale(0.5);
-      opacity: 0.8;
+    /* Front of Wooden Window Shutter */
+    .door-front {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 10px;
+      color: var(--cream);
+      border: 2px solid var(--gold-soft);
+      box-shadow:
+        0 8px 18px rgba(18, 6, 4, 0.42),
+        inset 0 1px 0 rgba(255, 240, 210, 0.28);
+      transition: box-shadow 0.25s ease, border-color 0.25s ease, filter 0.25s ease;
+    }
+
+    .door-slot:not(.is-locked):hover .door-front {
+      border-color: var(--gold);
+      box-shadow:
+        0 12px 24px rgba(18, 6, 4, 0.5),
+        0 0 20px rgba(247, 207, 117, 0.35),
+        inset 0 1px 0 rgba(255, 245, 220, 0.35);
+    }
+
+    /* Decorative cottage shutter inner frame */
+    .door-front::before {
+      content: '';
+      position: absolute;
+      inset: 7px;
+      border: 1px solid rgba(255, 236, 188, 0.38);
+      border-radius: 7px;
+      pointer-events: none;
+    }
+
+    /* Brass shutter handle knob */
+    .door-front::after {
+      content: '';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff4cc, #c78b24);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    /* Warm Storybook Door Palettes (No dark blue!) */
+    .theme-crimson .door-front {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255, 230, 190, 0.16), transparent 55%),
+        linear-gradient(145deg, var(--crimson-1) 0%, var(--crimson-2) 100%);
+    }
+
+    .theme-spruce .door-front {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255, 236, 190, 0.14), transparent 55%),
+        linear-gradient(145deg, var(--spruce-1) 0%, var(--spruce-2) 100%);
+    }
+
+    .theme-plum .door-front {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255, 228, 196, 0.16), transparent 55%),
+        linear-gradient(145deg, var(--plum-1) 0%, var(--plum-2) 100%);
+    }
+
+    .theme-computing .door-front {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255, 250, 220, 0.34), transparent 55%),
+        linear-gradient(145deg, #d89a2b 0%, #99610f 60%, #6e4107 100%);
+      border-color: rgba(255, 236, 179, 0.85);
+    }
+
+    .theme-finale .door-front {
+      background:
+        radial-gradient(circle at 50% 22%, rgba(255, 250, 225, 0.4), transparent 55%),
+        linear-gradient(145deg, #e08d1e 0%, #a63218 58%, #781c14 100%);
+      border: 2px solid #fde68a;
+      box-shadow:
+        0 10px 24px rgba(24, 8, 4, 0.5),
+        0 0 24px rgba(251, 191, 36, 0.36);
+    }
+
+    body.grinch-mode .theme-crimson .door-front,
+    body.grinch-mode .theme-plum .door-front {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(190, 242, 100, 0.2), transparent 55%),
+        linear-gradient(145deg, #257a39 0%, #144721 100%);
+      border-color: rgba(190, 242, 100, 0.5);
+    }
+
+    body.grinch-mode .theme-spruce .door-front {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(250, 204, 21, 0.18), transparent 55%),
+        linear-gradient(145deg, #356922 0%, #1c3d11 100%);
+      border-color: rgba(190, 242, 100, 0.5);
+    }
+
+    .door-month {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 243, 214, 0.82);
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .door-number {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 4vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1;
+      color: var(--cream);
+      text-shadow: 0 3px 10px rgba(28, 10, 6, 0.45);
+    }
+
+    .door-badge {
+      margin-top: 9px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: rgba(34, 14, 6, 0.34);
+      border: 1px solid rgba(255, 236, 179, 0.52);
+      color: var(--gold-bright);
+    }
+
+    .door-status {
+      margin-top: 9px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: rgba(255, 248, 235, 0.84);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .door-slot.is-locked .door-front {
+      filter: saturate(0.82) brightness(0.9);
       cursor: not-allowed;
     }
 
-    /* Shake animation for locked doors */
+    /* Back of Door (Warm Candlelit Room Reveal) */
+    .door-back {
+      transform: rotateY(180deg);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 232, 170, 0.55), transparent 65%),
+        linear-gradient(180deg, #fffdf8 0%, #f9eedc 100%);
+      color: var(--warm-ink);
+      border: 2px solid #d4a144;
+      padding: 11px 11px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+      box-shadow: inset 0 0 18px rgba(245, 158, 11, 0.16);
+    }
+
+    .theme-computing .door-back,
+    .theme-finale .door-back {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(253, 224, 71, 0.42), transparent 65%),
+        linear-gradient(180deg, #fffbeb 0%, #fdecc8 100%);
+      border-color: #d97706;
+    }
+
+    .back-top {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .back-day {
+      font-family: var(--serif);
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #7c2d12;
+      background: rgba(217, 119, 6, 0.15);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .back-topic {
+      font-size: 0.64rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #14532d;
+      background: rgba(22, 163, 74, 0.13);
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 68%;
+    }
+
+    .theme-computing .back-topic,
+    .theme-finale .back-topic {
+      color: #92400e;
+      background: rgba(217, 119, 6, 0.2);
+    }
+
+    .back-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 2px 0;
+    }
+
+    .back-icon {
+      font-size: 1.9rem;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .back-title {
+      font-family: var(--serif);
+      font-size: 0.94rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #23110a;
+      margin: 0;
+    }
+
+    .back-desc {
+      font-size: 0.73rem;
+      line-height: 1.3;
+      color: #5c4033;
+      margin: 2px 0 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .launch-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 9px;
+      background: var(--accent-btn);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(140, 24, 34, 0.28);
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+
+    .launch-link:hover {
+      background: var(--accent-btn-hover);
+      transform: translateY(-1px);
+    }
+
+    .theme-computing .launch-link,
+    .theme-finale .launch-link {
+      background: #b45309;
+      box-shadow: 0 3px 10px rgba(180, 83, 9, 0.3);
+    }
+
+    .theme-computing .launch-link:hover,
+    .theme-finale .launch-link:hover {
+      background: #92400e;
+    }
+
     @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
-      100% { transform: translateX(0); }
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
     }
 
     .shake {
-      animation: shake 0.3s ease-in-out;
+      animation: shake 0.36s ease-in-out;
     }
 
-    /* Cheat Mode Theme (Purple & Gold) */
-    body.cheat-mode {
-      background-color: #2d1b4e;
-      transition: background-color 0.5s;
-    }
-
-    body.cheat-mode .door-front {
-      background: linear-gradient(135deg, #6b46c1 0%, #553c9a 100%);
-      border-color: #f6e05e;
-    }
-
-    body.cheat-mode h1 {
-      color: #f6e05e;
-      text-shadow: 0 0 10px rgba(246, 224, 94, 0.5);
-    }
-
-    body.cheat-mode .door-front::before {
-      border-color: rgba(246, 224, 94, 0.3);
-    }
-
-    /* Snow Canvas */
-    #snow-canvas {
+    /* Modal */
+    .modal-backdrop {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
+      inset: 0;
+      background: rgba(30, 12, 10, 0.74);
+      backdrop-filter: blur(5px);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
     }
 
-    .content-layer {
+    .modal-backdrop.hidden {
+      display: none;
+    }
+
+    .modal-card {
+      background: linear-gradient(180deg, #fffdf8 0%, #f7ebd8 100%);
+      color: var(--warm-ink);
+      border: 2px solid #d4a144;
+      border-radius: 20px;
+      max-width: 430px;
+      width: 100%;
+      padding: 26px 24px 22px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(24, 8, 6, 0.6);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      line-height: 1;
+      color: #7c5b4b;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .modal-close:hover {
+      color: #a42430;
+    }
+
+    .modal-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 6px;
+    }
+
+    .modal-title {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      margin: 0 0 8px;
+      color: #8f1d27;
+    }
+
+    .modal-body {
+      font-size: 0.96rem;
+      line-height: 1.5;
+      color: #4a3025;
+      margin: 0 0 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .modal-btn-wait {
+      background: #eadbc6;
+      color: #3b2217;
+      border-color: #d6bfa0;
+    }
+
+    .modal-btn-wait:hover {
+      background: #dec8aa;
+    }
+
+    /* Footer */
+    .site-footer {
       position: relative;
       z-index: 10;
+      max-width: 1080px;
+      margin: 24px auto 20px;
+      padding: 16px 18px;
+      text-align: center;
+      color: var(--cream);
+      background: rgba(52, 22, 18, 0.76);
+      border: 1px solid var(--gold-soft);
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+    }
+
+    body.grinch-mode .site-footer {
+      background: rgba(14, 46, 20, 0.8);
+    }
+
+    .site-footer a {
+      color: var(--gold-bright);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bulb, .shake {
+        animation: none !important;
+      }
+      .door-card {
+        transition: transform 0.2s ease;
+      }
     }
   </style>
-  <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
-<body class="min-h-screen bg-gray-900">
+<body>
 
-<!-- Snow Effect -->
-<canvas id="snow-canvas"></canvas>
+<canvas id="snow-canvas" aria-hidden="true"></canvas>
 
-<div class="content-layer container mx-auto px-4 py-8">
+<main class="page-wrap">
+  <header class="hero">
+    <div class="eyebrow">✨ 2026 Classroom Advent House ✨</div>
+    <h1>25 Days of <span class="gold-accent">Classroom Magic</span></h1>
+    <p class="subtitle">
+      Step into our cozy winter advent house — open a new interactive teaching resource every day in December, with flagship Computing specials every 5 days.
+    </p>
 
-  <!-- Header -->
-  <header class="text-center mb-10">
-    <h1 class="text-5xl md:text-7xl font-bold text-red-500 mb-2 text-shadow-lg drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)]">
-      Advent Calendar
-    </h1>
-    <p class="text-yellow-400 text-xl italic">Count down the days with a surprise behind every window!</p>
+    <div class="meta-strip">
+      <span class="pill" id="progress-pill">🎁 0 / 25 Opened</span>
+      <span class="pill" id="grinch-pill" hidden>😈 0 Sneaked Early</span>
+      <span id="date-display"></span>
+    </div>
 
-    <!-- Controls -->
-    <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
-      <button onclick="resetCalendar()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded shadow transition">
-        Reset Calendar
+    <div class="controls">
+      <button type="button" id="grinch-btn" class="btn btn-grinch" onclick="toggleGrinchTheme()" aria-pressed="false">
+        😈 Grinch Theme: Off
+      </button>
+      <button type="button" id="open-all-btn" class="btn btn-secondary" onclick="openAllAvailable()">
+        🎁 Open Today's Doors
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="resetCalendar()">
+        🔄 Reset Doors
       </button>
     </div>
-    <p id="date-display" class="mt-2 text-gray-400 text-xs"></p>
+
+    <div class="grinch-banner" id="grinch-banner" role="status" aria-live="polite">
+      <strong>💚 Grinch Mode!</strong> Click any locked window to sneak a peek early — the Grinch will have something cheeky to say every time you do.
+    </div>
   </header>
 
-  <!-- Grid -->
-  <div id="calendar-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
-    <!-- Windows will be injected here by JS -->
+  <!-- Storybook Wooden Advent House -->
+  <div class="advent-house">
+    <!-- Gabled Snowy Chalet Roof -->
+    <div class="house-roof-wrap" aria-hidden="true">
+      <svg class="house-roof-svg" viewBox="0 0 1100 138" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="roofWood" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#8b2630"/>
+            <stop offset="100%" stop-color="#53141c"/>
+          </linearGradient>
+          <linearGradient id="snowGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#f2e4d5"/>
+          </linearGradient>
+          <linearGradient id="gableFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#6e3622"/>
+            <stop offset="100%" stop-color="#472015"/>
+          </linearGradient>
+          <radialGradient id="windowGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff3b0"/>
+            <stop offset="70%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#b45309"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Brick Chimney -->
+        <rect x="820" y="18" width="54" height="58" rx="3" fill="#7c2d26" stroke="#471814" stroke-width="3"/>
+        <rect x="814" y="14" width="66" height="12" rx="4" fill="url(#snowGrad)"/>
+
+        <!-- Main Pitched Roof -->
+        <polygon points="10,134 550,14 1090,134" fill="url(#roofWood)" stroke="#3e1417" stroke-width="4"/>
+
+        <!-- Inner Wooden Gable -->
+        <polygon points="62,134 550,30 1038,134" fill="url(#gableFill)" stroke="#b37846" stroke-width="4"/>
+
+        <!-- Decorative Timber Beams -->
+        <line x1="550" y1="30" x2="550" y2="134" stroke="#9e6234" stroke-width="5"/>
+        <line x1="360" y1="72" x2="360" y2="134" stroke="#9e6234" stroke-width="4"/>
+        <line x1="740" y1="72" x2="740" y2="134" stroke="#9e6234" stroke-width="4"/>
+
+        <!-- Glowing Attic Round Window + Wreath -->
+        <circle cx="550" cy="84" r="28" fill="url(#windowGlow)" stroke="#f7cf75" stroke-width="4"/>
+        <line x1="550" y1="56" x2="550" y2="112" stroke="#5e3120" stroke-width="3"/>
+        <line x1="522" y1="84" x2="578" y2="84" stroke="#5e3120" stroke-width="3"/>
+        <circle cx="550" cy="84" r="33" fill="none" stroke="#1e6b3f" stroke-width="8" stroke-dasharray="10 4"/>
+        <circle cx="550" cy="51" r="6" fill="#dc2626"/>
+        <circle cx="542" cy="53" r="4" fill="#ef4444"/>
+        <circle cx="558" cy="53" r="4" fill="#ef4444"/>
+
+        <!-- Thick Snow Drift Along Roof Slopes -->
+        <path d="M 6,132 L 550,8 L 1094,132 Q 1072,138 1044,126 L 550,24 L 56,126 Q 28,138 6,132 Z" fill="url(#snowGrad)"/>
+        <!-- Roof Finial Star -->
+        <circle cx="550" cy="11" r="6" fill="#fde68a" stroke="#b45309" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <!-- Twinkling Eave Fairy Lights -->
+    <div class="eave-lights" aria-hidden="true">
+      <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+      <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+      <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+      <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+    </div>
+
+    <!-- Timber Facade with 25 Windows -->
+    <div class="house-body">
+      <div class="house-legend" aria-label="Door key">
+        <span class="legend-item"><span class="swatch swatch-regular"></span> Cross-Curricular &amp; Classroom Tools</span>
+        <span class="legend-item"><span class="swatch swatch-computing"></span> Computing Specials (Days 5, 10, 15, 20 &amp; 25)</span>
+      </div>
+      <section id="calendar-grid" class="calendar-grid" aria-label="25-day advent calendar"></section>
+    </div>
+
+    <!-- Snowy Wooden Porch Base -->
+    <div class="house-base" aria-hidden="true"></div>
   </div>
+</main>
 
-</div>
-
-<!-- Modal for details -->
-<div id="message-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white text-gray-900 rounded-lg max-w-md w-full p-6 shadow-2xl transform transition-all scale-100 relative">
-    <button onclick="closeModal()" class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-2xl">&times;</button>
-    <h3 id="modal-title" class="text-2xl font-bold text-red-600 festive-font mb-4">Wait!</h3>
-    <p id="modal-body" class="text-lg">You can't open this yet.</p>
-    <div class="mt-6 text-center">
-      <button onclick="closeModal()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-bold transition">OK</button>
+<!-- Grinch Early-Open Modal -->
+<div id="message-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card">
+    <button type="button" class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+    <div class="modal-emoji" id="modal-emoji">😈</div>
+    <h2 id="modal-title" class="modal-title">Caught by the Grinch!</h2>
+    <p id="modal-body" class="modal-body">You can't open this window yet.</p>
+    <div class="modal-actions">
+      <button type="button" id="modal-grinch-open" class="btn btn-grinch" onclick="sneakOpenPendingDay()">
+        😈 Sneak Open Anyway
+      </button>
+      <button type="button" class="btn modal-btn-wait" onclick="closeModal()">
+        😇 I'll Wait
+      </button>
     </div>
   </div>
 </div>
 
+<footer class="site-footer">
+  <p class="jsfun-support" style="margin:6px 0;text-align:center;font-size:14px;line-height:1.6;">Made with ❤️ for better thinking. If it helped you, support the project. <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:6px 4px;text-decoration:underline;"><strong>Buy me a tea</strong></a>.</p>
+  <a href="privacy.html" style="display:inline-block;padding:6px 12px;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a>
+</footer>
+
 <script>
-  // --- Configuration ---
-  const totalDays = 25;
-  const currentYear = new Date().getFullYear();
-  const storageKey = `advent_calendar_${currentYear}_state`;
+  // --- 2026 Advent Calendar Configuration ---
+  const calendarYear = 2026;
+  const storageKey = `advent_calendar_${calendarYear}_state`;
 
-  // Content for the 25 days with COMPUTING LINKS
   const adventData = [
-    // Week 1: Basics & Fun
-    { day: 1, type: 'text', content: "Let's roll some Story Dice!", icon: "🎲", url: "https://jamesabela.github.io/jsfun/storydice.html" },
-    { day: 2, type: 'text', content: "Visualise Binary Numbers", icon: "01", url: "https://sethideclercq.com/tools/binaryvisualiser.html" },
-    { day: 3, type: 'text', content: "Crack the code with a Cipher Wheel", icon: "🔐", url: "https://scratch.mit.edu/projects/427196904/" },
-    { day: 4, type: 'text', content: "Create Blackout Poetry", icon: "⬛", url: "https://sethideclercq.com/tools/blackoutpoetry.html" },
-    { day: 5, type: 'text', content: "Play the Binary Snake Game", icon: "🐍", url: "https://jamesabela.github.io/jsfun/snake.html" },
+    // Week 1
+    {
+      day: 1,
+      title: "Connections Grid",
+      desc: "Build and share 4×4 word connection puzzles for any topic.",
+      topic: "All Subjects",
+      icon: "🧩",
+      url: "https://jamesabela.github.io/jsfun/connections.html"
+    },
+    {
+      day: 2,
+      title: "Star Wars Crawler",
+      desc: "Turn any lesson hook or story into a deep-space crawl.",
+      topic: "English",
+      icon: "🌌",
+      url: "https://jamesabela.github.io/reading/star-wars-crawler.html"
+    },
+    {
+      day: 3,
+      title: "ThinkRank Studio",
+      desc: "Diamond 9, Triangle, Line, Podium & Elimination ranking suite.",
+      topic: "Discussion",
+      icon: "🏆",
+      url: "https://jamesabela.github.io/ThinkRankStudio"
+    },
+    {
+      day: 4,
+      title: "Optical Reading Simulator",
+      desc: "Experience reading challenges and explore text accessibility.",
+      topic: "Accessibility",
+      icon: "👓",
+      url: "https://jamesabela.github.io/reading/reading-experience.html"
+    },
+    {
+      day: 5,
+      title: "Binary DMZ",
+      desc: "Space arcade for Unsigned, Two's Complement & Hex mastery.",
+      topic: "Computing",
+      icon: "🚀",
+      special: true,
+      url: "https://jamesabela.github.io/binarydmz"
+    },
 
-    // Week 2: Logic & Tools
-    { day: 6, type: 'text', content: "Random Number Generator", icon: "#️⃣", url: "https://sethideclercq.com/tools/number-gen.html" },
-    { day: 7, type: 'text', content: "Solve the Towers of Hanoi", icon: "🏗️", url: "https://hanoitowers.my.canva.site/" },
-    { day: 8, type: 'text', content: "Send a Secret Message", icon: "🤫", url: "https://sethideclercq.com/tools/secretcodegen.html" },
-    { day: 9, type: 'text', content: "Brainstorm with a Mind Map", icon: "🧠", url: "https://jamesabela.github.io/mindmap/index.html" },
-    { day: 10, type: 'text', content: "Create a Word Search", icon: "🔎", url: "https://sethideclercq.com/tools/wordsearch.html" },
+    // Week 2
+    {
+      day: 6,
+      title: "Custom Crossword Studio",
+      desc: "Design, play, print & export custom vocabulary crosswords.",
+      topic: "Literacy",
+      icon: "✏️",
+      url: "https://jamesabela.github.io/reading/crossword.html"
+    },
+    {
+      day: 7,
+      title: "Image Compare",
+      desc: "Interactive slider to compare Now & Then or Before & After.",
+      topic: "Visual",
+      icon: "🖼️",
+      url: "https://jamesabela.github.io/jsfun/imgcomp.html"
+    },
+    {
+      day: 8,
+      title: "Candyfloss Tycoon",
+      desc: "1–4 player seaside business sim inspired by the 1982 classic.",
+      topic: "Economics",
+      icon: "🎡",
+      url: "https://jamesabela.github.io/candyfloss/"
+    },
+    {
+      day: 9,
+      title: "Whodunnit Detective",
+      desc: "Solve a classroom mystery with database queries & deduction.",
+      topic: "Data",
+      icon: "🕵️",
+      url: "https://whodunnit.primary-apps.com/whodunnit.html"
+    },
+    {
+      day: 10,
+      title: "Turtle Quest",
+      desc: "40-level Python Turtle adventure generating real Python code.",
+      topic: "Computing",
+      icon: "🐢",
+      special: true,
+      url: "https://jamesabela.github.io/jsfun/turtlepuzzles.html"
+    },
 
-    // Week 3: Visualisation
-    { day: 11, type: 'text', content: "3D Lollipop Carousel", icon: "🍭", url: "https://jamesabela.github.io/jsfun/lollipop.html" },
-    { day: 12, type: 'text', content: "Greater Than / Less Than", icon: "<>", url: "https://sethideclercq.com/tools/comparison.html" },
-    { day: 13, type: 'text', content: "Tile Reveal Game", icon: "🧱", url: "https://jamesabela.github.io/jsfun/imgtiles.html?image=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2015%2F12%2F23%2F22%2F36%2Fminecraft-1106253_1280.png" },
-    { day: 14, type: 'text', content: "Decimal to Binary Converter", icon: "🔟", url: "https://sethideclercq.com/tools/switchmaster.html" },
-    { day: 15, type: 'text', content: "Word Triangle Discussion", icon: "🔺", url: "https://jamesabela.github.io/jsfun/triangle.html" },
+    // Week 3
+    {
+      day: 11,
+      title: "Minecraft Reader",
+      desc: "Paste any text and explore your story in a procedural 3D world.",
+      topic: "Literacy",
+      icon: "⛏️",
+      url: "https://jamesabela.github.io/reading/minecraft-reader.html"
+    },
+    {
+      day: 12,
+      title: "Link Two Sides",
+      desc: "Customisable draw-a-line matching quizzes for exam practice.",
+      topic: "Exam Prep",
+      icon: "🔗",
+      url: "https://jamesabela.github.io/jsfun/linksides.html"
+    },
+    {
+      day: 13,
+      title: "Half-Life Calculator",
+      desc: "Visualise radioactive decay as repeated halving for Physics.",
+      topic: "Sciences",
+      icon: "☢️",
+      url: "https://jamesabela.github.io/jsfun/halflife.html"
+    },
+    {
+      day: 14,
+      title: "Lateral Thinking Puzzles",
+      desc: "100+ classroom puzzles with cryptic hints, timer & solutions.",
+      topic: "Starter",
+      icon: "💡",
+      url: "https://jamesabela.github.io/jsfun/lateral.html"
+    },
+    {
+      day: 15,
+      title: "Python to Flowchart",
+      desc: "Convert Python into interactive flowcharts & export SVG/PNG.",
+      topic: "Computing",
+      icon: "🔀",
+      special: true,
+      url: "https://jamesabela.github.io/jsfun/python2flow.html"
+    },
 
-    // Week 4: Challenge
-    { day: 16, type: 'text', content: "Part-Whole Challenges", icon: "🍰", url: "https://sethideclercq.com/tools/partwhole.html" },
-    { day: 17, type: 'text', content: "Spreadsheet Cell Fun", icon: "🖼️", url: "https://jamesabela.github.io/jsfun/cells.html" },
-    { day: 18, type: 'text', content: "Parity Byte Checker", icon: "🧮", url: "https://jamesabela.github.io/jsfun/paritybyte.html" },
-    { day: 19, type: 'text', content: "Plot Device Chooser", icon: "📖", url: "https://scratch.mit.edu/projects/2261416/fullscreen/" },
-    { day: 20, type: 'text', content: "Word Type Highlighter", icon: "🖍️", url: "https://sethideclercq.com/tools/wordtype.html" },
+    // Week 4
+    {
+      day: 16,
+      title: "Flowchart Studio",
+      desc: "Drag-and-drop flowcharts with PowerPoint & image exports.",
+      topic: "Workflows",
+      icon: "📊",
+      url: "https://jamesabela.github.io/jsfun/flowchart.html"
+    },
+    {
+      day: 17,
+      title: "Chat Maker",
+      desc: "Create WhatsApp-style chats for roleplay, history & English.",
+      topic: "Roleplay",
+      icon: "💬",
+      url: "https://jamesabela.github.io/reading/whatsapp-chat.html"
+    },
+    {
+      day: 18,
+      title: "Pi Day in Space",
+      desc: "Pi quiz, Buffon's needle simulation & mathematical history.",
+      topic: "Maths",
+      icon: "🥧",
+      url: "https://jamesabela.github.io/piday/index.html"
+    },
+    {
+      day: 19,
+      title: "RedactingFriend",
+      desc: "Turn screenshots into clean, privacy-safe visual guides locally.",
+      topic: "Teacher Tool",
+      icon: "🖍️",
+      url: "https://redactingfriend.sethideclercq.com"
+    },
+    {
+      day: 20,
+      title: "Parsons Algorithms Quest",
+      desc: "52-quest gamified Python algorithms campaign with stars.",
+      topic: "Computing",
+      icon: "⚔️",
+      special: true,
+      url: "https://jamesabela.github.io/jsfun/parsonsgame.html"
+    },
 
-    // The Final Stretch: Advanced Computing
-    { day: 21, type: 'text', content: "Draggable Manipulatives", icon: "✋", url: "https://jamesabela.github.io/jsfun/manip.html" },
-    { day: 22, type: 'text', content: "AmberJr: ScratchJr Assets", icon: "🐱", url: "https://amberjr.vercel.app/" },
-    { day: 23, type: 'text', content: "TutorialFriend: Visual Guides", icon: "🤝", url: "https://tutorialfriend.vercel.app/" },
-    { day: 24, type: 'text', content: "EmeraldLens: Video Learning", icon: "🟢", url: "https://emerald-lens.vercel.app/" },
-    { day: 25, type: 'text', content: "SapphireStudio: Recorder", icon: "💎", url: "https://sapphirestudio.vercel.app/" }
+    // Final Stretch
+    {
+      day: 21,
+      title: "Penalty Shootout",
+      desc: "High-stakes vocabulary & definition penalty game for any topic.",
+      topic: "Vocab Game",
+      icon: "⚽",
+      url: "https://jamesabela.github.io/reading/penalties.html"
+    },
+    {
+      day: 22,
+      title: "End of the World",
+      desc: "10-level AI crisis decision game on ethics & geopolitics.",
+      topic: "AI Ethics",
+      icon: "🌍",
+      url: "https://jamesabela.github.io/EndOfWorld/"
+    },
+    {
+      day: 23,
+      title: "Gandalf AI Challenge",
+      desc: "Viral prompt-injection & AI literacy game every class loves.",
+      topic: "AI Literacy",
+      icon: "🧙",
+      url: "https://gandalf.lakera.ai/baseline"
+    },
+    {
+      day: 24,
+      title: "Family Conversation Starters",
+      desc: "Christmas Eve special: road trips, meals & game nights!",
+      topic: "Holiday Fun",
+      icon: "🚗",
+      url: "https://jamesabela.github.io/jsfun/roadtrip.html"
+    },
+    {
+      day: 25,
+      title: "Python Code Lab",
+      desc: "Edit, run, visualise & turn Python into puzzles in-browser.",
+      topic: "Finale",
+      icon: "🐍",
+      special: true,
+      finale: true,
+      url: "https://jamesabela.github.io/jsfun/pythoncopy"
+    }
   ];
 
-  // --- State Management ---
-  let openedDoors = JSON.parse(localStorage.getItem(storageKey)) || [];
+  // --- State ---
+  let openedDoors = [];
+  let earlyDoors = [];
+  let isGrinchTheme = false;
   let isTestMode = false;
+  let pendingEarlyDay = null;
+  let grinchQuipIndex = 0;
+
+  const grinchQuips = [
+    (d) => `Ooh, sneaky! December ${d} isn't here yet. Your heart might shrink two sizes, but shall I pry open Window #${d} for you anyway?`,
+    (d) => `Caught green-handed! Santa's elves have noted your interest in December ${d}. Still want to peek inside just this window?`,
+    (d) => `Patience is overrated anyway, right? December ${d} is still wrapped up — ready to be a Grinch and open Window #${d} early?`,
+    (d) => `Shhh! Don't tell Whoville, but I can unlatch December ${d} early if you promise it's strictly for "lesson planning".`,
+    (d) => `Another early peek?! The Grinch approves of your chaos. Shall we crack open Window #${d} ahead of schedule?`,
+    (d) => `December ${d} is locked tighter than Mount Crumpit — lucky for you, the Grinch has a spare key for Window #${d}.`
+  ];
+
+  const earlyStorageKey = `advent_calendar_${calendarYear}_early`;
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey));
+    if (Array.isArray(saved)) {
+      openedDoors = saved.filter(n => Number.isInteger(n) && n >= 1 && n <= 25);
+    }
+    const savedEarly = JSON.parse(localStorage.getItem(earlyStorageKey));
+    if (Array.isArray(savedEarly)) {
+      earlyDoors = savedEarly.filter(n => Number.isInteger(n) && n >= 1 && n <= 25);
+    }
+  } catch (err) {
+    openedDoors = [];
+    earlyDoors = [];
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(openedDoors));
+      localStorage.setItem(earlyStorageKey, JSON.stringify(earlyDoors));
+    } catch (err) {
+      // Ignore storage quota / private-mode errors
+    }
+  }
 
   function init() {
-    // Check URL parameters for cheat mode
     const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('grinch')) {
+      isGrinchTheme = true;
+    }
     if (urlParams.has('cheat') || urlParams.get('mode') === 'test') {
       isTestMode = true;
-      document.body.classList.add('cheat-mode');
+      isGrinchTheme = true;
     }
 
+    syncGrinchUI();
     renderGrid();
-    updateDateDisplay();
+    updateHeaderStats();
     startSnow();
-  }
 
-  function resetCalendar() {
-    if(confirm("Are you sure you want to close all windows?")) {
-      localStorage.removeItem(storageKey);
-      openedDoors = [];
-      location.reload();
-    }
-  }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
 
-  function updateDateDisplay() {
-    const today = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('date-display').innerText = `Current Date: ${today.toLocaleDateString('en-US', options)}`;
+    document.getElementById('message-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'message-modal') closeModal();
+    });
   }
 
   function isDateValid(day) {
     if (isTestMode) return true;
 
     const now = new Date();
-    const currentMonth = now.getMonth(); // 0-11, December is 11
-    const currentDay = now.getDate();
+    const year = now.getFullYear();
+    const month = now.getMonth(); // 0-indexed: December is 11
+    const date = now.getDate();
 
-    // Allow opening if it's December and the day is reached or passed
-    if (currentMonth === 11) { // It is December
-      return day <= currentDay;
+    if (year > calendarYear) return true;
+    if (year === calendarYear && month === 11) {
+      return day <= date;
     }
-
-    // If it's NOT December, generally lock everything unless testing
     return false;
   }
 
-  function handleDoorClick(day, element) {
-    // If already open, do nothing
-    if (openedDoors.includes(day)) return;
+  function syncGrinchUI() {
+    document.body.classList.toggle('grinch-mode', isGrinchTheme);
+    const btn = document.getElementById('grinch-btn');
+    btn.setAttribute('aria-pressed', String(isGrinchTheme));
+    btn.textContent = isGrinchTheme ? '😇 Nice Theme' : '😈 Grinch Theme';
+  }
 
-    if (!isDateValid(day)) {
-      // Shake animation
-      element.classList.add('shake');
-      setTimeout(() => element.classList.remove('shake'), 500);
+  function toggleGrinchTheme() {
+    isGrinchTheme = !isGrinchTheme;
+    syncGrinchUI();
+    renderGrid();
+  }
 
-      // Show modal
-      showModal("Not Yet!", `You can't open window #${day} until December ${day}!`);
+  function sneakOpenPendingDay() {
+    const dayToOpen = pendingEarlyDay;
+    pendingEarlyDay = null;
+    closeModal();
+    if (!dayToOpen) return;
+
+    if (!openedDoors.includes(dayToOpen)) {
+      openedDoors.push(dayToOpen);
+    }
+    if (!earlyDoors.includes(dayToOpen)) {
+      earlyDoors.push(dayToOpen);
+    }
+    saveState();
+
+    const slot = document.querySelector(`.door-slot[data-day="${dayToOpen}"]`);
+    if (slot) {
+      slot.classList.remove('is-locked');
+      slot.querySelector('.door-card').classList.add('open');
+      slot.setAttribute('aria-expanded', 'true');
+    } else {
+      renderGrid();
+    }
+    updateHeaderStats();
+  }
+
+  function openAllAvailable() {
+    let newlyOpened = 0;
+    adventData.forEach(item => {
+      if (isDateValid(item.day) && !openedDoors.includes(item.day)) {
+        openedDoors.push(item.day);
+        newlyOpened++;
+      }
+    });
+
+    if (newlyOpened === 0) {
+      pendingEarlyDay = null;
+      document.getElementById('modal-grinch-open').style.display = 'none';
+      showModal(
+        '❄️',
+        'No Windows Due Yet!',
+        'No new December windows are ready today. Click any locked window directly if you want the Grinch to sneak it open early!'
+      );
       return;
     }
 
-    // Open the door
-    openedDoors.push(day);
-    localStorage.setItem(storageKey, JSON.stringify(openedDoors));
+    saveState();
+    renderGrid();
+    updateHeaderStats();
+  }
 
-    // Trigger animation
-    const cardInner = element.querySelector('.door-card');
-    cardInner.classList.add('open');
+  function resetCalendar() {
+    if (confirm('Close all 25 advent windows and reset your progress?')) {
+      try {
+        localStorage.removeItem(storageKey);
+        localStorage.removeItem(earlyStorageKey);
+      } catch (err) {
+        // Ignore storage errors
+      }
+      openedDoors = [];
+      earlyDoors = [];
+      renderGrid();
+      updateHeaderStats();
+    }
+  }
+
+  function updateHeaderStats() {
+    const today = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('date-display').textContent = today.toLocaleDateString('en-GB', options);
+    document.getElementById('progress-pill').textContent = `🎁 ${openedDoors.length} / 25 Opened`;
+
+    const grinchPill = document.getElementById('grinch-pill');
+    if (earlyDoors.length > 0) {
+      grinchPill.hidden = false;
+      grinchPill.textContent = `😈 ${earlyDoors.length} Sneaked Early`;
+    } else {
+      grinchPill.hidden = true;
+    }
+  }
+
+  function getDoorTheme(item) {
+    if (item.finale) return 'theme-finale';
+    if (item.special) return 'theme-computing';
+    const themes = ['theme-crimson', 'theme-spruce', 'theme-plum'];
+    return themes[(item.day - 1) % themes.length];
+  }
+
+  function handleDoorClick(day, slot) {
+    if (openedDoors.includes(day)) return;
+
+    if (!isDateValid(day)) {
+      pendingEarlyDay = day;
+      slot.classList.remove('shake');
+      void slot.offsetWidth;
+      slot.classList.add('shake');
+
+      const quip = grinchQuips[grinchQuipIndex % grinchQuips.length](day);
+      grinchQuipIndex++;
+
+      const openBtn = document.getElementById('modal-grinch-open');
+      openBtn.style.display = '';
+      openBtn.textContent = `😈 Sneak Open Day ${day}`;
+
+      showModal(
+        '😈',
+        `Grinch Alert — Dec ${day}!`,
+        quip
+      );
+      return;
+    }
+
+    openedDoors.push(day);
+    saveState();
+    slot.querySelector('.door-card').classList.add('open');
+    slot.setAttribute('aria-expanded', 'true');
+    updateHeaderStats();
   }
 
   function renderGrid() {
@@ -303,54 +1456,81 @@
     adventData.forEach(item => {
       const isOpen = openedDoors.includes(item.day);
       const canOpen = isDateValid(item.day);
+      const isLocked = !canOpen && !isOpen;
+      const theme = getDoorTheme(item);
 
-      // Outer Container (Perspective)
-      const container = document.createElement('div');
-      container.className = `perspective-container h-48 w-full`;
+      const slot = document.createElement('div');
+      slot.className = `door-slot ${theme}${isLocked ? ' is-locked' : ''}`;
+      slot.dataset.day = String(item.day);
+      slot.setAttribute('tabindex', '0');
+      slot.setAttribute('role', 'button');
+      slot.setAttribute('aria-expanded', String(isOpen));
+      slot.setAttribute('aria-label', `December ${item.day}${item.special ? ' Computing Special' : ''}${isLocked ? ' (Locked — click for Grinch sneak peek)' : isOpen ? `: ${item.title}` : ' (Ready to open)'}`);
 
-      // Inner Card (The thing that flips)
       const card = document.createElement('div');
-      card.className = `door-card ${isOpen ? 'open' : ''}`;
+      card.className = `door-card${isOpen ? ' open' : ''}`;
 
-      // Click Handler on container to capture clicks
-      container.onclick = (e) => {
-        // Prevent flipping if clicking the link button directly
+      slot.addEventListener('click', (e) => {
         if (!e.target.closest('a')) {
-          handleDoorClick(item.day, container);
+          handleDoorClick(item.day, slot);
         }
-      };
+      });
 
-      // Front Face
+      slot.addEventListener('keydown', (e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('a')) {
+          e.preventDefault();
+          handleDoorClick(item.day, slot);
+        }
+      });
+
+      const badgeText = item.finale
+        ? '★ Christmas Finale ★'
+        : item.special
+          ? '💻 Computing Special'
+          : '';
+
+      const statusText = isLocked
+        ? '🔒 Dec ' + item.day
+        : '✨ Tap to Open';
+
       const front = document.createElement('div');
-      front.className = `door-face door-front ${!canOpen && !isOpen ? 'locked' : ''}`;
+      front.className = 'door-face door-front';
       front.innerHTML = `
-                    <span class="text-4xl font-bold festive-font drop-shadow-md">${item.day}</span>
-                    ${!canOpen && !isOpen ? '<span class="text-xs mt-2 uppercase tracking-wide opacity-75">Locked</span>' : ''}
-                `;
+        <span class="door-month">December</span>
+        <span class="door-number">${item.day}</span>
+        ${badgeText ? `<span class="door-badge">${badgeText}</span>` : ''}
+        <span class="door-status">${statusText}</span>
+      `;
 
-      // Back Face
       const back = document.createElement('div');
-      back.className = 'door-face door-back flex flex-col items-center justify-center p-2';
-      // Added the Link Button here
+      back.className = 'door-face door-back';
       back.innerHTML = `
-                    <div class="text-3xl mb-1">${item.icon}</div>
-                    <p class="font-bold text-xs leading-tight mb-2">${item.content}</p>
-                    <a href="${item.url}" target="_blank" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded shadow transition-colors duration-200 flex items-center gap-1">
-                        Go <span class="text-xs">→</span>
-                    </a>
-                `;
+        <div class="back-top">
+          <span class="back-day">Day ${item.day}</span>
+          <span class="back-topic">${item.topic}</span>
+        </div>
+        <div class="back-body">
+          <div class="back-icon" aria-hidden="true">${item.icon}</div>
+          <h3 class="back-title">${item.title}</h3>
+          <p class="back-desc">${item.desc}</p>
+        </div>
+        <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="launch-link">
+          Launch Tool <span aria-hidden="true">→</span>
+        </a>
+      `;
 
       card.appendChild(front);
       card.appendChild(back);
-      container.appendChild(card);
-      grid.appendChild(container);
+      slot.appendChild(card);
+      grid.appendChild(slot);
     });
   }
 
-  // --- Modal Logic ---
-  function showModal(title, body) {
-    document.getElementById('modal-title').innerText = title;
-    document.getElementById('modal-body').innerText = body;
+  // --- Modal ---
+  function showModal(emoji, title, body) {
+    document.getElementById('modal-emoji').textContent = emoji;
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').textContent = body;
     document.getElementById('message-modal').classList.remove('hidden');
   }
 
@@ -358,74 +1538,70 @@
     document.getElementById('message-modal').classList.add('hidden');
   }
 
-  // --- Snowfall Animation (Lightweight) ---
+  // --- Gentle Snowfall Animation ---
   function startSnow() {
-    const canvas = document.getElementById("snow-canvas");
-    const ctx = canvas.getContext("2d");
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    const canvas = document.getElementById('snow-canvas');
+    const ctx = canvas.getContext('2d');
     let width = window.innerWidth;
     let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
 
-    const maxFlakes = 100;
-    const flakes = [];
-
-    for (let i = 0; i < maxFlakes; i++) {
-      flakes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: Math.random() * 3 + 1, // radius
-        d: Math.random() * maxFlakes // density
-      });
-    }
-
-    function drawFlakes() {
-      ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-      ctx.beginPath();
-      for (let i = 0; i < maxFlakes; i++) {
-        const f = flakes[i];
-        ctx.moveTo(f.x, f.y);
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
-      }
-      ctx.fill();
-      moveFlakes();
-    }
-
-    let angle = 0;
-    function moveFlakes() {
-      angle += 0.01;
-      for (let i = 0; i < maxFlakes; i++) {
-        const f = flakes[i];
-        f.y += Math.pow(f.d, 2) + 1; // Speed
-        f.x += Math.sin(angle) * 2;
-
-        // If it hits bottom, send to top
-        if (f.y > height) {
-          // Resets to -10 (just above screen) so they enter smoothly
-          flakes[i] = { x: Math.random() * width, y: -10, r: f.r, d: f.d };
-        }
-      }
-    }
-
-    setInterval(drawFlakes, 25);
-
-    // Handle Resize
-    window.addEventListener('resize', () => {
+    function resize() {
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width;
       canvas.height = height;
-    });
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const flakeCount = Math.min(80, Math.max(36, Math.floor(width / 18)));
+    const flakes = Array.from({ length: flakeCount }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 2.4 + 0.9,
+      speed: Math.random() * 0.85 + 0.3,
+      drift: Math.random() * 0.55 - 0.275,
+      alpha: Math.random() * 0.55 + 0.3,
+      phase: Math.random() * Math.PI * 2
+    }));
+
+    let tick = 0;
+    function frame() {
+      ctx.clearRect(0, 0, width, height);
+      tick += 0.008;
+      const grinch = document.body.classList.contains('grinch-mode');
+
+      for (let i = 0; i < flakes.length; i++) {
+        const f = flakes[i];
+        f.y += f.speed;
+        f.x += Math.sin(tick + f.phase) * 0.55 + f.drift;
+
+        if (f.y > height + 6) {
+          f.y = -6;
+          f.x = Math.random() * width;
+        }
+        if (f.x > width + 6) f.x = -6;
+        if (f.x < -6) f.x = width + 6;
+
+        ctx.beginPath();
+        ctx.fillStyle = grinch
+          ? `rgba(217, 249, 157, ${f.alpha})`
+          : `rgba(255, 250, 242, ${f.alpha})`;
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
   }
 
-  // Run
   init();
-
 </script>
-
-<div style="text-align:center;padding:12px;clear:both;"><p class="jsfun-support" style="margin:8px 0;text-align:center;font-size:14px;line-height:1.6;">Made with ❤️ for better thinking. If it helped you, support the project. <a href="https://wise.com/pay/me/jamesphilipj" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 4px;color:inherit;text-decoration:underline;"><strong>Buy me a tea</strong></a>.</p>
-<a href="privacy.html" style="display:inline-block;padding:8px 12px;color:inherit;text-decoration:underline;font:inherit;font-size:14px;">Privacy Notice</a></div>
 <script src="privacy.js" data-page="/advent.html" defer></script>
 </body>
 </html>
